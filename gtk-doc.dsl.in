@@ -19,7 +19,7 @@
 
 (define $generate-chapter-toc$ 
   (lambda ()
-    #f))
+    #t))
 
 (define %chapter-autolabel% 
   ;; Are chapters enumerated?
