@@ -96,7 +96,6 @@ if (lc($OUTPUT_FORMAT) eq "xml") {
     $empty_element_end = "/>";
 
     if ($MAIN_SGML_FILE && -e $MAIN_SGML_FILE) {
-	print "scanning $MAIN_SGML_FILE";
         open(INPUT, "<$MAIN_SGML_FILE") || die "Can't open $MAIN_SGML_FILE";
 	$doctype_header = "";
 	while (<INPUT>) {
@@ -116,7 +115,7 @@ if (lc($OUTPUT_FORMAT) eq "xml") {
 "               \"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd\">\n";
     }
     $doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
-} else {
+  } else {
     $OUTPUT_FORMAT = "sgml";
     $doctype_header = "";
     $empty_element_end = ">";
@@ -166,6 +165,7 @@ my %DeclarationTypes;
 my %DeclarationConditional;
 my %DeclarationOutput;
 my %Deprecated;
+my %Since;
 
 # These global hashes store the existing documentation.
 my %SymbolDocs;
@@ -628,14 +628,15 @@ sub OutputMacro {
 	$desc .= "</programlisting>\n";
     }
 
-    if ($Deprecated{$symbol}) {
-        $desc .= "<warning>\n<para>\n<literal>$symbol</literal> is deprecated and should not be used in newly-written code.\n</para>\n</warning>\n";
-    }
+    $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
     }
     $desc .= &OutputParamDescriptions ("MACRO", $symbol);
+    if (exists $Since{$symbol}) {
+	$desc .= "<para>Since $Since{$symbol}</para>";
+    }
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -659,12 +660,13 @@ sub OutputTypedef {
 	$desc .= "<programlisting>$declaration</programlisting>\n";
     }
 
-    if ($Deprecated{$symbol}) {
-        $desc .= "<warning>\n<para>\n<literal>$symbol</literal> is deprecated and should not be used in newly-written code.\n</para>\n</warning>\n";
-    }
+    $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+    if (exists $Since{$symbol}) {
+	$desc .= "<para>Since $Since{$symbol}</para>";
     }
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
@@ -736,9 +738,7 @@ sub OutputStruct {
     $decl_out = &CreateValidSGML ($decl_out);
     $desc .= "<programlisting>$decl_out</programlisting>\n";
 
-    if ($Deprecated{$symbol}) {
-        $desc .= "<warning>\n<para>\n<literal>$symbol</literal> is deprecated and should not be used in newly-written code.\n</para>\n</warning>\n";
-    }
+    $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
@@ -790,6 +790,9 @@ EOF
     
 	$desc .= "</variablelist>";
     }
+    if (exists $Since{$symbol}) {
+	$desc .= "<para>Since $Since{$symbol}</para>";
+    }
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -810,9 +813,7 @@ sub OutputEnum {
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
 
-    if ($Deprecated{$symbol}) {
-        $desc .= "<warning>\n<para>\n<literal>$symbol</literal> is deprecated and should not be used in newly-written code.\n</para>\n</warning>\n";
-    }
+    $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
@@ -857,6 +858,9 @@ EOF
 	$desc .= "</variablelist>";
     }
 
+    if (exists $Since{$symbol}) {
+	$desc .= "<para>Since $Since{$symbol}</para>";
+    }
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -877,12 +881,13 @@ sub OutputUnion {
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
 
-    if ($Deprecated{$symbol}) {
-        $desc .= "<warning>\n<para>\n<literal>$symbol</literal> is deprecated and should not be used in newly-written code.\n</para>\n</warning>\n";
-    }
+    $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+    if (exists $Since{$symbol}) {
+	$desc .= "<para>Since $Since{$symbol}</para>";
     }
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
@@ -915,12 +920,13 @@ sub OutputVariable {
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
 
-    if ($Deprecated{$symbol}) {
-        $desc .= "<warning>\n<para>\n<literal>$symbol</literal> is deprecated and should not be used in newly-written code.\n</para>\n</warning>\n";
-    }
+    $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+    if (exists $Since{$symbol}) {
+	$desc .= "<para>Since $Since{$symbol}</para>";
     }
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
@@ -1073,15 +1079,16 @@ sub OutputFunction {
     $synop .= ");\n";
     $desc  .= ");</programlisting>\n";
 
-    if ($Deprecated{$symbol}) {
-        $desc .= "<warning>\n<para>\n<literal>$symbol</literal> is deprecated and should not be used in newly-written code.\n</para>\n</warning>\n";
-    }
+    $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
     }
 
     $desc .= &OutputParamDescriptions ("FUNCTION", $symbol);
+    if (exists $Since{$symbol}) {
+	$desc .= "<para>Since $Since{$symbol}</para>";
+    }
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -1476,6 +1483,27 @@ sub MakeXRef {
     # Get rid of special '-struct' suffix.
     $symbol =~ s/-struct$//;
     return "<link linkend=\"$symbol_id\">$symbol</link>";
+}
+
+
+#############################################################################
+# Function    : MakeDeprecationNote
+# Description : This returns a deprecation warning for the given symbol.
+# Arguments   : $symbol - the symbol to try to create a warning for.
+#############################################################################
+
+sub MakeDeprecationNote {
+    my ($symbol) = $_[0];
+    my $desc = "";
+    if (exists $Deprecated{$symbol}) {
+	$desc .= "<warning>";
+	$desc .= "<para><literal>$symbol</literal> is deprecated and should not be used in newly-written code.";
+	if ($Deprecated{$symbol} ne "") {
+	    $desc .= " " . &ExpandAbbreviations($Deprecated{$symbol});
+	}
+	$desc .= "</para></warning>\n";
+    }
+    return $desc;
 }
 
 
@@ -1887,14 +1915,12 @@ sub ReadSourceDocumentation {
 sub ScanSourceFile {
     my ($file) = @_;
 
-#    print "Scanning source file: $file\n";
-
     open (SRCFILE, $file)
 	|| die "Can't open $file: $!";
     my $in_comment_block = 0;
     my $symbol;
-    my ($in_description, $in_return);
-    my ($description, $return_desc, $return_start);
+    my ($in_description, $in_return, $in_since, $in_deprecated);
+    my ($description, $return_desc, $return_start, $since_desc, $deprecated_desc);
     my $current_param;
     my $ignore_returns;
     my @params;
@@ -1911,8 +1937,12 @@ sub ScanSourceFile {
 		$symbol = "";
 		$in_description = 0;
 		$in_return = 0;
+		$in_since = 0;
+		$in_deprecated = 0;
 		$description = "";
 		$return_desc = "";
+		$since_desc = "";
+		$deprecated_desc = "";
 		$current_param = -1;
 		$ignore_returns = 0;
 		@params = ();
@@ -1922,7 +1952,6 @@ sub ScanSourceFile {
 
 	# We're in a comment block. Check if we've found the end of it.
 	if (m%^\s*\*+/%) {
-#	    print "Found comment block end: $symbol\n";
 	    if (!$symbol) {
 		print <<EOF;
 WARNING: symbol name not found in comment block.
@@ -1943,6 +1972,21 @@ EOF
 
 		$SourceSymbolDocs{$symbol} = $description;
 		$SourceSymbolParams{$symbol} = [ @params ];
+
+		if ($since_desc) {
+		    $Since{$symbol} = &ConvertSGMLChars ($since_desc);
+		}
+
+		if ($deprecated_desc) {
+		    if (exists $Deprecated{$symbol}) {
+		    }
+		    else {
+			print <<EOF;
+WARNING: Unguarded $symbol deprecated in inline comments
+EOF
+		    }
+		    $Deprecated{$symbol} = &ConvertSGMLChars ($deprecated_desc);
+		}
 	    }
 
 	    $in_comment_block = 0;
@@ -1972,8 +2016,50 @@ EOF
 		$description .= $return_start . $return_desc;
 		$return_start = $1;
 		$return_desc = $';
+	    } elsif (m%^\s*since:%i) {
+		$since_desc = $';
+		$in_since = 1;
+		$in_return = 0;
+	    } elsif (m%^\s*deprecated:%i) {
+		$deprecated_desc = $';
+		$in_deprecated = 1;
+		$in_return = 0;
 	    } else {
 		$return_desc .= $_;
+	    }
+	    next;
+	}
+
+	if ($in_since) {
+	    if (m%^\s*(returns:|return\s+value:|returns\s*)%i) {
+		$description .= $return_start . $return_desc;
+		$return_start = $1;
+		$return_desc = $';
+		$in_return = 1;
+		$in_since = 0;
+	    } elsif (m%^\s*deprecated:%i) {
+		$deprecated_desc = $';
+		$in_deprecated = 1;
+		$in_since = 0;
+	    } else {
+		$since_desc .= $_;
+	    }
+	    next;
+	}
+
+	if ($in_deprecated) {
+	    if (m%^\s*(returns:|return\s+value:|returns\s*)%i) {
+		$description .= $return_start . $return_desc;
+		$return_start = $1;
+		$return_desc = $';
+		$in_return = 1;
+		$in_deprecated = 0;
+	    } elsif (m%^\s*since:%i) {
+		$since_desc = $';
+		$in_since = 1;
+		$in_deprecated = 0;
+	    } else {
+		$deprecated_desc .= $_;
 	    }
 	    next;
 	}
@@ -1985,10 +2071,19 @@ EOF
 	    s%^\s*Description:%%;
 
 	    if (!$ignore_returns && m%^\s*(returns:|return\s+value:|returns\s*)%i) {
-#		print "RETURNS: $_";
 		$return_start = $1;
 		$return_desc = $';
 		$in_return = 1;
+		next;
+	    }
+	    elsif (m%^\s*since:%i) {
+		$since_desc = $';
+		$in_since = 1;
+		next;
+	    }
+	    elsif (m%^\s*deprecated:%i) {
+		$deprecated_desc = $';
+		$in_deprecated = 1;
 		next;
 	    }
 
@@ -2300,7 +2395,9 @@ sub ReadDeclarationsFile {
 		    if ($DeclarationTypes{$declaration_name} eq 'FUNCTION') {
 			# Ignore it.
 		    } elsif ($declaration_type eq 'FUNCTION') {
-                        $Deprecated{$declaration_name} = $is_deprecated;
+			if ($is_deprecated) {
+			    $Deprecated{$declaration_name} = "";
+			}
 			$Declarations{$declaration_name} = $declaration;
 			$DeclarationTypes{$declaration_name} = $declaration_type;
 		    } elsif ($DeclarationTypes{$declaration_name}
@@ -2308,7 +2405,9 @@ sub ReadDeclarationsFile {
 			# If the existing declaration is empty override it.
 			if ($declaration_type eq 'STRUCT') {
 			    if ($Declarations{$declaration_name} =~ m/^\s*$/) {
-                                $Deprecated{$declaration_name} = $is_deprecated;
+				if ($is_deprecated) {
+				    $Deprecated{$declaration_name} = "";
+				}
 				$Declarations{$declaration_name} = $declaration;
 			    } elsif ($declaration =~ m/^\s*$/) {
 				# Ignore an empty declaration.
@@ -2325,7 +2424,9 @@ sub ReadDeclarationsFile {
 			print "ERROR: $declaration_name has multiple definitions\n";
 		    }
 		} else {
-                    $Deprecated{$declaration_name} = $is_deprecated;
+		    if ($is_deprecated) {
+			$Deprecated{$declaration_name} = "";
+		    }
 		    $Declarations{$declaration_name} = $declaration;
 		    $DeclarationTypes{$declaration_name} = $declaration_type;
 		}

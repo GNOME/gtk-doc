@@ -1,3 +1,14 @@
+2002-11-27  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in: Parse to new tags in inline doc comments,
+	Since: and Deprecated:, which can be placed after the Returns:
+	tag. Emit the Since: information (which is expected to be just a
+	version number) after the parameters and the Deprecated:
+	information (which is expected to be one or more full sentences)
+	inside the deprecation warning. 
+	Warn if a Deprecated: tag is found on a symbol which is not
+	guarded by a deprecation guard in the header.
+
 2002-11-26  James Henstridge  <james@daa.com.au>
 
 	* gtkdoc-mkhtml.in: set gtkdoc-bookname and gtkdoc-version
