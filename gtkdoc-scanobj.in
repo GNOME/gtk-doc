@@ -720,8 +720,6 @@ output_widget_args (FILE *fp, GtkType object_type)
   GtkArg *args;
   guint32 *arg_flags;
   guint n_args;
-  GtkArgInfo arginfo;
-  gchar *error;
   gint arg;
   gchar flags[16], *pos;
 

@@ -1,3 +1,13 @@
+1999-05-22  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk-doc.dsl.in: Renamed %shade-verbatim-attr-2% to
+	$shade-verbatim-attr$ and removed our redefinition of
+	$verbatim-display$ since the stylesheets version now calls
+	$shade-verbatim-attr$ as a function which is just what we wanted.
+
+	* README: Updated info on stylesheet versions supported - 1.40 is
+	known to be OK (with this version of gtk-doc), 1.19+ may work.
+
 1999-03-31  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* configure.in: update version to 0.2 for next release.

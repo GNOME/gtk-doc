@@ -10,6 +10,10 @@
 ;; Modular DocBook Stylesheets.
 ;; I've copied parts of a few functions from the stylesheets so these should
 ;; be checked occasionally to ensure they are up to date.
+;;
+;; The last check was with version 1.40 of the stylesheets.
+;; It will not work with versions < 1.19 since the $shade-verbatim-attr$
+;; function was added then. Versions 1.19 to 1.39 may be OK, if you're lucky!
 
 ;;(define %generate-book-toc% #f)
 
@@ -58,7 +62,7 @@
 
 ;; I want to change this so that for programlisting we use a blue background,
 ;; but for example or informalexample we use green.
-(define %shade-verbatim-attr-2% 
+(define $shade-verbatim-attr$
   ;; Attributes used to create a shaded verbatim environment.
   (lambda ()
     (if (or (equal? (gi (parent (current-node)))
@@ -78,25 +82,6 @@
 	)
   )
 )
-
-;; This overrides $verbatim-display$ (copied from 1.20, dbverb.dsl).
-;; It simply changes %shade-verbatim-attr% to (%shade-verbatim-attr-2%) so we
-;; can use our own function to set the different verbatim colours.
-(define ($verbatim-display$ line-numbers?)
-  (let ((content (make element gi: "PRE"
-		       attributes: (list
-				    (list "CLASS" (gi)))
-		       (if line-numbers?
-			   ($verbatim-content-with-linenumbers$)
-			   ($verbatim-content$)))))
-    (if %shade-verbatim%
-	(make element gi: "TABLE"
-	      attributes: (%shade-verbatim-attr-2%)
-	      (make element gi: "TR"
-		    (make element gi: "TD"
-			  content)))
-	content)))
-
 
 ;; This overrides the tgroup definition (copied from 1.20, dbtable.dsl).
 ;; It changes the table background color, cell spacing and cell padding.
