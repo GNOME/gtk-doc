@@ -39,7 +39,7 @@ if $is_xml; then
       --stringparam gtkdoc.version "@VERSION@" \
       $gtkdocdir/gtk-doc.xsl $document
 else
-  @JADE@ -t sgml-raw -w no-idref -d $gtkdocdir/gtk-doc.dsl \
+  @JADE@ -t @SGML_FORMAT_TYPE@ -w no-idref -d $gtkdocdir/gtk-doc.dsl \
       -V "gtkdoc-bookname=$module" -V "gtkdoc-version=@VERSION@" \
       $gtkdocdir/gtk-doc.dcl $document
 fi
