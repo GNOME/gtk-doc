@@ -1,5 +1,9 @@
 2004-10-14  Damon Chaplin  <damon@gnome.org>
 
+	* gtk-doc.make (scan-build.stamp): depend on $(CFILE_GLOB) as well,
+	since changes in properties need to be picked up by gtkdoc-scangobj.
+	Bug #52458.
+
 	* gtkdoc-mkdb.in: (ParseStructDeclaration): for fields that are
 	function pointers, only return the function name, as otherwise the
 	output gets really messy. Fixes #66618.
