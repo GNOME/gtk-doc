@@ -1,3 +1,14 @@
+1998-11-28  Damon Chaplin  <DAChaplin@msn.com>
+
+	* gtkdoc-scanobj: 
+	* gtkdoc-scan: 
+	* gtkdoc-mktmpl: 
+	* gtkdoc-mkdb: Major changes to make it easy to update the docs
+	when the API changes. It's pretty much all automatic now.
+	Also added licenses and function comments, and added 'use strict'.
+	The Gnome widgets should now be visible in the hierarchy.
+	Removed a few 'mkdir's which I don't think are necessary now.
+	
 Tue Nov 24 16:32:23 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* README doc/authors.txt: Updated to describe the

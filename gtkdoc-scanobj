@@ -1,9 +1,31 @@
 #!/usr/bin/perl -w
 #
+# gtk-doc - GTK DocBook documentation generator.
+# Copyright (C) 1998  Damon Chaplin
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+
+#
 # This gets information about object heirarchies and signals
 # by compiling a small C program. CFLAGS and LDFLAGS must be
 # set appropriately before running this script.
 #
+# NOTE: the lookup_signal_srg_names() function contains the argument names of
+#       standard GTK signal handlers. This may need to be updated for new
+#       GTK signals or Gnome widget signals.
 
 use Getopt::Long;
 
@@ -67,8 +89,8 @@ print OUTPUT <<EOT;
 }
 
 /*
- * This outputs signal prototypes in a form which can be read by mkdocbook.pl
- * It also outputs the widget hierarchy.
+ * This uses GTK type functions to output signal prototypes and the widget
+ * hierarchy.
  */
 
 /* The output files */
@@ -78,16 +100,15 @@ gchar *hierarchy_filename = "$MODULE.hierarchy";
 
 extern GtkType* get_object_types();
 
-/* These are used for outputting signal handler prototypes. */
-#define GB_PARAM_INDENT		40
-#define GB_PARAM_TYPE_WIDTH	16
-
-void gb_widgets_init ();
-void output_signals ();
-void output_widget_signals (FILE *fp, GtkType object_type);
-void output_widget_signal (FILE *fp, GtkType object_type,
-			   gchar *object_class_name, guint signal_id);
-static gchar * get_type_name (GtkType type, gboolean * is_pointer);
+static void output_signals ();
+static void output_widget_signals (FILE *fp,
+				   GtkType object_type);
+static void output_widget_signal (FILE *fp,
+				  GtkType object_type,
+				  gchar *object_class_name,
+				  guint signal_id);
+static gchar * get_type_name (GtkType type,
+			      gboolean * is_pointer);
 static gchar * get_gdk_event (const gchar * signal_name);
 static gchar ** lookup_signal_arg_names (gchar * type,
 					 const gchar * signal_name);
@@ -110,7 +131,7 @@ main (int argc, char *argv[])
 }
 
 
-void
+static void
 output_signals ()
 {
   FILE *fp;
@@ -134,7 +155,7 @@ output_signals ()
 
 
 /* This outputs all the signals of one widget. */
-void
+static void
 output_widget_signals (FILE *fp, GtkType object_type)
 {
   GtkObjectClass *class;
@@ -162,7 +183,7 @@ output_widget_signals (FILE *fp, GtkType object_type)
 
 
 /* This outputs one signal. */
-void
+static void
 output_widget_signal (FILE *fp,
 		      GtkType object_type,
 		      gchar *object_name,
@@ -185,7 +206,6 @@ output_widget_signal (FILE *fp,
   param_num = 1;
   widget_num = event_num = callback_num = 0;
 
-  /* Output empty signal handler. */
   query_info = gtk_signal_query (signal_id);
   if (query_info == NULL)
     {
@@ -198,14 +218,19 @@ output_widget_signal (FILE *fp,
   sprintf (ret_type_buffer, "%s%s", ret_type, is_pointer ? "*" : "");
 
   /* Output the signal object type and the argument name. We assume the
-     type is a pointer - I think that is OK. We remove "Gtk" and convert
-     to lower case for the argument name. */
+     type is a pointer - I think that is OK. We remove "Gtk" or "Gnome" and
+     convert to lower case for the argument name. */
   pos = buffer;
   sprintf (pos, "%s ", object_name);
   pos += strlen (pos);
 
-  object_arg = (!strncmp (object_name, "Gtk", 3)) ? object_name + 3
-    : object_name;
+  if (!strncmp (object_name, "Gtk", 3))
+      object_arg = object_name + 3;
+  else if (!strncmp (object_name, "Gnome", 5))
+      object_arg = object_name + 5;
+  else
+      object_arg = object_name;
+
   object_arg_start = pos;
   sprintf (pos, "*%s\n", object_arg);
   pos += strlen (pos);
@@ -395,14 +420,15 @@ get_gdk_event (const gchar * signal_name)
 }
 
 
-/* This returns argument names to use for some known GTK signals. */
-/* Note: Could possibly return the types to use as well, since several of
-   them could be better, e.g. "GtkOrientation" instead of "gint". */
+/* This returns argument names to use for some known GTK signals.
+    It is passed a widget name, e.g. 'GtkCList' and a signal name, e.g.
+    'select_row' and it returns a pointer to an array of argument types and
+    names. */
 static gchar **
 lookup_signal_arg_names (gchar * type, const gchar * signal_name)
 {
   /* Each arg array starts with the object type name and the signal name,
-     and then signal arguments follow. Note that the spacing is hardcoded. */
+     and then signal arguments follow. */
   static gchar *GbArgTable[][16] =
   {
     {"GtkCList", "select_row",
@@ -619,6 +645,8 @@ lookup_signal_arg_names (gchar * type, const gchar * signal_name)
 }
 
 
+/* This outputs the hierarchy of all widgets which have been initialized,
+   i.e. by calling their XXX_get_type() initialization function. */
 static void
 output_widget_hierarchy ()
 {
@@ -635,6 +663,7 @@ output_widget_hierarchy ()
 }
 
 
+/* This is called recursively to output the hierarchy of a widget. */
 static void
 output_hierarchy (FILE *fp,
 		  GtkType type,
