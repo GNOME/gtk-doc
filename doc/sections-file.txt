@@ -25,7 +25,9 @@ You can also use <SUBSECTION Standard> for standard GtkObject declarations
 GTK_IS_OBJECT() etc.) Currently these are left out of the documentation.
 You can also use <SUBSECTION Private> for private declarations which will not
 be output (Its a handy way to avoid warning messages about unused
-declarations.)
+declarations.). If your library contains private types which you don't want
+to appear in the object hierarchy and the list of implemented or required 
+interfaces, add them to a Private subsection.
 
 You can also use <INCLUDE> ... <INCLUDE> to specify the #include files which
 are shown in the synopsis sections. It contains a comma-separate list of

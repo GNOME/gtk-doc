@@ -1,3 +1,19 @@
+2004-04-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* doc/sections-file.txt: Add hint about private types.
+
+	* README: Update.
+
+	* MAINTAINERS: Add myself.
+
+	* gtkdoc-mkdb.in (ReadKnownSymbols): New function which
+	extracts information about public and private symbols from
+	the $MODULE-sections.txt file. 
+	(ReadObjectHierarchy): Prune the tree, based on the information
+	collected by ReadKnownSymbols.
+	(ReadInterfaces): Also filter out private interfaces here
+	(ReadPrerequisites): ...and here.
+
 2004-04-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* Makefile.am: Add version-greater-or-equal.xsl.

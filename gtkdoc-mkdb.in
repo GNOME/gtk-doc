@@ -192,6 +192,9 @@ my @ObjectLevels;
 my %Interfaces;
 my %Prerequisites;
 
+# holds the symbols which are mentioned in $MODULE-sections.txt
+my %KnownSymbols;
+
 # Create the root DocBook output directory if it doens't exist.
 if (! -e $SGML_OUTPUT_DIR) {
     mkdir ("$SGML_OUTPUT_DIR", 0777)
@@ -203,6 +206,7 @@ my $RETURN_TYPE_FIELD_WIDTH = 12;
 my $SYMBOL_FIELD_WIDTH = 32;
 my $SIGNAL_FIELD_WIDTH = 12;
 
+&ReadKnownSymbols ("$ROOT_DIR/$MODULE-sections.txt");
 &ReadSignalsFile ($SIGNALS_FILE);
 &ReadArgsFile ($ARGS_FILE);
 &ReadObjectHierarchy;
@@ -587,7 +591,7 @@ EOF
 
 		# Note that the declaration has been output.
 		$DeclarationOutput{$symbol} = 1;
-	    } else {
+	    } elsif ($subsection ne "Standard" && $subsection ne "Private") {
 		print "WARNING: No declaration for: $1\n";
 	    }
 	    $num_symbols++;
@@ -604,6 +608,64 @@ EOF
     &OutputBook ($book_top, $book_bottom);
 
     return $changed;
+}
+
+
+#############################################################################
+# Function    : ReadKnownSymbols
+# Description : This collects the names of non-private symbols from the
+#               $MODULE-sections.txt file.
+# Arguments   : $file - the $MODULE-sections.txt file which contains all of
+#		the functions/macros/structs etc. being documented, organised
+#		into sections and subsections.
+#############################################################################
+
+sub ReadKnownSymbols {
+    my ($file) = @_;
+
+    my $subsection = "";
+ 
+#    print "Reading: $file\n";
+    open (INPUT, $file)
+	|| die "Can't open $file";
+
+    while (<INPUT>) {
+	if (m/^#/) {
+	    next;
+
+	} elsif (m/^<SECTION>/) {
+	    $subsection = "";
+
+	} elsif (m/^<SUBSECTION\s*(.*)>/i) {
+	    $subsection = $1;
+
+	} elsif (m/^<SUBSECTION>/) {
+	    next;
+
+	} elsif (m/^<TITLE>(.*)<\/TITLE>/) {
+            next;
+
+	} elsif (m/^<FILE>(.*)<\/FILE>/) {
+            next;
+
+	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
+            next;
+
+	} elsif (m/^<\/SECTION>/) {
+            next;
+
+	} elsif (m/^(\S+)/) {
+	    my $symbol = $1;
+
+	    if ($subsection ne "Standard" && $subsection ne "Private") {
+	        $KnownSymbols{$symbol} = 1;
+	    }
+	    else {
+	        $KnownSymbols{$symbol} = 0;
+	    }
+	}
+    }
+    close (INPUT);
 }
 
 
@@ -2948,11 +3010,11 @@ sub ReadTemplateFile {
 #		It places them in the @Objects array, and places their level
 #		in the widget hierarchy in the @ObjectLevels array, at the
 #		same index. GtkObject, the root object, has a level of 1.
-#   
+#
 #               FIXME: the version in gtkdoc-mkdb also generates tree_index.sgml
 #               as it goes along, this should be split out into a separate
 #               function.
-# 
+#
 # Arguments   : none
 #############################################################################
 
@@ -2977,17 +3039,38 @@ sub ReadObjectHierarchy {
 	|| die "Can't create $new_tree_index";
     print (OUTPUT "$tree_header<screen>\n");
 
+    # Only emit objects if they are supposed to be documented, or if
+    # they have documented children. To implement this, we maintain a
+    # stack of pending objects which will be emitted if a documented
+    # child turns up.
+    my @pending_objects = ();
+    my @pending_levels = ();
     while (<INPUT>) {
         if (m/\S+/) {
 	    my $object = $&;
 	    my $level = (length($`)) / 2 + 1;
-#            print ("Level: $level  Object: $object\n");
+            my $xref = "";
 
-	    my $xref = &MakeXRef ($object);
-	    print (OUTPUT ' ' x ($level * 4), "$xref\n");
-	    push (@Objects, $object);
-	    push (@ObjectLevels, $level);
-        }
+	    while (($#pending_levels >= 0) && ($pending_levels[$#pending_levels] >= $level)) {
+	        my $pobject = pop(@pending_objects);
+	        my $plevel = pop(@pending_levels);
+	    }
+
+   	    push (@pending_objects, $object);
+	    push (@pending_levels, $level);
+
+            if (exists($KnownSymbols{$object}) && $KnownSymbols{$object} == 1) {
+   	        while ($#pending_levels >= 0) {
+                    $object = shift @pending_objects;
+		    $level = shift @pending_levels;
+   	            $xref = &MakeXRef ($object);
+
+ 	            print (OUTPUT ' ' x ($level * 4), "$xref\n");
+	            push (@Objects, $object);
+	            push (@ObjectLevels, $level);
+                }
+            }
+	}
     }
     print (OUTPUT "</screen>\n");
 
@@ -3020,7 +3103,18 @@ sub ReadInterfaces {
     while (<INPUT>) {
        chomp;
        my ($object, @ifaces) = split;
-       $Interfaces{$object} = join(' ', @ifaces);
+       if (exists($KnownSymbols{$object}) && $KnownSymbols{$object} == 1) {
+           my @knownIfaces = ();
+
+           # filter out private interfaces, but leave foreign interfaces
+	   foreach my $iface (@ifaces) {
+	       if (!exists($KnownSymbols{$iface}) || $KnownSymbols{$iface} == 1) {
+                   push (@knownIfaces, $iface);
+	       }
+	     }
+
+           $Interfaces{$object} = join(' ', @knownIfaces);
+       }
     }
     close (INPUT);
 }
@@ -3046,7 +3140,18 @@ sub ReadPrerequisites {
     while (<INPUT>) {
        chomp;
        my ($iface, @prereqs) = split;
-       $Prerequisites{$iface} = join(' ', @prereqs);
+       if (exists($KnownSymbols{$iface}) && $KnownSymbols{$iface} == 1) {
+           my @knownPrereqs = ();
+
+           # filter out private prerequisites, but leave foreign prerequisites
+	   foreach my $prereq (@prereqs) {
+	       if (!exists($KnownSymbols{$prereq}) || $KnownSymbols{$prereq} == 1) {
+                  push (@knownPrereqs, $prereq);
+	       }
+	   }
+
+           $Prerequisites{$iface} = join(' ', @knownPrereqs);
+       }
     }
     close (INPUT);
 }
@@ -3226,7 +3331,7 @@ sub ParseStructDeclaration {
 	#        this functionality should be separated out.
 
 	if ($line =~ m/^
-	    (const\s+|unsigned\s+|volatile\s+)*(struct\s+)? # mod1
+	    (const\s+|unsigned\s+|volatile\s+|signed\s+)*(struct\s+)? # mod1
 	    (\w+)\s*                            # type
 	    (\**)\s*                            # ptr1
 	    (const\s+)?                         # mod2
@@ -3266,7 +3371,7 @@ sub ParseStructDeclaration {
 	    
         # Try to match structure members which are functions
 	} elsif ($line =~ m/^
-		 (const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?  # mod1 
+		 (const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?  # mod1
 		 (\w+)\s*                             # type
 		 (\**)\s*                             # ptr1
 		 (const\s+)?                          # mod2
