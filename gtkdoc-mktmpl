@@ -203,6 +203,9 @@ sub UpdateTemplates {
 	} elsif (m/^<FILE>(.*)<\/FILE>/) {
 	    $file = $1;
 
+	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
+	    next;
+
 	} elsif (m/^<\/SECTION>/) {
 	    if ($title eq "") {
 		$title = $file;

@@ -227,6 +227,9 @@ sub OutputSGML {
 	|| die "Can't open $file";
     my $book_top = "";
     my $book_bottom = "";
+    my $includes = "";
+    my $section_includes = "";
+    my $in_section = 0;
     my $title = "";
     my $subsection = "";
     my $synopsis;
@@ -240,6 +243,7 @@ sub OutputSGML {
 	    $synopsis = "";
 	    $details = "";
 	    $num_symbols = 0;
+	    $in_section = 1;
 
 	} elsif (m/^<SUBSECTION\s*(\w*)>/i) {
 	    $synopsis .= "\n";
@@ -263,6 +267,13 @@ sub OutputSGML {
 	    &ReadTemplateFile ("$TMPL_DIR/$file.sgml", 1);
 	    &MergeSourceDocumentation;
 
+	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
+	    if ($in_section) {
+		$section_includes = $1;
+	    } else {
+		$includes = $1;
+	    }
+
 	} elsif (m/^<\/SECTION>/) {
 	    if ($title eq "") {
 		$title = $file;
@@ -284,11 +295,17 @@ sub OutputSGML {
 		$book_top .= "<!entity $section_id SYSTEM \"sgml/$file\">\n";
 		$book_bottom .= "    &$section_id;\n";
 
-		&OutputSGMLFile ($file, $title, $section_id,
+		if ($section_includes eq "") {
+		    $section_includes = $includes;
+		}
+
+		&OutputSGMLFile ($file, $title, $section_id, $includes,
 				 \$synopsis, \$details);
 	    }
 	    $title = "";
 	    $subsection = "";
+	    $in_section = 0;
+	    $section_includes = "";
 
 	} elsif (m/^(\S+)/) {
 	    my $symbol = $1;
@@ -726,12 +743,14 @@ EOF
 #		$title - the title from the $MODULE-sections.txt file, which
 #		  will be overriden by the title in the template file.
 #		$section_id - the SGML id to use for the toplevel tag.
+#		$includes - comma-separates list of include files added at top
+#		  of synopsis, with '<' '>' around them.
 #		$synopsis - reference to the DocBook for the Synopsis part.
 #		$details - reference to the DocBook for the Details part.
 #############################################################################
 
 sub OutputSGMLFile {
-    my ($file, $title, $section_id, $synopsis, $details) = @_;
+    my ($file, $title, $section_id, $includes, $synopsis, $details) = @_;
 
     # Find out if this is a GtkObject or descendant.
     my $signals_synop = "";
@@ -768,6 +787,12 @@ sub OutputSGMLFile {
     my $month = (qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec))[$mon];
     $year += 1900;
 
+    my $include_output = "";
+    my $include;
+    foreach $include (split (/,/, $includes)) {
+	$include_output .= "#include &lt;${include}&gt;\n";
+    }
+
     open (OUTPUT, ">$SGML_OUTPUT_DIR/$file")
 	|| die "Can't create $SGML_OUTPUT_DIR/$file";
 
@@ -788,7 +813,7 @@ sub OutputSGMLFile {
 <refsynopsisdiv><title>Synopsis</title>
 <synopsis>
 
-#include &lt;$HEADER_FILE&gt;
+$include_output
 
 $${synopsis}</synopsis>
 </refsynopsisdiv>

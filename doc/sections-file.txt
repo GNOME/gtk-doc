@@ -19,7 +19,15 @@ it outputs a blank line between subsections in the synopsis section.
 You can also use <SUBSECTION Standard> for standard GtkObject declarations,
 and <SUBSECTION Private> for private declarations which will not be output.
 
+You can also use <INCLUDE> ... <INCLUDE> to specify the #include files which
+are shown in the synopsis sections. It contains a comma-separate list of
+#include files, without the angle brackets. If you set it outside of any
+sections, it acts for all sections until the end of the file. If you set it
+within a section, it only applies to that section.
+
 Example section:
+
+<INCLUDE>gnome.h</INCLUDE>
 
 <SECTION>
 <FILE>gnome-dateedit</FILE>
