@@ -1055,6 +1055,7 @@ sub CreateValidSGMLID {
     $id =~ s/[_ ]/-/g;
     $id =~ s/[,\.]//g;
     $id =~ s/^-*//;
+    $id =~ s/::/-/g;
 
     # Special case, since ids are case-insensitive G-CSET-A-2-Z clashes with
     # G-CSET-a-2-z, so we change it to G-CSET-A-2-Z-CAPS
