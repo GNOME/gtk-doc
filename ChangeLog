@@ -1,5 +1,11 @@
 2004-11-16  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (OutputFunction): output "const" rather than
+	"G_CONST_RETURN". #157674.
+
+	* gtkdoc-mktmpl.in (OutputDeclaration): skip "void" return types but
+	not if it has modifiers e.g. "void *". #156963.
+
 	* gtkdoc-scan.in (ScanHeader): handle __attribute__. Patch from
 	Simon Josefsson. #156962.
 

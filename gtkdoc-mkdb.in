@@ -1133,6 +1133,10 @@ sub OutputFunction {
 #	$start = "typedef ";
     }
 
+    # We output const rather than G_CONST_RETURN.
+    $type_modifier =~ s/G_CONST_RETURN/const/g;
+    $pointer =~ s/G_CONST_RETURN/const/g;
+
     my $ret_type_len = length ($start) + length ($type_modifier)
 	+ length ($pointer) + length ($type);
     my $ret_type_output;

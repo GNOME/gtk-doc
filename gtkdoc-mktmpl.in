@@ -369,7 +369,9 @@ EOF
     if ($type eq "FUNCTION" || $type eq "USER_FUNCTION") {
 	# Take out the return type
         $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*)<\/RETURNS>\n//;
-	my ($ret_type) = $3;
+	my $ret_type_modifier = defined($1) ? $1 : "";
+	my $ret_type = $3;
+	my $ret_type_pointer = $4;
 
 	my ($param_num) = 0;
 	my ($name);
@@ -382,7 +384,7 @@ EOF
 		if ($param_num != 0) {
 		    print "WARNING: void used as parameter in function $symbol\n";
 		}
-		
+
 	    } elsif ($declaration =~ s/^...\s*[,\n]//) {
 		$output .= &OutputParam ($symbol, "Varargs",
 					 $template_exists, 1, "");
@@ -410,8 +412,8 @@ EOF
 	    $param_num++;
 	}
 
-    
-	if ($ret_type ne "void") {
+
+	if ($ret_type ne "void" || $ret_type_modifier || $ret_type_pointer) {
 	    $output .= &OutputParam ($symbol, "Returns", $template_exists, 1,
 				     "");
 	}
