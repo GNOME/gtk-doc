@@ -419,6 +419,7 @@ EOF
 	}
 	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
+	$output .= &OutputParam ($symbol, "Stability", $template_exists, 0, "");
         $output .= &OutputOldParams ($symbol);
 	$output .= "\n";
     }
@@ -438,6 +439,7 @@ EOF
 	$output .= &OutputParam ($symbol, "Returns", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
+	$output .= &OutputParam ($symbol, "Stability", $template_exists, 0, "");
 	$output .= &OutputOldParams ($symbol);
 	$output .= "\n";
     }
@@ -452,6 +454,7 @@ EOF
 	}
 	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
+	$output .= &OutputParam ($symbol, "Stability", $template_exists, 0, "");
     }
 
     if ($type eq "ENUM") {
@@ -462,6 +465,7 @@ EOF
 	}
 	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
+	$output .= &OutputParam ($symbol, "Stability", $template_exists, 0, "");
     }
 
     $output .= "\n";
@@ -579,7 +583,7 @@ sub OutputOldParams {
 sub OutputTemplateFile {
     my ($file, $title, $output) = @_;
 
-    my ($short_desc, $long_desc, $see_also);
+    my ($short_desc, $long_desc, $see_also, $stability);
 
     if (defined ($SymbolDocs{"$TMPL_DIR/$file:Title"})) {
 	$title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
@@ -603,6 +607,13 @@ sub OutputTemplateFile {
     } else {
 	$see_also = "<para>\n\n</para>\n";
     }
+    if (defined ($SymbolDocs{"$TMPL_DIR/$file:Stability_Level"})) {
+	$stability = $SymbolDocs{"$TMPL_DIR/$file:Stability_Level"};
+	delete $SymbolDocs{"$TMPL_DIR/$file:Stability_Level"};
+    } else {
+	$stability = "";
+    }
+
 
     my $old_tmpl_file = "$TMPL_DIR/$file";
     my $new_tmpl_file = "$TMPL_DIR/$file.new";
@@ -622,6 +633,9 @@ $long_desc
 
 <!-- ##### SECTION See_Also ##### -->
 $see_also
+
+<!-- ##### SECTION Stability_Level ##### -->
+$stability
 
 EOF
 
@@ -1022,7 +1036,8 @@ sub ReadTemplateFile {
 	    if ($symbol eq "Title"
 		|| $symbol eq "Short_Description"
 		|| $symbol eq "Long_Description"
-		|| $symbol eq "See_Also") {
+		|| $symbol eq "See_Also"
+		|| $symbol eq "Stability_Level") {
 		$symbol = $docsfile . ":" . $symbol;
 #		print "Found symbol: $symbol\n";
 	    }
