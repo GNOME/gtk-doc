@@ -1,3 +1,13 @@
+2002-01-18  Damon Chaplin  <damon@ximian.com>
+
+	* Released 0.8.
+
+2002-01-18  Damon Chaplin  <damon@ximian.com>
+
+	* gtkdoc-scangobj.in: Reverted jacob's patch for this release, since
+	it breaks GTK+ and possibly other packages. I'll re-apply it after
+	the release, so we can fix everything in CVS.
+
 2002-01-18  jacob berkman  <jacob@ximian.com>
 
 	* gtkdoc-scangobj.in: default to calling g_type_init(), remove
