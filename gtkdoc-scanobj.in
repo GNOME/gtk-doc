@@ -125,7 +125,7 @@ main (int argc, char *argv[])
 {
   gtk_init (&argc, &argv);
 
-  get_object_types();
+  get_object_types ();
 
   output_signals ();
   output_widget_hierarchy ();

@@ -1,3 +1,24 @@
+1999-08-15  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtkdoc-mkdb.in: Output $decl_out as the struct rather than the
+	original $declaration.
+
+1999-08-12  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtkdoc-mkdb.in: 
+	* gtkdoc-mktmpl.in: Added special case in ParseEnumDeclaration to
+	handle GIOCondition which uses strange macros like this:
+	typedef enum
+	{
+	  G_IO_IN	GLIB_SYSDEF_POLLIN,
+	  ...
+	The GLIB_SYSDEF_POLLIN macro expands to something like '=1'
+
+1999-08-05  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk-doc.dsl.in: output <br clear=all> after sections and at end of
+	page so that right-aligned images aren't messed up quite as much.
+
 Wed Aug  4 04:04:55 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkdoc-mk{db,tmpl}.in (ParseStructDeclaration): Allow

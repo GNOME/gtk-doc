@@ -440,7 +440,8 @@
     (if (or r1? r2?)
 	(make element gi: "DIV"
 	      attributes: '(("CLASS" "NAVFOOTER"))
-	      (make empty-element gi: "BR")
+	      (make empty-element gi: "BR"
+		    attributes: (list (list "CLEAR" "all")))
 	      (make empty-element gi: "BR")
 
 	      (make element gi: "TABLE"
@@ -495,6 +496,17 @@
   (make sequence (literal "<<< Previous Page")))
 (define (gentext-en-nav-next next)
   (make sequence (literal "Next Page >>>")))
+
+
+(define ($section-body$)
+  (make sequence
+    (make empty-element gi: "BR"
+	  attributes: (list (list "CLEAR" "all")))
+    (make element gi: "DIV"
+	  attributes: (list (list "CLASS" (gi)))
+	  ($section-separator$)
+	  ($section-title$)
+	  (process-children))))
 
 </style-specification-body>
 </style-specification>

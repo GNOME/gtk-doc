@@ -477,7 +477,7 @@ sub OutputStruct {
     }
 
     $decl_out = &CreateValidSGML ($decl_out);
-    $desc .= "<programlisting>$declaration</programlisting>\n";
+    $desc .= "<programlisting>$decl_out</programlisting>\n";
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
     }
@@ -2262,6 +2262,11 @@ sub ParseEnumDeclaration {
 	my $terminator = $2;
 
 	if ($line =~ m/^(\w+)\s*(=.*)?$/msg) {
+	    push @result, $1;
+	    
+	# Special case for GIOCondition, where the values are specified by
+	# macros which expand to include the equal sign like '=1'.
+	} elsif ($line =~ m/^(\w+)\s*GLIB_SYSDEF_POLL/msg) {
 	    push @result, $1;
 	    
 	# Special case include of <gdk/gdkcursors.h>, just ignore it
