@@ -1,3 +1,8 @@
+2002-04-28  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (ScanSourceFile): Don't scan for return value
+	descriptions unnecessarily.  (#65997)
+
 2002-03-11  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scangobj.in, gtkdoc-mkdb.in: Create docs for signals on interfaces.

@@ -108,7 +108,8 @@ my @ArgObjects;		# The GtkObject which has the Arg.
 my @ArgNames;		# The Arg name.
 my @ArgTypes;		# The Arg type - gint, GtkArrowType etc.
 my @ArgFlags;		# How the Arg can be used - readable/writable etc.
-
+my @ArgNicks;		# The nickname of the Arg.
+my @ArgBlurbs;          # Docstring of the Arg.
 # These global hashes store declaration info keyed on a symbol name.
 my %Declarations;
 my %DeclarationTypes;
@@ -1506,10 +1507,11 @@ sub GetArgs {
 
 	    $desc .= "<varlistentry><term><anchor id=\"$id\">&quot;<literal>$name</literal>&quot; ($type_output : $flags_string)</term>\n<listitem>\n";
 
+	    my $blurb = &CreateValidSGML ($ArgBlurbs[$i]);
+	    $desc .= "<para>$blurb</para>\n";
+
 	    if (defined ($SymbolDocs{$symbol})) {
 	        $desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
-	    } else {
-		$desc .= "<para></para>\n";
 	    }
 
 	    $desc .= "</listitem></varlistentry>\n";
@@ -1604,6 +1606,7 @@ sub ScanSourceFile {
     my ($in_description, $in_return);
     my ($description, $return_desc, $return_start);
     my $current_param;
+    my $ignore_returns;
     my @params;
     while (<SRCFILE>) {
 	# Look for the start of a comment block.
@@ -1621,6 +1624,7 @@ sub ScanSourceFile {
 		$description = "";
 		$return_desc = "";
 		$current_param = -1;
+		$ignore_returns = 0;
 		@params = ();
 	    }
 	    next;
@@ -1692,7 +1696,7 @@ EOF
 	    # Get rid of 'Description:'
 	    s%^\s*Description:%%;
 
-	    if (m%^\s*(returns:|return\s+value:|returns\s*)%i) {
+	    if (!$ignore_returns && m%^\s*(returns:|return\s+value:|returns\s*)%i) {
 #		print "RETURNS: $_";
 		$return_start = $1;
 		$return_desc = $';
@@ -1717,6 +1721,9 @@ EOF
 	    # Allow '...' as the Varargs parameter.
 	    if ($param_name eq "...") {
 		$param_name = "Varargs";
+	    }
+	    if ("\L$param_name" eq "returns") {
+	      $ignore_returns = 1;
 	    }
 	    push (@params, $param_name);
 	    push (@params, $');
@@ -1758,16 +1765,12 @@ sub OutputMissingDocumentation {
 
      foreach $symbol (sort (keys (%AllSymbols))) {
           if (defined ($Declarations{$symbol})) {
-               my $type = $DeclarationTypes{$symbol};
-               if (($type eq 'FUNCTION') or ($type eq 'MACRO')) {
-                    $total++;
-                    if (exists ($AllDocumentedSymbols{$symbol})) {
-                         $n_documented++;
-                    } else {
-                         $buffer .= $symbol . "\n";
-                    }
-               } elsif ($type eq 'STRUCT') {
-               }
+	       $total++;
+	       if (exists ($AllDocumentedSymbols{$symbol})) {
+		 $n_documented++;
+	       } else {
+		 $buffer .= $symbol . "\n";
+	       }
           }
      }
 
@@ -1778,15 +1781,15 @@ sub OutputMissingDocumentation {
           $percent = ($n_documented / $total) * 100.0;
      }
 
-     printf UNDOCUMENTED "%.0f%% function docs coverage.\n", $percent;
-     print UNDOCUMENTED "$n_documented functions documented.\n";
+     printf UNDOCUMENTED "%.0f%% docs coverage.\n", $percent;
+     print UNDOCUMENTED "$n_documented symbols documented.\n";
      print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
 
      print UNDOCUMENTED $buffer;
 
      close (UNDOCUMENTED);
 
-     printf (("%.0f%% function docs coverage ($n_documented functions documented, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
+     printf (("%.0f%% symbol docs coverage ($n_documented symbols documented, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
 }
 
 
@@ -2279,7 +2282,8 @@ sub ReadObjectHierarchy {
 # Function    : ReadArgsFile
 # Description : This reads in an existing file which contains information on
 #		all GTK args. It creates the arrays @ArgObjects, @ArgNames,
-#		@ArgTypes and @ArgFlags containing info on the args.
+#		@ArgTypes, @ArgFlags, @ArgNicks and @ArgBlurbs containing info 
+#               on the args.
 # Arguments   : $file - the file containing the arg information.
 #############################################################################
 
@@ -2291,12 +2295,16 @@ sub ReadArgsFile {
     my $arg_name;
     my $arg_type;
     my $arg_flags;
+    my $arg_nick;
+    my $arg_blurb;
 
     # Reset the signal info.
     @ArgObjects = ();
     @ArgNames = ();
     @ArgTypes = ();
     @ArgFlags = ();
+    @ArgNicks = ();
+    @ArgBlurbs = ();
 
     if (! -f $file) {
 	return;
@@ -2313,6 +2321,8 @@ sub ReadArgsFile {
 		$arg_name = "";
 		$arg_type = "";
 		$arg_flags = "";
+		$arg_nick = "";
+		$arg_blurb = "";
 	    }
 	} else {
 	    if (m/^<NAME>(.*)<\/NAME>/) {
@@ -2328,12 +2338,18 @@ sub ReadArgsFile {
 		$arg_type = $1;
 	    } elsif (m/^<FLAGS>(.*)<\/FLAGS>/) {
 		$arg_flags = $1;
+	    } elsif (m/^<NICK>(.*)<\/NICK>/) {
+		$arg_nick = $1;
+	    } elsif (m/^<BLURB>(.*)<\/BLURB>/) {
+		$arg_blurb = $1;
 	    } elsif (m%^</ARG>%) {
 #		print "Found end of arg: ${arg_object}::${arg_name}\n${arg_type} : ${arg_flags}\n";
 		push (@ArgObjects, $arg_object);
 		push (@ArgNames, $arg_name);
 		push (@ArgTypes, $arg_type);
 		push (@ArgFlags, $arg_flags);
+		push (@ArgNicks, $arg_nick);
+		push (@ArgBlurbs, $arg_blurb);
 		$in_arg = 0;
 	    }
 	}
