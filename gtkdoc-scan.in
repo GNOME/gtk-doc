@@ -1,4 +1,5 @@
 #!@PERL@ -w
+# -*- cperl -*-
 #
 # gtk-doc - GTK DocBook documentation generator.
 # Copyright (C) 1998  Damon Chaplin
@@ -49,19 +50,27 @@ my $OUTPUT_DIR;
 my @SOURCE_DIRS;
 my $IGNORE_HEADERS = "";
 my $PRINT_VERSION;
+# regexp matching cpp symbols which surround deprecated stuff
+# e.g. 'GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED'
+# these are detected if they are used as #if FOO, #ifndef FOO, or #ifdef FOO
+my $DEPRECATED_GUARDS;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
 	      'ignore-headers' => \$IGNORE_HEADERS,
 	      'output-dir' => \$OUTPUT_DIR,
-	      'version' => \$PRINT_VERSION);
+	      'version' => \$PRINT_VERSION,
+              'deprecated-guards' => \$DEPRECATED_GUARDS);
 GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
-	   "output-dir:s", "version");
+	   "output-dir:s", "version",
+           "deprecated-guards:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
     exit 0;
 }
+
+$DEPRECATED_GUARDS = $DEPRECATED_GUARDS ? $DEPRECATED_GUARDS : "does_not_match_any_cpp_symbols_at_all_nope";
 
 $OUTPUT_DIR = $OUTPUT_DIR ? $OUTPUT_DIR : ".";
 
@@ -176,6 +185,11 @@ sub ScanHeader {
 				#   subclasses, which we remove from the list.
 
     my $file_basename;
+    
+    my $deprecated_conditional_nest = 0;
+
+    my $deprecated = "";
+
     if ($input_file =~ m/^.*[\/\\](.*)\.h$/) {
 	$file_basename = $1;
     } else {
@@ -210,6 +224,32 @@ sub ScanHeader {
 	    }
 	    next;
 	}
+
+        # Keep a count of #if, #ifdef, #ifndef nesting,
+        # and if we enter a deprecation-symbol-bracketed
+        # zone, take note.
+        if (m/^\s*#\s*if\w*\s+(\w+)/) {
+            if ($deprecated_conditional_nest == 0 and $1 =~ /$DEPRECATED_GUARDS/) {
+                 $deprecated_conditional_nest = 1;
+            } elsif ($deprecated_conditional_nest > 0) {
+                 $deprecated_conditional_nest += 1;
+            }
+        } elsif (m/^\s*#\sif/) {
+            if ($deprecated_conditional_nest > 0) {
+                 $deprecated_conditional_nest += 1;
+            }
+        } elsif (m/^\s*#endif/) {
+            if ($deprecated_conditional_nest > 0) {
+                $deprecated_conditional_nest -= 1;
+            }
+        }
+
+        # set global that affects AddSymbolToList
+        if ($deprecated_conditional_nest > 0) {
+            $deprecated = "<DEPRECATED/>\n";
+        } else {
+            $deprecated = "";
+        }
 
 	if (!$in_declaration) {
 	    # Skip top-level comments.
@@ -284,7 +324,7 @@ sub ScanHeader {
 		# will override this.
 #		print "DEBUG: struct typedef: $1\n";
 		&AddSymbolToList (\$list, $1);
-		print DECL "<STRUCT>\n<NAME>$1</NAME>\n</STRUCT>\n";
+		print DECL "<STRUCT>\n<NAME>$1</NAME>\n$deprecated</STRUCT>\n";
 
 	    } elsif (m/^\s*typedef\s+struct\s*{/) {
 		$symbol = "";
@@ -315,7 +355,7 @@ sub ScanHeader {
 		if ($2 !~ m/^struct\s/ && $2 !~ m/^union\s/) {
 #		    print "Found typedef: $_";
 		    &AddSymbolToList (\$list, $3);
-		    print DECL "<TYPEDEF>\n<NAME>$3</NAME>\n$_</TYPEDEF>\n";
+		    print DECL "<TYPEDEF>\n<NAME>$3</NAME>\n$deprecated$_</TYPEDEF>\n";
 		}
 	    } elsif (m/^\s*typedef\s+/) {
 #		print "Skipping typedef: $_";
@@ -328,7 +368,7 @@ sub ScanHeader {
 	        s/^\s*([A-Za-z_]+VAR)\b/extern/;
 #		print "Possible extern: $_";
 		&AddSymbolToList (\$list, $symbol);
-		print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$_</VARIABLE>\n";
+		print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$_</VARIABLE>\n";
 
 
 	    # FUNCTIONS
@@ -393,7 +433,7 @@ sub ScanHeader {
 						# and end of lines.
 		$ret_type =~ s%/\*.*?\*/%%g;	# remove comments in ret type.
 		&AddSymbolToList (\$list, $symbol);
-		print DECL "<FUNCTION>\n<NAME>$symbol</NAME>\n<RETURNS>$ret_type</RETURNS>\n$decl\n</FUNCTION>\n";
+		print DECL "<FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl\n</FUNCTION>\n";
 		$in_declaration = "";
 	    }
 	}
@@ -401,7 +441,7 @@ sub ScanHeader {
 	if ($in_declaration eq 'user_function') {
 	    if ($decl =~ s/\).*$//) {
 		&AddSymbolToList (\$list, $symbol);
-		print DECL "<USER_FUNCTION>\n<NAME>$symbol</NAME>\n<RETURNS>$ret_type</RETURNS>\n$decl</USER_FUNCTION>\n";
+		print DECL "<USER_FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl</USER_FUNCTION>\n";
 		$in_declaration = "";
 	    }
 	}
@@ -409,7 +449,7 @@ sub ScanHeader {
 	if ($in_declaration eq 'macro') {
 	    if ($decl !~ m/\\\s*$/) {
 		&AddSymbolToList (\$list, $symbol);
-		print DECL "<MACRO>\n<NAME>$symbol</NAME>\n$decl</MACRO>\n";
+		print DECL "<MACRO>\n<NAME>$symbol</NAME>\n$deprecated$decl</MACRO>\n";
 		$in_declaration = "";
 	    }
 	}
@@ -420,7 +460,7 @@ sub ScanHeader {
 		    $symbol = $1;
 		}
 		&AddSymbolToList (\$list, $symbol);
-		print DECL "<ENUM>\n<NAME>$symbol</NAME>\n$decl</ENUM>\n";
+		print DECL "<ENUM>\n<NAME>$symbol</NAME>\n$deprecated$decl</ENUM>\n";
 		$in_declaration = "";
 	    }
 	}
@@ -442,9 +482,9 @@ sub ScanHeader {
 		    &AddSymbolToList (\$list, $symbol);
 
 		    if ($decl =~ m/^\s*typedef\s+struct\s*{/) {
-		      print DECL "<TYPEDEF>\n<NAME>$symbol</NAME>\n$decl</TYPEDEF>\n";
+		      print DECL "<TYPEDEF>\n<NAME>$symbol</NAME>\n$deprecated$decl</TYPEDEF>\n";
 		    } else {
-		      print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$decl</STRUCT>\n";
+		      print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";
 		    }
 		}
 		$in_declaration = "";
@@ -459,7 +499,7 @@ sub ScanHeader {
 	if ($in_declaration eq 'union') {
 	    if ($decl =~ m/\}\s*;\s*$/) {
 		&AddSymbolToList (\$list, $symbol);
-		print DECL "<UNION>\n<NAME>$symbol</NAME>\n$decl</UNION>\n";
+		print DECL "<UNION>\n<NAME>$symbol</NAME>\n$deprecated$decl</UNION>\n";
 		$in_declaration = "";
 	    }
 	}
