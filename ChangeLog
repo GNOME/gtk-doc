@@ -1,3 +1,14 @@
+2002-05-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkhtml.in: Detect whether we're processing SGML or XML. 
+
+	* gtkdoc-mkdb.in: New option --output-format to switch between
+	SGML and XML output.
+
+	* Makefile.am (EXTRA_DIST): Add xml.dcl
+	
+	* xml.dcl: The XML declaration.
+
 2002-05-06  jacob berkman  <jacob@ximian.com>
 
 	* gtkdoc-scangobj.in: add an include for the GTK_CHECK_VERSION

@@ -14,11 +14,13 @@ gtkdocdatadir = $(datadir)/gtk-doc
 gtkdocdata_DATA = \
 	gtkdoc-common.pl	\
         gtk-doc.dsl		\
-	gtk-doc.dcl
+	gtk-doc.dcl		\
+	xml.dcl
 
 EXTRA_DIST= \
 	gtk-doc.spec.in	\
-	gtk-doc.dcl
+	gtk-doc.dcl  	\
+	xml.dcl
 
 dist-hook:
 	mkdir $(distdir)/doc
@@ -34,3 +36,4 @@ dist-hook:
 	cp -pr $(srcdir)/tools/* $(distdir)/tools
 	rm -rf $(distdir)/tools/CVS
 	cp gtk-doc.spec $(distdir)
+

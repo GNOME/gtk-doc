@@ -47,6 +47,7 @@ my $PRINT_HELP;
 my $OUTPUT_ALL_SYMBOLS;
 my $MAIN_SGML_FILE;
 my $SGML_MODE;
+my $OUTPUT_FORMAT;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
@@ -56,8 +57,20 @@ my %optctl = (module => \$MODULE,
 	      'help' => \$PRINT_HELP,
 	      'main-sgml-file' => \$MAIN_SGML_FILE,
 	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
-	      'sgml-mode' => \$SGML_MODE);
-GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode");
+	      'sgml-mode' => \$SGML_MODE,
+	      'output-format' => \$OUTPUT_FORMAT);
+GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode", "output-format:s");
+
+my $empty_element_end;
+
+if (lc($OUTPUT_FORMAT) eq "xml") {
+    $OUTPUT_FORMAT = "xml";
+    $empty_element_end = "/>";
+}
+else {
+    $OUTPUT_FORMAT = "sgml";
+    $empty_element_end = ">";
+}
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -72,6 +85,7 @@ if ($PRINT_HELP) {
     print "\n--output-dir=DIRNAME   Directory to put the generated Docbook files in";
     print "\n--tmpl-dir=DIRNAME     DIRECTORY in which template files may be found";
     print "\n--main-sgml-file=FILE  File containing the toplevel SGML file.";
+    print "\n--output-format=FORMAT The format to use for the generated docbook, XML or SGML.";
     print "\n--sgml-mode            Allow Docbook markup in inline documentation.";
     print "\n--version              Print the version of this program";
     print "\n--help                 Print this help\n";
@@ -84,7 +98,7 @@ my $ROOT_DIR = ".";
 $TMPL_DIR = $TMPL_DIR ? $TMPL_DIR : "$ROOT_DIR/tmpl";
 
 # This is where we put all the DocBook output.
-$SGML_OUTPUT_DIR = $SGML_OUTPUT_DIR ? $SGML_OUTPUT_DIR : "$ROOT_DIR/sgml";
+$SGML_OUTPUT_DIR = $SGML_OUTPUT_DIR ? $SGML_OUTPUT_DIR : "$ROOT_DIR/$OUTPUT_FORMAT";
 
 # This file contains the object hierarchy.
 my $OBJECT_TREE_FILE = "$ROOT_DIR/$MODULE.hierarchy";
@@ -204,9 +218,9 @@ sub OutputObjectList {
     print (OUTPUT <<EOF);
 <informaltable pgwide="1" frame="none">
 <tgroup cols="$cols">
-<colspec colwidth="1*">
-<colspec colwidth="1*">
-<colspec colwidth="1*">
+<colspec colwidth="1*"${empty_element_end}
+<colspec colwidth="1*"${empty_element_end}
+<colspec colwidth="1*"${empty_element_end}
 <tbody>
 EOF
 
@@ -304,7 +318,7 @@ sub OutputSGML {
 #	    print "End of section: $title\n";
 
 	    $file =~ s/\s/_/g;
-	    $file .= ".sgml";
+	    $file .= "." . $OUTPUT_FORMAT;
 
 	    # GtkObjects use their class name as the ID.
 	    my $section_id;
@@ -431,9 +445,9 @@ sub OutputMacro {
     $synop .= "\n";
 
     if ($args ne "") {
-	$desc = "<refsect2>\n<title><anchor id=\"$id\">${symbol}()</title>\n";
+	$desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}${symbol}()</title>\n";
     } else {
-	$desc = "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+	$desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
     }
     # Don't output the macro definition if is is a conditional macro or it
     # looks like a function, i.e. starts with "g_" or "_?gnome_", or it is
@@ -474,7 +488,7 @@ sub OutputTypedef {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $synop = "typedef     <link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
     if (!defined ($DeclarationConditional{$symbol})) {
 	$declaration = &CreateValidSGML ($declaration);
 	$desc .= "<programlisting>$declaration</programlisting>\n";
@@ -519,7 +533,7 @@ sub OutputStruct {
 	$id = &CreateValidSGMLID ($symbol);
     }
     my $synop = "struct      <link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\">struct $symbol</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}struct $symbol</title>\n";
 
     # Form a pretty-printed, private-data-removed form of the declaration
 
@@ -595,8 +609,8 @@ sub OutputStruct {
 	    $desc .= <<EOF;
 <informaltable pgwide="1" frame="none" role="struct">
 <tgroup cols="2">
-<colspec colwidth="2*">
-<colspec colwidth="8*">
+<colspec colwidth="2*"${empty_element_end}
+<colspec colwidth="8*"${empty_element_end}
 <tbody>
 EOF
 	while (@fields) {
@@ -631,7 +645,7 @@ sub OutputEnum {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $synop = "enum        <link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\">enum $symbol</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}enum $symbol</title>\n";
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
 
@@ -667,8 +681,8 @@ sub OutputEnum {
 	    $desc .= <<EOF;
 <informaltable pgwide="1" frame="none" role="enum">
 <tgroup cols="2">
-<colspec colwidth="2*">
-<colspec colwidth="8*">
+<colspec colwidth="2*"${empty_element_end}
+<colspec colwidth="8*"${empty_element_end}
 <tbody>
 EOF
 	for my $member_name (@members) {
@@ -702,7 +716,7 @@ sub OutputUnion {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $synop = "union       <link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\">union $symbol</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}union $symbol</title>\n";
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
 
@@ -740,7 +754,7 @@ sub OutputVariable {
 	$synop = "extern      <link linkend=\"$id\">$symbol</link>;\n";
     }
 
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
 
@@ -817,7 +831,7 @@ sub OutputFunction {
     }
 
     my $synop = $ret_type_output . $symbol_output . '(';
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\">${symbol} ()</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}${symbol} ()</title>\n";
     $desc  .= "<programlisting>${ret_type_output}$symbol_desc_output(";
 
     my $param_num = 0;
@@ -962,8 +976,8 @@ sub OutputParamDescriptions {
 	    $output .= <<EOF;
 <informaltable pgwide="1" frame="none" role="params">
 <tgroup cols="2">
-<colspec colwidth="2*">
-<colspec colwidth="8*">
+<colspec colwidth="2*"${empty_element_end}
+<colspec colwidth="8*"${empty_element_end}
 <tbody>
 EOF
 
@@ -1155,9 +1169,18 @@ sub OutputBook {
       open (OUTPUT, ">$MAIN_SGML_FILE")
 	|| die "Can't create $MAIN_SGML_FILE";
 
-      print OUTPUT <<EOF;
-<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+      if (lc($OUTPUT_FORMAT) eq "xml") {
+	  print OUTPUT <<EOF;
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 EOF
+      }
+      else {
+	print OUTPUT <<EOF;
+<!doctype book PUBLIC "-//DavenPort//DTD DocBook V3.0//EN" [
+EOF
+	}
 
       print OUTPUT $book_top;
 
@@ -1376,7 +1399,7 @@ sub GetSignals {
 		    . (' ' x $SIGNAL_FIELD_WIDTH);
 	    }
 
-	    $desc .= "<refsect2><title><anchor id=\"$id\">The &quot;$name&quot; signal</title>\n";
+	    $desc .= "<refsect2><title><anchor id=\"$id\"${empty_element_end}The &quot;$name&quot; signal</title>\n";
 	    $desc .= "<programlisting>";
 
 	    $SignalReturns[$i] =~ m/\s*(const\s*)?(\w+)\s*(\**)/;
@@ -1506,7 +1529,7 @@ sub GetArgs {
 	    my $pad2 = " " x (20 - length ($type));
 
  	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output$pad2 : $flags_string\n";
-	    my $arg_desc = "<varlistentry><term><anchor id=\"$id\">&quot;<literal>$name</literal>&quot; ($type_output : $flags_string)</term>\n<listitem>\n<para>$blurb</para>\n</listitem></varlistentry>\n";
+	    my $arg_desc = "<varlistentry><term><anchor id=\"$id\"${empty_element_end}&quot;<literal>$name</literal>&quot; ($type_output : $flags_string)</term>\n<listitem>\n<para>$blurb</para>\n</listitem></varlistentry>\n";
 
 	    if ($flags =~ m/c/) {
 	        $child_synop .= $arg_synop;
