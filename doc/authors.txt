@@ -99,13 +99,13 @@ To refer to an external function, e.g. a standard C function:
 To include example code:
 
     <example>
-    <title>Using a Hash Table</title>
+    <title>Using a GHashTable.</title>
     <programlisting>
       ...
     </programlisting>
     </example>
 
-  or possibly:
+  or possibly this, for very short code fragments which don't need a title:
 
     <informalexample>
     <programlisting>
@@ -117,13 +117,19 @@ To include example code:
 To include bulleted lists:
 
     <itemizedlist>
-    <listitem><para>
+
+    <listitem>
+    <para>
       ...
-    </para></listitem>
-    <listitem><para>
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
       ...
-    </para></listitem>
-      ....
+    </para>
+    </listitem>
+
     </itemizedlist>
 
 

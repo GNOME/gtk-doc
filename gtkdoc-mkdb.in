@@ -153,6 +153,9 @@ sub ReadObjectHierarchy {
     @Objects = ();
     @ObjectLevels = ();
 
+    if (! -f $OBJECT_TREE_FILE) {
+	return;
+    }
     if (!open (INPUT, $OBJECT_TREE_FILE)) {
 	warn "Can't open $OBJECT_TREE_FILE - skipping object tree\n";
 	return;
@@ -233,7 +236,7 @@ EOF
 sub OutputSGML {
     my ($file) = @_;
     
-    print "Reading: $file\n";
+#    print "Reading: $file\n";
     open (INPUT, $file)
 	|| die "Can't open $file";
     my $book_top = "";
@@ -1331,6 +1334,8 @@ sub GetArgs {
 
 	    if (defined ($SymbolDocs{$symbol})) {
 	        $desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	    } else {
+		$desc .= "<para></para>\n";
 	    }
 
 	    $desc .= "</listitem></varlistentry>\n";

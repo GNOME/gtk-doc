@@ -1,3 +1,12 @@
+1999-06-06  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* configure.in: updated version to 0.3.
+
+	* doc/style-guide.txt: A couple of minor changes.
+
+	* gtkdoc-mkdb.in: Get rid of a couple of messages.
+	Output an empty <para> if an Arg isn't documented, to keep Jade happy.
+
 1999-05-22  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtk-doc.dsl.in: Renamed %shade-verbatim-attr-2% to

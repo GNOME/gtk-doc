@@ -47,16 +47,37 @@ files the next time 'make templates' is run).
 Enumerations should appear after the first function which uses them.
 
 
-Widget Descriptions
+Section Descriptions
 ===================
 
-Start the main description with -
+For widgets, start the main description with -
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 The #GtkFontSelectionDialog widget ...
 
 
+If you want to include subsections in the main description, to conform to
+DocBook SGML you must have 0 or more leading paragraphs (or possibly other
+DocBook tags - see the DTD), then 1 or more <refsect2> subsections, with
+nothing after. e.g.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Introduction to the section....
+</para>
+<refsect2>
+  <title>First Subsection</title>
+  <para>
+    This is the first subsection.
+  </para>
+</refsect2>
+<refsect2>
+  <title>Second Subsection</title>
+  <para>
+    This is the second subsection.
+  </para>
+</refsect2>
 
 
 Functions & Macro Descriptions
@@ -195,4 +216,14 @@ don't add them yourself.
 -----------------------------------------------------------------------
 
 
-Damon, 31 Mar 1999
+Including Hypertext Links
+=========================
+
+Use the <ulink> tag to include hypertext links, e.g.
+
+Gnome's home page is at <ulink url="www.gnome.org">www.gnome.org</ulink>.
+
+Remember that the documentation may be printed, so it is probably best
+to repeat the URL within the link.
+
+Damon, 1 June 1999
