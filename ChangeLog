@@ -1,3 +1,9 @@
+2005-01-28  Damon Chaplin  <damon@gnome.org>
+
+	* gtk-doc.make: use dist-hook rather than EXTRA_DIST to copy the
+	$(DOC_MODULE).types file over, so we can skip this if it doesn't exist.
+	#156300.
+
 2005-01-12  Damon Chaplin  <damon@gnome.org>
 
 	* README: patch from Stefan Kost to mention GObject classes
