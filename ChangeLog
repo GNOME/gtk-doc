@@ -1,5 +1,21 @@
 2001-05-19  Damon Chaplin  <damon@ximian.com>
 
+	* README: 
+	* doc/README:
+	* doc/setting-up.txt:
+	* doc/sections-file.txt:
+	* doc/authors.txt: updated docs to cover simpler setup procedure.
+
+	* doc/gtk_button.txt:
+	* doc/manpage:
+	* doc/manpage.man:
+	* doc/notes.txt: removed out-of date stuff.
+
+	* Makefile.am (dist-hook): updated so it doesn't try to remove old
+	examples subdirectory stuff.
+
+2001-05-19  Damon Chaplin  <damon@ximian.com>
+
 	* examples/gnome/*:
 	* examples/gnomeui/*: removed out-of-date example files.
 

@@ -16,8 +16,7 @@ or for widgets it is based on the widget name converted to lower case).
 
 The <TITLE> ... </TITLE> tag is used to specify the title of the section.
 It is only useful before the templates are initially created, since the title
-set in the template file overrides this. (Note that if you change the titles
-anywhere you will have to update the main SGML file.)
+set in the template file overrides this.
 
 You can group items in the section by using the <SUBSECTION> tag. Currently
 it outputs a blank line between subsections in the synopsis section.

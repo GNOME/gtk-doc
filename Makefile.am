@@ -26,5 +26,5 @@ dist-hook:
 	rm -rf $(distdir)/db2man/CVS
 	mkdir $(distdir)/examples
 	cp -pr $(srcdir)/examples/* $(distdir)/examples
-	rm -rf $(distdir)/examples/CVS $(distdir)/examples/gnome/CVS $(distdir)/examples/gnomeui/CVS
+	rm -rf $(distdir)/examples/CVS
 	cp gtk-doc.spec $(distdir)
