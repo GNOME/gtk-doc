@@ -1797,11 +1797,13 @@ sub MakeIndexterms {
       $role = "deprecated";
   }
   if (exists $Since{$symbol}) {
-      $Since{$symbol} =~ /\s*([\w\.]*)\s*/;
-      if ($role ne "") {
-	  $role .= " ";
-	}
-      $role .= $1;
+     my $since = $Since{$symbol};
+     $since =~ s/^\s+//;
+     $since =~ s/\s+$//;
+     if ($role ne "") {
+         $role .= " ";
+     }
+     $role .= $since;
   }
   if ($role ne "") {
       $role = " role=\"$role\"";

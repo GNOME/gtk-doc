@@ -1,3 +1,8 @@
+2005-02-26  Sven Neumann  <sven@gimp.org>
+
+	* gtkdoc-mkdb.in (MakeIndexterms): allow space in Since: keywords,
+	only strip leading and trailing whitespace (bug #168384).
+
 2005-02-16  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (ScanSourceFile): add support for "@stability:"
