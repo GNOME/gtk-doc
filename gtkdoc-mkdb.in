@@ -239,12 +239,6 @@ if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
     close (TIMESTAMP);
 }
 
-open (DEPR, ">$ROOT_DIR/deprecated");
-foreach my $symbol (sort (keys (%Deprecated))) {
-    print DEPR $symbol . "\n";
-}
-close(DEPR);
-
 #############################################################################
 # Function    : OutputObjectList
 # Description : This outputs the alphabetical list of objects, in a columned
