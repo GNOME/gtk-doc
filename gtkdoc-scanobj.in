@@ -46,7 +46,7 @@ my $PRINT_VERSION;
 	   'output-dir' => \$OUTPUT_DIR,
 	   'version' => \$PRINT_VERSION);
 	   
-GetOptions(\%optctl, "module=s", "types:s", "nogtkinit", "version");
+GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "version");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
