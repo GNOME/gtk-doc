@@ -134,9 +134,13 @@ if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
 
 my $changed = 0;
 
-$changed ||= &UpdateTemplates ("$ROOT_DIR/$MODULE-sections.txt");
+if (&UpdateTemplates ("$ROOT_DIR/$MODULE-sections.txt")) {
+  $changed = TRUE;
+}
 &OutputUnusedTemplates;
-$changed ||= &CheckAllDeclarationsOutput;
+if (&CheckAllDeclarationsOutput) {
+  $changed = TRUE;
+}
 
 if ($changed || ! -e "$ROOT_DIR/tmpl.stamp") {
     open (TIMESTAMP, ">$ROOT_DIR/tmpl.stamp")
@@ -267,7 +271,7 @@ sub UpdateTemplates {
     }
     close (INPUT);
 
-    $changed;
+    return $changed;
 }
 
 
@@ -307,7 +311,7 @@ WARNING: $num_unused unused declarations.
 EOF
     }
 
-    &UpdateFileIfChanged ($old_unused_file, $new_unused_file, 0);
+    return &UpdateFileIfChanged ($old_unused_file, $new_unused_file, 0);
 }
 
 
