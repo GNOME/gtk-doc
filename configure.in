@@ -10,7 +10,7 @@ AC_ISC_POSIX
 AC_PROG_CC
 
 if test "x$with_dsssl_dir" = "x" ; then
-  dirs="/usr/lib/sgml/stylesheets/nwalsh-modular /usr/lib/dsssl/stylesheets/docbook"
+  dirs="/usr/lib/sgml/stylesheets/nwalsh-modular /usr/lib/sgml/stylesheet/dsssl/docbook/nwalsh /usr/lib/dsssl/stylesheets/docbook"
 else
   dirs=$with_dsssl_dir
 fi

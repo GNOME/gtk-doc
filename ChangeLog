@@ -1,3 +1,14 @@
+Wed Aug 18 03:55:30 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-mkdb.in: Fix bug that was preventing
+	structure field definitions from being output.
+
+Wed Aug 18 23:25:23 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add /usr/lib/sgml/stylesheet to list
+	of stylesheet directories. (Found in recent Debian
+	packages)
+
 1999-08-15  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtkdoc-mkdb.in: Output $decl_out as the struct rather than the

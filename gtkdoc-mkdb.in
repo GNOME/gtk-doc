@@ -2193,10 +2193,10 @@ sub ParseStructDeclaration {
 	    
 	    my @names = split /\s*,\s*/, $name;
 	    for my $n (@names) {
+		push @result, $n;
 		if (defined $namefunc) {
 		    $n = $namefunc->($n);
 		}
-		push @result, $n;
 		push @result, "$mod1$ptype$ptr1$mod2$ptr2$n$array$bits";
 	    }
 	    
