@@ -84,7 +84,7 @@ for $file (@ARGV) {
     &ScanHeader ($file, \$object_list, \$main_list);
 }
 
-for $dir (@SOURCE_DIRS) {
+for my $dir (@SOURCE_DIRS) {
     &ScanHeaders ($dir, \$object_list, \$main_list);
 }
 

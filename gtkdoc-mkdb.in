@@ -131,7 +131,7 @@ if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
     &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
 }
 
-for $dir (@SOURCE_DIRS) {
+for my $dir (@SOURCE_DIRS) {
     &ReadSourceDocumentation ($dir);
 }
 
