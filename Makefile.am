@@ -8,16 +8,17 @@ bin_SCRIPTS = \
 	gtkdoc-mkdb     \
 	gtkdoc-mkhtml   \
 	gtkdoc-mkman    \
-	gtkdoc-fixxref
+	gtkdoc-fixxref  \
+	gtkdocize
 
-gtkdocdatadir = $(datadir)/gtk-doc
+gtkdocdatadir = $(datadir)/gtk-doc/data
 gtkdocdata_DATA = \
 	gtkdoc-common.pl	\
         gtk-doc.dsl		\
 	gtk-doc.dcl		\
 	gtk-doc.xsl		\
 	devhelp.xsl		\
-	xml.dcl			\
+	gtk-doc.make		\
 	home.png		\
 	left.png		\
 	right.png		\
@@ -26,19 +27,22 @@ gtkdocdata_DATA = \
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gtk-doc.pc
 
+aclocaldir = $(datadir)/aclocal
+aclocal_DATA = gtk-doc.m4
+
 EXTRA_DIST= \
 	MAINTAINERS	\
 	gtk-doc.pc.in	\
 	gtk-doc.spec.in	\
+	gtk-doc.spec	\
 	gtk-doc.dcl  	\
 	gtk-doc.xsl	\
 	devhelp.xsl	\
-	xml.dcl		\
 	home.png	\
 	left.png	\
 	right.png	\
-	up.png
-
+	up.png		\
+	gtk-doc.m4
 
 dist-hook:
 	mkdir $(distdir)/doc
@@ -53,5 +57,4 @@ dist-hook:
 	mkdir $(distdir)/tools
 	cp -pr $(srcdir)/tools/* $(distdir)/tools
 	rm -rf $(distdir)/tools/CVS
-	cp gtk-doc.spec $(distdir)
 

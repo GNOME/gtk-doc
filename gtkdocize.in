@@ -1,0 +1,63 @@
+#!/bin/sh
+
+progname=`echo "$0" | sed 's%^.*/%%'`
+
+PROGRAM=gtkdocize
+PACKAGE=@PACKAGE@
+VERSION=@VERSION@
+
+prefix=@prefix@
+datadir=@datadir@
+
+# options
+docdir=.
+copy=no
+
+while test $# -gt 0; do
+  case "$1" in
+  --help)
+    echo "usage: $progname [ --copy ] [ --docdir DIR ]" 1>&2
+    exit 1 ;;
+  --copy)
+    copy=yes
+    shift ;;
+  --docdir)
+    shift
+    docdir="$1"
+    shift ;;
+  -*)
+    echo "$progname: unrecognised option '$1'" 1>&2
+    echo "usage: $progname [ --copy ] [ --docdir DIR ]" 1>&2
+    exit 1 ;;
+  *)
+    echo "$progname: too many arguments" 1>&2
+    echo "usage: $progname [ --copy ] [ --docdir DIR ]" 1>&2
+    exit 1 ;;
+  esac
+done
+
+if test -f configure.ac; then
+  configure=configure.ac
+elif test -f configure.in; then
+  configure=configure.in
+else
+  echo "$progname: neither configure.ac nor configure.in exist" 1>&2
+  exit 1
+fi
+
+if grep '^GTK_DOC_CHECK' $configure >/dev/null 2>&1; then
+  :
+else
+  echo "$progname: GTK_DOC_CHECK not called in $configure" 1>&2
+  exit 1
+fi
+
+rm -f $docdir/gtk-doc.make
+if test "$copy" = yes; then
+  cp -f $datadir/gtk-doc/data/gtk-doc.make $docdir/ ||
+    exit 1
+else
+  ln -sf $datadir/gtk-doc/data/gtk-doc.make $docdir/ ||
+    cp -f $datadir/gtk-doc/data/gtk-doc.make $docdir/ ||
+    exit 1
+fi

@@ -51,17 +51,21 @@ if test -z "$XSLTPROC"; then
   AC_MSG_ERROR([xsltproc not found])
 fi
 
+dnl check for DocBook DTD and stylesheets in the local catalog.
+JH_CHECK_XML_CATALOG([http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd])
+JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl])
+
 dnl
 dnl Set PACKAGE_DATA_DIR so we can find the script containing common routines.
 dnl
 if test "x${datadir}" = 'x${prefix}/share'; then
   if test "x${prefix}" = "xNONE"; then
-    PACKAGE_DATA_DIR="${ac_default_prefix}/share/${PACKAGE}"
+    PACKAGE_DATA_DIR="${ac_default_prefix}/share/${PACKAGE}/data"
   else
-    PACKAGE_DATA_DIR="${prefix}/share/${PACKAGE}"
+    PACKAGE_DATA_DIR="${prefix}/share/${PACKAGE}/data"
   fi
 else
-  PACKAGE_DATA_DIR="${datadir}/${PACKAGE}"
+  PACKAGE_DATA_DIR="${datadir}/${PACKAGE}/data"
 fi
 
 AC_SUBST(PACKAGE_DATA_DIR)
@@ -88,5 +92,6 @@ gtkdoc-mktmpl
 gtkdoc-scan
 gtkdoc-scanobj
 gtkdoc-scangobj
+gtkdocize
 ],
-[chmod +x gtkdoc-mkman gtkdoc-mkhtml gtkdoc-fixxref gtkdoc-mkdb gtkdoc-mktmpl gtkdoc-scan gtkdoc-scanobj])
+[chmod +x gtkdoc-mkman gtkdoc-mkhtml gtkdoc-fixxref gtkdoc-mkdb gtkdoc-mktmpl gtkdoc-scan gtkdoc-scanobj gtkdocize])

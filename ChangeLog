@@ -1,3 +1,32 @@
+2003-02-09  James Henstridge  <james@daa.com.au>
+
+	* gtkdocize.in: script used to copy gtk-doc.make into another
+	module.
+
+	* gtk-doc.make: automake makefile fragment to handle gtk-doc
+	support in other modules.
+
+	* configure.in: check to make sure DocBook XML DTD and XSLT
+	stylesheets are present in the XML catalog.
+
+	* acinclude.m4 (JH_CHECK_XML_CATALOG): new macro to check for
+	entries in the XML catalog.
+
+2003-02-04  James Henstridge  <james@daa.com.au>
+
+	* gtk-doc.m4: a macro to check for gtk-doc.
+
+	* Makefile.am (gtkdocdata_DATA): don't bother installing xml.dcl.
+	It isn't used anymore (since switching xml mode to xsltproc).
+
+	* gtkdoc-mkhtml.in (gtkdocdir): and here.
+
+	* Makefile.am (gtkdocdatadir): change dir.
+
+	* configure.in: put data files in $(datadir)/gtk-doc/data, so that
+	they don't all get mixed up with the html docs installed by other
+	packages.
+
 2003-01-20  Damon Chaplin  <damon@gnome.org>
 
 	* Released 1.0.
