@@ -127,6 +127,7 @@ sub ScanHeaders {
     # Now recursively scan the subdirectories.
     my $dir;
     foreach $dir (@subdirs) {
+	next if ($IGNORE_HEADERS =~ m/\b\Q${dir}\E\b/);
 	&ScanHeaders ("$source_dir/$dir", $object_list, $main_list);
     }
 }

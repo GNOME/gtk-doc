@@ -30,18 +30,25 @@ use Getopt::Long;
 
 # name of documentation module
 my $MODULE;
+my $MODULE_DIR;
 my $HTML_DIR = "";
+my @EXTRA_DIRS;
 
 my %optctl = (module => \$MODULE,
-	      'html-dir' => \$HTML_DIR);
-GetOptions(\%optctl, "module=s", "html-dir=s");
+	      'module-dir' => \$MODULE_DIR,
+	      'html-dir' => \$HTML_DIR,
+	      'extra-dir' => \@EXTRA_DIRS);
+GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir=s", "extra-dir=s@");
 
 # This contains all the entities and their relative URLs.
 my %Links;
 
 &ScanIndices ($HTML_DIR);
-&FixCrossReferences ("$HTML_DIR/$MODULE");
+foreach my $dir (@EXTRA_DIRS) {
+  &ScanIndices ($dir);
+}
 
+&FixCrossReferences (defined $MODULE_DIR ? $MODULE_DIR : "$HTML_DIR/$MODULE");
 
 sub ScanIndices {
     my ($scan_dir) = @_;

@@ -22,10 +22,10 @@
 # Script      : gtkdoc-mkdb
 # Description : This creates the DocBook files from the edited templates.
 #
-#		NOTE: There are a few special cases when creating SGML IDs,
-#		e.g. for G-CSET-A-2-Z. Since IDs are case-insensitive it
-#		clashes with G-CSET-a-2-z, so we change it to
-#		G-CSET-A-2-Z-CAPS. See the CreateValidSGMLID function.
+#		NOTE: When creating SGML IDS, we append -CAPS to all
+#               all-caps identifiers to prevent name clashes. (It basically
+#               never is the case that mixed-case identifiers would collide.)
+#		See the CreateValidSGMLID function.
 #############################################################################
 
 use strict;
@@ -1036,33 +1036,17 @@ sub OutputBook {
 sub CreateValidSGMLID {
     my ($id) = $_[0];
 
+    # Append -CAPS to all all-caps identifiers
+
     # Special case, '_' would end up as '' so we use 'gettext-macro' instead.
     if ($id eq "_") { return "gettext-macro"; }
 
-    # Special case, differentiate AND, OR and NOT from and, or and not.
-    if ($id eq 'AND') { return "AND-CAPS"; }
-    if ($id eq 'OR')  { return "OR-CAPS"; }
-    if ($id eq 'NOT') { return "NOT-CAPS"; }
-
-    if ($id eq 'GTK_OBJECT_CONSTRUCTED') { return "GTK-OBJECT-CONSTRUCTED-CAPS"; }
-
-    if ($id eq 'GDK_THREADS_ENTER') { return "GDK-THREADS-ENTER-CAPS"; }
-    if ($id eq 'GDK_THREADS_LEAVE') { return "GDK-THREADS-LEAVE-CAPS"; }
-
-    # Special case, differentiate Unit from unit.
-    if ($id eq 'Unit') { return "UNIT-CAP"; }
+    if ($id !~ /[a-z]/) { $id .= "-CAPS" };
 
     $id =~ s/[_ ]/-/g;
     $id =~ s/[,\.]//g;
     $id =~ s/^-*//;
     $id =~ s/::/-/g;
-
-    # Special case, since ids are case-insensitive G-CSET-A-2-Z clashes with
-    # G-CSET-a-2-z, so we change it to G-CSET-A-2-Z-CAPS
-    if ($id eq 'G-CSET-A-2-Z') { $id = 'G-CSET-A-2-Z-CAPS' };
-
-    # Special case, change GTK-WIDGET-BASIC to GTK-WIDGET-BASIC-CAPS
-    if ($id eq 'GTK-WIDGET-BASIC') { $id = 'GTK-WIDGET-BASIC-CAPS' };
 
     return $id;
 }
@@ -2255,6 +2239,12 @@ sub ParseEnumDeclaration {
     if ($declaration =~ /^\s*$/) {
 	return @result;
     }
+
+    # Remove parenthesized expressions (in macros like GTK_BLAH = BLAH(1,3))
+    # to avoid getting confused by commas they might contain. This
+    # doesn't handle nested parentheses correctly.
+
+    $declaration =~ s/\([^)]+\)//g;
 
     # Prime match after "typedef enum {" declaration
     if (!scalar($declaration =~ m/typedef\s+enum\s*\{/msg)) {

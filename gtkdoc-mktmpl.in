@@ -1311,6 +1311,12 @@ sub ParseEnumDeclaration {
 	return @result;
     }
 
+    # Remove parenthesized expressions (in macros like GTK_BLAH = BLAH(1,3))
+    # to avoid getting confused by commas they might contain. This
+    # doesn't handle nested parentheses correctly.
+
+    $declaration =~ s/\([^)]*\)//g;
+
     # Prime match after "typedef enum {" declaration
     if (!scalar($declaration =~ m/typedef\s+enum\s*\{/msg)) {
 	die "Enum declaration '$declaration' does not begin with typedef enum {\n";

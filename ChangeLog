@@ -1,3 +1,22 @@
+Tue Sep  5 23:37:53 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-fixxref.in: Add a --extra-dir option to
+	allow scanning of additional uninstalled HTML
+	directories.
+
+	* gtkdoc-scan.in (ScanHeaders): Honor subdirectories
+	appearing in --ignore-headers.
+
+	* gtkdoc-mkdb.in: Append -CAPS to all all-caps identifiers
+	to prevent an infinite expansion of special cases. 
+
+	* gtkdoc-fixxref.in: Add a --module-dir option to
+	allow fixing references in an uninstalled tree.
+
+	* gtkdoc-mkdb.in gtkdoc-mkhtml.in: Simple handling
+	for macros with embedded commas in enumeration 
+	declarations.
+
 Mon Aug 28 18:18:53 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (DSSSL_DIR): Remove check for AM_PATH_GTK
