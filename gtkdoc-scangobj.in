@@ -250,7 +250,7 @@ output_widget_signal (FILE *fp,
   g_signal_query (signal_id, &query_info);
 
   /* Output the return type and function name. */
-  ret_type = get_type_name (query_info.return_type, &is_pointer);
+  ret_type = get_type_name (query_info.return_type & ~G_SIGNAL_TYPE_STATIC_SCOPE, &is_pointer);
   sprintf (ret_type_buffer, "%s%s", ret_type, is_pointer ? "*" : "");
 
   /* Output the signal object type and the argument name. We assume the
@@ -294,7 +294,7 @@ output_widget_signal (FILE *fp,
 	}
       else
 	{
-	  type_name = get_type_name (query_info.param_types[param], &is_pointer);
+	  type_name = get_type_name (query_info.param_types[param] & ~G_SIGNAL_TYPE_STATIC_SCOPE, &is_pointer);
 
 	  /* Most arguments to the callback are called "arg1", "arg2", etc.
 	     GdkWidgets are called "widget", "widget2", ...
