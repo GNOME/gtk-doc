@@ -1,3 +1,8 @@
+Mon Sep 20 09:09:12 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-mkdb.in gtkdoc-mktmpl.in: (ParseStructDeclaration): 
+	Fixed up the code to do /*< private >*/ ... stripping.
+
 1999-09-10  Martin Baulig  <martin@home-of-linux.org>
 
 	* gtkdoc.dsl.in ($generate-chapter-toc$): Return #t, not #f.

@@ -1185,10 +1185,14 @@ sub ParseStructDeclaration {
 
     # For objects, assume private
     if ($is_object) {
-	$declaration =~ s!(struct\s+\w*\s*\{).*?(/\*\s*<\s*public\s*>\s\*/|\})!$1!msg;
+	$declaration =~ s!(struct\s+\w*\s*\{)
+	                  .*?
+			  (?:/\*\s*<\s*public\s*>\s*\*/|(?=\}))!$1!msgx;
     }
     
-    $declaration =~ s!/\*\s*<\s*private\s*>\s*\*/.*?(/\*\s*<\s*public\s*>\s*\*/|\})/!!msg;
+    $declaration =~ s!\n?[ \t]*/\*\s*<\s*private\s*>\s*\*/
+	              .*?
+		      (?:/\*\s*<\s*public\s*>\s*\*/|(?=\}))!!msgx;
     
     # Remove all other comments;
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
