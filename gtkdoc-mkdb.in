@@ -390,7 +390,6 @@ sub OutputSGML {
 		}
 
 		if ($section_includes eq "") {
-		  print "overriding section_includes to $includes\n";
 		    $section_includes = $includes;
 		}
 
