@@ -512,7 +512,7 @@ sub OutputOldParams {
 sub OutputTemplateFile {
     my ($file, $title, $output) = @_;
 
-    my ($short_desc, $long_desc);
+    my ($short_desc, $long_desc, $see_also);
 
     if (defined ($SymbolDocs{"$TMPL_DIR/$file:Title"})) {
 	$title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
@@ -530,6 +530,12 @@ sub OutputTemplateFile {
     } else {
 	$long_desc = "<para>\n\n</para>\n";
     }
+    if (defined ($SymbolDocs{"$TMPL_DIR/$file:See_Also"})) {
+	$see_also = $SymbolDocs{"$TMPL_DIR/$file:See_Also"};
+	delete $SymbolDocs{"$TMPL_DIR/$file:See_Also"};
+    } else {
+	$see_also = "<para>\n\n</para>\n";
+    }
 
     open (OUTPUT, ">$TMPL_DIR/$file")
 	|| die "Can't create $TMPL_DIR/$file";
@@ -543,6 +549,9 @@ $short_desc
 
 <!-- ##### SECTION Long_Description ##### -->
 $long_desc
+
+<!-- ##### SECTION See_Also ##### -->
+$see_also
 
 EOF
 
@@ -903,7 +912,7 @@ sub ReadSignalsFile {
 #############################################################################
 
 sub ReadTemplateFile {
-    my ($docsfile, $skip_unused_params) = $_[0];
+    my ($docsfile, $skip_unused_params) = @_;
 
 #    print "Reading $docsfile\n";
     if (! -f $docsfile) {
@@ -929,7 +938,8 @@ sub ReadTemplateFile {
 	    my $symbol = $2;
 	    if ($symbol eq "Title"
 		|| $symbol eq "Short_Description"
-		|| $symbol eq "Long_Description") {
+		|| $symbol eq "Long_Description"
+		|| $symbol eq "See_Also") {
 		$symbol = $docsfile . ":" . $symbol;
 #		print "Found symbol: $symbol\n";
 	    }

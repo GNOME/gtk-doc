@@ -1,3 +1,33 @@
+1999-03-31  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* configure.in: update version to 0.2 for next release.
+
+	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mkdb.in: added support for 'See Also' section.
+
+	* gtk-doc.dsl.in: changed green background color slightly, and
+	set background color for enum tables.
+
+1999-03-21  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtkdoc-mkhtml.in (gtkdocdir): use '-w no-idref' to suppress all the
+	warnings about references to non-existent IDs.
+
+1999-03-18  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtkdoc-mkdb.in (OutputParamDescriptions): use role="params" for the
+	table so we can adjust the stylesheet code.
+	(OutputSGMLFile): Don't output 'one line description goes here'.
+	(ExpandAbbreviations): allow '-' in #symbol abbreviations, so we can
+	use #GtkWidget-struct.
+	(MakeXRef): get rid of special '-struct' suffix, for #GtkWidget-struct.
+
+	* gtk-doc.dsl.in: use the "role" attribute on tables to set the
+	BGCOLOR.
+
+	* gtkdoc-scan.in (ScanHeader): fix for scanning functions declared
+	over multiple lines - was catching things which weren't functions.
+
 1999-03-11  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* examples/gnomeui/Makefile.am (clean-local): 

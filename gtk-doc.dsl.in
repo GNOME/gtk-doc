@@ -67,7 +67,7 @@
 		    (normalize "informalexample")))
 	(list
 	 (list "BORDER" "0")
-	 (list "BGCOLOR" "#D8FFD8")
+	 (list "BGCOLOR" "#D8F8D8")
 	 (list "WIDTH" "100%")
 	 (list "CELLPADDING" "6"))
 	(list
@@ -109,7 +109,19 @@
 	 (border (if (equal? frameattr (normalize "none"))
 		     '(("BORDER" "0"))
 		     '(("BORDER" "1"))))
-	 (bgcolor '(("BGCOLOR" "#FFD0D0")))
+	 (roleattr (attribute-string (normalize "role") wrapper))
+
+	 ;; FIXME: I thought that I should use normalize ("params") etc. here,
+	 ;; but that doesn't work. Anyone know why?
+	 (bgcolor (cond ((equal? roleattr "params")
+			 '(("BGCOLOR" "#FFD0D0")))
+			((equal? roleattr "struct")
+			 '(("BGCOLOR" "#FFF0D0")))
+			((equal? roleattr "enum")
+			 '(("BGCOLOR" "#F0F0D0")))
+			(else
+			 '(("BGCOLOR" "#FFFFFF")))))
+
 	 (width (if (equal? pgwide "1")
 		    (list (list "WIDTH" ($table-width$)))
 		    '()))

@@ -10,7 +10,10 @@ This file describes the way the GTK+ reference documentation should be written,
 so that we produce consistent documentation.
 
 We will also designate one or two of the template files as 'model' templates,
-i.e. they are to be taken as the 'correct' way to write the documentation.
+i.e. they are to be taken as the 'correct' way to write the documentation:
+
+  GtkFontSelectionDialog - contains example code and descriptions of enums.
+  GtkMisc - contains description of fields in a widget struct.
 
 
 Language
@@ -18,6 +21,8 @@ Language
 
 Use American spelling rather than British, i.e. color rather than colour,
 organize rather than organise etc.
+
+End all descriptions of functions & parameters with a period '.'.
 
 
 Organizing Sections
@@ -40,6 +45,18 @@ and they do not have to be documented (they will disappear form the template
 files the next time 'make templates' is run).
 
 Enumerations should appear after the first function which uses them.
+
+
+Widget Descriptions
+===================
+
+Start the main description with -
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkFontSelectionDialog widget ...
+
+
 
 
 Functions & Macro Descriptions
@@ -66,23 +83,55 @@ Some widget structs have fields which are useful to the developer, since
 there are currently no accessor functions to retrieve the particular field.
 
 These fields should be documented by using a table, Copy this
-and change the <structfield> and <entry> contents:
+and change the <entry> contents:
+
+-----------------------------------------------------------------------
+<!-- ##### STRUCT GtkFixedChild ##### -->
+<para>
+The #GtkFixedChild-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
 
 <informaltable pgwide=1 frame="none" role="struct">
 <tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
 <tbody>
 
 <row>
-<entry><structfield>GTK_ARROW_UP</structfield></entry>
-<entry>an arrow pointing up.</entry>
+<entry>#GtkWidget *widget;</entry>
+<entry>the child #GtkWidget.</entry>
 </row>
 
 <row>
-<entry><structfield>GTK_ARROW_DOWN</structfield></entry>
-<entry>an arrow pointing down.</entry>
+<entry>#gint16 x;</entry>
+<entry>the horizontal position of the widget within the #GtkFixed
+container.</entry>
+</row>
+
+<row>
+<entry>#gint16 y;</entry>
+<entry>the vertical position of the widget within the #GtkFixed
+container.</entry>
 </row>
 
 </tbody></tgroup></informaltable>
+</para>
+-----------------------------------------------------------------------
+
+
+If a widget struct is completely private, use this:
+
+-----------------------------------------------------------------------
+<!-- ##### STRUCT GtkFontSelectionDialog ##### -->
+<para>
+The #GtkFontSelectionDialog-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+-----------------------------------------------------------------------
+
+Note that the links to the widget names go to the top of the page,
+e.g. links to #GtkAccelLabel result in a link to the GtkAccelLabel page.
+If you want to link to the widget struct, you must append '-struct',
+e.g. #GtkAccelLabel-struct
 
 
 Enumerations
@@ -95,21 +144,55 @@ widget and so should be moved to the widget's section and documented there.
 The enumeration values should be documented with a table. Copy this
 and change the <symbol> and <entry> contents:
 
+-----------------------------------------------------------------------
+<!-- ##### ENUM GtkFontFilterType ##### -->
+<para>
+A set of bit flags used to specify the filter being set
+when calling gtk_font_selection_dialog_set_filter() or
+gtk_font_selection_set_filter().
+
 <informaltable pgwide=1 frame="none" role="enum">
 <tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
 <tbody>
 
 <row>
-<entry><symbol>GTK_ARROW_UP</symbol></entry>
-<entry>an arrow pointing up.</entry>
+<entry>GTK_FONT_FILTER_BASE</entry>
+<entry>the base filter, which can't be changed by the user.</entry>
 </row>
 
 <row>
-<entry><symbol>GTK_ARROW_DOWN</symbol></entry>
-<entry>an arrow pointing down.</entry>
+<entry>GTK_FONT_FILTER_USER</entry>
+<entry>the user filter, which can be changed from within the 'Filter' page
+of the #GtkFontSelection widget.</entry>
 </row>
 
 </tbody></tgroup></informaltable>
+</para>
+-----------------------------------------------------------------------
 
 
-Damon, 11 Mar 1999
+See Also
+========
+
+To link to related widgets/pages, use a <variablelist> like below.
+If there aren't any related pages, simply leave the See_Also section as it is,
+and it will not be output.
+Note that ancestors of widgets may automatically be added here, so
+don't add them yourself.
+
+-----------------------------------------------------------------------
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkFontSelection</term>
+<listitem><para>the underlying widget for selecting fonts.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+-----------------------------------------------------------------------
+
+
+Damon, 31 Mar 1999

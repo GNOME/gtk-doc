@@ -331,7 +331,7 @@ sub ScanHeader {
 		$decl = $';
 
 		if ($1) {
-		    print "Function: $symbol, Returns: $ret_type\n";
+#		    print "Function: $symbol, Returns: $ret_type\n";
 	        }
 		$in_declaration = "function";
 
@@ -344,7 +344,7 @@ sub ScanHeader {
 		$decl = $';
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
 		    && $previous_line !~ m/^\s*static\s+/) {
-		    if ($previous_line =~ m/^\s*(extern)?\s*((const\s*)?\w+)(\s*\*+)?/) {
+		    if ($previous_line =~ m/^\s*(extern)?\s*((const\s*)?\w+)(\s*\*+)?\s*$/) {
 			$ret_type = $2;
 			if (defined ($4)) { $ret_type .= " $4"; }
 #			print "Function: $symbol, Returns: $ret_type\n";

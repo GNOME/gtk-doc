@@ -799,7 +799,7 @@ sub OutputParamDescriptions {
 	# Start a table if we need one.
 	if ($params_desc || $returns) {
 	    $output .= <<EOF;
-<informaltable pgwide=1 frame="none">
+<informaltable pgwide=1 frame="none" role="params">
 <tgroup cols="2">
 <colspec colwidth="2*">
 <colspec colwidth="8*">
@@ -860,7 +860,8 @@ sub OutputSGMLFile {
     }
     my $short_desc = $SymbolDocs{"$TMPL_DIR/$file:Short_Description"};
     if (!defined ($short_desc) || $short_desc =~ m/^\s*$/) {
-	$short_desc = "one line description goes here.";
+#	$short_desc = "one line description goes here.";
+	$short_desc = "";
     } else {
 	$short_desc = &ExpandAbbreviations($short_desc);
 #	print "Found short_desc: $short_desc";
@@ -871,6 +872,16 @@ sub OutputSGMLFile {
     } else {
 	$long_desc = &ExpandAbbreviations($long_desc);
 #	print "Found long_desc: $long_desc";
+    }
+    my $see_also = $SymbolDocs{"$TMPL_DIR/$file:See_Also"};
+    if (!defined ($see_also) || $see_also =~ m%^\s*(<para>)?\s*(</para>)?\s*$%) {
+	$see_also = "";
+    } else {
+	$see_also = &ExpandAbbreviations($see_also);
+#	print "Found see_also: $see_also";
+    }
+    if ($see_also) {
+	$see_also = "<refsect1>\n<title>See Also</title>\n$see_also\n</refsect1>\n";
     }
 
     my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) =
@@ -925,6 +936,7 @@ $$details
 $args_desc
 $signals_desc
 
+$see_also
 </refentry>
 EOF
     close (OUTPUT);
@@ -976,6 +988,9 @@ sub CreateValidSGMLID {
     if ($id eq 'NOT') { return "NOT-CAPS"; }
 
     if ($id eq 'GTK_OBJECT_CONSTRUCTED') { return "GTK-OBJECT-CONSTRUCTED-CAPS"; }
+
+    if ($id eq 'GDK_THREADS_ENTER') { return "GDK-THREADS-ENTER-CAPS"; }
+    if ($id eq 'GDK_THREADS_LEAVE') { return "GDK-THREADS-LEAVE-CAPS"; }
 
     # Special case, differentiate Unit from unit.
     if ($id eq 'Unit') { return "UNIT-CAP"; }
@@ -1031,7 +1046,7 @@ sub ExpandAbbreviations {
     $text =~ s/\%(-?\w+)/<literal>$1<\/literal>/g;
 
     # Convert '#symbol'
-    $text =~ s/#(\w+)/&MakeXRef($1);/eg;
+    $text =~ s/#([\w-]+)/&MakeXRef($1);/eg;
 
     return $text;
 }
@@ -1057,6 +1072,8 @@ sub MakeXRef {
     }
 
     my $symbol_id = &CreateValidSGMLID ($symbol);
+    # Get rid of special '-struct' suffix.
+    $symbol =~ s/-struct$//;
     return "<link linkend=\"$symbol_id\">$symbol</link>";
 }
 
@@ -1842,7 +1859,8 @@ sub ReadTemplateFile {
 	    my $symbol = $2;
 	    if ($symbol eq "Title"
 		|| $symbol eq "Short_Description"
-		|| $symbol eq "Long_Description") {
+		|| $symbol eq "Long_Description"
+		|| $symbol eq "See_Also") {
 		$symbol = $docsfile . ":" . $symbol;
 #		print "Found symbol: $symbol\n";
 	    }
