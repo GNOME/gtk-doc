@@ -1,3 +1,9 @@
+Mon Aug 28 18:18:53 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (DSSSL_DIR): Remove check for AM_PATH_GTK
+	since the dependency is only run-time not install-time,
+	and to avoid dependency loops.
+
 2000-06-21  Damon Chaplin  <damon@helixcode.com>
 
 	* gtkdoc-mkdb.in: fixed <INCLUDES> bug, I think.

@@ -39,13 +39,6 @@ AC_SUBST(DSSSL_DIR)
 
 AC_MSG_RESULT(found)
 
-dnl GTK 1.0.2 is needed for g_strdown(), GPOINTER_TO_INT macros, and
-dnl the header file <gtk/features.h> which gives us the GTK version.
-AM_PATH_GTK(1.0.2,
-  	    [LIBS="$LIBS $GTK_LIBS"
-            CFLAGS="$CFLAGS $GTK_CFLAGS"],
-            AC_MSG_ERROR(Cannot find GTK: Is gtk-config in path?))
-
 dnl Only use -Wall if we have gcc
 if test "x$GCC" = "xyes"; then
   if test -z "`echo "$CFLAGS" | grep "\-Wall" 2> /dev/null`" ; then
