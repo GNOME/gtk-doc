@@ -1,3 +1,13 @@
+2003-02-26  James Henstridge  <james@daa.com.au>
+
+	* configure.in: update configure.in script to match
+	recommendations of newer autoconf's, and add an AC_PREREQ()
+	statement, since the xml catalog checks are using new autoconf
+	features.
+
+	* gtk-doc.make (xml-build.stamp): since other bits of the makefile
+	were assuming xml, may as well hard code --output-format=xml.
+
 2003-02-19  James Henstridge  <james@daa.com.au>
 
 	* Makefile.am: get rid of the dist-hook, and just include the
