@@ -18,6 +18,9 @@ while test $# -gt 0; do
   --help)
     echo "usage: $progname [ --copy ] [ --docdir DIR ]" 1>&2
     exit 1 ;;
+  --version)
+    echo "$PROGRAM ($PACKAGE) $VERSION"
+    exit 0 ;;
   --copy)
     copy=yes
     shift ;;
