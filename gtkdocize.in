@@ -55,6 +55,24 @@ else
   exit 1
 fi
 
+# If the AC_CONFIG_MACRO_DIR() macro is used, copy gtk-doc.m4 from our
+# prefix to that directory.  This makes sure that the M4 macro used
+# matches the the automake fragment.
+# If AC_CONFIG_MACRO_DIR is not used, the macro won't be copied, and
+# the correct flags must be passed to aclocal for it to find the macro.
+m4dir=`cat "$configure" | grep '^AC_CONFIG_MACRO_DIR' | sed -n -e 's/AC_CONFIG_MACRO_DIR(\([^()]*\))/\1/p' | sed -e 's/^\[\(.*\)\]$/\1/' | sed -e 1q`
+if test -n "$m4dir"; then
+  rm -f $m4dir/gtk-doc.m4
+  if test "$copy" = yes; then
+    cp -f $datadir/aclocal/gtk-doc.m4 $m4dir/ ||
+      exit 1
+  else
+    ln -sf $datadir/aclocal/gtk-doc.m4 $m4dir/ || 
+      cp -f $datadir/aclocal/gtk-doc.m4 $m4dir/ ||
+      exit 1
+  fi
+fi
+
 rm -f $docdir/gtk-doc.make
 if test "$copy" = yes; then
   cp -f $datadir/gtk-doc/data/gtk-doc.make $docdir/ ||

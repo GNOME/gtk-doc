@@ -1,3 +1,17 @@
+2004-11-22  James Henstridge  <james@jamesh.id.au>
+
+	* acconfig.h: remove file, since we don't have a config.h
+
+	* configure.in: make sure $ACLOCAL_FLAGS is passed to aclocal on a
+	rebuild.
+
+	* autogen.sh: use Automake-1.9 if available, and call aclocal,
+	autoconf, automake, etc in the same order as autoreconf does.
+
+	* gtkdocize.in: if the AC_CONFIG_MACRO_DIR option is used in the
+	configure script, copy gtk-doc.m4 to that directory in the source
+	tree.
+
 2004-11-16  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (OutputFunction): output "const" rather than

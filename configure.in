@@ -10,9 +10,11 @@ AC_INIT([gtk-doc], [gtk_doc_version],
 
 AC_CONFIG_SRCDIR([gtk-doc.dsl.in])
 
-AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
-
+AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
+
+# make sure $ACLOCAL_FLAGS are used during a rebuild.
+AC_SUBST([ACLOCAL_AMFLAGS], ["\${ACLOCAL_FLAGS}"])
 
 AC_ISC_POSIX
 AC_PROG_CC

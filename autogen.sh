@@ -22,15 +22,10 @@ cd "$srcdir"
 	DIE=1
 }
 
-(libtool --version) < /dev/null > /dev/null 2>&1 || {
-	echo
-	echo "You must have libtool installed to compile $PROJECT."
-	echo "Download the appropriate package for your distribution,"
-	echo "or get the source tarball at ftp://ftp.gnu.org/gnu/libtool/"
-	DIE=1
-}
-
-if automake-1.8 --version < /dev/null > /dev/null 2>&1; then
+if automake-1.9 --version < /dev/null > /dev/null 2>&1; then
+    AUTOMAKE=automake-1.9
+    ACLOCAL=aclocal-1.9
+elif automake-1.8 --version < /dev/null > /dev/null 2>&1; then
     AUTOMAKE=automake-1.8
     ACLOCAL=aclocal-1.8
 elif automake-1.7 --version < /dev/null > /dev/null 2>&1; then
@@ -39,9 +34,6 @@ elif automake-1.7 --version < /dev/null > /dev/null 2>&1; then
 elif automake-1.6 --version < /dev/null > /dev/null 2>&1; then
     AUTOMAKE=automake-1.6
     ACLOCAL=aclocal-1.6
-elif automake-1.4 --version < /dev/null > /dev/null 2>&1; then
-    AUTOMAKE=automake-1.4
-    ACLOCAL=aclocal-1.4
 else
 	echo
 	echo "You must have automake installed to compile $PROJECT."
@@ -59,22 +51,18 @@ test $TEST_TYPE $FILE || {
 	exit 1
 }
 
-if test -z "$*"; then
+if test "$#" = 0; then
 	echo "I am going to run ./configure with no arguments - if you wish "
         echo "to pass any to it, please specify them on the $0 command line."
 fi
 
-case $CC in
-*xlc | *xlc\ * | *lcc | *lcc\ *) am_opt=--include-deps;;
-esac
-
 $ACLOCAL $ACLOCAL_FLAGS
 
+autoconf
 # optionally feature autoheader
 #(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
 $AUTOMAKE --add-missing $am_opt
-autoconf
 
 cd "$THEDIR"
 
