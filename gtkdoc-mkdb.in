@@ -133,6 +133,9 @@ $SGML_OUTPUT_DIR = $SGML_OUTPUT_DIR ? $SGML_OUTPUT_DIR : "$ROOT_DIR/$OUTPUT_FORM
 # This file contains the object hierarchy.
 my $OBJECT_TREE_FILE = "$ROOT_DIR/$MODULE.hierarchy";
 
+# This file contains the interfaces.
+my $INTERFACES_FILE = "$ROOT_DIR/$MODULE.interfaces";
+
 # This file contains signal arguments and names.
 my $SIGNALS_FILE = "$ROOT_DIR/$MODULE.signals";
 
@@ -177,7 +180,7 @@ my %AllDocumentedSymbols;
 # These global arrays store GtkObject and subclasses and the hierarchy.
 my @Objects;
 my @ObjectLevels;
-
+my %Interfaces;
 
 # Create the root DocBook output directory if it doens't exist.
 if (! -e $SGML_OUTPUT_DIR) {
@@ -193,6 +196,7 @@ my $SIGNAL_FIELD_WIDTH = 12;
 &ReadSignalsFile ($SIGNALS_FILE);
 &ReadArgsFile ($ARGS_FILE);
 &ReadObjectHierarchy;
+&ReadInterfaces;
 
 # FIXME: this is the header file output at the top of the Synopsis.
 # We should allow this to be changed in the MODULE-sections.txt file.
@@ -234,7 +238,7 @@ if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
 # Function    : OutputObjectList
 # Description : This outputs the alphabetical list of objects, in a columned
 #		table. FIXME: Currently this also outputs ancestor objects
-#		which may not actually be in this module. 
+#		which may not actually be in this module.
 # Arguments   : none
 #############################################################################
 
@@ -308,6 +312,7 @@ sub OutputSGML {
     my $child_args_desc = "";
     my $style_args_desc = "";
     my $hierarchy = "";
+    my $interfaces = "";
 
     while (<INPUT>) {
 	if (m/^#/) {
@@ -462,7 +467,7 @@ EOF
 						    \$synopsis, \$details,
 						    \$signals_synop, \$signals_desc,
 						    \$args_synop, \$args_desc,
-						    \$hierarchy);
+						    \$hierarchy, \$interfaces);
 		if ($file_changed) {
 		    $changed = 1;
 		}
@@ -480,6 +485,7 @@ EOF
 	    $child_args_desc = "";
 	    $style_args_desc = "";
 	    $hierarchy = "";
+	    $interfaces = "";
 
 	} elsif (m/^(\S+)/) {
 	    my $symbol = $1;
@@ -496,6 +502,7 @@ EOF
 		    my ($arg_synop, $child_arg_synop, $style_arg_synop,
 			$arg_desc, $child_arg_desc, $style_arg_desc) = &GetArgs ($symbol);
 		    my $hier = &GetHierarchy ($symbol);
+		    my $ifaces = &GetInterfaces ($symbol);
 		    $synopsis .= $synop;
 		    $details .= $desc;
 		    $signals_synop .= $sig_synop;
@@ -507,6 +514,7 @@ EOF
 		    $child_args_desc .= $child_arg_desc;
 		    $style_args_desc .= $style_arg_desc;
 		    $hierarchy .= $hier;
+		    $interfaces .= $ifaces;
 		}
 
 		# Note that the declaration has been output.
@@ -520,7 +528,7 @@ EOF
     close (INPUT);
 
     &OutputMissingDocumentation;
-    
+
 		if ($OUTPUT_ALL_SYMBOLS) {
 			 &OutputAllSymbols;
 		}
@@ -1149,10 +1157,11 @@ EOF
 #               $args_synop - reference to the DocBook for the Arg Synopsis part
 #               $args_desc - reference to the DocBook for the Arg Description part
 #               $hierarchy - reference to the DocBook for the Object Hierarchy part
+#               $interfaces - reference to the DocBook for the Interfaces part
 #############################################################################
 
 sub OutputSGMLFile {
-    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy) = @_;
+    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces) = @_;
 
     # The edited title overrides the one from the sections file.
     my $new_title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
@@ -1235,6 +1244,7 @@ $${synopsis}</synopsis>
 </refsynopsisdiv>
 
 $$hierarchy
+$$interfaces
 $$args_synop
 $$signals_synop
 
@@ -1518,6 +1528,61 @@ sub GetHierarchy {
     $hierarchy .= "</synopsis>\n";
 
     return $hierarchy;
+}
+
+#############################################################################
+# Function    : GetInterfaces
+# Description : Returns the DocBook output describing the interfaces 
+#               implemented by a class. It uses the global %Interfaces hash.
+# Arguments   : $object - the GtkObject subclass.
+#############################################################################
+
+sub GetInterfaces {
+    my ($object) = @_;
+    my $title;
+    my $text = "";
+    my $i;
+
+    # Find object in the objects array.
+    if (exists($Interfaces{$object})) {
+	$title = "Implemented Interfaces";
+	$text = $object . " implements ";
+	my @ifaces = split(' ', $Interfaces{$object});
+	for ($i = 0; $i <= $#ifaces; $i++) {
+	    my $id = &CreateValidSGMLID ($ifaces[$i]);
+	    $text .= "<link linkend=\"$id\">$ifaces[$i]</link>";
+	    if ($i < $#ifaces) {
+		$text .= ', ';
+	    }
+	}
+    } else {
+	my @impls = ();
+	foreach my $key (keys %Interfaces) {
+	    if ($Interfaces{$key} =~ /\b$object\b/) {
+		push (@impls, $key);
+	    }
+	}
+	if ($#impls > 0) {
+	    $title = "Implementations";
+	    $text = $object . " is implemented by ";
+	    for ($i = 0; $i <= $#impls; $i++) {
+		my $id = &CreateValidSGMLID ($impls[$i]);
+		$text .= "<link linkend=\"$id\">$impls[$i]</link>";
+		if ($i < $#impls) {
+		    $text .= ', ';
+		}
+	    }
+	}
+    }
+    if ($text ne "") {
+	$text = <<EOF
+<refsect1>
+<title>$title</title>
+$text
+</refsect1>
+EOF
+    }
+    return $text;
 }
 
 
@@ -2423,6 +2488,31 @@ sub ReadObjectHierarchy {
     &OutputObjectList;
 }
 
+#############################################################################
+# Function    : ReadInterfaces
+# Description : This reads in the $MODULE.interfaces file.
+#
+# Arguments   : none
+#############################################################################
+
+sub ReadInterfaces {
+    %Interfaces = ();
+
+    if (! -f $INTERFACES_FILE) {
+	return;
+    }
+    if (!open (INPUT, $INTERFACES_FILE)) {
+	warn "Can't open $INTERFACES_FILE - skipping interfaces\n";
+	return;
+    }
+
+    while (<INPUT>) {
+       chomp;
+       my ($object, @ifaces) = split;
+       $Interfaces{$object} = join(' ', @ifaces);
+    }
+    close (INPUT);
+}
 
 #############################################################################
 # Function    : ReadArgsFile

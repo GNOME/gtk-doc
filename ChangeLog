@@ -1,3 +1,14 @@
+2002-10-14  Matthias Clasen  <maclas@gmx.de>
+
+	* examples/Makefile.am (SCANOBJ_FILES): Add $(DOC_MODULE).interfaces.
+
+	* gtkdoc-mkdb.in: Read $MODULE.interfaces and put lists of 
+	implemented interfaces/known implementations below the object 
+	hierarchy for classes/interfaces.
+
+	* gtkdoc-scangobj.in: Write interface information to 
+	$MODULE.interfaces.
+
 2002-10-12  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scangobj.in: Make interface appear in the object hierarchy.
