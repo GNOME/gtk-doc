@@ -211,17 +211,22 @@ output_widget_signals (FILE *fp, GType object_type)
   guint *signals, n_signals;
   guint sig;
 
-  object_class_name = g_type_name (object_type);
-
-  signals = g_signal_list_ids (object_type, &n_signals);
-  qsort (signals, n_signals, sizeof (guint), compare_signals);  	
-
-  for (sig = 0; sig < n_signals; sig++)
+  if (G_TYPE_IS_INSTANTIATABLE (object_type) ||
+      G_TYPE_IS_INTERFACE (object_type))
     {
-      output_widget_signal (fp, object_type, object_class_name,
-			    signals[sig]);
-    }
-  g_free (signals);
+
+      object_class_name = g_type_name (object_type);
+
+      signals = g_signal_list_ids (object_type, &n_signals);
+      qsort (signals, n_signals, sizeof (guint), compare_signals);
+
+      for (sig = 0; sig < n_signals; sig++)
+        {
+           output_widget_signal (fp, object_type, object_class_name,
+     		                 signals[sig]);
+        }
+      g_free (signals);
+   }
 }
 
 
