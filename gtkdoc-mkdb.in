@@ -1510,9 +1510,10 @@ sub GetArgs {
 	    my $blurb = &CreateValidSGML ($ArgBlurbs[$i]);
 	    $desc .= "<para>$blurb</para>\n";
 
-	    if (defined ($SymbolDocs{$symbol})) {
-	        $desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
-	    }
+# Don't add template docs for properties, since they are largely redundant
+#	    if (defined ($SymbolDocs{$symbol})) {
+#             $desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+#	    }
 
 	    $desc .= "</listitem></varlistentry>\n";
 	}
@@ -1781,7 +1782,7 @@ sub OutputMissingDocumentation {
           $percent = ($n_documented / $total) * 100.0;
      }
 
-     printf UNDOCUMENTED "%.0f%% docs coverage.\n", $percent;
+     printf UNDOCUMENTED "%.0f%% symbol docs coverage.\n", $percent;
      print UNDOCUMENTED "$n_documented symbols documented.\n";
      print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
 
@@ -2342,6 +2343,12 @@ sub ReadArgsFile {
 		$arg_nick = $1;
 	    } elsif (m/^<BLURB>(.*)<\/BLURB>/) {
 		$arg_blurb = $1;
+		if ($arg_blurb eq "(null)") {
+		  $arg_blurb = "";
+		  print <<EOF;
+WARNING: Property ${arg_object}::${arg_name} has NULL blurb.
+EOF
+		}
 	    } elsif (m%^</ARG>%) {
 #		print "Found end of arg: ${arg_object}::${arg_name}\n${arg_type} : ${arg_flags}\n";
 		push (@ArgObjects, $arg_object);
