@@ -5,6 +5,7 @@
   <!-- import the chunked XSL stylesheet -->
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
   <xsl:include href="devhelp.xsl"/>
+  <xsl:include href="version-greater-or-equal.xsl"/>
 
   <!-- change some parameters -->
   <xsl:param name="toc.section.depth">1</xsl:param>
@@ -16,6 +17,7 @@
   <xsl:param name="html.ext" select="'.html'"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
+  <xsl:param name="index.on.role" select="1"/>
 
   <!-- display variablelists as tables -->
   <xsl:param name="variablelist.as.table" select="1"/>
@@ -28,6 +30,19 @@
   <!-- template to create the index.sgml anchor index -->
 
   <xsl:template match="book|article">
+    <xsl:variable name="tooldver">
+      <xsl:call-template name="version-greater-or-equal">
+        <xsl:with-param name="ver1" select="$VERSION" />
+        <xsl:with-param name="ver2">1.36</xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$tooldver = 0">
+      <xsl:message terminate="yes">
+FATAL-ERROR: You need the DocBook XSL Stylesheets version 1.36 or higher
+to build the documentation. 
+Get a newer version at http://docbook.sourceforge.net/projects/xsl/
+      </xsl:message>
+    </xsl:if>
     <xsl:apply-imports/>
 
     <!-- generate the index.sgml href index -->
@@ -249,4 +264,31 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- avoid creating multiple identical indices 
+       if the stylesheets don't support filtered indices
+    -->
+  <xsl:template match="index"> 
+    <xsl:variable name="has-filtered-index">
+      <xsl:call-template name="version-greater-or-equal">
+        <xsl:with-param name="ver1" select="$VERSION" />
+        <xsl:with-param name="ver2">1.62</xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="($has-filtered-index = 1) or (count(@role) = 0)">
+      <xsl:apply-imports/>
+    </xsl:if> 
+  </xsl:template>
+
+  <xsl:template match="index" mode="toc">
+    <xsl:variable name="has-filtered-index">
+      <xsl:call-template name="version-greater-or-equal">
+        <xsl:with-param name="ver1" select="$VERSION" />
+        <xsl:with-param name="ver2">1.62</xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="($has-filtered-index = 1) or (count(@role) = 0)">
+      <xsl:apply-imports/>
+    </xsl:if> 
+  </xsl:template>
+ 
 </xsl:stylesheet>

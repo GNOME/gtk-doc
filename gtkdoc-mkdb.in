@@ -1585,12 +1585,23 @@ sub MakeXRef {
 
 sub MakeIndexterms {
   my ($symbol) = $_[0];
-  my $desc = "";
+  my $role = "";
 
-  $desc .= "<indexterm><primary>$symbol</primary></indexterm>";
-
-  return $desc;
-}
+  if (exists $Deprecated{$symbol}) {
+      $role = "deprecated";
+  }
+  if (exists $Since{$symbol}) {
+      $Since{$symbol} =~ /\s*([\w\.]*)\s*/;
+      if ($role ne "") {
+	  $role .= " ";
+	}
+      $role .= $1;
+  }
+  if ($role ne "") {
+      $role = " role=\"$role\"";
+  }
+  return "<indexterm$role><primary>$symbol</primary></indexterm>";
+ }
 
 #############################################################################
 # Function    : MakeDeprecationNote

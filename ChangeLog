@@ -1,3 +1,22 @@
+2004-04-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* Makefile.am: Add version-greater-or-equal.xsl.
+
+	* version-greater-or-equal.xsl: New file, implementing
+	the version-greater-or-equal template for comparing version
+	numbers.
+
+	* gtk-doc.xsl: Import version-greater-or-equal.xsl and
+	use the version-greater-or-equal template to a) check that
+	the xsl stylesheets are not too old and b) to avoid creating
+	multiple indices if the xsl stylesheets don't support filtered
+	indices.  (#107774)
+
+	* gtkdoc-mkdb.in (MakeIndexterms): Emit role attributes
+	on indexterms which can be used to create filtered indices
+	with sufficiently new xsl stylesheets. The required functionality
+	will appear in version 1.62 of the xsl stylesheets.  (#115530)
+
 2004-04-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* style.css: Style information in a separate stylesheet.
