@@ -112,7 +112,7 @@ if (lc($OUTPUT_FORMAT) eq "xml") {
     } else {
         $doctype_header =
 "<?xml version=\"1.0\"?>\n" .
-"<!DOCTYPE book PUBLIC \"-//OASIS//DTD Docbook XML V4.1.2//EN\"\n" .
+"<!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.1.2//EN\"\n" .
 "               \"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd\">\n";
     }
     $doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
@@ -1314,7 +1314,7 @@ sub OutputBook {
       if (lc($OUTPUT_FORMAT) eq "xml") {
 	  print OUTPUT <<EOF;
 <?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.1.2//EN" 
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
 <book id="index" xmlns:xi="http://www.w3.org/2001/XInclude">
 EOF
