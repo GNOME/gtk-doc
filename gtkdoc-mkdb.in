@@ -1800,7 +1800,7 @@ sub GetArgs {
 
 	    my $blurb;
 	    if (defined($SymbolDocs{$symbol})) {
-		$blurb = $SymbolDocs{$symbol};
+		$blurb = &ExpandAbbreviations($SymbolDocs{$symbol});
 	    }
 	    else {
 		$blurb = "<para>" . &CreateValidSGML ($ArgBlurbs[$i]) . "</para>";
