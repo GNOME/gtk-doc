@@ -169,10 +169,12 @@ sub BackupExistingTemplates {
 #	print "Backing up $_ to $backup_file\n";
 	if (-e $backup_file) {
 	    unlink ($backup_file)
-		|| die "Can't delete old backup file: $backup_file";
+		|| die "Can't delete old backup file: $backup_file: $!";
 	}
-	rename ($_, $backup_file)
-	    || die "Can't move $_ to $backup_file";
+	if (-e $_) {
+            rename ($_, $backup_file)
+	    || die "Can't move $_ to $backup_file: $!";
+        }
     }
 }
 

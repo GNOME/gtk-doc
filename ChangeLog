@@ -1,3 +1,8 @@
+2001-01-10  Havoc Pennington  <hp@redhat.com>
+
+	* gtkdoc-mktmpl.in: Only move old file to backup if the old file
+	exists, and have better error messages when doing the backups
+
 Mon Jan  8 14:57:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkdoc-mktmpl.in: Canonicalize signal and argument
