@@ -171,6 +171,7 @@ my %DeclarationConditional;
 my %DeclarationOutput;
 my %Deprecated;
 my %Since;
+my %StructHasTypedef;
 
 # These global hashes store the existing documentation.
 my %SymbolDocs;
@@ -824,41 +825,77 @@ sub OutputStruct {
     } else {
 	$id = &CreateValidSGMLID ($symbol);
     }
-    my $synop = "struct      <link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}struct $symbol</title>\n";
+
+    # Determine if it is a simple struct or it also has a typedef.
+    my $has_typedef = 0;
+    if ($StructHasTypedef{$symbol} || $declaration =~ m/^\s*typedef\s+/) {
+      $has_typedef = 1;
+    }
+
+    my $synop;
+    my $desc;
+    if ($has_typedef) {
+        # For structs with typedefs we just output the struct name.
+        $synop = "            <link linkend=\"$id\">$symbol</link>;\n";
+	$desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
+    } else {
+        $synop = "struct      <link linkend=\"$id\">$symbol</link>;\n";
+	$desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}struct $symbol</title>\n";
+    }
 
     $desc .= MakeIndexterms($symbol);
 
     # Form a pretty-printed, private-data-removed form of the declaration
 
-    my $decl_out;
+    my $decl_out = "";
     if ($declaration =~ m/^\s*$/) {
-#	print "Found opaque struct\n";
-	$decl_out = "struct $symbol;";
+#	print "Found opaque struct: $symbol\n";
+	$decl_out = "typedef struct _$symbol $symbol;";
     } else {
 	my $public = $default_to_public;
 	my $new_declaration = "";
 	my $decl_line;
 	my $decl = $declaration;
-	$decl =~ s/^[^{]*{//;
-	foreach $decl_line (split (/\n/, $decl)) {
-#	    print "Struct line: $decl_line\n";
-	    if ($decl_line =~ m%/\*\s*<\s*public\s*>\s*\*/%) {
-		$public = 1;
-	    } elsif ($decl_line =~ m%/\*\s*<\s*(private|protected)\s*>\s*\*/%) {
-		$public = 0;
-	    } elsif ($public) {
-		$new_declaration .= $decl_line . "\n";
+
+	if ($decl =~ m/^\s*(typedef\s+)?struct\s*\w*\s*{(.*)}\s*\w*\s*;\s*$/s) {
+	    my $struct_contents = $2;
+
+	    foreach $decl_line (split (/\n/, $struct_contents)) {
+#	        print "Struct line: $decl_line\n";
+	        if ($decl_line =~ m%/\*\s*<\s*public\s*>\s*\*/%) {
+		    $public = 1;
+		} elsif ($decl_line =~ m%/\*\s*<\s*(private|protected)\s*>\s*\*/%) {
+		    $public = 0;
+		} elsif ($public) {
+		    $new_declaration .= $decl_line . "\n";
+		}
 	    }
-	}
-	if ($new_declaration) {
-	    $decl_out = "struct $symbol {\n" . $new_declaration;
-	    # If we finished with public set, we already have the struct end.
-	    if ($public == 0) {
-		$decl_out .= "};\n";
+
+	    if ($new_declaration) {
+	        # Strip any blank lines off the ends.
+	        $new_declaration =~ s/^\s*\n//;
+	        $new_declaration =~ s/\n\s*$/\n/;
+
+	        if ($has_typedef) {
+		    $decl_out = "typedef struct {\n" . $new_declaration
+		      . "} $symbol;\n";
+		} else {
+		    $decl_out = "struct $symbol {\n" . $new_declaration
+		      . "};\n";
+		}
 	    }
 	} else {
-	    $decl_out = "struct $symbol;";
+	    print "WARNING: Couldn't parse struct:\n$declaration\n";
+	}
+
+	# If we couldn't parse the struct or it was all private, output an
+	# empty struct declaration.
+	if ($decl_out eq "") {
+	    if ($has_typedef) {
+		$decl_out = "typedef struct _$symbol $symbol;";
+	    } else {
+		$decl_out = "struct $symbol;";
+	    }
 	}
     }
 
@@ -2755,6 +2792,14 @@ sub ReadDeclarationsFile {
 		# Check that the declaration has a name
 		if ($declaration_name eq "") {
 		    print "ERROR: $declaration_type has no name $file:$.\n";
+		}
+
+		# If the declaration is an empty typedef struct _XXX XXX
+		# set the flag to indicate the struct has a typedef.
+	        if ($declaration_type eq 'STRUCT'
+		    && $declaration =~ m/^\s*$/) {
+#		    print "Struct has typedef: $declaration_name\n";
+		    $StructHasTypedef{$declaration_name} = 1;
 		}
 
 		# Check if the symbol is already defined.

@@ -1,3 +1,12 @@
+2004-10-20  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in (ReadDeclarationsFile): set a flag to indicate a
+	struct has a typedef declaration.
+	(OutputStruct): better output for structs with typedefs. #83269.
+
+	* gtkdoc-scan.in (ScanHeader): leave the struct declaration as it is.
+	Don't strip out 'typedef'. Also allow simple "struct foo {".
+
 2004-10-19  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-fixxref.in: use pkg-config to find where GLib is installed

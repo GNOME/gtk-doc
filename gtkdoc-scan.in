@@ -357,7 +357,7 @@ sub ScanHeader {
 		&AddSymbolToList (\$list, $1);
 		print DECL "<STRUCT>\n<NAME>$1</NAME>\n$deprecated</STRUCT>\n";
 
-	    } elsif (m/^\s*typedef\s+struct\s*{/) {
+	    } elsif (m/^\s*typedef\s+struct\s*\w*\s*{/) {
 		$symbol = "";
  		$decl = $_;
 		$level = 0;
@@ -366,7 +366,7 @@ sub ScanHeader {
 	    } elsif (m/^\s*struct\s+_(\w+)\s*;/) {
 		# Skip private structs.
 
-	    } elsif (s/^\s*struct\s+_(\w+)/struct $1/) {
+	    } elsif (m/^\s*struct\s+_?(\w+)/) {
 		# We assume that 'struct _<struct_name>' is really the
 		# declaration of struct <struct_name>.
 		$symbol = $1;
@@ -513,11 +513,7 @@ sub ScanHeader {
 		}
 		&AddSymbolToList (\$list, $symbol);
 
-		if ($decl =~ s/^\s*typedef\s+struct\s*{(.*)}\s*\w*;\s*$/struct $symbol\n{$1};\n/s) {
-		    print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";
-		} else {
-		    print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";
-		}
+		print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";
 		$in_declaration = "";
 	    } else {
 		# We use tr to count the brackets in the line, and adjust
