@@ -234,7 +234,9 @@ sub UpdateTemplates {
 	    $file =~ s/\s/_/g;
 	    $file .= ".sgml";
 
-	    $changed ||= &OutputTemplateFile ($file, $title, \$output);
+	    if (&OutputTemplateFile ($file, $title, \$output)) {
+	      $changed = 1;
+	    }
 
 	    $title = "";
 	    $subsection = "";
@@ -598,7 +600,7 @@ EOF
     &OutputArgTemplates ($title);
     close (OUTPUT);
 
-    &UpdateFileIfChanged ($old_tmpl_file, $new_tmpl_file, 1);
+    return &UpdateFileIfChanged ($old_tmpl_file, $new_tmpl_file, 1);
 }
 
 
