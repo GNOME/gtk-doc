@@ -1,7 +1,10 @@
 2002-12-08  Matthias Clasen  <maclas@gmx.de>
 
+	* gtkdoc-mkdb.in (OutputStruct): Don't emit private parts
+	of class structs to parameter lists in docs.
+
 	* gtkdoc-mktmpl.in (OutputDeclaration): Don't emit private parts
-	of class structs.
+	of class structs to parameter lists in templates.
 
 2002-12-06  Matthias Clasen  <maclas@gmx.de>
 
