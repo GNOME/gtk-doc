@@ -17,14 +17,23 @@ gtkdocdata_DATA = \
 	gtk-doc.dcl		\
 	gtk-doc.xsl		\
 	devhelp.xsl		\
-	xml.dcl
+	xml.dcl			\
+	home.png		\
+	left.png		\
+	right.png		\
+	up.png
 
 EXTRA_DIST= \
 	gtk-doc.spec.in	\
 	gtk-doc.dcl  	\
 	gtk-doc.xsl	\
 	devhelp.xsl	\
-	xml.dcl
+	xml.dcl		\
+	home.png	\
+	left.png	\
+	right.png	\
+	up.png
+
 
 dist-hook:
 	mkdir $(distdir)/doc

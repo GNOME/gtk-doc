@@ -35,6 +35,7 @@ fi
 
 if $is_xml; then
   @XSLTPROC@ --xinclude --stringparam gtkdoc.bookname $module $gtkdocdir/gtk-doc.xsl $document
+  cp -f $gtkdocdir/*.png .
 else
   @JADE@ -t sgml -w no-idref -d $gtkdocdir/gtk-doc.dsl \
       $gtkdocdir/gtk-doc.dcl $document
