@@ -1739,7 +1739,7 @@ sub OutputMissingDocumentation {
      my $symbol;
      my $percent;
      my $msg;
-     my $buffer;
+     my $buffer = "";
 	
      open (UNDOCUMENTED, ">$ROOT_DIR/$MODULE-undocumented.txt")
           || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt";
