@@ -190,7 +190,7 @@ sub ScanHeader {
 	|| die "Can't open $input_file: $!";
     while(<INPUT>) {
 	# If this is a private header, skip it.
-	if (m%^\s*/*<\s*private_header\s*>*/%) {
+	if (m%^\s*/\*\s*<\s*private_header\s*>\s*\*/%) {
 	    last;
 	}
 
