@@ -1,3 +1,13 @@
+2003-02-12  James Henstridge  <james@daa.com.au>
+
+	* gtk-doc.make: add some chmod calls to work arround distcheck on
+	automake >= 1.6.
+	(install-data-local): copy the images as well as the html files
+	during install.
+	(uninstall-local): add an uninstall rule to remove the docs.
+	(CLEANFILES): add $(DOC_MODULE)-scan.o to the list of files to be
+	cleaned up.
+
 2003-02-09  James Henstridge  <james@daa.com.au>
 
 	* gtkdocize.in: script used to copy gtk-doc.make into another

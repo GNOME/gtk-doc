@@ -63,7 +63,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc NEWS
 
 %{_bindir}/*
-%{_datadir}/gtk-doc/*
+%dir %{_datadir}/gtk-doc
+%dir %{_datadir}/gtk-doc/html
+%dir %{_datadir}/gtk-doc/data
+%{_datadir}/gtk-doc/data/*
 
 %changelog
 * Sun Aug 12 2001 Jens Finke <jens@gnome.org>
