@@ -1,3 +1,8 @@
+Sat Feb 14 01:37:38 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk-doc.make: Add an empty all-local target to make it work
+	with non-GNU make.  (#134343, Julio M. Merino Vidal)
+
 Wed Jan 28 00:52:00 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (OutputObjectList): Avoid emitting invalid
