@@ -1,3 +1,9 @@
+2003-02-26  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (GetArgs): Prefer template or comment docs over
+	blurbs only if they're nonempty, otherwise the empty docs from the
+	templates override all the blurbs.
+
 2003-02-26  James Henstridge  <james@daa.com.au>
 
 	* autogen.sh (THEDIR): set up so that it will choose automake 1.7

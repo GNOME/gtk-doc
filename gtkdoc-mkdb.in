@@ -1850,7 +1850,8 @@ sub GetArgs {
 	    }
 
 	    my $blurb;
-	    if (defined($SymbolDocs{$symbol})) {
+	    if ((defined($SymbolDocs{$symbol})) &&
+	       !($SymbolDocs{$symbol} =~ "<para>\n(FIXME)?\n</para>")) {
 		$blurb = &ExpandAbbreviations($SymbolDocs{$symbol});
 	    }
 	    else {
