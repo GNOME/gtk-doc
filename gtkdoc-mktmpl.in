@@ -873,12 +873,13 @@ sub ReadDeclarationsFile {
 			$DeclarationTypes{$declaration_name} = $declaration_type;
 		    } elsif ($DeclarationTypes{$declaration_name}
 			      eq $declaration_type) {
-			# If the existing declaration is empty override it.
+			# If the existing declaration is empty, or is just a
+		        # forward declaration of a struct, override it.
 			if ($declaration_type eq 'STRUCT') {
-			    if ($Declarations{$declaration_name} =~ m/^\s*$/) {
+			    if ($Declarations{$declaration_name} =~ m/^\s*(struct\s+\w+\s*;)?\s*$/) {
 				$Declarations{$declaration_name} = $declaration;
-			    } elsif ($declaration =~ m/^\s*$/) {
-				# Ignore an empty declaration.
+			    } elsif ($declaration =~ m/^\s*(struct\s+\w+\s*;)?\s*$/) {
+				# Ignore an empty or forward declaration.
 			    } else {
 				print "WARNING: Structure has multiple definitions: $declaration_name\n";
 			    }

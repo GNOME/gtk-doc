@@ -346,7 +346,7 @@ sub ScanHeader {
 		$in_declaration = "enum";
 
 
-	    #STRUCTS
+	    # STRUCTS
 
 	    } elsif (m/^\s*typedef\s+struct\s+_(\w+)\s+\1\s*;/) {
 		# We've found a 'typedef struct _<name> <name>;'
@@ -357,14 +357,21 @@ sub ScanHeader {
 		&AddSymbolToList (\$list, $1);
 		print DECL "<STRUCT>\n<NAME>$1</NAME>\n$deprecated</STRUCT>\n";
 
+	    } elsif (m/^\s*struct\s+_(\w+)\s*;/) {
+		# Skip private structs.
+
+	    } elsif (m/^\s*struct\s+(\w+)\s*;/) {
+	        # Do a similar thing for normal structs as for typedefs above.
+	        # But we output the declaration as well in this case, so we
+	        # can differentiate it from a typedef.
+		&AddSymbolToList (\$list, $1);
+		print DECL "<STRUCT>\n<NAME>$1</NAME>\n$_$deprecated</STRUCT>\n";
+
 	    } elsif (m/^\s*typedef\s+struct\s*\w*\s*{/) {
 		$symbol = "";
  		$decl = $_;
 		$level = 0;
 		$in_declaration = "struct";
-
-	    } elsif (m/^\s*struct\s+_(\w+)\s*;/) {
-		# Skip private structs.
 
 	    } elsif (m/^\s*struct\s+_?(\w+)/) {
 		# We assume that 'struct _<struct_name>' is really the

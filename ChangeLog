@@ -1,3 +1,10 @@
+2004-10-28  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mktmpl.in (ReadDeclarationsFile): 
+	* gtkdoc-mkdb.in (ReadDeclarationsFile): 
+	* gtkdoc-scan.in (ScanHeader): handle opaque/forward struct
+	declarations. #156318.
+
 2004-10-25  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (OutputParamDescriptions): use a &nbsp; after Returns:
