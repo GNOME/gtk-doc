@@ -43,26 +43,29 @@ my $PRINT_VERSION;
 %optctl = (module => \$MODULE,
 	   types => \$TYPES_FILE,
 	   nogtkinit => \$NO_GTK_INIT,
-	   'version' => \$PRINT_VERSION);
+	   'output-dir' => \$OUTPUT_DIR,
+	   version => \$PRINT_VERSION);
 	   
-GetOptions(\%optctl, "module=s", "types:s", "nogtkinit", "version");
+GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "version");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
     exit 0;
 }
 
-$TYPES_FILE = $TYPES_FILE ? $TYPES_FILE : "$MODULE.types";
+$OUTPUT_DIR = $OUTPUT_DIR ? $OUTPUT_DIR : ".";
+
+$TYPES_FILE = $TYPES_FILE ? $TYPES_FILE : "$OUTPUT_DIR/$MODULE.types";
 
 open TYPES, $TYPES_FILE || die "Cannot open $TYPES_FILE: $!\n";
 open OUTPUT, ">$MODULE-scan.c" || die "Cannot open $MODULE-scan.c: $!\n";
 
-my $old_signals_filename = "$MODULE.signals";
-my $new_signals_filename = "$MODULE.signals.new";
-my $old_hierarchy_filename = "$MODULE.hierarchy";
-my $new_hierarchy_filename = "$MODULE.hierarchy.new";
-my $old_args_filename = "$MODULE.args";
-my $new_args_filename = "$MODULE.args.new";
+my $old_signals_filename = "$OUTPUT_DIR/$MODULE.signals";
+my $new_signals_filename = "$OUTPUT_DIR/MODULE.signals.new";
+my $old_hierarchy_filename = "$OUTPUT_DIR/$MODULE.hierarchy";
+my $new_hierarchy_filename = "$OUTPUT_DIR/$MODULE.hierarchy.new";
+my $old_args_filename = "$OUTPUT_DIR/$MODULE.args";
+my $new_args_filename = "$OUTPUT_DIR/$MODULE.args.new";
 
 # write a C program to scan the types
 

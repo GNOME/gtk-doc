@@ -1,3 +1,14 @@
+Fri Apr 13 15:25:44 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-mkdb.in: Restore call to OutputBook that was accidentally
+	deleted.
+
+Thu Apr 12 17:57:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-scangobj.in: Add a --outputdir option (sort of hacky.
+	Need this because $CC, $LD can include relative paths if they
+	are based on $LIBTOOL)
+
 2001-03-26  Damon Chaplin  <damon@ximian.com>
 
 	* gtkdoc-mkdb.in (ReadSourceDocumentation): scan .h files as well,

@@ -330,6 +330,8 @@ sub OutputSGML {
     }
     close (INPUT);
 
+    &OutputBook ($book_top, $book_bottom);
+
     return $changed;
 }
 
