@@ -95,30 +95,34 @@
   <xsl:template name="user.head.content">
     <style>
       <xsl:text>
-        .synopsis, .classsynopsis, .programlisting {
-            background: #e0e0e0;
-            border: solid 1px #999999;
-            padding: 4px;
+        .synopsis, .classsynopsis {
+            background: #eeeeee;
+            border: solid 1px #aaaaaa;
+            padding: 0.5em;
+        }
+        .programlisting {
+            background: #eeeeff;
+            border: solid 1px #aaaaff;
+            padding: 0.5em;
         }
         .variablelist {
-            background: #ffe9ca;
-            border: solid 1px #fdb558;
             padding: 4px;
+            margin-left: 3em;
         }
         .navigation {
-            background: #f0d9d9;
-            border: solid 1px #ce8787;
-            margin-top: 4pt;
-            margin-bottom: 4pt;
+            background: #ffeeee;
+            border: solid 1px #ffaaaa;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
         }
         .navigation a {
-          color: #770000;
+            color: #770000;
         }
         .navigation a:visited {
-          color: #550000;
+            color: #550000;
         }
         .navigation .title {
-          font-size: 200%;
+            font-size: 200%;
         }
       </xsl:text>
     </style>

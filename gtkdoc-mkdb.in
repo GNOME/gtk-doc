@@ -781,7 +781,7 @@ EOF
 
 	    $desc .= "<varlistentry>\n<term>$text</term>\n";
 	    if (defined $field_descr) {
-		$desc .= "<listitem><para>".&ExpandAbbreviations($field_descr)."</para></listitem>\n";
+		$desc .= "<listitem><simpara>".&ExpandAbbreviations($field_descr)."</simpara></listitem>\n";
 	    } else {
 		$desc .= "<listitem></listitem>\n";
 	    }
@@ -847,7 +847,7 @@ EOF
 	    
 	    $desc .= "<varlistentry>\n<term><literal>$member_name</literal></term>\n";
 	    if (defined $member_descr) {
-		$desc .= "<listitem><para>".&ExpandAbbreviations($member_descr)."</para></listitem>\n";
+		$desc .= "<listitem><simpara>".&ExpandAbbreviations($member_descr)."</simpara></listitem>\n";
 	    } else {
 		$desc .= "<listitem></listitem>\n";
 	    }
@@ -1118,13 +1118,13 @@ sub OutputParamDescriptions {
 		    $param_name = "...";
 		}
 		$param = &ExpandAbbreviations($param);
-		$params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&nbsp;:</term>\n<listitem><para>$param</para></listitem></varlistentry>\n";
+		$params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&nbsp;:</term>\n<listitem><simpara>$param</simpara></listitem></varlistentry>\n";
 	    }
 	}
 
 	# Signals have an implicit user_data parameter which we describe.
 	if ($symbol_type eq "SIGNAL") {
-	    $params_desc .= "<varlistentry><term><parameter>user_data</parameter>&nbsp;:</term>\n<listitem><para>user data set when the signal handler was connected.</para></listitem></varlistentry>\n";
+	    $params_desc .= "<varlistentry><term><parameter>user_data</parameter>&nbsp;:</term>\n<listitem><simpara>user data set when the signal handler was connected.</simpara></listitem></varlistentry>\n";
 	}
 
 	# Start a table if we need one.
@@ -1140,7 +1140,7 @@ EOF
 
 	    # Output the returns info last.
 	    if ($returns) {
-		$output .= "<varlistentry><term><emphasis>Returns</emphasis> :</term><listitem><para>$returns</para></listitem></varlistentry>\n";
+		$output .= "<varlistentry><term><emphasis>Returns</emphasis> :</term><listitem><simpara>$returns</simpara></listitem></varlistentry>\n";
 	    }
 
 	    # Finish the table.
