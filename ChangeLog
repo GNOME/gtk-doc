@@ -1,8 +1,18 @@
 2001-10-02  Damon Chaplin  <damon@ximian.com>
 
+	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mkdb.in (OutputFunction): applied patch from
+	matthiasc@poet.de (Matthias Clasen) to handle G_CONST_RETURN in a
+	parameter list. Bug #61341.
+
+2001-10-02  Damon Chaplin  <damon@ximian.com>
+
 	* gtkdoc-mkdb.in (OutputMissingDocumentation): applied patch from
 	matthiasc@poet.de (Matthias Clasen) to output percentages better.
+	Bug #61467.
 	Also set percent to 100 if total is 0, avoiding divide-by-zero.
+
+2001-10-02  Damon Chaplin  <damon@ximian.com>
 
 	* examples/Makefile.am (DOC_OVERRIDES): define as an empty string,
 	even when not used.

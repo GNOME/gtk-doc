@@ -372,7 +372,7 @@ EOF
 					 $template_exists, 1, "");
 
 		# Try to match a standard parameter.
-	    } elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?((?:long\s+|short\s+)?\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	    } elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?((?:long\s+|short\s+)?\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 		if (defined ($7)) {
 		    $name = $7;
 		} else {
