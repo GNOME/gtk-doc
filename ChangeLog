@@ -5,6 +5,9 @@
 
 2003-02-19  James Henstridge  <james@daa.com.au>
 
+	* devhelp.xsl: put chapters that aren't at the top level into the
+	toc tree (to make gtk's .devhelp tree look better).
+
 	* gtk-doc.spec.in (Requires): make the requires lines match
 	current requirements ...
 

@@ -16,6 +16,8 @@ Requires:	libxslt
 Requires:	docbook-dtds
 Requires:	docbook-style-xsl
 
+BuildRequires: perl, openjade, libxslt, docbook-dtds, docbook-style-xsl
+
 %description
 gtk-doc is a set of perl scripts that generate API reference documention in
 DocBook format.  It can extract documentation from source code comments in a
@@ -29,23 +31,10 @@ GLib, Gtk+, and GNOME.
 mv doc/README doc/README.docs
 
 %build
-%ifarch alpha
-	MYARCH_FLAGS="--host=alpha-redhat-linux"
-%endif
+CFLAGS="$RPM_OPT_FLAGS" ./configure $MYARCH_FLAGS  --prefix=%{_prefix} \
+	--sysconfdir=%{_sysconfdir} --datadir=%{_datadir}
 
-if [ ! -f configure ]; then
-	CFLAGS="$RPM_OPT_FLAGS" ./autogen.sh $MYARCH_FLAGS --prefix=%{_prefix} \
-		--sysconfdir=%{_sysconfdir} --datadir=%{_datadir}
-else
-	CFLAGS="$RPM_OPT_FLAGS" ./configure $MYARCH_FLAGS  --prefix=%{_prefix} \
-		--sysconfdir=%{_sysconfdir} --datadir=%{_datadir}
-fi
-
-if [ "$SMP" != "" ]; then
-	make -k -j$SMP "MAKE=make -k -j$SMP"
-else
-	make -k
-fi
+make
 
 %install
 rm -rf $RPM_BUILD_ROOT
