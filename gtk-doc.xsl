@@ -301,4 +301,37 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     </xsl:if> 
   </xsl:template>
  
+  <xsl:template match="para">
+    <xsl:choose>
+      <xsl:when test="@role = 'gallery'">
+         <style>
+           div.float {
+              float: left;
+              padding: 10px;
+           }
+           div.float img {
+              border-style: none;
+           }
+           div.spacer {
+              clear: both;
+           }
+         </style>
+         <div class="container">
+           <div class="spacer"> </div>
+           <xsl:apply-templates mode="gallery.mode"/>
+         <div class="spacer"> </div>
+         </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-imports/>
+      </xsl:otherwise> 
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="link" mode="gallery.mode">
+    <div class="float">
+       <xsl:apply-templates select="."/>
+    </div>
+  </xsl:template>
+  
 </xsl:stylesheet>
