@@ -373,8 +373,10 @@ sub OutputSGML {
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
 	    if ($in_section) {
+	      print "section_includes $1\n";
 		$section_includes = $1;
 	    } else {
+	      print "includes $1\n";
 		$includes = $1;
 	    }
 
@@ -403,6 +405,7 @@ sub OutputSGML {
 		}
 
 		if ($section_includes eq "") {
+		  print "overriding section_includes to $includes\n";
 		    $section_includes = $includes;
 		}
 
@@ -2215,7 +2218,7 @@ sub ScanSourceFile {
     my ($file) = @_;
     my $basename;
 
-    if ($file =~ m/^.*[\/\\](.*\.[hc])$/) {
+    if ($file =~ m/^.*[\/\\]([^\/\\]*\.[hc])$/) {
 	$basename = $1;
     } else {
 	print "WARNING: Can't find basename of file $file\n";
@@ -2223,7 +2226,7 @@ sub ScanSourceFile {
     }
 
     # Check if the basename is in the list of files to ignore.
-    if ($IGNORE_FILES =~ m/(\s|^)\Q${basename}(\s|$)/) {
+    if ($IGNORE_FILES =~ m/(\s|^)\Q${basename}\E(\s|$)/) {
 	return;
     }
 
