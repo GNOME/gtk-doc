@@ -255,7 +255,7 @@ output_widget_signal (FILE *fp,
 {
   GSignalQuery query_info;
   const gchar *type_name, *ret_type, *object_arg;
-  gchar *pos, *arg_name, *object_arg_start;
+  gchar *pos, *arg_name, *object_arg_lower;
   gboolean is_pointer;
   gchar ret_type_buffer[1024], buffer[1024];
   gint i, param;
@@ -291,12 +291,12 @@ output_widget_signal (FILE *fp,
   else
       object_arg = object_name;
 
-  object_arg_start = pos + 1;
-  sprintf (pos, "*%s\\n", object_arg);
+  object_arg_lower = g_ascii_strdown (object_arg, -1);
+  sprintf (pos, "*%s\\n", object_arg_lower);
   pos += strlen (pos);
-  g_strdown (object_arg_start);
-  if (!strncmp (object_arg_start, "widget", 6))
+  if (!strncmp (object_arg_lower, "widget", 6))
     widget_num = 2;
+  g_free(object_arg_lower);
 
   /* Convert signal name to use underscores rather than dashes '-'. */
   strcpy (signal_name, query_info.signal_name);
@@ -879,7 +879,7 @@ compare_param_specs (const void *a, const void *b)
 static void
 output_widget_args (FILE *fp, GType object_type)
 {
-  GObjectClass *class;
+  gpointer class;
   const gchar *object_class_name;
   gint arg;
   gchar flags[16], *pos;
@@ -888,16 +888,29 @@ output_widget_args (FILE *fp, GType object_type)
   gboolean child_prop;
   gboolean style_prop;
 
-  if (!G_TYPE_IS_CLASSED (object_type))
-    return;
+  if (G_TYPE_IS_CLASSED (object_type))
+    {
+      class = g_type_class_peek (object_type);
+      if (!class)
+	return;
 
-  class = g_type_class_peek (object_type);
-  if (!class)
+      properties = g_object_class_list_properties (class, &n_properties);
+    }
+#if GLIB_MAJOR_VERSION > 2 || (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION >= 3)
+  else if (G_TYPE_IS_INTERFACE (object_type))
+    {
+      class = g_type_default_interface_ref (object_type);
+
+      if (!class)
+	return;
+
+      properties = g_object_interface_list_properties (class, &n_properties);
+    }
+#endif
+  else
     return;
 
   object_class_name = g_type_name (object_type);
-
-  properties = g_object_class_list_properties (class, &n_properties);
 
   child_prop = FALSE;
   style_prop = FALSE;

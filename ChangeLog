@@ -1,3 +1,13 @@
+Sun Nov 16 00:29:03 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-scangobj.in: Don't use g_strdown(). (#127028, 
+	David Schleef)
+
+Sun Nov 16 00:26:05 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-scangobj.in: If compiled against GLib >= 2.3.0, look
+	for properties on interfaces.  (#127068, James M. Cape)
+
 2003-11-03  Dan Winship  <danw@ximian.com>
 
 	* gtkdoc-scangobj.in: Clean up $MODULE-scan.o even when using
