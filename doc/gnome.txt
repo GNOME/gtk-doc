@@ -22,7 +22,9 @@ Each line starts with ' * '.
 The second line is the function name, optionally followed by a ':'. In
 order to document signals in inline comments, use a name of the form 
 class::signal, e.g. GtkWidget::notify-child. For properties, use a
-name of the form class:property, e.g. GtkAlignment:top_padding.
+name of the form class:property, e.g. GtkAlignment:top-padding. Note
+that gtk-doc expects the signal and property names to be spelled with
+hyphens, not underlines.
 
 Following the function name are the parameters, e.g. '@par1:' above.
 
