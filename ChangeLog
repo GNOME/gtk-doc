@@ -1,3 +1,11 @@
+2002-08-08  James Henstridge  <james@daa.com.au>
+
+	* gtk-doc.xsl: add a gtkdoc.bookname param, and include it in the
+	index.sgml output (if not empty).
+
+	* gtkdoc-mkhtml.in: only perform the sed operation if we are using
+	Jade, and pass the module name as a parameter when using xsltproc.
+
 2002-08-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scangobj.in: Don't try to list signals on types which

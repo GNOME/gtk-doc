@@ -18,6 +18,8 @@
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
 
+  <!-- this gets set on the command line ... -->
+  <xsl:param name="gtkdoc.bookname" select="''"/>
 
   <!-- ========================================================= -->
   <!-- template to create the index.sgml anchor index -->
@@ -46,6 +48,10 @@
       <xsl:text>&lt;ANCHOR id=&quot;</xsl:text>
       <xsl:value-of select="@id"/>
       <xsl:text>&quot; href=&quot;</xsl:text>
+      <xsl:if test="$gtkdoc.bookname">
+        <xsl:value-of select="$gtkdoc.bookname"/>
+        <xsl:text>/</xsl:text>
+      </xsl:if>
       <xsl:call-template name="href.target"/>
       <xsl:text>&quot;&gt;
 </xsl:text>

@@ -34,13 +34,13 @@ if test -f index.sgml; then
 fi
 
 if $is_xml; then
-  @XSLTPROC@ --xinclude $gtkdocdir/gtk-doc.xsl $document
+  @XSLTPROC@ --xinclude --stringparam gtkdoc.bookname $module $gtkdocdir/gtk-doc.xsl $document
 else
   @JADE@ -t sgml -w no-idref -d $gtkdocdir/gtk-doc.dsl \
       $gtkdocdir/gtk-doc.dcl $document
-fi
 
-sed s%href=\"%href=\"$module/% < index.sgml > index.sgml.tmp && mv index.sgml.tmp index.sgml
+  sed s%href=\"%href=\"$module/% < index.sgml > index.sgml.tmp && mv index.sgml.tmp index.sgml
+fi
 
 echo "timestamp" > ../html.stamp
 
