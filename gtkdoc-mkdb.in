@@ -275,6 +275,10 @@ EOF
 	if ($count % $cols == ($cols - 1)) { print (OUTPUT "</row>\n"); }
 	$count++;
     }
+    if ($count == 0) {
+        # emit an empty row, since empty tables are invalid
+	print (OUTPUT "<row><entry> </entry></row>\n");
+    }
 
     print (OUTPUT <<EOF);
 </tbody></tgroup></informaltable>

@@ -1,3 +1,8 @@
+Wed Jan 28 00:52:00 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (OutputObjectList): Avoid emitting invalid
+	docbook markup if there are no objects. Partial fix for #132661.
+
 Sun Jan 25 22:01:15 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in: Accept both the old and the new XInclude
