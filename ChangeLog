@@ -1,4 +1,13 @@
+2004-04-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtkdoc-mkdb.in (GetSignals): Organize the properties 
+	descriptions to fit better with the other sections, and 
+	also display information about allowed and default values. 
+
 2004-04-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtkdoc-scangobj.in: Use introspection more fully to emit
+	allowed ranges for integral types and default values.
 
 	* gtkdoc-mkdb.in (GetSignals): Handle missing signal parameter
 	names better.

@@ -162,6 +162,8 @@ my @ArgTypes;		# The Arg type - gint, GtkArrowType etc.
 my @ArgFlags;		# How the Arg can be used - readable/writable etc.
 my @ArgNicks;		# The nickname of the Arg.
 my @ArgBlurbs;          # Docstring of the Arg.
+my @ArgDefaults;        # Default value of the Arg.
+my @ArgRanges;		# The range of the Arg type
 # These global hashes store declaration info keyed on a symbol name.
 my %Declarations;
 my %DeclarationTypes;
@@ -429,9 +431,7 @@ EOF
 		    $args_desc  = <<EOF;
 <refsect1>
 <title>Properties</title>
-<variablelist>
 $args_desc
-</variablelist>
 </refsect1>
 EOF
 		}
@@ -448,9 +448,7 @@ EOF
 		    $args_desc .= <<EOF;
 <refsect1>
 <title>Child Properties</title>
-<variablelist>
 $child_args_desc
-</variablelist>
 </refsect1>
 EOF
 		}
@@ -467,9 +465,7 @@ EOF
 		    $args_desc .= <<EOF;
 <refsect1>
 <title>Style Properties</title>
-<variablelist>
 $style_args_desc
-</variablelist>
 </refsect1>
 EOF
 		}
@@ -1990,6 +1986,10 @@ sub GetArgs {
 
 	    my $type = $ArgTypes[$i];
 	    my $type_output;
+	    my $range = $ArgRanges[$i];
+	    my $range_output = CreateValidSGML($range);
+	    my $default = $ArgDefaults[$i];
+	    my $default_output = CreateValidSGML($default);
 
 	    if ($type eq "GtkSignal") {
 		$type = "GtkSignalFunc, gpointer";
@@ -2034,14 +2034,35 @@ sub GetArgs {
 		}
 		$blurb = "<para>" . &CreateValidSGML ($ArgBlurbs[$i]) . "</para>";
 	    }
-	    if (exists $Since{$symbol}) {
-	      $blurb .= "<para>Since $Since{$symbol}</para>";
-	    }
+
 	    my $pad1 = " " x (20 - length ($name));
 	    my $pad2 = " " x (20 - length ($type));
+	    my $kind = "";
 
- 	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output$pad2 : $flags_string\n";
-	    my $arg_desc = "<varlistentry><term><anchor id=\"$id\"${empty_element_end}&quot;<literal>$name</literal>&quot; ($type_output : $flags_string)</term>\n<listitem>\n$blurb\n</listitem></varlistentry>\n";
+	    if ($flags =~ m/c/) {
+	        $kind = "child property";
+	    }
+	    elsif ($flags =~ m/s/) {
+	        $kind = "style property";
+	    }
+	    else {
+	        $kind = "property";
+	    }
+
+ 	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output $pad2 : $flags_string\n";
+	    my $arg_desc = "<refsect2><title><anchor id=\"$id\"${empty_element_end}The &quot;<literal>$name</literal>&quot; $kind</title>\n";
+	    $arg_desc .= "<programlisting>  &quot;$name&quot;$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
+	    $arg_desc .= $blurb;
+	    if ($range ne "") {
+	        $arg_desc .= "<para>Allowed values: $range_output</para>\n";
+	    }
+	    if ($default ne "") {
+	        $arg_desc .= "<para>Default value: $default_output</para>\n";
+	    }
+	    if (exists $Since{$symbol}) {
+	      $arg_desc .= "<para>Since $Since{$symbol}</para>\n";
+	    }
+	    $arg_desc .= "</refsect2>\n";
 
 	    if ($flags =~ m/c/) {
 	        $child_synop .= $arg_synop;
@@ -3038,6 +3059,8 @@ sub ReadArgsFile {
     my $arg_flags;
     my $arg_nick;
     my $arg_blurb;
+    my $arg_default;
+    my $arg_range;
 
     # Reset the args info.
     @ArgObjects = ();
@@ -3046,6 +3069,8 @@ sub ReadArgsFile {
     @ArgFlags = ();
     @ArgNicks = ();
     @ArgBlurbs = ();
+    @ArgDefaults = ();
+    @ArgRanges = ();
 
     if (! -f $file) {
 	return;
@@ -3064,6 +3089,8 @@ sub ReadArgsFile {
 		$arg_flags = "";
 		$arg_nick = "";
 		$arg_blurb = "";
+		$arg_default = "";
+		$arg_range = "";
 	    }
 	} else {
 	    if (m/^<NAME>(.*)<\/NAME>/) {
@@ -3077,6 +3104,8 @@ sub ReadArgsFile {
 		}
 	    } elsif (m/^<TYPE>(.*)<\/TYPE>/) {
 		$arg_type = $1;
+	    } elsif (m/^<RANGE>(.*)<\/RANGE>/) {
+		$arg_range = $1;
 	    } elsif (m/^<FLAGS>(.*)<\/FLAGS>/) {
 		$arg_flags = $1;
 	    } elsif (m/^<NICK>(.*)<\/NICK>/) {
@@ -3089,14 +3118,18 @@ sub ReadArgsFile {
 WARNING: Property ${arg_object}::${arg_name} has NULL blurb.
 EOF
 		}
+	    } elsif (m/^<DEFAULT>(.*)<\/DEFAULT>/) {
+		$arg_default = $1;
 	    } elsif (m%^</ARG>%) {
 #		print "Found end of arg: ${arg_object}::${arg_name}\n${arg_type} : ${arg_flags}\n";
 		push (@ArgObjects, $arg_object);
 		push (@ArgNames, $arg_name);
 		push (@ArgTypes, $arg_type);
+		push (@ArgRanges, $arg_range);
 		push (@ArgFlags, $arg_flags);
 		push (@ArgNicks, $arg_nick);
 		push (@ArgBlurbs, $arg_blurb);
+		push (@ArgDefaults, $arg_default);
 		$in_arg = 0;
 	    }
 	}
