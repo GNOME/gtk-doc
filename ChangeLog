@@ -1,3 +1,29 @@
+1999-03-11  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* examples/gnomeui/Makefile.am (clean-local): 
+	* examples/gnome/Makefile.am (clean-local): added *.args
+
+	* gtkdoc-mkdb.in: added support for Args and variables. Also a few
+	minor changes in the output, e.g. don't show macros > 2 lines long.
+
+	* gtkdoc-mktmpl.in: 
+	* gtkdoc-scanobj.in: added support for Args.
+
+	* gtkdoc-scan.in: added support for extern'ed variables. Also
+	accept 'extern' before function declarations.
+
+	* gtk-doc.dsl.in: made output prettier. Changed the navigation bars
+	and the colours used for the various backgrounds.
+
+	* doc/style-guide.txt: new file containinf a style guide for writing
+	the GTK+ documentation.
+
+	* doc/README: added description of style-guide.txt
+
+	* doc/setting-up.txt: fixed a typo
+
+	* README: added a bit about Args.
+
 1999-02-07  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* Makefile.am: Removed all the scripts from EXTRA_DIST, as they are

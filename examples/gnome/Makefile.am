@@ -26,7 +26,7 @@ html:
 	-cd html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
 
 clean-local:
-	rm -f *~ *.bak *.hierarchy *.signals *-unused.txt
+	rm -f *~ *.bak *.hierarchy *.signals *.args *-unused.txt
 
 maintainer-clean-local: clean
 	rm -rf sgml html $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt 

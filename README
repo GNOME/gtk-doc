@@ -62,9 +62,9 @@ gtkdoc-scan:	Scans header files looking for declarations of functions,
 
 
 gtkdoc-scanobj:	Creates a small C program which is compiled and run to query
-		your library about which GtkObjects it contains and the
-		signals that they emit. If your module has no GtkObjects then
-		you don't need to use this.
+		your library about which GtkObjects it contains, the signals
+		they emit, and any Args they have. If your module has no
+		GtkObjects then	you don't need to use this.
 
 		You need to create a MODULE.types file which contains:
 
@@ -87,8 +87,9 @@ gtkdoc-scanobj:	Creates a small C program which is compiled and run to query
 		library, then run 'gtkdoc-scanobj --module=MODULE'.
 
 		It outputs MODULE.hierarchy which contains your widgets and
-		their ancestors, and MODULE.signals which contains prototypes
-		of the signals that they emit.
+		their ancestors, MODULE.signals which contains prototypes
+		of the signals that they emit, and MODULE.args which contains
+		the objects' Args.
 
 
 gtkdoc-mktmpl:	Uses MODULE-sections.txt to generate a set of template files
@@ -170,7 +171,7 @@ We've been using the targets:
   make scan	 - to run gtkdoc-scan (& gtkdoc-scanobj if appropriate)
 
   make templates - does the same as make scan but also runs gtkdoc-mktmpl
-		   to regerenate the templates
+		   to regenerate the templates
 
   make sgml      - runs gtkdoc-mkdb to generate the DocBook SGML.
 
@@ -186,5 +187,5 @@ The examples directory shows how libgnome and libgnomeui could be set up to
 use gtk-doc. (These are what I have been using to test gtk-doc.)
 
 
-Damon Chaplin (damon@karuna.freeserve.co.uk), 18 Jan 1999.
+Damon Chaplin (damon@karuna.freeserve.co.uk), 11 Mar 1999.
 

@@ -59,12 +59,22 @@ my $OBJECT_TREE_FILE = "$ROOT_DIR/$MODULE.hierarchy";
 # This file contains signal arguments and names.
 my $SIGNALS_FILE = "$ROOT_DIR/$MODULE.signals";
 
+# The file containing Arg information.
+my $ARGS_FILE = "$ROOT_DIR/$MODULE.args";
+
 # These global arrays store information on signals. Each signal has an entry
 # in each of these arrays at the same index, like a multi-dimensional array.
 my @SignalObjects;	# The GtkObject which emits the signal.
 my @SignalNames;	# The signal name.
 my @SignalReturns;	# The return type.
 my @SignalPrototypes;	# The rest of the prototype of the signal handler.
+
+# These global arrays store information on Args. Each Arg has an entry
+# in each of these arrays at the same index, like a multi-dimensional array.
+my @ArgObjects;		# The GtkObject which has the Arg.
+my @ArgNames;		# The Arg name.
+my @ArgTypes;		# The Arg type - gint, GtkArrowType etc.
+my @ArgFlags;		# How the Arg can be used - readable/writable etc.
 
 # These global hashes store declaration info keyed on a symbol name.
 my %Declarations;
@@ -98,6 +108,7 @@ my $SYMBOL_FIELD_WIDTH = 32;
 my $SIGNAL_FIELD_WIDTH = 12;
 
 &ReadSignalsFile ($SIGNALS_FILE);
+&ReadArgsFile ($ARGS_FILE);
 &ReadObjectHierarchy;
 
 # FIXME: this is the header file output at the top of the Synopsis.
@@ -245,7 +256,7 @@ sub OutputSGML {
 	    $num_symbols = 0;
 	    $in_section = 1;
 
-	} elsif (m/^<SUBSECTION\s*(\w*)>/i) {
+	} elsif (m/^<SUBSECTION\s*(.*)>/i) {
 	    $synopsis .= "\n";
 	    $subsection = $1;
 
@@ -358,6 +369,9 @@ sub OutputDeclaration {
 	return &OutputEnum ($symbol, $declaration);
     } elsif ($type eq 'UNION') {
 	return &OutputUnion ($symbol, $declaration);
+    } elsif ($type eq 'VARIABLE') {
+	return &OutputVariable ($symbol, $declaration);
+
     } elsif ($type eq 'FUNCTION') {
 	return &OutputFunction ($symbol, $declaration, $type);
     } elsif ($type eq 'USER_FUNCTION') {
@@ -398,10 +412,11 @@ sub OutputMacro {
 	$desc = "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
     }
     # Don't output the macro definition if is is a conditional macro or it
-    # looks like a function, i.e. starts with "g_" or "_?gnome_", otherwise we
-    # get lots of complicated macros like g_assert.
+    # looks like a function, i.e. starts with "g_" or "_?gnome_", or it is
+    # longer than 2 lines, otherwise we get lots of complicated macros like
+    # g_assert.
     if (!defined ($DeclarationConditional{$symbol}) && ($symbol !~ m/^g_/)
-	&& ($symbol !~ m/^_?gnome_/)) {
+	&& ($symbol !~ m/^_?gnome_/) && (($declaration =~ tr/\n//) < 2)) {
 	$declaration = &CreateValidSGML ($declaration);
 	$desc .= "<programlisting>$declaration</programlisting>\n";
     } else {
@@ -429,7 +444,7 @@ sub OutputMacro {
 sub OutputTypedef {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
-    my $synop = "typedef     <link linkend=\"$id\">$symbol</link>\n";
+    my $synop = "typedef     <link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
     if (!defined ($DeclarationConditional{$symbol})) {
 	$declaration = &CreateValidSGML ($declaration);
@@ -469,8 +484,8 @@ sub OutputStruct {
     } else {
 	$id = &CreateValidSGMLID ($symbol);
     }
-    my $synop = "struct      <link linkend=\"$id\">$symbol</link>\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+    my $synop = "struct      <link linkend=\"$id\">$symbol</link>;\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\">struct $symbol</title>\n";
     if ($declaration =~ m/^\s*$/) {
 #	print "Found opaque struct\n";
 	$declaration = "struct $symbol;";
@@ -519,8 +534,8 @@ sub OutputStruct {
 sub OutputEnum {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
-    my $synop = "enum        <link linkend=\"$id\">$symbol</link>\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+    my $synop = "enum        <link linkend=\"$id\">$symbol</link>;\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\">enum $symbol</title>\n";
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
     if (defined ($SymbolDocs{$symbol})) {
@@ -541,7 +556,40 @@ sub OutputEnum {
 sub OutputUnion {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
-    my $synop = "union       <link linkend=\"$id\">$symbol</link>\n";
+    my $synop = "union       <link linkend=\"$id\">$symbol</link>;\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\">union $symbol</title>\n";
+    $declaration = &CreateValidSGML ($declaration);
+    $desc .= "<programlisting>$declaration</programlisting>\n";
+    if (defined ($SymbolDocs{$symbol})) {
+	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+    $desc .= "</refsect2>\n";
+    return ($synop, $desc);
+}
+
+
+#############################################################################
+# Function    : OutputVariable
+# Description : Returns the synopsis and detailed description of a variable.
+# Arguments   : $symbol - the extern'ed variable.
+#		$declaration - the declaration of the variable.
+#############################################################################
+
+sub OutputVariable {
+    my ($symbol, $declaration) = @_;
+    my $id = &CreateValidSGMLID ($symbol);
+
+    my $synop;
+    if ($declaration =~ m/^\s*extern\s+((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)(\s*)([A-Za-z]\w*)\s*;/) {
+	my $mod = defined ($1) ? $1 : "";
+	my $ptr = defined ($3) ? $3 : "";
+	my $space = defined ($4) ? $4 : "";
+	$synop = "extern      $mod$ptr$space<link linkend=\"$id\">$symbol</link>;\n";
+
+    } else {
+	$synop = "extern      <link linkend=\"$id\">$symbol</link>;\n";
+    }
+
     my $desc = "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
@@ -614,7 +662,7 @@ sub OutputFunction {
     }
 
     my $synop = $ret_type_output . $symbol_output . '(';
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\">${symbol}()</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\">${symbol} ()</title>\n";
     $desc  .= "<programlisting>${ret_type_output}$symbol_desc_output(";
 
     my $param_num = 0;
@@ -795,9 +843,12 @@ sub OutputSGMLFile {
     # Find out if this is a GtkObject or descendant.
     my $signals_synop = "";
     my $signals_desc = "";
+    my $args_synop = "";
+    my $args_desc = "";
     my $hierarchy = "";
     if (&CheckIsObject ($title)) {
 	($signals_synop, $signals_desc) = &GetSignals ($title);
+	($args_synop, $args_desc) = &GetArgs ($title);
 	$hierarchy = &GetHierarchy ($title);
     }
 
@@ -859,6 +910,7 @@ $${synopsis}</synopsis>
 </refsynopsisdiv>
 
 $hierarchy
+$args_synop
 $signals_synop
 
 <refsect1>
@@ -870,6 +922,7 @@ $long_desc
 <title>Details</title>
 $$details
 </refsect1>
+$args_desc
 $signals_desc
 
 </refentry>
@@ -921,6 +974,8 @@ sub CreateValidSGMLID {
     if ($id eq 'AND') { return "AND-CAPS"; }
     if ($id eq 'OR')  { return "OR-CAPS"; }
     if ($id eq 'NOT') { return "NOT-CAPS"; }
+
+    if ($id eq 'GTK_OBJECT_CONSTRUCTED') { return "GTK-OBJECT-CONSTRUCTED-CAPS"; }
 
     # Special case, differentiate Unit from unit.
     if ($id eq 'Unit') { return "UNIT-CAP"; }
@@ -1119,14 +1174,14 @@ sub GetSignals {
 
 	    my $name_len = length ($name) + 2;
 	    if ($name_len < $SIGNAL_FIELD_WIDTH) {
-		$synop .= "'<link linkend=\"$id\">$name</link>'"
+		$synop .= "&quot;<link linkend=\"$id\">$name</link>&quot;"
 		    . (' ' x ($SIGNAL_FIELD_WIDTH - $name_len));
 	    } else {
-		$synop .= "'<link linkend=\"$id\">$name</link>'\n"
+		$synop .= "&quot;<link linkend=\"$id\">$name</link>&quot;\n"
 		    . (' ' x $SIGNAL_FIELD_WIDTH);
 	    }
 
-	    $desc .= "<refsect2><title><anchor id=\"$id\">The '$name' signal</title>\n";
+	    $desc .= "<refsect2><title><anchor id=\"$id\">The &quot;$name&quot; signal</title>\n";
 	    $desc .= "<programlisting>";
 
 	    $SignalReturns[$i] =~ m/\s*(const\s*)?(\w+)\s*(\**)/;
@@ -1185,6 +1240,100 @@ EOF
 <refsect1>
 <title>Signals</title>
 $desc
+</refsect1>
+EOF
+    }
+    return ($synop, $desc);
+}
+
+
+#############################################################################
+# Function    : GetArgs
+# Description : Returns the synopsis and detailed description DocBook output
+#		for the Args of a given GtkObject subclass.
+# Arguments   : $object - the GtkObject subclass, e.g. 'GtkButton'.
+#############################################################################
+
+sub GetArgs {
+    my ($object) = @_;
+    my $synop = "";
+    my $desc = "";
+
+    my $i;
+    for ($i = 0; $i <= $#ArgObjects; $i++) {
+	if ($ArgObjects[$i] eq $object) {
+#	    print "Found arg: $ArgNames[$i]\n";
+	    my $name = $ArgNames[$i];
+	    # Remember only one colon so we don't clash with signals.
+	    my $symbol = "${object}:${name}";
+	    # I've used two dashes here for the same reason.
+	    my $id = &CreateValidSGMLID ("$object--$name");
+
+	    my $type = $ArgTypes[$i];
+	    my $type_output;
+
+	    if ($type eq "GtkSignal") {
+		$type = "GtkSignalFunc, gpointer";
+		$type_output = &MakeXRef ("GtkSignalFunc") . ", "
+		    . &MakeXRef ("gpointer");
+	    } elsif ($type eq "GtkString") {
+		$type = "gchar*";
+		$type_output = &MakeXRef ("gchar") . "*";
+	    } else {
+		$type_output = &MakeXRef ($type);
+	    }
+
+	    my $flags = $ArgFlags[$i];
+	    my $flags_string = "";
+
+	    if ($flags =~ m/r/) {
+		$flags_string = "Read";
+	    }
+	    if ($flags =~ m/w/) {
+		if ($flags_string) { $flags_string .= " / "; }
+		$flags_string .= "Write";
+	    }
+	    if ($flags =~ m/x/) {
+		if ($flags_string) { $flags_string .= " / "; }
+		$flags_string .= "Construct";
+	    }
+	    if ($flags =~ m/X/) {
+		if ($flags_string) { $flags_string .= " / "; }
+		$flags_string .= "Construct Only";
+	    }
+	    if ($flags =~ m/c/) {
+		if ($flags_string) { $flags_string .= " / "; }
+		$flags_string .= "Child";
+	    }
+
+	    my $pad1 = " " x (20 - length ($name));
+	    my $pad2 = " " x (20 - length ($type));
+	    $synop .= "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output$pad2 : $flags_string\n";
+
+	    $desc .= "<varlistentry><term><anchor id=\"$id\">&quot;<literal>$name</literal>&quot; ($type_output : $flags_string)</term>\n<listitem>\n";
+
+	    if (defined ($SymbolDocs{$symbol})) {
+	        $desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	    }
+
+	    $desc .= "</listitem></varlistentry>\n";
+	}
+    }
+    if ($synop ne '') {
+        $synop = <<EOF;
+<refsect1>
+<title>Args</title>
+<synopsis>
+
+${synop}</synopsis>
+</refsect1>
+EOF
+	$desc  = <<EOF;
+<refsect1>
+<title>Args</title>
+<variablelist>
+$desc
+</variablelist>
 </refsect1>
 EOF
     }
@@ -1765,3 +1914,72 @@ sub ReadTemplateFile {
 
     close (DOCS);
 }
+
+
+#############################################################################
+# Function    : ReadArgsFile
+# Description : This reads in an existing file which contains information on
+#		all GTK args. It creates the arrays @ArgObjects, @ArgNames,
+#		@ArgTypes and @ArgFlags containing info on the args.
+# Arguments   : $file - the file containing the arg information.
+#############################################################################
+
+sub ReadArgsFile {
+    my ($file) = @_;
+
+    my $in_arg = 0;
+    my $arg_object;
+    my $arg_name;
+    my $arg_type;
+    my $arg_flags;
+
+    # Reset the signal info.
+    @ArgObjects = ();
+    @ArgNames = ();
+    @ArgTypes = ();
+    @ArgFlags = ();
+
+    if (! -f $file) {
+	return;
+    }
+    if (!open (INPUT, $file)) {
+	warn "Can't open $file - skipping args\n";
+	return;
+    }
+    while (<INPUT>) {
+	if (!$in_arg) {
+	    if (m/^<ARG>/) {
+		$in_arg = 1;
+		$arg_object = "";
+		$arg_name = "";
+		$arg_type = "";
+		$arg_flags = "";
+	    }
+	} else {
+	    if (m/^<NAME>(.*)<\/NAME>/) {
+		$arg_name = $1;
+		if ($arg_name =~ m/^(.*)::(.*)$/) {
+		    $arg_object = $1;
+		    $arg_name = $2;
+#		    print "Found arg: $arg_name\n";
+		} else {
+		    print "Invalid arg name: $arg_name\n";
+		}
+	    } elsif (m/^<TYPE>(.*)<\/TYPE>/) {
+		$arg_type = $1;
+	    } elsif (m/^<FLAGS>(.*)<\/FLAGS>/) {
+		$arg_flags = $1;
+	    } elsif (m%^</ARG>%) {
+#		print "Found end of arg: ${arg_object}::${arg_name}\n${arg_type} : ${arg_flags}\n";
+		push (@ArgObjects, $arg_object);
+		push (@ArgNames, $arg_name);
+		push (@ArgTypes, $arg_type);
+		push (@ArgFlags, $arg_flags);
+		$in_arg = 0;
+	    }
+	}
+    }
+    close (INPUT);
+}
+
+

@@ -1,0 +1,115 @@
+
+NOTE: This is only a draft version. Don't make major changes to your
+      documentation until we've agreed on all this.
+
+
+GTK+ Reference Documentation Style Guide
+========================================
+
+This file describes the way the GTK+ reference documentation should be written,
+so that we produce consistent documentation.
+
+We will also designate one or two of the template files as 'model' templates,
+i.e. they are to be taken as the 'correct' way to write the documentation.
+
+
+Language
+========
+
+Use American spelling rather than British, i.e. color rather than colour,
+organize rather than organise etc.
+
+
+Organizing Sections
+===================
+
+The organization of the sections is determined by the glib-sections.txt,
+gdk-sections.txt and gtk-sections.txt files.
+
+Group related functions/macros/enums etc. and place a "<SUBSECTION>" tag
+(on its own line) between groups. This results in a blank line in the synopsis
+between the groups, which makes it a bit easier to read.
+
+Order the groups sections by placing the most important/commonly-used
+functions/macros etc. first. For pairs of accessor functions place them
+together with the 'get' function first and then the 'set' function.
+
+Private functions etc. should be placed at the end of the "<SECTION>",
+after a "<SUBSECTION Private>" line. They will not appear in the HTML output
+and they do not have to be documented (they will disappear form the template
+files the next time 'make templates' is run).
+
+Enumerations should appear after the first function which uses them.
+
+
+Functions & Macro Descriptions
+==============================
+
+Start the description with a phrase like this:
+  'Looks up a key in a GHashTable'.
+i.e. assume that 'This function' (or 'This macro') precedes it.
+
+
+Function Parameters
+===================
+
+For object-oriented code, denote the object parameter with 'a',
+e.g. 'a #GHashTable'.
+
+Use 'the' for the rest of the parameters.
+
+
+Widget Structs
+==============
+
+Some widget structs have fields which are useful to the developer, since
+there are currently no accessor functions to retrieve the particular field.
+
+These fields should be documented by using a table, Copy this
+and change the <structfield> and <entry> contents:
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry><structfield>GTK_ARROW_UP</structfield></entry>
+<entry>an arrow pointing up.</entry>
+</row>
+
+<row>
+<entry><structfield>GTK_ARROW_DOWN</structfield></entry>
+<entry>an arrow pointing down.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+
+Enumerations
+============
+
+A lot of the enumerations in GTK+ are currently placed in the "Standard
+Enumerations" section. However, some of these are specific to a particular
+widget and so should be moved to the widget's section and documented there.
+
+The enumeration values should be documented with a table. Copy this
+and change the <symbol> and <entry> contents:
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry><symbol>GTK_ARROW_UP</symbol></entry>
+<entry>an arrow pointing up.</entry>
+</row>
+
+<row>
+<entry><symbol>GTK_ARROW_DOWN</symbol></entry>
+<entry>an arrow pointing down.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+
+Damon, 11 Mar 1999

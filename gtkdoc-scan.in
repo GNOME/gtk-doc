@@ -214,6 +214,8 @@ sub ScanHeader {
 		next;
 	    }
 
+	    # MACROS
+
 	    if (m/^\s*#\s*define\s+(\w+)/) {
 		$symbol = $1;
 		# We assume all macros which start with '_' are private, but
@@ -233,11 +235,17 @@ sub ScanHeader {
 		}
 		$first_macro = 0;
 
+
+	    # TYPEDEF'D FUNCTIONS (i.e. user functions)
+
 	    } elsif (m/^typedef\s+((const\s+)?\w+)\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
 		$ret_type = "$1 $3";
 		$symbol = $4;
 		$decl = $';
 		$in_declaration = "user_function";
+
+
+	    # ENUMS
 
 	    } elsif (s/^enum\s+_(\w+)\s+\{/enum $1 {/) {
 		# We assume that 'enum _<enum_name> {' is really the
@@ -256,6 +264,9 @@ sub ScanHeader {
 		$symbol = "";
 		$decl = $_;
 		$in_declaration = "enum";
+
+
+	    #STRUCTS
 
 	    } elsif (m/^typedef\s+struct\s+_(\w+)\s+\1\s*;/) {
 		# We've found a 'typedef struct _<name> <name>;'
@@ -283,6 +294,9 @@ sub ScanHeader {
 		$level = 0;
 		$in_declaration = "struct";
 
+
+	    # UNIONS
+
 	    } elsif (s/^union\s+_(\w+)/union $1/) {
 		$symbol = $1;
 		$decl = $_;
@@ -297,17 +311,28 @@ sub ScanHeader {
 	    } elsif (m/^typedef\s+/) {
 #		print "Skipping typedef: $_";
 
-	    } elsif (m/^extern\s+/) {
-#		print "Skipping extern: $_";
+
+	    # VARIABLES (extern'ed variables)
+
+	    } elsif (m/^extern\s+((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*;/) {
+		$symbol = $4;
+#		print "Possible extern: $_";
+		&AddSymbolToList (\$list, $symbol);
+		print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$_</VARIABLE>\n";
+
+
+	    # FUNCTIONS
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-	    } elsif (m/^\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
-		$ret_type = "$2 $4";
-		$symbol = $5;
+	    } elsif (m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
+		$ret_type = "$3 $5";
+		$symbol = $6;
 		$decl = $';
 
-#		print "Function: $symbol, Returns: $ret_type\n";
+		if ($1) {
+		    print "Function: $symbol, Returns: $ret_type\n";
+	        }
 		$in_declaration = "function";
 
 	    # Try to catch function declarations which have the return type on
@@ -319,21 +344,28 @@ sub ScanHeader {
 		$decl = $';
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
 		    && $previous_line !~ m/^\s*static\s+/) {
-		    if ($previous_line =~ m/^((const\s*)?\w+)(\s*\*+)?/) {
-			$ret_type = $1;
-			if (defined ($3)) { $ret_type .= " $3"; }
+		    if ($previous_line =~ m/^\s*(extern)?\s*((const\s*)?\w+)(\s*\*+)?/) {
+			$ret_type = $2;
+			if (defined ($4)) { $ret_type .= " $4"; }
 #			print "Function: $symbol, Returns: $ret_type\n";
 			$in_declaration = "function";
 		    }
 		}
+
+	    # Try to catch function declarations with the return type and name
+	    # on the previous line, and the start of the parameters on this.
 	    } elsif (m/^\s*\(/) {
 		$decl = $';
-		if ($previous_line =~ m/^\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
-		    $ret_type = "$2 $4";
-		    $symbol = $5;
+		if ($previous_line =~ m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
+		    $ret_type = "$3 $5";
+		    $symbol = $6;
 #		    print "Function: $symbol, Returns: $ret_type\n";
 		    $in_declaration = "function";
 		}
+
+#	    } elsif (m/^extern\s+/) {
+#		print "Skipping extern: $_";
+
 	    }
 	} else {
 	    # If we were already in the middle of a declaration, we simply add

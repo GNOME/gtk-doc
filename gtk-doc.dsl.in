@@ -13,12 +13,48 @@
 
 ;;(define %generate-book-toc% #f)
 
+(define $generate-chapter-toc$ 
+  (lambda ()
+    #f))
+
+(define %chapter-autolabel% 
+  ;; Are chapters enumerated?
+  #f)
+
 (define %use-id-as-filename% #t)
 
 (define %html-ext% ".html")
 
 (define %shade-verbatim% #t)
 
+
+(mode book-titlepage-recto-mode
+  (element title 
+    (make element gi: "TABLE"
+	  attributes: (list
+		       (list "WIDTH" %gentext-nav-tblwidth%)
+		       (list "BORDER" "0")
+		       (list "BGCOLOR" "#000000")
+		       (list "CELLPADDING" "1")
+		       (list "CELLSPACING" "0"))
+	  (make element gi: "TR"
+		(make element gi: "TH"
+		      attributes: (list
+				   (list "ALIGN" "center")
+				   (list "VALIGN" "center"))
+		      (make element gi: "FONT"
+			    attributes: (list
+					 (list "COLOR" "#FFFFFF")
+					 (list "SIZE" "7"))
+			    (make element gi: "P"
+				  attributes: (list (list "CLASS" (gi)))
+				  (make element gi: "A"
+					attributes: (list (list "NAME" (element-id)))
+					(process-children-trim))))))))
+)
+
+(define (book-titlepage-separator side)
+  (empty-sosofo))
 
 ;; I want to change this so that for programlisting we use a blue background,
 ;; but for example or informalexample we use green.
@@ -31,12 +67,12 @@
 		    (normalize "informalexample")))
 	(list
 	 (list "BORDER" "0")
-	 (list "BGCOLOR" "#E8F8E8")
+	 (list "BGCOLOR" "#D8FFD8")
 	 (list "WIDTH" "100%")
 	 (list "CELLPADDING" "6"))
 	(list
 	 (list "BORDER" "0")
-	 (list "BGCOLOR" "#E8E8F8")
+	 (list "BGCOLOR" "#D6E8FF")
 	 (list "WIDTH" "100%")
 	 (list "CELLPADDING" "6"))
 	)
@@ -73,7 +109,7 @@
 	 (border (if (equal? frameattr (normalize "none"))
 		     '(("BORDER" "0"))
 		     '(("BORDER" "1"))))
-	 (bgcolor '(("BGCOLOR" "#FFE0E0")))
+	 (bgcolor '(("BGCOLOR" "#FFD0D0")))
 	 (width (if (equal? pgwide "1")
 		    (list (list "WIDTH" ($table-width$)))
 		    '()))
@@ -96,10 +132,13 @@
 	  (make-table-endnotes))))
 
 ;; This overrides the refsect2 definition (copied from 1.20, dbrfntry.dsl).
-;; It puts a horizontal rule after each function/struct/... description.
+;; It puts a horizontal rule before each function/struct/... description,
+;; except the first one in the refsect1.
 (element refsect2
   (make sequence
-    (make empty-element gi: "HR")
+    (if (first-sibling?)
+	(empty-sosofo)
+	(make empty-element gi: "HR"))
     ($block-container$)))
 
 ;; Override the book declaration, so that we generate a crossreference
@@ -209,6 +248,256 @@
                          (list "HREF" (href-to target)))
             (process-children)))))
 
+
+;; This overrides default-header-nav-tbl-noff (copied from 1.20, dbnavig.dsl).
+;; I want 'Home' and 'Up' links at the top of each page, and white text on
+;; black.
+(define (default-header-nav-tbl-noff elemnode prev next prevsib nextsib)
+  (let* ((r1? (nav-banner? elemnode))
+	 (r1-sosofo (make element gi: "TR"
+			  (make element gi: "TH"
+				attributes: (list
+					     (list "COLSPAN" "4")
+					     (list "ALIGN" "center"))
+				(make element gi: "FONT"
+				      attributes: (list
+						   (list "COLOR" "#FFFFFF")
+						   (list "SIZE" "5"))
+				      (nav-banner elemnode)))))
+	 (r2? (or (not (node-list-empty? prev))
+		  (not (node-list-empty? next))
+		  (nav-context? elemnode)))
+	 (r2-sosofo (make element gi: "TR"
+			  (make element gi: "TD"
+				attributes: (list
+					     (list "WIDTH" "25%")
+					     (list "BGCOLOR" "#C00000")
+					     (list "ALIGN" "left"))
+				(if (node-list-empty? prev)
+				    (make entity-ref name: "nbsp")
+				    (make element gi: "A"
+					  attributes: (list
+						       (list "HREF" 
+							     (href-to 
+							      prev)))
+					  (make element gi: "FONT"
+						attributes: (list
+							     (list "COLOR" "#FFFFFF")
+							     (list "SIZE" "3"))
+						(make element gi: "B"
+						      (gentext-nav-prev prev))))))
+			 (make element gi: "TD"
+			       attributes: (list
+					    (list "WIDTH" "25%")
+					    (list "BGCOLOR" "#0000C0")
+					    (list "ALIGN" "center"))
+					  (make element gi: "FONT"
+						attributes: (list
+							     (list "COLOR" "#FFFFFF")
+							     (list "SIZE" "3"))
+						(make element gi: "B"
+						      (nav-home-link elemnode))))
+			 (make element gi: "TD"
+			       attributes: (list
+					    (list "WIDTH" "25%")
+					    (list "BGCOLOR" "#00C000")
+					    (list "ALIGN" "center"))
+					  (make element gi: "FONT"
+						attributes: (list
+							     (list "COLOR" "#FFFFFF")
+							     (list "SIZE" "3"))
+						(make element gi: "B"
+						      (if (nav-up? elemnode)
+							  (nav-up elemnode)
+							  (make entity-ref name: "nbsp")))))
+			  (make element gi: "TD"
+				attributes: (list
+					     (list "WIDTH" "25%")
+					     (list "BGCOLOR" "#C00000")
+					     (list "ALIGN" "right"))
+				(if (node-list-empty? next)
+				    (make entity-ref name: "nbsp")
+				    (make element gi: "A"
+					  attributes: (list
+						       (list "HREF" 
+							     (href-to
+							      next)))
+					  (make element gi: "FONT"
+						attributes: (list
+							     (list "COLOR" "#FFFFFF")
+							     (list "SIZE" "3"))
+						(make element gi: "B"
+						      (gentext-nav-next next)))))))))
+    (if (or r1? r2?)
+	(make element gi: "DIV"
+	      attributes: '(("CLASS" "NAVHEADER"))
+	  (make element gi: "TABLE"
+		attributes: (list
+			     (list "WIDTH" %gentext-nav-tblwidth%)
+			     (list "BORDER" "0")
+			     (list "BGCOLOR" "#000000")
+			     (list "CELLPADDING" "1")
+			     (list "CELLSPACING" "0"))
+		(if r1? r1-sosofo (empty-sosofo))
+		(if r2? r2-sosofo (empty-sosofo))))
+	(empty-sosofo))))
+
+
+;; This overrides default-footer-nav-tbl (copied from 1.20, dbnavig.dsl).
+;; It matches the header above.
+(define (default-footer-nav-tbl elemnode prev next prevsib nextsib)
+  (let ((r1? (or (not (node-list-empty? prev))
+		 (not (node-list-empty? next))
+		 (nav-home? elemnode)))
+	(r2? (or (not (node-list-empty? prev))
+		 (not (node-list-empty? next))
+		 (nav-up? elemnode)))
+
+	(r1-sosofo (make element gi: "TR"
+			  (make element gi: "TD"
+				attributes: (list
+					     (list "WIDTH" "25%")
+					     (list "BGCOLOR" "#C00000")
+					     (list "ALIGN" "left"))
+				(if (node-list-empty? prev)
+				    (make entity-ref name: "nbsp")
+				    (make element gi: "A"
+					  attributes: (list
+						       (list "HREF" 
+							     (href-to 
+							      prev)))
+					  (make element gi: "FONT"
+						attributes: (list
+							     (list "COLOR" "#FFFFFF")
+							     (list "SIZE" "3"))
+						(make element gi: "B"
+						      (gentext-nav-prev prev))))))
+			 (make element gi: "TD"
+			       attributes: (list
+					    (list "WIDTH" "25%")
+					    (list "BGCOLOR" "#0000C0")
+					    (list "ALIGN" "center"))
+					  (make element gi: "FONT"
+						attributes: (list
+							     (list "COLOR" "#FFFFFF")
+							     (list "SIZE" "3"))
+						(make element gi: "B"
+						      (nav-home-link elemnode))))
+			 (make element gi: "TD"
+			       attributes: (list
+					    (list "WIDTH" "25%")
+					    (list "BGCOLOR" "#00C000")
+					    (list "ALIGN" "center"))
+					  (make element gi: "FONT"
+						attributes: (list
+							     (list "COLOR" "#FFFFFF")
+							     (list "SIZE" "3"))
+						(make element gi: "B"
+						      (if (nav-up? elemnode)
+							  (nav-up elemnode)
+							  (make entity-ref name: "nbsp")))))
+			  (make element gi: "TD"
+				attributes: (list
+					     (list "WIDTH" "25%")
+					     (list "BGCOLOR" "#C00000")
+					     (list "ALIGN" "right"))
+				(if (node-list-empty? next)
+				    (make entity-ref name: "nbsp")
+				    (make element gi: "A"
+					  attributes: (list
+						       (list "HREF" 
+							     (href-to
+							      next)))
+					  (make element gi: "FONT"
+						attributes: (list
+							     (list "COLOR" "#FFFFFF")
+							     (list "SIZE" "3"))
+						(make element gi: "B"
+						      (gentext-nav-next next))))))))
+
+	(r2-sosofo (make element gi: "TR"
+			 (make element gi: "TD"
+			       attributes: (list
+					    (list "COLSPAN" "2")
+					    (list "ALIGN" "left"))
+			       (if (node-list-empty? prev)
+				   (make entity-ref name: "nbsp")
+				   (make element gi: "FONT"
+					 attributes: (list
+						      (list "COLOR" "#FFFFFF")
+						      (list "SIZE" "3"))
+					 (make element gi: "B"
+					       (element-title-sosofo prev)))))
+			 (make element gi: "TD"
+			       attributes: (list
+					    (list "COLSPAN" "2")
+					    (list "ALIGN" "right"))
+			       (if (node-list-empty? next)
+				   (make entity-ref name: "nbsp")
+				   (make element gi: "FONT"
+					 attributes: (list
+						      (list "COLOR" "#FFFFFF")
+						      (list "SIZE" "3"))
+					 (make element gi: "B"
+					       (element-title-sosofo next))))))))
+    (if (or r1? r2?)
+	(make element gi: "DIV"
+	      attributes: '(("CLASS" "NAVFOOTER"))
+	      (make empty-element gi: "BR")
+	      (make empty-element gi: "BR")
+
+	      (make element gi: "TABLE"
+		    attributes: (list
+				 (list "WIDTH" %gentext-nav-tblwidth%)
+				 (list "BORDER" "0")
+				 (list "BGCOLOR" "#000000")
+				 (list "CELLPADDING" "1")
+				 (list "CELLSPACING" "0"))
+		    (if r1? r1-sosofo (empty-sosofo))
+		    (if r2? r2-sosofo (empty-sosofo))))
+	(empty-sosofo))))
+
+
+;; This overrides nav-up (copied from 1.20, dbnavig.dsl).
+;; We want to change the size and color of the text.
+(define (nav-up elemnode)
+  (let ((up (parent elemnode)))
+    (if (or (node-list-empty? up)
+	    (node-list=? up (sgml-root-element)))
+	(make entity-ref name: "nbsp")
+	(make element gi: "A"
+	      attributes: (list
+			   (list "HREF" (href-to up)))
+	      (make element gi: "FONT"
+		    attributes: (list
+				 (list "COLOR" "#FFFFFF")
+				 (list "SIZE" "3"))
+		    (make element gi: "B"
+			  (gentext-nav-up up)))))))
+
+;; This overrides nav-home-link (copied from 1.20, dbnavig.dsl).
+;; We want to change the size and color of the text.
+(define (nav-home-link elemnode)
+  (let ((home (nav-home elemnode)))
+    (if (node-list=? elemnode home)
+	(make entity-ref name: "nbsp")
+	(make element gi: "A"
+	      attributes: (list
+			   (list "HREF" 
+				 (href-to home)))
+	      (make element gi: "FONT"
+		    attributes: (list
+				 (list "COLOR" "#FFFFFF")
+				 (list "SIZE" "3"))
+		    (make element gi: "B"
+			  (gentext-nav-home home)))))))
+
+;; These override 2 functions which return the English text to use for links to
+;; previous and next pages. (copied from 1.20, dbl1en.dsl).
+(define (gentext-en-nav-prev prev) 
+  (make sequence (literal "<<< Previous Page")))
+(define (gentext-en-nav-next next)
+  (make sequence (literal "Next Page >>>")))
 
 </style-specification-body>
 </style-specification>

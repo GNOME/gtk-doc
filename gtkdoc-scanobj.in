@@ -96,9 +96,8 @@ print OUTPUT <<EOT;
 /* The output files */
 gchar *signals_filename = "$MODULE.signals";
 gchar *hierarchy_filename = "$MODULE.hierarchy";
+gchar *args_filename = "$MODULE.args";
 
-
-extern GtkType* get_object_types();
 
 static void output_signals ();
 static void output_widget_signals (FILE *fp,
@@ -118,14 +117,19 @@ static void output_hierarchy (FILE *fp,
 			      GtkType type,
 			      gint level);
 
+static void output_args ();
+static void output_widget_args (FILE *fp, GtkType object_type);
 
 int
 main (int argc, char *argv[])
 {
   gtk_init (&argc, &argv);
 
+  get_object_types();
+
   output_signals ();
   output_widget_hierarchy ();
+  output_args ();
 
   return 0;
 }
@@ -135,7 +139,6 @@ static void
 output_signals ()
 {
   FILE *fp;
-  GtkType *object_types;
   gint i;
 
   fp = fopen (signals_filename, "w");
@@ -144,8 +147,6 @@ output_signals ()
       g_warning ("Couldn't open output file: %s", signals_filename);
       return;
     }
-
-  object_types = get_object_types();
 
   for (i = 0; object_types[i]; i++)
     output_widget_signals (fp, object_types[i]);
@@ -688,6 +689,72 @@ output_hierarchy (FILE *fp,
       output_hierarchy (fp, child, level + 1);
       list = list->next;
     }
+}
+
+
+static void
+output_args ()
+{
+  FILE *fp;
+  gint i;
+
+  fp = fopen (args_filename, "w");
+  if (fp == NULL)
+    {
+      g_warning ("Couldn't open output file: %s", args_filename);
+      return;
+    }
+
+  for (i = 0; object_types[i]; i++)
+    output_widget_args (fp, object_types[i]);
+
+  fclose (fp);
+}
+
+
+static void
+output_widget_args (FILE *fp, GtkType object_type)
+{
+  GtkObjectClass *class;
+  gchar *object_class_name;
+  GtkArg *args;
+  guint32 *arg_flags;
+  guint n_args;
+  GtkArgInfo arginfo;
+  gchar *error;
+  gint arg;
+  gchar flags[16], *pos;
+
+  class = gtk_type_class (object_type);
+  if (!class)
+    return;
+
+  object_class_name = gtk_type_name (object_type);
+
+  args = gtk_object_query_args (class->type, &arg_flags, &n_args);
+
+  for (arg = 0; arg < n_args; arg++)
+    {
+      pos = flags;
+      /* We use one-character flags for simplicity. */
+      if (arg_flags[arg] & GTK_ARG_READABLE)
+	*pos++ = 'r';
+      if (arg_flags[arg] & GTK_ARG_WRITABLE)
+	*pos++ = 'w';
+      if (arg_flags[arg] & GTK_ARG_CONSTRUCT)
+	*pos++ = 'x';
+      if (arg_flags[arg] & GTK_ARG_CONSTRUCT_ONLY)
+	*pos++ = 'X';
+      if (arg_flags[arg] & GTK_ARG_CHILD_ARG)
+	*pos++ = 'c';
+      *pos = '\0';
+
+      fprintf (fp, "<ARG>\n<NAME>%s</NAME>\n<TYPE>%s</TYPE>\n<FLAGS>%s</FLAGS>\n</ARG>\n\n",
+	       args[arg].name, gtk_type_name (args[arg].type), flags);
+    }
+
+  g_free (args);
+  g_free (arg_flags);
 }
 EOT
 
