@@ -48,5 +48,5 @@ if test "x$GCC" = "xyes"; then
   fi
 fi
 
-AC_OUTPUT([Makefile gtk-doc.dsl gtkdoc-mkman gtkdoc-mkhtml gtkdoc-install],
+AC_OUTPUT([Makefile gtk-doc.dsl gtkdoc-mkman gtkdoc-mkhtml],
 [chmod +x gtkdoc-mkman gtkdoc-mkhtml])
