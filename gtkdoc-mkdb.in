@@ -43,6 +43,7 @@ my $TMPL_DIR;
 my $SGML_OUTPUT_DIR;
 my @SOURCE_DIRS;
 my $PRINT_VERSION;
+my $PRINT_HELP;
 my $OUTPUT_ALL_SYMBOLS;
 my $MAIN_SGML_FILE;
 
@@ -51,12 +52,26 @@ my %optctl = (module => \$MODULE,
 	      'output-dir' => \$SGML_OUTPUT_DIR,
 	      'tmpl-dir' => \$TMPL_DIR,
 	      'version' => \$PRINT_VERSION,
+	      'help' => \$PRINT_HELP,
 	      'main-sgml-file' => \$MAIN_SGML_FILE,
 	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS);
-GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s");
+GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
+    exit 0;
+}
+
+if ($PRINT_HELP) {
+    print "gtkdoc-mkdb version @VERSION@\n";
+    print "\n--module=MODULE_NAME   Name of the doc module being parsed";
+    print "\n--source-dir=DIRNAME   Directories which contain inline reference material";
+    print "\n                       May be used more than once for multiple directories";
+    print "\n--output-dir=DIRNAME   Directory to put the generated Docbook files in";
+    print "\n--tmpl-dir=DIRNAME     DIRECTORY in which template files may be found";
+    print "\n--main-sgml-file=FILE  File containing the toplevel SGML file.";
+    print "\n--version              Print the version of this program";
+    print "\n--help                 Print this help\n";
     exit 0;
 }
 
@@ -183,7 +198,7 @@ sub OutputObjectList {
     open (OUTPUT, ">$new_object_index")
 	|| die "Can't create $new_object_index";
     print (OUTPUT <<EOF);
-<informaltable pgwide=1 frame="none">
+<informaltable pgwide="1" frame="none">
 <tgroup cols="$cols">
 <colspec colwidth="1*">
 <colspec colwidth="1*">
@@ -296,7 +311,7 @@ sub OutputSGML {
 	    }
 
 	    if ($num_symbols > 0) {
-		$book_top .= "<!entity $section_id SYSTEM \"sgml/$file\">\n";
+		$book_top .= "<!ENTITY $section_id SYSTEM \"sgml/$file\">\n";
 		$book_bottom .= "    &$section_id;\n";
 
 		if ($section_includes eq "") {
@@ -574,7 +589,7 @@ sub OutputStruct {
 	my %field_descrs = @$params;
 	
 	    $desc .= <<EOF;
-<informaltable pgwide=1 frame="none" role="struct">
+<informaltable pgwide="1" frame="none" role="struct">
 <tgroup cols="2">
 <colspec colwidth="2*">
 <colspec colwidth="8*">
@@ -646,7 +661,7 @@ sub OutputEnum {
 	my %member_descrs = @$params;
 	
 	    $desc .= <<EOF;
-<informaltable pgwide=1 frame="none" role="enum">
+<informaltable pgwide="1" frame="none" role="enum">
 <tgroup cols="2">
 <colspec colwidth="2*">
 <colspec colwidth="8*">
@@ -941,7 +956,7 @@ sub OutputParamDescriptions {
 	# Start a table if we need one.
 	if ($params_desc || $returns) {
 	    $output .= <<EOF;
-<informaltable pgwide=1 frame="none" role="params">
+<informaltable pgwide="1" frame="none" role="params">
 <tgroup cols="2">
 <colspec colwidth="2*">
 <colspec colwidth="8*">

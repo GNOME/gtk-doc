@@ -1,5 +1,11 @@
 2001-05-19  Damon Chaplin  <damon@ximian.com>
 
+	* gtkdoc-mkdb.in: added --help option and changed output slightly to
+	make more compatable with XML. Patch from Toshio Kuratomi
+	<badger@prtr-13.ucsc.edu>
+
+2001-05-19  Damon Chaplin  <damon@ximian.com>
+
 	* gtkdoc-mktmpl.in (OutputDeclaration): 
 	* gtkdoc-mkdb.in (OutputFunction): changed a '?' to a '*' so we accept
 	multi-dimensional array function parameters. Patch from Paolo Casarini
