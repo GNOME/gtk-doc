@@ -382,7 +382,10 @@ sub ScanHeader {
 		$decl = $_;
 		$in_declaration = "union";
 
-	    } elsif (m/^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w\S*);/) {
+
+	    # OTHER TYPEDEFS
+
+	    } elsif (m/^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w+)(\s*\[[^\]]+\])*\s*;/) {
 		if ($2 !~ m/^struct\s/ && $2 !~ m/^union\s/) {
 #		    print "Found typedef: $_";
 		    &AddSymbolToList (\$list, $3);

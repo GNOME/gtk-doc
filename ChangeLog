@@ -1,3 +1,22 @@
+2004-10-15  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-common.pl.in (ParseStructDeclaration)
+	(ParseEnumDeclaration): moved these here, rather than have 2 copies
+	in gtkdoc-mkdb.in and gtkdoc-mktmpl.in.
+
+	* gtkdoc-common.pl.in (ParseStructDeclaration): handle struct fields
+	better. We can now handle things like *foo, ***bar, *baz[12][23],
+	foo : 25 all on one line. Fixes part of #151219.
+	Also support the 'short' modifier to fix #90565.
+	And use $nbsp; rather than spaces to try to avoid splitting
+	declarations in the output.
+	Also take an extra arg specifying whether to include parameters in
+	the function pointer fields.
+	
+	* gtkdoc-scan.in (ScanHeader): Deal with array types in typedefs.
+	(Eg, "typedef unsigned char MD5Digest[16];") From Dan Winship.
+	Last bit of #151219.
+	
 2004-10-14  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (CreateValidSGMLID): use ":CAPS" rather than

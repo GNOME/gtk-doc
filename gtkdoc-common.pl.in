@@ -1,4 +1,5 @@
 #!@PERL@ -w
+# -*- cperl -*-
 #
 # gtk-doc - GTK DocBook documentation generator.
 # Copyright (C) 2001  Damon Chaplin
@@ -81,3 +82,203 @@ sub UpdateFileIfChanged {
     }
 }
 
+
+#############################################################################
+# Function    : ParseStructDeclaration
+# Description : This function takes a structure declaration and
+#               breaks it into individual type declarations.
+# Arguments   : $declaration - the declaration to parse
+#               $is_object - true if this is an object structure
+#               $typefunc - function reference to apply to type
+#               $namefunc - function reference to apply to name
+#############################################################################
+
+sub ParseStructDeclaration {
+    my ($declaration, $is_object, $output_function_params, $typefunc, $namefunc) = @_;
+
+    # Remove all private parts of the declaration
+
+    # For objects, assume private
+    if ($is_object) {
+	$declaration =~ s!(struct\s+\w*\s*\{)
+	                  .*?
+			  (?:/\*\s*<\s*public\s*>\s*\*/|(?=\}))!$1!msgx;
+    }
+
+    # Assume end of declaration if line begins with '}'
+    $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/
+	              .*?
+		      (?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
+
+    # Remove all other comments;
+    $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
+
+    my @result = ();
+
+    if ($declaration =~ /^\s*$/) {
+	return @result;
+    }
+
+    # Prime match after "struct {" declaration
+    if (!scalar($declaration =~ m/struct\s+\w*\s*\{/msg)) {
+	die "Structure declaration '$declaration' does not begin with struct [NAME] {\n";
+    }
+
+    # Treat lines in sequence, allowing singly nested anonymous structs
+    # and unions.
+    while ($declaration =~ m/\s*([^{;]+(\{[^\}]*\}[^{;]+)?);/msg) {
+	my $line = $1;
+
+	last if $line =~ /^\s*\}\s*\w*\s*$/;
+
+	# FIXME: Just ignore nested structs and unions for now
+	next if $line =~ /{/;
+
+	# FIXME: The regexes here are the same as in OutputFunction; 
+	#        this functionality should be separated out.
+
+        # Try to match structure members which are functions
+	if ($line =~ m/^
+		 (const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?  # mod1
+		 (\w+)\s*                             # type
+		 (\**)\s*                             # ptr1
+		 (const\s+)?                          # mod2
+		 \(\s*\*\s*(\w+)\s*\)\s*              # name
+		 \(([^)]*)\)\s*                       # func_params
+		            $/x) {
+
+	    my $mod1 = defined($1) ? $1 : "";
+	    if (defined($2)) { $mod1 .= $2; }
+	    my $type = $3;
+	    my $ptr1 = $4;
+	    my $mod2 = defined($5) ? $5 : "";
+	    my $name = $6;
+	    my $func_params = $7;
+	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
+	    my $pname = defined $namefunc ? $namefunc->($name) : $name;
+
+	    push @result, $name;
+
+	    if ($output_function_params) {
+	      push @result, "$mod1$ptype$ptr1$mod2 (*$pname) ($func_params)";
+	    } else {
+	      push @result, "$pname&nbsp;()";
+	    }
+
+
+	# Try to match normal struct fields of comma-separated variables/
+	} elsif ($line =~ m/^
+	    ((?:const\s+|unsigned\s+|volatile\s+|signed\s+|short\s+)*)(struct\s+)? # mod1
+	    (\w+)\s*                            # type
+	    (\** \s* const\s+)?                 # mod2
+	    (.*)				# variables
+	    $/x) {
+
+	    my $mod1 = defined($1) ? $1 : "";
+	    if (defined($2)) { $mod1 .= $2; }
+	    my $type = $3;
+	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
+	    my $mod2 = defined($4) ? " " . $4 : "";
+	    my $list = $5;
+
+	    $mod1 =~ s/ /&nbsp;/g;
+	    $mod2 =~ s/ /&nbsp;/g;
+
+	    my @names = split /,/, $list;
+	    for my $n (@names) {
+	        # Each variable can have any number of '*' before the
+	        # identifier, and be followed by any number of pairs of
+	        # brackets or a bit field specifier.
+	        # e.g. *foo, ***bar, *baz[12][23], foo : 25.
+	        if ($n =~ m/^\s* (\**) \s* (\w+) \s* (?: ((?:\[[^\]]*\]\s*)+) | (:\s*\d+)?) \s* $/x) {
+		    my $ptrs = $1;
+		    my $name = $2;
+		    my $array = defined($3) ? $3 : "";
+		    my $bits =  defined($4) ? " $4" : "";
+
+		    $array =~ s/ /&nbsp;/g;
+		    $bits =~ s/ /&nbsp;/g;
+
+		    push @result, $name;
+		    if (defined $namefunc) {
+		        $name = $namefunc->($name);
+		    }
+		    push @result, "$mod1$ptype$mod2&nbsp;$ptrs$name$array$bits;";
+
+#		    print "***** Matched line: $mod1$ptype$mod2 $ptrs$name$array$bits\n";
+		} else {
+		    print "WARNING: Couldn't parse struct field: $n\n";
+		}
+	    }
+
+	} else {
+	    warn "Cannot parse structure field \"$line\"";
+	}
+    }
+
+    return @result;
+}
+
+
+#############################################################################
+# Function    : ParseEnumDeclaration
+# Description : This function takes a enumeration declaration and
+#               breaks it into individual enum member declarations.
+# Arguments   : $declaration - the declaration to parse
+#############################################################################
+
+sub ParseEnumDeclaration {
+    my ($declaration, $is_object) = @_;
+
+    # Remove comments;
+    $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
+
+    my @result = ();
+
+    if ($declaration =~ /^\s*$/) {
+	return @result;
+    }
+
+    # Remove parenthesized expressions (in macros like GTK_BLAH = BLAH(1,3))
+    # to avoid getting confused by commas they might contain. This
+    # doesn't handle nested parentheses correctly.
+
+    $declaration =~ s/\([^)]+\)//g;
+
+    # Remove comma from comma - possible whitespace - closing brace sequence
+    # since it is legal in GNU C and C99 to have a trailing comma but doesn't 
+    # result in an actual enum member
+
+    $declaration =~ s/,(\s*})/$1/g;
+
+    # Prime match after "typedef enum {" declaration
+    if (!scalar($declaration =~ m/typedef\s+enum\s*\{/msg)) {
+	die "Enum declaration '$declaration' does not begin with typedef enum {\n";
+    }
+
+    # Treat lines in sequence.
+    while ($declaration =~ m/\s*([^,\}]+)([,\}])/msg) {
+	my $line = $1;
+	my $terminator = $2;
+
+	if ($line =~ m/^(\w+)\s*(=.*)?$/msg) {
+	    push @result, $1;
+
+	# Special case for GIOCondition, where the values are specified by
+	# macros which expand to include the equal sign like '=1'.
+	} elsif ($line =~ m/^(\w+)\s*GLIB_SYSDEF_POLL/msg) {
+	    push @result, $1;
+
+	# Special case include of <gdk/gdkcursors.h>, just ignore it
+	} elsif ($line =~ m/^#include/) {
+	    last;
+
+	} else {
+	    warn "Cannot parse enumeration member \"$line\"";
+	}
+
+	last if $terminator eq '}';
+    }
+
+    return @result;
+}
