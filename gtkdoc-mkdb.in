@@ -2470,6 +2470,8 @@ EOF
                             $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:See_Also"}=$params[$k+1];
                         } elsif ($params[$k] eq "title") {
                             $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Title"}=$params[$k+1];
+                        } elsif ($params[$k] eq "stability") {
+                            $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Stability_Level"}=$params[$k+1];
                         }
                     }
                     $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Long_Description"}=$description;
