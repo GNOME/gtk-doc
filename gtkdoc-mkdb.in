@@ -1710,7 +1710,7 @@ sub OutputMissingDocumentation {
      
      $percent = ($n_documented / $total) * 100.0;
 
-     printf UNDOCUMENTED "%.2g%% function docs coverage.\n", $percent;
+     printf UNDOCUMENTED "%.0f%% function docs coverage.\n", $percent;
      print UNDOCUMENTED "$n_documented functions documented.\n";
      print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
 
