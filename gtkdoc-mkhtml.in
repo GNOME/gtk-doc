@@ -22,7 +22,7 @@ gtkdocdir=@datadir@/gtk-doc/data
 
 declaration=$gtkdocdir/gtk-doc.dcl
 
-if head -1 $document | grep -q "<?xml"; then
+if head -1 $document | grep "<?xml" > /dev/null; then
   is_xml=true
 else
   is_xml=false

@@ -1,3 +1,8 @@
+2003-02-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkhtml.in (declaration): Avoid the unportable grep 
+	option -q.  (#105311)
+
 2003-02-19  James Henstridge  <james@daa.com.au>
 
 	* gtk-doc.spec.in (Requires): make the requires lines match
