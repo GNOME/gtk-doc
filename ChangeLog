@@ -1,3 +1,12 @@
+Sun Feb 11 18:35:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-mktmpl.in: Add a timestamp file for the
+	templates like sgml.stamp
+
+	* gtkdoc-mktmpl.in (OutputUnusedTemplates): Write the
+	symbols out in sorted order instead of hash table
+	order to reduce conflicts.
+
 Mon Feb  5 16:48:51 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in gtk-doc.dsl.in: Remove checks for DSSSL - use a

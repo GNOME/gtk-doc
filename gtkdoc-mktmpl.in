@@ -131,10 +131,19 @@ if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
     &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
 }
 &ReadExistingTemplates;
-&UpdateTemplates ("$ROOT_DIR/$MODULE-sections.txt");
-&OutputUnusedTemplates;
-&CheckAllDeclarationsOutput;
 
+my $changed = 0;
+
+$changed ||= &UpdateTemplates ("$ROOT_DIR/$MODULE-sections.txt");
+&OutputUnusedTemplates;
+$changed ||= &CheckAllDeclarationsOutput;
+
+if ($changed || ! -e "$ROOT_DIR/tmpl.stamp") {
+    open (TIMESTAMP, ">$ROOT_DIR/tmpl.stamp")
+	|| die "Can't create $ROOT_DIR/tmpl.stamp";
+    print (TIMESTAMP "timestamp");
+    close (TIMESTAMP);
+}
 
 #############################################################################
 # Function    : ReadExistingTemplates
@@ -190,6 +199,7 @@ sub UpdateTemplates {
     my $title = "";
     my $subsection = "";
     my $output;
+    my $changed = 0;
     while (<INPUT>) {
 	if (m/^#/) {
 	    next;
@@ -224,7 +234,7 @@ sub UpdateTemplates {
 	    $file =~ s/\s/_/g;
 	    $file .= ".sgml";
 
-	    &OutputTemplateFile ($file, $title, \$output);
+	    $changed ||= &OutputTemplateFile ($file, $title, \$output);
 
 	    $title = "";
 	    $subsection = "";
@@ -254,6 +264,8 @@ sub UpdateTemplates {
 	}
     }
     close (INPUT);
+
+    $changed;
 }
 
 
@@ -717,7 +729,9 @@ sub OutputUnusedTemplates {
 
     my $output = "";
     my ($symbol, $symbol_desc);
-    while (($symbol, $symbol_desc) = each (%SymbolDocs)) {
+    for $symbol (sort keys %SymbolDocs) {
+        $symbol_desc = $SymbolDocs{$symbol};
+
 #	print "Unused: $symbol\n";
 
 	my $type = $SymbolTypes{$symbol};
