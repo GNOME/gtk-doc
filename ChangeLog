@@ -1,3 +1,8 @@
+2003-06-29  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (ExpandAbbreviations): When expanding @param, catch the common @param->field
+	and @param.field, to reduce the need for littering the C sources with <literal>foo->bar</literal>.
+
 2003-06-25  Matthias Clasen  <maclas@gmx.de>
 
 	Changes for #115528:
