@@ -1,5 +1,15 @@
 2001-05-19  Damon Chaplin  <damon@ximian.com>
 
+	* examples/gnome/*:
+	* examples/gnomeui/*: removed out-of-date example files.
+
+	* examples/configure.in:
+	* examples/Makefile.am: new example setup mostly copied from GTK+.
+
+	* examples/README: describe the example configure.in/Makefile.am.
+
+2001-05-19  Damon Chaplin  <damon@ximian.com>
+
 	* gtkdoc-mkdb.in: added --help option and changed output slightly to
 	make more compatable with XML. Patch from Toshio Kuratomi
 	<badger@prtr-13.ucsc.edu>
