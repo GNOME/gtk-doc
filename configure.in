@@ -52,8 +52,10 @@ if test -z "$XSLTPROC"; then
 fi
 
 dnl check for DocBook DTD and stylesheets in the local catalog.
-JH_CHECK_XML_CATALOG([http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd])
-JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl])
+JH_CHECK_XML_CATALOG([http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd],
+   [DocBook XML DTD V4.1.2])
+JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl],
+   [DocBook XSL Stylesheets])
 
 dnl
 dnl Set PACKAGE_DATA_DIR so we can find the script containing common routines.

@@ -1,3 +1,12 @@
+2003-02-19  James Henstridge  <james@daa.com.au>
+
+	* configure.in: provide meaningful names for the commands.
+
+	* acinclude.m4 (JH_CHECK_XML_CATALOG): add some extra arguments: a
+	friendly name for the catalog entry, and actions to run if the
+	entry was found or not.  Also include a bit more information in
+	the config.log file if an error occurs.
+
 2003-02-18  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkhtml.in (declaration): Avoid the unportable grep 
