@@ -61,7 +61,7 @@ my %optctl = (module => \$MODULE,
 	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
 	      'sgml-mode' => \$SGML_MODE,
 	      'output-format' => \$OUTPUT_FORMAT);
-GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-files:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode", "output-format:s");
+GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode", "output-format:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";

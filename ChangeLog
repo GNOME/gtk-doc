@@ -1,5 +1,9 @@
 2003-02-14  James Henstridge  <james@daa.com.au>
 
+	* gtkdoc-mkdb.in (GetOptions): actually accept --tmpl-dir as a
+	command line option.  Based on a patch from Simon Josefsson
+	<jas@extundo.com>.
+
 	* gtk-doc.xsl: remove the xmlns declaration.  Not really needed
 	for html output anyway ...
 
