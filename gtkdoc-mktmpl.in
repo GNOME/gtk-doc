@@ -901,7 +901,7 @@ sub ReadSignalsFile {
 		$signal_name = $1;
 		if ($signal_name =~ m/^(.*)::(.*)$/) {
 		    $signal_object = $1;
-		    $signal_name = $2;
+		    ($signal_name = $2) =~ s/_/-/g;
 #		    print "Found signal: $signal_name\n";
 		} else {
 		    print "Invalid signal name: $signal_name\n";
@@ -970,6 +970,11 @@ sub ReadTemplateFile {
 		$symbol = $docsfile . ":" . $symbol;
 #		print "Found symbol: $symbol\n";
 	    }
+
+	    # Canonicalize signal and argument names to have -, not _ 
+	    if ($type eq "ARG" || $type eq "SIGNAL") {
+              $symbol =~ s/_/-/g;
+            }
 
 	    # Store previous symbol, but remove any trailing blank lines.
 	    if ($CurrentSymbol ne "") {
@@ -1123,7 +1128,7 @@ sub ReadArgsFile {
 		$arg_name = $1;
 		if ($arg_name =~ m/^(.*)::(.*)$/) {
 		    $arg_object = $1;
-		    $arg_name = $2;
+		    ($arg_name = $2) =~ s/_/-/g;
 #		    print "Found arg: $arg_name\n";
 		} else {
 		    print "Invalid arg name: $arg_name\n";

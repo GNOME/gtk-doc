@@ -367,10 +367,6 @@ get_type_name (GtkType type, gboolean * is_pointer)
     return "gpointer";
 
   case GTK_TYPE_SIGNAL:
-  case GTK_TYPE_ARGS:
-  case GTK_TYPE_FOREIGN:
-  case GTK_TYPE_CALLBACK:
-  case GTK_TYPE_C_CALLBACK:
     /* FIXME: These are wrong. I think they expand into more than 1 argument.
        See the GtkArg struct in gtktypeutils.h and gtkargcollector.c.
        Fortunately I doubt anything uses these as signal args. */
@@ -731,11 +727,8 @@ output_args ()
 static void
 output_widget_args (FILE *fp, GType object_type)
 {
-  GtkObjectClass *class;
+  GObjectClass *class;
   gchar *object_class_name;
-  GtkArg *args;
-  guint32 *arg_flags;
-  guint n_args;
   gint arg;
   gchar flags[16], *pos;
 
@@ -745,30 +738,25 @@ output_widget_args (FILE *fp, GType object_type)
 
   object_class_name = g_type_name (object_type);
 
-  args = gtk_object_query_args (object_type, &arg_flags, &n_args);
-
-  for (arg = 0; arg < n_args; arg++)
+  for (arg = 0; arg < class->n_property_specs; arg++)
     {
+      GParamSpec *spec = class->property_specs[arg];
+
       pos = flags;
       /* We use one-character flags for simplicity. */
-      if (arg_flags[arg] & GTK_ARG_READABLE)
+      if (spec->flags & G_PARAM_READABLE)
 	*pos++ = 'r';
-      if (arg_flags[arg] & GTK_ARG_WRITABLE)
+      if (spec->flags & G_PARAM_WRITABLE)
 	*pos++ = 'w';
-      if (arg_flags[arg] & GTK_ARG_CONSTRUCT)
+      if (spec->flags & G_PARAM_CONSTRUCT)
 	*pos++ = 'x';
-      if (arg_flags[arg] & GTK_ARG_CONSTRUCT_ONLY)
+      if (spec->flags & G_PARAM_CONSTRUCT_ONLY)
 	*pos++ = 'X';
-      if (arg_flags[arg] & GTK_ARG_CHILD_ARG)
-	*pos++ = 'c';
       *pos = '\0';
 
-      fprintf (fp, "<ARG>\n<NAME>%s</NAME>\n<TYPE>%s</TYPE>\n<FLAGS>%s</FLAGS>\n</ARG>\n\n",
-	       args[arg].name, gtk_type_name (args[arg].type), flags);
+      fprintf (fp, "<ARG>\n<NAME>%s::%s</NAME>\n<TYPE>%s</TYPE>\n<FLAGS>%s</FLAGS>\n</ARG>\n\n",
+	       object_class_name, spec->name, g_type_name (spec->value_type), flags);
     }
-
-  g_free (args);
-  g_free (arg_flags);
 }
 EOT
 

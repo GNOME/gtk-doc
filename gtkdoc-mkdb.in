@@ -1817,7 +1817,7 @@ sub ReadSignalsFile {
 		$signal_name = $1;
 		if ($signal_name =~ m/^(.*)::(.*)$/) {
 		    $signal_object = $1;
-		    $signal_name = $2;
+		    ($signal_name = $2) =~ s/_/-/g;
 #		    print "Found signal: $signal_name\n";
 		} else {
 		    print "Invalid signal name: $signal_name\n";
@@ -2052,7 +2052,7 @@ sub ReadArgsFile {
 		$arg_name = $1;
 		if ($arg_name =~ m/^(.*)::(.*)$/) {
 		    $arg_object = $1;
-		    $arg_name = $2;
+		    ($arg_name = $2) =~ s/_/-/g;
 #		    print "Found arg: $arg_name\n";
 		} else {
 		    print "Invalid arg name: $arg_name\n";
