@@ -8,8 +8,13 @@
   <xsl:include href="version-greater-or-equal.xsl"/>
 
   <!-- change some parameters -->
-  <xsl:param name="toc.section.depth">1</xsl:param>
+  <xsl:param name="toc.section.depth">2</xsl:param>
+  <xsl:param name="generate.toc">
+    book	toc
+    chapter	toc
+  </xsl:param>
 
+  
   <xsl:param name="default.encoding" select="'ISO-8859-1'"/>
   <xsl:param name="chunk.fast" select="1"/> 
   <xsl:param name="chapter.autolabel" select="0"/>
