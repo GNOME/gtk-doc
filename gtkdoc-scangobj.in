@@ -73,6 +73,8 @@ my $old_hierarchy_filename = "$OUTPUT_DIR/$MODULE.hierarchy";
 my $new_hierarchy_filename = "$OUTPUT_DIR/$MODULE.hierarchy.new";
 my $old_interfaces_filename = "$OUTPUT_DIR/$MODULE.interfaces";
 my $new_interfaces_filename = "$OUTPUT_DIR/$MODULE.interfaces.new";
+my $old_prerequisites_filename = "$OUTPUT_DIR/$MODULE.prerequisites";
+my $new_prerequisites_filename = "$OUTPUT_DIR/$MODULE.prerequisites.new";
 my $old_args_filename = "$OUTPUT_DIR/$MODULE.args";
 my $new_args_filename = "$OUTPUT_DIR/$MODULE.args.new";
 
@@ -139,6 +141,7 @@ print OUTPUT <<EOT;
 gchar *signals_filename = "$new_signals_filename";
 gchar *hierarchy_filename = "$new_hierarchy_filename";
 gchar *interfaces_filename = "$new_interfaces_filename";
+gchar *prerequisites_filename = "$new_prerequisites_filename";
 gchar *args_filename = "$new_args_filename";
 
 
@@ -164,6 +167,10 @@ static void output_widget_interfaces ();
 static void output_interfaces (FILE *fp,
 			       GType type);
 
+static void output_interface_prerequisites ();
+static void output_prerequisites (FILE *fp,
+			          GType type);
+
 static void output_args ();
 static void output_widget_args (FILE *fp, GType object_type);
 
@@ -177,6 +184,7 @@ main (int argc, char *argv[])
   output_signals ();
   output_widget_hierarchy ();
   output_widget_interfaces ();
+  output_interface_prerequisites ();
   output_args ();
 
   return 0;
@@ -348,12 +356,12 @@ output_widget_signal (FILE *fp,
 	    sprintf (pos, "%s%s%i\\n", is_pointer ? "*" : " ", arg_name,
 		     *arg_num);
 	      pos += strlen (pos);
-	      
+
 	      if (arg_num)
 		*arg_num += 1;
 	}
     }
-  
+
   fprintf (fp,
 	   "<SIGNAL>\\n<NAME>%s::%s</NAME>\\n<RETURNS>%s</RETURNS>\\n%s</SIGNAL>\\n\\n",
 	   object_name, query_info.signal_name, ret_type_buffer, buffer);
@@ -763,7 +771,7 @@ output_interfaces (FILE  *fp,
       fprintf (fp, g_type_name (type));
       for (i=0; i < n_interfaces; i++)
           fprintf (fp, " %s", g_type_name (interfaces[i]));
-      fprintf (fp, "\n");
+      fprintf (fp, "\\n");
      }
   g_free (interfaces);
 
@@ -773,6 +781,52 @@ output_interfaces (FILE  *fp,
     output_interfaces (fp, children[i]);
 
   g_free (children);
+}
+
+static void output_interface_prerequisites ()
+{
+  FILE *fp;
+
+  fp = fopen (prerequisites_filename, "w");
+  if (fp == NULL)
+    {
+      g_warning ("Couldn't open output file: %s", prerequisites_filename);
+      return;
+    }
+  output_prerequisites (fp, G_TYPE_INTERFACE);
+  fclose (fp);
+}
+
+static void
+output_prerequisites (FILE  *fp,
+		      GType  type)
+{
+#if GLIB_CHECK_VERSION(2,1,0)
+  guint i;
+  GType *children, *prerequisites;
+  guint n_children, n_prerequisites;
+
+  if (!type)
+    return;
+
+  prerequisites = g_type_interface_prerequisites (type, &n_prerequisites);
+
+  if (n_prerequisites > 0)
+    {
+      fprintf (fp, g_type_name (type));
+      for (i=0; i < n_prerequisites; i++)
+          fprintf (fp, " %s", g_type_name (prerequisites[i]));
+      fprintf (fp, "\\n");
+     }
+  g_free (prerequisites);
+
+  children = g_type_children (type, &n_children);
+
+  for (i=0; i < n_children; i++)
+    output_prerequisites (fp, children[i]);
+
+  g_free (children);
+#endif
 }
 
 static void
@@ -921,6 +975,7 @@ unlink "./$MODULE-scan.c", "./$o_file", "./$MODULE-scan";
 &UpdateFileIfChanged ($old_signals_filename, $new_signals_filename, 0);
 &UpdateFileIfChanged ($old_hierarchy_filename, $new_hierarchy_filename, 0);
 &UpdateFileIfChanged ($old_interfaces_filename, $new_interfaces_filename, 0);
+&UpdateFileIfChanged ($old_prerequisites_filename, $new_prerequisites_filename, 0);
 &UpdateFileIfChanged ($old_args_filename, $new_args_filename, 0);
 
 

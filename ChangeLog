@@ -1,3 +1,13 @@
+2002-10-20  Matthias Clasen  <maclas@gmx.de>
+
+	* examples/Makefile.am (SCANOBJ_FILES): Add $(DOC_MODULE).prerequisites.
+
+	* gtkdoc-mkdb.in: Read $MODULE.prerequisites and put list of 
+	prerequisites below the object hierarchy for interfaces.
+
+	* gtkdoc-scangobj.in: Write information about interface
+	prerequisites to $MODULE.prerequisites.
+
 2002-10-15  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scangobj.in: Sort paramspec arrays for

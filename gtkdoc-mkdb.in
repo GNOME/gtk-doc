@@ -136,6 +136,9 @@ my $OBJECT_TREE_FILE = "$ROOT_DIR/$MODULE.hierarchy";
 # This file contains the interfaces.
 my $INTERFACES_FILE = "$ROOT_DIR/$MODULE.interfaces";
 
+# This file contains the prerequisites.
+my $PREREQUISITES_FILE = "$ROOT_DIR/$MODULE.prerequisites";
+
 # This file contains signal arguments and names.
 my $SIGNALS_FILE = "$ROOT_DIR/$MODULE.signals";
 
@@ -180,7 +183,9 @@ my %AllDocumentedSymbols;
 # These global arrays store GtkObject and subclasses and the hierarchy.
 my @Objects;
 my @ObjectLevels;
+
 my %Interfaces;
+my %Prerequisites;
 
 # Create the root DocBook output directory if it doens't exist.
 if (! -e $SGML_OUTPUT_DIR) {
@@ -197,6 +202,7 @@ my $SIGNAL_FIELD_WIDTH = 12;
 &ReadArgsFile ($ARGS_FILE);
 &ReadObjectHierarchy;
 &ReadInterfaces;
+&ReadPrerequisites;
 
 # FIXME: this is the header file output at the top of the Synopsis.
 # We should allow this to be changed in the MODULE-sections.txt file.
@@ -313,6 +319,7 @@ sub OutputSGML {
     my $style_args_desc = "";
     my $hierarchy = "";
     my $interfaces = "";
+    my $prerequisites = "";
 
     while (<INPUT>) {
 	if (m/^#/) {
@@ -467,7 +474,8 @@ EOF
 						    \$synopsis, \$details,
 						    \$signals_synop, \$signals_desc,
 						    \$args_synop, \$args_desc,
-						    \$hierarchy, \$interfaces);
+						    \$hierarchy, \$interfaces,
+						    \$prerequisites);
 		if ($file_changed) {
 		    $changed = 1;
 		}
@@ -486,6 +494,7 @@ EOF
 	    $style_args_desc = "";
 	    $hierarchy = "";
 	    $interfaces = "";
+	    $prerequisites = "";
 
 	} elsif (m/^(\S+)/) {
 	    my $symbol = $1;
@@ -503,6 +512,7 @@ EOF
 			$arg_desc, $child_arg_desc, $style_arg_desc) = &GetArgs ($symbol);
 		    my $hier = &GetHierarchy ($symbol);
 		    my $ifaces = &GetInterfaces ($symbol);
+		    my $prereqs = &GetPrerequisites ($symbol);
 		    $synopsis .= $synop;
 		    $details .= $desc;
 		    $signals_synop .= $sig_synop;
@@ -515,6 +525,7 @@ EOF
 		    $style_args_desc .= $style_arg_desc;
 		    $hierarchy .= $hier;
 		    $interfaces .= $ifaces;
+		    $prerequisites .= $prereqs;
 		}
 
 		# Note that the declaration has been output.
@@ -532,7 +543,7 @@ EOF
 		if ($OUTPUT_ALL_SYMBOLS) {
 			 &OutputAllSymbols;
 		}
-		
+
     &OutputBook ($book_top, $book_bottom);
 
     return $changed;
@@ -1061,7 +1072,6 @@ sub OutputFunction {
     }
     $synop .= ");\n";
     $desc  .= ");</programlisting>\n";
-    
 
     if ($Deprecated{$symbol}) {
         $desc .= "<warning>\n<para>\n<literal>$symbol</literal> is deprecated and should not be used in newly-written code.\n</para>\n</warning>\n";
@@ -1158,10 +1168,11 @@ EOF
 #               $args_desc - reference to the DocBook for the Arg Description part
 #               $hierarchy - reference to the DocBook for the Object Hierarchy part
 #               $interfaces - reference to the DocBook for the Interfaces part
+#               $prerequisites - reference to the DocBook for the Prerequisites part
 #############################################################################
 
 sub OutputSGMLFile {
-    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces) = @_;
+    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $prerequisites) = @_;
 
     # The edited title overrides the one from the sections file.
     my $new_title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
@@ -1245,6 +1256,7 @@ $${synopsis}</synopsis>
 
 $$hierarchy
 $$interfaces
+$$prerequisites
 $$args_synop
 $$signals_synop
 
@@ -1551,8 +1563,14 @@ sub GetInterfaces {
 	for ($i = 0; $i <= $#ifaces; $i++) {
 	    my $id = &CreateValidSGMLID ($ifaces[$i]);
 	    $text .= "<link linkend=\"$id\">$ifaces[$i]</link>";
-	    if ($i < $#ifaces) {
+	    if ($i < $#ifaces - 1) {
 		$text .= ', ';
+	    }
+	    elsif ($i < $#ifaces) {
+	        $text .= ' and ';
+	    }
+	    else {
+	        $text .= '.';
 	    }
 	}
     } else {
@@ -1568,8 +1586,14 @@ sub GetInterfaces {
 	    for ($i = 0; $i <= $#impls; $i++) {
 		my $id = &CreateValidSGMLID ($impls[$i]);
 		$text .= "<link linkend=\"$id\">$impls[$i]</link>";
-		if ($i < $#impls) {
+		if ($i < $#impls - 1) {
 		    $text .= ', ';
+		}
+		elsif ($i < $#impls) {
+		  $text .= ' and ';
+		}
+		else {
+		  $text .= '.';
 		}
 	    }
 	}
@@ -1578,6 +1602,46 @@ sub GetInterfaces {
 	$text = <<EOF
 <refsect1>
 <title>$title</title>
+$text
+</refsect1>
+EOF
+    }
+    return $text;
+}
+
+
+#############################################################################
+# Function    : GetPrerequisites
+# Description : Returns the DocBook output describing the prerequisites
+#               of an interface. It uses the global %Prerequisites hash.
+# Arguments   : $iface - the interface.
+#############################################################################
+
+sub GetPrerequisites {
+    my ($iface) = @_;
+    my $text = "";
+    my $i;
+
+    # Find object in the objects array.
+    if (exists($Prerequisites{$iface})) {
+	$text = $iface . " requires ";
+	my @prereqs = split(' ', $Prerequisites{$iface});
+	for ($i = 0; $i <= $#prereqs; $i++) {
+	    my $id = &CreateValidSGMLID ($prereqs[$i]);
+	    $text .= "<link linkend=\"$id\">$prereqs[$i]</link>";
+	    if ($i < $#prereqs - 1) {
+		$text .= ', ';
+	    }
+	    elsif ($i < $#prereqs) {
+	        $text .= ' and ';
+	    }
+	    else {
+	        $text .= '.';
+	    }
+	}
+	$text = <<EOF
+<refsect1>
+<title>Prerequisites</title>
 $text
 </refsect1>
 EOF
@@ -2510,6 +2574,32 @@ sub ReadInterfaces {
        chomp;
        my ($object, @ifaces) = split;
        $Interfaces{$object} = join(' ', @ifaces);
+    }
+    close (INPUT);
+}
+
+#############################################################################
+# Function    : ReadPrerequisites
+# Description : This reads in the $MODULE.prerequisites file.
+#
+# Arguments   : none
+#############################################################################
+
+sub ReadPrerequisites {
+    %Prerequisites = ();
+
+    if (! -f $PREREQUISITES_FILE) {
+	return;
+    }
+    if (!open (INPUT, $PREREQUISITES_FILE)) {
+	warn "Can't open $PREREQUISITES_FILE - skipping prerequisites\n";
+	return;
+    }
+
+    while (<INPUT>) {
+       chomp;
+       my ($iface, @prereqs) = split;
+       $Prerequisites{$iface} = join(' ', @prereqs);
     }
     close (INPUT);
 }
