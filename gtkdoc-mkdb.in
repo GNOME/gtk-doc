@@ -1602,7 +1602,9 @@ sub GetInterfaces {
 	$text = <<EOF
 <refsect1>
 <title>$title</title>
+<para>
 $text
+</para>
 </refsect1>
 EOF
     }
@@ -2106,6 +2108,18 @@ sub MergeSourceDocumentation {
     my $symbol;
     foreach $symbol (keys (%SymbolDocs)) {
         $AllSymbols{$symbol} = 1;
+
+	my $have_tmpl_docs = 0;
+	
+	## See if the symbol is documented out-of-line
+	my $tmpl_doc = $SymbolDocs{$symbol};
+	$tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
+	$tmpl_doc =~ s/<\/?[a-z]+>//g;
+	$tmpl_doc =~ s/\s//g;
+	if ($tmpl_doc ne "") {
+	    $have_tmpl_docs = 1;
+	}
+	
 	if (exists ($SourceSymbolDocs{$symbol})) {
 	    my $src_doc = $SourceSymbolDocs{$symbol};
 	    my $tmpl_doc = $SymbolDocs{$symbol};
@@ -2113,6 +2127,12 @@ sub MergeSourceDocumentation {
 	    $src_doc =~ s/^\s+//;
 	    $src_doc =~ s/\s+$//;
 
+	    if ($have_tmpl_docs) {
+		    print <<EOF;
+WARNING: Documentation in template file for $symbol being overriden by inline comments
+EOF
+	    }
+	    
             if ($src_doc ne "") {
                  $AllDocumentedSymbols{$symbol} = 1;
             }
@@ -2177,16 +2197,11 @@ WARNING: Parameter described in source code comment block but does not exist -
 EOF
 		}
 	    }
-       } else {
-            ## See if the symbol is documented out-of-line
-	    my $tmpl_doc = $SymbolDocs{$symbol};
-	    $tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
-            $tmpl_doc =~ s/<\/?[a-z]+>//g;
-            $tmpl_doc =~ s/\s//g;
-            if ($tmpl_doc ne "") {
-                 $AllDocumentedSymbols{$symbol} = 1;
-            }
-       }
+	} else {
+	    if ($have_tmpl_docs) {
+		$AllDocumentedSymbols{$symbol} = 1;		
+	    }
+	}
    }
 }
 

@@ -1,3 +1,11 @@
+Mon Nov  4 17:17:40 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-mkdb.in (MergeSourceDocumentation): Warn
+	when overriding docs in template file by inline comments.
+
+	* gtkdoc-mkdb.in (GetInterfaces): Add missing <para> in
+	"Implemented interfaces" output.
+
 2002-10-29  Damon Chaplin  <damon@ximian.com>
 
 	* gtkdoc-scangobj.in: in get_type_name() set is_pointer to TRUE for
