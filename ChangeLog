@@ -1,5 +1,9 @@
 2004-10-14  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in: (ParseStructDeclaration): for fields that are
+	function pointers, only return the function name, as otherwise the
+	output gets really messy. Fixes #66618.
+
 	* gtkdoc-mktmpl.in: 
 	* gtkdoc-mkdb.in: 
 	* gtkdoc-scan.in: 

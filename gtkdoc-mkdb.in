@@ -3376,7 +3376,9 @@ sub ParseStructDeclaration {
 	    my $pname = defined $namefunc ? $namefunc->($name) : $name;
 	    
 	    push @result, $name;
-	    push @result, "$mod1$ptype$ptr1$mod2 (*$pname) ($func_params)";
+	    # Just output the function name here, since otherwise it is messy.
+	    push @result, "$pname&nbsp;()";
+#	    push @result, "$mod1$ptype$ptr1$mod2 (*$pname) ($func_params)";
 	    
 	} else {
 	    warn "Cannot parse structure field \"$line\"";
