@@ -269,6 +269,15 @@ sub OutputSGML {
     my $details;
     my $num_symbols;
     my $changed = 0;
+    my $signals_synop = "";
+    my $signals_desc = "";
+    my $args_synop = "";
+    my $child_args_synop = "";
+    my $style_args_synop = "";
+    my $args_desc = "";
+    my $child_args_desc = "";
+    my $style_args_desc = "";
+    my $hierarchy = "";
 
     while (<INPUT>) {
 	if (m/^#/) {
@@ -335,9 +344,91 @@ sub OutputSGML {
 		    $section_includes = $includes;
 		}
 
+		if ($signals_synop ne '') {
+		    $signals_synop = <<EOF;
+<refsect1>
+<title>Signal Prototypes</title>
+<synopsis>
+
+${signals_synop}</synopsis>
+</refsect1>
+EOF
+		    $signals_desc  = <<EOF;
+<refsect1>
+<title>Signals</title>
+$signals_desc
+</refsect1>
+EOF
+		}
+		if ($args_synop ne '') {
+		    $args_synop = <<EOF;
+<refsect1>
+<title>Properties</title>
+<synopsis>
+
+${args_synop}</synopsis>
+</refsect1>
+EOF
+		    $args_desc  = <<EOF;
+<refsect1>
+<title>Properties</title>
+<variablelist>
+$args_desc
+</variablelist>
+</refsect1>
+EOF
+		}
+		if ($child_args_synop ne '') {
+		    $args_synop .= <<EOF;
+<refsect1>
+<title>Child Properties</title>
+<synopsis>
+
+${child_args_synop}</synopsis>
+</refsect1>
+EOF
+		    $args_desc .= <<EOF;
+<refsect1>
+<title>Child Properties</title>
+<variablelist>
+$child_args_desc
+</variablelist>
+</refsect1>
+EOF
+		}
+		if ($style_args_synop ne '') {
+		    $args_synop .= <<EOF;
+<refsect1>
+<title>Style Properties</title>
+<synopsis>
+
+${style_args_synop}</synopsis>
+</refsect1>
+EOF
+		    $args_desc .= <<EOF;
+<refsect1>
+<title>Style Properties</title>
+<variablelist>
+$style_args_desc
+</variablelist>
+</refsect1>
+EOF
+		}
+		if ($hierarchy ne "") {
+		    $hierarchy = <<EOF
+<refsect1>
+<title>Object Hierarchy</title>
+$hierarchy
+</refsect1>
+EOF
+		}
+
 		my $file_changed = &OutputSGMLFile ($file, $title, $section_id,
 						    $section_includes,
-						    \$synopsis, \$details);
+						    \$synopsis, \$details,
+						    \$signals_synop, \$signals_desc,
+						    \$args_synop, \$args_desc,
+						    \$hierarchy);
 		if ($file_changed) {
 		    $changed = 1;
 		}
@@ -346,20 +437,42 @@ sub OutputSGML {
 	    $subsection = "";
 	    $in_section = 0;
 	    $section_includes = "";
+	    $signals_synop = "";
+	    $signals_desc = "";
+	    $args_synop = "";
+	    $child_args_synop = "";
+	    $style_args_synop = "";
+	    $args_desc = "";
+	    $child_args_desc = "";
+	    $style_args_desc = "";
+	    $hierarchy = "";
 
 	} elsif (m/^(\S+)/) {
 	    my $symbol = $1;
 #	    print "  Symbol: $symbol\n";
 
-	    my $declaration = $Declarations{$1};
+	    my $declaration = $Declarations{$symbol};
 	    if (defined ($declaration)) {
 		# We don't want standard macros/functions of GtkObjects,
 		# or private declarations.
 		if ($subsection ne "Standard" && $subsection ne "Private") {
 		    my ($synop, $desc) = &OutputDeclaration ($symbol,
 							     $declaration);
+		    my ($sig_synop, $sig_desc) = &GetSignals ($symbol);
+		    my ($arg_synop, $child_arg_synop, $style_arg_synop,
+			$arg_desc, $child_arg_desc, $style_arg_desc) = &GetArgs ($symbol);
+		    my $hier = &GetHierarchy ($symbol);
 		    $synopsis .= $synop;
 		    $details .= $desc;
+		    $signals_synop .= $sig_synop;
+		    $signals_desc .= $sig_desc;
+		    $args_synop .= $arg_synop;
+		    $child_args_synop .= $child_arg_synop;
+		    $style_args_synop .= $style_arg_synop;
+		    $args_desc .= $arg_desc;
+		    $child_args_desc .= $child_arg_desc;
+		    $style_args_desc .= $style_arg_desc;
+		    $hierarchy .= $hier;
 		}
 
 		# Note that the declaration has been output.
@@ -1009,22 +1122,15 @@ EOF
 #		  of synopsis, with '<' '>' around them.
 #		$synopsis - reference to the DocBook for the Synopsis part.
 #		$details - reference to the DocBook for the Details part.
+#               $signal_synop - reference to the DocBook for the Signal Synopsis part
+#               $signal_desc - reference to the DocBook for the Signal Description part
+#               $args_synop - reference to the DocBook for the Arg Synopsis part
+#               $args_desc - reference to the DocBook for the Arg Description part
+#               $hierarchy - reference to the DocBook for the Object Hierarchy part
 #############################################################################
 
 sub OutputSGMLFile {
-    my ($file, $title, $section_id, $includes, $synopsis, $details) = @_;
-
-    # Find out if this is a GtkObject or descendant.
-    my $signals_synop = "";
-    my $signals_desc = "";
-    my $args_synop = "";
-    my $args_desc = "";
-    my $hierarchy = "";
-	($signals_synop, $signals_desc) = &GetSignals ($title);
-    if (&CheckIsObject ($title)) {
-	($args_synop, $args_desc) = &GetArgs ($title);
-	$hierarchy = &GetHierarchy ($title);
-    }
+    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy) = @_;
 
     # The edited title overrides the one from the sections file.
     my $new_title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
@@ -1102,9 +1208,9 @@ $include_output
 $${synopsis}</synopsis>
 </refsynopsisdiv>
 
-$hierarchy
-$args_synop
-$signals_synop
+$$hierarchy
+$$args_synop
+$$signals_synop
 
 <refsect1>
 <title>Description</title>
@@ -1115,8 +1221,8 @@ $long_desc
 <title>Details</title>
 $$details
 </refsect1>
-$args_desc
-$signals_desc
+$$args_desc
+$$signals_desc
 
 $see_also
 </refentry>
@@ -1384,12 +1490,7 @@ sub GetHierarchy {
     }
     $hierarchy .= "</synopsis>\n";
 
-    return <<EOF;
-<refsect1>
-<title>Object Hierarchy</title>
-$hierarchy
-</refsect1>
-EOF
+    return $hierarchy;
 }
 
 
@@ -1467,22 +1568,6 @@ sub GetSignals {
 	    $desc .= &OutputParamDescriptions ("SIGNAL", $symbol);
 	    $desc .= "</refsect2>";
 	}
-    }
-    if ($synop ne '') {
-        $synop = <<EOF;
-<refsect1>
-<title>Signal Prototypes</title>
-<synopsis>
-
-${synop}</synopsis>
-</refsect1>
-EOF
-	$desc  = <<EOF;
-<refsect1>
-<title>Signals</title>
-$desc
-</refsect1>
-EOF
     }
     return ($synop, $desc);
 }
@@ -1568,61 +1653,7 @@ sub GetArgs {
 	    }
 	}
     }
-    if ($synop ne '') {
-        $synop = <<EOF;
-<refsect1>
-<title>Properties</title>
-<synopsis>
-
-${synop}</synopsis>
-</refsect1>
-EOF
-	$desc  = <<EOF;
-<refsect1>
-<title>Properties</title>
-<variablelist>
-$desc
-</variablelist>
-</refsect1>
-EOF
-      }
-    if ($child_synop ne '') {
-        $child_synop = <<EOF;
-<refsect1>
-<title>Child Properties</title>
-<synopsis>
-
-${child_synop}</synopsis>
-</refsect1>
-EOF
-	$child_desc = <<EOF;
-<refsect1>
-<title>Child Properties</title>
-<variablelist>
-$child_desc
-</variablelist>
-</refsect1>
-EOF
-      }
-    if ($style_synop ne '') {
-        $style_synop = <<EOF;
-<refsect1>
-<title>Style Properties</title>
-<synopsis>
-
-${style_synop}</synopsis>
-</refsect1>
-EOF
-	$style_desc  = <<EOF;
-<refsect1>
-<title>Style Properties</title>
-<variablelist>
-$style_desc
-</variablelist>
-</refsect1>
-EOF
-      }
-    return ($synop . $child_synop . $style_synop, $desc . $child_desc . $style_desc);
+    return ($synop, $child_synop, $style_synop, $desc, $child_desc, $style_desc);
 }
 
 

@@ -1,3 +1,14 @@
+2002-05-29  Matthias Clasen  <maclas@gmx.de>
+
+	Fixes for #77193:
+	
+	* gtkdoc-mkdb.in (OutputSGML): Call GetSignals, GetArgs and
+	GetHierarchy for each symbol here and accumulate.
+	(OutputSGMLFile): Get signal, argument and hierarchy information
+	from the caller.
+	(GetSignals, GetArgs, GetHierarchy): Don't wrap the return value
+	in a refsect1, so that the results of multiple calls can be accumulated.
+
 2002-05-28  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (ConvertSGMLChars): Make this work correctly
