@@ -137,7 +137,7 @@ static gchar ** lookup_signal_arg_names (gchar * type,
 static void output_widget_hierarchy (void);
 static void output_hierarchy (FILE *fp,
 			      GtkType type,
-			      gint level);
+			      guint level);
 
 static void output_args (void);
 static void output_widget_args (FILE *fp, GtkType object_type);
@@ -227,7 +227,7 @@ output_widget_signal (FILE *fp,
   gchar *ret_type, *pos, *type_name, *arg_name, *object_arg, *object_arg_start;
   gboolean is_pointer;
   gchar ret_type_buffer[1024], buffer[1024];
-  gint i, param;
+  guint i, param;
   gchar **arg_names;
   gint param_num, widget_num, event_num, callback_num;
   gint *arg_num;
@@ -703,7 +703,7 @@ output_widget_hierarchy (void)
 static void
 output_hierarchy (FILE *fp,
 		  GtkType type,
-		  gint level)
+		  guint level)
 {
   GList *list;
   guint i;
@@ -755,7 +755,7 @@ output_widget_args (FILE *fp, GtkType object_type)
   GtkArg *args;
   guint32 *arg_flags;
   guint n_args;
-  gint arg;
+  guint arg;
   gchar flags[16], *pos;
 
   class = gtk_type_class (object_type);

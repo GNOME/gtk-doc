@@ -178,7 +178,7 @@ static gchar ** lookup_signal_arg_names (const gchar * type,
 static void output_widget_hierarchy (void);
 static void output_hierarchy (FILE *fp,
 			      GType type,
-			      gint level);
+			      guint level);
 
 static void output_widget_interfaces (void);
 static void output_interfaces (FILE *fp,
@@ -275,7 +275,7 @@ output_widget_signal (FILE *fp,
   gchar *pos, *arg_name, *object_arg_lower;
   gboolean is_pointer;
   gchar ret_type_buffer[1024], buffer[1024];
-  gint i, param;
+  guint i, param;
   gchar **arg_names;
   gint param_num, widget_num, event_num, callback_num;
   gint *arg_num;
@@ -753,7 +753,7 @@ output_widget_hierarchy (void)
 static void
 output_hierarchy (FILE  *fp,
 		  GType  type,
-		  gint   level)
+		  guint   level)
 {
   guint i;
   GType *children;
@@ -1313,7 +1313,7 @@ output_widget_args (FILE *fp, GType object_type)
 {
   gpointer class;
   const gchar *object_class_name;
-  gint arg;
+  guint arg;
   gchar flags[16], *pos;
   GParamSpec **properties;
   guint n_properties;
