@@ -1,3 +1,15 @@
+2002-10-29  Damon Chaplin  <damon@ximian.com>
+
+	* gtkdoc-scangobj.in: in get_type_name() set is_pointer to TRUE for
+	subtypes of G_TYPE_BOXED and G_TYPE_POINTER. This means we get things
+	like "GtkTreeIter *iter" rather than "GtkTreeIter iter" which was
+	incorrect. Also return 'GParamSpec*' for G_TYPE_PARAM.
+	in lookup_signal_arg_names() changed GtkNotebook::switch-page
+	page argument to guint. And fixed a few other entries.
+	Also fixed argument numbering, so we don't get 2 "widget" arguments.
+	
+	* gtkdoc-scanobj.in: add ';' after unlink command to avoid warning.
+
 2002-10-20  Matthias Clasen  <maclas@gmx.de>
 
 	* examples/Makefile.am (SCANOBJ_FILES): Add $(DOC_MODULE).prerequisites.
