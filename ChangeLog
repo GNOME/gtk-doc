@@ -1,3 +1,10 @@
+Mon Feb  5 16:48:51 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in gtk-doc.dsl.in: Remove checks for DSSSL - use a
+	public entity instead.
+
+	* gtkdoc-scangobj.in: Fix to work with libtool better.
+
 2001-01-30  Havoc Pennington  <hp@pobox.com>
 
 	* gtkdoc-fixxref.in, gtkdoc-mkdb.in, gtkdoc-mktmpl.in,

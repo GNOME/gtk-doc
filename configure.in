@@ -4,8 +4,6 @@ AC_INIT(gtk-doc.dsl.in)
 
 AM_INIT_AUTOMAKE(gtk-doc, 0.5)
 
-AC_ARG_WITH(dsssl-dir, [  --with-dsssl-dir=PATH path to DocBook style sheets ])
-
 AC_ISC_POSIX
 AC_PROG_CC
 
@@ -19,25 +17,6 @@ AC_PATH_PROG(PERL, perl)
 if test -z "$PERL"; then
    AC_MSG_ERROR([perl not found])
 fi
-
-AC_MSG_CHECKING([for DocBook stylesheets])
-
-DSSSL_DIR=""
-for i in $dirs ; do
-  if test -f $i/html/docbook.dsl ; then
-    DSSSL_DIR=$i
-  fi
-done
-
-if test "x$DSSSL_DIR" = x ; then
-  AC_MSG_ERROR([
-*** Cannot find DocBook stylesheets in "$dirs". 
-*** Perhaps you need to specify the --with-dsssl-dir=PATH option?])
-fi
-
-AC_SUBST(DSSSL_DIR)
-
-AC_MSG_RESULT(found)
 
 
 dnl Set PACKAGE_DATA_DIR so we can find the script containing common routines.
