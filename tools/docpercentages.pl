@@ -101,7 +101,7 @@ EOT
     my %index_symbols;
     
     while (<INDEX_SGML>) {
-	if (/<ANCHOR\s+id ="([^"]+)"\s+href="([^"]+)">/) {
+	if (/<ANCHOR\s+id="([^"]+)"\s+href="([^"]+)">/) {
 	    $index_symbols{$1} = $2;
 	}
     }
@@ -120,7 +120,7 @@ EOT
 EOT
     my $i = 0;
     for $symbol (@undocumented_symbols) {
-	my $id = uc(CreateValidSGMLID($symbol));
+	my $id = CreateValidSGMLID($symbol);
 
 	my $output;
 	if (exists $index_symbols{$id}) {
