@@ -20,7 +20,7 @@ prefix=@prefix@
 gtkdocdir=@datadir@/gtk-doc/
 
 # Delete the old index.sgml file, if it exists.
-if test -e index.sgml; then
+if test -f index.sgml; then
       rm -f index.sgml
 fi
 

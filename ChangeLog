@@ -1,3 +1,11 @@
+2001-03-26  Damon Chaplin  <damon@ximian.com>
+
+	* gtkdoc-mkdb.in (ReadSourceDocumentation): scan .h files as well,
+	so macros can be documented there if desired.
+
+	* gtkdoc-mkhtml.in (gtkdocdir): use 'test -f' rather than 'test -e'
+	which is GNU-specific.
+
 Thu Mar  8 17:26:29 2001  Tim Janik  <timj@gtk.org>
 
 	* gtkdoc-scangobj.in: fix signal param type handling.

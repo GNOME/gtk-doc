@@ -1499,7 +1499,7 @@ sub ReadSourceDocumentation {
 	    next;
 	} elsif (-d "$source_dir/$file") {
 	    push (@subdirs, $file);
-	} elsif ($file =~ m/\.c$/) {
+	} elsif ($file =~ m/\.[ch]$/) {
 	    &ScanSourceFile ("$source_dir/$file");
 	}
     }
