@@ -1,24 +1,15 @@
-# Note that this is NOT a relocatable package
-%define ver      @VERSION@
-%define rel      1
-%define prefix   /usr
-%define sysconfdir	/etc
-%define datadir %{prefix}/share
-
-Summary: GTK+ DocBook Documentation Generator
-Name: gtk-doc
-Version: %ver
-Release: %rel
-Copyright: GPL
-Group: Utilities/Text
-Source: ftp://ftp.gtk.org/pub/gtk/v1.1/docs/rdp/gtk-doc-%{ver}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-root
-Obsoletes: gtk-doc
-Packager: John Gotts <jgotts@linuxsavvy.com>
-URL: http://www.gtk.org/rdp/
-Docdir: %{datadir}/doc
+Summary: 	GTK+ DocBook Documentation Generator
+Name: 		gtk-doc
+Version: 	@VERSION@
+Release: 	1
+License: 	GPL
+Group: 		Utilities/Text
+Source:	 	ftp://ftp.gtk.org/pub/gtk/v1.1/docs/rdp/gtk-doc-%{version}.tar.gz
+BuildRoot: 	/var/tmp/%{name}-%{version}-root
+Obsoletes: 	gtk-doc
+URL: 		http://www.gtk.org/rdp/
 BuildArchitectures: noarch
-Requires: jade
+Requires: 	jade
 
 %description
 gtk-doc is a set of perl scripts that generate API reference documention in
@@ -26,17 +17,8 @@ DocBook format.  It can extract documentation from source code comments in a
 manner similar to java-doc.  It is used to generate the documentation for
 GLib, Gtk+, and GNOME.
 
-%changelog
-* Fri Apr 27 2001 Toshio Kuratomi <badger@prtr-13.ucsc.edu>
-- Merge in some of the features of the redhat spec file.
-
-* Wed Nov 15 2000 John Gotts <jgotts@linuxsavvy.com>
-- Minor updates for 0.4.
-* Thu Aug 26 1999 John E. Gotts <jgotts@engin.umich.edu>
-- Created spec file.
-
 %prep
-%setup
+%setup -q
 
 # Move this doc file to avoid name collisions
 mv doc/README doc/README.docs
@@ -47,11 +29,11 @@ mv doc/README doc/README.docs
 %endif
 
 if [ ! -f configure ]; then
-	CFLAGS="$RPM_OPT_FLAGS" ./autogen.sh $MYARCH_FLAGS --prefix=%prefix \
-		--sysconfdir=%{sysconfdir}
+	CFLAGS="$RPM_OPT_FLAGS" ./autogen.sh $MYARCH_FLAGS --prefix=%{_prefix} \
+		--sysconfdir=%{_sysconfdir} --datadir=%{_datadir}
 else
-	CFLAGS="$RPM_OPT_FLAGS" ./configure $MYARCH_FLAGS --prefix=%prefix \
-		--sysconfdir=%{sysconfdir}
+	CFLAGS="$RPM_OPT_FLAGS" ./configure $MYARCH_FLAGS  --prefix=%{_prefix} \
+		--sysconfdir=%{_sysconfdir} --datadir=%{_datadir}
 fi
 
 if [ "$SMP" != "" ]; then
@@ -63,7 +45,9 @@ fi
 %install
 rm -rf $RPM_BUILD_ROOT
 
-make prefix=$RPM_BUILD_ROOT%{prefix} sysconfdir=$RPM_BUILD_ROOT/etc install
+make prefix=$RPM_BUILD_ROOT%{_prefix} \
+     sysconfdir=$RPM_BUILD_ROOT%{_sysconfdir}  \
+     datadir=$RPM_BUILD_ROOT%{_datadir} install
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -76,5 +60,25 @@ rm -rf $RPM_BUILD_ROOT
 # NEWS is currently empty
 # %doc INSTALL NEWS
 
-%{prefix}/bin/*
-%{prefix}/share/gtk-doc/*
+%{_bindir}/*
+%{_datadir}/gtk-doc/*
+
+%changelog
+* Sun Aug 12 2001 Jens Finke <jens@gnome.org>
+- Modified to match GPP standard:
+ - Changed to Copyright to License
+ - Don't use hardcoded path, use rpm macros instead
+ - Moved ChangeLog to the end of the file.
+ - Removed packager
+ - Don't set docdir path.
+ - Use /var/tmp as installation prefix
+
+* Fri Apr 27 2001 Toshio Kuratomi <badger@prtr-13.ucsc.edu>
+- Merge in some of the features of the redhat spec file.
+
+* Wed Nov 15 2000 John Gotts <jgotts@linuxsavvy.com>
+- Minor updates for 0.4.
+* Thu Aug 26 1999 John E. Gotts <jgotts@engin.umich.edu>
+- Created spec file.
+
+
