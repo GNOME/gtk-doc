@@ -17,9 +17,14 @@
 
 ;;(define %generate-book-toc% #f)
 
-(define $generate-chapter-toc$ 
+;; If a Chapter has role="no-toc" we don't generate a table of contents.
+;; This is useful if a better contents page has been added manually, e.g. for
+;; the GTK+ Widgets & Objects page. (But it is a bit of a hack.)
+(define $generate-chapter-toc$
   (lambda ()
-    #t))
+    (if (equal? (attribute-string (normalize "role") (current-node)) "no-toc")
+        #f
+        #t)))
 
 (define %chapter-autolabel% 
   ;; Are chapters enumerated?

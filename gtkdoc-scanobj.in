@@ -36,9 +36,10 @@ my $MODULE;
 my $OUTPUT_DIR;
 
 %optctl = (module => \$MODULE,
-	   types => \$TYPES_FILE);
+	   types => \$TYPES_FILE,
+	   nogtkinit => \$NO_GTK_INIT);
 	   
-GetOptions(\%optctl, "module=s", "types:s");
+GetOptions(\%optctl, "module=s", "types:s", "nogtkinit");
 
 $TYPES_FILE = $TYPES_FILE ? $TYPES_FILE : "$MODULE.types";
 
@@ -123,8 +124,19 @@ static void output_widget_args (FILE *fp, GtkType object_type);
 int
 main (int argc, char *argv[])
 {
-  gtk_init (&argc, &argv);
+EOT
 
+  if ($NO_GTK_INIT) {
+    print OUTPUT <<EOT;
+  gtk_type_init ();
+EOT
+  } else {
+    print OUTPUT <<EOT;
+  gtk_init (&argc, &argv);
+EOT
+  }
+
+print OUTPUT <<EOT;
   get_object_types ();
 
   output_signals ();

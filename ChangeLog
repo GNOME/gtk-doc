@@ -1,3 +1,17 @@
+1999-09-20  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk-doc.dsl.in: If a Chapter has role="no-toc" we don't generate a
+	table of contents. This is useful if a better contents page has been
+	added manually, e.g. for the GTK+ Widgets & Objects page. (But it is
+	a bit of a hack.)
+
+	* gtkdoc-scanobj.in: added --nogtkinit flag which will make it call
+	gtk_type_init() rather than gtk_init(). This is useful when it is
+	run automatically to update the docs by a cron job or similar and a
+	connection to an X server is not desirable. However, if any widgets
+	need a connection to X in their class init function then this can't
+	be used (e.g. GtkFontSelection at present).
+
 Mon Sep 20 09:09:12 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkdoc-mkdb.in gtkdoc-mktmpl.in: (ParseStructDeclaration): 
