@@ -59,3 +59,17 @@ it is empty after the removal of the initial ' * ' prefix. Thus you
 can work around this problem by adding some trailing whitespace to
 lines which should appear as empty, but not end a paragraph. This is 
 especially relevant in code examples, which often contain empty lines.
+
+Some more hints regarding examples: Hyperlinks in the formatted examples
+are confusing, therefore you should suppress the gtk-doc markup by using
+function(<!-- -->) instead of function(). Use character entities to refer
+to the characters %, &, < or #, e.g. 
+
+   if (a < b && verbose)
+      printf ("bla %s %#x", bla, a);
+
+would become 
+
+   if (a &lt; b &amp;&amp; verbose)
+      printf ("bla &percnt;s &percnt;&num;x", bla, a);
+
