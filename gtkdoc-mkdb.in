@@ -1927,6 +1927,9 @@ sub GetSignals {
 		    else {
 			$name = $3;
 		    }
+		    if (!defined($name)) {
+		        $name = "arg$j";
+		    }
 		    $xref = &MakeXRef ($type);
 		    $synop .= "$xref $pointer$name,\n";
 		    $synop .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
