@@ -5,7 +5,7 @@
 <!-- =============Document Header ============================= -->
 <book id="index">
  <bookinfo>
-  <title>Gtk-Doc Manual</title>
+  <title>GTK-Doc Manual</title>
   <edition>0.0</edition>
   <authorgroup>
    <author>
@@ -64,55 +64,194 @@
   <title>Introduction</title>
 
   <para>
-   This chapter describes (FIXME)
+	This chapter introduces GTK-Doc and gives an overview of what it is and how it is used.
   </para>
 
   <sect1 id="whatisgtkdoc">
-   <title>What is Gtk-Doc?</title>
+   <title>What is GTK-Doc?</title>
 
    <para>
-    (FIXME)
-   </para>
+   GTK-Doc is used to document C code. It is typically used to document the public
+   API of libraries, such as the GTK+ and Gnome libraries. But it can also be
+   used to document application code.
+  </para>
 
-   <para>
-    (A system for embedding docs in libraries, extracting 
-    them, automagically determining certain information 
-    and relationships...)
-   </para>
+
 
   </sect1>
 
   <sect1 id="howdoesgtkdocwork">
-   <title>How Does Gtk-Doc Work?</title>
+   <title>How Does GTK-Doc Work?</title>
+
+       <para>
+GTK-Doc works by using documentation of functions placed inside the source files in
+specially-formatted comment blocks, or documentation added to the template files
+which GTK-Doc uses (though note that GTK-Doc will only document functions that
+are declared in header files; it won't produce output for static functions).
+Currently GTK-Doc does not support placing documentation of other types of
+declarations, such as enums, macros, and structs, inside the source code.
+  </para>
 
    <para>
-    (FIXME)
-   </para>
+GTK-Doc consists of a number of perl scripts, each performing a different step
+in the process.
+  </para>
 
+  <para>
+There are 5 main steps in the process:
+  </para>
+
+<orderedlist>
+
+  <listitem>
+    <para>
+<guilabel>Gathering information about the code.</guilabel>
+
+   gtkdoc-scan scans the header files of the code looking for declarations of
+   functions, macros, enums, structs, and unions. It creates a list of the
+   declarations, placing them into sections according to which header file they
+   are in. The author can rearrange the sections, and the order of the
+   declarations within them, to produce the final desired order.
+
+   gtkdoc-scanobj can also be used to dynamically query a library about
+   any GtkObject subclasses it exports. It saves information about each
+   object's position in the class hierarchy and about any GTK Args and Signals it
+   provides.
+  </para>
+  </listitem>
+
+  <listitem>
+    <para>
+<guilabel>Generating the "template" files.</guilabel>
+
+   gtkdoc-mktmpl creates a number of files in the tmpl/ subdirectory, using the
+   information gathered in the first step. (Note that this can be run
+   repeatedly. It will try to ensure that no documentation is ever lost.)
+  </para>
+  </listitem>
+
+  <listitem>
+    <para>
+<guilabel>Writing the documentation.</guilabel>
+
+   The author fills in the template files with the documentation for each
+function, macro, union etc.
+  </para>
+  </listitem>
+
+  <listitem>
+    <para>
+<guilabel>Generating the SGML and HTML.</guilabel>
+
+   gtkdoc-mkdb turns the template files into SGML files in the sgml/
+   subdirectory.(If the source code contains documentation on functions, using the special
+   comment blocks, it gets merged in here.)
+
+   gtkdoc-mkhtml turns the SGML files into HTML files in the html/
+   subdirectory.
+  </para>
+  </listitem>
+
+  <listitem>
+    <para>
+<guilabel>Fixing up cross-references between documents.</guilabel>
+
+   After installing the HTML files, gtkdoc-fixxref can be run to fix up any
+   cross-references between separate documents. For example, the GTK+
+documentation
+   contains many cross-references to types documented in the GLib manual.
+
+   </para>
+  </listitem>
+ </orderedlist>
+
+  </sect1>
+
+  <sect1 id="gettinggtkdoc">
+   <title>Getting GTK-Doc</title>
+
+  <sect2 id="requirements">
+   <title>Requirements</title>
    <para>
-    (Overview of the steps involved - start with Damon's 
-    description below this outline.)
+
+
+<guilabel>Perl v5</guilabel> - the main scripts are in Perl.
+   </para>
+   <para>
+<guilabel>DocBook DTD v3.0</guilabel> - This is the DocBook SGML DTD.
+   <ulink url="http://www.ora.com/davenport" type="http">http://www.ora.com/davenport</ulink>
+   </para>
+   <para>
+<guilabel>Jade v1.1</guilabel> - This is a DSSSL processor for converting SGML to various formats.
+   <ulink url="http://www.jclark.com/jade" type="http">http://www.jclark.com/jade</ulink>
+   </para>
+   <para>
+<guilabel>Modular DocBook Stylesheets</guilabel>
+    This is the DSSSL code to convert DocBook to HTML (and a few other
+    formats). It's used together with jade.
+    I've customized the DSSSL code slightly, in gtk-doc.dsl, to colour
+    the program code listings/declarations, and to support global
+    cross-reference indices in the generated HTML.
+    <ulink url="http://nwalsh.com/docbook/dsssl" type="http">http://nwalsh.com/docbook/dsssl</ulink>
+   </para>
+   <para>
+<guilabel>docbook-to-man</guilabel> - if you want to create man pages from the DocBook.
+    I've customized the 'translation spec' slightly, to capitalise section
+    headings and add the 'GTK Library' title at the top of the pages and the
+    revision date at the bottom.
+    There is a link to this on <ulink url="http://www.ora.com/davenport" type="http">http://www.ora.com/davenport</ulink>
+    NOTE: This does not work yet.
+   </para>
+</sect2>
+
+  <sect2 id="installation">
+   <title>Installation</title>
+   <para>
+
+
+There is no standard place where the DocBook Modular Stylesheets are installed.
+   </para>
+   <para>
+gtk-doc's configure script searches these 3 directories automatically:
+   </para>
+   <para>
+ <filename> /usr/lib/sgml/stylesheets/nwalsh-modular   </filename>     (used by RedHat)
+   </para>
+   <para>
+ <filename>  /usr/lib/dsssl/stylesheets/docbook         </filename>     (used by Debian)
+   </para>
+   <para>
+ <filename>  /usr/share/sgml/docbkdsl                   </filename>     (used by SuSE)
 
    </para>
+   <para>
+If you have the stylesheets installed somewhere else, you need to configure
+gtk-doc using the option:
+
+  <command> --with-dsssl-dir=&lt;PATH_TO_TOPLEVEL_STYLESHEETS_DIR&gt; </command>
+
+
+   </para>
+</sect2>
 
   </sect1>
 
   <sect1 id="whentousegtkdoc">
-   <title>When to Use Gtk-Doc</title>
+   <title>When to Use GTK-Doc</title>
 
    <para>
     (FIXME)
    </para>
 
    <para>
-    (What things Gtk-Doc should, and shouldn't, be used for.)
+    (What things GTK-Doc should, and shouldn't, be used for.)
 
    </para>
 
   </sect1>
 
   <sect1 id="aboutgtkdoc">
-   <title>About Gtk-Doc</title>
+   <title>About GTK-Doc</title>
 
    <para>
     (FIXME)
@@ -145,4 +284,5 @@
 &FDL;
 
 </book>
+
 
