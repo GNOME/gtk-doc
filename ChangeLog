@@ -1,3 +1,8 @@
+2004-10-25  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in (OutputParamDescriptions): use a &nbsp; after Returns:
+	so it doesn't break before the colon.
+
 2004-10-24  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-common.pl (ParseEnumDeclaration): handle "typedef enum XXX {"

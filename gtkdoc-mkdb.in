@@ -1334,7 +1334,7 @@ EOF
 
 	    # Output the returns info last.
 	    if ($returns) {
-		$output .= "<varlistentry><term><emphasis>Returns</emphasis> :</term><listitem><simpara>$returns</simpara></listitem></varlistentry>\n";
+		$output .= "<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>$returns</simpara></listitem></varlistentry>\n";
 	    }
 
 	    # Finish the table.
