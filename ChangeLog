@@ -1,3 +1,11 @@
+2002-12-16  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (OutputSGMLFile): Don't emit the additional
+	anchors in the title which breaks the generated html (the title
+	text is copied around). Instead, put the anchors before the
+	synopsis. This isn't perfect, but the best we can achieve without
+	stylesheet hackery.
+
 2002-12-13  Matthias Clasen  <maclas@gmx.de>
 	
 	* gtkdoc-mkdb.in: Add an --ignore-files option which can be used

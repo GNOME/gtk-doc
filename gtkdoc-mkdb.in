@@ -1264,7 +1264,7 @@ sub OutputSGMLFile {
     print OUTPUT <<EOF;
 <refentry id="$section_id">
 <refmeta>
-<refentrytitle>$object_anchors$title</refentrytitle>
+<refentrytitle>$title</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>\U$MODULE\E Library</refmiscinfo>
 </refmeta>
@@ -1274,6 +1274,7 @@ sub OutputSGMLFile {
 </refnamediv>
 
 <refsynopsisdiv><title>Synopsis</title>
+$object_anchors
 <synopsis>
 
 $include_output
