@@ -1,5 +1,9 @@
 2004-10-14  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (CreateValidSGMLID): use ":CAPS" rather than
+	"-CAPS" to distinguish all-caps identifiers, to avoid clashing with
+	identifiers ending in _caps! Bug #113120.
+ 
 	* gtkdoc-mkdb.in (MergeSourceDocumentation): if it looks like a
 	parameter has been described, but not in the right place, output
 	a better error message. Bug #141871.
