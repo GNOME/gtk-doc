@@ -1,3 +1,14 @@
+1999-01-28  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk-doc.dsl.in: I forgot to make the new refentry code process the
+	child elements, so it was only outputting anchors for each page.
+
+	* doc/setting-up.txt (scan): added step to create MODULE.types file
+	for modules which contain widgets (or objects).
+
+	* gtkdoc-mkdb (OutputStruct): allow spaces inside the public/private
+	markers, e.g. "/*  <  public  >  */"
+
 1999-01-27  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* Makefile.am: added scripts to EXTRA_DIST and copied examples, doc

@@ -61,19 +61,33 @@ scan:
      If not, take it out.
 
 
-6. Create the Makefile and 'make scan'. This will scan all the headers and
+6. If your module contains widgets you need to create a MODULE.types file.
+   This contains any '#include' directives needed to compile a program with
+   your module, and a list of functions to initialize all of the widgets in
+   the library. For example, the gtk.types file starts like this:
+
+	#include <gtk/gtk.h>
+
+	gtk_accel_label_get_type
+	gtk_adjustment_get_type
+	gtk_alignment_get_type
+	gtk_arrow_get_type
+
+
+
+7. Create the Makefile and 'make scan'. This will scan all the headers and
    produce a list of declarations found in the MODULE-decl-list.txt file.
    Copy this file to MODULE-sections.txt and rearrange it if necessary.
    (See sections-file.txt for a description of the format).
 
 
-7. Do a 'make templates' to create the template files in tmpl/
+8. Do a 'make templates' to create the template files in tmpl/
 
 
-8. Do a 'make sgml' to create the DocBook SGML output in sgml/
+9. Do a 'make sgml' to create the DocBook SGML output in sgml/
 
 
-9. Create your main SGML file (with the name you used in Makefile.am),
+10.Create your main SGML file (with the name you used in Makefile.am),
    using entity references to include all the generated SGML files.
    In sgml/MODULE-doc.top and sgml/MODULE-doc.bottom you will find a generated
    list of entities and references which you can use to include in your
@@ -85,11 +99,11 @@ scan:
    forget.
 
 
-10. Do a 'make html' to make the final HTML.
+11. Do a 'make html' to make the final HTML.
 
 
 
-10a. Email me and tell me where it went wrong :)
+11a. Email me and tell me where it went wrong :)
 
 
 Damon

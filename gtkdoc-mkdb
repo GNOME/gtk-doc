@@ -480,9 +480,9 @@ sub OutputStruct {
 	my $decl_line;
 	foreach $decl_line (split (/\n/, $declaration)) {
 #	    print "Struct line: $decl_line\n";
-	    if ($decl_line =~ m%/\*<public>\*/%) {
+	    if ($decl_line =~ m%/\*\s*<\s*public\s*>\s*\*/%) {
 		$public = 1;
-	    } elsif ($decl_line =~ m%/\*<private>\*/%) {
+	    } elsif ($decl_line =~ m%/\*\s*<\s*private\s*>\s*\*/%) {
 		$public = 0;
 	    } elsif ($public) {
 		$new_declaration .= $decl_line . "\n";
