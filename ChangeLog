@@ -1,3 +1,9 @@
+2002-12-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk-doc.xsl: Change XPath path to "//anchor|//refentry" for the 
+	generation of index.sgml. The previous path "//anchor|refentry"
+	was not matching any refentrys.
+
 2002-12-09  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mktmpl.in (UpdateTemplates): Emit unused class structs
