@@ -1,3 +1,10 @@
+2003-08-10  James Henstridge  <james@daa.com.au>
+
+	* acinclude.m4 (JH_PATH_XML_CATALOG): allow caller to specify
+	actions if found or not found.
+	(JH_CHECK_XML_CATALOG): when requiring JH_PATH_XML_CATALOG, don't
+	error out if it is not found.
+
 2003-08-03  Matthias Clasen  <maclas@gmx.de>
 
 	* doc/gnome.txt: Add some hints regarding markup of examples. 
