@@ -131,7 +131,7 @@ sub ScanHeaders {
 	|| die "Can't open source directory $source_dir: $!";
     my $file;
     foreach $file (readdir (SRCDIR)) {
-	if ($file eq '.' || $file eq '..') {
+	if ($file eq '.' || $file eq '..' || $file =~ /^\./) {
 	    next;
 	} elsif (-d "$source_dir/$file") {
 	    push (@subdirs, $file);

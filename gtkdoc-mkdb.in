@@ -43,13 +43,15 @@ my $TMPL_DIR;
 my $SGML_OUTPUT_DIR;
 my @SOURCE_DIRS;
 my $PRINT_VERSION;
+my $OUTPUT_ALL_SYMBOLS;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
 	      'output-dir' => \$SGML_OUTPUT_DIR,
 	      'tmpl-dir' => \$TMPL_DIR,
-	      'version' => \$PRINT_VERSION);
-GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version");
+	      'version' => \$PRINT_VERSION,
+				'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS);
+GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -102,6 +104,10 @@ my %SymbolParams;
 # These global hashes store documentation scanned from the source files.
 my %SourceSymbolDocs;
 my %SourceSymbolParams;
+
+# all documentation goes in here, so we can do coverage analysis
+my %AllSymbols;
+my %AllDocumentedSymbols;
 
 # These global arrays store GtkObject and subclasses and the hierarchy.
 my @Objects;
@@ -254,6 +260,8 @@ sub OutputSGML {
 	    $DeclarationOutput{"${title}Class"} = 1;
 
 	} elsif (m/^<FILE>(.*)<\/FILE>/) {
+            my $sym;
+
 	    $file = $1;
 	    %SymbolDocs = ();
 	    %SymbolTypes = ();
@@ -330,6 +338,12 @@ sub OutputSGML {
     }
     close (INPUT);
 
+    &OutputMissingDocumentation;
+    
+		if ($OUTPUT_ALL_SYMBOLS) {
+			 &OutputAllSymbols;
+		}
+		
     &OutputBook ($book_top, $book_bottom);
 
     return $changed;
@@ -1660,6 +1674,78 @@ EOF
     close (SRCFILE);
 }
 
+#############################################################################
+# Function    : OutputMissingDocumentation
+# Description : Outputs report of documentation coverage to a file
+#
+# Arguments   : none
+#############################################################################
+
+sub OutputMissingDocumentation {
+     my $n_documented = 0;
+     my $total = 0;
+     my $symbol;
+     my $percent;
+     my $msg;
+     my $buffer;
+	
+     open (UNDOCUMENTED, ">$ROOT_DIR/$MODULE-undocumented.txt")
+          || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt";
+
+     foreach $symbol (sort (keys (%AllSymbols))) {
+          if (defined ($Declarations{$symbol})) {
+               my $type = $DeclarationTypes{$symbol};
+               if (($type eq 'FUNCTION') or ($type eq 'MACRO')) {
+                    $total++;
+                    if (exists ($AllDocumentedSymbols{$symbol})) {
+                         $n_documented++;
+                    } else {
+                         $buffer .= $symbol . "\n";
+                    }
+               } elsif ($type eq 'STRUCT') {
+               }
+          }
+     }
+
+     
+     $percent = ($n_documented / $total) * 100.0;
+
+     printf UNDOCUMENTED "%.2g%% function docs coverage.\n", $percent;
+     print UNDOCUMENTED "$n_documented functions documented.\n";
+     print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
+
+     print UNDOCUMENTED $buffer;
+
+     close (UNDOCUMENTED);
+
+     printf (("%.2g%% function docs coverage ($n_documented functions documented, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
+}
+
+
+#############################################################################
+# Function    : OutputAllSymbols
+# Description : Outputs list of all symbols to a file
+#
+# Arguments   : none
+#############################################################################
+
+sub OutputAllSymbols {
+     my $n_documented = 0;
+     my $total = 0;
+     my $symbol;
+     my $percent;
+     my $msg;
+
+     open (SYMBOLS, ">$ROOT_DIR/$MODULE-symbols.txt")
+          || die "Can't create $ROOT_DIR/$MODULE-symbols.txt";
+
+     foreach $symbol (sort (keys (%AllSymbols))) {
+          print SYMBOLS $symbol . "\n"
+     }
+
+     close (SYMBOLS);
+}
+
 
 #############################################################################
 # Function    : MergeSourceDocumentation
@@ -1676,12 +1762,17 @@ EOF
 sub MergeSourceDocumentation {
     my $symbol;
     foreach $symbol (keys (%SymbolDocs)) {
+        $AllSymbols{$symbol} = 1;
 	if (exists ($SourceSymbolDocs{$symbol})) {
 	    my $src_doc = $SourceSymbolDocs{$symbol};
 	    my $tmpl_doc = $SymbolDocs{$symbol};
 	    $tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
 	    $src_doc =~ s/^\s+//;
 	    $src_doc =~ s/\s+$//;
+
+            if ($src_doc ne "") {
+                 $AllDocumentedSymbols{$symbol} = 1;
+            }
 
 	    # Convert special SGML characters. I'm not sure if we want to do
 	    # this but currently there are a couple of '&'s in the source code
@@ -1748,8 +1839,17 @@ WARNING: Parameter described in source code comment block but does not exist -
 EOF
 		}
 	    }
-	}
-    }
+       } else {
+            ## See if the symbol is documented out-of-line
+	    my $tmpl_doc = $SymbolDocs{$symbol};
+	    $tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
+            $tmpl_doc =~ s/<\/?[a-z]+>//g;
+            $tmpl_doc =~ s/\s//g;
+            if ($tmpl_doc ne "") {
+                 $AllDocumentedSymbols{$symbol} = 1;
+            }
+       }
+   }
 }
 
 
