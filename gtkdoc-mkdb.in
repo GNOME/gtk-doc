@@ -103,7 +103,7 @@ if (lc($OUTPUT_FORMAT) eq "xml") {
 	$doctype_header = "";
 	while (<INPUT>) {
 	    if (/^\s*<(book|chapter|article)/) {
-		if (index($_, "http://www.w3.org/2001/XInclude") < 0) {
+		if ($_ !~ m/http:\/\/www.w3.org\/200[13]\/XInclude/) {
 		    $doctype_header = "";
 		}
 	        last;
@@ -1422,7 +1422,7 @@ sub OutputBook {
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
-<book id="index" xmlns:xi="http://www.w3.org/2001/XInclude">
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
 EOF
       } else {
 	print OUTPUT <<EOF;
