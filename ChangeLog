@@ -1,3 +1,9 @@
+2003-01-18  James Henstridge  <james@daa.com.au>
+
+	* gtkdoc-mkhtml.in (declaration): switch the output type from
+	"sgml" to "sgml-raw" when using Jade to process docs.  This gets
+	rid of the line breaks inside the tags, which were confusing Lynx.
+
 2003-01-15  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scan.in (ScanHeader): Remove special cases for Pango and
