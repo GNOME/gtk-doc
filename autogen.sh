@@ -30,7 +30,7 @@ cd "$srcdir"
 	DIE=1
 }
 
-(automake --version) < /dev/null > /dev/null 2>&1 || {
+(automake-1.4 --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "You must have automake installed to compile $PROJECT."
 	echo "Get ftp://ftp.cygnus.com/pub/home/tromey/automake-1.2d.tar.gz"
@@ -56,12 +56,12 @@ case $CC in
 *xlc | *xlc\ * | *lcc | *lcc\ *) am_opt=--include-deps;;
 esac
 
-aclocal $ACLOCAL_FLAGS
+aclocal-1.4 $ACLOCAL_FLAGS
 
 # optionally feature autoheader
 #(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
-automake --add-missing $am_opt
+automake-1.4 --add-missing $am_opt
 autoconf
 
 cd "$THEDIR"
