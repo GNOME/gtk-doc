@@ -578,7 +578,7 @@ EOF
 		# Note that the declaration has been output.
 		$DeclarationOutput{$symbol} = 1;
 	    } elsif ($subsection ne "Standard" && $subsection ne "Private") {
-		print "WARNING: No declaration for: $1\n";
+		print "WARNING: No declaration found for: $1\n";
 	    }
 	    $num_symbols++;
 	}
@@ -2339,7 +2339,7 @@ sub ScanSourceFile {
 	if (m%^\s*\*+/%) {
 	    if (!$symbol) {
 		print <<EOF;
-WARNING: symbol name not found in comment block.
+WARNING: Symbol name not found at the start of the comment block.
  $file line $.
 EOF
 	    } else {
@@ -2367,7 +2367,9 @@ EOF
 		    }
 		    else {
 			print <<EOF;
-WARNING: Unguarded $symbol deprecated in inline comments
+WARNING: $symbol is deprecated in the inline comments
+         but no deprecation guards were found around the declaration.
+         (See the --deprecated-guards option for gtkdoc-scan.)
 EOF
 		    }
 		    $Deprecated{$symbol} = &ConvertSGMLChars ($deprecated_desc);
@@ -3325,7 +3327,7 @@ sub ReadArgsFile {
 		if ($arg_blurb eq "(null)") {
 		  $arg_blurb = "";
 		  print <<EOF;
-WARNING: Property ${arg_object}::${arg_name} has NULL blurb.
+WARNING: Property ${arg_object}::${arg_name} has no documentation.
 EOF
 		}
 	    } elsif (m/^<DEFAULT>(.*)<\/DEFAULT>/) {

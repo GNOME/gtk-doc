@@ -96,6 +96,11 @@ sub UpdateFileIfChanged {
 sub ParseStructDeclaration {
     my ($declaration, $is_object, $output_function_params, $typefunc, $namefunc) = @_;
 
+    # For forward struct declarations just return an empty array.
+    if ($declaration =~ m/struct\s+\S+\s*;/msg) {
+      return ();
+    }
+
     # Remove all private parts of the declaration
 
     # For objects, assume private

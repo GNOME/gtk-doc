@@ -1,3 +1,12 @@
+2005-01-09  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-common.pl.in (ParseStructDeclaration): return an empty array
+	for forward struct declarations. Part of #156318.
+
+	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mkdb.in: updated a few of the warnings to make them a bit
+	easier to understand.
+
 2004-11-22  James Henstridge  <james@jamesh.id.au>
 
 	* acconfig.h: remove file, since we don't have a config.h
