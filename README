@@ -6,7 +6,8 @@ GTK-Doc is used to document C code. It is typically used to document the public
 API of libraries, such as the GTK+ and Gnome libraries. But it can also be
 used to document application code.
 
-Documentation for functions and macros can be written in 2 ways:
+Documentation for functions, macros, widget signals, and widget properties
+can be written in 2 ways:
 
   a) Embedded inside the source code in specially-formatted comments.
 
@@ -25,20 +26,26 @@ Requirements
 ============
 
 Perl v5 - the main scripts are in Perl.
+    http://www.perl.com/
 
-DocBook DTD v3.0 - This is the DocBook SGML DTD.
-    http://www.ora.com/davenport
+DocBook SGML DTD v3.0 or DocBook XML DTD v4.1.2 - the DocBook DTDs.
+    http://www.oasis-open.org/docbook/
 
-Jade v1.1 - This is a DSSSL processor for converting SGML to various formats.
+Jade v1.1 or OpenJade 1.3.1 for SGML.
     http://www.jclark.com/jade
+    http://sourceforge.net/projects/openjade
 
-Modular DocBook Stylesheets (I've got 1.40, but v1.19+ may be OK)
-    This is the DSSSL code to convert DocBook to HTML (and a few other
+libxslt & libxml2 2.3.6 for XML.
+    http://xmlsoft.org/
+
+DocBook Stylesheets (I've got 1.40, but v1.19+ may be OK)
+    This is the DSSSL code to convert DocBook SGML to HTML (and a few other
     formats). It's used together with jade.
     I've customized the DSSSL code slightly, in gtk-doc.dsl, to colour
     the program code listings/declarations, and to support global
     cross-reference indices in the generated HTML.
     http://nwalsh.com/docbook/dsssl
+
 
 Most distributions now have packages for all of these, so I would strongly
 advise that you grab those.
@@ -50,5 +57,5 @@ the setting-up.txt file which describes how to set up your application or
 library to use gtk-doc.
 
 
-Damon Chaplin (damon@ximian.com), 19 May 2001.
+Damon Chaplin (damon@gnome.org), 13 Nov 2002.
 
