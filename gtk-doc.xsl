@@ -22,6 +22,7 @@
   <xsl:param name="variablelist.as.table" select="1"/>
 
   <!-- this gets set on the command line ... -->
+  <xsl:param name="gtkdoc.version" select="''"/>
   <xsl:param name="gtkdoc.bookname" select="''"/>
 
   <!-- ========================================================= -->
@@ -93,6 +94,10 @@
   </xsl:template>
 
   <xsl:template name="user.head.content">
+    <xsl:if test="$gtkdoc.version">
+      <meta name="generator"
+            content="GTK-Doc V{$gtkdoc.version} (XML mode)"/>
+    </xsl:if>
     <style type="text/css">
       <xsl:text>
         .synopsis, .classsynopsis {

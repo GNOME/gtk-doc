@@ -1,3 +1,18 @@
+2002-11-26  James Henstridge  <james@daa.com.au>
+
+	* gtkdoc-mkhtml.in: set gtkdoc-bookname and gtkdoc-version
+	parameters in sgml mode, and don't bother with the sed run after
+	processing with jade.
+	In XML mode, pass the version number in as a parameter too.
+
+	* gtk-doc.dsl.in ($user-html-header$): add <meta> tag if
+	gtkdoc-version is set.
+	(generate-index-mode): if gtkdoc-bookname is set, add it to the
+	hrefs in the index file, like the XSLT sheets do.
+
+	* gtk-doc.xsl: add gtkdoc.version parameter, and use it to add a
+	<meta> tag with the gtk-doc version number.
+
 2002-11-16  Damon Chaplin  <damon@gnome.org>
 
 	* Released 0.10.

@@ -6,6 +6,9 @@
 <style-specification use="docbook">
 <style-specification-body>
 
+(define gtkdoc-version "")
+(define gtkdoc-bookname "")
+
 ;; These are some customizations to the standard HTML output produced by the
 ;; Modular DocBook Stylesheets.
 ;; I've copied parts of a few functions from the stylesheets so these should
@@ -33,6 +36,22 @@
 
 (define %shade-verbatim% #t)
 
+
+(define ($user-html-header$ #!optional
+                            (home (empty-node-list))
+                            (up (empty-node-list))
+                            (prev (empty-node-list))
+                            (next (empty-node-list)))
+  (make sequence
+    (if (not (string=? gtkdoc-version ""))
+	(make empty-element gi: "META"
+	      attributes: (list
+			   (list "NAME" "GENERATOR")
+			   (list "CONTENT" (string-append
+					  "GTK-Doc V"
+					  gtkdoc-version
+					  " (SGML mode)"))))
+	(empty-sosofo))))
 
 (mode book-titlepage-recto-mode
   (element title 
@@ -249,6 +268,9 @@
 	      (string-append "\less-than-sign;ANCHOR id =\""
 			     (attribute-string "id" (current-node))
 			     "\" href=\""
+			     (if (not (string=? gtkdoc-bookname ""))
+				 (string-append gtkdoc-bookname "/")
+				 "")
 			     (href-to (current-node))
 			     "\"\greater-than-sign;
 "))))
@@ -260,6 +282,9 @@
 	    (string-append "\less-than-sign;ANCHOR id =\""
 			   (attribute-string "id" (current-node))
 			   "\" href=\""
+			   (if (not (string=? gtkdoc-bookname ""))
+			       (string-append gtkdoc-bookname "/")
+			       "")
 			   (href-to (current-node))
 			   "\"\greater-than-sign;
 "))
