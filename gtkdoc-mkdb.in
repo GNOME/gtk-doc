@@ -1356,7 +1356,7 @@ sub OutputBook {
 EOF
       } else {
 	print OUTPUT <<EOF;
-<!doctype book PUBLIC "-//DavenPort//DTD DocBook V3.0//EN" [
+<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
 EOF
         print OUTPUT $book_top;
         print OUTPUT <<EOF;
