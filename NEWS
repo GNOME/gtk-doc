@@ -1,3 +1,21 @@
+GTK-Doc 1.1     (Apr 18 2003)
+===========
+
+ o Add a gtk-doc.m4 macro that allows packages to provide consistent
+   checking for gtk-doc.
+ o Check to make sure that the XML catalog actually contains entries
+   for the DocBook XML DTD and XSLT stylesheets.  Please consult the
+   README file if your system's XML catalog isn't set up.
+ o Add infrastructure for including the standard gtk-doc makefile
+   glue, so that maintainers of packages don't need to worry about
+   keeping it up to date.  See glib head for an example of its use.
+ o Some updates to the devhelp contents file generation, as suggested
+   by Hallski.
+ o Fix some bugs in the DocBook XML codepath that were preventing
+   inter-module cross references from being resolved.
+ o Fix some bugs in extraction of object property documentation.
+
+
 
 GTK-Doc 0.10	(Nov 14 2002)
 ============
