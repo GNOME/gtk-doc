@@ -78,7 +78,7 @@
 
     <sub name="{$title}" link="{$target}">
       <xsl:apply-templates select="section|sect1|sect2|
-                                   refentry|refsect|refsect1|refsect2|
+                                   refentry|refsect|
                                    bridgehead|part"
                            mode="generate.devhelp.toc.mode"/>
     </sub>

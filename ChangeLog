@@ -1,3 +1,13 @@
+2003-02-13  James Henstridge  <james@daa.com.au>
+
+	* devhelp.xsl: remove refsect1's and refsect2's from book tree, as
+	suggested by Hallski.
+
+	* gtk-doc.make (install-data-local): the change to install images
+	was superfluous, so I have removed it.
+	(CLEANFILES): move some more stuff to CLEANFILES from the
+	distclean-local rule.
+
 2003-02-12  James Henstridge  <james@daa.com.au>
 
 	* gtk-doc.make: add some chmod calls to work arround distcheck on
