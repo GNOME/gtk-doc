@@ -291,12 +291,12 @@ output_widget_signal (FILE *fp,
   else
       object_arg = object_name;
 
-  object_arg_start = pos;
+  object_arg_start = pos + 1;
   sprintf (pos, "*%s\\n", object_arg);
   pos += strlen (pos);
   g_strdown (object_arg_start);
-  if (!strcmp (object_arg_start, "widget"))
-    widget_num++;
+  if (!strncmp (object_arg_start, "widget", 6))
+    widget_num = 2;
 
   /* Convert signal name to use underscores rather than dashes '-'. */
   strcpy (signal_name, query_info.signal_name);
@@ -355,10 +355,15 @@ output_widget_signal (FILE *fp,
 	  else
 	    sprintf (pos, "%s%s%i\\n", is_pointer ? "*" : " ", arg_name,
 		     *arg_num);
-	      pos += strlen (pos);
+	  pos += strlen (pos);
 
-	      if (arg_num)
-		*arg_num += 1;
+	  if (arg_num)
+	    {
+	      if (*arg_num == 0)
+		*arg_num = 2;
+	      else
+	        *arg_num += 1;
+	    }
 	}
     }
 
@@ -406,8 +411,14 @@ get_type_name (GType type, gboolean * is_pointer)
     return "gint";
 
   case G_TYPE_BOXED:
-    /* A boxed value is just an opaque pointer, I think. */
+    /* The boxed type shouldn't be used itself, only subtypes. Though we
+       return 'gpointer' just in case. */
     return "gpointer";
+
+  case G_TYPE_PARAM:
+    /* A GParam is really a GParamSpec*. */
+    *is_pointer = TRUE;
+    return "GParamSpec";
 
   default:
     break;
@@ -416,6 +427,14 @@ get_type_name (GType type, gboolean * is_pointer)
   /* For all GtkObject subclasses we can use the class name with a "*",
      e.g. 'GtkWidget *'. */
   if (g_type_is_a (type, G_TYPE_OBJECT))
+    *is_pointer = TRUE;
+
+  /* All boxed subtypes will be pointers as well. */
+  if (g_type_is_a (type, G_TYPE_BOXED))
+    *is_pointer = TRUE;
+
+  /* All pointer subtypes will be pointers as well. */
+  if (g_type_is_a (type, G_TYPE_POINTER))
     *is_pointer = TRUE;
 
   return type_name;
@@ -507,23 +526,21 @@ lookup_signal_arg_names (const gchar * type, const gchar * signal_name)
     {"GtkCList", "scroll_horizontal",
      "GtkScrollType    scroll_type",
      "gfloat           position"},
-    {"GtkContainer", "focus",
-     "GtkDirectionType direction"},
+
     {"GtkCTree", "tree_select_row",
-     "GList           *node",
+     "GtkCTreeNode    *node",
      "gint             column"},
     {"GtkCTree", "tree_unselect_row",
-     "GList           *node",
+     "GtkCTreeNode    *node",
      "gint             column"},
-
     {"GtkCTree", "tree_expand",
-     "GList           *node"},
+     "GtkCTreeNode    *node"},
     {"GtkCTree", "tree_collapse",
-     "GList           *node"},
+     "GtkCTreeNode    *node"},
     {"GtkCTree", "tree_move",
-     "GList           *node",
-     "GList           *new_parent",
-     "GList           *new_sibling"},
+     "GtkCTreeNode    *node",
+     "GtkCTreeNode    *new_parent",
+     "GtkCTreeNode    *new_sibling"},
     {"GtkCTree", "change_focus_row_expansion",
      "GtkCTreeExpansionType expansion"},
 
@@ -558,9 +575,9 @@ lookup_signal_arg_names (const gchar * type, const gchar * signal_name)
 
 
     {"GtkInputDialog", "enable_device",
-     "gint             deviceid"},
+     "GdkDevice       *deviceid"},
     {"GtkInputDialog", "disable_device",
-     "gint             deviceid"},
+     "GdkDevice       *deviceid"},
 
     {"GtkListItem", "extend_selection",
      "GtkScrollType    scroll_type",
@@ -581,7 +598,7 @@ lookup_signal_arg_names (const gchar * type, const gchar * signal_name)
 
     {"GtkNotebook", "switch_page",
      "GtkNotebookPage *page",
-     "gint             page_num"},
+     "guint            page_num"},
     {"GtkStatusbar", "text_pushed",
      "guint            context_id",
      "gchar           *text"},
@@ -688,9 +705,11 @@ lookup_signal_arg_names (const gchar * type, const gchar * signal_name)
 
   for (i = 0; GbArgTable[i][0]; i++)
     {
+#if 1
       if (!strcmp (type, GbArgTable[i][0])
 	  && !strcmp (signal_name, GbArgTable[i][1]))
 	return &GbArgTable[i][2];
+#endif
     }
   return NULL;
 }
