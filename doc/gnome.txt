@@ -1,6 +1,6 @@
 
 These are the comment blocks used in Gnome source files to document
-functions (and macros if you want).
+functions (and macros, signals and properties, if you want).
 
 /**
  * function_name:
@@ -19,7 +19,10 @@ functions (and macros if you want).
 The block starts with '/**'.
 Each line starts with ' * '.
 
-The second line is the function name, optionally followed by a ':'.
+The second line is the function name, optionally followed by a ':'. In
+order to document signals in inline comments, use a name of the form 
+class::signal, e.g. GtkWidget::notify-child. For properties, use a
+name of the form class:property, e.g. GtkAlignment:top_padding.
 
 Following the function name are the parameters, e.g. '@par1:' above.
 
@@ -43,4 +46,14 @@ will be expanded into appropriate DocBook tags):
 
 To avoid problems, the characters '<', '>' and '&' in the descriptions are
 converted into the SGML entities &lt; &gt; and &amp;.
-This means that you can't use DocBook SGML tags.
+This means that you can't use Docbook SGML tags, unless specify the --sgml-mode
+option for gtkdoc-mkdb, which suppresses the escaping of '<', '>' and
+'&' and allows Docbook markup in inline comments.
+
+If you are using markup in inline comments, you must be careful to to
+not run into problems with the automatic splitting of the comment in
+paragraphs at empty lines. A line counts as empty for this purpose, if
+it is empty after the removal of the initial ' * ' prefix. Thus you
+can work around this problem by adding some trailing whitespace to
+lines which should appear as empty, but not end a paragraph. This is 
+especially relevant in code examples, which often contain empty lines.
