@@ -30,13 +30,22 @@ cd "$srcdir"
 	DIE=1
 }
 
-(automake-1.4 --version) < /dev/null > /dev/null 2>&1 || {
+if automake-1.7 --version < /dev/null > /dev/null 2>&1; then
+    AUTOMAKE=automake-1.7
+    ACLOCAL=aclocal-1.7
+elif automake-1.6 --version < /dev/null > /dev/null 2>&1; then
+    AUTOMAKE=automake-1.6
+    ACLOCAL=aclocal-1.6
+elif automake-1.4 --version < /dev/null > /dev/null 2>&1; then
+    AUTOMAKE=automake-1.4
+    ACLOCAL=aclocal-1.4
+else
 	echo
 	echo "You must have automake installed to compile $PROJECT."
 	echo "Get ftp://ftp.cygnus.com/pub/home/tromey/automake-1.2d.tar.gz"
 	echo "(or a newer version if it is available)"
 	DIE=1
-}
+fi
 
 if test "$DIE" -eq 1; then
 	exit 1
@@ -56,12 +65,12 @@ case $CC in
 *xlc | *xlc\ * | *lcc | *lcc\ *) am_opt=--include-deps;;
 esac
 
-aclocal-1.4 $ACLOCAL_FLAGS
+$ACLOCAL $ACLOCAL_FLAGS
 
 # optionally feature autoheader
 #(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
-automake-1.4 --add-missing $am_opt
+$AUTOMAKE --add-missing $am_opt
 autoconf
 
 cd "$THEDIR"
@@ -70,6 +79,3 @@ $srcdir/configure "$@"
 
 echo 
 echo "Now type 'make install' to install $PROJECT."
-
-
-

@@ -1,5 +1,8 @@
 2003-02-26  James Henstridge  <james@daa.com.au>
 
+	* autogen.sh (THEDIR): set up so that it will choose automake 1.7
+	or 1.6 in preference to 1.4.  Passes distcheck okay.
+
 	* configure.in: update configure.in script to match
 	recommendations of newer autoconf's, and add an AC_PREREQ()
 	statement, since the xml catalog checks are using new autoconf
