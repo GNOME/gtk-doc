@@ -621,6 +621,8 @@ sub OutputMacro {
     } else {
 	$desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
     }
+    $desc .= MakeIndexterms($symbol);
+
     # Don't output the macro definition if is is a conditional macro or it
     # looks like a function, i.e. starts with "g_" or "_?gnome_", or it is
     # longer than 2 lines, otherwise we get lots of complicated macros like
@@ -662,6 +664,9 @@ sub OutputTypedef {
     my $id = &CreateValidSGMLID ($symbol);
     my $synop = "typedef     <link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
+
+    $desc .= MakeIndexterms($symbol);
+
     if (!defined ($DeclarationConditional{$symbol})) {
 	$declaration = &CreateValidSGML ($declaration);
 	$desc .= "<programlisting>$declaration</programlisting>\n";
@@ -710,6 +715,9 @@ sub OutputStruct {
     }
     my $synop = "struct      <link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}struct $symbol</title>\n";
+
+    $desc .= MakeIndexterms($symbol);
+
     # Form a pretty-printed, private-data-removed form of the declaration
 
     my $decl_out;
@@ -818,6 +826,9 @@ sub OutputEnum {
     my $id = &CreateValidSGMLID ($symbol);
     my $synop = "enum        <link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}enum $symbol</title>\n";
+
+    $desc .= MakeIndexterms($symbol);
+
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
 
@@ -886,6 +897,9 @@ sub OutputUnion {
     my $id = &CreateValidSGMLID ($symbol);
     my $synop = "union       <link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}union $symbol</title>\n";
+
+    $desc .= MakeIndexterms($symbol);
+
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
 
@@ -925,6 +939,9 @@ sub OutputVariable {
     }
 
     my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
+
+    $desc .= MakeIndexterms($symbol);
+
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
 
@@ -1003,6 +1020,9 @@ sub OutputFunction {
 
     my $synop = $ret_type_output . $symbol_output . '(';
     my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}${symbol} ()</title>\n";
+
+    $desc .= MakeIndexterms($symbol);
+
     $desc  .= "<programlisting>${ret_type_output}$symbol_desc_output(";
 
     my $param_num = 0;
@@ -1504,6 +1524,21 @@ sub MakeXRef {
 
 
 #############################################################################
+# Function    : MakeIndexterms
+# Description : This returns a indexterm elements for the given symbol
+# Arguments   : $symbol - the symbol to create indexterms for
+#############################################################################
+
+sub MakeIndexterms {
+  my ($symbol) = $_[0];
+  my $desc = "";
+
+  $desc .= "<indexterm><primary>$symbol</primary></indexterm>";
+
+  return $desc;
+}
+
+#############################################################################
 # Function    : MakeDeprecationNote
 # Description : This returns a deprecation warning for the given symbol.
 # Arguments   : $symbol - the symbol to try to create a warning for.
@@ -1786,6 +1821,9 @@ sub GetSignals {
 	    }
 
 	    $desc .= &OutputParamDescriptions ("SIGNAL", $symbol);
+	    if (exists $Since{$symbol}) {
+	      $desc .= "<para>Since $Since{$symbol}</para>";
+	    }
 	    $desc .= "</refsect2>";
 	}
     }
@@ -1864,6 +1902,9 @@ sub GetArgs {
 		    $AllDocumentedSymbols{$symbol} = 1;
 		}
 		$blurb = "<para>" . &CreateValidSGML ($ArgBlurbs[$i]) . "</para>";
+	    }
+	    if (exists $Since{$symbol}) {
+	      $blurb .= "<para>Since $Since{$symbol}</para>";
 	    }
 	    my $pad1 = " " x (20 - length ($name));
 	    my $pad2 = " " x (20 - length ($type));
