@@ -736,11 +736,6 @@ output_args ()
   fclose (fp);
 }
 
-#ifndef GTK_IS_CONTAINER_CLASS
-#define GTK_IS_CONTAINER_CLASS(class) FALSE
-#define gtk_container_class_list_child_properties(class, n_properties) NULL
-#endif
-
 static void
 output_widget_args (FILE *fp, GType object_type)
 {
@@ -751,7 +746,8 @@ output_widget_args (FILE *fp, GType object_type)
   GParamSpec **properties;
   guint n_properties;
   gboolean child_prop;
-  
+  gboolean style_prop;
+
   if (!G_TYPE_IS_CLASSED (object_type))
     return;
 
@@ -763,44 +759,61 @@ output_widget_args (FILE *fp, GType object_type)
 
   properties = g_object_class_list_properties (class, &n_properties);
   child_prop = FALSE;
+  style_prop = FALSE;
 
-property_loop:
+  while (TRUE) {
+    for (arg = 0; arg < n_properties; arg++)
+      {
+        GParamSpec *spec = properties[arg];
+        const gchar *nick, *blurb;
 
-  for (arg = 0; arg < n_properties; arg++)
-    {
-      GParamSpec *spec = properties[arg];
-      const gchar *nick, *blurb;
+        if (spec->owner_type != object_type)
+          continue;
 
-      if (spec->owner_type != object_type)
-        continue;        
+        pos = flags;
+        /* We use one-character flags for simplicity. */
+        if (child_prop && !style_prop)
+   	  *pos++ = 'c';
+        if (style_prop)
+   	  *pos++ = 's';
+        if (spec->flags & G_PARAM_READABLE)
+ 	  *pos++ = 'r';
+        if (spec->flags & G_PARAM_WRITABLE)
+	  *pos++ = 'w';
+        if (spec->flags & G_PARAM_CONSTRUCT)
+	  *pos++ = 'x';
+        if (spec->flags & G_PARAM_CONSTRUCT_ONLY)
+	  *pos++ = 'X';
+        *pos = 0;
 
-      pos = flags;
-      /* We use one-character flags for simplicity. */
-      if (child_prop)
-	*pos++ = 'c';
-      if (spec->flags & G_PARAM_READABLE)
-	*pos++ = 'r';
-      if (spec->flags & G_PARAM_WRITABLE)
-	*pos++ = 'w';
-      if (spec->flags & G_PARAM_CONSTRUCT)
-	*pos++ = 'x';
-      if (spec->flags & G_PARAM_CONSTRUCT_ONLY)
-	*pos++ = 'X';
-      *pos = 0;
+        nick = g_param_spec_get_nick (spec);
+        blurb = g_param_spec_get_blurb (spec);
 
-      nick = g_param_spec_get_nick (spec);
-      blurb = g_param_spec_get_blurb (spec);
+        fprintf (fp, "<ARG>\\n<NAME>%s::%s</NAME>\\n<TYPE>%s</TYPE>\\n<FLAGS>%s</FLAGS>\\n<NICK>%s</NICK>\\n<BLURB>%s</BLURB>\\n</ARG>\\n\\n",
+	         object_class_name, g_param_spec_get_name (spec), g_type_name (spec->value_type), flags, nick ? nick : "(null)", blurb ? blurb : "(null)");
+      }
 
-      fprintf (fp, "<ARG>\\n<NAME>%s::%s</NAME>\\n<TYPE>%s</TYPE>\\n<FLAGS>%s</FLAGS>\\n<NICK>%s</NICK>\\n<BLURB>%s</BLURB>\\n</ARG>\\n\\n",
-	       object_class_name, g_param_spec_get_name (spec), g_type_name (spec->value_type), flags, nick ? nick : "(null)", blurb ? blurb : "(null)");
+    g_free (properties);
+
+#ifdef GTK_IS_CONTAINER_CLASS
+    if (!child_prop && GTK_IS_CONTAINER_CLASS (class)) {
+      properties = gtk_container_class_list_child_properties (class, &n_properties);
+      child_prop = TRUE;
+      continue;
     }
+#endif
 
-  g_free (properties);
+#ifdef GTK_IS_WIDGET_CLASS
+#if GTK_CHECK_VERSION(2,1,0)
+    if (!style_prop && GTK_IS_WIDGET_CLASS (class)) {
+      properties = gtk_widget_class_list_style_properties (GTK_WIDGET_CLASS (class), &n_properties);
+      style_prop = TRUE;
+      continue;
+    }
+#endif
+#endif
 
-  if (!child_prop && GTK_IS_CONTAINER_CLASS (class)) {
-    properties = gtk_container_class_list_child_properties (class, &n_properties);    
-    child_prop = TRUE;
-    goto property_loop;
+    break;
   }
 }
 EOT
@@ -827,7 +840,7 @@ system($command) == 0 or die "Compilation of scanner failed\n";
 
 system("./$MODULE-scan") == 0 or die "Scan failed\n";
 
-unlink "./$MODULE-scan.c", "./$MODULE-scan";
+unlink "./$MODULE-scan.c", "./$o_file", "./$MODULE-scan";
 
 &UpdateFileIfChanged ($old_signals_filename, $new_signals_filename, 0);
 &UpdateFileIfChanged ($old_hierarchy_filename, $new_hierarchy_filename, 0);

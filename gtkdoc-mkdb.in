@@ -1453,6 +1453,10 @@ sub GetArgs {
     my ($object) = @_;
     my $synop = "";
     my $desc = "";
+    my $child_synop = "";
+    my $child_desc = "";
+    my $style_synop = "";
+    my $style_desc = "";
 
     my $i;
     for ($i = 0; $i <= $#ArgObjects; $i++) {
@@ -1496,26 +1500,26 @@ sub GetArgs {
 		if ($flags_string) { $flags_string .= " / "; }
 		$flags_string .= "Construct Only";
 	    }
-	    if ($flags =~ m/c/) {
-		if ($flags_string) { $flags_string .= " / "; }
-		$flags_string .= "Child";
-	    }
-
-	    my $pad1 = " " x (20 - length ($name));
-	    my $pad2 = " " x (20 - length ($type));
-	    $synop .= "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output$pad2 : $flags_string\n";
-
-	    $desc .= "<varlistentry><term><anchor id=\"$id\">&quot;<literal>$name</literal>&quot; ($type_output : $flags_string)</term>\n<listitem>\n";
 
 	    my $blurb = &CreateValidSGML ($ArgBlurbs[$i]);
-	    $desc .= "<para>$blurb</para>\n";
+	    my $pad1 = " " x (20 - length ($name));
+	    my $pad2 = " " x (20 - length ($type));
 
-# Don't add template docs for properties, since they are largely redundant
-#	    if (defined ($SymbolDocs{$symbol})) {
-#             $desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
-#	    }
+ 	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output$pad2 : $flags_string\n";
+	    my $arg_desc = "<varlistentry><term><anchor id=\"$id\">&quot;<literal>$name</literal>&quot; ($type_output : $flags_string)</term>\n<listitem>\n<para>$blurb</para>\n</listitem></varlistentry>\n";
 
-	    $desc .= "</listitem></varlistentry>\n";
+	    if ($flags =~ m/c/) {
+	        $child_synop .= $arg_synop;
+		$child_desc .= $arg_desc;
+	    }
+	    elsif ($flags =~ m/s/) {
+	        $style_synop .= $arg_synop;
+		$style_desc .= $arg_desc;
+	    }
+	    else {
+	        $synop .= $arg_synop;
+		$desc .= $arg_desc;
+	    }
 	}
     }
     if ($synop ne '') {
@@ -1535,8 +1539,44 @@ $desc
 </variablelist>
 </refsect1>
 EOF
-    }
-    return ($synop, $desc);
+      }
+    if ($child_synop ne '') {
+        $child_synop = <<EOF;
+<refsect1>
+<title>Child Properties</title>
+<synopsis>
+
+${child_synop}</synopsis>
+</refsect1>
+EOF
+	$child_desc = <<EOF;
+<refsect1>
+<title>Child Properties</title>
+<variablelist>
+$child_desc
+</variablelist>
+</refsect1>
+EOF
+      }
+    if ($style_synop ne '') {
+        $style_synop = <<EOF;
+<refsect1>
+<title>Style Properties</title>
+<synopsis>
+
+${style_synop}</synopsis>
+</refsect1>
+EOF
+	$style_desc  = <<EOF;
+<refsect1>
+<title>Style Properties</title>
+<variablelist>
+$style_desc
+</variablelist>
+</refsect1>
+EOF
+      }
+    return ($synop . $child_synop . $style_synop, $desc . $child_desc . $style_desc);
 }
 
 

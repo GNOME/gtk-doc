@@ -1,3 +1,10 @@
+2002-05-05  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-scangobj.in: Output style properties.  (#80659)
+
+	* gtkdoc-mkdb.in (GetArgs): Return separate sections for
+	properties, child properties and style properties.  (#80659)
+
 2002-05-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scangobj.in: Fix for segfault in scangobj-generated C
