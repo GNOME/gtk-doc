@@ -1,3 +1,8 @@
+2004-01-23  Thomas Vander Stichele  <thomas at apestaart dot org>
+
+	* gtkdoc-mkhtml.in: exit when tools return non-zero so errors can
+          be caught.
+
 Thu Jan 15 23:06:10 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk-doc.xsl: Set the chunk.fast parameter, to gain some

@@ -37,11 +37,11 @@ if $is_xml; then
   @XSLTPROC@ --nonet --xinclude \
       --stringparam gtkdoc.bookname $module \
       --stringparam gtkdoc.version "@VERSION@" \
-      $gtkdocdir/gtk-doc.xsl $document
+      $gtkdocdir/gtk-doc.xsl $document || exit $?
 else
   @JADE@ -t @SGML_FORMAT_TYPE@ -w no-idref -d $gtkdocdir/gtk-doc.dsl \
       -V "gtkdoc-bookname=$module" -V "gtkdoc-version=@VERSION@" \
-      $gtkdocdir/gtk-doc.dcl $document
+      $gtkdocdir/gtk-doc.dcl $document || exit $?
 fi
 
 # copy navigation images to html directory ...
