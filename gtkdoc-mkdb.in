@@ -358,10 +358,8 @@ sub OutputSGML {
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
 	    if ($in_section) {
-	      print "section_includes $1\n";
 		$section_includes = $1;
 	    } else {
-	      print "includes $1\n";
 		$includes = $1;
 	    }
 
