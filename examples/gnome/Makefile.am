@@ -7,13 +7,13 @@ DOC_MODULE=gnome
 DOC_MAIN_SGML_FILE=gnome-docs.sgml
 
 # The directory containing the source code (if it contains documentation).
-DOC_SOURCE_DIR=../../../libgnome
+DOC_SOURCE_DIR=$(GNOME_LIBS_DIR)/libgnome
 
 
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
 scan:
-	gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="libgnomeP.h gnome-i18nP.h gnome-triggersP.h"
+	gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="libgnomeP.h gnome-i18nP.h gnome-triggersP.h gnome-magic.h vroot.h"
 
 templates: scan
 	gtkdoc-mktmpl --module=$(DOC_MODULE)

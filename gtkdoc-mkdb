@@ -446,19 +446,59 @@ sub OutputTypedef {
 #############################################################################
 # Function    : OutputStruct
 # Description : Returns the synopsis and detailed description of a struct.
+#		We check if it is a widget struct, and if so we only output
+#		parts of it that are noted as public fields.
+#		We also use a different SGML ID for widget structs, since the
+#		original ID is used for the entire RefEntry.
 # Arguments   : $symbol - the struct.
 #		$declaration - the declaration of the struct.
 #############################################################################
 
 sub OutputStruct {
     my ($symbol, $declaration) = @_;
-    my $id = &CreateValidSGMLID ($symbol);
+
+    my $is_widget_struct = 0;
+    if (&CheckIsObject ($symbol)) {
+#	print "Found widget struct: $symbol\n";
+	$is_widget_struct = 1;
+    }
+
+    my $id;
+    if ($is_widget_struct) {
+	$id = &CreateValidSGMLID ($symbol . "_struct");
+    } else {
+	$id = &CreateValidSGMLID ($symbol);
+    }
     my $synop = "struct      <link linkend=\"$id\">$symbol</link>\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
     if ($declaration =~ m/^\s*$/) {
 #	print "Found opaque struct\n";
 	$declaration = "struct $symbol;";
+    } elsif ($is_widget_struct) {
+	my $public = 0;
+	my $new_declaration = "";
+	my $decl_line;
+	foreach $decl_line (split (/\n/, $declaration)) {
+#	    print "Struct line: $decl_line\n";
+	    if ($decl_line =~ m%/\*<public>\*/%) {
+		$public = 1;
+	    } elsif ($decl_line =~ m%/\*<private>\*/%) {
+		$public = 0;
+	    } elsif ($public) {
+		$new_declaration .= $decl_line . "\n";
+	    }
+	}
+	if ($new_declaration) {
+	    $declaration = "struct $symbol {\n" . $new_declaration;
+	    # If we finished with public set, we already have the struct end.
+	    if ($public == 0) {
+		$declaration .= "};\n";
+	    }
+	} else {
+	    $declaration = "struct $symbol;";
+	}
     }
+
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
     if (defined ($SymbolDocs{$symbol})) {
@@ -1396,7 +1436,9 @@ sub MergeSourceDocumentation {
 		    my $param_name = $$params[$k];
 		    my $param_desc = $$params[$k + 1];
 
-		    if ($param_name eq $tmpl_param_name) {
+		    # We accept changed in case, since the Gnome source docs
+		    # contain a lot of these.
+		    if ("\L$param_name" eq "\L$tmpl_param_name") {
 			$found = 1;
 
 			# Override the description.

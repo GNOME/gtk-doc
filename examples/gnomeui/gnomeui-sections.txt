@@ -3,6 +3,7 @@
 
 <SECTION>
 <FILE>gnome-about</FILE>
+GnomeAbout
 <TITLE>GnomeAbout</TITLE>
 gnome_about_new
 gnome_about_construct
@@ -15,6 +16,7 @@ GNOME_ABOUT_CLASS
 
 <SECTION>
 <FILE>gnome-animator</FILE>
+GnomeAnimator
 GnomeAnimatorStatus
 GnomeAnimatorLoopType
 GnomeAnimatorFrame
@@ -51,16 +53,22 @@ GNOME_ANIMATOR_CLASS
 
 <SECTION>
 <FILE>gnome-app</FILE>
-GnomeAppWidgetPositionType
+GnomeApp
 <TITLE>GnomeApp</TITLE>
 gnome_app_new
 gnome_app_construct
+GNOME_APP_MENUBAR_NAME
+GNOME_APP_TOOLBAR_NAME
 gnome_app_set_menus
 gnome_app_set_toolbar
 gnome_app_set_statusbar
 gnome_app_set_contents
-gnome_app_toolbar_set_position
-gnome_app_menu_set_position
+gnome_app_add_toolbar
+gnome_app_add_docked
+gnome_app_add_dock_item
+gnome_app_enable_layout_config
+gnome_app_get_dock
+gnome_app_get_dock_item_by_name
 <SUBSECTION Standard>
 GNOME_APP
 GNOME_IS_APP
@@ -70,6 +78,7 @@ GNOME_APP_CLASS
 
 <SECTION>
 <FILE>gnome-appbar</FILE>
+GnomeAppBar
 GNOME_APPBAR_HAS_STATUS
 GNOME_APPBAR_HAS_PROGRESS
 GnomeAppBarMsg
@@ -97,6 +106,7 @@ GNOME_APPBAR_CLASS
 
 <SECTION>
 <FILE>gnome-calculator</FILE>
+GnomeCalculator
 GnomeCalculatorMode
 <TITLE>GnomeCalculator</TITLE>
 gnome_calculator_new
@@ -112,10 +122,14 @@ GNOME_CALCULATOR_CLASS
 
 <SECTION>
 <FILE>gnome-canvas</FILE>
+GnomeCanvas
 GNOME_CANVAS_EPSILON
+GNOME_CANVAS_COLOR
+GNOME_CANVAS_COLOR_A
 GnomeCanvasBuf
 <TITLE>GnomeCanvas</TITLE>
 gnome_canvas_new
+gnome_canvas_new_aa
 gnome_canvas_root
 gnome_canvas_set_scroll_region
 gnome_canvas_get_scroll_region
@@ -123,8 +137,10 @@ gnome_canvas_set_pixels_per_unit
 gnome_canvas_scroll_to
 gnome_canvas_get_scroll_offsets
 gnome_canvas_update_now
+gnome_canvas_get_item_at
 gnome_canvas_request_redraw_uta
 gnome_canvas_request_redraw
+gnome_canvas_w2c_affine
 gnome_canvas_w2c
 gnome_canvas_w2c_d
 gnome_canvas_c2w
@@ -144,6 +160,7 @@ GNOME_IS_CANVAS_CLASS
 <SECTION>
 <FILE>gnome-canvas-item</FILE>
 <TITLE>GnomeCanvasItem</TITLE>
+GnomeCanvasItem
 gnome_canvas_item_new
 gnome_canvas_item_newv
 gnome_canvas_item_construct
@@ -152,6 +169,10 @@ gnome_canvas_item_set
 gnome_canvas_item_setv
 gnome_canvas_item_set_valist
 gnome_canvas_item_move
+gnome_canvas_item_affine_relative
+gnome_canvas_item_affine_absolute
+gnome_canvas_item_scale
+gnome_canvas_item_rotate
 gnome_canvas_item_raise
 gnome_canvas_item_lower
 gnome_canvas_item_raise_to_top
@@ -162,6 +183,8 @@ gnome_canvas_item_grab
 gnome_canvas_item_ungrab
 gnome_canvas_item_w2i
 gnome_canvas_item_i2w
+gnome_canvas_item_i2w_affine
+gnome_canvas_item_i2c_affine
 gnome_canvas_item_reparent
 gnome_canvas_item_grab_focus
 gnome_canvas_item_get_bounds
@@ -178,6 +201,7 @@ GNOME_IS_CANVAS_ITEM_CLASS
 <SECTION>
 <FILE>gnome-canvas-group</FILE>
 <TITLE>GnomeCanvasGroup</TITLE>
+GnomeCanvasGroup
 gnome_canvas_group_child_bounds
 <SUBSECTION Standard>
 gnome_canvas_group_get_type
@@ -191,6 +215,7 @@ GNOME_IS_CANVAS_GROUP_CLASS
 <SECTION>
 <FILE>gnome-canvas-line</FILE>
 <TITLE>GnomeCanvasLine</TITLE>
+GnomeCanvasLine
 <SUBSECTION Standard>
 GNOME_CANVAS_LINE
 GNOME_IS_CANVAS_LINE
@@ -203,6 +228,7 @@ GNOME_IS_CANVAS_LINE_CLASS
 <SECTION>
 <FILE>gnome-canvas-polygon</FILE>
 <TITLE>GnomeCanvasPolygon</TITLE>
+GnomeCanvasPolygon
 <SUBSECTION Standard>
 GNOME_CANVAS_POLYGON
 GNOME_IS_CANVAS_POLYGON
@@ -215,6 +241,7 @@ GNOME_IS_CANVAS_POLYGON_CLASS
 <SECTION>
 <FILE>gnome-canvas-rect-ellipse</FILE>
 <TITLE>GnomeCanvasRE</TITLE>
+GnomeCanvasRE
 <SUBSECTION Standard>
 GNOME_CANVAS_RE
 GNOME_IS_CANVAS_RE
@@ -227,6 +254,7 @@ GNOME_IS_CANVAS_RE_CLASS
 <SECTION>
 <FILE>gnome-canvas-rect</FILE>
 <TITLE>GnomeCanvasRect</TITLE>
+GnomeCanvasRect
 <SUBSECTION Standard>
 gnome_canvas_rect_get_type
 GNOME_TYPE_CANVAS_RECT
@@ -239,6 +267,7 @@ GNOME_IS_CANVAS_RECT_CLASS
 <SECTION>
 <FILE>gnome-canvas-ellipse</FILE>
 <TITLE>GnomeCanvasEllipse</TITLE>
+GnomeCanvasEllipse
 <SUBSECTION Standard>
 GNOME_TYPE_CANVAS_ELLIPSE
 GNOME_CANVAS_ELLIPSE
@@ -251,6 +280,9 @@ gnome_canvas_ellipse_get_type
 <SECTION>
 <FILE>gnome-canvas-text</FILE>
 <TITLE>GnomeCanvasText</TITLE>
+GnomeCanvasText
+GnomeCanvasTextSuckChar
+GnomeCanvasTextSuckFont
 <SUBSECTION Standard>
 GNOME_CANVAS_TEXT
 GNOME_IS_CANVAS_TEXT
@@ -263,6 +295,7 @@ GNOME_IS_CANVAS_TEXT_CLASS
 <SECTION>
 <FILE>gnome-canvas-image</FILE>
 <TITLE>GnomeCanvasImage</TITLE>
+GnomeCanvasImage
 <SUBSECTION Standard>
 GNOME_CANVAS_IMAGE
 GNOME_IS_CANVAS_IMAGE
@@ -275,6 +308,7 @@ GNOME_IS_CANVAS_IMAGE_CLASS
 <SECTION>
 <FILE>gnome-canvas-widget</FILE>
 <TITLE>GnomeCanvasWidget</TITLE>
+GnomeCanvasWidget
 <SUBSECTION Standard>
 GNOME_CANVAS_WIDGET
 GNOME_IS_CANVAS_WIDGET
@@ -286,6 +320,8 @@ GNOME_IS_CANVAS_WIDGET_CLASS
 
 <SECTION>
 <FILE>gnome-client</FILE>
+GnomeClient
+GnomeClientFlags
 GNOME_CLIENT_CONNECTED
 GnomeInteractStyle
 GnomeDialogType
@@ -306,6 +342,8 @@ gnome_client_get_id
 gnome_client_get_previous_id
 gnome_client_get_config_prefix
 gnome_client_get_global_config_prefix
+gnome_client_set_global_config_prefix
+gnome_client_get_flags
 gnome_client_set_restart_style
 gnome_client_set_restart_command
 gnome_client_add_static_arg
@@ -337,6 +375,7 @@ GNOME_CLIENT_CLASS
 <SECTION>
 <FILE>gnome-color-picker</FILE>
 <TITLE>GnomeColorPicker</TITLE>
+GnomeColorPicker
 gnome_color_picker_new
 gnome_color_picker_set_d
 gnome_color_picker_get_d
@@ -359,6 +398,7 @@ GNOME_IS_COLOR_PICKER_CLASS
 <SECTION>
 <FILE>gnome-dateedit</FILE>
 <TITLE>GnomeDateEdit</TITLE>
+GnomeDateEdit
 gnome_date_edit_new
 gnome_date_edit_set_time
 gnome_date_edit_set_popup_range
@@ -373,6 +413,7 @@ GNOME_DATE_EDIT_CLASS
 <SECTION>
 <FILE>gnome-dentry-edit</FILE>
 <TITLE>GnomeDEntryEdit</TITLE>
+GnomeDEntryEdit
 gnome_dentry_edit_new
 gnome_dentry_edit_child1
 gnome_dentry_edit_child2
@@ -393,6 +434,7 @@ GNOME_DENTRY_EDIT_CLASS
 <SECTION>
 <FILE>gnome-dialog</FILE>
 <TITLE>GnomeDialog</TITLE>
+GnomeDialog
 gnome_dialog_new
 gnome_dialog_newv
 gnome_dialog_set_parent
@@ -423,6 +465,7 @@ GNOME_DIALOG_CLASS
 
 <SECTION>
 <FILE>gnome-dock-band</FILE>
+GnomeDockBand
 GnomeDockBandChild
 <TITLE>GnomeDockBand</TITLE>
 gnome_dock_band_new
@@ -449,9 +492,12 @@ GNOME_DOCK_BAND_CLASS
 
 <SECTION>
 <FILE>gnome-dock-item</FILE>
+GnomeDockItem
 GnomeDockItemBehavior
+GNOME_DOCK_ITEM_NOT_LOCKED
 <TITLE>GnomeDockItem</TITLE>
 gnome_dock_item_new
+gnome_dock_item_get_child
 gnome_dock_item_get_name
 gnome_dock_item_set_shadow_type
 gnome_dock_item_get_shadow_type
@@ -462,23 +508,32 @@ gnome_dock_item_detach
 gnome_dock_item_attach
 gnome_dock_item_grab_pointer
 gnome_dock_item_drag_floating
+gnome_dock_item_handle_size_request
+gnome_dock_item_get_floating_position
 <SUBSECTION Standard>
 GNOME_DOCK_ITEM
 GNOME_IS_DOCK_ITEM
 gnome_dock_item_get_type
 GNOME_DOCK_ITEM_CLASS
+
+<SUBSECTION Private>
+GNOME_DOCK_ITEM_BEH_NEVER_DETACH
 </SECTION>
 
 <SECTION>
 <FILE>gnome-dock</FILE>
-GnomeDockPositionType
-GnomeDockChild
+GnomeDock
+GnomeDockPlacement
 <TITLE>GnomeDock</TITLE>
 gnome_dock_new
+gnome_dock_allow_floating_items
 gnome_dock_add_item
+gnome_dock_add_floating_item
 gnome_dock_set_client_area
+gnome_dock_get_client_area
 gnome_dock_get_item_by_name
 gnome_dock_get_layout
+gnome_dock_add_from_layout
 <SUBSECTION Standard>
 GNOME_DOCK
 GNOME_IS_DOCK
@@ -489,6 +544,7 @@ GNOME_DOCK_CLASS
 <SECTION>
 <FILE>gnome-entry</FILE>
 <TITLE>GnomeEntry</TITLE>
+GnomeEntry
 gnome_entry_new
 gnome_entry_gtk_entry
 gnome_entry_set_history_id
@@ -506,6 +562,7 @@ GNOME_ENTRY_CLASS
 <SECTION>
 <FILE>gnome-file-entry</FILE>
 <TITLE>GnomeFileEntry</TITLE>
+GnomeFileEntry
 gnome_file_entry_new
 gnome_file_entry_gnome_entry
 gnome_file_entry_gtk_entry
@@ -523,10 +580,12 @@ GNOME_FILE_ENTRY_CLASS
 
 <SECTION>
 <FILE>gnome-font-picker</FILE>
+GnomeFontPicker
 GnomeFontPickerMode
 <TITLE>GnomeFontPicker</TITLE>
 gnome_font_picker_new
 gnome_font_picker_set_title
+gnome_font_picker_get_mode
 gnome_font_picker_set_mode
 gnome_font_picker_fi_set_use_font_in_label
 gnome_font_picker_fi_set_show_size
@@ -547,6 +606,7 @@ GNOME_IS_FONT_PICKER_CLASS
 
 <SECTION>
 <FILE>gnome-font-selector</FILE>
+GnomeFontSelector
 FontInfo
 <TITLE>GnomeFontSelector</TITLE>
 gnome_font_selector_new
@@ -563,6 +623,7 @@ GNOME_FONT_SELECTOR_CLASS
 <SECTION>
 <FILE>gnome-guru</FILE>
 <TITLE>GnomeGuru</TITLE>
+GnomeGuru
 gnome_guru_new
 gnome_guru_construct
 gnome_guru_append_page
@@ -579,6 +640,7 @@ GNOME_GURU_CLASS
 <SECTION>
 <FILE>gnome-href</FILE>
 <TITLE>GnomeHRef</TITLE>
+GnomeHRef
 gnome_href_new
 gnome_href_set_url
 gnome_href_get_url
@@ -594,6 +656,7 @@ GNOME_HREF_CLASS
 <SECTION>
 <FILE>gnome-icon-entry</FILE>
 <TITLE>GnomeIconEntry</TITLE>
+GnomeIconEntry
 gnome_icon_entry_new
 gnome_icon_entry_set_pixmap_subdir
 gnome_icon_entry_gnome_file_entry
@@ -610,6 +673,7 @@ GNOME_ICON_ENTRY_CLASS
 <SECTION>
 <FILE>gnome-icon-item</FILE>
 <TITLE>GnomeIconTextItem</TITLE>
+GnomeIconTextItem
 gnome_icon_text_item_configure
 gnome_icon_text_item_setxy
 gnome_icon_text_item_select
@@ -625,9 +689,12 @@ GNOME_ICON_TEXT_ITEM_CLASS
 <SECTION>
 <FILE>gnome-icon-list</FILE>
 <TITLE>GnomeIconList</TITLE>
-GNOME_ICON_LIST_VERSION2
+GnomeIconList
+GNOME_ICON_LIST_IS_EDITABLE
+GNOME_ICON_LIST_STATIC_TEXT
 GnomeIconListMode
 gnome_icon_list_new
+gnome_icon_list_new_flags
 gnome_icon_list_construct
 gnome_icon_list_set_hadjustment
 gnome_icon_list_set_vadjustment
@@ -662,11 +729,15 @@ GNOME_ICON_LIST
 GNOME_IS_ICON_LIST
 gnome_icon_list_get_type
 GNOME_ICON_LIST_CLASS
+
+<SUBSECTION Private>
+GNOME_ICON_LIST_VERSION2
 </SECTION>
 
 <SECTION>
 <FILE>gnome-icon-sel</FILE>
 <TITLE>GnomeIconSelection</TITLE>
+GnomeIconSelection
 gnome_icon_selection_new
 gnome_icon_selection_add_defaults
 gnome_icon_selection_add_directory
@@ -684,6 +755,7 @@ GNOME_ICON_SELECTION_CLASS
 <SECTION>
 <FILE>gnome-less</FILE>
 <TITLE>GnomeLess</TITLE>
+GnomeLess
 gnome_less_new
 gnome_less_clear
 gnome_less_show_file
@@ -706,6 +778,7 @@ GNOME_LESS_CLASS
 
 <SECTION>
 <FILE>gnome-mdi-child</FILE>
+GnomeMDIChild
 GnomeMDIChildViewCreator
 GnomeMDIChildMenuCreator
 GnomeMDIChildConfigFunc
@@ -725,6 +798,7 @@ GNOME_MDI_CHILD_CLASS
 <SECTION>
 <FILE>gnome-mdi-generic-child</FILE>
 <TITLE>GnomeMDIGenericChild</TITLE>
+GnomeMDIGenericChild
 gnome_mdi_generic_child_new
 gnome_mdi_generic_child_set_view_creator
 gnome_mdi_generic_child_set_view_creator_full
@@ -737,12 +811,13 @@ gnome_mdi_generic_child_set_label_func_full
 <SUBSECTION Standard>
 GNOME_MDI_GENERIC_CHILD
 GNOME_MDI_GENERIC_CHILD_CLASS
-GNOME_IS_GENERIC_MDI_CHILD
+GNOME_IS_MDI_MDI_CHILD
 gnome_mdi_generic_child_get_type
 </SECTION>
 
 <SECTION>
 <FILE>gnome-mdi</FILE>
+GnomeMDI
 GnomeMDIMode
 <TITLE>GnomeMDI</TITLE>
 gnome_mdi_new
@@ -781,6 +856,7 @@ GNOME_MDI_CLASS
 
 <SECTION>
 <FILE>gnome-messagebox</FILE>
+GnomeMessageBox
 GNOME_MESSAGE_BOX_INFO
 GNOME_MESSAGE_BOX_WARNING
 GNOME_MESSAGE_BOX_ERROR
@@ -789,6 +865,7 @@ GNOME_MESSAGE_BOX_GENERIC
 GnomeMessageBoxButton
 <TITLE>GnomeMessageBox</TITLE>
 gnome_message_box_new
+gnome_message_box_newv
 gnome_message_box_set_modal
 gnome_message_box_set_default
 <SUBSECTION Standard>
@@ -801,6 +878,7 @@ GNOME_MESSAGE_BOX_CLASS
 <SECTION>
 <FILE>gnome-number-entry</FILE>
 <TITLE>GnomeNumberEntry</TITLE>
+GnomeNumberEntry
 gnome_number_entry_new
 gnome_number_entry_gnome_entry
 gnome_number_entry_gtk_entry
@@ -816,10 +894,15 @@ GNOME_NUMBER_ENTRY_CLASS
 <SECTION>
 <FILE>gnome-paper-selector</FILE>
 <TITLE>GnomePaperSelector</TITLE>
+GnomePaperSelector
 gnome_paper_selector_new
 gnome_paper_selector_get_name
 gnome_paper_selector_get_width
 gnome_paper_selector_get_height
+gnome_paper_selector_get_left_margin
+gnome_paper_selector_get_right_margin
+gnome_paper_selector_get_top_margin
+gnome_paper_selector_get_bottom_margin
 <SUBSECTION Standard>
 GNOME_PAPER_SELECTOR
 GNOME_IS_PAPER_SELECTOR
@@ -830,6 +913,7 @@ GNOME_PAPER_SELECTOR_CLASS
 <SECTION>
 <FILE>gnome-pixmap-entry</FILE>
 <TITLE>GnomePixmapEntry</TITLE>
+GnomePixmapEntry
 gnome_pixmap_entry_new
 gnome_pixmap_entry_set_pixmap_subdir
 gnome_pixmap_entry_gnome_file_entry
@@ -848,6 +932,7 @@ GNOME_PIXMAP_ENTRY_CLASS
 <SECTION>
 <FILE>gnome-pixmap</FILE>
 <TITLE>GnomePixmap</TITLE>
+GnomePixmap
 gnome_pixmap_new_from_file
 gnome_pixmap_new_from_file_at_size
 gnome_pixmap_new_from_xpm_d
@@ -878,6 +963,7 @@ GNOME_PIXMAP_CLASS
 
 <SECTION>
 <FILE>gnome-propertybox</FILE>
+GnomePropertyBox
 GNOME_PROPERTY_BOX_DIRTY
 <TITLE>GnomePropertyBox</TITLE>
 gnome_property_box_new
@@ -892,19 +978,10 @@ GNOME_PROPERTY_BOX_CLASS
 </SECTION>
 
 <SECTION>
-<FILE>gnome-rootwin</FILE>
-<TITLE>GnomeRootWin</TITLE>
-gnome_rootwin_new
-<SUBSECTION Standard>
-GNOME_ROOTWIN
-GNOME_IS_ROOTWIN
-gnome_rootwin_get_type
-GNOME_ROOTWIN_CLASS
-</SECTION>
-
-<SECTION>
 <FILE>gnome-scores</FILE>
 <TITLE>GnomeScores</TITLE>
+GnomeScores
+gnome_scores_display
 gnome_scores_new
 gnome_scores_set_logo_label
 gnome_scores_set_logo_pixmap
@@ -923,6 +1000,7 @@ GNOME_SCORES_CLASS
 
 <SECTION>
 <FILE>gnome-stock</FILE>
+GnomeStock
 GNOME_STOCK_PIXMAP_NEW
 GNOME_STOCK_PIXMAP_OPEN
 GNOME_STOCK_PIXMAP_CLOSE
@@ -932,6 +1010,7 @@ GNOME_STOCK_PIXMAP_SAVE_AS
 GNOME_STOCK_PIXMAP_CUT
 GNOME_STOCK_PIXMAP_COPY
 GNOME_STOCK_PIXMAP_PASTE
+GNOME_STOCK_PIXMAP_CLEAR
 GNOME_STOCK_PIXMAP_PROPERTIES
 GNOME_STOCK_PIXMAP_PREFERENCES
 GNOME_STOCK_PIXMAP_HELP
@@ -962,6 +1041,7 @@ GNOME_STOCK_PIXMAP_UNDELETE
 GNOME_STOCK_PIXMAP_SPELLCHECK
 GNOME_STOCK_PIXMAP_MIC
 GNOME_STOCK_PIXMAP_LINE_IN
+GNOME_STOCK_PIXMAP_CDROM
 GNOME_STOCK_PIXMAP_VOLUME
 GNOME_STOCK_PIXMAP_BOOK_RED
 GNOME_STOCK_PIXMAP_BOOK_GREEN
@@ -990,7 +1070,16 @@ GNOME_STOCK_PIXMAP_TEXT_BOLD
 GNOME_STOCK_PIXMAP_TEXT_ITALIC
 GNOME_STOCK_PIXMAP_TEXT_UNDERLINE
 GNOME_STOCK_PIXMAP_TEXT_STRIKEOUT
+GNOME_STOCK_PIXMAP_TEXT_INDENT
+GNOME_STOCK_PIXMAP_TEXT_UNINDENT
 GNOME_STOCK_PIXMAP_EXIT
+GNOME_STOCK_PIXMAP_COLORSELECTOR
+GNOME_STOCK_PIXMAP_ADD
+GNOME_STOCK_PIXMAP_REMOVE
+GNOME_STOCK_PIXMAP_TABLE_BORDERS
+GNOME_STOCK_PIXMAP_TABLE_FILL
+GNOME_STOCK_PIXMAP_TEXT_BULLETED_LIST
+GNOME_STOCK_PIXMAP_TEXT_NUMBERED_LIST
 GNOME_STOCK_PIXMAP_REGULAR
 GNOME_STOCK_PIXMAP_DISABLED
 GNOME_STOCK_PIXMAP_FOCUSED
@@ -1072,6 +1161,7 @@ GNOME_STOCK_MENU_TIMER_STOP
 GNOME_STOCK_MENU_SPELLCHECK
 GNOME_STOCK_MENU_MIC
 GNOME_STOCK_MENU_LINE_IN
+GNOME_STOCK_MENU_CDROM
 GNOME_STOCK_MENU_VOLUME
 GNOME_STOCK_MENU_BOOK_RED
 GNOME_STOCK_MENU_BOOK_GREEN
@@ -1109,6 +1199,8 @@ GNOME_STOCK_CLASS
 GNOME_IS_STOCK
 <SUBSECTION Private>
 USE_NEW_GNOME_STOCK
+GnomeStockPixmapWidget
+GnomeStockPixmapWidgetClass
 gnome_stock_pixmap_widget_new
 GNOME_STOCK_PIXMAP_WIDGET
 GNOME_IS_STOCK_PIXMAP_WIDGET
@@ -1118,6 +1210,7 @@ GNOME_STOCK_PIXMAP_WIDGET_CLASS
 
 <SECTION>
 <FILE>gtk-clock</FILE>
+GtkClock
 GtkClockType
 <TITLE>GtkClock</TITLE>
 gtk_clock_new
@@ -1135,6 +1228,7 @@ GTK_CLOCK_CLASS
 
 <SECTION>
 <FILE>gtk-ted</FILE>
+GtkTed
 gtk_ted_set_app_name
 gtk_ted_prepare
 gtk_ted_new
@@ -1151,6 +1245,7 @@ GTK_TED_CLASS
 <SECTION>
 <FILE>gtkdial</FILE>
 <TITLE>GtkDial</TITLE>
+GtkDial
 gtk_dial_new
 gtk_dial_get_adjustment
 gtk_dial_set_update_policy
@@ -1170,6 +1265,7 @@ GTK_DIAL_CLASS
 <SECTION>
 <FILE>gtkpixmapmenuitem</FILE>
 <TITLE>GtkPixmapMenuItem</TITLE>
+GtkPixmapMenuItem
 gtk_pixmap_menu_item_new
 gtk_pixmap_menu_item_set_pixmap
 <SUBSECTION Standard>
@@ -1183,6 +1279,7 @@ GTK_IS_PIXMAP_MENU_ITEM_CLASS
 
 <SECTION>
 <FILE>gnome-spell</FILE>
+GnomeSpell
 GnomeSpellInfo
 <TITLE>GnomeSpell</TITLE>
 gnome_spell_new
@@ -1200,11 +1297,20 @@ GNOME_SPELL_CLASS
 
 <SECTION>
 <FILE>gnome-dock-layout</FILE>
+GnomeDockLayout
 GnomeDockLayoutItem
 <TITLE>GnomeDockLayout</TITLE>
 gnome_dock_layout_new
-gnome_dock_layout_add
+gnome_dock_layout_add_item
+gnome_dock_layout_add_floating_item
 gnome_dock_layout_get_item
+gnome_dock_layout_get_item_by_name
+gnome_dock_layout_remove_item
+gnome_dock_layout_remove_item_by_name
+gnome_dock_layout_create_string
+gnome_dock_layout_parse_string
+gnome_dock_layout_add_to_dock
+
 <SUBSECTION Standard>
 GNOME_DOCK_LAYOUT
 GNOME_IS_DOCK_LAYOUT
@@ -1214,10 +1320,12 @@ GNOME_DOCK_LAYOUT_CLASS
 
 <SECTION>
 <FILE>gnome-procbar</FILE>
+GnomeProcBar
 GNOME_PROC_BAR__CLASS
 <TITLE>GnomeProcBar</TITLE>
 gnome_proc_bar_new
 gnome_proc_bar_set_values
+gnome_proc_bar_set_orient
 gnome_proc_bar_start
 gnome_proc_bar_stop
 gnome_proc_bar_update
@@ -1230,6 +1338,7 @@ gnome_proc_bar_get_type
 <SECTION>
 <FILE>gnome-app-helper</FILE>
 GnomeUIInfoType
+GnomeUIInfoConfigurableTypes
 GnomeUIPixmapType
 GnomeUIInfo
 GNOMEUIINFO_KEY_UIDATA
@@ -1248,10 +1357,65 @@ GNOMEUIINFO_SUBTREE_STOCK
 GNOMEUIINFO_RADIOLIST
 GNOMEUIINFO_RADIOITEM
 GNOMEUIINFO_RADIOITEM_DATA
+GNOMEUIINFO_MENU_ABOUT_ITEM
+GNOMEUIINFO_MENU_CLEAR_ITEM
+GNOMEUIINFO_MENU_CLOSE_ITEM
+GNOMEUIINFO_MENU_CLOSE_WINDOW_ITEM
+GNOMEUIINFO_MENU_COPY_ITEM
+GNOMEUIINFO_MENU_CUT_ITEM
+GNOMEUIINFO_MENU_EDIT_TREE
+GNOMEUIINFO_MENU_END_GAME_ITEM
+GNOMEUIINFO_MENU_EXIT_ITEM
+GNOMEUIINFO_MENU_FILES_TREE
+GNOMEUIINFO_MENU_FILE_TREE
+GNOMEUIINFO_MENU_FIND_AGAIN_ITEM
+GNOMEUIINFO_MENU_FIND_ITEM
+GNOMEUIINFO_MENU_GAME_TREE
+GNOMEUIINFO_MENU_HELP_TREE
+GNOMEUIINFO_MENU_HINT_ITEM
+GNOMEUIINFO_MENU_NEW_GAME_ITEM
+GNOMEUIINFO_MENU_NEW_ITEM
+GNOMEUIINFO_MENU_NEW_SUBTREE
+GNOMEUIINFO_MENU_NEW_WINDOW_ITEM
+GNOMEUIINFO_MENU_OPEN_ITEM
+GNOMEUIINFO_MENU_PASTE_ITEM
+GNOMEUIINFO_MENU_PAUSE_GAME_ITEM
+GNOMEUIINFO_MENU_PREFERENCES_ITEM
+GNOMEUIINFO_MENU_PRINT_ITEM
+GNOMEUIINFO_MENU_PRINT_SETUP_ITEM
+GNOMEUIINFO_MENU_PROPERTIES_ITEM
+GNOMEUIINFO_MENU_REDO_ITEM
+GNOMEUIINFO_MENU_REDO_MOVE_ITEM
+GNOMEUIINFO_MENU_REPLACE_ITEM
+GNOMEUIINFO_MENU_RESTART_GAME_ITEM
+GNOMEUIINFO_MENU_REVERT_ITEM
+GNOMEUIINFO_MENU_SAVE_AS_ITEM
+GNOMEUIINFO_MENU_SAVE_ITEM
+GNOMEUIINFO_MENU_SCORES_ITEM
+GNOMEUIINFO_MENU_SELECT_ALL_ITEM
+GNOMEUIINFO_MENU_SETTINGS_TREE
+GNOMEUIINFO_MENU_UNDO_ITEM
+GNOMEUIINFO_MENU_UNDO_MOVE_ITEM
+GNOMEUIINFO_MENU_VIEW_TREE
+GNOMEUIINFO_MENU_WINDOWS_TREE
+GNOMEUIINFO_SUBTREE_HINT
+GNOME_MENU_FILE_STRING
+GNOME_MENU_FILE_PATH
+GNOME_MENU_EDIT_STRING
+GNOME_MENU_EDIT_PATH
+GNOME_MENU_VIEW_STRING
+GNOME_MENU_VIEW_PATH
+GNOME_MENU_SETTINGS_STRING
+GNOME_MENU_SETTINGS_PATH
+GNOME_MENU_FILES_STRING
+GNOME_MENU_FILES_PATH
+GNOME_MENU_WINDOWS_STRING
+GNOME_MENU_WINDOWS_PATH
 GnomeUIBuilderData
 GnomeUISignalConnectFunc
 gnome_app_fill_menu
 gnome_app_fill_menu_custom
+gnome_app_ui_configure_configurable
 gnome_app_create_menus
 gnome_app_create_menus_interp
 gnome_app_create_menus_with_data
@@ -1297,13 +1461,23 @@ gnome_app_progress_done
 
 <SECTION>
 <FILE>gnome-canvas-util</FILE>
-GNOEM_CANVAS_UTIL_H
 GnomeCanvasPoints
 gnome_canvas_points_new
 gnome_canvas_points_free
 gnome_canvas_get_miter_points
 gnome_canvas_get_butt_points
 gnome_canvas_polygon_to_point
+gnome_canvas_render_svp
+gnome_canvas_update_svp
+gnome_canvas_update_svp_clip
+gnome_canvas_item_reset_bounds
+gnome_canvas_item_update_svp
+gnome_canvas_item_update_svp_clip
+gnome_canvas_item_request_redraw_svp
+gnome_canvas_update_bbox
+gnome_canvas_buf_ensure_buf
+gnome_canvas_load_alpha
+gnome_canvas_destroy_image
 </SECTION>
 
 <SECTION>
@@ -1378,6 +1552,8 @@ gnome_widget_add_help_with_uidata
 <SECTION>
 <FILE>gnome-popup-menu</FILE>
 gnome_popup_menu_new
+gnome_popup_menu_new_with_accelgroup
+gnome_popup_menu_get_accel_group
 gnome_popup_menu_attach
 gnome_popup_menu_do_popup
 gnome_popup_menu_do_popup_modal
@@ -1396,6 +1572,8 @@ gnome_preferences_get_statusbar_dialog
 gnome_preferences_set_statusbar_dialog
 gnome_preferences_get_statusbar_interactive
 gnome_preferences_set_statusbar_interactive
+gnome_preferences_get_statusbar_meter_on_right
+gnome_preferences_set_statusbar_meter_on_right
 gnome_preferences_get_menubar_detachable
 gnome_preferences_set_menubar_detachable
 gnome_preferences_get_menubar_relief
@@ -1422,6 +1600,8 @@ gnome_preferences_get_mdi_tab_pos
 gnome_preferences_set_mdi_tab_pos
 gnome_preferences_get_property_box_apply
 gnome_preferences_set_property_box_button_apply
+gnome_preferences_get_menus_have_tearoff
+gnome_preferences_set_menus_have_tearoff
 gnome_preferences_get_menus_have_icons
 gnome_preferences_set_menus_have_icons
 gnome_preferences_get_disable_imlib_cache
@@ -1483,6 +1663,8 @@ GNOME_KEY_NAME_COPY
 GNOME_KEY_MOD_COPY
 GNOME_KEY_NAME_PASTE
 GNOME_KEY_MOD_PASTE
+GNOME_KEY_NAME_SELECT_ALL
+GNOME_KEY_MOD_SELECT_ALL
 GNOME_KEY_NAME_CLEAR
 GNOME_KEY_MOD_CLEAR
 GNOME_KEY_NAME_UNDO
@@ -1497,6 +1679,28 @@ GNOME_KEY_NAME_SAVE_AS
 GNOME_KEY_MOD_SAVE_AS
 GNOME_KEY_NAME_OPEN
 GNOME_KEY_MOD_OPEN
+GNOME_KEY_NAME_NEW_WINDOW
+GNOME_KEY_MOD_NEW_WINDOW
+GNOME_KEY_NAME_CLOSE_WINDOW
+GNOME_KEY_MOD_CLOSE_WINDOW
+GNOME_KEY_NAME_REDO_MOVE
+GNOME_KEY_MOD_REDO_MOVE
+GNOME_KEY_NAME_UNDO_MOVE
+GNOME_KEY_MOD_UNDO_MOVE
+GNOME_KEY_NAME_FIND
+GNOME_KEY_MOD_FIND
+GNOME_KEY_NAME_FIND_AGAIN
+GNOME_KEY_MOD_FIND_AGAIN
+GNOME_KEY_NAME_REPLACE
+GNOME_KEY_MOD_REPLACE
+GNOME_KEY_NAME_PAUSE_GAME
+GNOME_KEY_MOD_PAUSE_GAME
+GNOME_KEY_NAME_NEW_GAME
+GNOME_KEY_MOD_NEW_GAME
+GNOME_KEY_NAME_PRINT
+GNOME_KEY_MOD_PRINT
+GNOME_KEY_NAME_PRINT_SETUP
+GNOME_KEY_MOD_PRINT_SETUP
 </SECTION>
 
 <SECTION>
@@ -1571,17 +1775,3 @@ GtkCauldronCustomCallback
 gtk_dialog_cauldron
 gtk_dialog_cauldron_parse
 </SECTION>
-
-<SECTION>
-<FILE>libgnomeui</FILE>
-</SECTION>
-
-<SECTION>
-<FILE>gnometypebuiltins</FILE>
-GNOME_TYPE_NUM_BUILTINS
-</SECTION>
-
-<SECTION>
-<FILE>gnome-stock-imlib</FILE>
-</SECTION>
-

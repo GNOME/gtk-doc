@@ -1,3 +1,36 @@
+1999-01-26  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtkdoc-scan (ScanHeader): parse function declarations that have the
+	return type and name on one line, and the '(' and args on the next.
+	NOTE: functions with the start of the declaration split over 3 lines
+	will not be parsed (e.g. return type on one line, function name on
+	next, and '(' and first argument on the third.) I hope there aren't
+	any.
+
+	* gtkdoc-mkdb (OutputStruct): Use a different SGML ID for widget
+	structs, since the original ID is used for the entire RefEntry.
+	Also only show parts of widget structs which are marked with a
+	comment '/*<public>*/'. Use '/*<private>*/' for private fields.
+
+	* gtkdoc-mktmpl (UpdateTemplates): We include widget structs now,
+	so we do want warnings if they aren't used.
+
+	* examples/gnomeui/gnomeui-docs.sgml: 
+	* examples/gnomeui/gnomeui-sections.txt:
+	* examples/gnomeui/gnomeui.types:
+	* examples/gnome/gnome-docs.sgml: 
+	* examples/gnome/gnome-sections.txt: sync with latest source.
+
+	* examples/configure.in: Add --with-gnome-libs-dir option, so it can
+	be configured easily.
+	* examples/gnomeui/Makefile.am (DOC_SOURCE_DIR): 
+	* examples/gnome/Makefile.am (DOC_SOURCE_DIR): use the new
+	GNOME_LIBS_DIR.
+
+	* gtkdoc-mkdb (MergeSourceDocumentation): accept parameters names in
+	the source which use the wrong case, since there are quite a few of
+	these in Gnome.
+
 1999-01-25  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtkdoc-mktmpl: parse G_GNUC_EXTENSION before typedef'ed types.

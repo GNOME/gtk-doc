@@ -4,10 +4,15 @@ AC_INIT(README)
 
 AM_INIT_AUTOMAKE(gnome-libs-reference, 0.1)
 
+AC_ARG_WITH(gnome-libs-dir, [  --with-gnome-libs-dir=PATH path to gnome-libs source directory ])
 AC_ARG_WITH(html-dir, [  --with-html-dir=PATH path to installed docs ])
 
 AC_ISC_POSIX
 AC_PROG_CC
+
+GNOME_LIBS_DIR=$with_gnome_libs_dir
+
+AC_SUBST(GNOME_LIBS_DIR)
 
 if test "x$with_html_dir" = "x" ; then
   HTML_DIR='${datadir}/gtk-doc/html'

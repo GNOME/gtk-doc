@@ -7,7 +7,7 @@ DOC_MODULE=gnomeui
 DOC_MAIN_SGML_FILE=gnomeui-docs.sgml
 
 # The directory containing the source code (if it contains documentation).
-DOC_SOURCE_DIR=../../../libgnomeui
+DOC_SOURCE_DIR=$(GNOME_LIBS_DIR)/libgnomeui
 
 CFLAGS=`gnome-config --cflags gnomeui`
 LDFLAGS=`gnome-config --libs gnomeui`
@@ -17,13 +17,13 @@ TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
 scan:
 	-CFLAGS=$(CFLAGS) LDFLAGS=$(LDFLAGS) gtkdoc-scanobj --module=$(DOC_MODULE)
-	gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(SOURCE_DIR)
+	gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR)
 
 templates: scan
 	gtkdoc-mktmpl --module=$(DOC_MODULE)
 
 sgml:
-	gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(SOURCE_DIR)
+	gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR)
 
 html:
 	if ! test -d html ; then mkdir html ; fi

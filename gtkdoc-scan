@@ -195,20 +195,12 @@ sub ScanHeader {
 
 	# Skip to the end of the current comment.
 	if ($in_comment) {
+#	    print "Comment: $_";
 	    if (m%\*/%) {
 		$in_comment = 0;
 	    }
 	    next;
 	}
-
-	# Look for a widget class to use as the section title.
-	# GtkStyle isn't really an object.
-# This is done below now.
-#	if (m/^struct\s+_(Gtk\S+|Gnome\S+)Class/) {
-#	    if ($1 ne 'GtkStyle') {
-#		$list .= "<TITLE>$1</TITLE>\n";
-#	    }
-#	}
 
 	if (!$in_declaration) {
 	    # Skip top-level comments.
@@ -322,7 +314,7 @@ sub ScanHeader {
 	    # the previous line. But we don't want to catch complete functions
 	    # which have been declared G_INLINE_FUNC, e.g. g_bit_nth_lsf in
 	    # glib, or 'static inline' functions.
-	    } elsif (m/^([A-Za-z]\w*)\s*\(/) {
+	    } elsif (m/^\s*([A-Za-z]\w*)\s*\(/) {
 		$symbol = $1;
 		$decl = $';
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
@@ -333,6 +325,14 @@ sub ScanHeader {
 #			print "Function: $symbol, Returns: $ret_type\n";
 			$in_declaration = "function";
 		    }
+		}
+	    } elsif (m/^\s*\(/) {
+		$decl = $';
+		if ($previous_line =~ m/^\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
+		    $ret_type = "$2 $4";
+		    $symbol = $5;
+#		    print "Function: $symbol, Returns: $ret_type\n";
+		    $in_declaration = "function";
 		}
 	    }
 	} else {

@@ -43,14 +43,13 @@
 <!entity GnomePixmapEntry SYSTEM "sgml/gnome-pixmap-entry.sgml">
 <!entity GnomePixmap SYSTEM "sgml/gnome-pixmap.sgml">
 <!entity GnomePropertyBox SYSTEM "sgml/gnome-propertybox.sgml">
-<!entity GnomeRootWin SYSTEM "sgml/gnome-rootwin.sgml">
 <!entity GnomeScores SYSTEM "sgml/gnome-scores.sgml">
-<!entity GnomeSpell SYSTEM "sgml/gnome-spell.sgml">
 <!entity GnomeStock SYSTEM "sgml/gnome-stock.sgml">
 <!entity GtkClock SYSTEM "sgml/gtk-clock.sgml">
 <!entity GtkTed SYSTEM "sgml/gtk-ted.sgml">
 <!entity GtkDial SYSTEM "sgml/gtkdial.sgml">
 <!entity GtkPixmapMenuItem SYSTEM "sgml/gtkpixmapmenuitem.sgml">
+<!entity GnomeSpell SYSTEM "sgml/gnome-spell.sgml">
 <!entity GnomeDockLayout SYSTEM "sgml/gnome-dock-layout.sgml">
 <!entity GnomeProcBar SYSTEM "sgml/gnome-procbar.sgml">
 <!entity gnomeui-gnome-app-helper SYSTEM "sgml/gnome-app-helper.sgml">
@@ -73,7 +72,6 @@
 <!entity gnomeui-gnome-uidefs SYSTEM "sgml/gnome-uidefs.sgml">
 <!entity gnomeui-gnome-winhints SYSTEM "sgml/gnome-winhints.sgml">
 <!entity gnomeui-gtkcauldron SYSTEM "sgml/gtkcauldron.sgml">
-<!entity gnomeui-gnometypebuiltins SYSTEM "sgml/gnometypebuiltins.sgml">
 ]>
 <book>
   <bookinfo>
@@ -102,7 +100,6 @@
     &gnomeui-gnome-uidefs;
     &gnomeui-gnome-winhints;
     &gnomeui-gtkcauldron;
-    &gnomeui-gnometypebuiltins;
   </chapter>
 
   <chapter id="gnome-objects">
@@ -151,14 +148,13 @@
     &GnomePixmapEntry;
     &GnomePixmap;
     &GnomePropertyBox;
-    &GnomeRootWin;
     &GnomeScores;
-    &GnomeSpell;
     &GnomeStock;
     &GtkClock;
     &GtkTed;
     &GtkDial;
     &GtkPixmapMenuItem;
+    &GnomeSpell;
     &GnomeDockLayout;
     &GnomeProcBar;
   </chapter>
