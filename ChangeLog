@@ -1,3 +1,10 @@
+1999-08-22  Erik Walthinsen  <omega@cse.ogi.edu>
+
+	* gtkdoc-scan.in: modified so it will find any Class, not just Gtk
+	and Gnome classes.  Introduces the possibility of extraneous Class
+	definitions (verified), which should be pruned somehow (haven't
+	analyzed the false positive yet).
+
 1999-08-22  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtkdoc-mktmpl.in: 

@@ -423,7 +423,7 @@ sub ScanHeader {
 		    $symbol = $1;
 		}
 
-		if ($symbol =~ m/^(Gtk\S+|Gnome\S+)Class/
+		if ($symbol =~ m/^(\S+)Class/
 		    && $1 ne 'GtkStyle') {
 #		    print "Found object: $1\n";
 		    $list .= "<TITLE>$1</TITLE>\n";
@@ -466,32 +466,21 @@ sub ScanHeader {
     # end of the current section, in a subsection named 'Standard'.
     my ($class) = "";
     my ($standard_decl) = "";
-    if ($list =~ m/^GTK_IS_(\S*)_CLASS/m) {
+    if ($list =~ m/^\S+_IS_(\S*)_CLASS/m) {
 	$class = $1;
-    } elsif ($list =~ m/^GTK_IS_(\S*)/m) {
-	$class = $1;
-    } elsif ($list =~ m/^GNOME_IS_(\S*)_CLASS/m) {
-	$class = $1;
-    } elsif ($list =~ m/^GNOME_IS_(\S*)/m) {
+    } elsif ($list =~ m/^\S+_IS_(\S*)/m) {
 	$class = $1;
     }
 
     if ($class ne "") {
 #	print "Found class: $class\n";
 
-	if ($list =~ s/^GTK_$class\n//m)            { $standard_decl .= $&; }
-	if ($list =~ s/^GTK_IS_$class\n//m)         { $standard_decl .= $&; }
-	if ($list =~ s/^GTK_TYPE_$class\n//m)       { $standard_decl .= $&; }
-	if ($list =~ s/^gtk_.*_get_type\n//m)       { $standard_decl .= $&; }
-	if ($list =~ s/^GTK_${class}_CLASS\n//m)    { $standard_decl .= $&; }
-	if ($list =~ s/^GTK_IS_${class}_CLASS\n//m) { $standard_decl .= $&; }
-
-	if ($list =~ s/^GNOME_$class\n//m)            { $standard_decl .= $&; }
-	if ($list =~ s/^GNOME_IS_$class\n//m)         { $standard_decl .= $&; }
-	if ($list =~ s/^GNOME_TYPE_$class\n//m)       { $standard_decl .= $&; }
-	if ($list =~ s/^gnome_.*_get_type\n//m)       { $standard_decl .= $&; }
-	if ($list =~ s/^GNOME_${class}_CLASS\n//m)    { $standard_decl .= $&; }
-	if ($list =~ s/^GNOME_IS_${class}_CLASS\n//m) { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_$class\n//m)            { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_IS_$class\n//m)         { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_TYPE_$class\n//m)       { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_.*_get_type\n//m)       { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_${class}_CLASS\n//m)    { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_IS_${class}_CLASS\n//m) { $standard_decl .= $&; }
 
         if ($standard_decl ne "") {
 	    $list .= "<SUBSECTION Standard>\n$standard_decl";
