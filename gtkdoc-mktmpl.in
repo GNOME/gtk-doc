@@ -135,11 +135,11 @@ if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
 my $changed = 0;
 
 if (&UpdateTemplates ("$ROOT_DIR/$MODULE-sections.txt")) {
-  $changed = TRUE;
+  $changed = 1;
 }
 &OutputUnusedTemplates;
 if (&CheckAllDeclarationsOutput) {
-  $changed = TRUE;
+  $changed = 1;
 }
 
 if ($changed || ! -e "$ROOT_DIR/tmpl.stamp") {
