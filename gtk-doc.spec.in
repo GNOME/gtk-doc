@@ -2,7 +2,8 @@
 %define ver      @VERSION@
 %define rel      1
 %define prefix   /usr
-%define  sysconfdir	/etc
+%define sysconfdir	/etc
+%define datadir %{prefix}/share
 
 Summary: GTK+ DocBook Documentation Generator
 Name: gtk-doc
@@ -11,17 +12,24 @@ Release: %rel
 Copyright: GPL
 Group: Utilities/Text
 Source: ftp://ftp.gtk.org/pub/gtk/v1.1/docs/rdp/gtk-doc-%{ver}.tar.gz
-BuildRoot: /tmp/gtk-doc-root
+BuildRoot: %{_tmppath}/%{name}-root
 Obsoletes: gtk-doc
 Packager: John Gotts <jgotts@linuxsavvy.com>
 URL: http://www.gtk.org/rdp/
-Docdir: %{prefix}/doc
+Docdir: %{datadir}/doc
 BuildArchitectures: noarch
+Requires: jade
 
 %description
-GTK+ DocBook documentation generator.
+gtk-doc is a set of perl scripts that generate API reference documention in
+DocBook format.  It can extract documentation from source code comments in a
+manner similar to java-doc.  It is used to generate the documentation for
+GLib, Gtk+, and GNOME.
 
 %changelog
+* Fri Apr 27 2001 Toshio Kuratomi <badger@prtr-13.ucsc.edu>
+- Merge in some of the features of the redhat spec file.
+
 * Wed Nov 15 2000 John Gotts <jgotts@linuxsavvy.com>
 - Minor updates for 0.4.
 * Thu Aug 26 1999 John E. Gotts <jgotts@engin.umich.edu>
@@ -29,6 +37,9 @@ GTK+ DocBook documentation generator.
 
 %prep
 %setup
+
+# Move this doc file to avoid name collisions
+mv doc/README doc/README.docs
 
 %build
 %ifarch alpha
@@ -60,8 +71,10 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root)
 
-%doc AUTHORS COPYING ChangeLog INSTALL NEWS README doc/README
-%doc doc/authors.txt doc/gnome.txt doc/gtk_button.txt doc/notes.txt
-%doc doc/sections-file.txt doc/setting-up.txt doc/style-guide.txt
+%doc AUTHORS COPYING ChangeLog README doc/* examples
+# INSTALL is generic instructions from autoconf
+# NEWS is currently empty
+# %doc INSTALL NEWS
+
 %{prefix}/bin/*
 %{prefix}/share/gtk-doc/*
