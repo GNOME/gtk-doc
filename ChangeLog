@@ -1,5 +1,9 @@
 2004-10-14  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (MergeSourceDocumentation): if it looks like a
+	parameter has been described, but not in the right place, output
+	a better error message. Bug #141871.
+
 	* gtkdoc-mkdb.in (OutputMacro, OutputFunction, GetSignals): allow
 	the author to use <!--PARAMETERS--> to specify the position of the
 	parameter table if they want. Hopefully good enough for bug #99567.
