@@ -769,6 +769,7 @@ property_loop:
   for (arg = 0; arg < n_properties; arg++)
     {
       GParamSpec *spec = properties[arg];
+      const gchar *nick, *blurb;
 
       if (spec->owner_type != object_type)
         continue;        
@@ -787,8 +788,11 @@ property_loop:
 	*pos++ = 'X';
       *pos = 0;
 
+      nick = g_param_spec_get_nick (spec);
+      blurb = g_param_spec_get_blurb (spec);
+
       fprintf (fp, "<ARG>\\n<NAME>%s::%s</NAME>\\n<TYPE>%s</TYPE>\\n<FLAGS>%s</FLAGS>\\n<NICK>%s</NICK>\\n<BLURB>%s</BLURB>\\n</ARG>\\n\\n",
-	       object_class_name, g_param_spec_get_name (spec), g_type_name (spec->value_type), flags, g_param_spec_get_nick (spec), g_param_spec_get_blurb (spec));
+	       object_class_name, g_param_spec_get_name (spec), g_type_name (spec->value_type), flags, nick ? nick : "(null)", blurb ? blurb : "(null)");
     }
 
   g_free (properties);
@@ -823,8 +827,7 @@ system($command) == 0 or die "Compilation of scanner failed\n";
 
 system("./$MODULE-scan") == 0 or die "Scan failed\n";
 
-unlink "./$MODULE-scan.c", "./$MODULE-scan"
-
+unlink "./$MODULE-scan.c", "./$MODULE-scan";
 
 &UpdateFileIfChanged ($old_signals_filename, $new_signals_filename, 0);
 &UpdateFileIfChanged ($old_hierarchy_filename, $new_hierarchy_filename, 0);
