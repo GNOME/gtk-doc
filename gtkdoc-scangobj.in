@@ -289,7 +289,7 @@ output_widget_signal (FILE *fp,
   g_strdown (object_arg_start);
   if (!strcmp (object_arg_start, "widget"))
     widget_num++;
-  
+
   /* Convert signal name to use underscores rather than dashes '-'. */
   strcpy (signal_name, query_info.signal_name);
   for (i = 0; signal_name[i]; i++)
@@ -794,6 +794,15 @@ output_args ()
   fclose (fp);
 }
 
+static gint
+compare_param_specs (const void *a, const void *b)
+{
+  GParamSpec *spec_a = *(GParamSpec **)a;
+  GParamSpec *spec_b = *(GParamSpec **)b;
+
+  return strcmp (g_param_spec_get_name (spec_a), g_param_spec_get_name (spec_b));
+}
+
 static void
 output_widget_args (FILE *fp, GType object_type)
 {
@@ -816,10 +825,12 @@ output_widget_args (FILE *fp, GType object_type)
   object_class_name = g_type_name (object_type);
 
   properties = g_object_class_list_properties (class, &n_properties);
+
   child_prop = FALSE;
   style_prop = FALSE;
 
   while (TRUE) {
+    qsort (properties, n_properties, sizeof (GParamSpec *), compare_param_specs);
     for (arg = 0; arg < n_properties; arg++)
       {
         GParamSpec *spec = properties[arg];
