@@ -1,3 +1,10 @@
+2002-12-13  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in: Add an --ignore-files option which can be used
+	to omit files or directories from scanning.
+	(OutputSGMLFile): Emit anchors for all objects contained in the
+	file to avoid dangling links.
+
 2002-12-12  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scan.in (ScanHeader): Also recognize "positive" guards

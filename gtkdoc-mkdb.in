@@ -42,6 +42,7 @@ my $MODULE;
 my $TMPL_DIR;
 my $SGML_OUTPUT_DIR;
 my @SOURCE_DIRS;
+my $IGNORE_FILES = "";
 my $PRINT_VERSION;
 my $PRINT_HELP;
 my $OUTPUT_ALL_SYMBOLS;
@@ -51,6 +52,7 @@ my $OUTPUT_FORMAT;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
+	      'ignore-files' => \$IGNORE_FILES,
 	      'output-dir' => \$SGML_OUTPUT_DIR,
 	      'tmpl-dir' => \$TMPL_DIR,
 	      'version' => \$PRINT_VERSION,
@@ -59,7 +61,7 @@ my %optctl = (module => \$MODULE,
 	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
 	      'sgml-mode' => \$SGML_MODE,
 	      'output-format' => \$OUTPUT_FORMAT);
-GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode", "output-format:s");
+GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-files:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode", "output-format:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -74,6 +76,7 @@ if ($PRINT_HELP) {
     print "gtkdoc-mkdb version @VERSION@\n";
     print "\n--module=MODULE_NAME   Name of the doc module being parsed";
     print "\n--source-dir=DIRNAME   Directories which contain inline reference material";
+    print "\n--ignore-files=FILES   Files or directories which should not be scanned";
     print "\n                       May be used more than once for multiple directories";
     print "\n--output-dir=DIRNAME   Directory to put the generated Docbook files in";
     print "\n--tmpl-dir=DIRNAME     DIRECTORY in which template files may be found";
@@ -319,6 +322,7 @@ sub OutputSGML {
     my $hierarchy = "";
     my $interfaces = "";
     my $prerequisites = "";
+    my @file_objects = ();
 
     while (<INPUT>) {
 	if (m/^#/) {
@@ -329,6 +333,7 @@ sub OutputSGML {
 	    $details = "";
 	    $num_symbols = 0;
 	    $in_section = 1;
+	    @file_objects = ();
 
 	} elsif (m/^<SUBSECTION\s*(.*)>/i) {
 	    $synopsis .= "\n";
@@ -474,7 +479,7 @@ EOF
 						    \$signals_synop, \$signals_desc,
 						    \$args_synop, \$args_desc,
 						    \$hierarchy, \$interfaces,
-						    \$prerequisites);
+						    \$prerequisites, \@file_objects);
 		if ($file_changed) {
 		    $changed = 1;
 		}
@@ -504,6 +509,9 @@ EOF
 		# We don't want standard macros/functions of GtkObjects,
 		# or private declarations.
 		if ($subsection ne "Standard" && $subsection ne "Private") {
+		    if (&CheckIsObject ($symbol)) {
+			push @file_objects, $symbol;
+		    }
 		    my ($synop, $desc) = &OutputDeclaration ($symbol,
 							     $declaration);
 		    my ($sig_synop, $sig_desc) = &GetSignals ($symbol);
@@ -1179,10 +1187,11 @@ EOF
 #               $hierarchy - reference to the DocBook for the Object Hierarchy part
 #               $interfaces - reference to the DocBook for the Interfaces part
 #               $prerequisites - reference to the DocBook for the Prerequisites part
+#               $file_objects - reference to an array of objects in this file
 #############################################################################
 
 sub OutputSGMLFile {
-    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $prerequisites) = @_;
+    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $prerequisites, $file_objects) = @_;
 
     # The edited title overrides the one from the sections file.
     my $new_title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
@@ -1233,6 +1242,14 @@ sub OutputSGMLFile {
     open (OUTPUT, ">$new_sgml_file")
 	|| die "Can't create $new_sgml_file";
 
+    my $object_anchors = "";
+    foreach my $object (@$file_objects) {
+	next if ($object eq $section_id);
+	my $id = CreateValidSGMLID($object);
+#	print "Debug: Adding anchor for $object\n";
+	$object_anchors .= "<anchor id=\"$id\"$empty_element_end";
+    }
+
     # Note: The refname and refpurpose are on the same line to stop
     # docbook-to-man 1.08 putting them on separate lines.
     #
@@ -1247,7 +1264,7 @@ sub OutputSGMLFile {
     print OUTPUT <<EOF;
 <refentry id="$section_id">
 <refmeta>
-<refentrytitle>$title</refentrytitle>
+<refentrytitle>$object_anchors$title</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>\U$MODULE\E Library</refmiscinfo>
 </refmeta>
@@ -1905,6 +1922,7 @@ sub ReadSourceDocumentation {
     # Now recursively scan the subdirectories.
     my $dir;
     foreach $dir (@subdirs) {
+	next if ($IGNORE_FILES =~ m/(\s|^)\Q${dir}\E(\s|$)/);
 	&ReadSourceDocumentation ("$source_dir/$dir");
     }
 }
@@ -1922,6 +1940,19 @@ sub ReadSourceDocumentation {
 
 sub ScanSourceFile {
     my ($file) = @_;
+    my $basename;
+
+    if ($file =~ m/^.*[\/\\](.*\.[hc])$/) {
+	$basename = $1;
+    } else {
+	print "WARNING: Can't find basename of file $file\n";
+	$basename = $file;
+    }
+
+    # Check if the basename is in the list of files to ignore.
+    if ($IGNORE_FILES =~ m/(\s|^)\Q${basename}(\s|$)/) {
+	return;
+    }
 
     open (SRCFILE, $file)
 	|| die "Can't open $file: $!";
@@ -2150,6 +2181,7 @@ sub OutputMissingDocumentation {
      my $percent;
      my $msg;
      my $buffer = "";
+     my $buffer2 = "";
 	
      open (UNDOCUMENTED, ">$ROOT_DIR/$MODULE-undocumented.txt")
           || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt";
@@ -2159,12 +2191,16 @@ sub OutputMissingDocumentation {
 	       $total++;
 	       if (exists ($AllDocumentedSymbols{$symbol})) {
 		 $n_documented++;
-	       } else {
-		 $buffer .= $symbol . "\n";
+	       } elsif (exists $Deprecated{$symbol}) {
+		   $buffer2 .= $symbol . "\n";
+	       }
+	       else {
+		   $buffer .= $symbol . "\n";
 	       }
           }
      }
 
+     $buffer .= "\n" . $buffer2;
      
      if ($total == 0) {
 	  $percent = 100;
