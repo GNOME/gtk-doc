@@ -34,7 +34,7 @@ if test -f index.sgml; then
 fi
 
 if $is_xml; then
-  @XSLTPROC@ --xinclude \
+  @XSLTPROC@ --nonet --xinclude \
       --stringparam gtkdoc.bookname $module \
       --stringparam gtkdoc.version "@VERSION@" \
       $gtkdocdir/gtk-doc.xsl $document

@@ -1,3 +1,5 @@
+# -*- mode: rpm-spec -*-
+
 Summary: 	GTK+ DocBook Documentation Generator
 Name: 		gtk-doc
 Version: 	@VERSION@
@@ -6,11 +8,13 @@ License: 	GPL
 Group: 		Utilities/Text
 Source:	 	ftp://ftp.gtk.org/pub/gtk/v1.1/docs/rdp/gtk-doc-%{version}.tar.gz
 BuildRoot: 	/var/tmp/%{name}-%{version}-root
-Obsoletes: 	gtk-doc
 URL: 		http://www.gtk.org/rdp/
 BuildArchitectures: noarch
-Requires: 	jade
+Requires: 	openjade
 Requires:	perl >= 5.6.0
+Requires:	libxslt
+Requires:	docbook-dtds
+Requires:	docbook-style-xsl
 
 %description
 gtk-doc is a set of perl scripts that generate API reference documention in
