@@ -24,7 +24,7 @@ if test -f index.sgml; then
       rm -f index.sgml
 fi
 
-jade -t sgml -w no-idref -d $gtkdocdir/gtk-doc.dsl $2
+jade -t sgml -w no-idref -d $gtkdocdir/gtk-doc.dsl $gtkdocdir/gtk-doc.dcl $2
 sed s%href=\"%href=\"$module/% < index.sgml > index.sgml.tmp && mv index.sgml.tmp index.sgml
 
 echo "timestamp" > ../html.stamp
