@@ -1,5 +1,8 @@
 2005-01-09  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-scan.in (ScanHeader): support "typedef struct a *b;". Fixes
+	last part of #156318.
+
 	* gtkdoc-common.pl.in (ParseStructDeclaration): return an empty array
 	for forward struct declarations. Part of #156318.
 

@@ -392,6 +392,11 @@ sub ScanHeader {
 
 	    # OTHER TYPEDEFS
 
+	    } elsif (m/^\s*typedef\s+struct\s+\w+[\s\*]+(\w+)\s*;/) {
+#	        print "Found struct* typedef: $_";
+		&AddSymbolToList (\$list, $1);
+		print DECL "<TYPEDEF>\n<NAME>$1</NAME>\n$deprecated$_</TYPEDEF>\n";
+
 	    } elsif (m/^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w+)(\s*\[[^\]]+\])*\s*;/) {
 		if ($2 !~ m/^struct\s/ && $2 !~ m/^union\s/) {
 #		    print "Found typedef: $_";
