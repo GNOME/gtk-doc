@@ -13,13 +13,6 @@ gtkdocdatadir = $(datadir)/gtk-doc
 gtkdocdata_DATA = \
         gtk-doc.dsl
 
-EXTRA_DIST = \
-	gtkdoc-scanobj \
-	gtkdoc-scan    \
-	gtkdoc-mktmpl  \
-	gtkdoc-mkdb    \
-	gtkdoc-fixxref
-
 dist-hook:
 	mkdir $(distdir)/doc
 	cp -pr doc/* $(distdir)/doc

@@ -94,9 +94,8 @@ scan:
    main SGML file. (Look at the gnome/gnome-docs.sgml and
    gnomeui/gnomeui-docs.sgml files in the examples directory).
 
-   Note: if you add 'sections' to the documentation, or change the title of
-   any section, you will need to update this main SGML file. It's very easy to
-   forget.
+   Note: if you add or remove 'sections' in the documentation, you will need
+   to update this main SGML file. It's very easy to forget.
 
 
 11. Do a 'make html' to make the final HTML.

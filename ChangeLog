@@ -1,3 +1,13 @@
+1999-02-07  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* Makefile.am: Removed all the scripts from EXTRA_DIST, as they are
+	now generated from the .in files which automatically go in the dist.
+
+1999-02-02  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* doc/setting-up.txt (scan): removed text which incorrectly said that
+	changing section titles means you have to recreate the main SGML file.
+
 1999-02-03  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 	
 	* configure.in: find perl in $PATH, generate the perl programs
