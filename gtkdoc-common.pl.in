@@ -1,0 +1,83 @@
+#!@PERL@ -w
+#
+# gtk-doc - GTK DocBook documentation generator.
+# Copyright (C) 2001  Damon Chaplin
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+
+#
+# These are functions used by several of the gtk-doc Perl scripts.
+# I'll move more of the common routines here eventually, though I need to
+# stop them from using global variables.
+#
+
+1;
+
+
+#############################################################################
+# Function    : UpdateFileIfChanged
+# Description : Compares the old version of the file with the new version and
+#		if the file has changed it moves the new version into the old
+#		versions place. This is used so we only change files if
+#		needed, so we can do proper dependency tracking and we don't
+#		needlessly check files into CVS that haven't changed.
+#		It returns 0 if the file hasn't changed, and 1 if it has.
+# Arguments   : $old_file - the pathname of the old file.
+#		$new_file - the pathname of the new version of the file.
+#		$make_backup - 1 if a backup of the old file should be kept.
+#			It will have the .bak suffix added to the file name.
+#############################################################################
+
+sub UpdateFileIfChanged {
+    my ($old_file, $new_file, $make_backup) = @_;
+
+#    print "Comparing $old_file with $new_file...\n";
+
+    # If the old file doesn't exist we want this to default to 1.
+    my $exit_code = 1;
+
+    if (-e $old_file) {
+	`cmp -s $old_file $new_file`;
+	$exit_code = $? >> 8;
+#	print "   cmp exit code: $exit_code ($?)\n";
+    }
+
+    if ($exit_code > 1) {
+	die "Error running 'cmp $old_file $new_file'";
+    }
+
+    if ($exit_code == 1) {
+#	print "   files changed - replacing old version with new version.\n";
+
+	if ($make_backup && -e $old_file) {
+	    rename ($old_file, "$old_file.bak")
+		|| die "Can't move $old_file to $old_file.bak: $!";
+	}
+
+	rename ($new_file, $old_file)
+	    || die "Can't move $new_file to $old_file: $!";
+
+	return 1;
+    } else {
+#	print "   files the same - deleting new version.\n";
+
+	unlink ("$new_file")
+	    || die "Can't delete file: $new_file: $!";
+
+	return 0;
+    }
+}
+
