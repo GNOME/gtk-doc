@@ -16,7 +16,9 @@ gtkdocdata_DATA = \
         gtk-doc.dsl		\
 	gtk-doc.dcl
 
-EXTRA_DIST=gtk-doc.spec.in
+EXTRA_DIST= \
+	gtk-doc.spec.in	\
+	gtk-doc.dcl
 
 dist-hook:
 	mkdir $(distdir)/doc

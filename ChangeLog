@@ -4,6 +4,10 @@
 
 2002-01-18  Damon Chaplin  <damon@ximian.com>
 
+	* Makefile.am (EXTRA_DIST): added gtk-doc.dcl to EXTRA_DIST.
+
+2002-01-18  Damon Chaplin  <damon@ximian.com>
+
 	* gtkdoc-scangobj.in: Reverted jacob's patch for this release, since
 	it breaks GTK+ and possibly other packages. I'll re-apply it after
 	the release, so we can fix everything in CVS.
