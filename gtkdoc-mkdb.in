@@ -266,7 +266,7 @@ sub OutputSGML {
 		    $section_includes = $includes;
 		}
 
-		&OutputSGMLFile ($file, $title, $section_id, $includes,
+		&OutputSGMLFile ($file, $title, $section_id, $section_includes,
 				 \$synopsis, \$details);
 	    }
 	    $title = "";
