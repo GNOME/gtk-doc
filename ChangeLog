@@ -1,3 +1,11 @@
+2002-12-05  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mkdb.in (ReadTemplateFile): Support @Since: and
+	@Deprecated: as a way to specify since and deprecated information
+	in template files. This works for all kinds of symbols, even those
+	which normally don't have parameter lists.
+
 2002-12-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (MakeDeprecationNote): Support multi-paragraph 

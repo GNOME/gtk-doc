@@ -399,6 +399,8 @@ EOF
 	    $output .= &OutputParam ($symbol, "Returns", $template_exists, 1,
 				     "");
 	}
+	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
+	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
         $output .= &OutputOldParams ($symbol);
 	$output .= "\n";
     }
@@ -416,6 +418,8 @@ EOF
 	    }
 	}
 	$output .= &OutputParam ($symbol, "Returns", $template_exists, 0, "");
+	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
+	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
 	$output .= &OutputOldParams ($symbol);
 	$output .= "\n";
     }
@@ -428,6 +432,8 @@ EOF
 	    my $field_name = $fields[$i];
 	    $output .= &OutputParam ($symbol, $field_name, $template_exists, 1, "");
 	}
+	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
+	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
     }
 
     if ($type eq "ENUM") {
@@ -436,6 +442,8 @@ EOF
 	for my $member (@members) {
 	    $output .= &OutputParam ($symbol, $member, $template_exists, 1, "");
 	}
+	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
+	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
     }
 
     $output .= "\n";

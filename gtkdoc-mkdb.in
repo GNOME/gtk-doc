@@ -1111,7 +1111,6 @@ sub OutputFunction {
 sub OutputParamDescriptions {
     my ($symbol_type, $symbol) = @_;
     my $output = "";
-
     if (defined ($SymbolParams{$symbol})) {
 	my $returns = "";
 	my $params = $SymbolParams{$symbol};
@@ -2569,8 +2568,8 @@ sub ReadTemplateFile {
 		|| $symbol eq "Long_Description"
 		|| $symbol eq "See_Also") {
 		$symbol = $docsfile . ":" . $symbol;
-#		print "Found symbol: $symbol\n";
 	    }
+#	    print "Found symbol: $symbol\n";
 
 	    # Store previous symbol, but remove any trailing blank lines.
 	    if ($current_symbol ne "") {
@@ -2578,6 +2577,28 @@ sub ReadTemplateFile {
 		$SymbolTypes{$current_symbol} = $current_type;
 		$SymbolDocs{$current_symbol} = $symbol_doc;
 		if ($current_param >= 0) {
+		    if ($current_param > 0) {
+			if ($params[$current_param - 1] eq "Deprecated") {
+			    $Deprecated{$current_symbol} = pop (@params);
+			    pop (@params);
+			    $current_param -= 2;
+			}
+		    }
+		    if ($current_param > 0) {
+			if ($params[$current_param - 1] eq "Since") {
+			    $Since{$current_symbol} = pop (@params);
+			    pop (@params);
+			    $current_param -= 2;
+			}
+		    }
+		    # look for deprecated again to support both orders
+		    if ($current_param > 0) {
+			if ($params[$current_param - 1] eq "Deprecated") {
+			    $Deprecated{$current_symbol} = pop (@params);
+			    pop (@params);
+			    $current_param -= 2;
+			}
+		    }
 		    $SymbolParams{$current_symbol} = [ @params ];
 		} else {
 		    # Delete any existing params in case we are overriding a
@@ -2631,6 +2652,27 @@ sub ReadTemplateFile {
 	$SymbolTypes{$current_symbol} = $current_type;
 	$SymbolDocs{$current_symbol} = $symbol_doc;
 	if ($current_param >= 0) {
+	    if ($current_param > 0) {
+		if ($params[$current_param - 1] eq "Deprecated") {
+		    $Deprecated{$current_symbol} = pop (@params);
+		    pop (@params);
+		    $current_param -= 2;
+		}
+	    }
+	    if ($current_param > 0) {
+		if ($params[$current_param - 1] eq "Since") {
+		    $Since{$current_symbol} = pop (@params);
+		    pop (@params);
+		    $current_param -= 2;
+		}
+	    }
+	    if ($current_param > 0) {
+		if ($params[$current_param - 1] eq "Deprecated") {
+		    $Deprecated{$current_symbol} = pop (@params);
+		    pop (@params);
+		    $current_param -= 2;
+		}
+	    }
 	    $SymbolParams{$current_symbol} = [ @params ];
 	} else {
 	    delete $SymbolParams{$current_symbol};
