@@ -907,8 +907,8 @@ sub ExpandAbbreviations {
     # Convert '@param'
     $text =~ s/\@(\w+)/<parameter>$1<\/parameter>/g;
 
-    # Convert '%constant'
-    $text =~ s/\%(\w+)/<literal>$1<\/literal>/g;
+    # Convert '%constant'. Also allow negative numbers, e.g. %-1.
+    $text =~ s/\%(-?\w+)/<literal>$1<\/literal>/g;
 
     # Convert '#symbol'
     $text =~ s/#(\w+)/&MakeXRef($1);/eg;
@@ -1192,7 +1192,7 @@ sub ScanSourceFile {
     my $in_comment_block = 0;
     my $symbol;
     my ($in_description, $in_return);
-    my ($description, $return_desc);
+    my ($description, $return_desc, $return_start);
     my $current_param;
     my @params;
     while (<SRCFILE>) {
@@ -1236,9 +1236,16 @@ EOF
 	    next;
 	}
 
+	# Get rid of ' * ' at start of every line in the comment block.
+	s%^\s*\*\s*%%;
+	# But make sure we don't get rid of the newline at the end.
+	if (!$_) {
+	    $_ = "\n";
+	}
+
 	# If we haven't found the symbol name yet, look for it.
 	if (!$symbol) {
-	    if (m%^\s*\*\s*(\w+)\s*:?%) {
+	    if (m%^(\w+)\s*:?%) {
 		$symbol = $1;
 	    }
 	    next;
@@ -1246,34 +1253,44 @@ EOF
 
 	# If we're in the return value description, add it to the end.
 	if ($in_return) {
-	    s%^\s*\*\s*%%;
-	    $return_desc .= $_;
+	    # If we find another valid returns line, we assume that the first
+	    # one was really part of the description.
+	    if (m%^(returns:|return\s+value:|returns\s*)%i) {
+		$description .= $return_start . $return_desc;
+		$return_start = $1;
+		$return_desc = $';
+	    } else {
+		$return_desc .= $_;
+	    }
 	    next;
 	}
 
 	# If we're in the description part, check for the 'Return' line.
 	# If that isn't found, add the text to the end.
 	if ($in_description) {
-	    if (m%^\s*\*\s*(returns:|return\s+value:|returns\s*)%i) {
+	    # Get rid of 'Description:'
+	    s%^Description:%%;
+
+	    if (m%^(returns:|return\s+value:|returns\s*)%i) {
 #		print "RETURNS: $_";
+		$return_start = $1;
 		$return_desc = $';
 		$in_return = 1;
 		next;
 	    }
 
-	    s%^\s*\*\s*%%;
 	    $description .= $_;
 	    next;
 	}
 
 	# We must be in the parameters. Check for the empty line at the end.
-	if (m%^\s*\*\s*$%) {
+	if (m%^$%) {
 	    $in_description = 1;
 	    next;
 	}
 
 	# Look for a parameter name.
-	if (m%^\s*\*\s*@(\S+)\s*:%) {
+	if (m%^@(\S+)\s*:%) {
 	    my $param_name = $1;
 #	    print "Found parameter: $param_name\n";
 	    # Allow '...' as the Varargs parameter.
@@ -1288,7 +1305,6 @@ EOF
 
 	# We must be in the middle of a parameter description, so add it on
 	# to the last element in @params.
-	s%^\s*\*\s*%%;
 	if ($current_param == -1) {
 	    print <<EOF
 ERROR parsing comment block file : parameter expected -

@@ -1,3 +1,14 @@
+1998-12-16  Damon Chaplin  <DAChaplin@msn.com>
+
+	* gtkdoc-mkdb (ExpandAbbreviations): Allow -ve contants, e.g. %-1.
+	(ScanSourceFile): Try to handle function descriptions that start
+	with 'Returns'. It was assuming that they were describing the return
+	value before.
+	Gets rid of 'Description:' which is sometimes included
+	at the start of the function description in the source comment blocks.
+	Makes sure newlines are preserved in the description, as consecutive
+	newlines are converted to paragraph separators later.
+
 1998-12-15  Damon Chaplin  <DAChaplin@msn.com>
 	* Major changes to the scripts to merge in comments within source code
 	* gtk-doc-fixxref added
