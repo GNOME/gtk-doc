@@ -287,7 +287,7 @@ sub ScanHeader {
 
 	    # TYPEDEF'D FUNCTIONS (i.e. user functions)
 
-	    } elsif (m/^\s*typedef\s+((const\s+)?\w+)\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
+	    } elsif (m/^\s*typedef\s+((const\s+|G_CONST_RETURN\s+)?\w+)\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
 		$ret_type = "$1 $3";
 		$symbol = $4;
 		$decl = $';
@@ -375,7 +375,7 @@ sub ScanHeader {
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-	    } elsif (m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
+	    } elsif (m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
 		$ret_type = "$3 $5";
 		$symbol = $6;
 		$decl = $';
@@ -394,7 +394,7 @@ sub ScanHeader {
 		$decl = $';
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
 		    && $previous_line !~ m/^\s*static\s+/) {
-		    if ($previous_line =~ m/^\s*(extern)?\s*((const\s*)?\w+)(\s*\*+)?\s*$/) {
+		    if ($previous_line =~ m/^\s*(extern)?\s*((const\s*|G_CONST_RETURN\s*)?\w+)(\s*\*+)?\s*$/) {
 			$ret_type = $2;
 			if (defined ($4)) { $ret_type .= " $4"; }
 #			print "Function: $symbol, Returns: $ret_type\n";
@@ -406,7 +406,7 @@ sub ScanHeader {
 	    # on the previous line, and the start of the parameters on this.
 	    } elsif (m/^\s*\(/) {
 		$decl = $';
-		if ($previous_line =~ m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
+		if ($previous_line =~ m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
 		    $ret_type = "$3 $5";
 		    $symbol = $6;
 #		    print "Function: $symbol, Returns: $ret_type\n";

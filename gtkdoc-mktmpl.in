@@ -352,7 +352,7 @@ EOF
     # For functions and function typedefs we also output the return value.
     if ($type eq "FUNCTION" || $type eq "USER_FUNCTION") {
 	# Take out the return type
-	$declaration =~ s/<RETURNS>\s*(const\s+|unsigned\s+)*(\w+)\s*(\**)\s*<\/RETURNS>\n//;
+	$declaration =~ s/<RETURNS>\s*(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(\w+)\s*(\**)\s*<\/RETURNS>\n//;
 	my ($ret_type) = $2;
 
 	my ($param_num) = 0;
@@ -382,7 +382,7 @@ EOF
 					 "");
 
 		# Try to match parameters which are functions.
-	    } elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+	    } elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
 	        $name = $6;
 		$output .= &OutputParam ($symbol, $name, $template_exists, 1,
 					 "");
@@ -1296,12 +1296,12 @@ sub ParseStructDeclaration {
 	    
         # Try to match structure members which are functions
 	} elsif ($line =~ m/^
-		 (const\s+|unsigned\s+)*(struct\s+)?  # mod1 
-		 (\w+)\s*                             # type
-		 (\**)\s*                             # ptr1
-		 (const\s+)?                          # mod2
-		 \(\s*\*\s*(\w+)\s*\)\s*              # name
-		 \(([^)]*)\)\s*                       # func_params
+		 (const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?  # mod1 
+		 (\w+)\s*                                               # type
+		 (\**)\s*                                               # ptr1
+		 (const\s+)?                                            # mod2
+		 \(\s*\*\s*(\w+)\s*\)\s*                                # name
+		 \(([^)]*)\)\s*                                         # func_params
 		            $/x) {
 
 	    my $mod1 = defined($1) ? $1 : "";

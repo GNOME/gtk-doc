@@ -1,3 +1,10 @@
+Sat Mar  3 17:43:42 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-{scan,mktmpl,mkdb}.in: Add support for G_CONST_RETURN.
+	(Right now, it will appear as G_CONST_RETURN in the output -
+	I'm not sure that's right - perhaps it should be converted
+	to const.)
+
 2001-02-20  Michael Meeks  <michael@ximian.com>
 
 	* gtkdoc-mktmpl.in: s/TRUE/1/
