@@ -239,6 +239,11 @@ if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
     close (TIMESTAMP);
 }
 
+open (DEPR, ">$ROOT_DIR/deprecated");
+foreach my $symbol (sort (keys (%Deprecated))) {
+    print DEPR $symbol . "\n";
+}
+close(DEPR);
 
 #############################################################################
 # Function    : OutputObjectList
@@ -1495,11 +1500,16 @@ sub MakeXRef {
 sub MakeDeprecationNote {
     my ($symbol) = $_[0];
     my $desc = "";
+    my $note = "";
     if (exists $Deprecated{$symbol}) {
 	$desc .= "<warning>";
 	$desc .= "<para><literal>$symbol</literal> is deprecated and should not be used in newly-written code.";
 	if ($Deprecated{$symbol} ne "") {
-	    $desc .= " " . &ExpandAbbreviations($Deprecated{$symbol});
+	    $note = &ExpandAbbreviations($Deprecated{$symbol});
+	    $note =~ s/^\s+//;
+	    $note =~ s/\s+$//;
+	    $note =~ s%\n{2,}%\n</para>\n<para>\n%g;
+	    $desc .= " " . $note;
 	}
 	$desc .= "</para></warning>\n";
     }
