@@ -1,5 +1,8 @@
 2002-01-23  Damon Chaplin  <damon@ximian.com>
 
+	* configure.in: bumped the version to 0.9, so GTK+ can depend on this
+	if it wants to.
+
 	* gtkdoc-scangobj.in: we now default to calling g_type_init() to
 	initialize the type system, rather than gtk_init(). This means you
 	don't need an X connection to build the docs any more. Hurrah!
