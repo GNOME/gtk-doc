@@ -1,3 +1,14 @@
+2002-12-06  Matthias Clasen  <maclas@gmx.de>
+
+	Improved /*< private >*/ handling:  (#95398)
+	
+	* gtkdoc-mkdb.in (OutputStruct): Handle /*< public >*/ and 
+	/*< private >*/ for all structs. Default to private for object and 
+	class structs, to public for all other structs.
+
+	* gtkdoc-scan.in (ScanHeader): Emit declarations for class structs
+	to $MODULE-decl.txt.
+
 2002-12-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mktmpl.in (OutputDeclaration): 

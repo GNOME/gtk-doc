@@ -485,14 +485,13 @@ sub ScanHeader {
 #		    print "Found object: $1\n";
 		    $list .= "<TITLE>$1</TITLE>\n";
 		    push (@objects, $1);
-		} else {
-		    &AddSymbolToList (\$list, $symbol);
+		}
+		&AddSymbolToList (\$list, $symbol);
 
-		    if ($decl =~ m/^\s*typedef\s+struct\s*{/) {
-		      print DECL "<TYPEDEF>\n<NAME>$symbol</NAME>\n$deprecated$decl</TYPEDEF>\n";
-		    } else {
-		      print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";
-		    }
+		if ($decl =~ m/^\s*typedef\s+struct\s*{/) {
+		    print DECL "<TYPEDEF>\n<NAME>$symbol</NAME>\n$deprecated$decl</TYPEDEF>\n";
+		} else {
+		    print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";
 		}
 		$in_declaration = "";
 	    } else {

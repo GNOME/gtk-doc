@@ -693,9 +693,14 @@ sub OutputStruct {
     my ($symbol, $declaration) = @_;
 
     my $is_widget_struct = 0;
+    my $default_to_public = 1;
     if (&CheckIsObject ($symbol)) {
 #	print "Found widget struct: $symbol\n";
 	$is_widget_struct = 1;
+	$default_to_public = 0;
+    }
+    if ($symbol =~ /^(\S+)Class/) {
+	$default_to_public = 0;
     }
 
     my $id;
@@ -713,11 +718,13 @@ sub OutputStruct {
     if ($declaration =~ m/^\s*$/) {
 #	print "Found opaque struct\n";
 	$decl_out = "struct $symbol;";
-    } elsif ($is_widget_struct) {
-	my $public = 0;
+    } else {
+	my $public = $default_to_public;
 	my $new_declaration = "";
 	my $decl_line;
-	foreach $decl_line (split (/\n/, $declaration)) {
+	my $decl = $declaration;
+	$decl =~ s/^[^{]*{//;
+	foreach $decl_line (split (/\n/, $decl)) {
 #	    print "Struct line: $decl_line\n";
 	    if ($decl_line =~ m%/\*\s*<\s*public\s*>\s*\*/%) {
 		$public = 1;
@@ -736,8 +743,6 @@ sub OutputStruct {
 	} else {
 	    $decl_out = "struct $symbol;";
 	}
-    } else {
-	$decl_out = $declaration;
     }
 
     $decl_out = &CreateValidSGML ($decl_out);
