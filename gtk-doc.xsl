@@ -13,11 +13,16 @@
   <xsl:param name="default.encoding" select="'ISO-8859-1'"/>
   <xsl:param name="chunk.fast" select="1"/> 
   <xsl:param name="chapter.autolabel" select="0"/>
-  <xsl:param name="use.id.as.filename" select="'1'"/>
+  <xsl:param name="use.id.as.filename" select="1"/>
   <xsl:param name="html.ext" select="'.html'"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
+
+  <!-- use index filtering (if available) -->
   <xsl:param name="index.on.role" select="1"/>
+
+  <!-- generate more <link rel=...> elements -->
+  <xsl:param name="html.extra.head.links" select="1"/>
 
   <!-- display variablelists as tables -->
   <xsl:param name="variablelist.as.table" select="1"/>
@@ -271,7 +276,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:variable name="has-filtered-index">
       <xsl:call-template name="version-greater-or-equal">
         <xsl:with-param name="ver1" select="$VERSION" />
-        <xsl:with-param name="ver2">1.62</xsl:with-param>
+        <xsl:with-param name="ver2">1.66</xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
     <xsl:if test="($has-filtered-index = 1) or (count(@role) = 0)">
@@ -283,7 +288,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:variable name="has-filtered-index">
       <xsl:call-template name="version-greater-or-equal">
         <xsl:with-param name="ver1" select="$VERSION" />
-        <xsl:with-param name="ver2">1.62</xsl:with-param>
+        <xsl:with-param name="ver2">1.66</xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
     <xsl:if test="($has-filtered-index = 1) or (count(@role) = 0)">
