@@ -1,5 +1,9 @@
 2005-02-01  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (ScanSourceFile, MergeSourceDocumentation): patch
+	from Stefan Kost to support section documentation within the source
+	code (long description, short description, see also and title).
+
 	* gtkdoc-mkdb.in: 
 	* gtkdoc-mktmpl.in: patch from Brian Cameron to support stability
 	levels.

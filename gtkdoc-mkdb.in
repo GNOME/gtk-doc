@@ -2456,8 +2456,27 @@ EOF
 		    $params[$k] = &ConvertSGMLChars ($params[$k]);
 		}
 
-		$SourceSymbolDocs{$symbol} = $description;
-		$SourceSymbolParams{$symbol} = [ @params ];
+                # Handle Section docs
+                if ($symbol =~ m/SECTION:(.*)/) {
+                    my $real_symbol=$1;
+                    my $k;
+
+                    #print "SECTION DOCS found in source for : '$real_symbol'\n";
+                    for ($k = 0; $k <= $#params; $k += 2) {
+                        #print "   '".$params[$k]."'\n";
+                        if ($params[$k] eq "summary") {
+                            $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Short_Description"}=$params[$k+1];
+                        } elsif ($params[$k] eq "see") {
+                            $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:See_Also"}=$params[$k+1];
+                        } elsif ($params[$k] eq "title") {
+                            $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Title"}=$params[$k+1];
+                        }
+                    }
+                    $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Long_Description"}=$description;
+                } else {
+                    $SourceSymbolDocs{$symbol} = $description;
+                    $SourceSymbolParams{$symbol} = [ @params ];
+                }
 
 		if ($since_desc) {
 		    $Since{$symbol} = &ConvertSGMLChars ($since_desc);
@@ -2832,7 +2851,17 @@ EOF
 	    if ($src_doc =~ s%\n{2,}%\n</para>\n<para>\n%g) {
 #		print "Converted blank lines:\n$src_doc\n";
 	    }
-	    $SymbolDocs{$symbol} = "<para>\n$src_doc</para>\n$tmpl_doc";
+
+            if ($symbol =~ m/$TMPL_DIR\/.+:Long_Description/) {
+                # FIXME: should we check for empty $tmpl_doc ?
+                $SymbolDocs{$symbol} = "<para>\n$src_doc</para>\n$tmpl_doc"
+            } elsif ($symbol =~ m/$TMPL_DIR\/.+:.+/) {
+                # For the title/summary/see also section docs we don't want to
+	        # add any <para> tags.
+                $SymbolDocs{$symbol} = "$src_doc"
+            } else {
+                $SymbolDocs{$symbol} = "<para>\n$src_doc</para>\n$tmpl_doc";
+            }
 
 	    if ($symbol =~ m/.*::.*/) {
 		# For signals we prefer the param names from the source docs,
