@@ -1,3 +1,9 @@
+2003-07-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mktmpl.in (ParseStructDeclaration): 
+	* gtkdoc-mkdb.in (ParseStructDeclaration): Accept volatile struct members, which have just
+	made their appearance in glib.
+
 2003-06-29  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (ExpandAbbreviations): When expanding @param, catch the common @param->field

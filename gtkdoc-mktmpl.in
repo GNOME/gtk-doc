@@ -1263,7 +1263,7 @@ sub ParseStructDeclaration {
 	#        this functionality should be separated out.
 
 	if ($line =~ m/^
-	    (const\s+|unsigned\s+)*(struct\s+)? # mod1
+	    (const\s+|unsigned\s+|volatile\s+)*(struct\s+)? # mod1
 	    (\w+)\s*                            # type
 	    (\**)\s*                            # ptr1
 	    (const\s+)?                         # mod2
