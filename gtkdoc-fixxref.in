@@ -57,8 +57,7 @@ sub ScanIndices {
     # This array holds any subdirectories found.
     my (@subdirs) = ();
     
-    opendir (HTMLDIR, $scan_dir)
-	|| die "Can't open HTML directory $scan_dir: $!";
+    opendir (HTMLDIR, $scan_dir) || return;
     my $file;
     foreach $file (readdir (HTMLDIR)) {
 	if ($file eq '.' || $file eq '..') {

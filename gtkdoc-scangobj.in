@@ -678,12 +678,13 @@ output_widget_hierarchy ()
 
 /* This is called recursively to output the hierarchy of a widget. */
 static void
-output_hierarchy (FILE *fp,
-		  GtkType type,
-		  gint level)
+output_hierarchy (FILE  *fp,
+		  GType  type,
+		  gint   level)
 {
-  GList *list;
   guint i;
+  GType *children;
+  guint n_children;
 
   if (!type)
     return;
@@ -693,14 +694,12 @@ output_hierarchy (FILE *fp,
   fprintf (fp, gtk_type_name (type));
   fprintf (fp, "\n");
 
-  list = gtk_type_children_types (type);
+  children = g_type_children (type, &n_children);
+  
+  for (i=0; i < n_children; i++)
+    output_hierarchy (fp, children[i], level + 1);
 
-  while (list)
-    {
-      GtkType child = (GtkType) list->data;
-      output_hierarchy (fp, child, level + 1);
-      list = list->next;
-    }
+  g_free (children);
 }
 
 
@@ -735,13 +734,13 @@ output_widget_args (FILE *fp, GtkType object_type)
   gint arg;
   gchar flags[16], *pos;
 
-  class = gtk_type_class (object_type);
+  class = g_type_class_peek (object_type);
   if (!class)
     return;
 
-  object_class_name = gtk_type_name (object_type);
+  object_class_name = g_type_name (object_type);
 
-  args = gtk_object_query_args (class->type, &arg_flags, &n_args);
+  args = gtk_object_query_args (object_type, &arg_flags, &n_args);
 
   for (arg = 0; arg < n_args; arg++)
     {

@@ -1,3 +1,14 @@
+Wed Sep  6 17:57:33 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-scangobj.in: Add gtkdoc-scangobj scanner for
+	GObject type system.
+
+	* gtkdoc-scanobj.in: Allow setting $LD to allow separating
+	compilation and linking and thus to allow using libtool.
+
+	* gtkdoc-fixxref.in (ScanIndices): Allow HTMLDIR
+	not to be present yet.
+
 Tue Sep  5 23:37:53 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkdoc-fixxref.in: Add a --extra-dir option to
