@@ -1,3 +1,20 @@
+2004-09-10  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-scan.in: create an empty MODULE-overrides.txt file if it
+	doesn't exist. gtkdoc.make expects one to exist.
+
+	* doc/setting-up.txt: updated to document new procedure using
+	gtkdoc.make.
+
+	* examples/Makefile.am: updated to use gtkdoc.make.
+
+	* examples/configure.in: removed this. gtkdoc.make is used instead
+	now.
+
+	* examples/README: updated.
+
+	* Makefile.am (EXTRA_DIST): removed examples/configure.in.
+
 Wed Sep  8 01:12:25 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scan.in (ScanHeader): 

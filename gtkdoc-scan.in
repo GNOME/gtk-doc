@@ -133,6 +133,12 @@ if (! -e $sections_file) {
   `cp $old_decl_list $sections_file`;
 }
 
+# If there is no MODULE-overrides.txt file we create an empty one.
+my $overrides_file = "${OUTPUT_DIR}/$MODULE-overrides.txt";
+if (! -e $overrides_file) {
+  `touch $overrides_file`;
+}
+
 
 
 #############################################################################

@@ -2,22 +2,42 @@
 How to Set Up an Application or Library to use GTK-Doc
 ======================================================
 
-This assumes that you are using autoconf & automake to build your package.
+This assumes that you are using autoconf & automake to build your package,
+and already have gtk-doc installed properly.
 
 
-1. Insert the code from examples/configure.in into your configure.in.
-   (somewhere before the call to AC_OUTPUT.)
+1. Add this line to your autogen.sh, before the calls to autoheader, automake
+   or autoconf:
 
-2. Create a directory in which you want the docs to be built,
-   e.g. 'myproject/docs/reference'.
+      gtkdocize || exit 1
 
-3. Copy examples/Makefile.am to this directory and edit the variables at
-   the top of the file. (See the GTK+ source for an example.)
+   If you are using gnome-autogen.sh it already runs gtkdocize for you.
+   If you don't have an autogen.sh script you may need to run gtkdocize
+   manually. (All gtkdocize does is copy gtk-doc.make to your project.)
 
-4. Add the new Makefile to your configure.in's AC_OUTPUT call, and make sure
+
+2. Add this line to your configure.in (somewhere before the call to AC_OUTPUT)
+
+       GTK_DOC_CHECK(1.0)
+
+   The number in brackets is the minimum version of gtk-doc required.
+
+
+3. Create a directory in your project where you want the docs to be built,
+   e.g. 'myproject/docs/reference'. If you want to create several separate
+   pieces of documentation you can create subdirectories for each one here.
+   (e.g. GTK+ has subdirectories for gtk, gdk and gdk-pixbuf.)
+
+
+4. Copy examples/Makefile.am to this directory (or subdirectories) and edit
+   the variables at the top of the file. (See the GTK+ source for an example.)
+
+
+5. Add the new Makefile(s) to your configure.in's AC_OUTPUT call, and make sure
    all the SUBDIRS variables are set properly so the docs directory is built.
 
-5. If your library or application includes GtkObjects/GObjects, and you want
+
+6. If your library or application includes GtkObjects/GObjects, and you want
    their signals, arguments/parameters and position in the hierarchy to be
    documented:
 
@@ -34,10 +54,16 @@ This assumes that you are using autoconf & automake to build your package.
 	gtk_alignment_get_type
 	gtk_arrow_get_type
 
+=============================================================================
 
 That's it! If you now build the application or library you should get a
-complete set of documentation. (Note that due to make being awkward the build
-may fail the first time, but if you run make again it should work.)
+complete set of documentation. gtk-doc is normally off by default so you
+may have to pass '--enable-gtk-doc' to autogen.sh or configure.in.
+
+(Note that due to a problem with make the build may fail the very first time
+it is run, but if you run make again it should work. It only fails because
+there are no files in the tmpl/ directory initially. As soon as these are
+created it works fine.)
 
 
 You can tweak the output in several ways:

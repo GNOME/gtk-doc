@@ -62,7 +62,6 @@ EXTRA_DIST = \
   db2man/docbook-to-man.ts \
   examples/README       \
   examples/Makefile.am  \
-  examples/configure.in \
   tools/docpercentages.pl \
   tools/gtk-doc.el \
   style.css
