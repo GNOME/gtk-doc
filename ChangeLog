@@ -1,3 +1,14 @@
+2003-07-21  Matthias Clasen  <maclas@gmx.de>
+
+	Applied patches from Sebastian Rittau to add maintainer mode and an SGML catalog.  (#117955, #117956)
+
+	* gtk-doc.cat.in: New catalog file.
+	* configure.in: Added gtk-doc.catalog to output files.
+	* Makefile.am: Install gtk-doc.catalog.
+
+	* configure.in: Added AM_MAINTAINER_MODE.
+	* autogen.sh: Added --enable-maintainer-mode to configure options.
+
 2003-07-09  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mktmpl.in (ParseStructDeclaration): 

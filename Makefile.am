@@ -30,6 +30,9 @@ pkgconfig_DATA = gtk-doc.pc
 aclocaldir = $(datadir)/aclocal
 aclocal_DATA = gtk-doc.m4
 
+sgmldir = $(datadir)/sgml/gtk-doc
+sgml_DATA = gtk-doc.cat
+
 EXTRA_DIST = \
   MAINTAINERS     \
   gtk-doc.pc.in   \
@@ -39,6 +42,7 @@ EXTRA_DIST = \
   gtk-doc.spec    \
   gtk-doc.dcl     \
   gtk-doc.xsl     \
+  gtk-doc.cat.in  \
   devhelp.xsl     \
   home.png  \
   left.png  \

@@ -12,6 +12,8 @@ AC_CONFIG_SRCDIR([gtk-doc.dsl.in])
 
 AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
 
+AM_MAINTAINER_MODE
+
 AC_ISC_POSIX
 AC_PROG_CC
 
@@ -91,6 +93,7 @@ AC_CONFIG_FILES([Makefile
 gtk-doc.pc
 gtk-doc.dsl 
 gtk-doc.spec
+gtk-doc.catalog
 gtkdoc-common.pl
 ])
 

@@ -75,7 +75,7 @@ autoconf
 
 cd "$THEDIR"
 
-$srcdir/configure "$@"
+$srcdir/configure --enable-maintainer-mode "$@"
 
 echo 
 echo "Now type 'make install' to install $PROJECT."
