@@ -1,3 +1,15 @@
+1999-02-03  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+	
+	* configure.in: find perl in $PATH, generate the perl programs
+	from their *.in counterparts.
+	
+	* gtkdoc-fixxref, gtkdoc-mkdb, gtkdoc-mktmpl, gtkdoc-scan,
+	gtkdoc-scanobj: Renamed to *.in and changed /usr/bin/perl to
+	@PERL@, as determined by configure.
+	
+	* .cvsignore: Added diverse config* stuff and the new generated
+	perl programs.
+
 1999-01-28  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtk-doc.dsl.in: I forgot to make the new refentry code process the

@@ -14,6 +14,11 @@ if test "x$with_dsssl_dir" = "x" ; then
 else
   dirs=$with_dsssl_dir
 fi
+ 
+AC_PATH_PROG(PERL, perl)
+if test -z "$PERL"; then
+   AC_MSG_ERROR([perl not found])
+fi
 
 AC_MSG_CHECKING([for DocBook stylesheets])
 
@@ -48,5 +53,14 @@ if test "x$GCC" = "xyes"; then
   fi
 fi
 
-AC_OUTPUT([Makefile gtk-doc.dsl gtkdoc-mkman gtkdoc-mkhtml],
-[chmod +x gtkdoc-mkman gtkdoc-mkhtml])
+AC_OUTPUT([Makefile 
+gtk-doc.dsl 
+gtkdoc-mkman 
+gtkdoc-mkhtml
+gtkdoc-fixxref
+gtkdoc-mkdb
+gtkdoc-mktmpl
+gtkdoc-scan
+gtkdoc-scanobj
+],
+[chmod +x gtkdoc-mkman gtkdoc-mkhtml gtkdoc-fixxref gtkdoc-mkdb gtkdoc-mktmpl gtkdoc-scan gtkdoc-scanobj])
