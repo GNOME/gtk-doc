@@ -1,3 +1,15 @@
+Thu Sep  7 11:41:12 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-mkdb.in: Ignore all . files when scanning directories.
+
+	* gtkdoc-scan.in: Add support for GLIB_VAR, GDKVAR,
+	etc when looking for variable declarations. 
+
+	* gtkdoc-scan.in: Recognize GET_CLASS macros.
+
+	* gtkdoc-scangobj.in: Support .lo intermediate files
+	with libtool.
+
 Wed Sep  6 17:57:33 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkdoc-scangobj.in: Add gtkdoc-scangobj scanner for

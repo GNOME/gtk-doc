@@ -315,8 +315,9 @@ sub ScanHeader {
 
 	    # VARIABLES (extern'ed variables)
 
-	    } elsif (m/^\s*extern\s+((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*;/) {
-		$symbol = $4;
+	    } elsif (m/^\s*(extern|[A-Za-z_]+VAR)\s+((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*;/) {
+		$symbol = $5;
+	        s/^\s*([A-Za-z_]+VAR)\b/extern/;
 #		print "Possible extern: $_";
 		&AddSymbolToList (\$list, $symbol);
 		print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$_</VARIABLE>\n";
@@ -477,16 +478,17 @@ sub ScanHeader {
     } elsif ($list =~ m/^\S+_IS_(\S*)/m) {
 	$class = $1;
     }
-
+ 
     if ($class ne "") {
-#	print "Found class: $class\n";
+	if ($list =~ s/^\S+_IS_$class\n//m)          { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_TYPE_$class\n//m)        { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_.*_get_type\n//m)        { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_${class}_CLASS\n//m)     { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_IS_${class}_CLASS\n//m)  { $standard_decl .= $&; }
+	if ($list =~ s/^\S+_${class}_GET_CLASS\n//m) { $standard_decl .= $&; }
 
-	if ($list =~ s/^\S+_$class\n//m)            { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_IS_$class\n//m)         { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_TYPE_$class\n//m)       { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_.*_get_type\n//m)       { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_${class}_CLASS\n//m)    { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_IS_${class}_CLASS\n//m) { $standard_decl .= $&; }
+	# We do this one last, otherwise it tends to be caught by the IS_$class macro
+	if ($list =~ s/^\S+_$class\n//m)             { $standard_decl = $& . $standard_decl; }
 
         if ($standard_decl ne "") {
 	    $list .= "<SUBSECTION Standard>\n$standard_decl";
