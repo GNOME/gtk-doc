@@ -1,3 +1,8 @@
+2004-07-23  Damon Chaplin  <damon@gnome.org>
+
+	* examples/Makefile.am (all-local): add empty all-local target for
+	when ENABLE_GTK_DOC is false. (#148209, Martin Quinson)
+
 Fri Jul 23 13:21:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (ScanSourceFile): Fix regexps for matching
