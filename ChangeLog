@@ -1,3 +1,8 @@
+2002-12-12  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-scan.in (ScanHeader): Also recognize "positive" guards
+	like #ifdef GTK_ENABLE_BROKEN.
+
 2002-12-11  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk-doc.xsl: Change XPath path to "//anchor|//refentry" for the 
