@@ -1,3 +1,12 @@
+2001-05-20  Damon Chaplin  <damon@ximian.com>
+
+	* examples/Makefile.am (sgml-build.stamp): replaced use of wildcard
+	(which isn't portable) with original *.sgml. I think this just means
+	that the first time you try to build the docs it will fail, but if
+	you run make again it will work.
+
+	* doc/setting-up.txt: explained that make may fail the first time.
+
 2001-05-19  Damon Chaplin  <damon@ximian.com>
 
 	* README: 

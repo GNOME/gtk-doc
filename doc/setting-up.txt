@@ -36,7 +36,8 @@ This assumes that you are using autoconf & automake to build your package.
 
 
 That's it! If you now build the application or library you should get a
-complete set of documentation.
+complete set of documentation. (Note that due to make being awkward the build
+may fail the first time, but if you run make again it should work.)
 
 
 You can tweak the output in several ways:
