@@ -143,6 +143,7 @@ sub ParseStructDeclaration {
 		 (\w+)\s*                             # type
 		 (\**)\s*                             # ptr1
 		 (const\s+)?                          # mod2
+		 (\**\s*)			      # ptr2
 		 \(\s*\*\s*(\w+)\s*\)\s*              # name
 		 \(([^)]*)\)\s*                       # func_params
 		            $/x) {
@@ -152,15 +153,16 @@ sub ParseStructDeclaration {
 	    my $type = $3;
 	    my $ptr1 = $4;
 	    my $mod2 = defined($5) ? $5 : "";
-	    my $name = $6;
-	    my $func_params = $7;
+	    my $ptr2 = $6;
+	    my $name = $7;
+	    my $func_params = $8;
 	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
 	    my $pname = defined $namefunc ? $namefunc->($name) : $name;
 
 	    push @result, $name;
 
 	    if ($output_function_params) {
-	      push @result, "$mod1$ptype$ptr1$mod2 (*$pname) ($func_params)";
+	      push @result, "$mod1$ptype$ptr1$mod2$ptr2 (*$pname) ($func_params)";
 	    } else {
 	      push @result, "$pname&nbsp;()";
 	    }

@@ -1,5 +1,8 @@
 2004-10-18  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-common.pl.in (ParseStructDeclaration): support function
+	pointers that return "foo const *" #141870.
+
 	* gtkdoc-scan.in (ScanHeader): 
 	* gtkdoc-mkdb.in (OutputFunction): 
 	* gtkdoc-mktmpl.in (OutputDeclaration): handle functions with const
