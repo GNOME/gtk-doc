@@ -71,9 +71,9 @@ print OUTPUT <<EOT;
 #include <stdio.h>
 
 $includes
-GtkType object_types[$ntypes];
+GType object_types[$ntypes];
 
-GtkType *
+GType *
 get_object_types ()
 {
     gint i = 0;
@@ -85,6 +85,12 @@ for (@types) {
 
 print OUTPUT <<EOT;
     object_types[i] = 0;
+
+    /* Need to make sure all the types are loaded in and initialize
+     * their signals and properties.
+     */
+    for (i=0; object_types[i]; i++)
+      g_type_class_ref (object_types[i]);
 
     return object_types;
 }
@@ -102,12 +108,12 @@ gchar *args_filename = "$MODULE.args";
 
 static void output_signals ();
 static void output_widget_signals (FILE *fp,
-				   GtkType object_type);
+				   GType object_type);
 static void output_widget_signal (FILE *fp,
-				  GtkType object_type,
+				  GType object_type,
 				  gchar *object_class_name,
 				  guint signal_id);
-static gchar * get_type_name (GtkType type,
+static gchar * get_type_name (GType type,
 			      gboolean * is_pointer);
 static gchar * get_gdk_event (const gchar * signal_name);
 static gchar ** lookup_signal_arg_names (gchar * type,
@@ -115,11 +121,11 @@ static gchar ** lookup_signal_arg_names (gchar * type,
 
 static void output_widget_hierarchy ();
 static void output_hierarchy (FILE *fp,
-			      GtkType type,
+			      GType type,
 			      gint level);
 
 static void output_args ();
-static void output_widget_args (FILE *fp, GtkType object_type);
+static void output_widget_args (FILE *fp, GType object_type);
 
 int
 main (int argc, char *argv[])
@@ -169,40 +175,32 @@ output_signals ()
 
 /* This outputs all the signals of one widget. */
 static void
-output_widget_signals (FILE *fp, GtkType object_type)
+output_widget_signals (FILE *fp, GType object_type)
 {
-  GtkObjectClass *class;
   gchar *object_class_name;
+  guint *signals, n_signals;
   guint sig;
 
-  class = gtk_type_class (object_type);
-  if (!class || class->nsignals == 0)
-    return;
+  object_class_name = g_type_name (object_type);
 
-  object_class_name = gtk_type_name (object_type);
-
-  for (sig = 0; sig < class->nsignals; sig++)
+  signals = g_type_signals (object_type, &n_signals);
+  for (sig = 0; sig < n_signals; sig++)
     {
-      if (!class->signals[sig])
-        {
-          /*g_print ("Signal slot [%u] is empty\n", sig);*/
-          continue;
-        }
-
       output_widget_signal (fp, object_type, object_class_name,
-			    class->signals[sig]);
+			    signals[sig]);
     }
+  g_free (signals);
 }
 
 
 /* This outputs one signal. */
 static void
 output_widget_signal (FILE *fp,
-		      GtkType object_type,
+		      GType object_type,
 		      gchar *object_name,
 		      guint signal_id)
 {
-  GtkSignalQuery *query_info;
+  GSignalQuery query_info;
   gchar *ret_type, *pos, *type_name, *arg_name, *object_arg, *object_arg_start;
   gboolean is_pointer;
   gchar ret_type_buffer[1024], buffer[1024];
@@ -219,15 +217,10 @@ output_widget_signal (FILE *fp,
   param_num = 1;
   widget_num = event_num = callback_num = 0;
 
-  query_info = gtk_signal_query (signal_id);
-  if (query_info == NULL)
-    {
-      g_warning ("Couldn't query signal");
-      return;
-    }
+  g_signal_query (signal_id, &query_info);
 
   /* Output the return type and function name. */
-  ret_type = get_type_name (query_info->return_val, &is_pointer);
+  ret_type = get_type_name (query_info.return_type, &is_pointer);
   sprintf (ret_type_buffer, "%s%s", ret_type, is_pointer ? "*" : "");
 
   /* Output the signal object type and the argument name. We assume the
@@ -252,7 +245,7 @@ output_widget_signal (FILE *fp,
     widget_num++;
   
   /* Convert signal name to use underscores rather than dashes '-'. */
-  strcpy (signal_name, query_info->signal_name);
+  strcpy (signal_name, query_info.signal_name);
   for (i = 0; signal_name[i]; i++)
     {
       if (signal_name[i] == '-')
@@ -262,7 +255,7 @@ output_widget_signal (FILE *fp,
   /* Output the signal parameters. */
   arg_names = lookup_signal_arg_names (object_name, signal_name);
 
-  for (param = 0; param < query_info->nparams; param++)
+  for (param = 0; param < query_info.n_params; param++)
     {
       if (arg_names)
 	{
@@ -271,7 +264,7 @@ output_widget_signal (FILE *fp,
 	}
       else
 	{
-	  type_name = get_type_name (query_info->params[param], &is_pointer);
+	  type_name = get_type_name (query_info.param_types[param], &is_pointer);
 
 	  /* Most arguments to the callback are called "arg1", "arg2", etc.
 	     GdkWidgets are called "widget", "widget2", ...
@@ -317,13 +310,12 @@ output_widget_signal (FILE *fp,
   
   fprintf (fp,
 	   "<SIGNAL>\n<NAME>%s::%s</NAME>\n<RETURNS>%s</RETURNS>\n%s</SIGNAL>\n\n",
-	   object_name, query_info->signal_name, ret_type_buffer, buffer);
-  g_free (query_info);
+	   object_name, query_info.signal_name, ret_type_buffer, buffer);
 }
 
 
 static gchar *
-get_type_name (GtkType type, gboolean * is_pointer)
+get_type_name (GType type, gboolean * is_pointer)
 {
   static gchar *GbTypeNames[] =
   {
@@ -350,12 +342,12 @@ get_type_name (GtkType type, gboolean * is_pointer)
     NULL
   };
 
-  GtkType parent_type;
+  GType parent_type;
   gchar *type_name, *parent_type_name;
   gint i;
 
   *is_pointer = FALSE;
-  type_name = gtk_type_name (type);
+  type_name = g_type_name (type);
   for (i = 0; GbTypeNames[i]; i += 2)
     {
       if (!strcmp (type_name, GbTypeNames[i]))
@@ -368,12 +360,12 @@ get_type_name (GtkType type, gboolean * is_pointer)
 
   for (;;)
     {
-      parent_type = gtk_type_parent (type);
+      parent_type = g_type_parent (type);
       if (parent_type == 0)
 	break;
       type = parent_type;
     }
-  parent_type_name = gtk_type_name (type);
+  parent_type_name = g_type_name (type);
   /*g_print ("Parent type name: %s\n", parent_type_name);*/
   if (!strcmp (parent_type_name, "GtkObject")
       || !strcmp (parent_type_name, "boxed")
@@ -691,7 +683,7 @@ output_hierarchy (FILE  *fp,
 
   for (i = 0; i < level; i++)
     fprintf (fp, "  ");
-  fprintf (fp, gtk_type_name (type));
+  fprintf (fp, g_type_name (type));
   fprintf (fp, "\n");
 
   children = g_type_children (type, &n_children);
@@ -724,7 +716,7 @@ output_args ()
 
 
 static void
-output_widget_args (FILE *fp, GtkType object_type)
+output_widget_args (FILE *fp, GType object_type)
 {
   GtkObjectClass *class;
   gchar *object_class_name;
