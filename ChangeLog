@@ -1,3 +1,9 @@
+2002-11-16  James Henstridge  <james@daa.com.au>
+
+	* gtk-doc.xsl: output HTML in ISO-8859-1 (latin1), as using UTF-8
+	can trigger misinterpretation of web pages when the web server
+	asserts that the document is encoded in latin1 in the mime type.
+
 2002-11-15  James Henstridge  <james@daa.com.au>
 
 	* gtk-doc.xsl: small changes to make the output closer to valid
