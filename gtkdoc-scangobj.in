@@ -68,7 +68,7 @@ open TYPES, $TYPES_FILE || die "Cannot open $TYPES_FILE: $!\n";
 open OUTPUT, ">$MODULE-scan.c" || die "Cannot open $MODULE-scan.c: $!\n";
 
 my $old_signals_filename = "$OUTPUT_DIR/$MODULE.signals";
-my $new_signals_filename = "$OUTPUT_DIR/MODULE.signals.new";
+my $new_signals_filename = "$OUTPUT_DIR/$MODULE.signals.new";
 my $old_hierarchy_filename = "$OUTPUT_DIR/$MODULE.hierarchy";
 my $new_hierarchy_filename = "$OUTPUT_DIR/$MODULE.hierarchy.new";
 my $old_args_filename = "$OUTPUT_DIR/$MODULE.args";
@@ -119,6 +119,7 @@ print OUTPUT <<EOT;
      * their signals and properties.
      */
     for (i=0; object_types[i]; i++)
+      if (G_TYPE_IS_CLASSED (object_types[i]))
       g_type_class_ref (object_types[i]);
 
     return object_types;
@@ -745,6 +746,9 @@ output_widget_args (FILE *fp, GType object_type)
   gchar flags[16], *pos;
   GParamSpec **properties;
   guint n_properties;
+
+  if (!G_TYPE_IS_CLASSED (object_type))
+    return;
 
   class = g_type_class_peek (object_type);
   if (!class)

@@ -1006,8 +1006,8 @@ sub OutputSGMLFile {
     my $args_synop = "";
     my $args_desc = "";
     my $hierarchy = "";
-    if (&CheckIsObject ($title)) {
 	($signals_synop, $signals_desc) = &GetSignals ($title);
+    if (&CheckIsObject ($title)) {
 	($args_synop, $args_desc) = &GetArgs ($title);
 	$hierarchy = &GetHierarchy ($title);
     }
