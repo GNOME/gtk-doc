@@ -1,3 +1,9 @@
+2005-03-21  James Henstridge  <james@jamesh.id.au>
+
+	* gtk-doc.xsl (encoding): output US-ASCII instead of ISO-8859-1.
+	This ensures that the output will be display correctly when served
+	as either ISO-8859-1 or UTF-8.
+
 2005-02-26  Sven Neumann  <sven@gimp.org>
 
 	* gtkdoc-mkdb.in (MakeIndexterms): allow space in Since: keywords,
