@@ -252,6 +252,9 @@ sub UpdateTemplates {
 		if ($subsection ne "Standard" && $subsection ne "Private") {
 		    $output .= &OutputDeclaration ($DeclarationTypes {$symbol},
 						   $symbol, $declaration);
+
+		    $output .= &OutputSignalTemplates ($symbol);
+		    $output .= &OutputArgTemplates ($symbol);
 		}
 
 		# Note that the declaration has been output.
@@ -260,6 +263,7 @@ sub UpdateTemplates {
 		if ($declaration eq '##conditional##') {
 #		    print "Conditional $DeclarationTypes{$symbol}\n";
 		}
+
 	    } else {
 		print "WARNING: No declaration for: $1\n";
 	    }
@@ -604,8 +608,6 @@ $see_also
 EOF
 
     print (OUTPUT $$output);
-    &OutputSignalTemplates ($title);
-    &OutputArgTemplates ($title);
     close (OUTPUT);
 
     return &UpdateFileIfChanged ($old_tmpl_file, $new_tmpl_file, 1);
@@ -684,7 +686,7 @@ EOF
 	    $output .= "\n";
 	}
     }
-    print (OUTPUT $output);
+    return $output;
 }
 
 
@@ -723,7 +725,7 @@ $symbol_desc
 EOF
 	}
     }
-    print (OUTPUT $output);
+    return $output;
 }
 
 

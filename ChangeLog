@@ -1,3 +1,16 @@
+2003-10-01  Matthias Clasen  <maclas@gmx.de>
+
+	Make signals and properties end up in the right template 
+	file (#116569, Owen Taylor):
+
+	* gtkdoc-mktmpl.in (OutputSignalTemplates): 
+	(OutputArgTemplates): Return a string rather than directly 
+	writing to OUTPUT. 
+	(OutputTemplateFile): Don't interpret $title as the name of 
+	the object to print signal and property templates for.
+	(UpdateTemplates): Collect signal and property templates for all
+	objects contained in the section.
+
 2003-08-10  James Henstridge  <james@daa.com.au>
 
 	* acinclude.m4 (JH_PATH_XML_CATALOG): allow caller to specify
