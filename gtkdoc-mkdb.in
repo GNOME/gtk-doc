@@ -1260,8 +1260,8 @@ sub ConvertSGMLChars {
     my ($text) = @_;
     if ($SGML_MODE) {
 	$text =~ s/&(?![[:alpha:]#])/&amp;/g;	# Do this first, or the others get messed up.
-	$text =~ s/<(?![[:alpha:]\/])/&lt;/g;
-	$text =~ s/(?<![[:alpha:]"'])>/&gt;/g;
+	$text =~ s/<(?![[:alpha:]\/!])/&lt;/g;
+	$text =~ s/(?<![[:alpha:]"'\/-])>/&gt;/g;
     }
     else {
 	$text =~ s/&/&amp;/g;	# Do this first, or the others get messed up.

@@ -1,3 +1,8 @@
+2002-05-28  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (ConvertSGMLChars): Make this work correctly
+	for empty elements and XML comments in doc comments.
+
 2002-05-27  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (ReadTemplateFile, OutputSGMLFile): 
