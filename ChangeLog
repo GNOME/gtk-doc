@@ -1,3 +1,9 @@
+2005-02-04  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in (ParseStabilityLevel): don't reset $stability if it
+	isn't Stable/Unstable/Private (Brian Cameron).
+	(ScanSourceFile): skip whitespace after "SECTION:".
+
 2005-02-01  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (ScanSourceFile, MergeSourceDocumentation): patch
