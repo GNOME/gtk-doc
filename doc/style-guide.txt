@@ -103,8 +103,7 @@ Widget Structs
 Some widget structs have fields which are useful to the developer, since
 there are currently no accessor functions to retrieve the particular field.
 
-These fields should be documented by using a table, Copy this
-and change the <entry> contents:
+These fields should be documented as follows:
 
 -----------------------------------------------------------------------
 <!-- ##### STRUCT GtkFixedChild ##### -->
@@ -112,30 +111,13 @@ and change the <entry> contents:
 The #GtkFixedChild-struct struct contains the following fields.
 (These fields should be considered read-only. They should never be set by
 an application.)
-
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>#GtkWidget *widget;</entry>
-<entry>the child #GtkWidget.</entry>
-</row>
-
-<row>
-<entry>#gint16 x;</entry>
-<entry>the horizontal position of the widget within the #GtkFixed
-container.</entry>
-</row>
-
-<row>
-<entry>#gint16 y;</entry>
-<entry>the vertical position of the widget within the #GtkFixed
-container.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
+
+@widget: the child #GtkWidget.
+@x: the horizontal position of the widget within the #GtkFixed
+    container.
+@y: the vertical position of the widget within the #GtkFixed
+    container.
 -----------------------------------------------------------------------
 
 
@@ -154,6 +136,37 @@ e.g. links to #GtkAccelLabel result in a link to the GtkAccelLabel page.
 If you want to link to the widget struct, you must append '-struct',
 e.g. #GtkAccelLabel-struct
 
+Whether a particular field in a structure is output in the 
+documentation is determined by adding /*< public >*/ and
+/*< private >*/ comments into the header files. For instance,
+GtkEditable looks like:
+
+-----------------------------------------------------------------------
+struct _GtkEditable
+{
+  GtkWidget widget;
+
+  /*< public >*/
+  guint      current_pos;
+
+  guint      selection_start_pos;
+  guint      selection_end_pos;
+  guint      has_selection : 1;
+
+  /*< private >*/
+  guint      editable : 1;
+  guint      visible : 1;
+  GdkIC     *ic;
+  GdkICAttr *ic_attr;
+  
+  gchar *clipboard_text;
+};
+-----------------------------------------------------------------------
+
+You should add these as you go along. Please send these changes
+in along with your patche for the reference docs. Widget structures
+are by default all private, other structures are by default all public.
+
 
 Enumerations
 ============
@@ -162,8 +175,7 @@ A lot of the enumerations in GTK+ are currently placed in the "Standard
 Enumerations" section. However, some of these are specific to a particular
 widget and so should be moved to the widget's section and documented there.
 
-The enumeration values should be documented with a table. Copy this
-and change the <symbol> and <entry> contents:
+The enumeration values should be documented as follows:
 
 -----------------------------------------------------------------------
 <!-- ##### ENUM GtkFontFilterType ##### -->
@@ -171,24 +183,11 @@ and change the <symbol> and <entry> contents:
 A set of bit flags used to specify the filter being set
 when calling gtk_font_selection_dialog_set_filter() or
 gtk_font_selection_set_filter().
-
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GTK_FONT_FILTER_BASE</entry>
-<entry>the base filter, which can't be changed by the user.</entry>
-</row>
-
-<row>
-<entry>GTK_FONT_FILTER_USER</entry>
-<entry>the user filter, which can be changed from within the 'Filter' page
-of the #GtkFontSelection widget.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
+
+@GTK_FONT_FILTER_BASE: the base filter, which can't be changed by the user.
+@GTK_FONT_FILTER_USER: the user filter, which can be changed from within the 'Filter' page
+		       of the #GtkFontSelection widget.
 -----------------------------------------------------------------------
 
 

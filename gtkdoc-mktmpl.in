@@ -70,6 +70,9 @@ my $ROOT_DIR = ".";
 # The directory containing the template files.
 $TMPL_DIR = $TMPL_DIR ? $TMPL_DIR : "$ROOT_DIR/tmpl";
 
+# This file contains the object hierarchy.
+my $OBJECT_TREE_FILE = "$ROOT_DIR/$MODULE.hierarchy";
+
 # The file containing signal handler prototype information.
 my $SIGNALS_FILE = "$ROOT_DIR/$MODULE.signals";
 
@@ -104,8 +107,13 @@ my %SymbolDocs;
 my %SymbolTypes;
 my %SymbolParams;
 
+# These global arrays store GtkObject and subclasses and the hierarchy.
+my @Objects;
+my @ObjectLevels;
+
 &ReadSignalsFile ($SIGNALS_FILE);
 &ReadArgsFile ($ARGS_FILE);
+&ReadObjectHierarchy;
 
 &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-decl.txt", 0);
 if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
@@ -397,6 +405,25 @@ EOF
 	$output .= &OutputOldParams ($symbol);
 	$output .= "\n";
     }
+
+    if ($type eq "STRUCT") {
+	my $is_object_struct = CheckIsObject ($symbol);
+	my @fields = ParseStructDeclaration($declaration, $is_object_struct);
+
+	for (my $i = 0; $i <= $#fields; $i += 2) {
+	    my $field_name = $fields[$i];
+	    $output .= &OutputParam ($symbol, $field_name, $template_exists, 1, "");
+	}
+    }
+
+    if ($type eq "ENUM") {
+	my @members = ParseEnumDeclaration($declaration);
+
+	for my $member (@members) {
+	    $output .= &OutputParam ($symbol, $member, $template_exists, 1, "");
+	}
+    }
+
     $output .= "\n";
 
     # Remove the used docs from the hashes.
@@ -1011,6 +1038,49 @@ sub ReadTemplateFile {
 
 
 #############################################################################
+# Function    : ReadObjectHierarchy
+# Description : This reads in the $MODULE-hierarchy.txt file containing all
+#		the GtkObject subclasses described in this module (and their
+#		ancestors).
+#		It places them in the @Objects array, and places their level
+#		in the widget hierarchy in the @ObjectLevels array, at the
+#		same index. GtkObject, the root object, has a level of 1.
+#   
+#               FIXME: the version in gtkdoc-mkdb also generates tree_index.sgml
+#               as it goes along, this should be split out into a separate
+#               function.
+# 
+# Arguments   : none
+#############################################################################
+
+sub ReadObjectHierarchy {
+    @Objects = ();
+    @ObjectLevels = ();
+
+    if (! -f $OBJECT_TREE_FILE) {
+	return;
+    }
+    if (!open (INPUT, $OBJECT_TREE_FILE)) {
+	warn "Can't open $OBJECT_TREE_FILE - skipping object tree\n";
+	return;
+    }
+    while (<INPUT>) {
+        if (m/\S+/) {
+	    my $object = $&;
+	    my $level = (length($`)) / 2 + 1;
+#            print ("Level: $level  Object: $object\n");
+
+	    my $xref = &MakeXRef ($object);
+	    push (@Objects, $object);
+	    push (@ObjectLevels, $level);
+        }
+    }
+
+    close (INPUT);
+}
+
+
+#############################################################################
 # Function    : ReadArgsFile
 # Description : This reads in an existing file which contains information on
 #		all GTK args. It creates the arrays @ArgObjects, @ArgNames,
@@ -1077,3 +1147,188 @@ sub ReadArgsFile {
 }
 
 
+#############################################################################
+# Function    : CheckIsObject
+# Description : Returns 1 if the given name is a GtkObject or a subclass.
+#		It uses the global @Objects array.
+#		Note that the @Objects array only contains classes in the
+#		current module and their ancestors - not all GTK classes.
+# Arguments   : $name - the name to check.
+#############################################################################
+
+sub CheckIsObject {
+    my ($name) = @_;
+
+    my $object;
+    foreach $object (@Objects) {
+	if ($object eq $name) {
+	    return 1;
+	}
+    }
+    return 0;
+}
+
+
+#############################################################################
+# Function    : ParseStructDeclaration
+# Description : This function takes a structure declaration and
+#               breaks it into individual type declarations.
+# Arguments   : $declaration - the declaration to parse
+#               $is_object - true if this is an object structure
+#               $typefunc - function reference to apply to type
+#               $namefunc - function reference to apply to name
+#############################################################################
+
+sub ParseStructDeclaration {
+    my ($declaration, $is_object, $typefunc, $namefunc) = @_;
+
+    # Remove all private parts of the declaration
+
+    # For objects, assume private
+    if ($is_object) {
+	s!/(struct\s*\w+\s*\{)\s\*/.*?/\*\s*<\s*public\s*>\s\*/!$1!msg;
+    }
+    
+    s!/\*\s*<\s*private\s*>\s\*/.*?(/\*\s*<\s*public\s*>\s\*|\})/!!msg;
+    
+    # Remove all other comments;
+    $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
+
+    my @result = ();
+
+    if ($declaration =~ /^\s*$/) {
+	return @result;
+    }
+
+    # Prime match after "struct {" declaration
+    if (!scalar($declaration =~ m/struct\s*\w+\s*\{/msg)) {
+	die "Structure declaration '$declaration' does not begin with struct NAME {\n";
+    }
+
+    # Treat lines in sequence, allowing singly nested anonymous structs
+    # and unions.
+    while ($declaration =~ m/\s*([^{;]+(\{[^\}]*\}[^{;]+)?);/msg) {
+	my $line = $1;
+	
+	last if $line =~ /^\s*\}\s*$/;
+
+	# FIXME: Just ignore nested structs and unions for now
+	next if $line =~ /{/;
+
+	# FIXME: The regexes here are the same as in OutputFunction; 
+	#        this functionality should be separated out.
+
+	if ($line =~ m/^
+	    (const\s+|unsigned\s+)*(struct\s+)? # mod1
+	    (\w+)\s*                            # type
+	    (\**)\s*                            # ptr1
+	    (const\s+)?                         # mod2
+	    (\**)?\s*                           # ptr2
+	    (\w+(?:\s*,\s*\w+)*)\s*             # name
+	    ((?:\[\d*\]\s*)+)?\s*               # array
+	               $/x) {
+	    my $mod1 = defined($1) ? $1 : "";
+	    if (defined($2)) { $mod1 .= $2; }
+	    my $type = $3;
+	    my $ptr1 = $4;
+	    my $mod2 = defined($5) ? $5 : "";
+	    my $ptr2 = $6;
+	    my $name = $7;
+	    $ptr1 = " " . $ptr1;
+	    my $array = defined($8) ? $8 : "";
+	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
+	    
+	    # FIXME:
+	    # As a hack, we allow the "name" to be of the form
+	    # "a, b, c". This isn't the correct C syntax, but
+	    # at least we get "gint16 x, y" right. Such constructs
+	    # should really be completely removed from the source.
+	    # Or we should really try to understand the C syntax
+	    # here...
+	    
+	    my @names = split /\s*,\s*/, $name;
+	    for my $n (@names) {
+		if (defined $namefunc) {
+		    $n = $namefunc->($n);
+		}
+		push @result, $n;
+		push @result, "$mod1$ptype$ptr1$mod2$ptr2$n$array";
+	    }
+	    
+        # Try to match structure members which are functions
+	} elsif ($line =~ m/^
+		 (const\s+|unsigned\s+)*(struct\s+)?  # mod1 
+		 (\w+)\s*                             # type
+		 (\**)\s*                             # ptr1
+		 (const\s+)?                          # mod2
+		 \(\s*\*\s*(\w+)\s*\)\s*              # name
+		 \(([^)]*)\)\s*                       # func_params
+		            $/x) {
+
+	    my $mod1 = defined($1) ? $1 : "";
+	    if (defined($2)) { $mod1 .= $2; }
+	    my $type = $3;
+	    my $ptr1 = $4;
+	    my $mod2 = defined($5) ? $5 : "";
+	    my $name = $6;
+	    my $func_params = $7;
+	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
+	    my $pname = defined $namefunc ? $namefunc->($name) : $name;
+	    
+	    push @result, $name;
+	    push @result, "$mod1$ptype$ptr1$mod2 (*$pname) ($func_params)";
+	    
+	} else {
+	    warn "Cannot parse structure field $line";
+	}
+    }
+    
+    return @result;
+}
+
+
+#############################################################################
+# Function    : ParseEnumDeclaration
+# Description : This function takes a enumeration declaration and
+#               breaks it into individual enum member declarations.
+# Arguments   : $declaration - the declaration to parse
+#############################################################################
+
+sub ParseEnumDeclaration {
+    my ($declaration, $is_object) = @_;
+
+    # Remove comments;
+    $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
+
+    my @result = ();
+
+    if ($declaration =~ /^\s*$/) {
+	return @result;
+    }
+
+    # Prime match after "typedef enum {" declaration
+    if (!scalar($declaration =~ m/typedef\s+enum\s*\{/msg)) {
+	die "Enum declaration '$declaration' does not begin with typedef enum {\n";
+    }
+
+    # Treat lines in sequence.
+    while ($declaration =~ m/\s*([^,\}]+)([,\}])/msg) {
+	my $line = $1;
+	my $terminator = $2;
+
+	if ($line =~ m/^(\w+)\s*(=.*)?$/msg) {
+	    push @result, $1;
+	    
+	# Special case include of <gdk/gdkcursors.h>, just ignore it
+	} elsif ($line =~ m/^#include/) {
+	    last;
+
+	} else {
+	    warn "Cannot parse enumeration member $line";
+	}
+
+	last if $terminator eq '}';
+    }
+    
+    return @result;
+}

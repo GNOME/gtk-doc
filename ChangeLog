@@ -1,3 +1,36 @@
+Wed Aug  4 03:30:19 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* doc/style-guide.txt: Removed references to creating
+	tables explicitely in favor of demonstrating new
+	syntax. Added a short section on /<* public >*/
+	and /*< private *>/.
+
+Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-mktmpl.in gtkdoc-mkhtml.in: Handle Struct and
+	Enumerations in approximately the same way as we
+	handle parameters. That is, instead of (as before)
+	coding in the tables by hand, one uses lines like:
+
+	@width: the width of the rectangle in pixels.
+
+	To support migration from the older hand-coded
+	tables, if none of the members of a structure or
+	enumeration have a description in a @... line, then
+	we don't generate the table at all.
+
+	Also, gtkdoc-mktmpl now loads up the object heirarchy,
+	because we need to be able to check if structures
+	are widget structures.
+
+	In general, the coding here is pretty clean, though
+	the style is a little different. (I'm interating
+	through strings with m/.../msg; instead of 
+	s/^...//; for one thing.) However, there are a some
+	of FIXME's where I've whimped out on try to handle
+	real C syntax, and the need to split out and librarize
+	a bunch of duplicated code is greater than ever.
+
 1999-06-06  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* configure.in: updated version to 0.3.
