@@ -1,3 +1,13 @@
+2003-11-03  Dan Winship  <danw@ximian.com>
+
+	* gtkdoc-scangobj.in: Clean up $MODULE-scan.o even when using
+	libtool
+
+	* gtkdoc-scanobj.in: Likewise
+
+	* gtk-doc.make (CLEANFILES): Remove $(MODULE)-scan.o from here
+	(clean-local): rm -rf .libs
+	
 Wed Oct  8 01:21:54 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scan.in (ScanHeader): Make gtkdoc-scan grok 

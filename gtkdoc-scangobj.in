@@ -989,7 +989,7 @@ system($command) == 0 or die "Compilation of scanner failed\n";
 
 system("./$MODULE-scan") == 0 or die "Scan failed\n";
 
-unlink "./$MODULE-scan.c", "./$o_file", "./$MODULE-scan";
+unlink "./$MODULE-scan.c", "./$MODULE-scan.o", "./$MODULE-scan.lo", "./$MODULE-scan";
 
 &UpdateFileIfChanged ($old_signals_filename, $new_signals_filename, 0);
 &UpdateFileIfChanged ($old_hierarchy_filename, $new_hierarchy_filename, 0);
