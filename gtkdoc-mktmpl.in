@@ -642,7 +642,7 @@ sub OutputSignalTemplates {
 $symbol_desc
 
 EOF
-	    
+	    my $sourceparams = $SymbolParams{$symbol};
 	    my @params = split ("[,\n]", $SignalPrototypes[$i]);
 	    my ($j, $name);
 	    for ($j = 0; $j <= $#params; $j++) {
@@ -653,7 +653,10 @@ EOF
 		if ($param =~ m/^void$/) { next; }
 
 		if ($param =~ m/^\s*(\w+)\s*(\**)\s*([\w\[\]]+)?\s*$/) {
-		    if (defined($3)) {
+		    if (defined($sourceparams)) {
+			$name = $$sourceparams[2 * $j];
+		    }
+		    elsif (defined($3)) {
 			$name = $3;
 		    } else {
 			$name = "Param" . ($j + 1);
