@@ -1,3 +1,15 @@
+Wed Oct  8 01:21:54 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-scan.in (ScanHeader): Make gtkdoc-scan grok 
+	typedef struct { } foo; in addition to the more baroque
+	typedef struct _foo foo; struct _foo { };
+	(#116807, Malcolm Tredinnick)
+
+Wed Oct  8 01:21:35 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (OutputParamDescriptions): Remove a pointless 
+	warning.
+
 2003-10-01  Matthias Clasen  <maclas@gmx.de>
 
 	Make signals and properties end up in the right template 

@@ -1188,9 +1188,6 @@ sub OutputParamDescriptions {
 	my $returns = "";
 	my $params = $SymbolParams{$symbol};
 	my $params_desc = "";
-	if ($#$params < 0) {
-	    print "WARNING: 0 parameters\n";
-	}
 	my $j;
 	for ($j = 0; $j <= $#$params; $j += 2) {
 	    my $param_name = $$params[$j];
@@ -2144,7 +2141,8 @@ sub ScanSourceFile {
 	    if (m%^\s*/\*.*\*/%) {
 	        #one-line comment - not gtkdoc
 	    } elsif (m%^\s*/\*\*\s%) {
-#		print "Found comment block start\n";
+#	      print "Found comment block start\n";
+
 		$in_comment_block = 1;
 
 		# Reset all the symbol data.
@@ -3034,7 +3032,7 @@ sub ReadArgsFile {
     my $arg_nick;
     my $arg_blurb;
 
-    # Reset the signal info.
+    # Reset the args info.
     @ArgObjects = ();
     @ArgNames = ();
     @ArgTypes = ();

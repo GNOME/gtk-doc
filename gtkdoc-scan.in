@@ -335,7 +335,7 @@ sub ScanHeader {
 
 	    } elsif (m/^\s*typedef\s+struct\s*{/) {
 		$symbol = "";
-		$decl = $_;
+ 		$decl = $_;
 		$level = 0;
 		$in_declaration = "struct";
 
@@ -487,8 +487,8 @@ sub ScanHeader {
 		}
 		&AddSymbolToList (\$list, $symbol);
 
-		if ($decl =~ m/^\s*typedef\s+struct\s*{/) {
-		    print DECL "<TYPEDEF>\n<NAME>$symbol</NAME>\n$deprecated$decl</TYPEDEF>\n";
+		if ($decl =~ s/^\s*typedef\s+struct\s*{(.*)}\s*\w*;\s*$/struct $symbol\n{$1};\n/s) {
+		    print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";
 		} else {
 		    print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";
 		}
