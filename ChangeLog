@@ -1,3 +1,8 @@
+2002-10-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk-doc.xsl: use 'UTF-8', not UTF-8 for default.encoding, to
+	make the encoding actually appear in the resulting HTML.
+
 2002-10-09  James Henstridge  <james@daa.com.au>
 
 	* gtkdoc-mkdb.in: set $doctype_header to "" for the SGML case, as
