@@ -22,7 +22,8 @@ gtkdocdata_DATA = \
 	home.png		\
 	left.png		\
 	right.png		\
-	up.png
+	up.png			\
+	style.css
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gtk-doc.pc
@@ -61,4 +62,5 @@ EXTRA_DIST = \
   examples/Makefile.am  \
   examples/configure.in \
   tools/docpercentages.pl \
-  tools/gtk-doc.el
+  tools/gtk-doc.el \
+  style.css

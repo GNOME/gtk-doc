@@ -97,39 +97,7 @@
       <meta name="generator"
             content="GTK-Doc V{$gtkdoc.version} (XML mode)"/>
     </xsl:if>
-    <style type="text/css">
-      <xsl:text>
-        .synopsis, .classsynopsis {
-            background: #eeeeee;
-            border: solid 1px #aaaaaa;
-            padding: 0.5em;
-        }
-        .programlisting {
-            background: #eeeeff;
-            border: solid 1px #aaaaff;
-            padding: 0.5em;
-        }
-        .variablelist {
-            padding: 4px;
-            margin-left: 3em;
-        }
-        .navigation {
-            background: #ffeeee;
-            border: solid 1px #ffaaaa;
-            margin-top: 0.5em;
-            margin-bottom: 0.5em;
-        }
-        .navigation a {
-            color: #770000;
-        }
-        .navigation a:visited {
-            color: #550000;
-        }
-        .navigation .title {
-            font-size: 200%;
-        }
-      </xsl:text>
-    </style>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
   </xsl:template>
 
   <xsl:template match="title" mode="book.titlepage.recto.mode">

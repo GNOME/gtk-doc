@@ -46,6 +46,7 @@ fi
 
 # copy navigation images to html directory ...
 cp -f $gtkdocdir/*.png .
+cp -f $gtkdocdir/*.css .
 
 
 echo "timestamp" > ../html.stamp
