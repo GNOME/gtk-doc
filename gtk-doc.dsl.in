@@ -20,11 +20,8 @@
 ;; If a Chapter has role="no-toc" we don't generate a table of contents.
 ;; This is useful if a better contents page has been added manually, e.g. for
 ;; the GTK+ Widgets & Objects page. (But it is a bit of a hack.)
-(define $generate-chapter-toc$
-  (lambda ()
-    (if (equal? (attribute-string (normalize "role") (current-node)) "no-toc")
-        #f
-        #t)))
+(define ($generate-chapter-toc$)
+  (not (equal? (attribute-string (normalize "role") (current-node)) "no-toc"))
 
 (define %chapter-autolabel% 
   ;; Are chapters enumerated?
@@ -59,34 +56,25 @@
 				  attributes: (list (list "CLASS" (gi)))
 				  (make element gi: "A"
 					attributes: (list (list "NAME" (element-id)))
-					(process-children-trim))))))))
-)
+					(process-children-trim)))))))))
 
 (define (book-titlepage-separator side)
   (empty-sosofo))
 
 ;; I want to change this so that for programlisting we use a blue background,
 ;; but for example or informalexample we use green.
-(define $shade-verbatim-attr$
+(define ($shade-verbatim-attr$)
   ;; Attributes used to create a shaded verbatim environment.
-  (lambda ()
-    (if (or (equal? (gi (parent (current-node)))
-		    (normalize "example"))
-	    (equal? (gi (parent (current-node)))
-		    (normalize "informalexample")))
-	(list
-	 (list "BORDER" "0")
-	 (list "BGCOLOR" "#D8F8D8")
-	 (list "WIDTH" "100%")
-	 (list "CELLPADDING" "6"))
-	(list
-	 (list "BORDER" "0")
-	 (list "BGCOLOR" "#D6E8FF")
-	 (list "WIDTH" "100%")
-	 (list "CELLPADDING" "6"))
-	)
-  )
-)
+  (let* ((wrapper-gi (gi (parent (current-node))))
+	 (bgcolor (if (or (equal? wrapper-gi (normalize "example"))
+			  (equal? wrapper-gi (normalize "informalexample")))
+		      "#D8F8D8"
+		      "#D6E8FF")))
+    (list
+     (list "BORDER" "0")
+     (list "BGCOLOR" bgcolor)
+     (list "WIDTH" ($table-width$))
+     (list "CELLPADDING" "6"))))
 
 ;; This overrides the tgroup definition (copied from 1.20, dbtable.dsl).
 ;; It changes the table background color, cell spacing and cell padding.

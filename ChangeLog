@@ -1,3 +1,12 @@
+1999-11-23  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk-doc.dsl.in: Use the (define (foo) ...) syntax rather than
+	the uglier (define foo (lambda () ...)) syntax.
+	($generate-chapter-toc$): Simplify.
+	($shade-verbatim-attr$): Simplify.  Use ($table-width$) instead of
+	"100%" for width (See docs. of NWalsh Docbook DSSSL Stylesheets
+	for an explanation).
+
 1999-09-20  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtk-doc.dsl.in: If a Chapter has role="no-toc" we don't generate a
