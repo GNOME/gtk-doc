@@ -409,14 +409,13 @@ sub ScanHeader {
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-	    } elsif (m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+)*\w+)(\s+(?:(?:const\s+|G_CONST_RETURN\s+)?\*\s*)+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
-		$ret_type = "$3 $5";
-		$symbol = $6;
+	    } elsif (m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+)*\w+(\**\s+\**(const|G_CONST_RETURN))?(\s+|\s*\*+))\s*([A-Za-z]\w*)\s*\(/) {
+		$ret_type = $3;
+		$symbol = $8;
 		$decl = $';
 
-		if ($1) {
-#		    print "Function: $symbol, Returns: $ret_type\n";
-	        }
+#		print "Function: $symbol, Returns: $ret_type\n";
+
 		$in_declaration = "function";
 
 	    # Try to catch function declarations which have the return type on

@@ -1,3 +1,10 @@
+2004-10-18  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-scan.in (ScanHeader): 
+	* gtkdoc-mkdb.in (OutputFunction): 
+	* gtkdoc-mktmpl.in (OutputDeclaration): handle functions with const
+	or struct return types. #141870 and #148507.
+
 2004-10-15  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-common.pl.in (ParseStructDeclaration)

@@ -368,8 +368,8 @@ EOF
     # For functions and function typedefs we also output the return value.
     if ($type eq "FUNCTION" || $type eq "USER_FUNCTION") {
 	# Take out the return type
-	$declaration =~ s/<RETURNS>\s*(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(\w+)\s*(((\s*const\s+|\s*G_CONST_RETURN\s+|\s*)\*)*)\s*<\/RETURNS>\n//;
-	my ($ret_type) = $2;
+        $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*)<\/RETURNS>\n//;
+	my ($ret_type) = $3;
 
 	my ($param_num) = 0;
 	my ($name);
