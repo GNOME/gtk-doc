@@ -736,10 +736,24 @@ sub OutputMacro {
 
     $desc .= &MakeDeprecationNote($symbol);
 
+    my $parameters = &OutputParamDescriptions ("MACRO", $symbol);
+    my $parameters_output = 0;
+
     if (defined ($SymbolDocs{$symbol})) {
-	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	my $symbol_docs = &ExpandAbbreviations($SymbolDocs{$symbol});
+
+	# Try to insert the parameter table at the author's desired position.
+	# Otherwise we need to tag it onto the end.
+	if ($symbol_docs =~ s/<!--PARAMETERS-->/$parameters/) {
+	  $parameters_output = 1;
+	}
+	$desc .= $symbol_docs;
     }
-    $desc .= &OutputParamDescriptions ("MACRO", $symbol);
+
+    if ($parameters_output == 0) {
+	$desc .= $parameters;
+    }
+
     if (exists $Since{$symbol}) {
 	$desc .= "<para>Since $Since{$symbol}</para>";
     }
@@ -1207,11 +1221,24 @@ sub OutputFunction {
 
     $desc .= &MakeDeprecationNote($symbol);
 
+    my $parameters = &OutputParamDescriptions ("FUNCTION", $symbol);
+    my $parameters_output = 0;
+
     if (defined ($SymbolDocs{$symbol})) {
-	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	my $symbol_docs = &ExpandAbbreviations($SymbolDocs{$symbol});
+
+	# Try to insert the parameter table at the author's desired position.
+	# Otherwise we need to tag it onto the end.
+	if ($symbol_docs =~ s/<!--PARAMETERS-->/$parameters/) {
+	  $parameters_output = 1;
+	}
+	$desc .= $symbol_docs;
     }
 
-    $desc .= &OutputParamDescriptions ("FUNCTION", $symbol);
+    if ($parameters_output == 0) {
+	$desc .= $parameters;
+    }
+
     if (exists $Since{$symbol}) {
 	$desc .= "<para>Since $Since{$symbol}</para>";
     }
@@ -1998,15 +2025,29 @@ sub GetSignals {
 	    $synop .= "$xref user_data);\n";
 	    $desc  .= "$xref user_data);</programlisting>\n";
 
+	    my $parameters = &OutputParamDescriptions ("SIGNAL", $symbol);
+	    my $parameters_output = 0;
+
 	    $AllSymbols{$symbol} = 1;
 	    if (defined ($SymbolDocs{$symbol})) {
-	        $desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	        my $symbol_docs = &ExpandAbbreviations($SymbolDocs{$symbol});
+
+		# Try to insert the parameter table at the author's desired
+		# position. Otherwise we need to tag it onto the end.
+		if ($symbol_docs =~ s/<!--PARAMETERS-->/$parameters/) {
+		  $parameters_output = 1;
+		}
+		$desc .= $symbol_docs;
+
 		if (!IsEmptyDoc($SymbolDocs{$symbol})) {
 		    $AllDocumentedSymbols{$symbol} = 1;
 		}
 	    }
 
-	    $desc .= &OutputParamDescriptions ("SIGNAL", $symbol);
+	    if ($parameters_output == 0) {
+	        $desc .= $parameters;
+	      }
+
 	    if (exists $Since{$symbol}) {
 	      $desc .= "<para>Since $Since{$symbol}</para>";
 	    }
@@ -2549,6 +2590,10 @@ EOF
             if ($src_doc ne "") {
                  $AllDocumentedSymbols{$symbol} = 1;
             }
+
+	    # Convert <!--PARAMETERS--> with any blank lines around it to
+	    # a </para> followed by <!--PARAMETERS--> followed by <para>.
+	    $src_doc =~ s%\n+\s*<!--PARAMETERS-->\s*\n+%\n</para>\n<!--PARAMETERS-->\n<para>\n%g;
 
 	    # If there is a blank line, finish the paragraph and start another.
 	    if ($src_doc =~ s%\n{2,}%\n</para>\n<para>\n%g) {

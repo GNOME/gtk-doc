@@ -17,6 +17,12 @@ related sections. To do this rearrange the MODULE-sections.txt
 files. You can also add <SUBSECTION> between functions. Currently this just
 results in a blank line between them in the synopsis.
 
+If a function or macro has a very long description, you may want the table
+of parameters to go somewhere in the middle rather than after the description
+as would normally happen. To place the table of parameters in the middle of
+the description simple write "<!--PARAMETERS-->" on its own line at the
+desired location.
+
 
 Abbreviations
 =============

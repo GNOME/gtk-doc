@@ -1,5 +1,13 @@
 2004-10-14  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (OutputMacro, OutputFunction, GetSignals): allow
+	the author to use <!--PARAMETERS--> to specify the position of the
+	parameter table if they want. Hopefully good enough for bug #99567.
+	(MergeSourceDocumentation): end the paragraph before <!--PARAMETERS-->
+	and start a new one after it.
+
+	* doc/authors.txt: document <!--PARAMETERS-->.
+
 	* style.css: don't underline links normally, as we output lots of
 	them and it makes it very cluttered. Only underline links when the
 	mouse hovers over them, and change the color. Fixes #108037.
