@@ -1,5 +1,9 @@
 2004-10-14  Damon Chaplin  <damon@gnome.org>
 
+	* style.css: don't underline links normally, as we output lots of
+	them and it makes it very cluttered. Only underline links when the
+	mouse hovers over them, and change the color. Fixes #108037.
+
 	* gtk-doc.make (scan-build.stamp): depend on $(CFILE_GLOB) as well,
 	since changes in properties need to be picked up by gtkdoc-scangobj.
 	Bug #52458.
