@@ -15,6 +15,7 @@ Requires:	perl >= 5.6.0
 Requires:	libxslt
 Requires:	docbook-dtds
 Requires:	docbook-style-xsl
+Provides:	perl(gtkdoc-common.pl)
 
 BuildRequires: perl, openjade, libxslt, docbook-dtds, docbook-style-xsl
 
@@ -60,8 +61,13 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/gtk-doc/html
 %dir %{_datadir}/gtk-doc/data
 %{_datadir}/gtk-doc/data/*
+%{_libdir}/pkgconfig/*
 
 %changelog
+* Tue Jun 03 2003 Matthias Clasen <maclas@gmx.de>
+- Add a missing Provides: and include the .pc file.  
+  (#106568, Joe Pranevich)
+
 * Sun Aug 12 2001 Jens Finke <jens@gnome.org>
 - Modified to match GPP standard:
  - Changed to Copyright to License
@@ -78,5 +84,10 @@ rm -rf $RPM_BUILD_ROOT
 - Minor updates for 0.4.
 * Thu Aug 26 1999 John E. Gotts <jgotts@engin.umich.edu>
 - Created spec file.
+
+
+
+
+
 
 
