@@ -156,7 +156,7 @@ EOT
 
   if ($NO_GTK_INIT) {
     print OUTPUT <<EOT;
-  g_type_init (G_TYPE_DEBUG_NONE);
+  g_type_init ();
 EOT
   } else {
     print OUTPUT <<EOT;
