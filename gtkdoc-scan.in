@@ -38,6 +38,9 @@
 use strict;
 use Getopt::Long;
 
+unshift @INC, "@PACKAGE_DATA_DIR@";
+require "gtkdoc-common.pl";
+
 # Options
 
 # name of documentation module
@@ -45,13 +48,20 @@ my $MODULE;
 my $OUTPUT_DIR;
 my @SOURCE_DIRS;
 my $IGNORE_HEADERS = "";
+my $PRINT_VERSION;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
 	      'ignore-headers' => \$IGNORE_HEADERS,
-	      'output-dir' => \$OUTPUT_DIR);
+	      'output-dir' => \$OUTPUT_DIR,
+	      'version' => \$PRINT_VERSION);
 GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
-	   "output-dir:s");
+	   "output-dir:s", "version");
+
+if ($PRINT_VERSION) {
+    print "@VERSION@\n";
+    exit 0;
+}
 
 $OUTPUT_DIR = $OUTPUT_DIR ? $OUTPUT_DIR : ".";
 
@@ -59,21 +69,15 @@ if (!-d ${OUTPUT_DIR}) {
     mkdir($OUTPUT_DIR, 0755) || die "Cannot create $OUTPUT_DIR: $!";
 }
 
-# Backup existing files
-if (-f "${OUTPUT_DIR}/$MODULE-decl-list.txt") {
-    rename ("${OUTPUT_DIR}/$MODULE-decl-list.txt",
-	    "${OUTPUT_DIR}/$MODULE-decl-list.bak");
-}
+my $old_decl_list = "${OUTPUT_DIR}/$MODULE-decl-list.txt";
+my $new_decl_list = "${OUTPUT_DIR}/$MODULE-decl-list.new";
+my $old_decl = "${OUTPUT_DIR}/$MODULE-decl.txt";
+my $new_decl = "${OUTPUT_DIR}/$MODULE-decl.new";
 
-if (-f "${OUTPUT_DIR}/$MODULE-decl.txt") {
-    rename ("${OUTPUT_DIR}/$MODULE-decl.txt",
-	    "${OUTPUT_DIR}/$MODULE-decl.bak");
-}
-
-open (DECLLIST, ">${OUTPUT_DIR}/$MODULE-decl-list.txt")
-    || die "Can't open ${OUTPUT_DIR}/$MODULE-decl-list.txt";
-open (DECL, ">${OUTPUT_DIR}/$MODULE-decl.txt")
-    || die "Can't open ${OUTPUT_DIR}/$MODULE-decl.txt";
+open (DECLLIST, ">$new_decl_list")
+    || die "Can't open $new_decl_list";
+open (DECL, ">$new_decl")
+    || die "Can't open $new_decl";
 
 my $main_list = "";
 my $object_list = "";
@@ -91,6 +95,10 @@ for my $dir (@SOURCE_DIRS) {
 print DECLLIST $object_list, $main_list;
 close (DECLLIST);
 close (DECL);
+
+&UpdateFileIfChanged ($old_decl_list, $new_decl_list, 1);
+&UpdateFileIfChanged ($old_decl, $new_decl, 1);
+
 
 
 #############################################################################

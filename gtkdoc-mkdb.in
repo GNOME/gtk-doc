@@ -31,6 +31,9 @@
 use strict;
 use Getopt::Long;
 
+unshift @INC, "@PACKAGE_DATA_DIR@";
+require "gtkdoc-common.pl";
+
 # Options
 
 # name of documentation module
@@ -38,12 +41,19 @@ my $MODULE;
 my $TMPL_DIR;
 my $SGML_OUTPUT_DIR;
 my @SOURCE_DIRS;
+my $PRINT_VERSION;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
 	      'output-dir' => \$SGML_OUTPUT_DIR,
-	      'tmpl-dir' => \$TMPL_DIR);
-GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s");
+	      'tmpl-dir' => \$TMPL_DIR,
+	      'version' => \$PRINT_VERSION);
+GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version");
+
+if ($PRINT_VERSION) {
+    print "@VERSION@\n";
+    exit 0;
+}
 
 my $ROOT_DIR = ".";
 
@@ -135,7 +145,16 @@ for my $dir (@SOURCE_DIRS) {
     &ReadSourceDocumentation ($dir);
 }
 
-&OutputSGML ("$ROOT_DIR/$MODULE-sections.txt");
+my $changed = &OutputSGML ("$ROOT_DIR/$MODULE-sections.txt");
+
+# If any of the DocBook SGML files have changed, update the timestamp file (so
+# it can be used for Makefile dependencies).
+if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
+    open (TIMESTAMP, ">$ROOT_DIR/sgml.stamp")
+	|| die "Can't create $ROOT_DIR/sgml.stamp";
+    print (TIMESTAMP "timestamp");
+    close (TIMESTAMP);
+}
 
 
 #############################################################################
@@ -148,9 +167,11 @@ for my $dir (@SOURCE_DIRS) {
 
 sub OutputObjectList {
     my $cols = 3;
+    my $old_object_index = "$SGML_OUTPUT_DIR/object_index.sgml";
+    my $new_object_index = "$SGML_OUTPUT_DIR/object_index.new";
 
-    open (OUTPUT, ">$SGML_OUTPUT_DIR/object_index.sgml")
-	|| die "Can't create $SGML_OUTPUT_DIR/object_index.sgml";
+    open (OUTPUT, ">$new_object_index")
+	|| die "Can't create $new_object_index";
     print (OUTPUT <<EOF);
 <informaltable pgwide=1 frame="none">
 <tgroup cols="$cols">
@@ -174,6 +195,8 @@ EOF
 </tbody></tgroup></informaltable>
 EOF
     close (OUTPUT);
+
+    &UpdateFileIfChanged ($old_object_index, $new_object_index, 0);
 }
 
 
@@ -202,6 +225,8 @@ sub OutputSGML {
     my $synopsis;
     my $details;
     my $num_symbols;
+    my $changed = 0;
+
     while (<INPUT>) {
 	if (m/^#/) {
 	    next;
@@ -266,8 +291,12 @@ sub OutputSGML {
 		    $section_includes = $includes;
 		}
 
-		&OutputSGMLFile ($file, $title, $section_id, $section_includes,
-				 \$synopsis, \$details);
+		my $file_changed = &OutputSGMLFile ($file, $title, $section_id,
+						    $section_includes,
+						    \$synopsis, \$details);
+		if ($file_changed) {
+		    $changed = 1;
+		}
 	    }
 	    $title = "";
 	    $subsection = "";
@@ -299,7 +328,7 @@ sub OutputSGML {
     }
     close (INPUT);
 
-    &OutputBook ($book_top, $book_bottom);
+    return $changed;
 }
 
 
@@ -952,13 +981,21 @@ sub OutputSGMLFile {
 	$include_output .= "#include &lt;${include}&gt;\n";
     }
 
-    open (OUTPUT, ">$SGML_OUTPUT_DIR/$file")
-	|| die "Can't create $SGML_OUTPUT_DIR/$file";
+    my $old_sgml_file = "$SGML_OUTPUT_DIR/$file";
+    my $new_sgml_file = "$SGML_OUTPUT_DIR/$file.new";
+
+    open (OUTPUT, ">$new_sgml_file")
+	|| die "Can't create $new_sgml_file";
 
     # Note: The refname and refpurpose are on the same line to stop
     # docbook-to-man 1.08 putting them on separate lines.
+    #
+    # We used to output this, but is messes up our UpdateFileIfChanged code
+    # since it changes every day (and it is only used in the man pages):
+    # "<refentry id="$section_id" revision="$mday $month $year">"
+
     print OUTPUT <<EOF;
-<refentry id="$section_id" revision="$mday $month $year">
+<refentry id="$section_id">
 <refmeta>
 <refentrytitle>$title</refentrytitle>
 <manvolnum>3</manvolnum>
@@ -997,6 +1034,8 @@ $see_also
 </refentry>
 EOF
     close (OUTPUT);
+
+    return &UpdateFileIfChanged ($old_sgml_file, $new_sgml_file, 0);
 }
 
 
@@ -1013,15 +1052,26 @@ EOF
 sub OutputBook {
     my ($book_top, $book_bottom) = @_;
 
-    open (OUTPUT, ">$SGML_OUTPUT_DIR/$MODULE-doc.top")
-	|| die "Can't create $SGML_OUTPUT_DIR/$MODULE-doc.top";
+    my $old_file = "$SGML_OUTPUT_DIR/$MODULE-doc.top";
+    my $new_file = "$SGML_OUTPUT_DIR/$MODULE-doc.top.new";
+
+    open (OUTPUT, ">$new_file")
+	|| die "Can't create $new_file";
     print OUTPUT $book_top;
     close (OUTPUT);
 
-    open (OUTPUT, ">$SGML_OUTPUT_DIR/$MODULE-doc.bottom")
-	|| die "Can't create $SGML_OUTPUT_DIR/$MODULE-doc.bottom";
+    &UpdateFileIfChanged ($old_file, $new_file, 0);
+
+
+    $old_file = "$SGML_OUTPUT_DIR/$MODULE-doc.bottom";
+    $new_file = "$SGML_OUTPUT_DIR/$MODULE-doc.bottom.new";
+
+    open (OUTPUT, ">$new_file")
+	|| die "Can't create $new_file";
     print OUTPUT $book_bottom;
     close (OUTPUT);
+
+    &UpdateFileIfChanged ($old_file, $new_file, 0);
 }
 
 
@@ -1983,8 +2033,12 @@ sub ReadObjectHierarchy {
 	warn "Can't open $OBJECT_TREE_FILE - skipping object tree\n";
 	return;
     }
-    open (OUTPUT, ">$SGML_OUTPUT_DIR/tree_index.sgml")
-	|| die "Can't create $SGML_OUTPUT_DIR/tree_index.sgml";
+
+    my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.sgml";
+    my $new_tree_index = "$SGML_OUTPUT_DIR/tree_index.new";
+
+    open (OUTPUT, ">$new_tree_index")
+	|| die "Can't create $new_tree_index";
     print (OUTPUT "<literallayout>\n");
 
     while (<INPUT>) {
@@ -2003,6 +2057,8 @@ sub ReadObjectHierarchy {
 
     close (INPUT);
     close (OUTPUT);
+
+    &UpdateFileIfChanged ($old_tree_index, $new_tree_index, 0);
 
     &OutputObjectList;
 }

@@ -23,28 +23,45 @@
 # by compiling a small C program. CFLAGS and LDFLAGS must be
 # set appropriately before running this script.
 #
-# NOTE: the lookup_signal_srg_names() function contains the argument names of
+# NOTE: the lookup_signal_arg_names() function contains the argument names of
 #       standard GTK signal handlers. This may need to be updated for new
 #       GTK signals or Gnome widget signals.
 
 use Getopt::Long;
+
+unshift @INC, "@PACKAGE_DATA_DIR@";
+require "gtkdoc-common.pl";
 
 # Options
 
 # name of documentation module
 my $MODULE;
 my $OUTPUT_DIR;
+my $PRINT_VERSION;
 
 %optctl = (module => \$MODULE,
 	   types => \$TYPES_FILE,
-	   nogtkinit => \$NO_GTK_INIT);
+	   nogtkinit => \$NO_GTK_INIT,
+	   'version' => \$PRINT_VERSION);
 	   
-GetOptions(\%optctl, "module=s", "types:s", "nogtkinit");
+GetOptions(\%optctl, "module=s", "types:s", "nogtkinit", "version");
+
+if ($PRINT_VERSION) {
+    print "@VERSION@\n";
+    exit 0;
+}
 
 $TYPES_FILE = $TYPES_FILE ? $TYPES_FILE : "$MODULE.types";
 
 open TYPES, $TYPES_FILE || die "Cannot open $TYPES_FILE: $!\n";
 open OUTPUT, ">$MODULE-scan.c" || die "Cannot open $MODULE-scan.c: $!\n";
+
+my $old_signals_filename = "$MODULE.signals";
+my $new_signals_filename = "$MODULE.signals.new";
+my $old_hierarchy_filename = "$MODULE.hierarchy";
+my $new_hierarchy_filename = "$MODULE.hierarchy.new";
+my $old_args_filename = "$MODULE.args";
+my $new_args_filename = "$MODULE.args.new";
 
 # write a C program to scan the types
 
@@ -95,9 +112,9 @@ print OUTPUT <<EOT;
  */
 
 /* The output files */
-gchar *signals_filename = "$MODULE.signals";
-gchar *hierarchy_filename = "$MODULE.hierarchy";
-gchar *args_filename = "$MODULE.args";
+gchar *signals_filename = "$new_signals_filename";
+gchar *hierarchy_filename = "$new_hierarchy_filename";
+gchar *args_filename = "$new_args_filename";
 
 
 static void output_signals ();
@@ -786,3 +803,9 @@ system($command) == 0 or die "Compilation of scanner failed\n";
 system("./$MODULE-scan") == 0 or die "Scan failed\n";
 
 unlink "./$MODULE-scan.c", "./$MODULE-scan", 
+
+
+&UpdateFileIfChanged ($old_signals_filename, $new_signals_filename, 0);
+&UpdateFileIfChanged ($old_hierarchy_filename, $new_hierarchy_filename, 0);
+&UpdateFileIfChanged ($old_args_filename, $new_args_filename, 0);
+

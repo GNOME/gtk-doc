@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(gtk-doc.dsl.in)
 
-AM_INIT_AUTOMAKE(gtk-doc, 0.4)
+AM_INIT_AUTOMAKE(gtk-doc, 0.5)
 
 AC_ARG_WITH(dsssl-dir, [  --with-dsssl-dir=PATH path to DocBook style sheets ])
 
@@ -39,6 +39,21 @@ AC_SUBST(DSSSL_DIR)
 
 AC_MSG_RESULT(found)
 
+
+dnl Set PACKAGE_DATA_DIR so we can find the script containing common routines.
+if test "x${datadir}" = 'x${prefix}/share'; then
+  if test "x${prefix}" = "xNONE"; then
+    PACKAGE_DATA_DIR="${ac_default_prefix}/share/${PACKAGE}"
+  else
+    PACKAGE_DATA_DIR="${prefix}/share/${PACKAGE}"
+  fi
+else
+  PACKAGE_DATA_DIR="${datadir}/${PACKAGE}"
+fi
+
+AC_SUBST(PACKAGE_DATA_DIR)
+
+
 dnl Only use -Wall if we have gcc
 if test "x$GCC" = "xyes"; then
   if test -z "`echo "$CFLAGS" | grep "\-Wall" 2> /dev/null`" ; then
@@ -49,6 +64,7 @@ fi
 AC_OUTPUT([Makefile 
 gtk-doc.dsl 
 gtk-doc.spec
+gtkdoc-common.pl
 gtkdoc-mkman 
 gtkdoc-mkhtml
 gtkdoc-fixxref

@@ -33,12 +33,20 @@ my $MODULE;
 my $MODULE_DIR;
 my $HTML_DIR = "";
 my @EXTRA_DIRS;
+my $PRINT_VERSION;
 
 my %optctl = (module => \$MODULE,
 	      'module-dir' => \$MODULE_DIR,
 	      'html-dir' => \$HTML_DIR,
-	      'extra-dir' => \@EXTRA_DIRS);
-GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir=s", "extra-dir=s@");
+	      'extra-dir' => \@EXTRA_DIRS,
+	      'version' => \$PRINT_VERSION);
+GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir=s", "extra-dir=s@",
+	"version");
+
+if ($PRINT_VERSION) {
+    print "@VERSION@\n";
+    exit 0;
+}
 
 # This contains all the entities and their relative URLs.
 my %Links;

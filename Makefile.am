@@ -12,6 +12,7 @@ bin_SCRIPTS = \
 
 gtkdocdatadir = $(datadir)/gtk-doc
 gtkdocdata_DATA = \
+	gtkdoc-common.pl	\
         gtk-doc.dsl
 
 EXTRA_DIST=gtk-doc.spec.in

@@ -4,6 +4,11 @@
 prefix=@prefix@
 gtkdocdir=@datadir@/gtk-doc/
 
+if test "x$1" = "x--version"; then
+      echo "@VERSION@"
+      exit 0
+fi
+
 for i in `cd sgml;ls *.sgml`
 do j=`echo $i | sed 's/.sgml/.man/'`
 echo ": converting " $i $j

@@ -1,3 +1,60 @@
+2001-01-23  Damon Chaplin  <damon@helixcode.com>
+
+	* gtkdoc-scangobj.in: 
+	* gtkdoc-scanobj.in: 
+	* gtkdoc-scan.in: 
+	* gtkdoc-mkdb.in: 
+	* gtkdoc-mktmpl.in: changed so that they only update files when
+	necessary (they write new versions of the files out, then use 'cmp'
+	to compare with the existing versions to see if they have changed.)
+	This should make it easier to do proper dependency rules in Makefiles,
+	and it may cut down on CVS traffic.
+
+	* gtkdoc-mkhtml.in: update a timestamp file (html.stamp) after running.
+	* gtkdoc-mkdb.in: update a timestamp file (sgml.stamp) if any of the
+	DocBook SGML files have been changed. So hopefully you can now use
+	rules like this to avoid unnecessary regeneration of the HTML:
+
+	all-local:
+		$(MAKE) scan
+		$(MAKE) templates
+		$(MAKE) sgml
+		$(MAKE) html.stamp
+	
+	html.stamp: sgml.stamp $(EXTRA_SGML_FILES)
+		$(MAKE) html
+
+	(I've tried this with the old GTK+ reference API docs and it seems to
+	work well.)
+
+	* gtkdoc-scangobj.in: 
+	* gtkdoc-scanobj.in: 
+	* gtkdoc-scan.in: 
+	* gtkdoc-mkdb.in: 
+	* gtkdoc-mktmpl.in:
+	* gtkdoc-mkhtml.in:
+	* gtkdoc-mkman.in:
+	* gtkdoc-fixxref.in:
+	Added '--version' command-line arg to all shell & perl scripts, so
+	you can check for version 0.5 if you want to use the above rules.
+	(If 0.4 is used make will probably complain about not knowing how to
+	to build sgml.stamp.)
+
+	* gtkdoc-common.pl.in: new file to contain shared routines.
+	For now it just contains the UpdateFileIfChanged routine for the above.
+	We can move the duplicated routines here in future, though the use of
+	global variables makes this a bit awkward.
+
+	* configure.in (PACKAGE_DATA_DIR): calculates the data dir and
+	substitutes it so that the scripts know where gtkdoc-common.pl
+	is installed. Also added gtkdoc-common.pl to AC_OUTPUT.
+
+	* Makefile.am: added gtkdoc-common.pl to gtkdocdata_DATA.
+
+	* gtkdoc-mkhtml.in: deleted the old index.sgml file, since it causes
+	problems if it is owned by root (e.g. after you run 'make install' as
+	root. jade prompts you about overwriting it, which is annoying.
+
 2001-01-10  Havoc Pennington  <hp@redhat.com>
 
 	* gtkdoc-mktmpl.in: Only move old file to backup if the old file

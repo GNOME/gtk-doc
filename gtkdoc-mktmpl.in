@@ -53,17 +53,27 @@
 use strict;
 use Getopt::Long;
 
+unshift @INC, "@PACKAGE_DATA_DIR@";
+require "gtkdoc-common.pl";
+
 # Options
 
 # name of documentation module
 my $MODULE;
 my $TMPL_DIR;
 my $FLAG_CHANGES;
+my $PRINT_VERSION;
 
 my %optctl = (module => \$MODULE,
 	      'flag-changes' => \$FLAG_CHANGES,
-	      'output-dir' => \$TMPL_DIR);
-GetOptions(\%optctl, "module=s", "flag-changes!", "output-dir:s");
+	      'output-dir' => \$TMPL_DIR,
+	      'version' => \$PRINT_VERSION);
+GetOptions(\%optctl, "module=s", "flag-changes!", "output-dir:s", "version");
+
+if ($PRINT_VERSION) {
+    print "@VERSION@\n";
+    exit 0;
+}
 
 my $ROOT_DIR = ".";
 
@@ -120,7 +130,6 @@ if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
     &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
 }
 &ReadExistingTemplates;
-&BackupExistingTemplates;
 &UpdateTemplates ("$ROOT_DIR/$MODULE-sections.txt");
 &OutputUnusedTemplates;
 &CheckAllDeclarationsOutput;
@@ -153,28 +162,6 @@ sub ReadExistingTemplates {
 	} else {
 	    &ReadTemplateFile ($_, 0);
 	}
-    }
-}
-
-
-#############################################################################
-# Function    : BackupExistingTemplates
-# Description : This moves all existing .sgml to .sgml.bak.
-# Arguments   : none
-#############################################################################
-
-sub BackupExistingTemplates {
-    while (<$TMPL_DIR/*.sgml>) {
-	my $backup_file = $_ . ".bak";
-#	print "Backing up $_ to $backup_file\n";
-	if (-e $backup_file) {
-	    unlink ($backup_file)
-		|| die "Can't delete old backup file: $backup_file: $!";
-	}
-	if (-e $_) {
-            rename ($_, $backup_file)
-	    || die "Can't move $_ to $backup_file: $!";
-        }
     }
 }
 
@@ -281,8 +268,12 @@ sub UpdateTemplates {
 
 sub CheckAllDeclarationsOutput {
     my $num_unused = 0;
-    open (UNUSED, ">$ROOT_DIR/$MODULE-unused.txt")
-	|| die "Can't open $ROOT_DIR/$MODULE-unused.txt";
+
+    my $old_unused_file = "$ROOT_DIR/$MODULE-unused.txt";
+    my $new_unused_file = "$ROOT_DIR/$MODULE-unused.new";
+
+    open (UNUSED, ">$new_unused_file")
+	|| die "Can't open $new_unused_file";
     my ($symbol);
     foreach $symbol (keys (%Declarations)) {
 	if (!defined ($DeclarationOutput{$symbol})) {
@@ -300,6 +291,8 @@ WARNING: $num_unused unused declarations.
 =============================================================================
 EOF
     }
+
+    &UpdateFileIfChanged ($old_unused_file, $new_unused_file, 0);
 }
 
 
@@ -566,8 +559,11 @@ sub OutputTemplateFile {
 	$see_also = "<para>\n\n</para>\n";
     }
 
-    open (OUTPUT, ">$TMPL_DIR/$file")
-	|| die "Can't create $TMPL_DIR/$file";
+    my $old_tmpl_file = "$TMPL_DIR/$file";
+    my $new_tmpl_file = "$TMPL_DIR/$file.new";
+
+    open (OUTPUT, ">$new_tmpl_file")
+	|| die "Can't create $new_tmpl_file";
 
     print (OUTPUT <<EOF);
 <!-- ##### SECTION Title ##### -->
@@ -588,6 +584,8 @@ EOF
     &OutputSignalTemplates ($title);
     &OutputArgTemplates ($title);
     close (OUTPUT);
+
+    &UpdateFileIfChanged ($old_tmpl_file, $new_tmpl_file, 1);
 }
 
 
@@ -710,9 +708,11 @@ EOF
 #############################################################################
 
 sub OutputUnusedTemplates {
-    my ($unused_file) = "$TMPL_DIR/$MODULE-unused.sgml";
-    open (UNUSED, ">$unused_file")
-	|| die "Can't open file: $unused_file";
+    my ($old_unused_file) = "$TMPL_DIR/$MODULE-unused.sgml";
+    my ($new_unused_file) = "$TMPL_DIR/$MODULE-unused.new";
+
+    open (UNUSED, ">$new_unused_file")
+	|| die "Can't open file: $new_unused_file";
 
     my $output = "";
     my ($symbol, $symbol_desc);
@@ -746,6 +746,8 @@ EOF
 
     print UNUSED $output;
     close (UNUSED);
+
+    &UpdateFileIfChanged ($old_unused_file, $new_unused_file, 1);
 }
 
 
