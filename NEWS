@@ -1,3 +1,29 @@
+
+GTK-Doc 1.3     (Jan 9 2005)
+===========
+
+ o Use the new style.css stylesheet instead of hard-wiring the styles.
+ o Updated the documentation and example build files.
+ o Added support for a gallery of widget images.
+ o Output default values for widget properties and allowed ranges.
+ o Only underline links in the docs when the mouse hovers over them.
+ o Added support for placing the parameter table anywhere within the function
+   documentation (using the "<!--PARAMETERS-->" marker).
+ o Handle more variations of C syntax.
+
+
+GTK-Doc 1.2     (Feb 16 2004)
+===========
+
+ o Added widget signals and properties to undocumented output and statistics.
+ o Added support for an index of all symbols.
+ o Emit "Since:" information for signals and properties.
+ o Added derived subclasses and interfaces to the widget hierarchies.
+ o Added .cat SGML catalog file.
+ o Support properties on interfaces. 
+ o Added "--help" options to the scripts.
+
+
 GTK-Doc 1.1     (Apr 18 2003)
 ===========
 
@@ -15,7 +41,17 @@ GTK-Doc 1.1     (Apr 18 2003)
    inter-module cross references from being resolved.
  o Fix some bugs in extraction of object property documentation.
 
-
+
+GTK-Doc 1.0	(Jan 20 2003)
+===========
+
+ o Added support for "Since:" and "Deprecated:" tags, and look for deprecated
+   guard macros in header files.
+ o Support /*< public >*/ and /*< private >*/ markers for all structs.
+ o New "--ignore-files" option for gtkdoc-mkdb, to ignore files or directories.
+ o Used the "sgml-raw" output type with openjade, to avoid problems with Lynx.
+ o Added .pc pkg-config file which can be used to check the gtk-doc version.
+
 
 GTK-Doc 0.10	(Nov 14 2002)
 ============

@@ -3,23 +3,25 @@ GTK+ DocBook Documentation Generator
 ====================================
 
 GTK-Doc is used to document C code. It is typically used to document the public
-API of libraries, such as the GTK+ and Gnome libraries. But it can also be
+API of libraries, such as the GTK+ and GNOME libraries, but it can also be
 used to document application code.
 
-Documentation for functions, macros, widget signals, and widget properties
-can be written in 2 ways:
+Note that GTK-Doc wasn't originally intended to be a general-purpose
+documentation tool, so it can be a bit awkward to setup and use.
+For a more polished general-purpose documentation tool you may want to look
+at Doxygen (http://www.doxygen.org/). However GTK-Doc has some special code
+to document the signals and properties of GTK+ widgets which other tools may
+not have.
 
+GTK-Doc allows your documentation to be written in 2 ways:
   a) Embedded inside the source code in specially-formatted comments.
-
  or
-
   b) Added to the 'template' files which gtk-doc outputs after scanning all
      the header files and parsing the declarations.
 
-
-Documentation for other constructs such as enums, structs and callbacks must
-be added to the template files as in (b) above.
-
+Note that currently the documentation describing each section can only be
+added to the template files, though in future that will also be allowed within
+the source code.
 
 
 Requirements
@@ -28,29 +30,39 @@ Requirements
 Perl v5 - the main scripts are in Perl.
     http://www.perl.com/
 
-DocBook SGML DTD v3.0 or DocBook XML DTD v4.1.2 - the DocBook DTDs.
+
+For XML output (recommended):
+
+The DocBook XML DTD.
     http://www.oasis-open.org/docbook/
 
-Jade v1.1 or OpenJade 1.3.1 for SGML.
-    http://www.jclark.com/jade
-    http://sourceforge.net/projects/openjade
+The DocBook XSL Stylesheets.
+    http://docbook.sourceforge.net/projects/xsl/
 
 libxslt & libxml2 2.3.6 for XML.
     http://xmlsoft.org/
 
-DocBook DSSSL Stylesheets (I've got 1.40, but v1.19+ may be OK)
-    This is the DSSSL code to convert DocBook SGML to HTML (and a few other
-    formats). It's used together with jade.
+
+
+For SGML output (not actively maintained any more):
+
+The DocBook SGML DTD.
+    http://www.oasis-open.org/docbook/
+
+Jade v1.1 or OpenJade 1.3.1.
+    http://www.jclark.com/jade
+    http://sourceforge.net/projects/openjade
+
+The DocBook DSSSL Stylesheets (I've got 1.40, but v1.19+ may be OK).
     I've customized the DSSSL code slightly, in gtk-doc.dsl, to colour
     the program code listings/declarations, and to support global
     cross-reference indices in the generated HTML.
     http://docbook.sourceforge.net/projects/dsssl/
 
-DocBook XSL Stylesheets 1.36 
-    http://docbook.sourceforge.net/projects/xsl/
 
 Most distributions now have packages for all of these, so I would strongly
 advise that you grab those.
+
 
 You will also need to make sure that the DocBook XML DTD and XSL
 stylesheets are installed in the system's XML catalog.  The packages
@@ -71,5 +83,3 @@ McLoughlin:
 See the documentation in the docs directory for more information, especially
 the setting-up.txt file which describes how to set up your application or
 library to use gtk-doc.
-
-
