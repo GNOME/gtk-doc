@@ -1,5 +1,13 @@
 2003-06-15  Matthias Clasen  <maclas@gmx.de>
 
+	Support for a flat index of all symbols.  (#92861)
+	To use, put an empty <index/> element in your driver document. 
+	
+	* gtkdoc-mkdb.in (MakeIndexterms): New function, emits an indexterm.
+	(OutputMacro, OutputTypedef, OutputStruct, OutputEnum,
+	OutputUnion, OutputVariable, OutputFunction): Use MakeIndexterms.
+	to emit indexterms for symbols. 
+	
 	* gtkdoc-mkdb.in (GetSignals): 
 	(GetArgs): Emit Since: information for signals and properties.
 
