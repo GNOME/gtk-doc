@@ -179,6 +179,16 @@
 			     (href-to (current-node))
 			     "\"\greater-than-sign;
 "))))
+  ;; We also want to be able to link to complete RefEntry.
+  (element refentry
+	(make formatting-instruction data:
+	      (string-append "\less-than-sign;ANCHOR id =\""
+			     (attribute-string "id" (current-node))
+			     "\" href=\""
+			     (href-to (current-node))
+			     "\"\greater-than-sign;
+")))
+
   (default
     (process-child-elements)))
 

@@ -1,3 +1,22 @@
+1999-01-27  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* Makefile.am: added scripts to EXTRA_DIST and copied examples, doc
+	and db2man dirs in dist-hook.
+
+	* doc/sections-file.txt: added a couple of examples.
+
+	* doc/setting-up.txt: new document describing how to set up a module
+	to use gtk-doc.
+
+	* doc/README: added description of setting-up.txt
+
+	* README: added short 'Installation' section describing the
+	--with-dsssl-dir option.
+
+	* gtk-doc.dsl.in: also output links to each RefEntry page in the
+	index.sgml file, so libgnomeui docs can link to widgets. (The widget
+	hierarchy links were not working before.)
+
 1999-01-26  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtkdoc-scan (ScanHeader): parse function declarations that have the

@@ -7,7 +7,12 @@ file in the templates, which also corresponds to a SGML file, and a file in
 the final HTML files. Each section contains a list of function/macro etc.
 names, which can be rearranged into the desired order.
 
-The <FILE> ... </FILE> tag is used to specify the file name.
+The <FILE> ... </FILE> tag is used to specify the file name, without any
+suffix. For example, using '<FILE>gnome-config</FILE>' will result in the
+section declarations being output in the template file tmpl/gnome-config.sgml,
+which will be converted into the DocBook SGML file sgml/gnome-config.sgml.
+(The name of the html file is based on the module name and the section title,
+or for widgets it is based on the widget name converted to lower case).
 
 The <TITLE> ... </TITLE> tag is used to specify the title of the section.
 It is only useful before the templates are initially created, since the title
@@ -16,8 +21,12 @@ anywhere you will have to update the main SGML file.)
 
 You can group items in the section by using the <SUBSECTION> tag. Currently
 it outputs a blank line between subsections in the synopsis section.
-You can also use <SUBSECTION Standard> for standard GtkObject declarations,
-and <SUBSECTION Private> for private declarations which will not be output.
+You can also use <SUBSECTION Standard> for standard GtkObject declarations
+(e.g. the functions like gtk_object_get_type and macros like GTK_OBJECT(),
+GTK_IS_OBJECT() etc.) Currently these are left out of the documentation.
+You can also use <SUBSECTION Private> for private declarations which will not
+be output (Its a handy way to avoid warning messages about unused
+declarations.)
 
 You can also use <INCLUDE> ... <INCLUDE> to specify the #include files which
 are shown in the synopsis sections. It contains a comma-separate list of
@@ -25,7 +34,7 @@ are shown in the synopsis sections. It contains a comma-separate list of
 sections, it acts for all sections until the end of the file. If you set it
 within a section, it only applies to that section.
 
-Example section:
+Example MODULE-sections.txt file:
 
 <INCLUDE>gnome.h</INCLUDE>
 

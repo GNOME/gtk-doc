@@ -12,3 +12,18 @@ bin_SCRIPTS = \
 gtkdocdatadir = $(datadir)/gtk-doc
 gtkdocdata_DATA = \
         gtk-doc.dsl
+
+EXTRA_DIST = \
+	gtkdoc-scanobj \
+	gtkdoc-scan    \
+	gtkdoc-mktmpl  \
+	gtkdoc-mkdb    \
+	gtkdoc-fixxref
+
+dist-hook:
+	mkdir $(distdir)/doc
+	cp -pr doc/* $(distdir)/doc
+	mkdir $(distdir)/db2man
+	cp -pr db2man/* $(distdir)/db2man
+	mkdir $(distdir)/examples
+	cp -pr examples/* $(distdir)/examples

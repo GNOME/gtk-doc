@@ -1,0 +1,95 @@
+
+How to set up a module to use gtk-doc
+=====================================
+
+
+1. Get the latest gtk-doc from CVS, install it, and read the README so you
+   have an idea of how it works. Also look at the examples directory to see
+   an example of how gnome-libs docs could be set up.
+
+
+2. Decide if you want your documentation in a subdirectory of your main
+   application directory/module or as a separate directory/module.
+   If you put the docs inside the application module you can use relative paths
+   to point to the source code. If you put it in a separate module you may want
+   to add a configure option to point to the source code directory (as the
+   gnome example does).
+
+
+3. Create a directory to put the documentation.
+   Decide if your docs need to be split into separate pieces (as gnome-libs is
+   split into gnome and gnomeui), or there will be just one document.
+   If it is split into pieces, you need to create subdirectories for each
+   piece and the toplevel Makefile.am in the root directory (look at examples/)
+
+
+4. Set up your configure.in so that it accepts a --with-html-dir option
+   and substitutes HTML_DIR (like in the examples).
+
+
+5. Copy gnome/Makefile.am to each document directory (or if the your module
+   contains widgets copy gnomeui/Makefile.am).
+
+   Change DOC_MODULE to the name of your module.
+   Change DOC_MAIN_SGML_FILE to the name of the file you want to use as the
+     main SGML file - it will use entity refereces to include all of the
+     generated SGML files (MODULE-docs.sgml is fine).
+   Change DOC_SOURCE_DIR to the directory containing the source code. If the
+     documentation is within the application's directory then you can simply
+     use a relative path. If not, you need to use a configure option as used
+     in the examples directory. If you are scanning installed headers only
+     and don't have comment blocks in the source code you don't need this.
+
+   If you have widgets in your module, change the CFLAGS and LDFLAGS so that
+   gtkdoc-scanobj can compile and link a program with your library.
+
+   Change the options for gtkdoc-scan:
+     gtkdoc-scan scans header files. If you pass it a --source-dir option it
+     will recursively scan all the header files found in the directory tree.
+     You can use --ignore-headers to ignore particular header files
+     (just use the basenames and separate them with spaces, e.g.
+     --ignore-headers="libgnomeP.h gnome-i18nP.h gnome-triggersP.h" ).
+     Alternatively you can simply specify the headers which you do want
+     scanned as standard arguments. GLib uses this to scan installed headers:
+
+scan:
+        gtkdoc-scan --module=$(DOC_MODULE) `glib-config --prefix`/include/glib.h `glib-config --prefix`/include/gmodule.h `glib-config --prefix`/lib/glib/include/glibconfig.h 
+
+   Change the options for gtkdoc-mkdb:
+     If you have comment blocks in your source code, use the option
+        --source-dir=$(DOC_SOURCE_DIR)
+     If not, take it out.
+
+
+6. Create the Makefile and 'make scan'. This will scan all the headers and
+   produce a list of declarations found in the MODULE-decl-list.txt file.
+   Copy this file to MODULE-sections.txt and rearrange it if necessary.
+   (See sections-file.txt for a description of the format).
+
+
+7. Do a 'make templates' to create the template files in tmpl/
+
+
+8. Do a 'make sgml' to create the DocBook SGML output in sgml/
+
+
+9. Create your main SGML file (with the name you used in Makefile.am),
+   using entity references to include all the generated SGML files.
+   In sgml/MODULE-doc.top and sgml/MODULE-doc.bottom you will find a generated
+   list of entities and references which you can use to include in your
+   main SGML file. (Look at the gnome/gnome-docs.sgml and
+   gnomeui/gnomeui-docs.sgml files in the examples directory).
+
+   Note: if you add 'sections' to the documentation, or change the title of
+   any section, you will need to update this main SGML file. It's very easy to
+   forget.
+
+
+10. Do a 'make html' to make the final HTML.
+
+
+
+10a. Email me and tell me where it went wrong :)
+
+
+Damon
