@@ -254,7 +254,7 @@ sub ParseEnumDeclaration {
     $declaration =~ s/,(\s*})/$1/g;
 
     # Prime match after "typedef enum {" declaration
-    if (!scalar($declaration =~ m/typedef\s+enum\s*\{/msg)) {
+    if (!scalar($declaration =~ m/typedef\s+enum\s*(\S+\s*)?\{/msg)) {
 	die "Enum declaration '$declaration' does not begin with typedef enum {\n";
     }
 

@@ -1,3 +1,8 @@
+2004-10-24  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-common.pl (ParseEnumDeclaration): handle "typedef enum XXX {"
+	#156297. Patch from Simon Josefsson.
+
 2004-10-20  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (ReadDeclarationsFile): set a flag to indicate a
