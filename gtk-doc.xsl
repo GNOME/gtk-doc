@@ -8,11 +8,10 @@
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
   <xsl:include href="devhelp.xsl"/>
 
-  <xsl:output method="xml" indent="yes"/>
-
   <!-- change some parameters -->
   <xsl:param name="toc.section.depth">1</xsl:param>
 
+  <xsl:param name="default.encoding" select="UTF-8"/>
   <xsl:param name="chapter.autolabel" select="0"/>
   <xsl:param name="use.id.as.filename" select="'1'"/>
   <xsl:param name="html.ext" select="'.html'"/>
