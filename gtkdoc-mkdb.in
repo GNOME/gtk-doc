@@ -61,20 +61,8 @@ my %optctl = (module => \$MODULE,
 	      'output-format' => \$OUTPUT_FORMAT);
 GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode", "output-format:s");
 
-my $empty_element_end;
-
-if (lc($OUTPUT_FORMAT) eq "xml") {
-    $OUTPUT_FORMAT = "xml";
-    $empty_element_end = "/>";
-}
-else {
-    $OUTPUT_FORMAT = "sgml";
-    $empty_element_end = ">";
-}
-
-if ($PRINT_VERSION) {
-    print "@VERSION@\n";
-    exit 0;
+if (!$MODULE) {
+    $PRINT_HELP = 1;
 }
 
 if ($PRINT_HELP) {
@@ -90,6 +78,47 @@ if ($PRINT_HELP) {
     print "\n--version              Print the version of this program";
     print "\n--help                 Print this help\n";
     exit 0;
+}
+
+if ($PRINT_VERSION) {
+    print "@VERSION@\n";
+    exit 0;
+}
+
+if (!$MAIN_SGML_FILE) {
+    $MAIN_SGML_FILE="${MODULE}-docs.sgml";
+}
+
+my ($empty_element_end, $doctype_header);
+
+if (lc($OUTPUT_FORMAT) eq "xml") {
+    $OUTPUT_FORMAT = "xml";
+    $empty_element_end = "/>";
+
+    if ($MAIN_SGML_FILE && -e $MAIN_SGML_FILE) {
+	print "scanning $MAIN_SGML_FILE";
+        open(INPUT, "<$MAIN_SGML_FILE") || die "Can't open $MAIN_SGML_FILE";
+	$doctype_header = "";
+	while (<INPUT>) {
+	    if (/^\s*<(book|chapter|article)/) {
+		if (index($_, "http://www.w3.org/2001/XInclude") < 0) {
+		    $doctype_header = "";
+		}
+	        last;
+	    }
+	    $doctype_header .= $_;
+	}
+	close(INPUT);
+    } else {
+        $doctype_header =
+"<?xml version=\"1.0\"?>\n" .
+"<!DOCTYPE book PUBLIC \"-//OASIS//DTD Docbook XML V4.1.2//EN\"\n" .
+"               \"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd\">\n";
+    }
+    $doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
+} else {
+    $OUTPUT_FORMAT = "sgml";
+    $empty_element_end = ">";
 }
 
 my $ROOT_DIR = ".";
@@ -337,8 +366,12 @@ sub OutputSGML {
 	    }
 
 	    if ($num_symbols > 0) {
-		$book_top .= "<!ENTITY $section_id SYSTEM \"sgml/$file\">\n";
-		$book_bottom .= "    &$section_id;\n";
+		if (lc($OUTPUT_FORMAT) eq "xml") {
+		    $book_bottom .= "    <xi:include href=\"xml/$file.xml\"/>\n";
+		} else {
+		    $book_top.="<!ENTITY $section_id SYSTEM \"sgml/$file.sgml\">\n";
+		    $book_bottom .= "    &$section_id;\n";
+		}
 
 		if ($section_includes eq "") {
 		    $section_includes = $includes;
@@ -1188,6 +1221,10 @@ sub OutputSGMLFile {
     # since it changes every day (and it is only used in the man pages):
     # "<refentry id="$section_id" revision="$mday $month $year">"
 
+    if (lc($OUTPUT_FORMAT) eq "xml") {
+        print OUTPUT $doctype_header;
+    }
+
     print OUTPUT <<EOF;
 <refentry id="$section_id">
 <refmeta>
@@ -1278,20 +1315,21 @@ sub OutputBook {
 	  print OUTPUT <<EOF;
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.1.2//EN" 
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book id="index" xmlns:xi="http://www.w3.org/2001/XInclude">
 EOF
-      }
-      else {
+      } else {
 	print OUTPUT <<EOF;
 <!doctype book PUBLIC "-//DavenPort//DTD DocBook V3.0//EN" [
 EOF
-	}
-
-      print OUTPUT $book_top;
-
-      print OUTPUT <<EOF;
+        print OUTPUT $book_top;
+        print OUTPUT <<EOF;
 ]>
 <book id="index">
+EOF
+      }
+
+print OUTPUT <<EOF;
   <bookinfo>
     <title>[Insert name here] Reference Manual</title>
   </bookinfo>
@@ -2367,10 +2405,12 @@ sub ReadObjectHierarchy {
 
     my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.sgml";
     my $new_tree_index = "$SGML_OUTPUT_DIR/tree_index.new";
+    my $tree_header = $doctype_header;
+    $tree_header =~ s/<!DOCTYPE \w+/<!DOCTYPE screen/;
 
     open (OUTPUT, ">$new_tree_index")
 	|| die "Can't create $new_tree_index";
-    print (OUTPUT "<literallayout>\n");
+    print (OUTPUT "$tree_header<screen>\n");
 
     while (<INPUT>) {
         if (m/\S+/) {
@@ -2384,7 +2424,7 @@ sub ReadObjectHierarchy {
 	    push (@ObjectLevels, $level);
         }
     }
-    print (OUTPUT "</literallayout>\n");
+    print (OUTPUT "</screen>\n");
 
     close (INPUT);
     close (OUTPUT);

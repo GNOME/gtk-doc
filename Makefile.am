@@ -15,11 +15,13 @@ gtkdocdata_DATA = \
 	gtkdoc-common.pl	\
         gtk-doc.dsl		\
 	gtk-doc.dcl		\
+	gtk-doc.xsl		\
 	xml.dcl
 
 EXTRA_DIST= \
 	gtk-doc.spec.in	\
 	gtk-doc.dcl  	\
+	gtk-doc.xsl	\
 	xml.dcl
 
 dist-hook:

@@ -1,8 +1,7 @@
 <!SGML  "ISO 8879:1986"
   -- ...................................................................... --
-  -- this is a modified version of the DocBook SGML declaration 4.1  --
-  -- NAMELEN has been bumped from 44 to 256                          --
-  -- file gtk-doc.dcl ..................................................... --
+  -- DocBook SGML declaration V3.1 ........................................ --
+  -- file docbook.dcl ..................................................... --
 
 CHARSET
 
@@ -102,6 +101,6 @@ FEATURES
 
 APPINFO NONE
 
-  -- End of DocBook SGML declaration V4.1 ................................. --
+  -- End of DocBook SGML declaration V3.1 ................................. --
   -- ...................................................................... --
 >

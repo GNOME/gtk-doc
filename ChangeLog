@@ -1,3 +1,36 @@
+2002-06-12  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in: Make header-grabbing work without an explicit
+	--main-sgml-file argument.
+	
+	* gtkdoc-mkdb.in: Emit the object hierarchy as a <screen> rather
+	than a <literallayout>, since the Docbook XSL stylesheets don't
+	handle <link>s inside <literallayout>. 
+	
+	* gtkdoc-mkdb.in: Decide wether to generate standalone documents 
+	for XIncluding or entities based on the presence of the XInclude 
+	namespace declaration on the document element.
+
+2002-06-09  James Henstridge  <james@daa.com.au>
+
+	* gtkdoc-mkdb.in: try to grab the header off the top of the main
+	sgml file.
+
+2002-05-31  James Henstridge  <james@daa.com.au>
+
+	* gtkdoc-mkdb.in (OutputSGML): put XIncludes in the $book_bottom
+	variable.
+	(OutputBook): add the XInclude namespace declaration to the book
+	element.
+
+	* gtkdoc-mkhtml.in (declaration): if the document looks like XML,
+	process it with xsltproc.
+
+	* configure.in: check for xsltproc.
+
+	* gtk-doc.xsl: start of XSLT template for converting docbook/xml
+	to HTML.
+
 2002-06-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (ConvertSGMLChars): Don't use Posix character
