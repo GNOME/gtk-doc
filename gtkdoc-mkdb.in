@@ -1482,7 +1482,7 @@ sub ExpandAbbreviations {
     my ($text) = @_;
 
     # Convert 'function()' or 'macro()'
-    $text =~ s/(\w+)\s*\(\)/&MakeXRef($1) . "()";/eg;
+    $text =~ s/(\w+)\s*\(\)/&MakeXRef($1, &tagify($1 . "()", "function"));/eg;
 
     # Convert '@param'
     $text =~ s/\@(\w+)/<parameter>$1<\/parameter>/g;
@@ -1491,11 +1491,15 @@ sub ExpandAbbreviations {
     $text =~ s/\%(-?\w+)/<literal>$1<\/literal>/g;
 
     # Convert '#symbol'
-    $text =~ s/#([\w-]+)/&MakeXRef($1);/eg;
+    $text =~ s/#([\w-]+)/&MakeXRef($1, &tagify($1, "type"));/eg;
 
     return $text;
 }
 
+sub tagify {
+   my ($text, $elem) = @_;
+   return "<" . $elem . ">" . $text . "</" . $elem . ">";
+}
 
 #############################################################################
 # Function    : MakeXRef
@@ -1503,23 +1507,22 @@ sub ExpandAbbreviations {
 #		Though it doesn't try to do this for a few standard C types
 #		that it	knows won't be in the documentation.
 # Arguments   : $symbol - the symbol to try to create a XRef to.
+#               $text - text text to put inside the XRef, defaults to $symbol
 #############################################################################
 
 sub MakeXRef {
-    my ($symbol) = $_[0];
-#    print "Getting type link for $symbol\n";
+    my ($symbol, $text) = ($_[0], $_[1]);
+    if (!defined($text)) {
+	$text = $symbol;
 
-    # Don't create a link for some standard C types and functions, to cut
-    # down on the number of warnings output by jade.
-    if ($symbol eq "void" || $symbol eq "va_list" || $symbol eq "int"
-	|| $symbol eq "char" || $symbol eq "printf" || $symbol eq "sprintf") {
-	return $symbol;
+	# Get rid of special '-struct' suffix.
+	$text =~ s/-struct$//;
     }
 
+    #print "Getting type link for $symbol -> $text\n";
+
     my $symbol_id = &CreateValidSGMLID ($symbol);
-    # Get rid of special '-struct' suffix.
-    $symbol =~ s/-struct$//;
-    return "<link linkend=\"$symbol_id\">$symbol</link>";
+    return "<link linkend=\"$symbol_id\">$text</link>";
 }
 
 
@@ -1669,8 +1672,8 @@ sub GetInterfaces {
 	    $title = "Implementations";
 	    $text = $object . " is implemented by ";
 	    for ($i = 0; $i <= $#impls; $i++) {
-		my $id = &CreateValidSGMLID ($impls[$i]);
-		$text .= "<link linkend=\"$id\">$impls[$i]</link>";
+		my $id2 = &CreateValidSGMLID ($impls[$i]);
+		$text .= "<link linkend=\"$id2\">$impls[$i]</link>";
 		if ($i < $#impls - 1) {
 		    $text .= ', ';
 		}

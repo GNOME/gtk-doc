@@ -1,3 +1,11 @@
+2003-06-25  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (MakeXRef): Accept a second, optional parameter for the
+	text of the link.
+	(ExpandAbbreviations): Add semantic markup inside the links, so that 
+	non-crossreferenced symbols come out properly formatted after link
+	removal.  (#61345)
+
 2003-06-15  Matthias Clasen  <maclas@gmx.de>
 
 	Support for a flat index of all symbols.  (#92861)
