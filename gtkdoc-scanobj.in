@@ -95,7 +95,7 @@ $includes
 GtkType object_types[$ntypes];
 
 GtkType *
-get_object_types ()
+get_object_types (void)
 {
     gint i = 0;
 EOT
@@ -121,7 +121,7 @@ gchar *hierarchy_filename = "$new_hierarchy_filename";
 gchar *args_filename = "$new_args_filename";
 
 
-static void output_signals ();
+static void output_signals (void);
 static void output_widget_signals (FILE *fp,
 				   GtkType object_type);
 static void output_widget_signal (FILE *fp,
@@ -134,12 +134,12 @@ static gchar * get_gdk_event (const gchar * signal_name);
 static gchar ** lookup_signal_arg_names (gchar * type,
 					 const gchar * signal_name);
 
-static void output_widget_hierarchy ();
+static void output_widget_hierarchy (void);
 static void output_hierarchy (FILE *fp,
 			      GtkType type,
 			      gint level);
 
-static void output_args ();
+static void output_args (void);
 static void output_widget_args (FILE *fp, GtkType object_type);
 
 int
@@ -169,7 +169,7 @@ print OUTPUT <<EOT;
 
 
 static void
-output_signals ()
+output_signals (void)
 {
   FILE *fp;
   gint i;
@@ -684,7 +684,7 @@ lookup_signal_arg_names (gchar * type, const gchar * signal_name)
 /* This outputs the hierarchy of all widgets which have been initialized,
    i.e. by calling their XXX_get_type() initialization function. */
 static void
-output_widget_hierarchy ()
+output_widget_hierarchy (void)
 {
   FILE *fp;
 
@@ -728,7 +728,7 @@ output_hierarchy (FILE *fp,
 
 
 static void
-output_args ()
+output_args (void)
 {
   FILE *fp;
   gint i;

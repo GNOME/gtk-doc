@@ -109,8 +109,8 @@ $includes
 #endif
 GType object_types[$ntypes];
 
-GType *
-get_object_types ()
+static GType *
+get_object_types (void)
 {
     gint i = 0;
 EOT
@@ -145,7 +145,7 @@ gchar *prerequisites_filename = "$new_prerequisites_filename";
 gchar *args_filename = "$new_args_filename";
 
 
-static void output_signals ();
+static void output_signals (void);
 static void output_widget_signals (FILE *fp,
 				   GType object_type);
 static void output_widget_signal (FILE *fp,
@@ -158,20 +158,20 @@ static gchar * get_gdk_event (const gchar * signal_name);
 static gchar ** lookup_signal_arg_names (const gchar * type,
 					 const gchar * signal_name);
 
-static void output_widget_hierarchy ();
+static void output_widget_hierarchy (void);
 static void output_hierarchy (FILE *fp,
 			      GType type,
 			      gint level);
 
-static void output_widget_interfaces ();
+static void output_widget_interfaces (void);
 static void output_interfaces (FILE *fp,
 			       GType type);
 
-static void output_interface_prerequisites ();
+static void output_interface_prerequisites (void);
 static void output_prerequisites (FILE *fp,
 			          GType type);
 
-static void output_args ();
+static void output_args (void);
 static void output_widget_args (FILE *fp, GType object_type);
 
 int
@@ -192,7 +192,7 @@ main (int argc, char *argv[])
 
 
 static void
-output_signals ()
+output_signals (void)
 {
   FILE *fp;
   gint i;
@@ -717,7 +717,7 @@ lookup_signal_arg_names (const gchar * type, const gchar * signal_name)
 /* This outputs the hierarchy of all widgets which have been initialized,
    i.e. by calling their XXX_get_type() initialization function. */
 static void
-output_widget_hierarchy ()
+output_widget_hierarchy (void)
 {
   FILE *fp;
 
@@ -758,7 +758,7 @@ output_hierarchy (FILE  *fp,
   g_free (children);
 }
 
-static void output_widget_interfaces ()
+static void output_widget_interfaces (void)
 {
   FILE *fp;
 
@@ -802,7 +802,7 @@ output_interfaces (FILE  *fp,
   g_free (children);
 }
 
-static void output_interface_prerequisites ()
+static void output_interface_prerequisites (void)
 {
   FILE *fp;
 
@@ -849,7 +849,7 @@ output_prerequisites (FILE  *fp,
 }
 
 static void
-output_args ()
+output_args (void)
 {
   FILE *fp;
   gint i;
