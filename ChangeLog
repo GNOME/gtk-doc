@@ -1,3 +1,12 @@
+2002-11-29  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-scan.in (ScanHeader): Make deprecation guards work with
+	both 
+	#ifndef DEPRECATION_GUARD  
+	#if !defined(DEPRECATION_GUARD) || defined(FOO_COMPILATION)
+	The second form is used in GDK and GTK+ to include selected
+	deprecated symbols when compiling the library itself.
+
 2002-11-27  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in: Parse to new tags in inline doc comments,

@@ -235,7 +235,7 @@ sub ScanHeader {
         # Keep a count of #if, #ifdef, #ifndef nesting,
         # and if we enter a deprecation-symbol-bracketed
         # zone, take note.
-        if (m/^\s*#\s*if\w*\s+(\w+)/) {
+        if (m/^\s*#\s*if(?:ndef\b|\s+!\s*defined\s*\()\s*(\w+)/) {
             if ($deprecated_conditional_nest == 0 and $1 =~ /$DEPRECATED_GUARDS/) {
                  $deprecated_conditional_nest = 1;
             } elsif ($deprecated_conditional_nest > 0) {
