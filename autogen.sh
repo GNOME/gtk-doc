@@ -59,7 +59,7 @@ esac
 aclocal $ACLOCAL_FLAGS
 
 # optionally feature autoheader
-(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
+#(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
 automake --add-missing $am_opt
 autoconf

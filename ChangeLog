@@ -1,3 +1,12 @@
+2002-02-01  Damon Chaplin  <damon@ximian.com>
+
+	* configure.in: check for openjade or jade. Patch from Stefan Kost
+	<kost@imn.htwk-leipzig.de>.
+
+	* gtkdoc-mkhtml.in: use @JADE@ so the correct version of jade is used.
+
+	* autogen.sh: commented out autoheader since we don't have a config.h.
+
 2002-01-18  Damon Chaplin  <damon@ximian.com>
 
 	* Released 0.9.
