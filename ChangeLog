@@ -1,5 +1,15 @@
 2003-06-25  Matthias Clasen  <maclas@gmx.de>
 
+	Changes for #115528:
+	
+	* gtkdoc-mkdb.in (OutputSGML): Collect hierarchy, interfaces, implementations, prerequisites
+	and derived interfaces separately.
+	(OutputSGMLFile): Take two more arguments: implementations and derived interfaces.
+	(GetHierarchy): Also put immediate children in the local tree.
+	(GetInterfaces): Split into GetInterfaces and GetImplementations.
+	(GetImplementations): New function to get the implementations of an interface.
+	(GetDerived): New function to get the known derived interfaces of an interface.
+
 	* gtkdoc-mkdb.in (MakeXRef): Accept a second, optional parameter for the
 	text of the link.
 	(ExpandAbbreviations): Add semantic markup inside the links, so that 

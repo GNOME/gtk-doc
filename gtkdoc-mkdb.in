@@ -321,7 +321,9 @@ sub OutputSGML {
     my $style_args_desc = "";
     my $hierarchy = "";
     my $interfaces = "";
+    my $implementations = "";
     my $prerequisites = "";
+    my $derived = "";
     my @file_objects = ();
 
     while (<INPUT>) {
@@ -381,7 +383,7 @@ sub OutputSGML {
 	    } else {
 		$section_id = &CreateValidSGMLID ("$MODULE-$title");
 	    }
-
+	    
 	    if ($num_symbols > 0) {
 		if (lc($OUTPUT_FORMAT) eq "xml") {
 		    $book_bottom .= "    <xi:include href=\"xml/$file.xml\"/>\n";
@@ -410,6 +412,7 @@ $signals_desc
 </refsect1>
 EOF
 		}
+
 		if ($args_synop ne '') {
 		    $args_synop = <<EOF;
 <refsect1>
@@ -428,6 +431,7 @@ $args_desc
 </refsect1>
 EOF
 		}
+
 		if ($child_args_synop ne '') {
 		    $args_synop .= <<EOF;
 <refsect1>
@@ -446,6 +450,7 @@ $child_args_desc
 </refsect1>
 EOF
 		}
+
 		if ($style_args_synop ne '') {
 		    $args_synop .= <<EOF;
 <refsect1>
@@ -464,11 +469,48 @@ $style_args_desc
 </refsect1>
 EOF
 		}
+
 		if ($hierarchy ne "") {
-		    $hierarchy = <<EOF
+		    $hierarchy = <<EOF;
 <refsect1>
 <title>Object Hierarchy</title>
 $hierarchy
+</refsect1>
+EOF
+		}
+
+		if ($interfaces ne "") {
+		    $interfaces = <<EOF;
+<refsect1>
+<title>Implemented Interfaces</title>
+$interfaces
+</refsect1>
+EOF
+		}
+
+		if ($implementations ne "") {
+		    $implementations = <<EOF;
+<refsect1>
+<title>Known Implementations</title>
+$implementations
+</refsect1>
+EOF
+		}
+
+		if ($prerequisites ne "") {
+		    $prerequisites = <<EOF;
+<refsect1>
+<title>Prerequisites</title>
+$prerequisites
+</refsect1>
+EOF
+		}
+
+		if ($derived ne "") {
+		    $derived = <<EOF;
+<refsect1>
+<title>Known Derived Interfaces</title>
+$derived
 </refsect1>
 EOF
 		}
@@ -479,7 +521,9 @@ EOF
 						    \$signals_synop, \$signals_desc,
 						    \$args_synop, \$args_desc,
 						    \$hierarchy, \$interfaces,
-						    \$prerequisites, \@file_objects);
+						    \$implementations,
+						    \$prerequisites, \$derived,
+						    \@file_objects);
 		if ($file_changed) {
 		    $changed = 1;
 		}
@@ -497,8 +541,10 @@ EOF
 	    $child_args_desc = "";
 	    $style_args_desc = "";
 	    $hierarchy = "";
-	    $interfaces = "";
+ 	    $interfaces = "";
+ 	    $implementations = "";
 	    $prerequisites = "";
+	    $derived = "";
 
 	} elsif (m/^(\S+)/) {
 	    my $symbol = $1;
@@ -519,7 +565,9 @@ EOF
 			$arg_desc, $child_arg_desc, $style_arg_desc) = &GetArgs ($symbol);
 		    my $hier = &GetHierarchy ($symbol);
 		    my $ifaces = &GetInterfaces ($symbol);
+		    my $impls = &GetImplementations ($symbol);
 		    my $prereqs = &GetPrerequisites ($symbol);
+		    my $der = &GetDerived ($symbol);
 		    $synopsis .= $synop;
 		    $details .= $desc;
 		    $signals_synop .= $sig_synop;
@@ -532,7 +580,9 @@ EOF
 		    $style_args_desc .= $style_arg_desc;
 		    $hierarchy .= $hier;
 		    $interfaces .= $ifaces;
+		    $implementations .= $impls;
 		    $prerequisites .= $prereqs;
+		    $derived .= $der;
 		}
 
 		# Note that the declaration has been output.
@@ -1202,12 +1252,14 @@ EOF
 #               $args_desc - reference to the DocBook for the Arg Description part
 #               $hierarchy - reference to the DocBook for the Object Hierarchy part
 #               $interfaces - reference to the DocBook for the Interfaces part
+#               $implementations - reference to the DocBook for the Known Implementations part
 #               $prerequisites - reference to the DocBook for the Prerequisites part
+#               $derived - reference to the DocBook for the Derived Interfaces part
 #               $file_objects - reference to an array of objects in this file
 #############################################################################
 
 sub OutputSGMLFile {
-    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $prerequisites, $file_objects) = @_;
+    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $implementations, $prerequisites, $derived, $file_objects) = @_;
 
     # The edited title overrides the one from the sections file.
     my $new_title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
@@ -1299,8 +1351,10 @@ $${synopsis}</synopsis>
 </refsynopsisdiv>
 
 $$hierarchy
-$$interfaces
 $$prerequisites
+$$derived
+$$interfaces
+$$implementations
 $$args_synop
 $$signals_synop
 
@@ -1569,9 +1623,9 @@ sub MakeDeprecationNote {
 
 #############################################################################
 # Function    : GetHierarchy
-# Description : Returns the DocBook output describing the ancestors of a
-#		GtkObject subclass. It uses the global @Objects and
-#		@ObjectLevels arrays to walk up the tree.
+# Description : Returns the DocBook output describing the ancestors and
+#               immediate children of a GObject subclass. It uses the 
+#               global @Objects and @ObjectLevels arrays to walk the tree.
 # Arguments   : $object - the GtkObject subclass.
 #############################################################################
 
@@ -1580,11 +1634,23 @@ sub GetHierarchy {
 
     # Find object in the objects array.
     my $found = 0;
+    my @children = ();
     my $i;
+    my $level;
+    my $j;
     for ($i = 0; $i < @Objects; $i++) {
-	if ($Objects[$i] eq $object) {
-	    $found = 1;
+	if ($found) {
+	    if ($ObjectLevels[$i] <= $level) {
 	    last;
+	}
+	    elsif ($ObjectLevels[$i] == $level + 1) {
+		push (@children, $Objects[$i]);
+	    }
+	}
+	elsif ($Objects[$i] eq $object) {
+	    $found = 1;
+	    $j = $i;
+	    $level = $ObjectLevels[$i];
 	}
     }
     if (!$found) {
@@ -1594,13 +1660,12 @@ sub GetHierarchy {
     # Walk up the hierarchy, pushing ancestors onto the ancestors array.
     my @ancestors = ();
     push (@ancestors, $object);
-    my $level = $ObjectLevels[$i];
 #    print "Level: $level\n";
     while ($level > 1) {
-	$i--;
-	if ($ObjectLevels[$i] < $level) {
-	    push (@ancestors, $Objects[$i]);
-	    $level = $ObjectLevels[$i];
+	$j--;
+	if ($ObjectLevels[$j] < $level) {
+	    push (@ancestors, $Objects[$j]);
+	    $level = $ObjectLevels[$j];
 #	    print "Level: $level\n";
 	}
     }
@@ -1625,10 +1690,16 @@ sub GetHierarchy {
 	}
 	$level++;
     }
+    for ($i = 0; $i <= $#children; $i++) {
+      my $id = &CreateValidSGMLID ($children[$i]);
+      my $link_text = "<link linkend=\"$id\">$children[$i]</link>";
+      $hierarchy .= ' ' x ($level * 6 - 3) . "+----$link_text\n";
+    }
     $hierarchy .= "</synopsis>\n";
 
     return $hierarchy;
 }
+
 
 #############################################################################
 # Function    : GetInterfaces
@@ -1639,18 +1710,19 @@ sub GetHierarchy {
 
 sub GetInterfaces {
     my ($object) = @_;
-    my $title;
     my $text = "";
     my $i;
 
     # Find object in the objects array.
     if (exists($Interfaces{$object})) {
-	$title = "Implemented Interfaces";
-	$text = $object . " implements ";
-	my @ifaces = split(' ', $Interfaces{$object});
+        my @ifaces = split(' ', $Interfaces{$object});
+	$text = <<EOF;
+<para>
+$object implements
+EOF
 	for ($i = 0; $i <= $#ifaces; $i++) {
 	    my $id = &CreateValidSGMLID ($ifaces[$i]);
-	    $text .= "<link linkend=\"$id\">$ifaces[$i]</link>";
+	    $text .= " <link linkend=\"$id\">$ifaces[$i]</link>";
 	    if ($i < $#ifaces - 1) {
 		$text .= ', ';
 	    }
@@ -1661,39 +1733,51 @@ sub GetInterfaces {
 	        $text .= '.';
 	    }
 	}
-    } else {
-	my @impls = ();
-	foreach my $key (keys %Interfaces) {
-	    if ($Interfaces{$key} =~ /\b$object\b/) {
-		push (@impls, $key);
-	    }
-	}
-	if ($#impls >= 0) {
-	    $title = "Implementations";
-	    $text = $object . " is implemented by ";
-	    for ($i = 0; $i <= $#impls; $i++) {
-		my $id2 = &CreateValidSGMLID ($impls[$i]);
-		$text .= "<link linkend=\"$id2\">$impls[$i]</link>";
-		if ($i < $#impls - 1) {
-		    $text .= ', ';
-		}
-		elsif ($i < $#impls) {
-		  $text .= ' and ';
-		}
-		else {
-		  $text .= '.';
-		}
-	    }
+	$text .= <<EOF;
+</para>
+EOF
+    }
+
+    return $text;
+}
+
+#############################################################################
+# Function    : GetImplementations
+# Description : Returns the DocBook output describing the implementations 
+#               of an interface. It uses the global %Interfaces hash.
+# Arguments   : $object - the GtkObject subclass.
+#############################################################################
+
+sub GetImplementations {
+    my ($object) = @_;
+    my @impls = ();
+    my $text = "";
+    my $i;
+    foreach my $key (keys %Interfaces) {
+	if ($Interfaces{$key} =~ /\b$object\b/) {
+	    push (@impls, $key);
 	}
     }
-    if ($text ne "") {
-	$text = <<EOF
-<refsect1>
-<title>$title</title>
+    if ($#impls >= 0) {
+	$text = <<EOF;
 <para>
-$text
+$object is implemented by
+EOF
+        for ($i = 0; $i <= $#impls; $i++) {
+	    my $id = &CreateValidSGMLID ($impls[$i]);
+	    $text .= " <link linkend=\"$id\">$impls[$i]</link>";
+	    if ($i < $#impls - 1) {
+		$text .= ', ';
+	    }
+	    elsif ($i < $#impls) {
+		$text .= ' and ';
+	    }
+	    else {
+		$text .= '.';
+	    }
+	}
+	$text .= <<EOF;
 </para>
-</refsect1>
 EOF
     }
     return $text;
@@ -1712,13 +1796,15 @@ sub GetPrerequisites {
     my $text = "";
     my $i;
 
-    # Find object in the objects array.
     if (exists($Prerequisites{$iface})) {
-	$text = $iface . " requires ";
+	$text = <<EOF;
+<para>
+$iface requires
+EOF
 	my @prereqs = split(' ', $Prerequisites{$iface});
 	for ($i = 0; $i <= $#prereqs; $i++) {
 	    my $id = &CreateValidSGMLID ($prereqs[$i]);
-	    $text .= "<link linkend=\"$id\">$prereqs[$i]</link>";
+	    $text .= " <link linkend=\"$id\">$prereqs[$i]</link>";
 	    if ($i < $#prereqs - 1) {
 		$text .= ', ';
 	    }
@@ -1729,13 +1815,51 @@ sub GetPrerequisites {
 	        $text .= '.';
 	    }
 	}
-	$text = <<EOF
-<refsect1>
-<title>Prerequisites</title>
-<para>
-$text
+	$text .= <<EOF;
 </para>
-</refsect1>
+EOF
+    }
+    return $text;
+}
+
+#############################################################################
+# Function    : GetDerived
+# Description : Returns the DocBook output describing the derived interfaces
+#               of an interface. It uses the global %Prerequisites hash.
+# Arguments   : $iface - the interface.
+#############################################################################
+
+sub GetDerived {
+    my ($iface) = @_;
+    my $text = "";
+    my $i;
+
+    my @derived = ();
+    foreach my $key (keys %Prerequisites) {
+	if ($Prerequisites{$key} =~ /\b$iface\b/) {
+	    push (@derived, $key);
+	}
+    }
+    if ($#derived >= 0) {
+	$text = <<EOF;
+<para>
+$iface is required by
+EOF
+	for ($i = 0; $i <= $#derived; $i++) {
+	    my $id = &CreateValidSGMLID ($derived[$i]);
+	    $text .= " <link linkend=\"$id\">$derived[$i]</link>";
+	    if ($i < $#derived - 1) {
+		$text .= ', ';
+	    }
+	    elsif ($i < $#derived) {
+		$text .= ' and ';
+	    }
+	    else {
+		$text .= '.';
+	    }
+	}
+	$text .= <<EOF;
+</para>
 EOF
     }
     return $text;
