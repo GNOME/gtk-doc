@@ -68,6 +68,7 @@ $ntypes = @types + 1;
 
 print OUTPUT <<EOT;
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 $includes
@@ -172,6 +173,14 @@ output_signals ()
   fclose (fp);
 }
 
+static gint
+compare_signals (const void *a, const void *b)
+{
+  const guint *signal_a = a;
+  const guint *signal_b = b;
+
+  return strcmp (g_signal_name (*signal_a), g_signal_name (*signal_b));
+}
 
 /* This outputs all the signals of one widget. */
 static void
@@ -184,6 +193,8 @@ output_widget_signals (FILE *fp, GType object_type)
   object_class_name = g_type_name (object_type);
 
   signals = g_type_signals (object_type, &n_signals);
+  qsort (signals, n_signals, sizeof (guint), compare_signals);  	
+
   for (sig = 0; sig < n_signals; sig++)
     {
       output_widget_signal (fp, object_type, object_class_name,
