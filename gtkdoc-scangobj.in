@@ -747,6 +747,8 @@ output_widget_args (FILE *fp, GType object_type)
   const gchar *object_class_name;
   gint arg;
   gchar flags[16], *pos;
+  GParamSpec **properties;
+  guint n_properties;
 
   class = g_type_class_peek (object_type);
   if (!class)
@@ -754,9 +756,14 @@ output_widget_args (FILE *fp, GType object_type)
 
   object_class_name = g_type_name (object_type);
 
-  for (arg = 0; arg < class->n_property_specs; arg++)
+  properties = g_object_class_list_properties (class, &n_properties);
+
+  for (arg = 0; arg < n_properties; arg++)
     {
-      GParamSpec *spec = class->property_specs[arg];
+      GParamSpec *spec = properties[arg];
+
+      if (spec->owner_type != object_type)
+        continue;        
 
       pos = flags;
       /* We use one-character flags for simplicity. */
@@ -773,6 +780,8 @@ output_widget_args (FILE *fp, GType object_type)
       fprintf (fp, "<ARG>\n<NAME>%s::%s</NAME>\n<TYPE>%s</TYPE>\n<FLAGS>%s</FLAGS>\n</ARG>\n\n",
 	       object_class_name, spec->name, g_type_name (spec->value_type), flags);
     }
+
+  g_free (properties);
 }
 EOT
 
