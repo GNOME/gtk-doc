@@ -1,3 +1,9 @@
+2005-01-31  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in: patch from Stefan Kost to not add '<' '>' around
+	include files that already have '"' '"' around them, and to try to
+	gather more information about undocumented symbols. #164462.
+
 2005-01-28  Damon Chaplin  <damon@gnome.org>
 
 	* gtk-doc.make: use dist-hook rather than EXTRA_DIST to copy the

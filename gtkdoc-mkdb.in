@@ -184,6 +184,7 @@ my %SourceSymbolParams;
 
 # all documentation goes in here, so we can do coverage analysis
 my %AllSymbols;
+my %AllIncompleteSymbols;
 my %AllDocumentedSymbols;
 
 # These global arrays store GtkObject and subclasses and the hierarchy.
@@ -1360,7 +1361,7 @@ EOF
 #		  will be overriden by the title in the template file.
 #		$section_id - the SGML id to use for the toplevel tag.
 #		$includes - comma-separates list of include files added at top
-#		  of synopsis, with '<' '>' around them.
+#		  of synopsis, with '<' '>' around them (if not already enclosed in "").
 #		$synopsis - reference to the DocBook for the Synopsis part.
 #		$details - reference to the DocBook for the Details part.
 #               $signal_synop - reference to the DocBook for the Signal Synopsis part
@@ -1418,7 +1419,12 @@ sub OutputSGMLFile {
     my $include_output = "";
     my $include;
     foreach $include (split (/,/, $includes)) {
-	$include_output .= "#include &lt;${include}&gt;\n";
+        if ($include =~ m/^\".+\"$/) {
+            $include_output .= "#include ${include}\n";
+        }
+        else {
+            $include_output .= "#include &lt;${include}&gt;\n";
+        }
     }
 
     my $old_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT";
@@ -2524,12 +2530,14 @@ EOF
 
 sub OutputMissingDocumentation {
      my $n_documented = 0;
+     my $n_incomplete = 0;
      my $total = 0;
      my $symbol;
      my $percent;
      my $msg;
      my $buffer = "";
-     my $buffer2 = "";
+     my $buffer_deprecated = "";
+     my $buffer_descriptions = "";
 
      open (UNDOCUMENTED, ">$ROOT_DIR/$MODULE-undocumented.txt")
           || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt";
@@ -2537,18 +2545,43 @@ sub OutputMissingDocumentation {
      foreach $symbol (sort (keys (%AllSymbols))) {
           if ($symbol !~ /:(Title|Long_Description|Short_Description|See_Also)/) {
 	      $total++;
-	      if (exists ($AllDocumentedSymbols{$symbol})) {
+              if (exists ($AllDocumentedSymbols{$symbol})) {
 		  $n_documented++;
+                  if (exists ($AllIncompleteSymbols{$symbol})) {
+                      $n_incomplete++;
+                      $buffer .= $symbol . " (" . $AllIncompleteSymbols{$symbol} . ")\n";
+                  }
 	      } elsif (exists $Deprecated{$symbol}) {
-		  $buffer2 .= $symbol . "\n";
+                  if (exists ($AllIncompleteSymbols{$symbol})) {
+                      $n_incomplete++;
+                      $buffer_deprecated .= $symbol . " (" . $AllIncompleteSymbols{$symbol} . ")\n";
+                  } else {
+                      $buffer_deprecated .= $symbol . "\n";
+                  }
+	      } else {
+                  if (exists ($AllIncompleteSymbols{$symbol})) {
+                      $n_incomplete++;
+                      $buffer .= $symbol . " (" . $AllIncompleteSymbols{$symbol} . ")\n";
+                  } else {
+                      $buffer .= $symbol . "\n";
+                  }
 	      }
-	      else {
-		  $buffer .= $symbol . "\n";
-	      }
+          } elsif ($symbol =~ /:(Long_Description|Short_Description)/) {
+              $total++;
+              #my $len1=(exists($SymbolDocs{$symbol}))?length($SymbolDocs{$symbol}):-1;
+              #my $len2=(exists($AllDocumentedSymbols{$symbol}))?length($AllDocumentedSymbols{$symbol}):-1;
+              #print "%%%% $symbol : $len1,$len2\n";
+              if (((exists ($SymbolDocs{$symbol})) && (length ($SymbolDocs{$symbol}) > 0))
+              || ((exists ($AllDocumentedSymbols{$symbol})) && (length ($AllDocumentedSymbols{$symbol}) > 0))) {
+                  $n_documented++;
+              } else {
+                  $symbol =~ m/^.*\/(.*)$/;
+                  $buffer_descriptions .= $1 . "\n";                  
+              }
           }
      }
 
-     $buffer .= "\n" . $buffer2;
+     $buffer .= "\n" . $buffer_deprecated . "\n" . $buffer_descriptions;
      
      if ($total == 0) {
 	  $percent = 100;
@@ -2558,13 +2591,14 @@ sub OutputMissingDocumentation {
 
      printf UNDOCUMENTED "%.0f%% symbol docs coverage.\n", $percent;
      print UNDOCUMENTED "$n_documented symbols documented.\n";
+     print UNDOCUMENTED "$n_incomplete symbols incomplete.\n";
      print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
 
      print UNDOCUMENTED $buffer;
 
      close (UNDOCUMENTED);
 
-     printf (("%.0f%% symbol docs coverage ($n_documented symbols documented, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
+     printf (("%.0f%% symbol docs coverage ($n_documented symbols documented, $n_incomplete symbols incomplete, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
 }
 
 
@@ -2627,13 +2661,17 @@ sub MergeSourceDocumentation {
 	    my $type = $DeclarationTypes {$symbol};
 
 	    my $item = "Parameter";
-	    if (defined ($type)) {
-	      if ($type eq 'STRUCT') {
-		$item = "Field";
-	      } elsif ($type eq 'ENUM') {
-		$item = "Value";
-	      }
-	    }
+            if (defined ($type)) {
+                if ($type eq 'STRUCT') {
+                    $item = "Field";
+                } elsif ($type eq 'ENUM') {
+                    $item = "Value";
+                } elsif ($type eq 'UNION') {
+                    $item = "Field";
+                }
+            } else {
+                $type="SIGNAL";
+            }
 
 	    $tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
 	    $src_doc =~ s/^\s+//;
@@ -2664,12 +2702,13 @@ EOF
 	        # since the ones from the templates are likely to contain the
 	        # artificial argn names which are generated by gtkdoc-scangobj.
 		$SymbolParams{$symbol} = $SourceSymbolParams{$symbol}
-	    }
-	    else {
+                # FIXME: we need to check for empty docs here as well!
+	    } else {
 		# The templates contain the definitive parameter names and order,
 		# so we will not change that. We only override the actual text.
 		my $tmpl_params = $SymbolParams{$symbol};
 		if (!defined ($tmpl_params)) {
+                    #print "No merge for $symbol\n";
 		    next;
 		}
 
@@ -2677,7 +2716,6 @@ EOF
 		my $j;
 		for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
 		    my $tmpl_param_name = $$tmpl_params[$j];
-		    my $tmpl_param_desc = $$tmpl_params[$j + 1];
 
 		    # Try to find the param in the source comment documentation.
 		    my $found = 0;
@@ -2700,21 +2738,13 @@ EOF
 			}
 		    }
 
-		    # Output a warning if the parameter is not found.
-		    if (!$found) {
-			print <<EOF;
-WARNING: $item description missing in source code comment block -
-         $type: $symbol $item: $tmpl_param_name.
-EOF
-
-			# If it looks like the parameters are there, but not
-			# in the right place, try to explain a bit better.
-			if ($src_doc =~ m/\@$tmpl_param_name:/) {
-			  print <<EOF;
+                    # If it looks like the parameters are there, but not
+                    # in the right place, try to explain a bit better.
+                    if ((!$found) && ($src_doc =~ m/\@$tmpl_param_name:/)) {
+                        print <<EOF;
          Parameters must start on the line immediately after the function
 	 or macro name.
 EOF
-			}
 		    }
 		}
 
@@ -2733,8 +2763,51 @@ EOF
 	} else {
 	    if ($have_tmpl_docs) {
 		$AllDocumentedSymbols{$symbol} = 1;
-	    }
-	}
+            }
+        }
+        # if this symbol is documented, check if docs are complete
+        $tmpl_doc = $SymbolDocs{$symbol};
+	$tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
+	$tmpl_doc =~ s/<\/?[a-z]+>//g;
+	$tmpl_doc =~ s/\s//g;
+	if ($tmpl_doc ne "") {
+            my $tmpl_params = $SymbolParams{$symbol};
+            if (defined ($tmpl_params)) {
+                my $type = $DeclarationTypes {$symbol};
+    
+                my $item = "Parameter";
+                if (defined ($type)) {
+                    if ($type eq 'STRUCT') {
+                        $item = "Field";
+                    } elsif ($type eq 'ENUM') {
+                        $item = "Value";
+                    } elsif ($type eq 'UNION') {
+                        $item = "Field";
+                    }
+                } else {
+                    $type="SIGNAL";
+                }
+    
+                my $j;
+                for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
+                    # Output a warning if the parameter is empty and
+                    # remember for stats.
+                    my $tmpl_param_name = $$tmpl_params[$j];
+                    my $tmpl_param_desc = $$tmpl_params[$j + 1];
+                    if ($tmpl_param_desc !~ m/\S/) {
+                        if (exists ($AllIncompleteSymbols{$symbol})) {
+                            $AllIncompleteSymbols{$symbol}.=", ".$tmpl_param_name;
+                        } else {
+                            $AllIncompleteSymbols{$symbol}=$tmpl_param_name;
+                        }
+#                        print <<EOF;
+#WARNING: $item description missing in source code comment block -
+# $type: $symbol $item: $tmpl_param_name.
+#EOF
+                    }
+                }
+            }
+        }
    }
 }
 
@@ -2743,8 +2816,7 @@ sub IsEmptyDoc {
 
     if ($doc =~ /^\s*<para>\s*(FIXME)?\s*<\/para>\s*$/) {
 	return 1;
-    }
-    else {
+    } else {
 	return 0;
     }
 }
@@ -3026,6 +3098,7 @@ sub ReadTemplateFile {
 			}
 		    }
 		    $SymbolParams{$current_symbol} = [ @params ];
+                    #print "#### Found params for symbol : '$current_symbol'= " . @params . "\n";
 		} else {
 		    # Delete any existing params in case we are overriding a
 		    # previously read template.
@@ -3057,7 +3130,7 @@ sub ReadTemplateFile {
 		if ($param_name =~ m/^[Rr]eturns?$/) {
 		    $param_name = "Returns";
 		}
-#		print "Found param: $param_name\n";
+#               print "Found param for symbol $current_symbol : '$param_name'= '$_'\n";
 		push (@params, $param_name);
 		push (@params, $_);
 		$current_param += 2;
