@@ -17,7 +17,7 @@ Tools
 
   Make template files from declaration files
 
-  Usage: gtkdoc-mkhtml --module=MODULE
+  Usage: gtkdoc-mkhtml --module=MODULE [--output-dir=DIR] 
 
 * gtkdoc-mkdb
 
@@ -36,8 +36,7 @@ Tools
 General
 =======
 
-The files to edit manually are in the gtkdocs directory, and are split into 3
-subdirectories for glib, gdk and gtk.
+The files to edit manually are generated in the tmpl/ directory.
 
 You may find useful information in the GTK tutorial, or the info documentation.
 
@@ -52,7 +51,7 @@ For macros which return a value just like a function, you must manually
 add a '@Returns: ' field.
 
 You may want to rearrange the functions/macros etc. to split them into
-related sections. To do this rearrange the scan-gtk-perl/gXXX-sections.txt
+related sections. To do this rearrange the MODULE-sections.txt
 files. You can also add <SUBSECTION> between functions. Currently this just
 results in a blank line between them in the synopsis.
 

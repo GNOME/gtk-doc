@@ -5,17 +5,6 @@ GTK+ DocBook Documentation Generator
 This package automatically generates DocBook documentation for GTK+,
 and converts the DocBook documentation into HTML and man pages.
 
-There a few hard-coded paths in the scripts:
-   scan-gtk-perl/scangtk.pl
-   scan-gtk-c/getinits.pl
-   db2man/docbook-to-man
-   gtk-doc.dsl
-   mkgtkdb.pl
-   mkgtkhtml
-   mkgtktmpl.pl
-
-Also, some scripts expect certain directories to be created.
-
 
 Requirements
 ============
@@ -24,6 +13,9 @@ Perl v5 - the main scripts are in Perl, which is expected to be in /usr/bin.
     You'll have to change the first lines, "!#/usr/bin/perl" if it isn't.
 
 DocBook DTD v3.0 - This is the DocBook SGML DTD.
+    gtk-doc.dtd extends DocBook slightly to support an "href" 
+    attribute on the <anchor> tag. This is used to enable global
+    cross-references in the generated HTML.
     http://www.ora.com/davenport
 
 Jade v1.1 - This is a DSSSL processor for converting SGML to various formats.
@@ -33,8 +25,9 @@ Modular DocBook Stylesheets (I've got 1.20, but v1.08+ should be OK)
     This is the DSSSL code to convert DocBook to HTML (and a few other
     formats). It's used together with jade.
     I've customized the DSSSL code slightly, in gtk-doc.dsl, to stop the
-    output of the main table of contents, and to add a border and colour to
-    the program code listings/declarations.
+    output of the main table of contents, to add a border and colour to
+    the program code listings/declarations, and to support global
+    cross-reference indices in the generated HTML.
     http://nwalsh.com/docbook/dsssl
 
 docbook-to-man - This converts the DocBook into man pages. I've customized
@@ -44,42 +37,55 @@ docbook-to-man - This converts the DocBook into man pages. I've customized
     There is a link to this on http://www.ora.com/davenport
 
 
-[ The rest of the information in this file is out of date and
-  needs to be updated. See ftp://ftp.gtk.org/pub/users/otaylor/gtk-doc/
-  for some examples of documentation packages using the scripts
-  in this module. ]
-
 Overview
 ========
 
-These are the stages for producing the final HTML/man pages.
-I've already scanned GLib 1.1.4 and GTK 1.1.3 so you can skip steps 1 & 2
-for now. See the later section for resyncing the documentation with the code.
+These are the stages for producing the final HTML/man pages from a set
+of header files. See the later section for resyncing the documentation
+with the code.
 
 
-1. Scanning GTK, to get function prototypes, structs, enums, macros etc.
+1. Scanning the header files, to get function prototypes, structs,
+   enums, macros etc.
 
-  1.1. In the scan-gtk-c directory run getinits.pl to create inits.c
-       (Note: the script includes hard-coded paths which must be updated)
-       Compile the getgtkinfo C program and run it to generate signals.txt
-       and hierarchy.txt
+  1.1. Run gtk-scan on the header files. Use the --module=blah
+       flag to indicate a name for your documentation module.
+       This generates files blah-decl-list.txt and blah-decl.txt
 
-  1.2. Run scan-gtk-perl/scangtk.pl which scans the GTK header files and
-       outputs files describing all the function/macro etc. declarations found.
-       The gXXX-decl.txt files contain the full declarations.
-       The gXXX-decl-list.txt files contain a list of the declaration names,
-       and possibly section headings.
+  1.2  If the code you are documenting is GTK+ based, create a file
+       blah.types. This file contains two things:
 
-  1.4. Copy the gXXX-decl-list.txt files to gXXX-sections.txt and hand-edit
-       these to rearrange the items and split into sections.
+       a) #include lines necessary to compile a program against
+          your library.
+       b) The GtkObject types in your library, represented by lines
+          listing the name of a get_type() function.
 
+       An example file that does part of gtk would look like:
+
+============
+#include <gtk/gtk.h>
+gtk_object_get_type
+gtk_widget_get_type
+gtk_button_get_type
+============
+
+      Set the CFLAGS and LDFLAGS environment variables to the
+      values necessary to compile a program against your
+      library, then run 'gtkdoc-scanobj --module=blah'. This
+      generates files blah.signals and blah.heirarchy.
+
+  1.3  Copy the file blah-decl-list.txt to blah-sections.txt
+
+       The file blah-sections.txt is used to determine the order
+       and organization of the functions in the generated templates.
+ 
 
 2. Creating blank template files.
 
-  Run mkgtktmpl.pl to create empty templates for each function etc.
-  (Note: the script includes hard-coded paths which must be updated)
-  It won't overwrite files, since you may lose work, so if you need to
-  regenerate the blank documents you need to delete the current files.
+  Run 'gtkdoc-mktmpl --module=blah' to create empty templates for each
+  function etc. in the tmpl/ directory. It won't overwrite files, 
+  to avoid losing work work, so if you need to regenerate the blank 
+  documents you need to delete the current files.
 
 
 3. Manually editing documentation in gtkdocs/ directory.
@@ -90,48 +96,53 @@ for now. See the later section for resyncing the documentation with the code.
 
 4. Creating the DocBook files and then the HTML or man pages.
 
-  4.1. Run mkgtkdb.pl to generate the DocBook sgml files.
-       (Note: the script includes hard-coded paths which must be updated)
+  4.1. Run 'gtkdoc-mkdb --module=blah' to generate the DocBook sgml files.
 
-  4.2. If any new files have been added, you must recreate the main DocBook
-       document, sgml/gtk-docs.sgml. This should include all the entities
+  4.2. Create a driver file (conventionally called blah-docs.sgml).
+       When new files have been added to blah-sections.txt, you must also
+       add them here. This file should include all the entities
        generated in sgml/gXXX-doc.top & sgml/gXXX-doc.bottom.
 
-  4.3. Run mkgtkhtml to generate the HTML from the DocBook.
-       (Note: the script includes hard-coded paths which must be updated)
-       This uses the DSSSL file gtk-doc.dsl, which also has hard-coded paths.
-       Note that it complains a lot about references to non-existent IDs, but
-       it still works OK.
+  4.3. Make a directory 'html', cd there, and from there, run
+       'gtkdoc-mkhtml' to generate the HTML from the DocBook.
+       Note that it complains a lot about references to non-existent
+       IDs, but it still works OK.
 
-  4.4. Run mkgtkman to generate the man pages from the DocBook files.
+  4.4. Run gtkdoc-mkman to generate the man pages from the DocBook files.
        I customized docbook-to-man slightly. The script and transpec I use are
-       in db2man.
+       in db2man. [ This part probably needs work ]
 
-
-
-Resyncing the Documentation with New Versions of GTK/GLib
-=========================================================
+Resyncing the Documentation with New Versions of the Source
+===========================================================
 
 (This should be made simpler somehow)
 
-Scan GTK or GLib again, as in (1) above.
+Scan the header files again, as in (1) above.
 
-Compare the new gXXX-decl.txt files with the backups gXXX-decl.bak to
+Compare the new blah-decl.txt files with the backups blah-decl.bak to
 see which functions/macros etc. have been added or changed.
 If an existing function prototype has been changed you will have to edit the
 bits in the gtkdocs directory to bring them up to date.
 
-Update the gXXX-sections.txt to include the new functions etc. in the
+Update the blah-sections.txt to include the new functions etc. in the
 appropriate sections.
 
-Add the new templates to the gtkdocs/ files. (I usually run mkgtktmpl.pl
-with a different output directory and copy the new templates across.)
+Add the new templates to the tmpl/ files. (I usually run gtkdoc-mktmpl
+with a different output directory and copy the new templates across.
+The output directory can be specified with --output-dir=DIR)
 
-Run mkgtkdb.pl to generate the DocBook. It will complain about missing
-pieces and will output unused declarations to gXXX-unused.txt so you can
+Run gtkdoc-mkdb to generate the DocBook. It will complain about missing
+pieces and will output unused declarations to blah-unused.txt so you can
 go back and fix these and run it again until it is all OK.
 (Note: Currently I don't use the GTK object structs in the documentation so
 these always appear in gtk-unused.txt)
 
+Examples
+========
+
+ftp://ftp.gtk.org/pub/users/otaylor/gtk-doc/ for examples of
+documentation packages that use the above scripts, and of using
+automake to automate the process.
 
 Damon Chaplin (DAChaplin@msn.com), 10 Nov 1998.
+
