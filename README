@@ -39,12 +39,15 @@ Installation
 
 There is no standard place where the DocBook Modular Stylesheets are installed.
 
-gtk-doc's configure script searches these 2 directories automatically:
+gtk-doc's configure script searches these 3 directories automatically:
+
   /usr/lib/sgml/stylesheets/nwalsh-modular       (used by RedHat)
   /usr/lib/dsssl/stylesheets/docbook             (used by Debian)
+  /usr/share/sgml/docbkdsl                       (used by SuSE)
 
 If you have the stylesheets installed somewhere else, you need to configure
 gtk-doc using the option:
+
    --with-dsssl-dir=<PATH_TO_TOPLEVEL_STYLESHEETS_DIR>
 
 
