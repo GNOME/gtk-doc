@@ -35,8 +35,11 @@ are shown in the synopsis sections. It contains a comma-separate list of
 sections, it acts for all sections until the end of the file. If you set it
 within a section, it only applies to that section.
 
+If a line starts with a '#' it is treated as a comment and ignored.
+
 Example MODULE-sections.txt file:
 
+# This is a comment.
 <INCLUDE>gnome.h</INCLUDE>
 
 <SECTION>

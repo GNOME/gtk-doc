@@ -213,21 +213,6 @@ my $SIGNAL_FIELD_WIDTH = 12;
 &ReadInterfaces;
 &ReadPrerequisites;
 
-# FIXME: this is the header file output at the top of the Synopsis.
-# We should allow this to be changed in the MODULE-sections.txt file.
-# gnome.h includes gtk/gtk.h which includes gdk/gdk.h which includes glib.h
-# so what should we output? - alternatives?
-my $HEADER_FILE = "";
-if ($MODULE eq 'glib') {
-    $HEADER_FILE = "glib.h";
-} elsif ($MODULE eq 'gdk') {
-    $HEADER_FILE = "gtk/gdk.h";
-} elsif ($MODULE eq 'gtk') {
-    $HEADER_FILE = "gtk/gtk.h";
-} elsif ($MODULE eq 'gnome' || $MODULE eq 'gnomeui') {
-    $HEADER_FILE = "gnome.h";
-}
-
 &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-decl.txt", 0);
 if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
     &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
