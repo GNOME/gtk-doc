@@ -1,3 +1,8 @@
+2002-06-14  jacob berkman  <jacob@ximian.com>
+
+	* gtkdoc-mkdb.in: do the version check before help, so --version
+	doesn't output --help (should fix recent build bustage)
+
 2002-06-12  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in: Make header-grabbing work without an explicit

@@ -61,6 +61,11 @@ my %optctl = (module => \$MODULE,
 	      'output-format' => \$OUTPUT_FORMAT);
 GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode", "output-format:s");
 
+if ($PRINT_VERSION) {
+    print "@VERSION@\n";
+    exit 0;
+}
+
 if (!$MODULE) {
     $PRINT_HELP = 1;
 }
@@ -77,11 +82,6 @@ if ($PRINT_HELP) {
     print "\n--sgml-mode            Allow Docbook markup in inline documentation.";
     print "\n--version              Print the version of this program";
     print "\n--help                 Print this help\n";
-    exit 0;
-}
-
-if ($PRINT_VERSION) {
-    print "@VERSION@\n";
     exit 0;
 }
 
