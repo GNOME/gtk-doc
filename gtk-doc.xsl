@@ -6,6 +6,7 @@
 
   <!-- import the chunked XSL stylesheet -->
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
+  <xsl:include href="devhelp.xsl"/>
 
   <xsl:output method="xml" indent="yes"/>
 
@@ -29,7 +30,8 @@
 
     <!-- generate the index.sgml href index -->
     <xsl:call-template name="generate.index"/>
-  </xsl:template>    
+    <xsl:call-template name="generate.devhelp"/>
+  </xsl:template>
 
   <xsl:template name="generate.index">
     <xsl:call-template name="write.text.chunk">

@@ -1,3 +1,10 @@
+2002-08-12  James Henstridge  <james@daa.com.au>
+
+	* gtk-doc.xsl: include devhelp.xsl, and call generate.devhelp when
+	processing the docbook/xml input.
+
+	* devhelp.xsl: new file, implements .devhelp file output.
+
 2002-08-18  Havoc Pennington  <hp@pobox.com>
 
 	* autogen.sh: hardcode aclocal-1.4/automake-1.4 so that users with
