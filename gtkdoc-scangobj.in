@@ -694,9 +694,9 @@ output_widget_hierarchy ()
       return;
     }
   output_hierarchy (fp, G_TYPE_OBJECT, 0);
+  output_hierarchy (fp, G_TYPE_INTERFACE, 0);
   fclose (fp);
 }
-
 
 /* This is called recursively to output the hierarchy of a widget. */
 static void
@@ -723,7 +723,6 @@ output_hierarchy (FILE  *fp,
 
   g_free (children);
 }
-
 
 static void
 output_args ()
