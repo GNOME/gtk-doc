@@ -38,18 +38,34 @@ Jade v1.1 or OpenJade 1.3.1 for SGML.
 libxslt & libxml2 2.3.6 for XML.
     http://xmlsoft.org/
 
-DocBook Stylesheets (I've got 1.40, but v1.19+ may be OK)
+DocBook DSSSL Stylesheets (I've got 1.40, but v1.19+ may be OK)
     This is the DSSSL code to convert DocBook SGML to HTML (and a few other
     formats). It's used together with jade.
     I've customized the DSSSL code slightly, in gtk-doc.dsl, to colour
     the program code listings/declarations, and to support global
     cross-reference indices in the generated HTML.
-    http://nwalsh.com/docbook/dsssl
+    http://docbook.sourceforge.net/projects/dsssl/
 
+DocBook XSL Stylesheets
+    http://docbook.sourceforge.net/projects/xsl/
 
 Most distributions now have packages for all of these, so I would strongly
 advise that you grab those.
 
+You will also need to make sure that the DocBook XML DTD and XSL
+stylesheets are installed in the system's XML catalog.  The packages
+for Red Hat Linux have done this for a while, and the Debian packages
+will do so too soon.  For Debian systems, you might want to try the
+following script to set up the catalog:
+  http://www.daa.com.au/~james/files/build-xml-catalog-for-debian.sh
+
+For other systems, you can try the following steps provided by Mark
+McLoughlin:
+  1) download http://www.oasis-open.org/docbook/xml/4.1.2/docbkx412.zip
+  2) install it in /usr/share/sgml/docbook/xml-dtd-4.1.2
+  3) Download docbook-xsl from docbook.sf.net and install it in
+     /usr/share/sgml
+  4) download and run http://xmlsoft.org/buildDocBookCatalog
 
 
 See the documentation in the docs directory for more information, especially
