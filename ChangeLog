@@ -1,3 +1,25 @@
+2003-01-20  Damon Chaplin  <damon@gnome.org>
+
+	* Released 1.0.
+
+2003-01-20  Damon Chaplin  <damon@gnome.org>
+
+	* configure.in: bumped version to 1.0, and added SGML_OUTPUT_TYPE
+	variable, which we set to 'sgml-raw' if we have openjade, or 'sgml'
+	if we have jade. Added gtk-doc.pc to AC_OUTPUT.
+
+	* gtkdoc-mkhtml.in: used SGML_OUTPUT_TYPE variable to set the output
+	type of jade/openjade.
+
+	* gtk-doc.pc.in: new pkg-config file, which apps can use to reliably
+	check the gtk-doc version in future.
+
+	* Makefile.am (pkgconfigdir): install .pc file, and add it to
+	EXTRA_DIST.
+
+	* examples/configure.in: updated example to use pkg-config for the
+	version check.
+
 2003-01-18  James Henstridge  <james@daa.com.au>
 
 	* gtkdoc-mkhtml.in (declaration): switch the output type from
