@@ -1365,9 +1365,9 @@ sub CreateValidSGML {
 sub ConvertSGMLChars {
     my ($text) = @_;
     if ($SGML_MODE) {
-	$text =~ s/&(?![[:alpha:]#])/&amp;/g;	# Do this first, or the others get messed up.
-	$text =~ s/<(?![[:alpha:]\/!])/&lt;/g;
-	$text =~ s/(?<![[:alpha:]"'\/-])>/&gt;/g;
+	$text =~ s/&(?![a-zA-Z#])/&amp;/g;	# Do this first, or the others get messed up.
+	$text =~ s/<(?![a-zA-Z\/!])/&lt;/g;
+	$text =~ s/(?<![a-zA-Z0-9"'\/-])>/&gt;/g;
     }
     else {
 	$text =~ s/&/&amp;/g;	# Do this first, or the others get messed up.

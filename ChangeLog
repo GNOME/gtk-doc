@@ -1,3 +1,9 @@
+2002-06-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (ConvertSGMLChars): Don't use Posix character
+	classes. Perl < 5.6 doesn't have them; and the API doc autobuilder
+	on widget.gnome.org has an old Perl. 
+
 2002-05-29  Matthias Clasen  <maclas@gmx.de>
 
 	Fixes for #77193:
