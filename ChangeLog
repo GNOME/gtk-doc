@@ -1,3 +1,13 @@
+2004-10-14  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mkdb.in: 
+	* gtkdoc-scan.in: 
+	* gtkdoc-scanobj.in: 
+	* gtkdoc-scangobj.in: use '@PACKAGE_DATA_DIR@' instead of
+	"@PACKAGE_DATA_DIR@" so that it isn't interpolated. It failed when
+	$prefix was /software/@sys/usr. Fixes #113456.
+
 2004-10-13  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-scanobj.in: 

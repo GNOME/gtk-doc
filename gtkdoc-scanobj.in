@@ -30,7 +30,7 @@
 
 use Getopt::Long;
 
-unshift @INC, "@PACKAGE_DATA_DIR@";
+unshift @INC, '@PACKAGE_DATA_DIR@';
 require "gtkdoc-common.pl";
 
 # Options
