@@ -30,4 +30,7 @@ dist-hook:
 	mkdir $(distdir)/examples
 	cp -pr $(srcdir)/examples/* $(distdir)/examples
 	rm -rf $(distdir)/examples/CVS
+	mkdir $(distdir)/tools
+	cp -pr $(srcdir)/tools/* $(distdir)/tools
+	rm -rf $(distdir)/tools/CVS
 	cp gtk-doc.spec $(distdir)
