@@ -1,3 +1,9 @@
+2003-03-10  James Henstridge  <james@daa.com.au>
+
+	* configure.in: associate the chmod commands with the files they
+	are chmod'ing.  This way config.status will always run the correct
+	chmod command.
+
 2003-03-04  James Henstridge  <james@daa.com.au>
 
 	* configure.in: look up the docbook DTD by public id rather than

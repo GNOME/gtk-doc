@@ -92,18 +92,17 @@ gtk-doc.pc
 gtk-doc.dsl 
 gtk-doc.spec
 gtkdoc-common.pl
-gtkdoc-mkman 
-gtkdoc-mkhtml
-gtkdoc-fixxref
-gtkdoc-mkdb
-gtkdoc-mktmpl
-gtkdoc-scan
-gtkdoc-scanobj
-gtkdoc-scangobj
-gtkdocize
 ])
 
-AC_CONFIG_COMMANDS([chmod-scripts],
-[chmod +x gtkdoc-mkman gtkdoc-mkhtml gtkdoc-fixxref gtkdoc-mkdb gtkdoc-mktmpl gtkdoc-scan gtkdoc-scanobj gtkdocize], [])
+dnl run chmod on these after parsing them.
+AC_CONFIG_FILES([gtkdoc-mkman],    [chmod +x gtkdoc-mkman])
+AC_CONFIG_FILES([gtkdoc-mkhtml],   [chmod +x gtkdoc-mkhtml])
+AC_CONFIG_FILES([gtkdoc-fixxref],  [chmod +x gtkdoc-fixxref])
+AC_CONFIG_FILES([gtkdoc-mkdb],     [chmod +x gtkdoc-mkdb])
+AC_CONFIG_FILES([gtkdoc-mktmpl],   [chmod +x gtkdoc-mktmpl])
+AC_CONFIG_FILES([gtkdoc-scan],     [chmod +x gtkdoc-scan])
+AC_CONFIG_FILES([gtkdoc-scanobj],  [chmod +x gtkdoc-scanobj])
+AC_CONFIG_FILES([gtkdoc-scangobj], [chmod +x gtkdoc-scangobj])
+AC_CONFIG_FILES([gtkdocize],       [chmod +x gtkdocize])
 
 AC_OUTPUT
