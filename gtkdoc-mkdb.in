@@ -1605,7 +1605,9 @@ sub ScanSourceFile {
     while (<SRCFILE>) {
 	# Look for the start of a comment block.
 	if (!$in_comment_block) {
-	    if (m%^\s*/\*\*\s%) {
+	    if (m%^\s*/\*.*\*/%) {
+	        #one-line comment - not gtkdoc
+	    } elsif (m%^\s*/\*\*\s%) {
 #		print "Found comment block start\n";
 		$in_comment_block = 1;
 

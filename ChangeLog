@@ -1,3 +1,8 @@
+2001-05-25  Peter Williams  <peterw@ximian.com>
+
+	* gtkdoc-mkdb.in (ScanSourceFile): Skip single-line comments -- 
+	prevents barfing on ORBit-generated files.
+
 2001-05-20  Damon Chaplin  <damon@ximian.com>
 
 	* examples/Makefile.am (sgml-build.stamp): replaced use of wildcard
