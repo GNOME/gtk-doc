@@ -1,0 +1,1159 @@
+#!/usr/bin/perl -w
+#
+# Perl script to automatically-generate DocBook documentation for GTK, GDK and
+# GLIB.
+#
+# NOTE: There is a special case when creating the ID for G-CSET-A-2-Z (and
+# also GTK_WIDGET_BASIC).
+# Since IDs are case-insensitive it clashes with G-CSET-a-2-z, so we change it
+# to G-CSET-A-2-Z-CAPS. Maybe we should add a checksum suffix or something so
+# that the case of the ID will never be a problem. But then they become
+# impossible to type in manually.
+
+use Getopt::Long;
+
+# Options
+
+# name of documentation module
+my $PART;
+my $DOCS_DIR;
+my $SGML_OUTPUT_DIR;
+
+%optctl = (module => \$PART,
+	   'output-dir' => \$SGML_OUTPUT_DIR,
+	   'tmpl-dir' => \$DOCS_DIR);
+GetOptions(\%optctl, "module=s", "output-dir:s");
+
+$ROOT_DIR = ".";
+
+# All the files are written in subdirectories beneath here.
+$DOCS_DIR = $DOCS_DIR ? $DOCS_DIR : "$ROOT_DIR/tmpl";
+
+# This is where we put all the DocBook output.
+$SGML_OUTPUT_DIR = $SGML_OUTPUT_DIR ? $SGML_OUTPUT_DIR : "$ROOT_DIR/sgml";
+
+# This file contains the object hierarchy.
+$OBJECT_TREE_FILE = "$ROOT_DIR/$PART.hierarchy";
+
+# This file contains signal arguments and names.
+$SIGNALS_FILE = "$ROOT_DIR/$PART.signals";
+
+# Create the top output directory if it doens't exist.
+if (! -e $SGML_OUTPUT_DIR) {
+    mkdir ("$SGML_OUTPUT_DIR", 0777)
+	|| die "Can't create directory: $SGML_OUTPUT_DIR";
+}
+
+# Create the part output directory if it doesn't exist.
+if (! -e "$SGML_OUTPUT_DIR/$PART") {
+    mkdir ("$SGML_OUTPUT_DIR/$PART", 0777)
+	|| die "Can't create directory: $SGML_OUTPUT_DIR/$PART";
+}
+
+# Function and other declaration output settings.
+$RETURN_TYPE_FIELD_WIDTH = 12;
+$SYMBOL_FIELD_WIDTH = 32;
+
+$SIGNAL_FIELD_WIDTH = 12;
+
+&ReadSignalsFile;
+&ReadObjectHierarchy;
+
+# XXX this needs to be fixed
+$HEADER_FILE = "gtk/gtk.h";
+&ReadDeclarationsFile ("$ROOT_DIR/$PART-decl.txt", 0);
+if (-f "$ROOT_DIR/$PART-overrides.txt") {
+    &ReadDeclarationsFile ("$ROOT_DIR/$PART-overrides.txt", 1);
+}
+&OutputSGML ("$ROOT_DIR/$PART-sections.txt");
+&CheckAllDeclarationsOutput;
+
+
+# This reads in a file containing the function/macro/enum etc. declarations.
+#
+# Note that in some cases there are several declarations with the same name,
+# e.g. for conditional macros. In this case we set a flag in the 
+# %DeclarationConditional hash so the declaration is not shown in the docs.
+#
+# If a macro and a function have the same name, e.g. for gtk_object_ref,
+# the function declaration takes precedence.
+#
+# Some opaque structs are just declared with 'typedef _name name;' in which
+# case the declaration may be empty. The structure may have been
+# found later in the header, so that overrides the empty declaration.
+#
+
+sub ReadDeclarationsFile {
+    local ($file, $override) = @_;
+
+    if ($override == 0) {
+	%Declarations = ();
+	%DeclarationTypes = ();
+	%DeclarationConditional = ();
+	%DeclarationOutput = ();
+    }
+
+    open (INPUT, $file)
+	|| die "Can't open $file";
+    $declaration_type = "";
+    while (<INPUT>) {
+	if (!$declaration_type) {
+	    if (m/^<([^>]+)>/) {
+		$declaration_type = $1;
+		$declaration_name = "";
+#		print "Found declaration: $declaration_type\n";
+		$declaration = "";
+	    }
+	} else {
+	    if (m%^<NAME>(.*)</NAME>%) {
+		$declaration_name = $1;
+	    } elsif (m%^</$declaration_type>%) {
+#		print "Found end of declaration: $declaration_name\n";
+		# Check that the declaration has a name
+		if ($declaration_name eq "") {
+		    print "ERROR: $declaration_type has no name $file:$.\n";
+		}
+
+		# Check if the symbol is already defined.
+		if (defined ($Declarations{$declaration_name})
+		    && $override == 0) {
+		    # Function declarations take precedence.
+		    if ($DeclarationTypes{$declaration_name} eq 'FUNCTION') {
+			# Ignore it.
+		    } elsif ($declaration_type eq 'FUNCTION') {
+			$Declarations{$declaration_name} = $declaration;
+			$DeclarationTypes{$declaration_name} = $declaration_type;
+		    } elsif ($DeclarationTypes{$declaration_name}
+			      eq $declaration_type) {
+			# If the existing declaration is empty override it.
+			if ($declaration_type eq 'STRUCT') {
+			    if ($Declarations{$declaration_name} =~ m/^\s*$/) {
+				$Declarations{$declaration_name} = $declaration;
+			    } elsif ($declaration =~ m/^\s*$/) {
+				# Ignore an empty declaration.
+			    } else {
+				print "WARNING: Structure has multiple definitions: $declaration_name\n";
+			    }
+
+			} else {
+			    # set flag in %DeclarationConditional hash for
+			    # multiply defined macros/typedefs.
+			    $DeclarationConditional{$declaration_name} = 1;
+			}
+		    } else {
+			print "ERROR: $declaration_name has multiple definitions\n";
+		    }
+		} else {
+		    $Declarations{$declaration_name} = $declaration;
+		    $DeclarationTypes{$declaration_name} = $declaration_type;
+		}
+		$declaration_type = "";
+	    } else {
+		$declaration .= $_;
+	    }
+	}
+    }
+    close (INPUT);
+}
+
+
+# This reads all the GTK objects from the output of GLE's gtkquery.
+# It places them in the @objects array, and places their level in the widget
+# hierarchy in the @object_levels array, at the same index.
+# GtkObject, the root object, has a level of 1.
+sub ReadObjectHierarchy {
+    @objects = ();
+    @object_levels = ();
+
+    if (!open (INPUT, $OBJECT_TREE_FILE)) {
+	warn "Can't open $OBJECT_TREE_FILE - skipping object tree\n";
+	return;
+    }
+    open (OUTPUT, ">$SGML_OUTPUT_DIR/tree_index.sgml")
+	|| die "Can't create $SGML_OUTPUT_DIR/tree_index.sgml";
+    print (OUTPUT "<literallayout>\n");
+
+    while (<INPUT>) {
+        if (m/Gtk\S+/) {
+	    $object = $&;
+	    $level = (length($`)) / 2 + 1;
+#            print ("Level: $level  Object: $object\n");
+
+	    $type_link = &GetTypeLink ($object);
+	    print (OUTPUT ' ' x ($level * 4), "$type_link\n");
+	    push (@objects, $object);
+	    push (@object_levels, $level);
+        }
+    }
+    print (OUTPUT "</literallayout>\n");
+
+    close (INPUT);
+    close (OUTPUT);
+
+    &OutputObjectList(@objects);
+}
+
+
+# This outputs the alphabetical list of objects.
+# Note: It also outputs object/data/adjustment etc. - not just widgets.
+sub OutputObjectList {
+    local(@objects) = @_;
+    local($COLS) = 3;
+
+    open (OUTPUT, ">$SGML_OUTPUT_DIR/object_index.sgml")
+	|| die "Can't create $SGML_OUTPUT_DIR/object_index.sgml";
+    print (OUTPUT <<EOF);
+<informaltable pgwide=1 frame="none">
+<tgroup cols="$COLS">
+<colspec colwidth="1*">
+<colspec colwidth="1*">
+<colspec colwidth="1*">
+<tbody>
+EOF
+
+   $count = 0;
+    foreach $object (sort(@objects)) {
+	$type_link = &GetTypeLink ($object);
+	if ($count % $COLS == 0) { print (OUTPUT "<row>\n"); }
+	print (OUTPUT "<entry>$type_link</entry>\n");
+	if ($count % $COLS == ($COLS - 1)) { print (OUTPUT "</row>\n"); }
+	$count++;
+    }
+
+    print (OUTPUT <<EOF);
+</tbody></tgroup></informaltable>
+EOF
+    close (OUTPUT);
+}
+
+
+# This reads in an existing file which contains information on all GTK signals.
+# It creates the arrays @SignalNames and @SignalPrototypes containing info on
+# the signals. The first line of the SignalPrototype is the return type of
+# the signal handler. The remaining lines are the parameters passed to it.
+# The last parameter, "gpointer user_data" is always the same so is not
+# included.
+sub ReadSignalsFile {
+    @SignalObjects = ();
+    @SignalNames = ();
+    @SignalReturns = ();
+    @SignalPrototypes = ();
+
+    if (!open (INPUT, $SIGNALS_FILE)) {
+	warn "Can't open $SIGNALS_FILE - skipping signals\n";
+	return;
+    }
+    $in_signal = 0;
+    while (<INPUT>) {
+	if (!$in_signal) {
+	    if (m/^<SIGNAL>/) {
+		$in_signal = 1;
+		$signal_object = "";
+		$signal_name = "";
+		$signal_returns = "";
+		$signal_prototype = "";
+	    }
+	} else {
+	    if (m/^<NAME>(.*)<\/NAME>/) {
+		$signal_name = $1;
+		if ($signal_name =~ m/^(.*)::(.*)$/) {
+		    $signal_object = $1;
+		    $signal_name = $2;
+#		    print "Found signal: $signal_name\n";
+		} else {
+		    print "Invalid signal name: $signal_name\n";
+		}
+	    } elsif (m/^<RETURNS>(.*)<\/RETURNS>/) {
+		$signal_returns = $1;
+	    } elsif (m%^</SIGNAL>%) {
+#		print "Found end of signal: ${signal_object}::${signal_name}\nReturns: ${signal_returns}\n${signal_prototype}";
+		push (@SignalObjects, $signal_object);
+		push (@SignalNames, $signal_name);
+		push (@SignalReturns, $signal_returns);
+	        push (@SignalPrototypes, $signal_prototype);
+		$in_signal = 0;
+	    } else {
+		$signal_prototype .= $_;
+	    }
+	}
+    }
+    close (INPUT);
+}
+
+
+
+# This collects the output for each section of the docs, and outputs
+# each file when the end of the section is found.
+sub OutputSGML {
+    local ($file) = $_[0];
+    print "Reading: $file\n";
+    open (INPUT, $file)
+	|| die "Can't open $file";
+    $book_top = "";
+    $book_bottom = "";
+    $title = "";
+    my ($subsection) = "";
+    while (<INPUT>) {
+	if (m/^#/) {
+	    next;
+
+	} elsif (m/^<SECTION>/) {
+	    $synop = "";
+	    $desc = "";
+	    $num_symbols = 0;
+
+	} elsif (m/^<SUBSECTION>/) {
+	    $synop .= "\n";
+
+	} elsif (m/^<TITLE>(.*)<\/TITLE>/) {
+	    $title = $1;
+#	    print "Section: $title\n";
+
+	    # We don't want warnings if object & class structs aren't used.
+	    $DeclarationOutput{$title} = 1;
+	    $DeclarationOutput{"${title}Class"} = 1;
+
+	} elsif (m/^<FILE>(.*)<\/FILE>/) {
+	    $file = $1;
+	    &ReadDoc ($file);
+
+	} elsif (m/^<NAME>(.*)<\/NAME>/) {
+	    $subsection = $1;
+
+	} elsif (m/^<\/SECTION>/) {
+	    if ($title eq "") {
+		$title = $file;
+	    }
+#	    print "End of section: $title\n";
+
+	    $file =~ s/\s/_/g;
+	    $file .= ".sgml";
+
+	    # GtkObjects use their class name as the ID.
+	    if (&CheckIsObject ($title)) {
+		$section_id = &CreateValidSGMLID ($title);
+	    } else {
+		$section_id = &CreateValidSGMLID ("$PART-$title");
+	    }
+
+	    if ($num_symbols > 0) {
+		$book_top .= "<!entity $section_id SYSTEM \"sgml/$file\">\n";
+		$book_bottom .= "    &$section_id;\n";
+
+		&OutputSGMLFile ($file, $title, $section_id);
+	    }
+	    $title = "";
+	    $subsection = "";
+
+	} elsif (m/^(\S+)/) {
+	    $symbol = $1;
+#	    print "  Symbol: $symbol\n";
+
+	    $declaration = $Declarations{$1};
+	    if (defined ($declaration)) {
+		# We don't want standard macros/functions of GtkObjects.
+		if ($subsection ne "Standard") {
+		    &OutputDeclaration ($symbol, $declaration);
+		}
+
+		# Note that the declaration has been output.
+		$DeclarationOutput{$symbol} = 1;
+	    } else {
+		print "WARNING: No declaration for: $1\n";
+	    }
+	    $num_symbols++;
+	}
+    }
+    close (INPUT);
+
+    &OutputBook ($book_top, $book_bottom);
+}
+
+
+# This steps through all the declarations that were loaded, and makes sure
+# that each one has been output, by checking the corresponding flag in the
+# %DeclarationOutput hash. It is intended to check that any new declarations
+# in new version of GTK get added to the gXXX-sections.txt file.
+sub CheckAllDeclarationsOutput {
+    $NumUnused = 0;
+    open (UNUSED, ">$ROOT_DIR/$PART-unused.txt")
+	|| die "Can't open $ROOT_DIR/$PART-unused.txt";
+    foreach $symbol (keys (%Declarations)) {
+	if (!defined ($DeclarationOutput{$symbol})) {
+	    print (UNUSED "$symbol\n");
+	    $NumUnused++;
+	}
+    }
+    close (UNUSED);
+    if ($NumUnused != 0) {
+	print <<EOF;
+=============================================================================
+WARNING: $NumUnused unused declarations.
+         These can be found in $PART-unused.txt.
+         They should be added to $PART-sections.txt in the appropriate place.
+=============================================================================
+EOF
+    }
+}
+
+sub OutputDeclaration {
+    local ($symbol, $declaration) = @_;
+
+    $type = $DeclarationTypes {$symbol};
+    if ($type eq 'MACRO') {
+	&OutputMacro ($symbol, $declaration);
+    } elsif ($type eq 'TYPEDEF') {
+	&OutputTypedef ($symbol, $declaration);
+    } elsif ($type eq 'STRUCT') {
+	&OutputStruct ($symbol, $declaration);
+    } elsif ($type eq 'ENUM') {
+	&OutputEnum ($symbol, $declaration);
+    } elsif ($type eq 'UNION') {
+	&OutputUnion ($symbol, $declaration);
+    } elsif ($type eq 'FUNCTION') {
+	&OutputFunction ($symbol, $declaration, $type);
+    } elsif ($type eq 'USER_FUNCTION') {
+	&OutputFunction ($symbol, $declaration, $type);
+    } else {
+	die "Unknown symbol type";
+    }
+}
+
+sub OutputMacro {
+    local ($symbol, $declaration) = @_;
+    $id = &CreateValidSGMLID ($symbol);
+    $synop .= "#define     <link linkend=\"$id\">$symbol</link>";
+    $args = "";
+    if ($declaration =~ m/^\s*#\s*define\s+\w+(\([^\)]*\))/) {
+	$args = $1;
+
+	if (length ($symbol) < $SYMBOL_FIELD_WIDTH) {
+	    $synop .= (' ' x ($SYMBOL_FIELD_WIDTH - length ($symbol)));
+	}
+
+	$synop .= &CreateValidSGML ($args);
+    }
+    $synop .= "\n";
+
+    if ($args ne "") {
+	$desc .= "<refsect2>\n<title><anchor id=\"$id\">${symbol}()</title>\n";
+    } else {
+	$desc .= "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+    }
+    # Don't output the macro definition if is is a conditional macro or it
+    # looks like a function, i.e. starts with "g_" or "_?gnome_", otherwise we
+    # get lots of complicated macros like g_assert.
+    if (!defined ($DeclarationConditional{$symbol}) && ($symbol !~ m/^g_/)
+	&& ($symbol !~ m/^_?gnome_/)) {
+	$declaration = &CreateValidSGML ($declaration);
+	$desc .= "<programlisting>$declaration</programlisting>\n";
+    } else {
+	$desc .= "<programlisting>#define     $symbol";
+	$desc .= &CreateValidSGML ($args);
+	$desc .= "</programlisting>\n";
+    }
+    if (defined ($SymbolDocs{$symbol})) {
+	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+    &OutputParamDescriptions ("macro");
+    $desc .= "</refsect2>\n";
+}
+
+
+sub OutputTypedef {
+    local ($symbol, $declaration) = @_;
+    $id = &CreateValidSGMLID ($symbol);
+    $synop .= "typedef     <link linkend=\"$id\">$symbol</link>\n";
+    $desc .= "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+    # Don't output the macro definition if is is a conditional macro or it
+    # looks like a function, i.e. starts with "g_"
+    if (!defined ($DeclarationConditional{$symbol})) {
+	$declaration = &CreateValidSGML ($declaration);
+	$desc .= "<programlisting>$declaration</programlisting>\n";
+    }
+    if (defined ($SymbolDocs{$symbol})) {
+	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+    $desc .= "</refsect2>\n";
+}
+
+
+sub OutputStruct {
+    local ($symbol, $declaration) = @_;
+    $id = &CreateValidSGMLID ($symbol);
+    $synop .= "struct      <link linkend=\"$id\">$symbol</link>\n";
+    $desc .= "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+    if ($declaration =~ m/^\s*$/) {
+#	print "Found opaque struct\n";
+	$declaration = "struct $symbol;";
+    }
+    $declaration = &CreateValidSGML ($declaration);
+    $desc .= "<programlisting>$declaration</programlisting>\n";
+    if (defined ($SymbolDocs{$symbol})) {
+	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+    $desc .= "</refsect2>\n";
+}
+
+
+sub OutputEnum {
+    local ($symbol, $declaration) = @_;
+    $id = &CreateValidSGMLID ($symbol);
+    $synop .= "enum        <link linkend=\"$id\">$symbol</link>\n";
+    $desc .= "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+    $declaration = &CreateValidSGML ($declaration);
+    $desc .= "<programlisting>$declaration</programlisting>\n";
+    if (defined ($SymbolDocs{$symbol})) {
+	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+    $desc .= "</refsect2>\n";
+}
+
+
+sub OutputUnion {
+    local ($symbol, $declaration) = @_;
+    $id = &CreateValidSGMLID ($symbol);
+    $synop .= "union       <link linkend=\"$id\">$symbol</link>\n";
+    $desc .= "<refsect2>\n<title><anchor id=\"$id\">$symbol</title>\n";
+    $declaration = &CreateValidSGML ($declaration);
+    $desc .= "<programlisting>$declaration</programlisting>\n";
+    if (defined ($SymbolDocs{$symbol})) {
+	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+    $desc .= "</refsect2>\n";
+}
+
+
+sub OutputFunction {
+    local ($symbol, $declaration, $symbol_type) = @_;
+    $id = &CreateValidSGMLID ($symbol);
+
+    # Take out the return type
+    $declaration =~ s/<RETURNS>\s*(const\s+|unsigned\s+)*(\w+)\s*(\**)\s*<\/RETURNS>\n//;
+    if (defined($1)) { $type_modifier = $1; }
+    else { $type_modifier = ""; }
+    $type = $2;
+    $pointer = $3;
+    $type_link = &GetTypeLink ($type);
+    $start = "";
+    if ($symbol_type eq 'USER_FUNCTION') {
+#	$start = "typedef ";
+    }
+
+    $ret_type_len = length ($start) + length ($type_modifier)
+	+ length ($pointer) + length ($type);
+    if ($ret_type_len < $RETURN_TYPE_FIELD_WIDTH) {
+	$ret_type_output = "$start$type_modifier$type_link$pointer"
+	    . (' ' x ($RETURN_TYPE_FIELD_WIDTH - $ret_type_len));
+	$symbol_len = 0;
+    } else {
+#	$ret_type_output = "$start$type_modifier$type_link$pointer\n"
+#	    . (' ' x $RETURN_TYPE_FIELD_WIDTH);
+
+	$ret_type_output = "$start$type_modifier$type_link$pointer ";
+	$symbol_len = $ret_type_len + 1 - $RETURN_TYPE_FIELD_WIDTH;
+    }
+
+    $symbol_len += length ($symbol);
+    $char1 = $char2 = $char3 = "";
+    if ($symbol_type eq 'USER_FUNCTION') {
+	$symbol_len += 3;
+	$char1 = "(";
+	$char2 = "*";
+	$char3 = ")";
+    }
+
+    if ($symbol_len < $SYMBOL_FIELD_WIDTH) {
+	$symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3"
+	    . (' ' x ($SYMBOL_FIELD_WIDTH - $symbol_len));
+	$symbol_desc_output = "$char1$char2$symbol$char3"
+	    . (' ' x ($SYMBOL_FIELD_WIDTH - $symbol_len));
+    } else {
+	$symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3\n"
+	    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
+	$symbol_desc_output = "$char1$char2$symbol$char3\n"
+	    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
+    }
+
+    $synop .= $ret_type_output . $symbol_output . '(';
+    $desc .= "<refsect2>\n<title><anchor id=\"$id\">${symbol}()</title>\n";
+    $desc  .= "<programlisting>${ret_type_output}$symbol_desc_output(";
+
+    $param_num = 0;
+    while ($declaration ne "") {
+	if ($declaration =~ s/^[\s,]+//) {
+	    # skip whitespace and commas
+	    next;
+
+	} elsif ($declaration =~ s/^void\s*[,\n]//) {
+	    $synop .= "void";
+	    $desc  .= "void";
+
+	} elsif ($declaration =~ s/^...\s*[,\n]//) {
+	    if ($param_num == 0) {
+		$synop .= "...";
+		$desc  .= "...";
+	    } else {
+		$synop .= ",\n"
+		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
+		    . " ...";
+		$desc  .= ",\n"
+		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
+		    . " ...";
+	    }
+
+	    # allow alphanumerics, '_', '[' & ']' in param names
+	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*(\[\])?\s*[,\n]//) {
+	    if (defined($1)) { $mod1 = $1; }
+	    else { $mod1 = ""; }
+	    if (defined($2)) { $mod1 .= $2; }
+	    $type = $3;
+	    $ptr1 = $4;
+	    if (defined($5)) { $mod2 = $5; }
+	    else { $mod2 = ""; }
+	    $ptr2 = $6;
+	    if (defined($7)) {
+		$ptr1 = " " . $ptr1;
+		$name = $7;
+	    } else {
+		$name = "";
+	    }
+	    if (defined($8)) { $array = $8; }
+	    else { $array = ""; }
+	    $type_link = &GetTypeLink ($type);
+
+#	    print "Type: $mod1$type $ptr1 $mod2 $name $array\n";
+	    if ($param_num == 0) {
+		$synop .= "$mod1$type_link$ptr1$mod2$ptr2$name$array";
+		$desc  .= "$mod1$type_link$ptr1$mod2$ptr2$name$array";
+	    } else {
+		$synop .= ",\n"
+		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
+		    . " $mod1$type_link$ptr1$mod2$ptr2$name$array";
+		$desc  .= ",\n"
+		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
+		    . " $mod1$type_link$ptr1$mod2$ptr2$name$array";
+	    }
+
+	    # Try to match parameters which are functions.
+	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+	    if (defined($1)) { $mod1 = $1; }
+	    else { $mod1 = ""; }
+	    if (defined($2)) { $mod1 .= $2; }
+	    $type = $3;
+	    $ptr1 = $4;
+	    if (defined($5)) { $mod2 = $5; }
+	    else { $mod2 = ""; }
+	    $name = $6;
+	    $func_params = $7;
+	    $type_link = &GetTypeLink ($type);
+
+#	    print "Type: $mod1$type$ptr1$mod2(*$name)($func_params)\n";
+	    if ($param_num == 0) {
+		$synop .= "$mod1$type_link$ptr1$mod2 (*$name) ($func_params)";
+		$desc  .= "$mod1$type_link$ptr1$mod2 (*$name) ($func_params)";
+	    } else {
+		$synop .= ",\n"
+		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
+		    . " $mod1$type_link$ptr1$mod2 (*$name) ($func_params)";
+		$desc  .= ",\n"
+		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
+		    . " $mod1$type_link$ptr1$mod2 (*$name) ($func_params)";
+	    }
+
+	} else {
+	    print "###Can't parse args for function $symbol: $declaration\n";
+	    last;
+	}
+	$param_num++;
+    }
+    $synop .= ");\n";
+    $desc  .= ");</programlisting>\n";
+    if (defined ($SymbolDocs{$symbol})) {
+	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+    }
+
+    &OutputParamDescriptions ("function");
+    $desc .= "</refsect2>\n";
+}
+
+sub OutputParamDescriptions {
+    local ($params_type) = $_[0];
+
+    if (defined ($SymbolParams{$symbol})) {
+	undef $returns;
+	$params = $SymbolParams{$symbol};
+	$params_desc = "";
+	if ($#$params < 0) {
+	    print "WARNING: 0 parameters\n";
+	}
+	for ($j = 0; $j <= $#$params; $j++) {
+	    $param = $$params[$j];
+	    if ($param =~ s/^\@(\S+):\s*//) {
+		$param_name = $1;
+		if ($param_name eq "Returns") {
+		    $returns = &ExpandAbbreviations($param);
+		} else {
+		    if ($param_name eq "Varargs") {
+			$param_name = "...";
+		    }
+		    $param = &ExpandAbbreviations($param);
+		    $params_desc .= "<row><entry align=\"right\"><parameter>$param_name</parameter>&nbsp;:</entry>\n<entry>$param</entry></row>\n";
+		}
+	    } else {
+		print "ERROR: Can't parse parameter name\n";
+	    }
+	}
+
+	# Signals have an implicit user_data parameter which we describe.
+	if ($params_type eq "signal") {
+	    $params_desc .= "<row><entry align=\"right\"><parameter>user_data</parameter>&nbsp;:</entry>\n<entry>user data set when the signal handler was connected.</entry></row>\n";
+	}
+
+	# Start a table if we need one.
+	if ($params_desc ne "" || defined ($returns)) {
+	    $desc .= <<EOF;
+<informaltable pgwide=1 frame="none">
+<tgroup cols="2">
+<colspec colwidth="2*">
+<colspec colwidth="8*">
+<tbody>
+EOF
+
+	    if ($params_desc ne "") {
+#	        $desc .= "<row><entry>Parameters:</entry></row>\n";
+	        $desc .= $params_desc;
+	    }
+
+	    # Output the returns info last.
+	    if (defined ($returns)) {
+		$desc .= "<row><entry align=\"right\"><emphasis>Returns</emphasis> :</entry><entry>$returns</entry></row>\n";
+	    }
+
+	    # Finish the table.
+	    $desc .= "</tbody></tgroup></informaltable>";
+	}
+    }
+}
+
+
+sub OutputSGMLFile {
+    local ($file, $title, $section_id) = @_;
+
+    # Find out if this is a GtkObject or descendant.
+    $signals_synop = $signals_desc = $hierarchy = "";
+    if (&CheckIsObject ($title)) {
+	($signals_synop, $signals_desc) = &GetSignals ($title);
+	$hierarchy = &GetHierarchy ($title);
+    }
+
+    # The edited title overrides the one from the sections file.
+    $new_title = $SymbolDocs{"Title"};
+    if (defined ($new_title) && $new_title !~ m/^\s*$/) {
+	$title = $new_title;
+#	print "Found title: $title\n";
+    }
+    $short_desc = $SymbolDocs{"Short_Description"};
+    if (!defined ($short_desc) || $short_desc =~ m/^\s*$/) {
+	$short_desc = "one line description goes here.";
+    } else {
+	$short_desc = &ExpandAbbreviations($short_desc);
+#	print "Found short_desc: $short_desc";
+    }
+    $long_desc = $SymbolDocs{"Long_Description"};
+    if (!defined ($long_desc) || $long_desc =~ m/^\s*$/) {
+	$long_desc = "<para>\nA longer description goes here.\n</para>\n";
+    } else {
+	$long_desc = &ExpandAbbreviations($long_desc);
+#	print "Found long_desc: $long_desc";
+    }
+
+    if ($PART eq 'glib') {
+	$distribution_name = "GLib";
+    } else {
+	$distribution_name = "GTK+";
+    }
+
+    open (OUTPUT, ">$SGML_OUTPUT_DIR/$file")
+	|| die "Can't create $SGML_OUTPUT_DIR/$file";
+
+    # Note: The refname and refpurpose are on the same line to stop
+    # docbook-to-man 1.08 putting them on separate lines.
+    print OUTPUT <<EOF;
+<refentry id="$section_id" revision="14 Sep 1998">
+<refmeta>
+<refentrytitle>$title</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>\U$PART\E Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>$title</refname><refpurpose>$short_desc</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv><title>Synopsis</title>
+<synopsis>
+
+#include &lt;$HEADER_FILE&gt;
+
+${synop}</synopsis>
+</refsynopsisdiv>
+
+$hierarchy
+$signals_synop
+
+<refsect1>
+<title>Description</title>
+$long_desc
+</refsect1>
+
+<refsect1>
+<title>Details</title>
+$desc
+</refsect1>
+$signals_desc
+
+</refentry>
+EOF
+    close (OUTPUT);
+}
+
+# I'm not sure there's much point in putting this on every page.
+#<refsect1>
+#<title>Authors</title>
+#<para>
+#This manual page was written by XXX
+#<email>anon@nowhere.com</email>.
+#For the authors of $distribution_name, see the <filename>AUTHORS</filename>
+#file in the $distribution_name distribution.
+#</para>
+#</refsect1>
+
+
+sub OutputBook {
+    local ($book_top, $book_bottom) = @_;
+
+    open (OUTPUT, ">$SGML_OUTPUT_DIR/$PART-doc.top")
+	|| die "Can't create $SGML_OUTPUT_DIR/$PART-doc.top";
+    print OUTPUT $book_top;
+    close (OUTPUT);
+
+    open (OUTPUT, ">$SGML_OUTPUT_DIR/$PART-doc.bottom")
+	|| die "Can't create $SGML_OUTPUT_DIR/$PART-doc.bottom";
+    print OUTPUT $book_bottom;
+    close (OUTPUT);
+}
+
+
+# This creates a valid SGML 'id' from the given string.
+sub CreateValidSGMLID {
+    my ($id) = $_[0];
+
+    # Special case, '_' would end up as '' so we use 'gettext-macro' instead.
+    if ($id eq "_") { return "gettext-macro"; }
+
+    # Special case, differentiate AND, OR and NOT from and, or and not.
+    if ($id eq 'AND') { return "AND-CAPS"; }
+    if ($id eq 'OR')  { return "OR-CAPS"; }
+    if ($id eq 'NOT') { return "NOT-CAPS"; }
+
+    # Special case, differentiate Unit from unit.
+    if ($id eq 'Unit') { return "UNIT-CAP"; }
+
+    $id =~ s/[_ ]/-/g;
+    $id =~ s/[,\.]//g;
+    $id =~ s/^-*//;
+
+    # Special case, since ids are case-insensitive G-CSET-A-2-Z clashes with
+    # G-CSET-a-2-z, so we change it to G-CSET-A-2-Z-CAPS
+    if ($id eq 'G-CSET-A-2-Z') { $id = 'G-CSET-A-2-Z-CAPS' };
+
+    # Special case, change GTK-WIDGET-BASIC to GTK-WIDGET-BASIC-CAPS
+    if ($id eq 'GTK-WIDGET-BASIC') { $id = 'GTK-WIDGET-BASIC-CAPS' };
+
+    return $id;
+}
+
+
+# This turns any chars which are used in SGML into entities, e.g. '<' -> '&lt;'
+sub CreateValidSGML {
+    local ($text) = $_[0];
+    $text =~ s/&/&amp;/g;	# Do this first, or the others get messed up.
+    $text =~ s/</&lt;/g;
+    $text =~ s/>/&gt;/g;
+    return $text;
+}
+
+
+# This turns the abbreviations function(), macro(), @param, %constant, and
+# #symbol into appropriate DocBook markup.
+sub ExpandAbbreviations {
+    local ($text) = $_[0];
+
+    # Convert 'function()' or 'macro()'
+    $text =~ s/(\w+)\s*\(\)/&GetTypeLink($1) . "()";/eg;
+
+    # Convert '@param'
+    $text =~ s/\@(\w+)/<parameter>$1<\/parameter>/g;
+
+    # Convert '%constant'
+    $text =~ s/\%(\w+)/<literal>$1<\/literal>/g;
+
+    # Convert '#symbol'
+    $text =~ s/#(\w+)/&GetTypeLink($1);/eg;
+
+    return $text;
+}
+
+
+# This returns a cross-reference link to the given type.
+sub GetTypeLink {
+    local ($type) = $_[0];
+#    print "Getting type link for $type\n";
+    # Don't create a link for some standard C types and functions.
+    if ($type eq "void" || $type eq "va_list" || $type eq "int"
+	|| $type eq "char" || $type eq "printf" || $type eq "sprintf") {
+	return $type;
+    }
+
+    $type_id = &CreateValidSGMLID ($type);
+    return "<link linkend=\"$type_id\">$type</link>";
+}
+
+
+# Returns 1 if the given name is a GtkObject or a descendant.
+sub CheckIsObject {
+    local ($name) = $_[0];
+
+    for ($i = 0; $i <= $#objects; $i++) {
+	if ($objects[$i] eq $name) {
+	    return 1;
+	}
+    }
+    return 0;
+}
+
+
+
+# This returns the list of ancestors of a widget.
+# It uses the global @objects and @object_levels arrays to walk up the tree.
+sub GetHierarchy {
+    local ($object) = $_[0];
+
+    # Find object in the objects array.
+    $found = 0;
+#    print "looking for: $object\n";
+    for ($i = 0; $i <= $#objects; $i++) {
+#	print "$i comparing with: $objects[$i]\n";
+	if ($objects[$i] eq $object) { $found = 1; last; }
+    }
+    if (!$found) {
+#	print "not found\n";
+	return "";
+    }
+
+    # Walk up the hierarchy, pushing ancestors onto the ancestors array.
+    local (@ancestors) = ();
+    push (@ancestors, $object);
+    $level = $object_levels[$i];
+#    print "Level: $level\n";
+    while ($level > 1) {
+	$i--;
+	if ($object_levels[$i] < $level) {
+	    push (@ancestors, $objects[$i]);
+	    $level = $object_levels[$i];
+#	    print "Level: $level\n";
+	}
+    }
+
+    # Output the ancestors list, indented and with links.
+    local ($hierarchy) = "<synopsis>\n\n";
+    $level = 0;
+    for ($i = $#ancestors; $i >= 0; $i--) {
+	# Don't add a link to the current widget, i.e. when i == 0.
+	if ($i > 0) {
+	    local ($ancestor_id) = &CreateValidSGMLID ($ancestors[$i]);
+	    $link_text = "<link linkend=\"$ancestor_id\">$ancestors[$i]</link>";
+	} else {
+	    $link_text = "$ancestors[$i]";
+	}
+	if ($level == 0) {
+	    $hierarchy .= "  $link_text\n";
+	} else {
+	    $hierarchy .= ' ' x ($level * 6 - 3) . "|\n";
+	    $hierarchy .= ' ' x ($level * 6 - 3) . "+----$link_text\n";
+	}
+	$level++;
+    }
+    $hierarchy .= "</synopsis>\n";
+
+    return <<EOF;
+<refsect1>
+<title>Object Hierarchy</title>
+$hierarchy
+</refsect1>
+EOF
+}
+
+
+# This returns the signal prototypes for the synopsis and similar for the
+# signal descriptions.
+sub GetSignals {
+    local ($object) = $_[0];
+    local ($proto) = "";
+    local ($desc) = "";
+
+#    print "Getting signals for object: $object\n";
+
+    for ($i = 0; $i <= $#SignalObjects; $i++) {
+	if ($SignalObjects[$i] eq $object) {
+#	    print "Found signal: $SignalNames[$i]\n";
+	    $name = $SignalNames[$i];
+	    $symbol = "${object}::${name}";
+	    $id = &CreateValidSGMLID ("$object-$name");
+
+	    $name_len = length ($name) + 2;
+	    if ($name_len < $SIGNAL_FIELD_WIDTH) {
+		$proto .= "'<link linkend=\"$id\">$name</link>'"
+		    . (' ' x ($SIGNAL_FIELD_WIDTH - $name_len));
+	    } else {
+		$proto .= "'<link linkend=\"$id\">$name</link>'\n"
+		    . (' ' x $SIGNAL_FIELD_WIDTH);
+	    }
+
+	    $desc .= "<refsect2><title><anchor id=\"$id\">The '$name' signal</title>\n";
+	    $desc .= "<programlisting>";
+
+	    $SignalReturns[$i] =~ m/\s*(const\s*)?(\w+)\s*(\**)/;
+	    if (defined($1)) { $type_modifier = $1; }
+	    else { $type_modifier = ""; }
+	    $type = $2;
+	    $pointer = $3;
+	    $type_link = &GetTypeLink ($type);
+
+	    $ret_type_len = length ($type_modifier) + length ($pointer)
+		+ length ($type);
+	    $ret_type_output = "$type_modifier$type_link$pointer"
+		. (' ' x ($RETURN_TYPE_FIELD_WIDTH - $ret_type_len));
+
+	    $proto .= "${ret_type_output}user_function      (";
+	    $desc  .= "${ret_type_output}user_function                  (";
+
+	    @params = split ("\n", $SignalPrototypes[$i]);
+	    for ($j = 0; $j <= $#params; $j++) {
+		# allow alphanumerics, '_', '[' & ']' in param names
+		if ($params[$j] =~ m/^\s*(\w+)\s*(\**)\s*([\w\[\]]+)\s*$/) {
+		    $type = $1;
+		    $pointer = $2;
+		    $name = $3;
+		    $type_link = &GetTypeLink ($type);
+		    $proto .= "$type_link $pointer$name,\n";
+		    $proto .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
+		    $desc .= "$type_link $pointer$name,\n";
+		    $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
+		} else {
+		    print "###Can't parse arg: $params[$j]\nArgs:$SignalPrototypes[$i]\n";
+		}
+	    }
+	    $type_link = &GetTypeLink ("gpointer");
+	    $proto .= "$type_link user_data);\n";
+	    $desc  .= "$type_link user_data);</programlisting>\n";
+
+	    if (defined ($SymbolDocs{$symbol})) {
+	        $desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	    }
+
+	    &OutputParamDescriptions ("signal");
+	    $desc .= "</refsect2>";
+	}
+    }
+    if ($proto ne '') {
+        $proto = <<EOF;
+<refsect1>
+<title>Signal Prototypes</title>
+<synopsis>
+
+${proto}</synopsis>
+</refsect1>
+EOF
+	$desc  = <<EOF;
+<refsect1>
+<title>Signals</title>
+$desc
+</refsect1>
+EOF
+    }
+    return ($proto, $desc);
+}
+
+
+# This reads in the manually-edited documentation file corresponding to the
+# file currently being created, so we can insert the documentation at the
+# appropriate places. It outputs %SymbolDocs and %SymbolParams, which is
+# a hash of hashes.
+sub ReadDoc {
+    local ($file) = $_[0];
+    $docsfile = "$DOCS_DIR/$file.sgml";
+
+    if (! -f $docsfile) {
+	print "File doesn't exist: $docsfile\n";
+	return; 
+    }
+
+    open (DOCS, $docsfile)
+	|| die "Can't open file: $docsfile";
+
+    %SymbolDocs = ();
+    %SymbolParams = ();
+    $CurrentSymbol = "";
+    $CurrentParam = -1;
+    $SymbolDoc = "";
+    while (<DOCS>) {
+	if (m/^<!-- ##### [A-Z_]+ (\S+) ##### -->/) {
+	    $symbol = $1;
+#	    print "Found symbol: $symbol\n";
+
+	    # Store previous symbol, but remove any trailing blank lines.
+	    if ($CurrentSymbol ne "") {
+		$SymbolDoc =~ s/\s+$//;
+		$SymbolDocs{$CurrentSymbol} = $SymbolDoc;
+		if ($CurrentParam >= 0) {
+		    $SymbolParams{$CurrentSymbol} = [ @Params ];
+		}
+	    }
+	    $CurrentSymbol = $symbol;
+	    $CurrentParam = -1;
+	    $SymbolDoc = "";
+	    @Params = ();
+	} else {
+	    # Check if param found
+	    if (m/^\@(\S+):/) {
+		$param_name = $1;
+		# Allow variations of 'Returns'
+		if ($param_name =~ m/^[Rr]eturn/) {
+		    $param_name = "Returns";
+		}
+		push (@Params, $_);
+		$CurrentParam++;
+		next;
+	    }
+
+	    if ($CurrentParam >= 0) {
+		$Params[$CurrentParam] .= $_;
+	    } else {
+		$SymbolDoc .= $_;
+	    }
+	}
+    }
+
+    # Remember to finish the current symbol doccs.
+    if ($CurrentSymbol ne "") {
+	$SymbolDoc =~ s/\s+$//;
+	$SymbolDocs{$CurrentSymbol} = $SymbolDoc;
+	if ($CurrentParam >= 0) {
+	    $SymbolParams{$CurrentSymbol} = [ @Params ];
+	}
+    }
+
+    close (DOCS);
+}

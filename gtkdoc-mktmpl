@@ -1,0 +1,466 @@
+#!/usr/bin/perl -w
+#
+# This creates all the empty documents which we then type the descritions
+# into. It doesn't overwrite files, to make sure we don't accidentally lost
+# work.
+#
+# Currently if GTK is updated I run this using a different $DOCS_OUTPUT_DIR
+# and copy any new function templates into the existing documents.
+# Ideally this script would interleave the new, empty, templates with the
+#
+# The CheckAllDeclarationsOutput function checks that all the declarations
+# which were found with scangtk have been used, and writes unused ones to
+# gXXX-unused.txt, which does make it easier when GTK is updated.
+#
+# Also, I haven't output templates to describe signal handlers yet.
+#
+
+use Getopt::Long;
+
+# Options
+
+# name of documentation module
+my $MODULE;
+my $DOCS_OUTPUT_DIR;
+
+%optctl = (module => \$MODULE,
+	   'output-dir' => \$DOCS_OUTPUT_DIR);
+GetOptions(\%optctl, "module=s", "output-dir:s");
+
+$ROOT_DIR = ".";
+
+# All the files are written in subdirectories beneath here.
+$DOCS_OUTPUT_DIR = $DOCS_OUTPUT_DIR ? $DOCS_OUTPUT_DIR : "$ROOT_DIR/tmpl";
+
+# This file is output from a C program I wrote, based on some code in Glade.
+$GTK_SIGNALS_FILE = "$ROOT_DIR/$MODULE.signals";
+
+&ReadSignalsFile;
+
+# Create the top output directory if it doens't exist.
+if (! -e $DOCS_OUTPUT_DIR) {
+    mkdir ("$DOCS_OUTPUT_DIR", 0777)
+	|| die "Can't create directory: $DOCS_OUTPUT_DIR";
+}
+
+&ReadDeclarationsFile ("$ROOT_DIR/$MODULE-decl.txt", 0);
+if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
+    &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
+}
+&OutputDocs ("$ROOT_DIR/$MODULE-sections.txt");
+&CheckAllDeclarationsOutput;
+
+# This reads in a file containing the function/macro/enum etc. declarations.
+#
+# Note that in some cases there are several declarations with the same name,
+# e.g. for conditional macros. In this case we set a flag in the 
+# %DeclarationConditional hash so the declaration is not shown in the docs.
+#
+# If a macro and a function have the same name, e.g. for gtk_object_ref,
+# the function declaration takes precedence.
+#
+# Some opaque structs are just declared with 'typedef _name name;' in which
+# case the declaration may be empty. The structure may have been
+# found later in the header, so that overrides the empty declaration.
+#
+
+sub ReadDeclarationsFile {
+    local ($file, $override) = @_;
+
+    if ($override == 0) {
+	%Declarations = ();
+	%DeclarationTypes = ();
+	%DeclarationConditional = ();
+	%DeclarationOutput = ();
+    }
+
+    open (INPUT, $file)
+	|| die "Can't open $file";
+    $declaration_type = "";
+    while (<INPUT>) {
+	if (!$declaration_type) {
+	    if (m/^<([^>]+)>/) {
+		$declaration_type = $1;
+		$declaration_name = "";
+#		print "Found declaration: $declaration_type\n";
+		$declaration = "";
+	    }
+	} else {
+	    if (m%^<NAME>(.*)</NAME>%) {
+		$declaration_name = $1;
+	    } elsif (m%^</$declaration_type>%) {
+#		print "Found end of declaration: $declaration_name\n";
+		# Check that the declaration has a name
+		if ($declaration_name eq "") {
+		    print "ERROR: $declaration_type has no name $file:$.\n";
+		}
+
+		# Check if the symbol is already defined.
+		if (defined ($Declarations{$declaration_name})
+		    && $override == 0) {
+		    # Function declarations take precedence.
+		    if ($DeclarationTypes{$declaration_name} eq 'FUNCTION') {
+			# Ignore it.
+		    } elsif ($declaration_type eq 'FUNCTION') {
+			$Declarations{$declaration_name} = $declaration;
+			$DeclarationTypes{$declaration_name} = $declaration_type;
+		    } elsif ($DeclarationTypes{$declaration_name}
+			      eq $declaration_type) {
+			# If the existing declaration is empty override it.
+			if ($declaration_type eq 'STRUCT') {
+			    if ($Declarations{$declaration_name} =~ m/^\s*$/) {
+				$Declarations{$declaration_name} = $declaration;
+			    } elsif ($declaration =~ m/^\s*$/) {
+				# Ignore an empty declaration.
+			    } else {
+				print "WARNING: Structure has multiple definitions: $declaration_name\n";
+			    }
+
+			} else {
+			    # set flag in %DeclarationConditional hash for
+			    # multiply defined macros/typedefs.
+			    $DeclarationConditional{$declaration_name} = 1;
+			}
+		    } else {
+			print "ERROR: $declaration_name has multiple definitions\n";
+		    }
+		} else {
+		    $Declarations{$declaration_name} = $declaration;
+		    $DeclarationTypes{$declaration_name} = $declaration_type;
+		}
+		$declaration_type = "";
+	    } else {
+		$declaration .= $_;
+	    }
+	}
+    }
+    close (INPUT);
+}
+
+
+# This reads in an existing file which contains information on all GTK signals.
+# It creates the arrays @SignalNames and @SignalPrototypes containing info on
+# the signals. The first line of the SignalPrototype is the return type of
+# the signal handler. The remaining lines are the parameters passed to it.
+# The last parameter, "gpointer user_data" is always the same so is not
+# included.
+sub ReadSignalsFile {
+    @SignalObjects = ();
+    @SignalNames = ();
+    @SignalReturns = ();
+    @SignalPrototypes = ();
+
+    if (!open (INPUT, $GTK_SIGNALS_FILE)) {
+	warn "Can't open $GTK_SIGNALS_FILE - skipping signals\n";
+	return;
+    }
+    $in_signal = 0;
+    while (<INPUT>) {
+	if (!$in_signal) {
+	    if (m/^<SIGNAL>/) {
+		$in_signal = 1;
+		$signal_object = "";
+		$signal_name = "";
+		$signal_returns = "";
+		$signal_prototype = "";
+	    }
+	} else {
+	    if (m/^<NAME>(.*)<\/NAME>/) {
+		$signal_name = $1;
+		if ($signal_name =~ m/^(.*)::(.*)$/) {
+		    $signal_object = $1;
+		    $signal_name = $2;
+#		    print "Found signal: $signal_name\n";
+		} else {
+		    print "Invalid signal name: $signal_name\n";
+		}
+	    } elsif (m/^<RETURNS>(.*)<\/RETURNS>/) {
+		$signal_returns = $1;
+	    } elsif (m%^</SIGNAL>%) {
+#		print "Found end of signal: ${signal_object}::${signal_name}\nReturns: ${signal_returns}\n${signal_prototype}";
+		push (@SignalObjects, $signal_object);
+		push (@SignalNames, $signal_name);
+		push (@SignalReturns, $signal_returns);
+	        push (@SignalPrototypes, $signal_prototype);
+		$in_signal = 0;
+	    } else {
+		$signal_prototype .= $_;
+	    }
+	}
+    }
+    close (INPUT);
+}
+
+
+
+# This collects the output for each section of the docs, and outputs
+# each file when the end of the section is found.
+sub OutputDocs {
+    local ($file) = $_[0];
+    print "Reading: $file\n";
+    open (INPUT, $file)
+	|| die "Can't open $file";
+    $title = "";
+    my ($subsection) = "";
+    while (<INPUT>) {
+	if (m/^#/) {
+	    next;
+
+	} elsif (m/^<SECTION>/) {
+	    $DOCFILE = "";
+
+	} elsif (m/^<SUBSECTION>/) {
+	    next;
+
+	} elsif (m/^<TITLE>(.*)<\/TITLE>/) {
+	    $title = $1;
+#	    print "Section: $title\n";
+
+	    # We don't want warnings if object & class structs aren't used.
+	    $DeclarationOutput{$title} = 1;
+	    $DeclarationOutput{"${title}Class"} = 1;
+
+	} elsif (m/^<FILE>(.*)<\/FILE>/) {
+	    $file = $1;
+
+	} elsif (m/^<NAME>(.*)<\/NAME>/) {
+	    $subsection = $1;
+
+
+	} elsif (m/^<\/SECTION>/) {
+	    if ($title eq "") {
+		$title = $file;
+	    }
+#	    print "End of section: $title\n";
+
+	    $file =~ s/\s/_/g;
+	    $file .= ".sgml";
+
+	    &OutputDocsFile ($file, $title);
+
+	    $title = "";
+	    $subsection = "";
+
+	} elsif (m/^(\S+)/) {
+	    $symbol = $1;
+#	    print "  Symbol: $symbol\n";
+
+	    $declaration = $Declarations{$1};
+	    if (defined ($declaration)) {
+		# We don't want templates for standard macros/functions of
+		# GtkObjects.
+		if ($subsection ne "Standard") {
+		    &OutputDeclaration ($symbol, $declaration);
+		}
+
+		# Note that the declaration has been output.
+		$DeclarationOutput{$symbol} = 1;
+
+		if ($declaration eq '##conditional##') {
+#		    print "Conditional $DeclarationTypes{$symbol}\n";
+		}
+	    } else {
+		print "WARNING: No declaration for: $1\n";
+	    }
+	}
+    }
+    close (INPUT);
+}
+
+
+# This steps through all the declarations that were loaded, and makes sure
+# that each one has been output, by checking the corresponding flag in the
+# %DeclarationOutput hash. It is intended to check that any new declarations
+# in new version of GTK get added to the gXXX-sections.txt file.
+sub CheckAllDeclarationsOutput {
+    $NumUnused = 0;
+    open (UNUSED, ">$ROOT_DIR/$MODULE-unused.txt")
+	|| die "Can't open $ROOT_DIR/$MODULE-unused.txt";
+    foreach $symbol (keys (%Declarations)) {
+	if (!defined ($DeclarationOutput{$symbol})) {
+	    print (UNUSED "$symbol\n");
+	    $NumUnused++;
+	}
+    }
+    close (UNUSED);
+    if ($NumUnused != 0) {
+	print <<EOF;
+=============================================================================
+WARNING: $NumUnused unused declarations.
+         These can be found in $MODULE-unused.txt.
+         They should be added to $MODULE-sections.txt in the appropriate place.
+=============================================================================
+EOF
+    }
+}
+
+
+sub OutputDeclaration {
+    local ($symbol, $declaration) = @_;
+
+    $type = $DeclarationTypes {$symbol};
+#    print "Outputting $type: $symbol\n";
+
+    $DOCFILE .= <<EOF;
+<!-- ##### $type $symbol ##### -->
+<para>
+
+</para>
+
+EOF
+
+    # For functions, function typedefs and macros, we output the arguments.
+    # For functions and function typedefs we also output the return value.
+    if ($type eq "FUNCTION" || $type eq "USER_FUNCTION") {
+	# Take out the return type
+	$declaration =~ s/<RETURNS>\s*(const\s+|unsigned\s+)*(\w+)\s*(\**)\s*<\/RETURNS>\n//;
+	$ret_type = $2;
+
+	$param_num = 0;
+	while ($declaration ne "") {
+	    if ($declaration =~ s/^[\s,]+//) {
+		# skip whitespace and commas
+		next;
+
+	    } elsif ($declaration =~ s/^void\s*[,\n]//) {
+		if ($param_num != 0) {
+		    print "WARNING: void used as parameter in function $symbol\n";
+		}
+		
+	    } elsif ($declaration =~ s/^...\s*[,\n]//) {
+		$DOCFILE .= "\@Varargs: \n";
+
+		# allow alphanumerics, '_', '[' & ']' in param names
+	    } elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*(\[\])?\s*[,\n]//) {
+		if (defined($7)) {
+		    $name = $7;
+		} else {
+		    $name = "Param" . ($j + 1);
+		}
+		$DOCFILE .= "\@$name: \n";
+
+		# Try to match parameters which are functions.
+	    } elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+		$name = $6;
+		$DOCFILE .= "\@$name: \n";
+
+	    } else {
+		print "###Can't parse args for function $symbol: $declaration\n";
+		last;
+	    }
+	    $param_num++;
+	}
+
+    
+	if ($ret_type ne "void") {
+	    $DOCFILE .= "\@Returns: \n";
+	}
+    }
+
+    if ($type eq "MACRO") {
+	if ($declaration =~ m/^\s*#\s*define\s+\w+\(([^\)]*)\)/) {
+	    $args = $1;
+	    @params = split ("[,\n]", $args);
+	    for ($j = 0; $j <= $#params; $j++) {
+		$param = $params[$j];
+		$param =~ s/^\s+//;
+		$param =~ s/\s*$//;
+		if ($param =~ m/^\s*$/) { next; }
+		$DOCFILE .= "\@$param: \n";
+	    }
+	}
+    }
+    $DOCFILE .= "\n";
+}
+
+
+# This outputs one empty template file.
+# If the file already exists it will just return.
+sub OutputDocsFile {
+    local ($file, $title) = @_;
+
+    if (-e "$DOCS_OUTPUT_DIR/$MODULE" && ! -d _) {
+	die "$DOCS_OUTPUT_DIR/$MODULE exists and is not a directory";
+    }
+    if (! -e _) {
+	mkdir ("$DOCS_OUTPUT_DIR/$MODULE", 0777)
+	    || die "Can't create directory: $DOCS_OUTPUT_DIR/$MODULE";
+    }
+
+    # Don't overwrite existing files.
+    if (-f "$DOCS_OUTPUT_DIR/$file") {
+	print "$DOCS_OUTPUT_DIR/$file already exists - skipping.\n";
+	return;
+    }
+
+    open (OUTPUT, ">$DOCS_OUTPUT_DIR/$file")
+	|| die "Can't create $DOCS_OUTPUT_DIR/$file";
+
+    print (OUTPUT <<EOF);
+<!-- ##### SECTION Title ##### -->
+$title
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+EOF
+
+    print (OUTPUT $DOCFILE);
+
+    &OutputSignalTemplates ($title);
+
+    close (OUTPUT);
+}
+
+
+sub OutputSignalTemplates {
+    local ($title) = $_[0];
+
+    $SIGS = "";
+    for ($i = 0; $i <= $#SignalObjects; $i++) {
+	if ($SignalObjects[$i] eq $title) {
+#	    print "Found signal: $SignalObjects[$i]\n";
+
+	    $SIGS .= <<EOF;
+<!-- ##### SIGNAL $SignalObjects[$i]::$SignalNames[$i] ##### -->
+<para>
+
+</para>
+
+EOF
+	    
+	    @params = split ("[,\n]", $SignalPrototypes[$i]);
+	    for ($j = 0; $j <= $#params; $j++) {
+		$param = $params[$j];
+		$param =~ s/^\s+//;
+		$param =~ s/\s*$//;
+		if ($param =~ m/^\s*$/) { next; }
+		if ($param =~ m/^void$/) { next; }
+
+		if ($param =~ m/^\s*(\w+)\s*(\**)\s*([\w\[\]]+)?\s*$/) {
+		    if (defined($3)) {
+			$name = $3;
+		    } else {
+			$name = "Param" . ($j + 1);
+		    }
+		    if ($j == 0) {
+			$SIGS .= "\@$name: the object which received the signal.\n";
+		    } else {
+			$SIGS .= "\@$name: \n";
+		    }
+		}	
+	    }
+	    
+	    if ($SignalReturns[$i] ne "void") {
+		$SIGS .= "\@Returns: \n";
+	    }
+	    $SIGS .= "\n";
+	}
+    }
+    print (OUTPUT $SIGS);
+}

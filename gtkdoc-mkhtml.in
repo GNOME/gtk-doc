@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+
+usage="\
+Usage: gtkdoc-mkhtml MODULE DRIVER_FILE"
+
+
+if test $# -ne 2; then
+      echo "${usage}" 1>&2
+      exit 1
+fi
+
+module=$1
+
+prefix=@prefix@
+gtkdocdir=@datadir@/gtk-doc/
+
+jade -t sgml -d $gtkdocdir/gtk-doc.dsl -c $gtkdocdir/gtk-doc.cat $2
+sed s%href=\"%href=\"$module/% < index.sgml > index.sgml.tmp && mv index.sgml.tmp index.sgml

@@ -1,0 +1,381 @@
+#!/usr/bin/perl -w
+#
+# Perl script to extract declarations of functions, macros, enums, structs and
+# unions from header files to be used for generating DocBook documentation.
+#
+# It outputs all declarations found to a file named '$MODULE-decl.txt', and the
+# list of decarations to another file '$MODULE-decl-list.txt'.
+# This second list file is copied to '$MODULE-sections.txt' and organized into
+# sections ready to output the SGML pages.
+#
+# It is called with a module name, an optional output directory, and the
+# header files to scan.
+#
+
+use Getopt::Long;
+
+# Options
+
+# name of documentation module
+my $MODULE;
+my $OUTPUT_DIR;
+
+%optctl = (module => \$MODULE,
+	   'output-dir' => \$OUTPUT_DIR);
+GetOptions(\%optctl, "module=s", "output-dir:s");
+
+$OUTPUT_DIR = $OUTPUT_DIR ? $OUTPUT_DIR : ".";
+
+if (!-d ${OUTPUT_DIR}) {
+    mkdir($OUTPUT_DIR, 0755) || die "Cannot create $OUTPUT_DIR: $!";
+}
+
+# Backup existing files
+if (-f "${OUTPUT_DIR}/$MODULE-decl-list.txt") {
+    rename ("${OUTPUT_DIR}/$MODULE-decl-list.txt",
+	    "${OUTPUT_DIR}/$MODULE-decl-list.bak");
+}
+
+if (-f "${OUTPUT_DIR}/$MODULE-decl.txt") {
+    rename ("${OUTPUT_DIR}/$MODULE-decl.txt",
+	    "${OUTPUT_DIR}/$MODULE-decl.bak");
+}
+
+open (LIST, ">${OUTPUT_DIR}/$MODULE-decl-list.txt")
+    || die "Can't open ${OUTPUT_DIR}/$MODULE-decl-list.txt";
+open (TYPES, ">${OUTPUT_DIR}/$MODULE-decl.txt")
+    || die "Can't open ${OUTPUT_DIR}/$MODULE-decl.txt";
+
+$main_list = $object_list = "";
+
+for $file (@ARGV) {
+    my $file_basename;
+    if ($file =~ m/^.*[\/\\](.*)\.h$/) {
+	$file_basename = $1;
+    } else {
+	print "WARNING: Can't find basename of file $file\n";
+	$file_basename = $file;
+    }
+
+    # We split the output into two parts - GtkObject subclasses and everything
+    # else, so that all GtkObjects/Widgets are kept together.
+    my ($list, $is_object) = &ScanHeader($file);
+    if ($is_object) {
+	$object_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n";
+    } else {
+	$main_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n";
+    }
+}
+
+print LIST $object_list, $main_list;
+close (LIST);
+close (TYPES);
+
+# This scans a header file, looking for declarations of functions, macros,
+# typedefs, structs and unions, which it outputs to the TYPES file.
+# It returns the list of declarations found, and a boolean which is 1 if the
+# header file is describing a GtkObject subclass.
+sub ScanHeader {
+    my ($input_file) = @_;
+
+#    print "Scanning: $input_file\n";
+    $list = "";
+    @objects = ();
+
+    if (! -f $input_file) {
+	print "File doesn't exist: $input_file\n";
+	return ("", 0);
+    }
+
+    open(INPUT, $input_file)
+	|| die "Couldn't open file: $input_file";
+    my ($in_declaration) = "";
+    my ($previous_line) = "";
+    my ($first_macro) = 1;
+    my ($in_comment) = 0;
+    while(<INPUT>) {
+
+	# Skip to the end of the current comment.
+	if ($in_comment) {
+	    if (m%\*/%) {
+		$in_comment = 0;
+	    }
+	    next;
+	}
+
+	# Look for a widget class to use as the section title.
+	# Style isn't really an object.
+	if (m/^struct\s+_(Gtk\S+|Gnome\S+)Class/) {
+	    if ($1 ne 'GtkStyle') {
+		$list .= "<TITLE>$1</TITLE>\n";
+	    }
+	}
+
+	if (!$in_declaration) {
+
+	    # Skip top-level comments.
+	    if (s%^\s*/\*%%) {
+		if (m%\*/%) {
+#		    print "Found one-line comment: $_";
+		} else {
+		    $in_comment = 1;
+#		    print "Found start of comment: $_";
+		}
+		next;
+	    }
+
+	    if (m/^\s*#\s*define\s+(\w+)/) {
+		$macro = $1;
+		# We assume all macros which start with '_' are private, but
+		# we accept '_' itself which is the standard gettext macro.
+		# We also try to skip the header #ifdef/#define macro at the
+		# top of most header files.
+		# We also try to skip the first macro if it looks like the
+		# standard #ifndef HEADER_FILE #define HEADER_FILE etc.
+		# And we only want TRUE & FALSE defined in GLib.
+		if (($macro !~ m/^_/
+		     && ($previous_line !~ m/#ifndef\s+$macro/
+			 || $first_macro == 0)
+		     && (($macro ne 'TRUE' && $macro ne 'FALSE')
+			 || $MODULE eq 'glib'))
+		    || $macro eq "_") {
+		    $args = $_;
+		    $in_declaration = "macro";
+		}
+		$first_macro = 0;
+
+	    } elsif (m/^typedef\s+((const\s+)?\w+)\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
+		$ret_type = $1;
+		$modifier = $3;
+		$function = $4;
+		$args = $';
+		$in_declaration = "user_function";
+
+	    } elsif (s/^enum\s+_(\w+)\s+\{/enum $1 {/) {
+		$enum = $1;
+#		print "DEBUG: plain enum: $enum\n";
+		$args = $_;
+		$in_declaration = "enum";
+
+	    } elsif (m/^typedef\s+enum\s+_(\w+)\s+\1\s*;/) {
+#		print "DEBUG: skipping enum typedef: $1\n";
+
+	    } elsif (m/^typedef\s+enum/) {
+		$enum = "";
+		$args = $_;
+		$in_declaration = "enum";
+
+	    } elsif (m/^typedef\s+struct\s+_(\w+)\s+\1\s*;/) {
+#		print "DEBUG: struct typedef: $1\n";
+		&AddSymbolToList ($1);
+		# This could be an opaque data structure, so we output an
+		# empty declaration. If the structure is actually found that
+		# will override this.
+		print TYPES "<STRUCT>\n<NAME>$1</NAME>\n</STRUCT>\n";
+
+	    } elsif (m/^typedef\s+struct\s*{/) {
+		$struct = "";
+		$args = $_;
+		$level = 0;
+		$in_declaration = "struct";
+
+	    } elsif (s/^struct\s+_(\w+)/struct $1/) {
+		$struct = $1;
+		$args = $_;
+		# We skip object structs
+		if ($struct =~ m/^(Gtk\S+|Gnome\S+)Class/
+		    && $1 ne 'GtkStyle') {
+#		    print "Found class: $1\n";
+		    push (@objects, $1);
+		} else {
+		    $level = 0;
+		    $in_declaration = "struct";
+		}
+
+	    } elsif (s/^union\s+_(\w+)/union $1/) {
+		$union = $1;
+		$args = $_;
+		$in_declaration = "union";
+
+	    } elsif (m/^typedef\s+(.+[\s\*])(\w\S*);/) {
+		if ($1 !~ m/^struct\s/ && $1 !~ m/^union\s/) {
+#		    print "Found typedef: $_";
+		    &AddSymbolToList ($2);
+		    print TYPES "<TYPEDEF>\n<NAME>$2</NAME>\n$_</TYPEDEF>\n";
+		}
+	    } elsif (m/^typedef\s+/) {
+#		print "Skipping typedef: $_";
+
+	    } elsif (m/^extern\s+/) {
+#		print "Skipping extern: $_";
+
+	    # We assume that functions which start with '_' are private, so
+	    # we skip them.
+	    } elsif (m/^\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s\*+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
+		$ret_type = $2;
+		$modifier = $4;
+		$function = $5;
+		$args = $';
+
+		# Don't want typedefs
+		if ($ret_type ne 'typedef') {
+#		    print "Function: $function, Returns: ${ret_type}$modifier\n";
+		    $in_declaration = "function";
+		}
+
+	    # Try to catch function declarations which have the return type on
+	    # the previous line. But we don't want to catch complete functions
+	    # which have been declared G_INLINE_FUNC, e.g. g_bit_nth_lsf in
+	    # glib, or 'static inline' functions.
+	    } elsif (m/^([A-Za-z]\w*)\s*\(/) {
+		$function = $1;
+		$args = $';
+		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
+		    && $previous_line !~ m/^\s*static\s+inline/) {
+		    if ($previous_line =~ m/^((const\s*)?\w+)(\s*\*+)?/) {
+			$ret_type = $1;
+			$modifier = defined ($3) ? $3 : "";
+#		    print "Function: $function, Returns: ${ret_type}$modifier\n";
+			$in_declaration = "function";
+		    }
+		}
+	    }
+	} else {
+	    $args .= $_;
+	}
+
+	# Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);'.
+	if ($in_declaration eq 'function') {
+	    if ($args =~ s/\)\s*(G_GNUC_.*)?;.*$//) {
+		$args =~ s/^\s+//;
+		$args =~ s/\n\s+/\n/g;
+		$args =~ s/\s+$//;
+		$args =~ s/\s+\n/\n/g;
+		$args =~ s%/\*.*?\*/%%gs; # remove comments
+		$ret_type =~ s%/\*.*?\*/%%g; # remove comments
+		&AddSymbolToList ($function);
+		print TYPES "<FUNCTION>\n<NAME>$function</NAME>\n<RETURNS>$ret_type $modifier</RETURNS>\n$args\n</FUNCTION>\n";
+		$in_declaration = "";
+	    }
+	}
+
+	if ($in_declaration eq 'user_function') {
+	    if ($args =~ s/\).*$//) {
+		&AddSymbolToList ($function);
+		print TYPES "<USER_FUNCTION>\n<NAME>$function</NAME>\n<RETURNS>$ret_type $modifier</RETURNS>\n$args</USER_FUNCTION>\n";
+		$in_declaration = "";
+	    }
+	}
+
+	if ($in_declaration eq 'macro') {
+	    if ($args !~ m/\\\s*$/) {
+		&AddSymbolToList ($macro);
+		print TYPES "<MACRO>\n<NAME>$macro</NAME>\n$args</MACRO>\n";
+		$in_declaration = "";
+	    }
+	}
+
+	if ($in_declaration eq 'enum') {
+	    if ($args =~ m/\}\s*(\w+)?;\s*$/) {
+		if ($enum eq "") {
+		    $enum = $1;
+		}
+		&AddSymbolToList ($enum);
+		print TYPES "<ENUM>\n<NAME>$enum</NAME>\n$args</ENUM>\n";
+		$in_declaration = "";
+	    }
+	}
+
+	# We try to handle nested stucts/unions, but brackets in comments
+	# may cause problems.
+	if ($in_declaration eq 'struct') {
+	    if ($level <= 1 && $args =~ m/\}\s*(\w*);\s*$/) {
+		if ($struct eq "") {
+		    $struct = $1;
+		}
+		&AddSymbolToList ($struct);
+		print TYPES "<STRUCT>\n<NAME>$struct</NAME>\n$args</STRUCT>\n";
+		$in_declaration = "";
+	    } else {
+		if (m/\{/) {
+		    $level++;
+#		    print "DEBUG: level: $level\n";
+		}
+		if (m/\}/) {
+		    $level--;
+#		    print "DEBUG: level: $level\n";
+		}
+	    }
+	}
+
+	if ($in_declaration eq 'union') {
+	    if ($args =~ m/\}\s*;\s*$/) {
+		&AddSymbolToList ($union);
+		print TYPES "<UNION>\n<NAME>$union</NAME>\n$args</UNION>\n";
+		$in_declaration = "";
+	    }
+	}
+
+	$previous_line = $_;
+    }
+    close(INPUT);
+
+    # Take out any object structs
+    foreach $object (@objects) {
+	$list =~ s/^$object\n//m;
+	$list =~ s/^${object}Class\n//m;
+    }
+
+
+    # Try to separate the standard macros and function.
+    # FIXME: GTK specific.
+    my ($class) = "";
+    my ($standard_decl) = "";
+    if ($list =~ m/^GTK_IS_(.*)_CLASS/m) {
+	$class = $1;
+    } elsif ($list =~ m/^GTK_IS_(.*)/m) {
+	$class = $1;
+    } elsif ($list =~ m/^GNOME_IS_(.*)_CLASS/m) {
+	$class = $1;
+    } elsif ($list =~ m/^GNOME_IS_(.*)/m) {
+	$class = $1;
+    }
+
+    if ($class ne "") {
+#	print "Found class: $class\n";
+
+	if ($list =~ s/^GTK_$class\n//m)            { $standard_decl .= $&; }
+	if ($list =~ s/^GTK_IS_$class\n//m)         { $standard_decl .= $&; }
+	if ($list =~ s/^GTK_TYPE_$class\n//m)       { $standard_decl .= $&; }
+	if ($list =~ s/^gtk_.*_get_type\n//m)       { $standard_decl .= $&; }
+	if ($list =~ s/^GTK_${class}_CLASS\n//m)    { $standard_decl .= $&; }
+	if ($list =~ s/^GTK_IS_${class}_CLASS\n//m) { $standard_decl .= $&; }
+
+	if ($list =~ s/^GNOME_$class\n//m)            { $standard_decl .= $&; }
+	if ($list =~ s/^GNOME_IS_$class\n//m)         { $standard_decl .= $&; }
+	if ($list =~ s/^GNOME_TYPE_$class\n//m)       { $standard_decl .= $&; }
+	if ($list =~ s/^gnome_.*_get_type\n//m)       { $standard_decl .= $&; }
+	if ($list =~ s/^GNOME_${class}_CLASS\n//m)    { $standard_decl .= $&; }
+	if ($list =~ s/^GNOME_IS_${class}_CLASS\n//m) { $standard_decl .= $&; }
+
+        if ($standard_decl ne "") {
+	    $list .= "<SUBSECTION>\n<NAME>Standard</NAME>\n$standard_decl";
+	}
+	return ($list, 1);
+    } else {
+	return ($list, 0);
+    }
+}
+
+
+# This adds the symbol to the list of declarations, but only if it is not
+# already in the list.
+sub AddSymbolToList {
+    my ($symbol) = @_;
+
+    if ($list =~ m/\b\Q$symbol\E\b/) {
+#	print "Symbol $symbol already in list. skipping\n";
+	return;
+    }
+    $list .= "$symbol\n";
+}

@@ -1,0 +1,206 @@
+<!DOCTYPE style-sheet PUBLIC "-//James Clark//DTD DSSSL Style Sheet//EN" [
+<!ENTITY dbstyle SYSTEM "@DSSSL_DIR@/html/docbook.dsl" CDATA DSSSL>
+]>
+
+<style-sheet>
+<style-specification use="docbook">
+<style-specification-body>
+
+;; These are some customizations to the standard HTML output produced by the
+;; Modular DocBook Stylesheets.
+;; I've copied parts of a few functions from the stylesheets so these should
+;; be checked occasionally to ensure they are up to date.
+
+;;(define %generate-book-toc% #f)
+
+(define %use-id-as-filename% #t)
+
+(define %html-ext% ".html")
+
+(define %shade-verbatim% #t)
+
+
+;; I want to change this so that for programlisting we use a blue background,
+;; but for example or informalexample we use green.
+(define %shade-verbatim-attr-2% 
+  ;; Attributes used to create a shaded verbatim environment.
+  (lambda ()
+    (if (or (equal? (gi (parent (current-node)))
+		    (normalize "example"))
+	    (equal? (gi (parent (current-node)))
+		    (normalize "informalexample")))
+	(list
+	 (list "BORDER" "0")
+	 (list "BGCOLOR" "#E8F8E8")
+	 (list "WIDTH" "100%")
+	 (list "CELLPADDING" "6"))
+	(list
+	 (list "BORDER" "0")
+	 (list "BGCOLOR" "#E8E8F8")
+	 (list "WIDTH" "100%")
+	 (list "CELLPADDING" "6"))
+	)
+  )
+)
+
+;; This overrides $verbatim-display$ (copied from 1.20, dbverb.dsl).
+;; It simply changes %shade-verbatim-attr% to (%shade-verbatim-attr-2%) so we
+;; can use our own function to set the different verbatim colours.
+(define ($verbatim-display$ line-numbers?)
+  (let ((content (make element gi: "PRE"
+		       attributes: (list
+				    (list "CLASS" (gi)))
+		       (if line-numbers?
+			   ($verbatim-content-with-linenumbers$)
+			   ($verbatim-content$)))))
+    (if %shade-verbatim%
+	(make element gi: "TABLE"
+	      attributes: (%shade-verbatim-attr-2%)
+	      (make element gi: "TR"
+		    (make element gi: "TD"
+			  content)))
+	content)))
+
+
+;; This overrides the tgroup definition (copied from 1.20, dbtable.dsl).
+;; It changes the table background color, cell spacing and cell padding.
+(element tgroup
+  (let* ((wrapper   (parent (current-node)))
+	 (frameattr (attribute-string (normalize "frame") wrapper))
+	 (pgwide    (attribute-string (normalize "pgwide") wrapper))
+	 (footnotes (select-elements (descendants (current-node)) 
+				     (normalize "footnote")))
+	 (border (if (equal? frameattr (normalize "none"))
+		     '(("BORDER" "0"))
+		     '(("BORDER" "1"))))
+	 (bgcolor '(("BGCOLOR" "#FFE0E0")))
+	 (width (if (equal? pgwide "1")
+		    (list (list "WIDTH" ($table-width$)))
+		    '()))
+	 (head (select-elements (children (current-node)) (normalize "thead")))
+	 (body (select-elements (children (current-node)) (normalize "tbody")))
+	 (feet (select-elements (children (current-node)) (normalize "tfoot"))))
+    (make element gi: "TABLE"
+	  attributes: (append
+		       border
+		       width
+		       bgcolor
+		       '(("CELLSPACING" "0"))
+		       '(("CELLPADDING" "4"))
+		       (if %cals-table-class%
+			   (list (list "CLASS" %cals-table-class%))
+			   '()))
+	  (process-node-list head)
+	  (process-node-list body)
+	  (process-node-list feet)
+	  (make-table-endnotes))))
+
+;; This overrides the refsect2 definition (copied from 1.20, dbrfntry.dsl).
+;; It puts a horizontal rule after each function/struct/... description.
+(element refsect2
+  (make sequence
+    (make empty-element gi: "HR")
+    ($block-container$)))
+
+;; Override the book declaration, so that we generate a crossreference
+;; for the book
+
+(element book 
+  (let* ((bookinfo  (select-elements (children (current-node)) (normalize "bookinfo")))
+	 (ititle   (select-elements (children bookinfo) (normalize "title")))
+	 (title    (if (node-list-empty? ititle)
+		       (select-elements (children (current-node)) (normalize "title"))
+		       (node-list-first ititle)))
+	 (nl       (titlepage-info-elements (current-node) bookinfo))
+	 (tsosofo  (with-mode head-title-mode
+		     (process-node-list title)))
+	 (dedication (select-elements (children (current-node)) (normalize "dedication"))))
+    (make sequence
+     (html-document 
+      tsosofo
+      (make element gi: "DIV"
+	    attributes: '(("CLASS" "BOOK"))
+	    (if %generate-book-titlepage%
+		(make sequence
+		  (book-titlepage nl 'recto)
+		  (book-titlepage nl 'verso))
+		(empty-sosofo))
+	    
+	    (if (node-list-empty? dedication)
+		(empty-sosofo)
+		(with-mode dedication-page-mode
+		  (process-node-list dedication)))
+	    
+	    (if (not (generate-toc-in-front))
+		(process-children)
+		(empty-sosofo))
+	    
+	    (if %generate-book-toc%
+		(build-toc (current-node) (toc-depth (current-node)))
+		(empty-sosofo))
+	    
+	    ;;	  (let loop ((gilist %generate-book-lot-list%))
+	    ;;	    (if (null? gilist)
+	    ;;		(empty-sosofo)
+	    ;;		(if (not (node-list-empty? 
+	    ;;			  (select-elements (descendants (current-node))
+	    ;;					   (car gilist))))
+	    ;;		    (make sequence
+	    ;;		      (build-lot (current-node) (car gilist))
+	    ;;		      (loop (cdr gilist)))
+	    ;;		    (loop (cdr gilist)))))
+	  
+	    (if (generate-toc-in-front)
+		(process-children)
+		(empty-sosofo))))
+     (make entity 
+       system-id: "index.sgml"
+       (with-mode generate-index-mode
+	 (process-children))))))
+
+;; Honor href="" attributes in anchors
+
+(define (href-to target)
+  ;; Return the HTML HREF for the given node.  If nochunks is true, just
+  ;; return the fragment identifier.
+  (let* ((id       (element-id target))
+	 (href     (attribute-string "href" target))
+	 (curdepth (directory-depth (html-file (current-node))))
+	 (entfile  (html-file target))
+	 (fragid   (if (chunk? target)
+		     ""
+		     (string-append "#" id))))
+    (if href
+	(string-append (copy-string "../" (+ curdepth 1)) href)
+	(if nochunks
+	    fragid
+	    (string-append (copy-string "../" curdepth) entfile fragid)))))
+	
+;; Mode for generating cross references
+
+(define (process-child-elements)
+  (process-node-list
+   (node-list-map (lambda (snl)
+                    (if (equal? (node-property 'class-name snl) 'element)
+                        snl
+                        (empty-node-list)))
+                  (children (current-node)))))
+
+(mode generate-index-mode
+  (element anchor
+    (if (attribute-string "href" (current-node))
+	(empty-sosofo)
+	(make formatting-instruction data:
+	      (string-append "\less-than-sign;ANCHOR id =\""
+			     (attribute-string "id" (current-node))
+			     "\" href=\""
+			     (href-to (current-node))
+			     "\"\greater-than-sign;
+"))))
+  (default
+    (process-child-elements)))
+
+</style-specification-body>
+</style-specification>
+<external-specification id="docbook" document="dbstyle">
+</style-sheet>

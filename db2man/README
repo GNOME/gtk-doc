@@ -1,0 +1,14 @@
+
+FILES
+=====
+
+docbook-to-man
+    my customized version of the docbook-to-man script. Note that it has
+    paths in it that you may need to change.
+    I also used the PROLOG stuff to specify the DocBook DTD when passing
+    the man pages to instant.
+
+docbook-to-man.ts
+    my customized version of the instant 'translation spec'.
+    I added support for the central title at the top of the pages, and the
+    revision date at the end. I also converted section 1 headings to all caps.

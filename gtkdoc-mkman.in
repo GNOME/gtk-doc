@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+
+for i in `cd sgml/gtk;ls *.sgml`
+do j=`echo $i | sed 's/.sgml/.man/'`
+echo ": converting " $i $j
+docbook-to-man sgml/gtk/$i > man/gtk/$j 2> man/gtk-logs/$i.log
+done
+
+for i in `cd sgml/gdk;ls *.sgml`
+do j=`echo $i | sed 's/.sgml/.man/'`
+echo ": converting " $i $j
+docbook-to-man sgml/gdk/$i > man/gdk/$j 2> man/gdk-logs/$i.log
+done
+
+for i in `cd sgml/glib;ls *.sgml`
+do j=`echo $i | sed 's/.sgml/.man/'`
+echo ": converting " $i $j
+docbook-to-man sgml/glib/$i > man/glib/$j 2> man/glib-logs/$i.log
+done
+
+#for i in Man/*
+#do j=`echo $i | sed "s/Man.//"`
+#echo ": formatting " $i $j
+#tbl $i | nroff -man > Out/$j
+#done
+

@@ -1,0 +1,180 @@
+
+GTK Reference Documentation Notes
+===============================
+
+Things to include:
+    Compiling with GTK - gtk-config, gtk.m4, debugging options.
+    g_warning, g_return_if_fail etc. - though these are in glib.
+    Initialising the GTK library and entering the main loop.
+    Widgets (see below)
+    Object data hash (& GINT_TO_POINTER-type macros)
+    Type functions
+    Ref counting
+    Widget Layout - size_request/size_allocate, coordinate system, X windows.
+    Styles
+    Accelerators - major changes for GTK 1.1
+    Signals - signal emission procedure, connecting to signals, stopping,
+	adding new signals for new widgets, marshaller functions.
+    X Events - signals ending in "_event" have extra param, event masks
+    Keyboard input - focus, CAN_FOCUS, GRAB_FOCUS
+    Default widgets - CAN_DEFAULT, HAS_DEFAULT
+    Args - not complete yet.
+    Drag-and-drop
+    Selections
+    Timers
+    AddInput
+    RC files
+    Factories - major changes for GTK 1.1
+
+    Indices - functions, signals,	
+	      widget hierarchy/alphabetical list/grouped - annotated
+
+
+For each widget:
+
+    (We include a brief summary of the widget and its functions/signals at the
+    top of the page, since a lot of the time people know how it works but
+    have just forgotten a prototype or variable name.)
+
+ *  Name
+ *  Ancestors in widget hierarchy, with hyperlinks and set out like Java docs.
+    Short description.
+ ?  '#Include <gtk/gtkbutton.h>' line?
+ *  Index of functions, with prototypes, hyperlinks to descriptions below.
+ ?  Index of useful members of widget struct, hyperlinks to descriptions below.
+ *  Index of signals, with prototypes of signal handlers, and hyperlinks to
+        descriptions below.
+ *  Standard widget functions and macros, with hyperlinks.
+    Usage - example code covering common use of the widget, which may also use
+        ancestor's properties, e.g. gtk_misc_set_alignment (GTK_MISC (label)...
+ +  Full description of functions. Show parameters listed like Java docs?
+        A lot of the time there will just be one param - the widget itself.
+ +  Full description of struct members. Show how to access using macro?
+ +  Full description of signals.
+ +  Full description of standard functions and macros.
+    See Also section showing related widgets, mainly for the man pages.
+    
+    Could also be some structs or enums which are used by the widget, e.g.
+    the GtkTableChild/GtkPackerChild structs. Do we keep the enums separate?
+    Or put them with the widget if they are only relevant to that widget?
+
+    Include screenshots?
+
+ +  Include Args? - These still aren't fully supported, and they duplicate
+       the functionality already available, but should probably be included.
+
+
+Issues:
+
+    Some things have/will change between different GTK versions so we have to
+    show the changes somehow - a 'deprecated' icon/entity/label or possibly
+    show the version of GTK which each item was added to, e.g. a GTK 1.1 icon.
+    'Added in GTK 1.1', 'Deprecated in GTK 1.1', 'Not in GTK 1.1' ...
+
+    Cross-references - any time a widget class/type/enum appears there should
+        be a cross-reference (which will turn into a hyperlink for html).
+	But for man pages/printed docs we don't want 'See Also's everywhere.
+	Need to use an easy-to-remember naming scheme for ids - use
+	widget names, function names, enum names as much as possible.
+
+    Glib & GDK documentation - want this to be very similar, and we also need
+        to add cross-references to glib/gdk types and functions. But glib
+	documentation should also be separate?
+
+    For man page output we should include keywords or something to make it
+        easy to find the page with 'man -k' or similar.
+    For printed output we should also index all widgets, functions etc.,
+        so the pages can be found easily.
+    For the HTML version, we should create a database of entry points -
+        widgets, functions, declarations, so that an IDE can easily open up
+	the GTK documentation at a relevant page. e.g. If you move the mouse
+	over a widget in the palette and press F1 it shows the page about
+	the widget.
+
+
+GLib Reference
+==============
+
+Sections:
+    Intro - glib_major_version.
+    Types - gint, gchar, TRUE, FALSE.
+    Type conversion macros - GPOINTER_TO_INT.
+    Limits - G_MINFLOAT etc.
+    Macros - MIN, MAX, ABS, CLAMP, G_ENUM, G_STMT_START, G_GNUC_PRINTF,
+	     G_GNUC_FUNCTION, ATEXIT.
+    Memory allocation - g_new, g_new0, g_malloc, g_mem_chunk_create,
+		        g_chunk_new.
+    Warnings/assertions - g_assert, g_return_if_fail, g_error, g_warning.
+    Timers.
+    String utility functions.
+    Utility functions - g_get_user_name, g_get_home_dir, g_snprintf.
+    Scanner.
+    Modules.
+    Completion.
+
+  Data structures:
+    Doubly-linked lists.
+    Singly-linked lists.
+    Hash tables & hash functions - beware of adding pointers to
+        dynamically-allocated memory! - it may never be freed.
+    Caches.
+    Trees.
+    Strings.
+    String chunks.
+    Resizable arrays.
+    Resizable pointer arrays.
+    Byte arrays.
+    Quarks ??
+    Datasets.
+    Relation & Tuples.
+
+
+
+Reference Material
+==================
+
+GTK Specific Stuff:
+
+    GTK info pages
+	- a number of widgets & functions are documented, as well as some more
+	  general GTK programming topics, e.g. signals, object data.
+
+    GTK tutorial
+	- has descriptions of many widgets.
+
+    Shawn Admundson's example man page
+        - nice structure, includes brief reference material at top and more
+	  detailed descriptions below which is good (like Java docs). Also
+	  has a 'Usage' section which describes common usage.
+	  Doesn't include GTK Args, or useful members of the widget struct.
+
+    gtk+/gtk/testgtk gtk+/examples
+	- lots of example code.
+
+
+Documentation of other languages/toolkits:
+
+    Gnome's DocBook documentation.
+        - gnome-libs/gnome-hello has a basic DocBook document.
+	- perl script in gnome-libs/devel-docs/gdoc - what does it do??
+	- gnome-libs/devel-docs/gnome-dev-info.sgml has lots of stuff:
+	    uses '<!entity libgnome SYSTEM ...' to include other docs.
+	    pinch the bookinfo & license stuff.
+	    has tags: 'screenshot', 'graphic', 'ulink', 'email'
+	    '<programlisting role="C">', 'literal', 'prompt', 'userinput'
+	    'function', 'funcsynopsis', 'funcdef' 'paramdef', 'parameter'
+
+    Java documentation
+        - has a very nice structure and nice graphics to make it more
+	  attractive, cross-references, describes every function param.
+
+    QT documentation
+        - nice structure, screenshots, cross-references.
+
+    man manual page
+        - we want to output man pages, so we should try to keep close to
+	  the standard parts etc. (Use section 3 - library functions)
+	  From man man page:
+	  'They may be labelled NAME, SYNOPSIS, DESCRIPTION, OPTIONS,
+          FILES, SEE ALSO, BUGS, and AUTHOR.'
+	  see man (7) for the troff macros available (on Linux anyway).

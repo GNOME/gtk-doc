@@ -1,0 +1,174 @@
+Tools
+=====
+
+* gtkdoc-scan
+
+  Scan a set of header files for declarations.
+
+  Usage: gtkdoc-scan --module=MODULE [--output-dir=DIR] FILES
+
+* gtkdoc-scanobj
+
+  Compile a C program to get information about GTK+ objects.
+
+  Usage: gtkdoc-scan --module=MODULE
+
+* gtkdoc-mktmpl
+
+  Make template files from declaration files
+
+  Usage: gtkdoc-mkhtml --module=MODULE
+
+* gtkdoc-mkdb
+
+  Make DocBook output from declaration files and template files.
+
+  Usage: gtkdoc-mkdb --module=MODULE
+
+* gtkdoc-mkhtml
+
+  Usage: gtkdoc-mkhtml MODULE DRIVER_FILE
+
+* gtkdoc-mkman
+
+  Usage: gtkdoc-mkman 
+
+General
+=======
+
+The files to edit manually are in the gtkdocs directory, and are split into 3
+subdirectories for glib, gdk and gtk.
+
+You may find useful information in the GTK tutorial, or the info documentation.
+
+
+You must use &lt; or &gt; instead of '<' and '>'.
+
+The first part of each function/macro/struct etc. description should be
+a very short summary of what it is. This may be used at some point to
+produce a short reference guide which can be printed out.
+
+For macros which return a value just like a function, you must manually
+add a '@Returns: ' field.
+
+You may want to rearrange the functions/macros etc. to split them into
+related sections. To do this rearrange the scan-gtk-perl/gXXX-sections.txt
+files. You can also add <SUBSECTION> between functions. Currently this just
+results in a blank line between them in the synopsis.
+
+
+Abbreviations
+=============
+
+These are expanded into appropriate DocBook tags, saving a lot of typing.
+I've used the Gnome ones (see gnome.txt) but also added '#'.
+
+  Use function() to refer to functions or macros which take arguments.
+
+  Use @param to refer to parameters. (I've also used this when referring to
+  parameters of other functions, related to the one being described.)
+
+  Use %constant to refer to a constant, e.g. %G_TRAVERSE_LEAFS.
+
+  Use #symbol to refer to other types of symbol, e.g. structs and enums
+    and macros which don't take arguments.
+
+
+
+Useful DocBook Tags
+===================
+
+These are the DocBook tags which I have used or I think could be useful.
+Let me know if I'm doing something wrong!
+
+
+To link to another section in the GTK docs:
+
+    <link linkend="glib-Hash-Tables">Hash Tables</link>
+
+  The linkend is the SGML id on the top item of the page you want to link to.
+  For most pages this is currently the part ("gtk", "gdk", glib") and then
+  the page title ("Hash Tables"). For widgets it is just the class name.
+  Spaces and underscores are converted to '-' to conform to SGML.
+
+
+To refer to an external function, e.g. a standard C function:
+
+    <function>...</function> 
+
+
+To include example code:
+
+    <example>
+    <title>Using a Hash Table</title>
+    <programlisting>
+      ...
+    </programlisting>
+    </example>
+
+  or possibly:
+
+    <informalexample>
+    <programlisting>
+      ...
+    </programlisting>
+    </informalexample>
+
+
+To include bulleted lists:
+
+    <itemizedlist>
+    <listitem><para>
+      ...
+    </para></listitem>
+    <listitem><para>
+      ...
+    </para></listitem>
+      ....
+    </itemizedlist>
+
+
+To include a note which stands out from the text:
+
+    <note>
+    <para>
+      Make sure you free the data after use.
+    </para>
+    </note>
+
+To refer to a type:
+
+    <type>unsigned char</type>
+
+
+To refer to an external structure (not one described in the GTK docs):
+
+    <structname>XFontStruct</structname>
+
+
+To refer to a field of a structure:
+
+    <structfield>len</structfield>
+
+
+To refer to a class name, we could possibly use:
+
+    <classname>GtkWidget</classname>
+
+  but you'll probably be using #GtkWidget instead (to automatically create
+  a link to the GtkWidget page - see the abbreviations above).
+
+
+To emphasize text:
+
+    <emphasis>This is important</emphasis>
+
+  but I haven't been using it so far.
+
+
+For filenames use:
+
+    <filename>c:\windows</filename>
+
+
+Also, <screenshot>, <option>, 

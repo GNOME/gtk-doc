@@ -1,0 +1,52 @@
+dnl Process this file with autoconf to produce a configure script.
+
+AC_INIT(gtk-doc.dtd)
+
+AM_INIT_AUTOMAKE(gtk-doc, 0.1)
+
+AC_ARG_WITH(dsssl-dir, [  --with-dsssl-dir=PATH path to DocBook style sheets ])
+
+AC_ISC_POSIX
+AC_PROG_CC
+
+if test "x$with_dsssl_dir" = "x" ; then
+  dirs="/usr/lib/sgml/stylesheets/nwalsh-modular /usr/lib/dsssl/stylesheets/docbook"
+else
+  dirs=$with_dsssl_dir
+fi
+
+AC_MSG_CHECKING([for DocBook stylesheets])
+
+DSSSL_DIR=""
+for i in $dirs ; do
+  if test -f $i/html/docbook.dsl ; then
+    DSSSL_DIR=$i
+  fi
+done
+
+if test "x$DSSSL_DIR" = x ; then
+  AC_MSG_ERROR([
+*** Cannot find DocBook stylesheets in "$dirs". 
+*** Perhaps you need to specify the --with-dsssl-dir=PATH option?])
+fi
+
+AC_SUBST(DSSSL_DIR)
+
+AC_MSG_RESULT(found)
+
+dnl GTK 1.0.2 is needed for g_strdown(), GPOINTER_TO_INT macros, and
+dnl the header file <gtk/features.h> which gives us the GTK version.
+AM_PATH_GTK(1.0.2,
+  	    [LIBS="$LIBS $GTK_LIBS"
+            CFLAGS="$CFLAGS $GTK_CFLAGS"],
+            AC_MSG_ERROR(Cannot find GTK: Is gtk-config in path?))
+
+dnl Only use -Wall if we have gcc
+if test "x$GCC" = "xyes"; then
+  if test -z "`echo "$CFLAGS" | grep "\-Wall" 2> /dev/null`" ; then
+    CFLAGS="$CFLAGS -Wall"
+  fi
+fi
+
+AC_OUTPUT([Makefile gtk-doc.dsl gtkdoc-mkman gtkdoc-mkhtml gtkdoc-install],
+[chmod +x gtkdoc-mkman gtkdoc-mkhtml])
