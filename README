@@ -10,8 +10,8 @@ Note that GTK-Doc wasn't originally intended to be a general-purpose
 documentation tool, so it can be a bit awkward to setup and use.
 For a more polished general-purpose documentation tool you may want to look
 at Doxygen (http://www.doxygen.org/). However GTK-Doc has some special code
-to document the signals and properties of GTK+ widgets which other tools may
-not have.
+to document the signals and properties of GTK+ widgets and GObject classes
+which other tools may not have.
 
 GTK-Doc allows your documentation to be written in 2 ways:
   a) Embedded inside the source code in specially-formatted comments.
@@ -19,9 +19,15 @@ GTK-Doc allows your documentation to be written in 2 ways:
   b) Added to the 'template' files which gtk-doc outputs after scanning all
      the header files and parsing the declarations.
 
-Note that currently the documentation describing each section can only be
+(Note that currently the documentation describing each section can only be
 added to the template files, though in future that will also be allowed within
-the source code.
+the source code.)
+
+From these source code comments and template files GTK-Doc generates a Docbook
+XML (or SGML) document, which is then transformed into HTML.
+The generated HTML documentation can be browsed in an ordinary web browser or
+by using the special Devhelp API browser
+(see http://www.imendio.com/projects/devhelp/).
 
 
 Requirements
