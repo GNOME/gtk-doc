@@ -1067,10 +1067,11 @@ sub OutputFunction {
     my $id = &CreateValidSGMLID ($symbol);
 
     # Take out the return type
-    $declaration =~ s/<RETURNS>\s*(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(\w+)\s*(\**)\s*<\/RETURNS>\n//;
+    $declaration =~ s/<RETURNS>\s*(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(\w+)\s*(((\s+const\s+|\s+G_CONST_RETURN\s+)?\*)*)\s*<\/RETURNS>\n//;
     my $type_modifier = defined($1) ? $1 : "";
     my $type = $2;
     my $pointer = $3;
+#   print "$symbol pointer is $pointer\n";
     my $xref = &MakeXRef ($type);
     my $start = "";
     if ($symbol_type eq 'USER_FUNCTION') {

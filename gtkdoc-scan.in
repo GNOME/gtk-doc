@@ -400,7 +400,7 @@ sub ScanHeader {
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-	    } elsif (m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
+	    } elsif (m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+)*\w+)(\s+(?:(?:const\s+|G_CONST_RETURN\s+)?\*\s*)+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
 		$ret_type = "$3 $5";
 		$symbol = $6;
 		$decl = $';

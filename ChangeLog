@@ -1,3 +1,10 @@
+Wed Sep  8 01:12:25 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-scan.in (ScanHeader): 
+	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mkdb.in (OutputFunction): Accept mixtures of *
+	and const in return types.
+
 Wed Sep 01 05:58:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in: Remove a debug printf
