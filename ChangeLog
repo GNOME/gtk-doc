@@ -1,3 +1,14 @@
+2003-01-15  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-scan.in (ScanHeader): Remove special cases for Pango and
+	Bonobo.
+	* gtkdoc-mkdb.in (OutputDeclaration): 
+	* gtkdoc-mktmpl.in (OutputDeclaration): Remove special cases for
+	structs named BlablaClass.  (#95398)
+
+	* gtkdoc-mkdb.in (GetInterfaces): Fix an off-by-one error.
+	(#103466, Josh Parsons)
+
 2002-12-28 Chema Celorio <chema@celorio.com>
 
 	* gtkdoc-scan[g]obj.in: add "void" to functions with no parameters,

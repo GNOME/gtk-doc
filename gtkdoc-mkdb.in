@@ -701,9 +701,6 @@ sub OutputStruct {
 	$is_widget_struct = 1;
 	$default_to_public = 0;
     }
-    if ($symbol =~ /^(\S+)Class/) {
-	$default_to_public = 0;
-    }
 
     my $id;
     if ($is_widget_struct) {
@@ -1634,7 +1631,7 @@ sub GetInterfaces {
 		push (@impls, $key);
 	    }
 	}
-	if ($#impls > 0) {
+	if ($#impls >= 0) {
 	    $title = "Implementations";
 	    $text = $object . " is implemented by ";
 	    for ($i = 0; $i <= $#impls; $i++) {

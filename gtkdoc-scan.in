@@ -480,8 +480,7 @@ sub ScanHeader {
 		    $symbol = $1;
 		}
 
-		if ($symbol =~ m/^(\S+)Class/
-                    && $1 ne 'GtkStyle' && $1 !~ /^(Pango|Bonobo)/) {
+		if ($symbol =~ m/^(\S+)Class/) {
 #		    print "Found object: $1\n";
 		    $list .= "<TITLE>$1</TITLE>\n";
 		    push (@objects, $1);
