@@ -1,3 +1,10 @@
+2001-08-04  Damon Chaplin  <damon@ximian.com>
+
+	* gtkdoc-mkdb.in (OutputFunction): 
+	* gtkdoc-mktmpl.in (OutputDeclaration): patch from Lowell Johnson
+	<ldjohn@usgs.gov> to accept things like "long long", "short int",
+	"char test[][CLEN]" as function parameters.
+
 2001-07-20  Anders Carlsson  <andersca@gnome.org>
 
 	* gtkdoc-scangobj.in: Remove argument to g_type_init ();
