@@ -144,7 +144,7 @@ sub ScanHeaders {
     # Now recursively scan the subdirectories.
     my $dir;
     foreach $dir (@subdirs) {
-	next if ($IGNORE_HEADERS =~ m/\b\Q${dir}\E\b/);
+	next if ($IGNORE_HEADERS =~ m/(\s|^)\Q${dir}\E(\s|$)/);
 	&ScanHeaders ("$source_dir/$dir", $object_list, $main_list);
     }
 }
@@ -198,7 +198,7 @@ sub ScanHeader {
     }
 
     # Check if the basename is in the list of headers to ignore.
-    if ($IGNORE_HEADERS =~ m/\b\Q${file_basename}\E\.h\b/) {
+    if ($IGNORE_HEADERS =~ m/(\s|^)\Q${file_basename}\E\.h(\s|$)/) {
 #	print "DEBUG: File ignored: $input_file\n";
 	return;
     }
