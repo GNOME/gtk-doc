@@ -1,3 +1,10 @@
+2002-01-18  Damon Chaplin  <damon@ximian.com>
+
+	* gtkdoc-mkdb.in (ScanSourceFile): patch from Matthias Clasen
+	<matthiasc@poet.de> to only strip first space after '*' in source
+	code comment blocks, so example code can be indented as desired.
+	Bug #68216.
+
 Wed Nov 21 16:50:35 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkdoc-mkdb,tmpl.in: Add some extra quoting to
