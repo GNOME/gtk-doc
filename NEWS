@@ -1,0 +1,16 @@
+
+GTK-Doc 0.10	(Nov 14 2002)
+============
+
+ o --output-format option to select whether SGML or XML is generated. 
+ o Use openjade or jade when converting SGML to HTML.
+ o Use xsltproc to convert XML to HTML, with a new look.
+ o In XML mode, support XIncludes as an alternative to entities.
+ o In XML mode, create .devhelp files. 
+ o List interfaces in the object hierarchy.
+ o Create docs for signals on interfaces.
+ o Generate links between interface and their implementations and
+   prerequisites.
+ o Create docs for child and style properties.
+ o Use blurbs for property documentation.
+ o Allow inline documentation for signals and properties. 

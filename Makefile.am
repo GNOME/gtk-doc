@@ -24,6 +24,7 @@ gtkdocdata_DATA = \
 	up.png
 
 EXTRA_DIST= \
+	MAINTAINERS	\
 	gtk-doc.spec.in	\
 	gtk-doc.dcl  	\
 	gtk-doc.xsl	\

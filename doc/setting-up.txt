@@ -12,7 +12,7 @@ This assumes that you are using autoconf & automake to build your package.
    e.g. 'myproject/docs/reference'.
 
 3. Copy examples/Makefile.am to this directory and edit the variables at
-   the top of the file.
+   the top of the file. (See the GTK+ source for an example.)
 
 4. Add the new Makefile to your configure.in's AC_OUTPUT call, and make sure
    all the SUBDIRS variables are set properly so the docs directory is built.
