@@ -49,8 +49,9 @@ GTKDOC_LIBS =
 GTKDOC_CC=$(LIBTOOL) --mode=compile $(CC)
 GTKDOC_LD=$(LIBTOOL) --mode=link $(CC)
 
-# If you need to override some of the declarations, place them in this file
-# and uncomment this line.
+# If you need to override some of the declarations, place them in the
+# $(DOC_MODULE)-overrides.txt file and uncomment the second line here.
+DOC_OVERRIDES =
 #DOC_OVERRIDES = $(DOC_MODULE)-overrides.txt
 
 

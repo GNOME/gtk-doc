@@ -1,3 +1,8 @@
+2001-10-02  Damon Chaplin  <damon@ximian.com>
+
+	* examples/Makefile.am (DOC_OVERRIDES): define as an empty string,
+	even when not used.
+
 2001-09-13  Damon Chaplin  <damon@ximian.com>
 
 	* gtkdoc-mkdb.in (OutputMissingDocumentation): initialize buffer to "".
