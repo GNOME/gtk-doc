@@ -64,15 +64,31 @@ my $MODULE;
 my $TMPL_DIR;
 my $FLAG_CHANGES;
 my $PRINT_VERSION;
+my $PRINT_HELP;
 
 my %optctl = (module => \$MODULE,
 	      'flag-changes' => \$FLAG_CHANGES,
 	      'output-dir' => \$TMPL_DIR,
-	      'version' => \$PRINT_VERSION);
-GetOptions(\%optctl, "module=s", "flag-changes!", "output-dir:s", "version");
+	      'version' => \$PRINT_VERSION,
+	      'help' => \$PRINT_HELP);
+GetOptions(\%optctl, "module=s", "flag-changes!", "output-dir:s", "version", "help");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
+    exit 0;
+}
+
+if (!$MODULE) {
+    $PRINT_HELP = 1;
+}
+
+if ($PRINT_HELP) {
+    print "gtkdoc-mktmpl version @VERSION@\n";
+    print "\n--module=MODULE_NAME Name of the doc module being parsed";
+    print "\n--flag-changes       If specified, changes in templates are flagged";
+    print "\n--output-dir=DIRNAME The directory where the results are stored";
+    print "\n--version            Print the version of this program";
+    print "\n--help               Print this help\n";
     exit 0;
 }
 

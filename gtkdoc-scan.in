@@ -50,6 +50,7 @@ my $OUTPUT_DIR;
 my @SOURCE_DIRS;
 my $IGNORE_HEADERS = "";
 my $PRINT_VERSION;
+my $PRINT_HELP;
 # regexp matching cpp symbols which surround deprecated stuff
 # e.g. 'GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED'
 # these are detected if they are used as #if FOO, #ifndef FOO, or #ifdef FOO
@@ -60,13 +61,30 @@ my %optctl = (module => \$MODULE,
 	      'ignore-headers' => \$IGNORE_HEADERS,
 	      'output-dir' => \$OUTPUT_DIR,
 	      'version' => \$PRINT_VERSION,
+	      'help' => \$PRINT_HELP,
               'deprecated-guards' => \$DEPRECATED_GUARDS);
 GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
-	   "output-dir:s", "version",
+	   "output-dir:s", "version", "help",
            "deprecated-guards:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
+    exit 0;
+}
+
+if (!$MODULE) {
+    $PRINT_HELP = 1;
+}
+
+if ($PRINT_HELP) {
+    print "gtkdoc-scan version @VERSION@\n";
+    print "\n--module=MODULE_NAME       Name of the doc module being parsed";
+    print "\n--source-dir=DIRNAME       Directories containing the source files to scan";
+    print "\n--ignore-headers=FILES     A space-separated list of header files not to scan";
+    print "\n--output-dir=DIRNAME       The directory where the results are stored";
+    print "\n--deprecated-guards=GUARDS A |-separated list of symbols used as deprecation guards";
+    print "\n--version                  Print the version of this program";
+    print "\n--help                     Print this help\n";
     exit 0;
 }
 
