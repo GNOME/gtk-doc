@@ -1,3 +1,9 @@
+2000-10-30  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtkdoc-mkdb.in (ParseStructDeclaration):
+	Stop scanning at '}' only when it starts a line.
+	* gtkdoc-mktmpl.in (ParseStructDeclaration): Likewise.
+	
 Mon Oct 30 02:59:54 2000  Tim Janik  <timj@gtk.org>
 
 	* gtkdoc-scangobj.in: use g_signal_list_ids().

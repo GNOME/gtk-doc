@@ -2119,9 +2119,10 @@ sub ParseStructDeclaration {
 			  (?:/\*\s*<\s*public\s*>\s*\*/|(?=\}))!$1!msgx;
     }
     
+    # Assume end of declaration if line begins with '}'
     $declaration =~ s!\n?[ \t]*/\*\s*<\s*private\s*>\s*\*/
 	              .*?
-		      (?:/\*\s*<\s*public\s*>\s*\*/|(?=\}))!!msgx;
+		      (?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
     
     # Remove all other comments;
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
