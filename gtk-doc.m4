@@ -30,7 +30,7 @@ AC_DEFUN([GTK_DOC_CHECK],
   fi
 
   dnl do we want to do a version check?
-ifelse([$1],[],,
+ifelse([$1],[],,
   [gtk_doc_min_version=$1
   if test "$have_gtk_doc" = yes; then
     AC_MSG_CHECKING([gtk-doc version >= $gtk_doc_min_version])
