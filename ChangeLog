@@ -1,3 +1,13 @@
+2002-01-23  Damon Chaplin  <damon@ximian.com>
+
+	* gtkdoc-scangobj.in: we now default to calling g_type_init() to
+	initialize the type system, rather than gtk_init(). This means you
+	don't need an X connection to build the docs any more. Hurrah!
+	Also added a '--type-init-func' argument so you can change the
+	function to be called. GTK+ uses --type-init-func="gtk_type_init(0)".
+
+	* gtkdoc-scan.in (ScanHeader): removed 'Found object' debug message.
+
 2002-01-18  Damon Chaplin  <damon@ximian.com>
 
 	* Released 0.8.
