@@ -2883,6 +2883,11 @@ EOF
 		for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
 		    my $tmpl_param_name = $$tmpl_params[$j];
 
+		    # Allow '...' as the Varargs parameter.
+                    if ($tmpl_param_name eq "...") {
+		      $tmpl_param_name = "Varargs";
+		    }
+
 		    # Try to find the param in the source comment documentation.
 		    my $found = 0;
 		    my $k;

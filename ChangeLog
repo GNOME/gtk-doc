@@ -1,3 +1,9 @@
+2005-02-07  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in (MergeSourceDocumentation): allow use of "@...:" in
+	the source code as well as "@Varargs:". Patch from Benjamin Otte.
+	#166366.
+
 2005-02-04  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (ParseStabilityLevel): don't reset $stability if it
