@@ -24,7 +24,7 @@
 # by compiling a small C program. CFLAGS and LDFLAGS must be
 # set appropriately before running this script.
 #
-# NOTE: the lookup_signal_srg_names() function contains the argument names of
+# NOTE: the lookup_signal_arg_names() function contains the argument names of
 #       standard GTK signal handlers. This may need to be updated for new
 #       GTK signals or Gnome widget signals.
 
@@ -130,12 +130,12 @@ static void output_widget_signals (FILE *fp,
 				   GType object_type);
 static void output_widget_signal (FILE *fp,
 				  GType object_type,
-				  gchar *object_class_name,
+				  const gchar *object_class_name,
 				  guint signal_id);
-static gchar * get_type_name (GType type,
-			      gboolean * is_pointer);
+static const gchar * get_type_name (GType type,
+			            gboolean * is_pointer);
 static gchar * get_gdk_event (const gchar * signal_name);
-static gchar ** lookup_signal_arg_names (gchar * type,
+static gchar ** lookup_signal_arg_names (const gchar * type,
 					 const gchar * signal_name);
 
 static void output_widget_hierarchy ();
@@ -153,7 +153,7 @@ EOT
 
   if ($NO_GTK_INIT) {
     print OUTPUT <<EOT;
-  gtk_type_init ();
+  g_type_init (G_TYPE_DEBUG_NONE);
 EOT
   } else {
     print OUTPUT <<EOT;
@@ -204,7 +204,7 @@ compare_signals (const void *a, const void *b)
 static void
 output_widget_signals (FILE *fp, GType object_type)
 {
-  gchar *object_class_name;
+  const gchar *object_class_name;
   guint *signals, n_signals;
   guint sig;
 
@@ -226,11 +226,12 @@ output_widget_signals (FILE *fp, GType object_type)
 static void
 output_widget_signal (FILE *fp,
 		      GType object_type,
-		      gchar *object_name,
+		      const gchar *object_name,
 		      guint signal_id)
 {
   GSignalQuery query_info;
-  gchar *ret_type, *pos, *type_name, *arg_name, *object_arg, *object_arg_start;
+  const gchar *type_name, *ret_type, *object_arg;
+  gchar *pos, *arg_name, *object_arg_start;
   gboolean is_pointer;
   gchar ret_type_buffer[1024], buffer[1024];
   gint i, param;
@@ -346,48 +347,42 @@ output_widget_signal (FILE *fp,
 /* Returns the type name to use for a signal argument or return value, given
    the GtkType from the signal info. It also sets is_pointer to TRUE if the
    argument needs a '*' since it is a pointer. */
-static gchar *
-get_type_name (GtkType type, gboolean * is_pointer)
+static const gchar *
+get_type_name (GType type, gboolean * is_pointer)
 {
-  gchar *type_name;
+  const gchar *type_name;
 
   *is_pointer = FALSE;
-  type_name = gtk_type_name (type);
+  type_name = g_type_name (type);
 
   switch (type) {
-  case GTK_TYPE_NONE:
-  case GTK_TYPE_CHAR:
-  case GTK_TYPE_UCHAR:
-  case GTK_TYPE_BOOL:
-  case GTK_TYPE_INT:
-  case GTK_TYPE_UINT:
-  case GTK_TYPE_LONG:
-  case GTK_TYPE_ULONG:
-  case GTK_TYPE_FLOAT:
-  case GTK_TYPE_DOUBLE:
-  case GTK_TYPE_POINTER:
+  case G_TYPE_NONE:
+  case G_TYPE_CHAR:
+  case G_TYPE_UCHAR:
+  case G_TYPE_BOOLEAN:
+  case G_TYPE_INT:
+  case G_TYPE_UINT:
+  case G_TYPE_LONG:
+  case G_TYPE_ULONG:
+  case G_TYPE_FLOAT:
+  case G_TYPE_DOUBLE:
+  case G_TYPE_POINTER:
     /* These all have normal C type names so they are OK. */
     return type_name;
 
-  case GTK_TYPE_STRING:
+  case G_TYPE_STRING:
     /* A GtkString is really a gchar*. */
     *is_pointer = TRUE;
     return "gchar";
 
-  case GTK_TYPE_ENUM:
-  case GTK_TYPE_FLAGS:
+  case G_TYPE_ENUM:
+  case G_TYPE_FLAGS:
     /* We use a gint for both of these. Hopefully a subtype with a decent
        name will be registered and used instead, as GTK+ does itself. */
     return "gint";
 
-  case GTK_TYPE_BOXED:
+  case G_TYPE_BOXED:
     /* A boxed value is just an opaque pointer, I think. */
-    return "gpointer";
-
-  case GTK_TYPE_SIGNAL:
-    /* FIXME: These are wrong. I think they expand into more than 1 argument.
-       See the GtkArg struct in gtktypeutils.h and gtkargcollector.c.
-       Fortunately I doubt anything uses these as signal args. */
     return "gpointer";
 
   default:
@@ -396,7 +391,7 @@ get_type_name (GtkType type, gboolean * is_pointer)
 
   /* For all GtkObject subclasses we can use the class name with a "*",
      e.g. 'GtkWidget *'. */
-  if (gtk_type_is_a (type, GTK_TYPE_OBJECT))
+  if (g_type_is_a (type, G_TYPE_OBJECT))
     *is_pointer = TRUE;
 
   return type_name;
@@ -457,7 +452,7 @@ get_gdk_event (const gchar * signal_name)
     'select_row' and it returns a pointer to an array of argument types and
     names. */
 static gchar **
-lookup_signal_arg_names (gchar * type, const gchar * signal_name)
+lookup_signal_arg_names (const gchar * type, const gchar * signal_name)
 {
   /* Each arg array starts with the object type name and the signal name,
      and then signal arguments follow. */
@@ -690,7 +685,7 @@ output_widget_hierarchy ()
       g_warning ("Couldn't open output file: %s", hierarchy_filename);
       return;
     }
-  output_hierarchy (fp, GTK_TYPE_OBJECT, 0);
+  output_hierarchy (fp, G_TYPE_OBJECT, 0);
   fclose (fp);
 }
 
@@ -746,7 +741,7 @@ static void
 output_widget_args (FILE *fp, GType object_type)
 {
   GObjectClass *class;
-  gchar *object_class_name;
+  const gchar *object_class_name;
   gint arg;
   gchar flags[16], *pos;
 
@@ -770,7 +765,7 @@ output_widget_args (FILE *fp, GType object_type)
 	*pos++ = 'x';
       if (spec->flags & G_PARAM_CONSTRUCT_ONLY)
 	*pos++ = 'X';
-      *pos = '\0';
+      *pos = '\\000';
 
       fprintf (fp, "<ARG>\n<NAME>%s::%s</NAME>\n<TYPE>%s</TYPE>\n<FLAGS>%s</FLAGS>\n</ARG>\n\n",
 	       object_class_name, spec->name, g_type_name (spec->value_type), flags);
