@@ -1,3 +1,22 @@
+2000-12-10  Damon Chaplin  <damon@helixcode.com>
+
+	* gtk-doc.spec.in: added spec.in file from John Gotts
+	<jgotts@linuxsavvy.com>.
+
+	* configure.in (AC_OUTPUT): added spec file.
+
+	* Makefile.am: uncommented spec file stuff, now that we have one.
+
+	* gtkdoc-scanobj.in (get_type_name): 
+	* gtkdoc-scangobj.in (get_type_name): updated to use the type numbers
+	rather than the type names, which were changed in GTK+ 1.2. This
+	should fix a problem where GTK_TYPE_STRING arguments were output as
+	'GtkString *arg' instead of 'gchar *arg'.
+
+	I'm still not sure what to output for the structured types such as
+	GTK_TYPE_SIGNAL/ARGS/FOREIGN/CALLBACK/C_CALLBACK. Should these be
+	expanded to several arguments to the signal handler?
+
 2000-11-25  Dan Mueth <d-mueth@uchicago.edu>
 
 	* help/manual/C/: created this path

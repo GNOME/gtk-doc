@@ -325,62 +325,60 @@ output_widget_signal (FILE *fp,
 }
 
 
+/* Returns the type name to use for a signal argument or return value, given
+   the GtkType from the signal info. It also sets is_pointer to TRUE if the
+   argument needs a '*' since it is a pointer. */
 static gchar *
-get_type_name (GType type, gboolean * is_pointer)
+get_type_name (GtkType type, gboolean * is_pointer)
 {
-  static gchar *GbTypeNames[] =
-  {
-    "char", "gchar",
-    "bool", "gboolean",
-    "int", "gint",
-    "uint", "guint",
-    "long", "glong",
-    "ulong", "gulong",
-    "float", "gfloat",
-    "double", "gdouble",
-    "string", "gchar",
-    "enum", "gint",
-    "flags", "gint",
-    "boxed", "gpointer",
-    "foreign", "gpointer",
-    "callback", "GtkCallback",	/* ?? */
-    "args", "gpointer",
-
-    "pointer", "gpointer",
-    "signal", "gpointer",
-    "c_callback", "GtkCallback",	/* ?? */
-
-    NULL
-  };
-
-  GType parent_type;
-  gchar *type_name, *parent_type_name;
-  gint i;
+  gchar *type_name;
 
   *is_pointer = FALSE;
-  type_name = g_type_name (type);
-  for (i = 0; GbTypeNames[i]; i += 2)
-    {
-      if (!strcmp (type_name, GbTypeNames[i]))
-	{
-	  if (!strcmp (type_name, "string"))
-	    *is_pointer = TRUE;
-	  return GbTypeNames[i + 1];
-	}
-    }
+  type_name = gtk_type_name (type);
 
-  for (;;)
-    {
-      parent_type = g_type_parent (type);
-      if (parent_type == 0)
-	break;
-      type = parent_type;
-    }
-  parent_type_name = g_type_name (type);
-  /*g_print ("Parent type name: %s\n", parent_type_name);*/
-  if (!strcmp (parent_type_name, "GtkObject")
-      || !strcmp (parent_type_name, "boxed")
-      || !strcmp (parent_type_name, "GtkBoxed"))
+  switch (type) {
+  case GTK_TYPE_NONE:
+  case GTK_TYPE_CHAR:
+  case GTK_TYPE_UCHAR:
+  case GTK_TYPE_BOOL:
+  case GTK_TYPE_INT:
+  case GTK_TYPE_UINT:
+  case GTK_TYPE_LONG:
+  case GTK_TYPE_ULONG:
+  case GTK_TYPE_FLOAT:
+  case GTK_TYPE_DOUBLE:
+  case GTK_TYPE_POINTER:
+    /* These all have normal C type names so they are OK. */
+    return type_name;
+
+  case GTK_TYPE_STRING:
+    /* A GtkString is really a gchar*. */
+    *is_pointer = TRUE;
+    return "gchar";
+
+  case GTK_TYPE_ENUM:
+  case GTK_TYPE_FLAGS:
+    /* We use a gint for both of these. Hopefully a subclass with a decent
+       name will be registered and used instead, as GTK+ does itself. */
+    return "gint";
+
+  case GTK_TYPE_BOXED:
+    /* A boxed value is just an opaque pointer, I think. */
+    return "gpointer";
+
+  case GTK_TYPE_SIGNAL:
+  case GTK_TYPE_ARGS:
+  case GTK_TYPE_FOREIGN:
+  case GTK_TYPE_CALLBACK:
+  case GTK_TYPE_C_CALLBACK:
+    /* FIXME: These are wrong. I think they expand into more than 1 argument.
+       See the GtkArg struct in gtktypeutils.h and gtkargcollector.c.
+       Fortunately I doubt anything uses these as signal args. */
+    return "gpointer";
+
+  /* For all GtkObject subclasses we can use the class name with a "*",
+     e.g. 'GtkWidget *'. */
+  if (gtk_type_is_a (type, GTK_TYPE_OBJECT))
     *is_pointer = TRUE;
 
   return type_name;

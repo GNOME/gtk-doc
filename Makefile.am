@@ -14,7 +14,7 @@ gtkdocdatadir = $(datadir)/gtk-doc
 gtkdocdata_DATA = \
         gtk-doc.dsl
 
-#EXTRA_DIST=gtk-doc.spec.in
+EXTRA_DIST=gtk-doc.spec.in
 
 dist-hook:
 	mkdir $(distdir)/doc
@@ -26,4 +26,4 @@ dist-hook:
 	mkdir $(distdir)/examples
 	cp -pr $(srcdir)/examples/* $(distdir)/examples
 	rm -rf $(distdir)/examples/CVS $(distdir)/examples/gnome/CVS $(distdir)/examples/gnomeui/CVS
-#	cp gtk-doc.spec $(distdir)
+	cp gtk-doc.spec $(distdir)
