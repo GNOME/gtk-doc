@@ -113,18 +113,18 @@ maintainer-clean-local: clean
 	cd $(srcdir) && rm -rf xml html $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
 
 install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(TARGET_DIR)
-	(installfiles=`echo $(srcdir)/html/*`; \
+	installfiles=`echo $(srcdir)/html/*`; \
 	if test "$$installfiles" = '$(srcdir)/html/*'; \
 	then echo '-- Nothing to install' ; \
 	else \
+	  $(mkinstalldirs) $(DESTDIR)$(TARGET_DIR); \
 	  for i in $$installfiles; do \
 	    echo '-- Installing '$$i ; \
 	    $(INSTALL_DATA) $$i $(DESTDIR)$(TARGET_DIR); \
 	  done; \
 	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
 	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR) || :; \
-	fi)
+	fi
 
 uninstall-local:
 	rm -f $(DESTDIR)$(TARGET_DIR)/*
