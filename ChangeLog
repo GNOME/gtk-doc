@@ -1,3 +1,26 @@
+2001-05-19  Damon Chaplin  <damon@ximian.com>
+
+	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mkdb.in (OutputFunction): changed a '?' to a '*' so we accept
+	multi-dimensional array function parameters. Patch from Paolo Casarini
+	<casarini@CS.UniBO.IT>
+
+2001-05-12  Damon Chaplin  <damon@ximian.com>
+
+	* gtkdoc-scangobj.in: 
+	* gtkdoc-scanobj.in: used "*pos = 0" to avoid problems with backslashes
+	in '\0'.
+
+	* configure.in: removed dsssl dirs stuff, since we use public entities
+	now.
+
+	* gtkdoc-mkdb.in (OutputBook): if there is no main SGML file we create
+	it here. Also added a --main-sgml-file option so we know where to put
+	it.
+
+	* gtkdoc-scan.in: if there is no MODULE-sections.txt file, we copy
+	the MODULE-decl-list.txt file to it. The user can tweak it later.
+
 2001-05-11  Damon Chaplin  <damon@ximian.com>
 
 	* gtk-doc.spec.in: applied patch from Toshio Kuratomi
@@ -37,7 +60,8 @@ Thu Apr 12 17:57:12 2001  Owen Taylor  <otaylor@redhat.com>
 2001-03-26  Damon Chaplin  <damon@ximian.com>
 
 	* gtkdoc-mkdb.in (ReadSourceDocumentation): scan .h files as well,
-	so macros can be documented there if desired.
+	so macros can be documented there if desired. Patch from
+	Yoann Vandoorselaere <yoann@mandrakesoft.com>
 
 	* gtkdoc-mkhtml.in (gtkdocdir): use 'test -f' rather than 'test -e'
 	which is GNU-specific.

@@ -768,7 +768,7 @@ output_widget_args (FILE *fp, GType object_type)
 	*pos++ = 'x';
       if (spec->flags & G_PARAM_CONSTRUCT_ONLY)
 	*pos++ = 'X';
-      *pos = '\\000';
+      *pos = 0;
 
       fprintf (fp, "<ARG>\n<NAME>%s::%s</NAME>\n<TYPE>%s</TYPE>\n<FLAGS>%s</FLAGS>\n</ARG>\n\n",
 	       object_class_name, spec->name, g_type_name (spec->value_type), flags);

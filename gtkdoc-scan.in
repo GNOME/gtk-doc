@@ -108,6 +108,13 @@ close (DECL);
 &UpdateFileIfChanged ($old_decl_list, $new_decl_list, 1);
 &UpdateFileIfChanged ($old_decl, $new_decl, 1);
 
+# If there is no MODULE-sections.txt file yet, we copy the MODULE-decl-list.txt
+# file into its place. The user can tweak it later if they want.
+my $sections_file = "${OUTPUT_DIR}/$MODULE-sections.txt";
+if (! -e $sections_file) {
+  `cp $old_decl_list $sections_file`;
+}
+
 
 
 #############################################################################

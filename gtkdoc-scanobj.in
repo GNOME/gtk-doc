@@ -780,7 +780,7 @@ output_widget_args (FILE *fp, GtkType object_type)
 	*pos++ = 'X';
       if (arg_flags[arg] & GTK_ARG_CHILD_ARG)
 	*pos++ = 'c';
-      *pos = '\0';
+      *pos = 0;
 
       fprintf (fp, "<ARG>\n<NAME>%s</NAME>\n<TYPE>%s</TYPE>\n<FLAGS>%s</FLAGS>\n</ARG>\n\n",
 	       args[arg].name, gtk_type_name (args[arg].type), flags);

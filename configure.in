@@ -7,12 +7,7 @@ AM_INIT_AUTOMAKE(gtk-doc, 0.6)
 AC_ISC_POSIX
 AC_PROG_CC
 
-if test "x$with_dsssl_dir" = "x" ; then
-  dirs="/usr/lib/sgml/stylesheets/nwalsh-modular /usr/lib/sgml/stylesheet/dsssl/docbook/nwalsh /usr/lib/dsssl/stylesheets/docbook /usr/share/sgml/docbkdsl"
-else
-  dirs=$with_dsssl_dir
-fi
- 
+
 AC_PATH_PROG(PERL, perl)
 if test -z "$PERL"; then
    AC_MSG_ERROR([perl not found])
@@ -39,6 +34,7 @@ if test "x$GCC" = "xyes"; then
     CFLAGS="$CFLAGS -Wall"
   fi
 fi
+
 
 AC_OUTPUT([Makefile 
 gtk-doc.dsl 

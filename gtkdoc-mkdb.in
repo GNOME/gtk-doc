@@ -44,14 +44,16 @@ my $SGML_OUTPUT_DIR;
 my @SOURCE_DIRS;
 my $PRINT_VERSION;
 my $OUTPUT_ALL_SYMBOLS;
+my $MAIN_SGML_FILE;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
 	      'output-dir' => \$SGML_OUTPUT_DIR,
 	      'tmpl-dir' => \$TMPL_DIR,
 	      'version' => \$PRINT_VERSION,
-				'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS);
-GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols");
+	      'main-sgml-file' => \$MAIN_SGML_FILE,
+	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS);
+GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -823,7 +825,7 @@ sub OutputFunction {
 	    }
 
 	    # allow alphanumerics, '_', '[' & ']' in param names
-	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*(\[\d*\])?\s*[,\n]//) {
+	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*(\[\d*\])*\s*[,\n]//) {
 	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
@@ -1126,6 +1128,39 @@ sub OutputBook {
     close (OUTPUT);
 
     &UpdateFileIfChanged ($old_file, $new_file, 0);
+
+
+    # If the main SGML file hasn't been created yet, we create it here.
+    # The user can tweak it later.
+    if ($MAIN_SGML_FILE && ! -e $MAIN_SGML_FILE) {
+      open (OUTPUT, ">$MAIN_SGML_FILE")
+	|| die "Can't create $MAIN_SGML_FILE";
+
+      print OUTPUT <<EOF;
+<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+EOF
+
+      print OUTPUT $book_top;
+
+      print OUTPUT <<EOF;
+]>
+<book id="index">
+  <bookinfo>
+    <title>[Insert name here] Reference Manual</title>
+  </bookinfo>
+
+  <chapter>
+    <title>[Insert title here]</title>
+EOF
+      print OUTPUT $book_bottom;
+
+      print OUTPUT <<EOF;
+  </chapter>
+</book>
+EOF
+
+      close (OUTPUT);
+    }
 }
 
 
