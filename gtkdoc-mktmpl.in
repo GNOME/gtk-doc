@@ -997,7 +997,7 @@ sub ReadTemplateFile {
 
 	} else {
 	    # Check if param found
-	    if (s/^\@(\S+):\s*//) {
+	    if (s/^\@(\S+):\040?//) {
 		my $param_name = $1;
 		# Allow variations of 'Returns'
 		if ($param_name =~ m/^[Rr]eturns?$/) {
@@ -1191,7 +1191,7 @@ sub ParseStructDeclaration {
     }
     
     # Assume end of declaration if line begins with '}'
-    $declaration =~ s!\n?[ \t]*/\*\s*<\s*private\s*>\s*\*/
+    $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/
 	              .*?
 		      (?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
     

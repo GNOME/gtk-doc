@@ -457,7 +457,7 @@ sub OutputStruct {
 #	    print "Struct line: $decl_line\n";
 	    if ($decl_line =~ m%/\*\s*<\s*public\s*>\s*\*/%) {
 		$public = 1;
-	    } elsif ($decl_line =~ m%/\*\s*<\s*private\s*>\s*\*/%) {
+	    } elsif ($decl_line =~ m%/\*\s*<\s*(private|protected)\s*>\s*\*/%) {
 		$public = 0;
 	    } elsif ($public) {
 		$new_declaration .= $decl_line . "\n";
@@ -1919,7 +1919,7 @@ sub ReadTemplateFile {
 
 	} else {
 	    # Check if param found
-	    if (s/^\@(\S+):\s*//) {
+	    if (s/^\@(\S+):\040?//) {
 		my $param_name = $1;
 		# Allow variations of 'Returns'
 		if ($param_name =~ m/^[Rr]eturns?$/) {
@@ -2120,7 +2120,7 @@ sub ParseStructDeclaration {
     }
     
     # Assume end of declaration if line begins with '}'
-    $declaration =~ s!\n?[ \t]*/\*\s*<\s*private\s*>\s*\*/
+    $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/
 	              .*?
 		      (?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
     

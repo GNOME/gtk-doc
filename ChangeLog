@@ -1,3 +1,20 @@
+Fri Nov  3 07:21:34 2000  Tim Janik  <timj@gtk.org>
+
+	* gtkdoc-mkdb.in:
+	(ParseStructDeclaration):
+	(OutputStruct):
+	* gtkdoc-mktmpl.in:
+	(ParseStructDeclaration):
+	support /*<protected>*/ equivalently to /*<private>*/
+
+Fri Nov  3 07:15:58 2000  Tim Janik  <timj@gtk.org>
+
+	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mkdb.in:
+	(ReadTemplateFile): only eat up the first space (if at all
+	present) after "@param:" to preserve indentation for multiline
+	parameter descriptions.
+
 2000-10-30  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* gtkdoc-mkdb.in (ParseStructDeclaration):
