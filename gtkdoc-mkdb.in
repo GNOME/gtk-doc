@@ -547,9 +547,9 @@ EOF
 
     &OutputMissingDocumentation;
 
-		if ($OUTPUT_ALL_SYMBOLS) {
-			 &OutputAllSymbols;
-		}
+    if ($OUTPUT_ALL_SYMBOLS) {
+	&OutputAllSymbols;
+    }
 
     &OutputBook ($book_top, $book_bottom);
 
@@ -710,7 +710,6 @@ sub OutputStruct {
     }
     my $synop = "struct      <link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}struct $symbol</title>\n";
-
     # Form a pretty-printed, private-data-removed form of the declaration
 
     my $decl_out;
@@ -1778,8 +1777,12 @@ sub GetSignals {
 	    $synop .= "$xref user_data);\n";
 	    $desc  .= "$xref user_data);</programlisting>\n";
 
+	    $AllSymbols{$symbol} = 1;
 	    if (defined ($SymbolDocs{$symbol})) {
 	        $desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+		if (!IsEmptyDoc($SymbolDocs{$symbol})) {
+		    $AllDocumentedSymbols{$symbol} = 1;
+		}
 	    }
 
 	    $desc .= &OutputParamDescriptions ("SIGNAL", $symbol);
@@ -1849,12 +1852,17 @@ sub GetArgs {
 		$flags_string .= "Construct Only";
 	    }
 
+	    $AllSymbols{$symbol} = 1;
 	    my $blurb;
-	    if ((defined($SymbolDocs{$symbol})) &&
-	       !($SymbolDocs{$symbol} =~ "<para>\n(FIXME)?\n</para>")) {
+	    if (defined($SymbolDocs{$symbol}) &&
+		!IsEmptyDoc($SymbolDocs{$symbol})) {
 		$blurb = &ExpandAbbreviations($SymbolDocs{$symbol});
+		$AllDocumentedSymbols{$symbol} = 1;
 	    }
 	    else {
+		if (!($ArgBlurbs[$i] eq "")) {
+		    $AllDocumentedSymbols{$symbol} = 1;
+		}
 		$blurb = "<para>" . &CreateValidSGML ($ArgBlurbs[$i]) . "</para>";
 	    }
 	    my $pad1 = " " x (20 - length ($name));
@@ -2181,21 +2189,21 @@ sub OutputMissingDocumentation {
      my $msg;
      my $buffer = "";
      my $buffer2 = "";
-	
+
      open (UNDOCUMENTED, ">$ROOT_DIR/$MODULE-undocumented.txt")
           || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt";
 
      foreach $symbol (sort (keys (%AllSymbols))) {
-          if (defined ($Declarations{$symbol})) {
-	       $total++;
-	       if (exists ($AllDocumentedSymbols{$symbol})) {
-		 $n_documented++;
-	       } elsif (exists $Deprecated{$symbol}) {
-		   $buffer2 .= $symbol . "\n";
-	       }
-	       else {
-		   $buffer .= $symbol . "\n";
-	       }
+          if ($symbol !~ /:(Title|Long_Description|Short_Description|See_Also)/) {
+	      $total++;
+	      if (exists ($AllDocumentedSymbols{$symbol})) {
+		  $n_documented++;
+	      } elsif (exists $Deprecated{$symbol}) {
+		  $buffer2 .= $symbol . "\n";
+	      }
+	      else {
+		  $buffer .= $symbol . "\n";
+	      }
           }
      }
 
@@ -2359,12 +2367,22 @@ EOF
 	    }
 	} else {
 	    if ($have_tmpl_docs) {
-		$AllDocumentedSymbols{$symbol} = 1;		
+		$AllDocumentedSymbols{$symbol} = 1;
 	    }
 	}
    }
 }
 
+sub IsEmptyDoc {
+    my ($doc) = @_;
+
+    if ($doc =~ /^\s*<para>\s*(FIXME)?\s*<\/para>\s*$/) {
+	return 1;
+    }
+    else {
+	return 0;
+    }
+}
 
 #############################################################################
 # LIBRARY FUNCTIONS -	These functions are used in both gtkdoc-mkdb and
