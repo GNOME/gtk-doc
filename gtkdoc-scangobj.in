@@ -192,7 +192,7 @@ output_widget_signals (FILE *fp, GType object_type)
 
   object_class_name = g_type_name (object_type);
 
-  signals = g_type_signals (object_type, &n_signals);
+  signals = g_signal_list_ids (object_type, &n_signals);
   qsort (signals, n_signals, sizeof (guint), compare_signals);  	
 
   for (sig = 0; sig < n_signals; sig++)
