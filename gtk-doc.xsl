@@ -19,6 +19,9 @@
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
 
+  <!-- display variablelists as tables -->
+  <xsl:param name="variablelist.as.table" select="1"/>
+
   <!-- this gets set on the command line ... -->
   <xsl:param name="gtkdoc.bookname" select="''"/>
 
@@ -97,7 +100,7 @@
             background: #D6E8FF;
             padding: 4px;
         }
-        .informaltable {
+        .variablelist {
             background: #FFD0D0;
             padding: 4px;
         }

@@ -752,27 +752,23 @@ sub OutputStruct {
 	my %field_descrs = @$params;
 	
 	    $desc .= <<EOF;
-<informaltable pgwide="1" frame="none" role="struct">
-<tgroup cols="2">
-<colspec colwidth="2*"${empty_element_end}
-<colspec colwidth="8*"${empty_element_end}
-<tbody>
+<variablelist role="struct">
 EOF
 	while (@fields) {
 	    my $field_name = shift @fields;
 	    my $text = shift @fields;
 	    my $field_descr = $field_descrs{$field_name};
 
-	    $desc .= "<row>\n<entry>$text</entry>\n";
+	    $desc .= "<varlistentry>\n<term>$text</term>\n";
 	    if (defined $field_descr) {
-		$desc .= "<entry>".&ExpandAbbreviations($field_descr)."</entry>\n";
+		$desc .= "<listitem><para>".&ExpandAbbreviations($field_descr)."</para></listitem>\n";
 	    } else {
-		$desc .= "<entry></entry>\n";
+		$desc .= "<listitem></listitem>\n";
 	    }
-            $desc .= "</row>\n";
+            $desc .= "</varlistentry>\n";
 	}
     
-	$desc .= "</tbody></tgroup></informaltable>";
+	$desc .= "</variablelist>";
     }
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
@@ -824,25 +820,21 @@ sub OutputEnum {
 	my %member_descrs = @$params;
 	
 	    $desc .= <<EOF;
-<informaltable pgwide="1" frame="none" role="enum">
-<tgroup cols="2">
-<colspec colwidth="2*"${empty_element_end}
-<colspec colwidth="8*"${empty_element_end}
-<tbody>
+<variablelist role="enum">
 EOF
 	for my $member_name (@members) {
 	    my $member_descr = $member_descrs{$member_name};
 	    
-	    $desc .= "<row>\n<entry><literal>$member_name</literal></entry>\n";
+	    $desc .= "<varlistentry>\n<term><literal>$member_name</literal></term>\n";
 	    if (defined $member_descr) {
-		$desc .= "<entry>".&ExpandAbbreviations($member_descr)."</entry>\n";
+		$desc .= "<listitem><para>".&ExpandAbbreviations($member_descr)."</para></listitem>\n";
 	    } else {
-		$desc .= "<entry></entry>\n";
+		$desc .= "<listitem></listitem>\n";
 	    }
-            $desc .= "</row>\n";
+            $desc .= "</varlistentry>\n";
 	}
     
-	$desc .= "</tbody></tgroup></informaltable>";
+	$desc .= "</variablelist>";
     }
 
     $desc .= "</refsect2>\n";
@@ -1107,37 +1099,33 @@ sub OutputParamDescriptions {
 		    $param_name = "...";
 		}
 		$param = &ExpandAbbreviations($param);
-		$params_desc .= "<row><entry align=\"right\"><parameter>$param_name</parameter>&nbsp;:</entry>\n<entry>$param</entry></row>\n";
+		$params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&nbsp;:</term>\n<listitem><para>$param</para></listitem></varlistentry>\n";
 	    }
 	}
 
 	# Signals have an implicit user_data parameter which we describe.
 	if ($symbol_type eq "SIGNAL") {
-	    $params_desc .= "<row><entry align=\"right\"><parameter>user_data</parameter>&nbsp;:</entry>\n<entry>user data set when the signal handler was connected.</entry></row>\n";
+	    $params_desc .= "<varlistentry><term><parameter>user_data</parameter>&nbsp;:</term>\n<listitem><para>user data set when the signal handler was connected.</para></listitem></varlistentry>\n";
 	}
 
 	# Start a table if we need one.
 	if ($params_desc || $returns) {
 	    $output .= <<EOF;
-<informaltable pgwide="1" frame="none" role="params">
-<tgroup cols="2">
-<colspec colwidth="2*"${empty_element_end}
-<colspec colwidth="8*"${empty_element_end}
-<tbody>
+<variablelist role="params">
 EOF
 
 	    if ($params_desc ne "") {
-#	        $output .= "<row><entry>Parameters:</entry></row>\n";
+#	        $output .= "<varlistentry><term>Parameters:</term><listitem></listitem></varlistentry>\n";
 	        $output .= $params_desc;
 	    }
 
 	    # Output the returns info last.
 	    if ($returns) {
-		$output .= "<row><entry align=\"right\"><emphasis>Returns</emphasis> :</entry><entry>$returns</entry></row>\n";
+		$output .= "<varlistentry><term><emphasis>Returns</emphasis> :</term><listitem><para>$returns</para></listitem></varlistentry>\n";
 	    }
 
 	    # Finish the table.
-	    $output .= "</tbody></tgroup></informaltable>";
+	    $output .= "</variablelist>";
 	}
     }
     return $output;

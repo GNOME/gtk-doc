@@ -76,19 +76,14 @@
      (list "WIDTH" ($table-width$))
      (list "CELLPADDING" "6"))))
 
-;; This overrides the tgroup definition (copied from 1.20, dbtable.dsl).
-;; It changes the table background color, cell spacing and cell padding.
-(element tgroup
-  (let* ((wrapper   (parent (current-node)))
-	 (frameattr (attribute-string (normalize "frame") wrapper))
-	 (pgwide    (attribute-string (normalize "pgwide") wrapper))
-	 (footnotes (select-elements (descendants (current-node)) 
-				     (normalize "footnote")))
-	 (border (if (equal? frameattr (normalize "none"))
-		     '(("BORDER" "0"))
-		     '(("BORDER" "1"))))
-	 (roleattr (attribute-string (normalize "role") wrapper))
 
+;; This overrides the variablelist definition (copied from 1.76,
+;; dblists.dsl).  It changes the table background color, cell spacing
+;; and cell padding.
+;;
+;; I have also removed the code to handle the non-table case.
+(element variablelist
+  (let* ((roleattr (attribute-string (normalize "role") (current-node)))
 	 ;; FIXME: I thought that I should use normalize ("params") etc. here,
 	 ;; but that doesn't work. Anyone know why?
 	 (bgcolor (cond ((equal? roleattr "params")
@@ -98,28 +93,77 @@
 			((equal? roleattr "enum")
 			 '(("BGCOLOR" "#F0F0D0")))
 			(else
-			 '(("BGCOLOR" "#FFFFFF")))))
+			 '()))))
 
-	 (width (if (equal? pgwide "1")
-		    (list (list "WIDTH" ($table-width$)))
-		    '()))
-	 (head (select-elements (children (current-node)) (normalize "thead")))
-	 (body (select-elements (children (current-node)) (normalize "tbody")))
-	 (feet (select-elements (children (current-node)) (normalize "tfoot"))))
-    (make element gi: "TABLE"
-	  attributes: (append
-		       border
-		       width
-		       bgcolor
-		       '(("CELLSPACING" "0"))
-		       '(("CELLPADDING" "4"))
-		       (if %cals-table-class%
-			   (list (list "CLASS" %cals-table-class%))
-			   '()))
-	  (process-node-list head)
-	  (process-node-list body)
-	  (process-node-list feet)
-	  (make-table-endnotes))))
+    (make sequence
+      (if %spacing-paras%
+          (make element gi: "P" (empty-sosofo))
+          (empty-sosofo))
+      (para-check)
+
+      (make element gi: "TABLE"
+            attributes: (append
+                         '(("CLASS" "VARIABLELIST")
+                           ("BORDER" "0")
+                           ("CELLSPACING" "0")
+                           ("CELLPADDING" "4")
+                           ("WIDTH" "100%"))
+                          bgcolor)
+            (if %html40%
+                (make element gi: "TBODY"
+                      (with-mode variablelist-table
+                        (process-children)))
+                (with-mode variablelist-table
+                  (process-children))))
+      (para-check 'restart))))
+
+(mode variablelist-table
+  (element (variablelist title)
+    (make element gi: "TR"
+          attributes: '(("CLASS" "TITLE"))
+          (make element gi: "TH"
+                attributes: '(("ALIGN" "LEFT")
+                              ("VALIGN" "TOP")
+                              ("COLSPAN" "2"))
+                (process-children))))
+
+  (element varlistentry
+    (let* ((terms      (select-elements (children (current-node))
+                                        (normalize "term")))
+           (listitem   (select-elements (children (current-node))
+                                        (normalize "listitem"))))
+
+      (make element gi: "TR"
+            (make element gi: "TD"
+                  attributes: '(("ALIGN" "RIGHT")
+                                ("VALIGN" "TOP")
+                                ("WIDTH" "20%"))
+                  (make empty-element gi: "A"
+                        attributes: (list
+                                     (list "NAME" (element-id))))
+                  (process-node-list terms))
+            (make element gi: "TD"
+                  attributes: '(("ALIGN" "LEFT")
+                                ("VALIGN" "TOP")
+                                ("WIDTH" "80%"))
+                  (process-node-list listitem)))))
+  
+  (element (varlistentry term)
+    (make sequence
+      (if %css-decoration%
+          (make element gi: "SPAN"
+                attributes: '(("STYLE" "white-space: nowrap"))
+                (process-children-trim))
+          (make element gi: "NOBR"
+                (process-children-trim)))
+      (if (not (last-sibling?))
+          (literal ", ")
+          (literal ""))))
+
+  (element (varlistentry listitem)
+    (process-children))
+)
+
 
 ;; This overrides the refsect2 definition (copied from 1.20, dbrfntry.dsl).
 ;; It puts a horizontal rule before each function/struct/... description,
