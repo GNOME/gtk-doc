@@ -2464,9 +2464,10 @@ EOF
                     #print "SECTION DOCS found in source for : '$real_symbol'\n";
                     for ($k = 0; $k <= $#params; $k += 2) {
                         #print "   '".$params[$k]."'\n";
-                        if ($params[$k] eq "summary") {
+		        $params[$k] = "\L$params[$k]";
+                        if ($params[$k] eq "short_description") {
                             $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Short_Description"}=$params[$k+1];
-                        } elsif ($params[$k] eq "see") {
+                        } elsif ($params[$k] eq "see_also") {
                             $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:See_Also"}=$params[$k+1];
                         } elsif ($params[$k] eq "title") {
                             $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Title"}=$params[$k+1];
