@@ -1,5 +1,8 @@
 2003-02-19  James Henstridge  <james@daa.com.au>
 
+	* Makefile.am: get rid of the dist-hook, and just include the
+	given files in EXTRA_DIST instead.
+
 	* configure.in: provide meaningful names for the commands.
 
 	* acinclude.m4 (JH_CHECK_XML_CATALOG): add some extra arguments: a
