@@ -2448,7 +2448,7 @@ sub ParseStructDeclaration {
 	    
         # Try to match structure members which are functions
 	} elsif ($line =~ m/^
-		 (const\s+|unsigned\s+)*(struct\s+)?  # mod1 
+		 (const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?  # mod1 
 		 (\w+)\s*                             # type
 		 (\**)\s*                             # ptr1
 		 (const\s+)?                          # mod2
