@@ -1,3 +1,12 @@
+2002-12-16  James Henstridge  <james@daa.com.au>
+
+	* gtk-doc.spec.in: require perl >= 5.6.0
+
+	* configure.in: require Perl >= 5.6.0
+
+	* gtkdoc-fixxref.in: add "use bytes;" to fix malformed UTF-8
+	character errors when run with a UTF-8 locale.
+
 2002-12-16  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (OutputSGMLFile): Don't emit the additional

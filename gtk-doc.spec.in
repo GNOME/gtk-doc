@@ -10,6 +10,7 @@ Obsoletes: 	gtk-doc
 URL: 		http://www.gtk.org/rdp/
 BuildArchitectures: noarch
 Requires: 	jade
+Requires:	perl >= 5.6.0
 
 %description
 gtk-doc is a set of perl scripts that generate API reference documention in
@@ -58,7 +59,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING ChangeLog README doc/* examples
 # INSTALL is generic instructions from autoconf
 # NEWS is currently empty
-# %doc INSTALL NEWS
+# %doc INSTALL
+%doc NEWS
 
 %{_bindir}/*
 %{_datadir}/gtk-doc/*

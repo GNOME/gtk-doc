@@ -12,9 +12,16 @@ dnl Check for Perl.
 dnl
 AC_PATH_PROG(PERL, perl)
 if test -z "$PERL"; then
-   AC_MSG_ERROR([perl not found])
+  AC_MSG_ERROR([perl not found])
 fi
 
+AC_MSG_CHECKING([if Perl version >= 5.6.0])
+if "$PERL" -e "require v5.6.0"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([perl >= 5.6.0 is required for gtk-doc])
+fi
 
 dnl
 dnl Check for jade or openjade.
