@@ -1,3 +1,11 @@
+2002-05-27  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (ReadTemplateFile, OutputSGMLFile): 
+	Use only the basename of the template file in the key for the
+	symbol table, in order to decouple the file extensions of the
+	template files and the generated entities (we want to generate
+	.xml entities from .sgml template files when emitting XML). 
+
 2002-05-25  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (ConvertSGMLChars): New function which tries to

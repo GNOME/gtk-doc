@@ -301,7 +301,7 @@ sub OutputSGML {
 	    %SymbolDocs = ();
 	    %SymbolTypes = ();
 	    %SymbolParams = ();
-	    &ReadTemplateFile ("$TMPL_DIR/$file.sgml", 1);
+	    &ReadTemplateFile ("$TMPL_DIR/$file", 1);
 	    &MergeSourceDocumentation;
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
@@ -318,7 +318,6 @@ sub OutputSGML {
 #	    print "End of section: $title\n";
 
 	    $file =~ s/\s/_/g;
-	    $file .= "." . $OUTPUT_FORMAT;
 
 	    # GtkObjects use their class name as the ID.
 	    my $section_id;
@@ -1070,8 +1069,8 @@ sub OutputSGMLFile {
 	$include_output .= "#include &lt;${include}&gt;\n";
     }
 
-    my $old_sgml_file = "$SGML_OUTPUT_DIR/$file";
-    my $new_sgml_file = "$SGML_OUTPUT_DIR/$file.new";
+    my $old_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT";
+    my $new_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT.new";
 
     open (OUTPUT, ">$new_sgml_file")
 	|| die "Can't create $new_sgml_file";
@@ -2207,9 +2206,10 @@ sub ReadSignalsFile {
 sub ReadTemplateFile {
     my ($docsfile, $skip_unused_params) = @_;
 
-#    print "Reading $docsfile\n";
-    if (! -f $docsfile) {
-	print "File doesn't exist: $docsfile\n";
+    my $template = "$docsfile.sgml";
+#    print "Reading $template\n";
+    if (! -f $template) {
+	print "File doesn't exist: $template\n";
 	return; 
     }
 
@@ -2223,8 +2223,8 @@ sub ReadTemplateFile {
 				#   of param name & description.
     my $in_unused_params = 0;	# True if we are reading in the unused params.
 
-    open (DOCS, $docsfile)
-	|| die "Can't open file $docsfile: $!";
+    open (DOCS, "$template")
+	|| die "Can't open file $template: $!";
     while (<DOCS>) {
 	if (m/^<!-- ##### ([A-Z_]+) (\S+) ##### -->/) {
 	    my $type = $1;
