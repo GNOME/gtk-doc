@@ -425,7 +425,7 @@ EOF
     }
 
     if ($type eq "STRUCT") {
-	my $is_object_struct = CheckIsObject ($symbol);
+	my $is_object_struct = CheckIsObject ($symbol) || ($symbol =~ m/.*Class$/);
 	my @fields = ParseStructDeclaration($declaration, $is_object_struct);
 
 	for (my $i = 0; $i <= $#fields; $i += 2) {
