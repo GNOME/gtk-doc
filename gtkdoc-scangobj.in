@@ -493,6 +493,9 @@ get_gdk_event (const gchar * signal_name)
     "other_event", "GdkEventOther",
     "client_event", "GdkEventClient",
     "no_expose_event", "GdkEventNoExpose",
+    "visibility_notify_event", "GdkEventVisibility",
+    "window_state_event", "GdkEventWindowState",
+    "scroll_event", "GdkEventScroll",
     NULL
   };
 
