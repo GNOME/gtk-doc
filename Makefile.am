@@ -23,8 +23,12 @@ gtkdocdata_DATA = \
 	right.png		\
 	up.png
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = gtk-doc.pc
+
 EXTRA_DIST= \
 	MAINTAINERS	\
+	gtk-doc.pc.in	\
 	gtk-doc.spec.in	\
 	gtk-doc.dcl  	\
 	gtk-doc.xsl	\
