@@ -1,3 +1,11 @@
+Wed Aug  4 04:04:55 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-mk{db,tmpl}.in (ParseStructDeclaration): Allow
+	for bit fields.
+
+	* gtkdoc-mktmpl.in (ReadObjectHierarchy): Remove
+	call to MakeXref that slipped in accidentally.
+
 Wed Aug  4 03:30:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* doc/style-guide.txt: Removed references to creating

@@ -2168,7 +2168,8 @@ sub ParseStructDeclaration {
 	    (const\s+)?                         # mod2
 	    (\**)?\s*                           # ptr2
 	    (\w+(?:\s*,\s*\w+)*)\s*             # name
-	    ((?:\[\d*\]\s*)+)?\s*               # array
+	    (?:((?:\[[^\]]*\]\s*)+) |           # array
+	       (:\s*\d+))?\s*                   # bits
 	               $/x) {
 	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
@@ -2179,6 +2180,7 @@ sub ParseStructDeclaration {
 	    my $name = $7;
 	    $ptr1 = " " . $ptr1;
 	    my $array = defined($8) ? $8 : "";
+	    my $bits =  defined($9) ? " $9" : "";
 	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
 	    
 	    # FIXME:
@@ -2191,9 +2193,11 @@ sub ParseStructDeclaration {
 	    
 	    my @names = split /\s*,\s*/, $name;
 	    for my $n (@names) {
-		my $pname = defined $namefunc ? $namefunc->($n) : $n;
+		if (defined $namefunc) {
+		    $n = $namefunc->($n);
+		}
 		push @result, $n;
-		push @result, "$mod1$ptype$ptr1$mod2$ptr2$pname$array";
+		push @result, "$mod1$ptype$ptr1$mod2$ptr2$n$array$bits";
 	    }
 	    
         # Try to match structure members which are functions
