@@ -1,4 +1,4 @@
-#!@PERL@ -w
+]#!@PERL@ -w
 # -*- cperl -*-
 #
 # gtk-doc - GTK DocBook documentation generator.
@@ -2481,7 +2481,7 @@ sub ParseStructDeclaration {
 	    push @result, "$mod1$ptype$ptr1$mod2 (*$pname) ($func_params)";
 	    
 	} else {
-	    warn "Cannot parse structure field $line";
+	    warn "Cannot parse structure field \"$line\"";
 	}
     }
     
@@ -2537,7 +2537,7 @@ sub ParseEnumDeclaration {
 	    last;
 
 	} else {
-	    warn "Cannot parse enumeration member $line";
+	    warn "Cannot parse enumeration member \"$line\"";
 	}
 
 	last if $terminator eq '}';
