@@ -146,7 +146,7 @@ sub ParseStructDeclaration {
 	if ($line =~ m/^
 		 (const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?  # mod1
 		 (\w+)\s*                             # type
-		 (\**)\s*                             # ptr1
+	         (\**(?:\s*restrict)?)\s*             # ptr1
 		 (const\s+)?                          # mod2
 		 (\**\s*)			      # ptr2
 		 \(\s*\*\s*(\w+)\s*\)\s*              # name
@@ -197,12 +197,13 @@ sub ParseStructDeclaration {
 	        # identifier, and be followed by any number of pairs of
 	        # brackets or a bit field specifier.
 	        # e.g. *foo, ***bar, *baz[12][23], foo : 25.
-	        if ($n =~ m/^\s* (\**) \s* (\w+) \s* (?: ((?:\[[^\]]*\]\s*)+) | (:\s*\d+)?) \s* $/x) {
+	        if ($n =~ m/^\s* (\**(?:\s*restrict)?) \s* (\w+) \s* (?: ((?:\[[^\]]*\]\s*)+) | (:\s*\d+)?) \s* $/x) {
 		    my $ptrs = $1;
 		    my $name = $2;
 		    my $array = defined($3) ? $3 : "";
 		    my $bits =  defined($4) ? " $4" : "";
 
+		    if ($ptrs && $ptrs !~ m/\*$/) { $ptrs .= " "; }
 		    $array =~ s/ /&nbsp;/g;
 		    $bits =~ s/ /&nbsp;/g;
 

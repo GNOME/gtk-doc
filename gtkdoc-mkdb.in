@@ -1123,7 +1123,7 @@ sub OutputFunction {
     my $id = &CreateValidSGMLID ($symbol);
 
     # Take out the return type
-    $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*)<\/RETURNS>\n//;
+    $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*(restrict)?\s*)<\/RETURNS>\n//;
     my $type_modifier = defined($1) ? $1 : "";
     my $type = $3;
     my $pointer = $4;
@@ -1207,7 +1207,7 @@ sub OutputFunction {
 	    }
 
 	    # allow alphanumerics, '_', '[' & ']' in param names
-	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?((?:long\s+|short\s+)?\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?((?:long\s+|short\s+)?\w+)\s*(\**(?:\s*restrict)?)\s*(const\s+)?(\**(?:\s*restrict)?)?\s*(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
@@ -1215,8 +1215,11 @@ sub OutputFunction {
 	    my $mod2 = defined($5) ? $5 : "";
 	    my $ptr2 = $6;
 	    my $name = defined($7) ? $7 : "";
-	    if ($name) { $ptr1 = " " . $ptr1; }
 	    my $array = defined($8) ? $8 : "";
+
+	    if ($ptr1 && $ptr1 !~ m/\*$/) { $ptr1 .= " "; }
+	    if ($name) { $ptr1 = " " . $ptr1; }
+	    if ($ptr2 && $ptr2 !~ m/\*$/) { $ptr2 .= " "; }
 	    my $xref = &MakeXRef ($type);
 
 #	    print "Type: $mod1$type $ptr1 $mod2 $name $array\n";
@@ -1233,7 +1236,7 @@ sub OutputFunction {
 	    }
 
 	    # Try to match parameters which are functions.
-	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**(?:\s*restrict)?)\s*(const\s+)?\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
 	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
@@ -1241,6 +1244,8 @@ sub OutputFunction {
 	    my $mod2 = defined($5) ? $5 : "";
 	    my $name = $6;
 	    my $func_params = $7;
+
+	    if ($ptr1 && $ptr1 !~ m/\*$/) { $ptr1 .= " "; }
 	    my $xref = &MakeXRef ($type);
 
 #	    print "Type: $mod1$type$ptr1$mod2(*$name)($func_params)\n";

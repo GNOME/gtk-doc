@@ -1,3 +1,13 @@
+2005-02-01  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in (OutputFunction): 
+	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-common.pl.in (ParseStructDeclaration): patch from Roger Leigh
+	to add support for the "restrict" keyword.
+
+	* gtkdoc-scan.in (ScanHeader): patch from Roger Leigh to add support
+	for "unsigned" to one of the regexps.
+
 2005-01-31  Damon Chaplin  <damon@gnome.org>
 
 	* gtk-doc.make (scan-build.stamp): added "2>&1" to grep command to
