@@ -1360,6 +1360,12 @@ sub ParseEnumDeclaration {
 
     $declaration =~ s/\([^)]*\)//g;
 
+    # Remove comma from comma - possible whitespace - closing brace sequence
+    # since it is legal in GNU C and C99 to have a trailing comma but doesn't 
+    # result in an actual enum member
+
+    $declaration =~ s/,(\s*})/$1/g;
+
     # Prime match after "typedef enum {" declaration
     if (!scalar($declaration =~ m/typedef\s+enum\s*\{/msg)) {
 	die "Enum declaration '$declaration' does not begin with typedef enum {\n";

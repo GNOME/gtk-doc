@@ -1,3 +1,10 @@
+Sat Dec 27 00:43:42 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (ParseEnumDeclaration): 
+	* gtkdoc-mktmpl.in (ParseEnumDeclaration): Support a trailing ,
+	in enum declarations. These are a GNU C extension, but also 
+	blessed by C99.  (#129949, Thomas Vander Stichele)
+
 Sun Nov 16 00:29:03 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scangobj.in: Don't use g_strdown(). (#127028, 
