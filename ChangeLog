@@ -1,3 +1,12 @@
+2002-11-15  James Henstridge  <james@daa.com.au>
+
+	* gtk-doc.xsl: small changes to make the output closer to valid
+	HTML.
+
+	* gtkdoc-fixxref.in (MakeXRef): when substituting in cross
+	references, use lower case element and attribute names, and quote
+	the attribute value.
+
 2002-11-12  James Henstridge  <james@daa.com.au>
 
 	* gtkdoc-mkdb.in: put content of parameter descriptions in

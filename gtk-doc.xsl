@@ -93,7 +93,7 @@
   </xsl:template>
 
   <xsl:template name="user.head.content">
-    <style>
+    <style type="text/css">
       <xsl:text>
         .synopsis, .classsynopsis {
             background: #eeeeee;
@@ -132,7 +132,7 @@
     <table class="navigation" width="100%"
            cellpadding="2" cellspacing="0">
       <tr>
-        <th valign="center">
+        <th valign="middle">
           <p class="{name(.)}">
             <xsl:value-of select="."/>
           </p>
@@ -150,7 +150,7 @@
     <xsl:if test="$suppress.navigation = '0' and $home != .">
       <table class="navigation" width="100%"
              summary = "Navigation header" cellpadding="2" cellspacing="2">
-        <tr valign="center">
+        <tr valign="middle">
           <xsl:if test="count($prev) > 0">
             <td>
               <a accesskey="p">
@@ -239,7 +239,7 @@
     <xsl:if test="$suppress.navigation = '0'">
       <table class="navigation" width="100%"
              summary="Navigation footer" cellpadding="2" cellspacing="0">
-        <tr valign="center">
+        <tr valign="middle">
           <td align="left">
             <xsl:if test="count($prev) > 0">
               <a accesskey="p">

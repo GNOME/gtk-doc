@@ -148,7 +148,7 @@ sub MakeXRef {
 
     my $href = $Links{$id};
     if ($href) {
-	return "<A\nHREF=../$href\n>$text</A>";
+	return "<a\nhref=\"../$href\"\n>$text</a>";
     } else {
 	return $text;
     }
