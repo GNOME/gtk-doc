@@ -39,14 +39,15 @@ require "gtkdoc-common.pl";
 my $MODULE;
 my $OUTPUT_DIR;
 my $PRINT_VERSION;
+my $TYPE_INIT_FUNC="g_type_init ()";
 
 %optctl = (module => \$MODULE,
 	   types => \$TYPES_FILE,
-	   nogtkinit => \$NO_GTK_INIT,
+	   'type-init-func' => \$TYPE_INIT_FUNC,
 	   'output-dir' => \$OUTPUT_DIR,
 	   version => \$PRINT_VERSION);
-	   
-GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "version");
+
+GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "type-init-func:s", "version");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -152,19 +153,8 @@ static void output_widget_args (FILE *fp, GType object_type);
 int
 main (int argc, char *argv[])
 {
-EOT
+  $TYPE_INIT_FUNC;
 
-  if ($NO_GTK_INIT) {
-    print OUTPUT <<EOT;
-  g_type_init ();
-EOT
-  } else {
-    print OUTPUT <<EOT;
-  gtk_init (&argc, &argv);
-EOT
-  }
-
-print OUTPUT <<EOT;
   get_object_types ();
 
   output_signals ();

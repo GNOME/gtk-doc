@@ -1,3 +1,9 @@
+2002-01-18  jacob berkman  <jacob@ximian.com>
+
+	* gtkdoc-scangobj.in: default to calling g_type_init(), remove
+	--nogtkinit argument and replace with a more flexible
+	--type-init-func
+
 2002-01-18  Damon Chaplin  <damon@ximian.com>
 
 	* gtkdoc-mkdb.in (ScanSourceFile): patch from Matthias Clasen
