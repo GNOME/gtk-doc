@@ -13,7 +13,7 @@ gtkdocdatadir = $(datadir)/gtk-doc
 gtkdocdata_DATA = \
         gtk-doc.dsl
 
-EXTRA_DIST=gtk-doc.spec.in
+#EXTRA_DIST=gtk-doc.spec.in
 
 dist-hook:
 	mkdir $(distdir)/doc
@@ -22,4 +22,4 @@ dist-hook:
 	cp -pr $(srcdir)/db2man/* $(distdir)/db2man
 	mkdir $(distdir)/examples
 	cp -pr $(srcdir)/examples/* $(distdir)/examples
-	cp gtk-doc.spec $(distdir)
+#	cp gtk-doc.spec $(distdir)

@@ -1,3 +1,14 @@
+1999-08-22  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mkdb.in: a few fixes to ParseStructDeclaration. It still
+	has problems with nested structs/unions like those which occur in
+	gtkclist.h and gtktypeutils.h.
+
+	* configure.in: removed gtk-doc.spec from AC_OUTPUT, as	whoever wrote
+	this forgot to add gtk-doc.spec.in to CVS.
+	* Makefile.am: commented out gtk-doc.spec.
+
 Wed Aug 18 03:55:30 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkdoc-mktmpl.in: Propagate fix from gtkdoc-mkdb.in.

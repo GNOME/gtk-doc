@@ -2129,10 +2129,10 @@ sub ParseStructDeclaration {
 
     # For objects, assume private
     if ($is_object) {
-	s!/(struct\s*\w+\s*\{)\s\*/.*?/\*\s*<\s*public\s*>\s\*/!$1!msg;
+	$declaration =~ s!(struct\s+\w*\s*\{).*?(/\*\s*<\s*public\s*>\s\*/|\})!$1!msg;
     }
     
-    s!/\*\s*<\s*private\s*>\s\*/.*?(/\*\s*<\s*public\s*>\s\*|\})/!!msg;
+    $declaration =~ s!/\*\s*<\s*private\s*>\s*\*/.*?(/\*\s*<\s*public\s*>\s*\*/|\})/!!msg;
     
     # Remove all other comments;
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
@@ -2144,8 +2144,8 @@ sub ParseStructDeclaration {
     }
 
     # Prime match after "struct {" declaration
-    if (!scalar($declaration =~ m/struct\s*\w+\s*\{/msg)) {
-	die "Structure declaration '$declaration' does not begin with struct NAME {\n";
+    if (!scalar($declaration =~ m/struct\s+\w*\s*\{/msg)) {
+	die "Structure declaration '$declaration' does not begin with struct [NAME] {\n";
     }
 
     # Treat lines in sequence, allowing singly nested anonymous structs
@@ -2153,7 +2153,7 @@ sub ParseStructDeclaration {
     while ($declaration =~ m/\s*([^{;]+(\{[^\}]*\}[^{;]+)?);/msg) {
 	my $line = $1;
 	
-	last if $line =~ /^\s*\}\s*$/;
+	last if $line =~ /^\s*\}\s*\w*\s*$/;
 
 	# FIXME: Just ignore nested structs and unions for now
 	next if $line =~ /{/;
