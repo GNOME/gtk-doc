@@ -1,3 +1,8 @@
+2002-12-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mktmpl.in (UpdateTemplates): Emit unused class structs
+	to $MODULE-unused.txt.
+
 2002-12-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (OutputStruct): Don't emit private parts
