@@ -7,6 +7,13 @@ FILE=gtk-doc.dsl.in
 
 DIE=0
 
+srcdir=`dirname $0`
+test -z "$srcdir" && srcdir=.
+
+THEDIR="`pwd`"
+
+cd "$srcdir"
+
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "You must have autoconf installed to compile $PROJECT."
@@ -57,7 +64,9 @@ aclocal $ACLOCAL_FLAGS
 automake --add-missing $am_opt
 autoconf
 
-./configure "$@"
+cd "$THEDIR"
+
+$srcdir/configure "$@"
 
 echo 
 echo "Now type 'make install' to install $PROJECT."
