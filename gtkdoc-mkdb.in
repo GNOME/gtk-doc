@@ -1760,9 +1760,13 @@ sub OutputMissingDocumentation {
      }
 
      
-     $percent = ($n_documented / $total) * 100.0;
+     if ($total == 0) {
+	  $percent = 100;
+     } else {
+          $percent = ($n_documented / $total) * 100.0;
+     }
 
-     printf UNDOCUMENTED "%.0f%% function docs coverage.\n", $percent;
+     printf UNDOCUMENTED "%.2f%% function docs coverage.\n", $percent;
      print UNDOCUMENTED "$n_documented functions documented.\n";
      print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
 
@@ -1770,7 +1774,7 @@ sub OutputMissingDocumentation {
 
      close (UNDOCUMENTED);
 
-     printf (("%.2g%% function docs coverage ($n_documented functions documented, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
+     printf (("%.2f%% function docs coverage ($n_documented functions documented, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
 }
 
 

@@ -1,5 +1,9 @@
 2001-10-02  Damon Chaplin  <damon@ximian.com>
 
+	* gtkdoc-mkdb.in (OutputMissingDocumentation): applied patch from
+	matthiasc@poet.de (Matthias Clasen) to output percentages better.
+	Also set percent to 100 if total is 0, avoiding divide-by-zero.
+
 	* examples/Makefile.am (DOC_OVERRIDES): define as an empty string,
 	even when not used.
 
