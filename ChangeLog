@@ -1,3 +1,16 @@
+Fri Sep 17 01:13:24 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk-doc.xsl: Add the images from the gallery on top
+	of the refentry they point to.
+
+	* style.css: Move the css bits of the gallery implementation
+	here.
+
+Fri Sep 17 00:30:16 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk-doc.xsl: Don't generate <link rel="refentry">
+	links, since e.g. the GTK+ docs contain MANY refentries.
+
 2004-09-10  Damon Chaplin  <damon@gnome.org>
 
 	* autogen.sh: support automake 1.8. (part of #151219).

@@ -26,9 +26,6 @@
   <!-- use index filtering (if available) -->
   <xsl:param name="index.on.role" select="1"/>
 
-  <!-- generate more <link rel=...> elements -->
-  <xsl:param name="html.extra.head.links" select="1"/>
-
   <!-- display variablelists as tables -->
   <xsl:param name="variablelist.as.table" select="1"/>
 
@@ -123,6 +120,31 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
             content="GTK-Doc V{$gtkdoc.version} (XML mode)"/>
     </xsl:if>
     <link rel="stylesheet" href="style.css" type="text/css"/>
+
+      <!-- copied from the html.head template in the docbook stylesheets
+           we don't want links for all refentrys, thats just too much
+        -->
+      <xsl:variable name="this" select="."/>
+      <xsl:for-each select="//part
+                            |//reference
+                            |//preface
+                            |//chapter
+                            |//article
+                            |//appendix[not(parent::article)]|appendix
+                            |//glossary[not(parent::article)]|glossary
+                            |//index[not(parent::article)]|index">
+        <link rel="{local-name(.)}">
+          <xsl:attribute name="href">
+            <xsl:call-template name="href.target">
+              <xsl:with-param name="context" select="$this"/>
+              <xsl:with-param name="object" select="."/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:attribute name="title">
+            <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
+          </xsl:attribute>
+        </link>
+      </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="title" mode="book.titlepage.recto.mode">
@@ -304,22 +326,10 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
   <xsl:template match="para">
     <xsl:choose>
       <xsl:when test="@role = 'gallery'">
-         <style>
-           div.float {
-              float: left;
-              padding: 10px;
-           }
-           div.float img {
-              border-style: none;
-           }
-           div.spacer {
-              clear: both;
-           }
-         </style>
          <div class="container">
-           <div class="spacer"> </div>
+           <div class="gallery-spacer"> </div>
            <xsl:apply-templates mode="gallery.mode"/>
-         <div class="spacer"> </div>
+         <div class="gallery-spacer"> </div>
          </div>
       </xsl:when>
       <xsl:otherwise>
@@ -329,9 +339,53 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
   </xsl:template>
 
   <xsl:template match="link" mode="gallery.mode">
-    <div class="float">
+    <div class="gallery-float">
        <xsl:apply-templates select="."/>
     </div>
+  </xsl:template>
+
+  <!-- add gallery handling to refnamediv template -->
+  <xsl:template match="refnamediv">
+    <div class="{name(.)}">
+      <table width="100%">
+        <tr><td valign="top">
+         <xsl:call-template name="anchor"/>
+           <xsl:choose>
+             <xsl:when test="$refentry.generate.name != 0">
+               <h2>
+                <xsl:call-template name="gentext">
+                  <xsl:with-param name="key" select="'RefName'"/>
+                </xsl:call-template>
+              </h2>
+            </xsl:when>
+            <xsl:when test="$refentry.generate.title != 0">
+              <h2>
+                <xsl:choose>
+                  <xsl:when test="../refmeta/refentrytitle">
+                    <xsl:apply-templates select="../refmeta/refentrytitle"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:apply-templates select="refname[1]"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </h2>
+            </xsl:when>
+          </xsl:choose>
+          <p>
+            <xsl:apply-templates/>
+          </p>
+        </td>
+        <td valign="top" align="right">
+           <!-- find the gallery image to use here 
+                - determine the id of the enclosing refentry
+                - look for an inlinegraphic inside a link with linkend == refentryid inside a para with role == gallery
+                - use it here
+             -->
+           <xsl:variable name="refentryid" select="../@id"/>
+           <xsl:apply-templates select="//para[@role = 'gallery']/link[@linkend = $refentryid]/inlinegraphic"/>
+        </td></tr>
+       </table>
+     </div>
   </xsl:template>
   
 </xsl:stylesheet>
