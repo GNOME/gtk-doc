@@ -1,3 +1,10 @@
+2004-10-19  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-fixxref.in: use pkg-config to find where GLib is installed
+	and scan that directory for index files. Also scan $GNOME2_PATH.
+	These are only used as a last resort. If they are used we have to
+	output links as absolute URLs, rather than the default relative ones.
+
 2004-10-18  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-common.pl.in (ParseStructDeclaration): support function

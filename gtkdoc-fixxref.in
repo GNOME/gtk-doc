@@ -67,20 +67,50 @@ if ($PRINT_HELP) {
 # This contains all the entities and their relative URLs.
 my %Links;
 
-&ScanIndices ($HTML_DIR);
+my $dir;
+
+# We scan the directory containing GLib and any directories in GNOME2_PATH
+# first, but these will be overriden by any later scans.
+$dir = `pkg-config --variable=prefix glib-2.0`;
+$dir =~ s/\s+$//;
+$dir = $dir . "/share/gtk-doc/html";
+if (-d $dir && $dir ne $HTML_DIR) {
+#    print "Scanning GLib directory: $dir\n";
+    &ScanIndices ($dir, 1);
+}
+
+if (defined ($ENV{"GNOME2_PATH"})) {
+    foreach $dir (split (/:/, $ENV{"GNOME2_PATH"})) {
+        $dir = $dir . "/share/gtk-doc/html";
+	if (-d $dir && $dir ne $HTML_DIR) {
+#	    print "Scanning GNOME2_PATH directory: $dir\n";
+	    &ScanIndices ($dir, 1);
+	}
+    }
+}
+
+#print "Scanning HTML_DIR directory: $HTML_DIR\n";
+&ScanIndices ($HTML_DIR, 0);
 foreach my $dir (@EXTRA_DIRS) {
-  &ScanIndices ($dir);
+#    print "Scanning EXTRA_DIR directory: $dir\n";
+    # If the --extra-dir option is an absolute directory, we use absolute
+    # directories for the links. Support Unix '/' or Win32 'C:\'.
+    if ($dir =~ m%^(/|[A-Z]:\\)%) {
+        &ScanIndices ($dir, 1);
+    } else {
+        &ScanIndices ($dir, 0);
+    }
 }
 
 &FixCrossReferences (defined $MODULE_DIR ? $MODULE_DIR : "$HTML_DIR/$MODULE");
 
 sub ScanIndices {
-    my ($scan_dir) = @_;
-#    print "Scanning source directory: $scan_dir\n";
+    my ($scan_dir, $use_absolute_links) = @_;
+#    print "Scanning source directory: $scan_dir absolute: $use_absolute_links\n";
 
     # This array holds any subdirectories found.
     my (@subdirs) = ();
-    
+
     opendir (HTMLDIR, $scan_dir) || return;
     my $file;
     foreach $file (readdir (HTMLDIR)) {
@@ -89,7 +119,7 @@ sub ScanIndices {
 	} elsif (-d "$scan_dir/$file") {
 	    push (@subdirs, $file);
 	} elsif ($file eq "index.sgml") {
-	    &ScanIndex ("$scan_dir/$file");
+	    &ScanIndex ("$scan_dir/$file", $use_absolute_links);
 	}
     }
     closedir (HTMLDIR);
@@ -97,22 +127,33 @@ sub ScanIndices {
     # Now recursively scan the subdirectories.
     my $dir;
     foreach $dir (@subdirs) {
-	&ScanIndices ("$scan_dir/$dir");
+	&ScanIndices ("$scan_dir/$dir", $use_absolute_links);
     }
 }
 
 sub ScanIndex {
-    my ($file) = @_;
-#    print "Scanning index file: $file\n";
+    my ($file, $use_absolute_links) = @_;
+#    print "Scanning index file: $file absolute: $use_absolute_links\n";
+
+    # Determine the absolute directory, to be added to links in index.sgml
+    # if we need to use an absolute link.
+    # $file will be something like /opt/gnome/share/gtk-doc/html/gtk/index.sgml
+    # We want the part up to 'html' since the links in index.sgml include
+    # the rest.
+    my $dir = "../";
+    if ($use_absolute_links) {
+        $file =~ /(.*\/)(.*?)\/index\.sgml/;
+        $dir = $1;
+    }
 
     open (INDEXFILE, $file)
 	|| die "Can't open $file: $!";
     while (<INDEXFILE>) {
 	if (m/^<ANCHOR\s+id\s*=\s*"([^"]*)"\s+href\s*=\s*"([^"]*)"\s*>/) {
 #	    print "Found id: $1 href: $2\n";
-	    $Links{$1} = $2;
+	    $Links{$1} = "$dir$2";
 	}
-    }	
+    }
     close (INDEXFILE);
 }
 
@@ -163,7 +204,7 @@ sub MakeXRef {
 
     my $href = $Links{$id};
     if ($href) {
-	return "<a\nhref=\"../$href\"\n>$text</a>";
+        return "<a\nhref=\"$href\"\n>$text</a>";
     } else {
 	return $text;
     }
