@@ -6,6 +6,7 @@
               http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
                                                                                 
 <!ENTITY FDL SYSTEM "fdl-appendix.xml">
+<!ENTITY FDLlink "<link linkend='fdl'>included</link>">
 ]>
 
 <!-- =============Document Header ============================= -->
@@ -51,7 +52,7 @@
     document under the terms of the <citetitle>GNU Free Documentation
     License</citetitle>, Version 1.1 or any later version published    by the Free Software Foundation with no Invariant Sections, no
     Front-Cover Texts, and no Back-Cover Texts. A copy of the license
-    is included in <!--<xref linkend="fdl"/>-->.
+    is &FDLlink;.
    </para>
    <para>
     Many of the names used by companies to distinguish their products and
