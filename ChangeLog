@@ -1,5 +1,8 @@
 2005-01-09  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (MergeSourceDocumentation): output better warnings
+	using the type information. Patch from Stefan Kost. #161979
+
 	* gtkdoc-scan.in (ScanHeader): support "typedef struct a *b;". Fixes
 	last part of #156318.
 

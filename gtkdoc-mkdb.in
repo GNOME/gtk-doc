@@ -2597,7 +2597,7 @@ sub OutputAllSymbols {
 # Function    : MergeSourceDocumentation
 # Description : This merges documentation read from a source file into the
 #		documentation read in from a template file.
-#		
+#
 #		Parameter descriptions override any in the template files.
 #		Function descriptions are placed before any description from
 #		the template files.
@@ -2611,7 +2611,7 @@ sub MergeSourceDocumentation {
         $AllSymbols{$symbol} = 1;
 
 	my $have_tmpl_docs = 0;
-	
+
 	## See if the symbol is documented out-of-line
 	my $tmpl_doc = $SymbolDocs{$symbol};
 	$tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
@@ -2620,10 +2620,21 @@ sub MergeSourceDocumentation {
 	if ($tmpl_doc ne "") {
 	    $have_tmpl_docs = 1;
 	}
-	
+
 	if (exists ($SourceSymbolDocs{$symbol})) {
 	    my $src_doc = $SourceSymbolDocs{$symbol};
 	    my $tmpl_doc = $SymbolDocs{$symbol};
+	    my $type = $DeclarationTypes {$symbol};
+
+	    my $item = "Parameter";
+	    if (defined ($type)) {
+	      if ($type eq 'STRUCT') {
+		$item = "Field";
+	      } elsif ($type eq 'ENUM') {
+		$item = "Value";
+	      }
+	    }
+
 	    $tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
 	    $src_doc =~ s/^\s+//;
 	    $src_doc =~ s/\s+$//;
@@ -2661,39 +2672,39 @@ EOF
 		if (!defined ($tmpl_params)) {
 		    next;
 		}
-		
+
 		my $params = $SourceSymbolParams{$symbol};
 		my $j;
 		for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
 		    my $tmpl_param_name = $$tmpl_params[$j];
 		    my $tmpl_param_desc = $$tmpl_params[$j + 1];
-		    
+
 		    # Try to find the param in the source comment documentation.
 		    my $found = 0;
 		    my $k;
 		    for ($k = 0; $k <= $#$params; $k += 2) {
 			my $param_name = $$params[$k];
 			my $param_desc = $$params[$k + 1];
-			
-			# We accept changed in case, since the Gnome source docs
+
+			# We accept changes in case, since the Gnome source docs
 			# contain a lot of these.
 			if ("\L$param_name" eq "\L$tmpl_param_name") {
 			    $found = 1;
-			    
+
 			    # Override the description.
 			    $$tmpl_params[$j + 1] = $param_desc ;
-			    
+
 			    # Set the name to "" to mark it as used.
 			    $$params[$k] = "";
 			    last;
 			}
 		    }
-		    
+
 		    # Output a warning if the parameter is not found.
 		    if (!$found) {
 			print <<EOF;
-WARNING: Parameter description missing in source code comment block -
-         Func: $symbol Param: $tmpl_param_name.
+WARNING: $item description missing in source code comment block -
+         $type: $symbol $item: $tmpl_param_name.
 EOF
 
 			# If it looks like the parameters are there, but not
@@ -2713,8 +2724,8 @@ EOF
 		    my $param_name = $$params[$j];
 		    if ($param_name) {
 			print <<EOF;
-WARNING: Parameter described in source code comment block but does not exist -
-         Func: $symbol Param: $param_name.
+WARNING: $item described in source code comment block but does not exist -
+         $type: $symbol $item: $param_name.
 EOF
 		    }
 		}
