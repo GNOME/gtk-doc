@@ -8,7 +8,7 @@ bin_SCRIPTS = \
 	gtkdoc-mkhtml  \
 	gtkdoc-mkman   \
 	gtkdoc-fixxref
-	 
+
 gtkdocdatadir = $(datadir)/gtk-doc
 gtkdocdata_DATA = \
         gtk-doc.dsl
