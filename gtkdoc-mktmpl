@@ -58,10 +58,12 @@ use Getopt::Long;
 # name of documentation module
 my $MODULE;
 my $TMPL_DIR;
+my $FLAG_CHANGES;
 
 my %optctl = (module => \$MODULE,
+	      'flag-changes' => \$FLAG_CHANGES,
 	      'output-dir' => \$TMPL_DIR);
-GetOptions(\%optctl, "module=s", "output-dir:s");
+GetOptions(\%optctl, "module=s", "flag-changes!", "output-dir:s");
 
 my $ROOT_DIR = ".";
 
@@ -70,6 +72,9 @@ $TMPL_DIR = $TMPL_DIR ? $TMPL_DIR : "$ROOT_DIR/tmpl";
 
 # The file containing signal handler prototype information.
 my $SIGNALS_FILE = "$ROOT_DIR/$MODULE.signals";
+
+# Set the flag to indicate changes, if requested.
+my $CHANGES_FLAG = $FLAG_CHANGES ? "FIXME" : "";
 
 # These global arrays store information on signals. Each signal has an entry
 # in each of these arrays at the same index, like a multi-dimensional array.
@@ -183,7 +188,8 @@ sub UpdateTemplates {
 	} elsif (m/^<SECTION>/) {
 	    $output = "";
 
-	} elsif (m/^<SUBSECTION>/) {
+	} elsif (m/^<SUBSECTION\s*(\w*)>/i) {
+	    $subsection = $1;
 	    next;
 
 	} elsif (m/^<TITLE>(.*)<\/TITLE>/) {
@@ -196,10 +202,6 @@ sub UpdateTemplates {
 
 	} elsif (m/^<FILE>(.*)<\/FILE>/) {
 	    $file = $1;
-
-	} elsif (m/^<NAME>(.*)<\/NAME>/) {
-	    $subsection = $1;
-
 
 	} elsif (m/^<\/SECTION>/) {
 	    if ($title eq "") {
@@ -222,8 +224,8 @@ sub UpdateTemplates {
 	    my $declaration = $Declarations{$1};
 	    if (defined ($declaration)) {
 		# We don't want templates for standard macros/functions of
-		# GtkObjects.
-		if ($subsection ne "Standard") {
+		# GtkObjects or private declarations.
+		if ($subsection ne "Standard" && $subsection ne "Private") {
 		    $output .= &OutputDeclaration ($DeclarationTypes {$symbol},
 						   $symbol, $declaration);
 		}
@@ -301,7 +303,7 @@ sub OutputDeclaration {
 	$symbol_desc =~ s/\s+$//;
     } else {
 	$template_exists = 0;
-	$symbol_desc = "<para>\nFIXME\n</para>";
+	$symbol_desc = "<para>\n$CHANGES_FLAG\n</para>";
     }
 
     $output .= <<EOF;
@@ -334,7 +336,7 @@ EOF
 					 $template_exists, 1, "");
 
 		# Try to match a standard parameter.
-	    } elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*(\[\])?\s*[,\n]//) {
+	    } elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*(\[\d*\])?\s*[,\n]//) {
 		if (defined ($7)) {
 		    $name = $7;
 		} else {
@@ -442,7 +444,7 @@ sub OutputParam {
 	    return "\@$param_to_output: $default_description\n";
 	} else {
 	    if ($template_exists) {
-		return "\@$param_to_output: FIXME\n";
+		return "\@$param_to_output: $CHANGES_FLAG\n";
 	    } else {
 		return "\@$param_to_output: \n";
 	    }
@@ -561,7 +563,7 @@ sub OutputSignalTemplates {
 		$symbol_desc =~ s/\s+$//;
 	    } else {
 		$template_exists = 0;
-		$symbol_desc = "<para>\nFIXME\n</para>";
+		$symbol_desc = "<para>\n$CHANGES_FLAG\n</para>";
 	    }
 
 	    $output .= <<EOF;
@@ -743,7 +745,7 @@ sub ReadDeclarationsFile {
 			    $DeclarationConditional{$declaration_name} = 1;
 			}
 		    } else {
-			print "ERROR: $declaration_name has multiple definitions\n";
+			print "WARNING: $declaration_name has multiple definitions\n";
 		    }
 		} else {
 		    $Declarations{$declaration_name} = $declaration;

@@ -1,0 +1,22 @@
+
+This directory contains an example configuration for the libgnome and
+libgnomui parts of gnome-libs.
+
+I've created the gnome-docs.sgml and gnome-sections.txt based on a fairly
+recent checkout of the sources (13 Dec 1998) so these could be used
+for the real documentation (and the same goes for gnomeui).
+
+Note that the Makefile.am files in the gnome and gnomeui subdirectories
+use a relative path to the source code directory, which may need to be
+changed depending on where the documentation is actually placed.
+
+Note also that the libgnomeui library contains GtkObjects and so the scan
+target also uses gtkdoc-scanobj.
+
+When added to gnome-libs a separate configure.in may not be necessary.
+
+
+You may also need .cvsignore files to ignore all the generated files
+(everything except MODULE-sections.txt, MODULE-types.txt (if the module has
+GtkObjects in it), MODULE-docs.sgml and the templates in the tmpl directory,
+I think).

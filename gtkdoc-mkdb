@@ -37,11 +37,13 @@ use Getopt::Long;
 my $MODULE;
 my $TMPL_DIR;
 my $SGML_OUTPUT_DIR;
+my $SOURCE_DIR;
 
 my %optctl = (module => \$MODULE,
+	      'source-dir' => \$SOURCE_DIR,
 	      'output-dir' => \$SGML_OUTPUT_DIR,
 	      'tmpl-dir' => \$TMPL_DIR);
-GetOptions(\%optctl, "module=s", "output-dir:s");
+GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s");
 
 my $ROOT_DIR = ".";
 
@@ -75,6 +77,10 @@ my %SymbolDocs;
 my %SymbolTypes;
 my %SymbolParams;
 
+# These global hashes store documentation scanned from the source files.
+my %SourceSymbolDocs;
+my %SourceSymbolParams;
+
 # These global arrays store GtkObject and subclasses and the hierarchy.
 my @Objects;
 my @ObjectLevels;
@@ -98,7 +104,7 @@ my $SIGNAL_FIELD_WIDTH = 12;
 # We should allow this to be changed in the MODULE-sections.txt file.
 # gnome.h includes gtk/gtk.h which includes gdk/gdk.h which includes glib.h
 # so what should we output? - alternatives?
-my $HEADER_FILE;
+my $HEADER_FILE = "";
 if ($MODULE eq 'glib') {
     $HEADER_FILE = "glib.h";
 } elsif ($MODULE eq 'gdk') {
@@ -113,6 +119,11 @@ if ($MODULE eq 'glib') {
 if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
     &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
 }
+
+if ($SOURCE_DIR) {
+    &ReadSourceDocumentation ($SOURCE_DIR);
+}
+
 &OutputSGML ("$ROOT_DIR/$MODULE-sections.txt");
 
 
@@ -217,7 +228,7 @@ sub OutputSGML {
     my $book_top = "";
     my $book_bottom = "";
     my $title = "";
-    my ($subsection) = "";
+    my $subsection = "";
     my $synopsis;
     my $details;
     my $num_symbols;
@@ -230,8 +241,11 @@ sub OutputSGML {
 	    $details = "";
 	    $num_symbols = 0;
 
-	} elsif (m/^<SUBSECTION>/) {
+	} elsif (m/^<SUBSECTION\s*(\w*)>/i) {
 	    $synopsis .= "\n";
+	    $subsection = $1;
+
+	} elsif (m/^<SUBSECTION>/) {
 
 	} elsif (m/^<TITLE>(.*)<\/TITLE>/) {
 	    $title = $1;
@@ -247,9 +261,7 @@ sub OutputSGML {
 	    %SymbolTypes = ();
 	    %SymbolParams = ();
 	    &ReadTemplateFile ("$TMPL_DIR/$file.sgml", 1);
-
-	} elsif (m/^<NAME>(.*)<\/NAME>/) {
-	    $subsection = $1;
+	    &MergeSourceDocumentation;
 
 	} elsif (m/^<\/SECTION>/) {
 	    if ($title eq "") {
@@ -284,8 +296,9 @@ sub OutputSGML {
 
 	    my $declaration = $Declarations{$1};
 	    if (defined ($declaration)) {
-		# We don't want standard macros/functions of GtkObjects.
-		if ($subsection ne "Standard") {
+		# We don't want standard macros/functions of GtkObjects,
+		# or private declarations.
+		if ($subsection ne "Standard" && $subsection ne "Private") {
 		    my ($synop, $desc) = &OutputDeclaration ($symbol,
 							     $declaration);
 		    $synopsis .= $synop;
@@ -571,7 +584,7 @@ sub OutputFunction {
 	    }
 
 	    # allow alphanumerics, '_', '[' & ']' in param names
-	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*(\[\])?\s*[,\n]//) {
+	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(\w+)?\s*(\[\d*\])?\s*[,\n]//) {
 	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
@@ -694,7 +707,7 @@ EOF
 	    }
 
 	    # Output the returns info last.
-	    if (defined ($returns)) {
+	    if ($returns) {
 		$output .= "<row><entry align=\"right\"><emphasis>Returns</emphasis> :</entry><entry>$returns</entry></row>\n";
 	    }
 
@@ -750,13 +763,18 @@ sub OutputSGMLFile {
 #	print "Found long_desc: $long_desc";
     }
 
+    my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) =
+	gmtime (time);
+    my $month = (qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec))[$mon];
+    $year += 1900;
+
     open (OUTPUT, ">$SGML_OUTPUT_DIR/$file")
 	|| die "Can't create $SGML_OUTPUT_DIR/$file";
 
     # Note: The refname and refpurpose are on the same line to stop
     # docbook-to-man 1.08 putting them on separate lines.
     print OUTPUT <<EOF;
-<refentry id="$section_id" revision="14 Sep 1998">
+<refentry id="$section_id" revision="$mday $month $year">
 <refmeta>
 <refentrytitle>$title</refentrytitle>
 <manvolnum>3</manvolnum>
@@ -1106,6 +1124,271 @@ $desc
 EOF
     }
     return ($synop, $desc);
+}
+
+
+#############################################################################
+# Function    : ReadSourceDocumentation
+# Description : This reads in the documentation embedded in comment blocks
+#		in the source code (for Gnome).
+#		
+#		Parameter descriptions override any in the template files.
+#		Function descriptions are placed before any description from
+#		the template files.
+#
+#		It recursively descends the source directory looking for .c
+#		files and scans them looking for specially-formatted comment
+#		blocks.
+#
+# Arguments   : $source_dir - the directory to scan.
+#############################################################################
+
+sub ReadSourceDocumentation {
+    my ($source_dir) = @_;
+#    print "Scanning source directory: $source_dir\n";
+
+    # This array holds any subdirectories found.
+    my (@subdirs) = ();
+    
+    opendir (SRCDIR, $source_dir)
+	|| die "Can't open source directory $source_dir: $!";
+    my $file;
+    foreach $file (readdir (SRCDIR)) {
+	if ($file eq '.' || $file eq '..') {
+	    next;
+	} elsif (-d "$source_dir/$file") {
+	    push (@subdirs, $file);
+	} elsif ($file =~ m/\.c$/) {
+	    &ScanSourceFile ("$source_dir/$file");
+	}
+    }
+    closedir (SRCDIR);
+
+    # Now recursively scan the subdirectories.
+    my $dir;
+    foreach $dir (@subdirs) {
+	&ReadSourceDocumentation ("$source_dir/$dir");
+    }
+}
+
+
+#############################################################################
+# Function    : ScanSourceFile
+# Description : Scans one source file looking for specially-formatted comment
+#		blocks. It calls &MergeSourceDocumentation to merge any
+#		documentation found with the documentation already read in
+#		from the template files.
+#		
+# Arguments   : $file - the file to scan.
+#############################################################################
+
+sub ScanSourceFile {
+    my ($file) = @_;
+
+#    print "Scanning source file: $file\n";
+
+    open (SRCFILE, $file)
+	|| die "Can't open $file: $!";
+    my $in_comment_block = 0;
+    my $symbol;
+    my ($in_description, $in_return);
+    my ($description, $return_desc);
+    my $current_param;
+    my @params;
+    while (<SRCFILE>) {
+	# Look for the start of a comment block.
+	if (!$in_comment_block) {
+	    if (m%^\s*/\*\*\s%) {
+#		print "Found comment block start\n";
+		$in_comment_block = 1;
+
+		# Reset all the symbol data.
+		$symbol = "";
+		$in_description = 0;
+		$in_return = 0;
+		$description = "";
+		$return_desc = "";
+		$current_param = -1;
+		@params = ();
+	    }
+	    next;
+	}
+
+	# We're in a comment block. Check if we've found the end of it.
+	if (m%^\s*\*+/%) {
+#	    print "Found comment block end: $symbol\n";
+	    if (!$symbol) {
+		print <<EOF;
+WARNING: symbol name not found in comment block.
+ $file line $.
+EOF
+	    } else {
+		# Add the return value description onto the end of the params.
+		if ($return_desc) {
+		    push (@params, "Returns");
+		    push (@params, $return_desc);
+		}
+		$SourceSymbolDocs{$symbol} = $description;
+		$SourceSymbolParams{$symbol} = [ @params ];
+	    }
+
+	    $in_comment_block = 0;
+	    next;
+	}
+
+	# If we haven't found the symbol name yet, look for it.
+	if (!$symbol) {
+	    if (m%^\s*\*\s*(\w+)\s*:?%) {
+		$symbol = $1;
+	    }
+	    next;
+	}
+
+	# If we're in the return value description, add it to the end.
+	if ($in_return) {
+	    s%^\s*\*\s*%%;
+	    $return_desc .= $_;
+	    next;
+	}
+
+	# If we're in the description part, check for the 'Return' line.
+	# If that isn't found, add the text to the end.
+	if ($in_description) {
+	    if (m%^\s*\*\s*(returns:|return\s+value:|returns\s*)%i) {
+#		print "RETURNS: $_";
+		$return_desc = $';
+		$in_return = 1;
+		next;
+	    }
+
+	    s%^\s*\*\s*%%;
+	    $description .= $_;
+	    next;
+	}
+
+	# We must be in the parameters. Check for the empty line at the end.
+	if (m%^\s*\*\s*$%) {
+	    $in_description = 1;
+	    next;
+	}
+
+	# Look for a parameter name.
+	if (m%^\s*\*\s*@(\S+)\s*:%) {
+	    my $param_name = $1;
+#	    print "Found parameter: $param_name\n";
+	    # Allow '...' as the Varargs parameter.
+	    if ($param_name eq "...") {
+		$param_name = "Varargs";
+	    }
+	    push (@params, $param_name);
+	    push (@params, $');
+	    $current_param += 2;
+	    next;
+	}
+
+	# We must be in the middle of a parameter description, so add it on
+	# to the last element in @params.
+	s%^\s*\*\s*%%;
+	if ($current_param == -1) {
+	    print <<EOF
+ERROR parsing comment block file : parameter expected -
+ $file:$.
+EOF
+	} else {
+	    $params[$#params] .= $_;
+	}
+    }
+    close (SRCFILE);
+}
+
+
+#############################################################################
+# Function    : MergeSourceDocumentation
+# Description : This merges documentation read from a source file into the
+#		documentation read in from a template file.
+#		
+#		Parameter descriptions override any in the template files.
+#		Function descriptions are placed before any description from
+#		the template files.
+#
+# Arguments   : none
+#############################################################################
+
+sub MergeSourceDocumentation {
+    my $symbol;
+    foreach $symbol (keys (%SymbolDocs)) {
+	if (exists ($SourceSymbolDocs{$symbol})) {
+	    my $src_doc = $SourceSymbolDocs{$symbol};
+	    my $tmpl_doc = $SymbolDocs{$symbol};
+	    $tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
+	    $src_doc =~ s/^\s+//;
+	    $src_doc =~ s/\s+$//;
+
+	    # Convert special SGML characters. I'm not sure if we want to do
+	    # this but currently there are a couple of '&'s in the source code
+	    # comment blocks which mess up the HTML output badly.
+	    $src_doc = &CreateValidSGML ($src_doc);
+
+	    # If there is a blank line, finish the paragraph and start another.
+	    if ($src_doc =~ s%\n{2,}%\n</para>\n<para>\n%g) {
+#		print "Converted blank lines:\n$src_doc\n";
+	    }
+	    $SymbolDocs{$symbol} = "<para>\n$src_doc</para>\n$tmpl_doc";
+
+	    # The templates contain the definitive parameter names and order,
+	    # so we will not change that. We only override the actual text.
+	    my $tmpl_params = $SymbolParams{$symbol};
+	    if (!defined ($tmpl_params)) {
+		next;
+	    }
+
+	    my $params = $SourceSymbolParams{$symbol};
+	    my $j;
+	    for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
+		my $tmpl_param_name = $$tmpl_params[$j];
+		my $tmpl_param_desc = $$tmpl_params[$j + 1];
+
+		# Try to find the param in the source comment documentation.
+		my $found = 0;
+		my $k;
+		for ($k = 0; $k <= $#$params; $k += 2) {
+		    my $param_name = $$params[$k];
+		    my $param_desc = $$params[$k + 1];
+
+		    if ($param_name eq $tmpl_param_name) {
+			$found = 1;
+
+			# Override the description.
+			$$tmpl_params[$j + 1] = &CreateValidSGML ($param_desc);
+
+			# Set the name to "" to mark it as used.
+			$$params[$k] = "";
+			last;
+		    }
+		}
+
+		# Output a warning if the parameter is not found.
+		if (!$found) {
+		    print <<EOF;
+WARNING: Parameter description missing in source code comment block -
+         Func: $symbol Param: $tmpl_param_name.
+EOF
+		}
+	    }
+
+	    # Now we output a warning if parameters have been described which
+	    # do not exist.
+	    for ($j = 0; $j <= $#$params; $j += 2) {
+		my $param_name = $$params[$j];
+		if ($param_name) {
+		    print <<EOF;
+WARNING: Parameter described in source code comment block but does not exist -
+         Func: $symbol Param: $param_name.
+EOF
+		}
+	    }
+	}
+    }
 }
 
 

@@ -1,0 +1,140 @@
+#!/usr/bin/perl -w
+#
+# gtk-doc - GTK DocBook documentation generator.
+# Copyright (C) 1998  Damon Chaplin
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+
+#############################################################################
+# Script      : gtkdoc-fixxref
+# Description : This fixes cross-references in the HTML documentation.
+#############################################################################
+
+use strict;
+use Getopt::Long;
+
+# Options
+
+# name of documentation module
+my $MODULE;
+my $HTML_DIR = "";
+
+my %optctl = (module => \$MODULE,
+	      'html-dir' => \$HTML_DIR);
+GetOptions(\%optctl, "module=s", "html-dir=s");
+
+# This contains all the entities and their relative URLs.
+my %Links;
+
+&ScanIndices ($HTML_DIR);
+&FixCrossReferences ("$HTML_DIR/$MODULE");
+
+
+sub ScanIndices {
+    my ($scan_dir) = @_;
+#    print "Scanning source directory: $scan_dir\n";
+
+    # This array holds any subdirectories found.
+    my (@subdirs) = ();
+    
+    opendir (HTMLDIR, $scan_dir)
+	|| die "Can't open HTML directory $scan_dir: $!";
+    my $file;
+    foreach $file (readdir (HTMLDIR)) {
+	if ($file eq '.' || $file eq '..') {
+	    next;
+	} elsif (-d "$scan_dir/$file") {
+	    push (@subdirs, $file);
+	} elsif ($file eq "index.sgml") {
+	    &ScanIndex ("$scan_dir/$file");
+	}
+    }
+    closedir (HTMLDIR);
+
+    # Now recursively scan the subdirectories.
+    my $dir;
+    foreach $dir (@subdirs) {
+	&ScanIndices ("$scan_dir/$dir");
+    }
+}
+
+sub ScanIndex {
+    my ($file) = @_;
+#    print "Scanning index file: $file\n";
+
+    open (INDEXFILE, $file)
+	|| die "Can't open $file: $!";
+    while (<INDEXFILE>) {
+	if (m/^<ANCHOR\s+id\s*=\s*"([^"]*)"\s+href\s*=\s*"([^"]*)"\s*>/) {
+#	    print "Found id: $1 href: $2\n";
+	    $Links{$1} = $2;
+	}
+    }	
+    close (INDEXFILE);
+}
+
+
+sub FixCrossReferences {
+    my ($scan_dir) = @_;
+
+    opendir (HTMLDIR, $scan_dir)
+	|| die "Can't open HTML directory $scan_dir: $!";
+    my $file;
+    foreach $file (readdir (HTMLDIR)) {
+	if ($file eq '.' || $file eq '..') {
+	    next;
+	} elsif ($file =~ m/.html?$/) {
+	    &FixHTMLFile ("$scan_dir/$file");
+	}
+    }
+    closedir (HTMLDIR);
+}
+
+
+sub FixHTMLFile {
+    my ($file) = @_;
+#    print "Fixing file: $file\n";
+
+    open (HTMLFILE, $file)
+	|| die "Can't open $file: $!";
+    undef $/;
+    my $entire_file = <HTMLFILE>;
+    close (HTMLFILE);
+
+    $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($1, $2); %ge;
+
+    open (NEWFILE, ">$file.new")
+	|| die "Can't open $file: $!";
+    print NEWFILE $entire_file;
+    close (NEWFILE);
+
+    unlink ($file)
+	|| die "Can't delete $file: $!";
+    rename ("$file.new", $file)
+	|| die "Can't rename $file.new: $!";
+}
+
+
+sub MakeXRef {
+    my ($id, $text) = @_;
+
+    my $href = $Links{$id};
+    if ($href) {
+	return "<A\nHREF=../$href\n>$text</A>";
+    } else {
+	return $text;
+    }
+}

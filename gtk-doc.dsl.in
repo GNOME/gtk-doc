@@ -158,24 +158,6 @@
        (with-mode generate-index-mode
 	 (process-children))))))
 
-;; Honor href="" attributes in anchors
-
-(define (href-to target)
-  ;; Return the HTML HREF for the given node.  If nochunks is true, just
-  ;; return the fragment identifier.
-  (let* ((id       (element-id target))
-	 (href     (attribute-string "href" target))
-	 (curdepth (directory-depth (html-file (current-node))))
-	 (entfile  (html-file target))
-	 (fragid   (if (chunk? target)
-		     ""
-		     (string-append "#" id))))
-    (if href
-	(string-append (copy-string "../" (+ curdepth 1)) href)
-	(if nochunks
-	    fragid
-	    (string-append (copy-string "../" curdepth) entfile fragid)))))
-	
 ;; Mode for generating cross references
 
 (define (process-child-elements)
@@ -199,6 +181,21 @@
 "))))
   (default
     (process-child-elements)))
+
+;; For hypertext links for which no target is found in the document, we output
+;; our own special tag which we use later to resolve cross-document links.
+(element link 
+  (let* ((target (element-with-id (attribute-string (normalize "linkend")))))
+    (if (node-list-empty? target)
+      (make element gi: "GTKDOCLINK"
+	    attributes: (list
+			 (list "HREF" (attribute-string (normalize "linkend"))))
+            (process-children))
+      (make element gi: "A"
+            attributes: (list
+                         (list "HREF" (href-to target)))
+            (process-children)))))
+
 
 </style-specification-body>
 </style-specification>

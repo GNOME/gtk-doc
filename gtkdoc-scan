@@ -23,8 +23,8 @@
 # Description : Extracts declarations of functions, macros, enums, structs
 #		and unions from header files.
 #
-#		It is called with a module name, an optional output directory,
-#		and the header files to scan.
+#		It is called with a module name, an optional source directory,
+#		an optional output directory, and the header files to scan.
 #
 #		It outputs all declarations found to a file named
 #		'$MODULE-decl.txt', and the list of decarations to another
@@ -43,10 +43,15 @@ use Getopt::Long;
 # name of documentation module
 my $MODULE;
 my $OUTPUT_DIR;
+my $SOURCE_DIR;
+my $IGNORE_HEADERS = "";
 
 my %optctl = (module => \$MODULE,
+	      'source-dir' => \$SOURCE_DIR,
+	      'ignore-headers' => \$IGNORE_HEADERS,
 	      'output-dir' => \$OUTPUT_DIR);
-GetOptions(\%optctl, "module=s", "output-dir:s");
+GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
+	   "output-dir:s");
 
 $OUTPUT_DIR = $OUTPUT_DIR ? $OUTPUT_DIR : ".";
 
@@ -76,22 +81,11 @@ my $file;
 
 # The header files to scan are passed in as command-line args.
 for $file (@ARGV) {
-    my $file_basename;
-    if ($file =~ m/^.*[\/\\](.*)\.h$/) {
-	$file_basename = $1;
-    } else {
-	print "WARNING: Can't find basename of file $file\n";
-	$file_basename = $file;
-    }
+    &ScanHeader ($file, \$object_list, \$main_list);
+}
 
-    # We split the output into two parts - GtkObject subclasses and everything
-    # else, so that all GtkObjects/Widgets are kept together.
-    my ($list, $is_object) = &ScanHeader($file);
-    if ($is_object) {
-	$object_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n";
-    } else {
-	$main_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n";
-    }
+if ($SOURCE_DIR) {
+    &ScanHeaders ($SOURCE_DIR, \$object_list, \$main_list);
 }
 
 print DECLLIST $object_list, $main_list;
@@ -100,18 +94,58 @@ close (DECL);
 
 
 #############################################################################
+# Function    : ScanHeaders
+# Description : This scans a directory tree looking for header files.
+#
+# Arguments   : $source_dir - the directory to scan.
+#		$object_list - a reference to the list of object functions &
+#			declarations.
+#		$main_list - a reference to the list of other declarations.
+#############################################################################
+
+sub ScanHeaders {
+    my ($source_dir, $object_list, $main_list) = @_;
+#    print "Scanning source directory: $source_dir\n";
+
+    # This array holds any subdirectories found.
+    my (@subdirs) = ();
+    
+    opendir (SRCDIR, $source_dir)
+	|| die "Can't open source directory $source_dir: $!";
+    my $file;
+    foreach $file (readdir (SRCDIR)) {
+	if ($file eq '.' || $file eq '..') {
+	    next;
+	} elsif (-d "$source_dir/$file") {
+	    push (@subdirs, $file);
+	} elsif ($file =~ m/\.h$/) {
+	    &ScanHeader ("$source_dir/$file", $object_list, $main_list);
+	}
+    }
+    closedir (SRCDIR);
+
+    # Now recursively scan the subdirectories.
+    my $dir;
+    foreach $dir (@subdirs) {
+	&ScanHeaders ("$source_dir/$dir", $object_list, $main_list);
+    }
+}
+
+
+#############################################################################
 # Function    : ScanHeader
 # Description : This scans a header file, looking for declarations of
 #		functions, macros, typedefs, structs and unions, which it
 #		outputs to the DECL file.
 # Arguments   : $input_file - the header file to scan.
-# Returns     : the list of declarations found, and a boolean which
-#		is 1 if the header file looks like it is describing a
-#		GtkObject subclass (it looks for GTK_IS_xxx or GNOME_IS_xxx).
+#		$object_list - a reference to the list of object functions &
+#			declarations.
+#		$main_list - a reference to the list of other declarations.
+# Returns     : it adds declarations to the appropriate list.
 #############################################################################
 
 sub ScanHeader {
-    my ($input_file) = @_;
+    my ($input_file, $object_list, $main_list) = @_;
 #    print "DEBUG: Scanning $input_file\n";
 
     my $list = "";		# Holds the resulting list of declarations.
@@ -132,14 +166,33 @@ sub ScanHeader {
     my @objects = ();		# Holds declarations that look like GtkObject
 				#   subclasses, which we remove from the list.
 
+    my $file_basename;
+    if ($input_file =~ m/^.*[\/\\](.*)\.h$/) {
+	$file_basename = $1;
+    } else {
+	print "WARNING: Can't find basename of file $input_file\n";
+	$file_basename = $input_file;
+    }
+
+    # Check if the basename is in the list of headers to ignore.
+    if ($IGNORE_HEADERS =~ m/\b\Q${file_basename}\E\.h\b/) {
+#	print "DEBUG: File ignored: $input_file\n";
+	return;
+    }
+
     if (! -f $input_file) {
 	print "File doesn't exist: $input_file\n";
-	return ("", 0);
+	return;
     }
 
     open(INPUT, $input_file)
 	|| die "Can't open $input_file: $!";
     while(<INPUT>) {
+	# If this is a private header, skip it.
+	if (m%^\s*/*<\s*private_header\s*>*/%) {
+	    last;
+	}
+
 	# Skip to the end of the current comment.
 	if ($in_comment) {
 	    if (m%\*/%) {
@@ -150,11 +203,12 @@ sub ScanHeader {
 
 	# Look for a widget class to use as the section title.
 	# GtkStyle isn't really an object.
-	if (m/^struct\s+_(Gtk\S+|Gnome\S+)Class/) {
-	    if ($1 ne 'GtkStyle') {
-		$list .= "<TITLE>$1</TITLE>\n";
-	    }
-	}
+# This is done below now.
+#	if (m/^struct\s+_(Gtk\S+|Gnome\S+)Class/) {
+#	    if ($1 ne 'GtkStyle') {
+#		$list .= "<TITLE>$1</TITLE>\n";
+#	    }
+#	}
 
 	if (!$in_declaration) {
 	    # Skip top-level comments.
@@ -226,20 +280,16 @@ sub ScanHeader {
 		$level = 0;
 		$in_declaration = "struct";
 
+	    } elsif (m/^struct\s+_(\w+)\s*;/) {
+		# Skip private structs.
+
 	    } elsif (s/^struct\s+_(\w+)/struct $1/) {
 		# We assume that 'struct _<struct_name>' is really the
 		# declaration of struct <struct_name>.
 		$symbol = $1;
 		$decl = $_;
-		# We skip object structs
-		if ($symbol =~ m/^(Gtk\S+|Gnome\S+)Class/
-		    && $1 ne 'GtkStyle') {
-#		    print "Found class: $1\n";
-		    push (@objects, $1);
-		} else {
-		    $level = 0;
-		    $in_declaration = "struct";
-		}
+		$level = 0;
+		$in_declaration = "struct";
 
 	    } elsif (s/^union\s+_(\w+)/union $1/) {
 		$symbol = $1;
@@ -260,7 +310,7 @@ sub ScanHeader {
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-	    } elsif (m/^\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s\*+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
+	    } elsif (m/^\s*(G_INLINE_FUNC)?\s*((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*\(/) {
 		$ret_type = "$2 $4";
 		$symbol = $5;
 		$decl = $';
@@ -276,7 +326,7 @@ sub ScanHeader {
 		$symbol = $1;
 		$decl = $';
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
-		    && $previous_line !~ m/^\s*static\s+inline/) {
+		    && $previous_line !~ m/^\s*static\s+/) {
 		    if ($previous_line =~ m/^((const\s*)?\w+)(\s*\*+)?/) {
 			$ret_type = $1;
 			if (defined ($3)) { $ret_type .= " $3"; }
@@ -340,8 +390,16 @@ sub ScanHeader {
 		if ($symbol eq "") {
 		    $symbol = $1;
 		}
-		&AddSymbolToList (\$list, $symbol);
-		print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$decl</STRUCT>\n";
+
+		if ($symbol =~ m/^(Gtk\S+|Gnome\S+)Class/
+		    && $1 ne 'GtkStyle') {
+#		    print "Found object: $1\n";
+		    $list .= "<TITLE>$1</TITLE>\n";
+		    push (@objects, $1);
+		} else {
+		    &AddSymbolToList (\$list, $symbol);
+		    print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$decl</STRUCT>\n";
+		}
 		$in_declaration = "";
 	    } else {
 		# We use tr to count the brackets in the line, and adjust
@@ -376,13 +434,13 @@ sub ScanHeader {
     # end of the current section, in a subsection named 'Standard'.
     my ($class) = "";
     my ($standard_decl) = "";
-    if ($list =~ m/^GTK_IS_(.*)_CLASS/m) {
+    if ($list =~ m/^GTK_IS_(\S*)_CLASS/m) {
 	$class = $1;
-    } elsif ($list =~ m/^GTK_IS_(.*)/m) {
+    } elsif ($list =~ m/^GTK_IS_(\S*)/m) {
 	$class = $1;
-    } elsif ($list =~ m/^GNOME_IS_(.*)_CLASS/m) {
+    } elsif ($list =~ m/^GNOME_IS_(\S*)_CLASS/m) {
 	$class = $1;
-    } elsif ($list =~ m/^GNOME_IS_(.*)/m) {
+    } elsif ($list =~ m/^GNOME_IS_(\S*)/m) {
 	$class = $1;
     }
 
@@ -404,11 +462,12 @@ sub ScanHeader {
 	if ($list =~ s/^GNOME_IS_${class}_CLASS\n//m) { $standard_decl .= $&; }
 
         if ($standard_decl ne "") {
-	    $list .= "<SUBSECTION>\n<NAME>Standard</NAME>\n$standard_decl";
+	    $list .= "<SUBSECTION Standard>\n$standard_decl";
 	}
-	return ($list, 1);
+
+	$$object_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
     } else {
-	return ($list, 0);
+	$$main_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
     }
 }
 

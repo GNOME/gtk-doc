@@ -1,79 +1,46 @@
-From: Miguel de Icaza [miguel@nuclecu.unam.mx]
-Sent: 16 October 1998 00:13
-To: dusk@smsi-roman.com
-Cc: rosalia@cygnus.com; gnome-list@gnome.org
-Subject: Re: Documentation
 
-
-> When was this?  Was it on gnome-list?  (And where was I?  :c)  I've
-> scanned the past couple months, and can't find either proposal.  I vaguely
-> remember the embedded C comment thread, but nothing official about it.
-
-here is the document:
-
------------------- api-commenting-style.txt --------------------
-
-I suggest we use the following to documenting API entry points in the
-GNOME libraries.  I have written a simple Perl script that can extract
-these comments into a file.  I will need to make my Perl script
-generate DocBook output.
+These are the comment blocks used in Gnome source files to document
+functions (and macros if you want).
 
 /**
  * function_name:
- * @par1:  description of parameter 1
+ * @par1:  description of parameter 1. These can extend over more than
+ * one line.
  * @par2:  description of parameter 2
  *
- * function description.  You can include references to parameters
- * here like @par1 and their font will be set properly on the output.
- * constants can be references with %constant as well to make their
- * string descriptions use a font specification.  This function
- * is simliar to #function_name2 in this and that
+ * The function description goes here. You can use @par1 to refer to parameters
+ * so that they are highlighted in the output. You can also use %constant
+ * for constants, function_name2() for functions and #GtkWidget for links to
+ * other declarations (which may be documented elsewhere).
  * 
- * return values: an integer.
+ * Returns: an integer.
  */
-int
-function_name (int par1, char * par2)
-{
-}
 
-The important parts are:
+The block starts with '/**'.
+Each line starts with ' * '.
 
-The first line of an API entry point documentation starts with /**
-like the Java documentation system (slash and two stars).  The comment
-is formatted with stars at the beginning of each line.  The second
-line is the function name, it might include an optional ':' for beautification
-purposes. 
+The second line is the function name, optionally followed by a ':'.
 
-A number of keywords can be included in the function_name line, so far
-only the [constructor] string has a special meaning (it is used to
-list before any other API entry points in the generated output).  We
-can define more of those attributes in the future.
+Following the function name are the parameters, e.g. '@par1:' above.
 
-Any line from that point on that matches the regular expression:
+A blank line MUST be used to separate parameter descriptions from the main
+description (otherwise it is assumed to be a continuation of the parameter
+description.)
 
-	^ \* @[a-zA-Z0-9]:
+After the main description is a 'Returns:' line to describe the
+returned value of the function (if it is not void).
 
-(for example: " * @par1: parameter one")
+Text inside the descriptions can use these special characters (they
+will be expanded into appropriate DocBook tags):
 
-Is taken to be the declaration of a function parameter.  We can
-extract the type of this parameter from the actual function definition. 
+   @name   a parameter.
+   %name   a constant.
+   name()  reference to a function, or a macro which works like a function
+	   (this will be turned into a hypertext link if the function is
+	   documented anywhere).
+   #name   reference to any other type of declaration, e.g. a struct, enum,
+	   union, or macro (this will also be turned into a link if possible).
 
-After the parameters we have the function description.  If any line of
-the function description matches the regexp:
-
-	^ \* [Rr]eturn
-
-It is taken to be the description of the return value for the
-function.  
-
-Text inside the descritpion can have any of the following special tags
-on the beginning:
-
-   @name:   reference to a parameter.
-   %name:   reference to a constant.
-   name():   function reference.
-
-
--- 
-         To unsubscribe: mail gnome-list-request@gnome.org with 
-                       "unsubscribe" as the Subject.
+To avoid problems, the characters '<', '>' and '&' in the descriptions are
+converted into the SGML entities &lt; &gt; and &amp;.
+This means that you can't use DocBook SGML tags.

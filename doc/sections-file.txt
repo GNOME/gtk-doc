@@ -1,0 +1,36 @@
+
+This describes the MODULE-sections.txt file which is used to organise the
+documentation output by gtk-doc.
+
+The file is divided into sections. Each section will be output to a separate
+file in the templates, which also corresponds to a SGML file, and a file in
+the final HTML files. Each section contains a list of function/macro etc.
+names, which can be rearranged into the desired order.
+
+The <FILE> ... </FILE> tag is used to specify the file name.
+
+The <TITLE> ... </TITLE> tag is used to specify the title of the section.
+It is only useful before the templates are initially created, since the title
+set in the template file overrides this. (Note that if you change the titles
+anywhere you will have to update the main SGML file.)
+
+You can group items in the section by using the <SUBSECTION> tag. Currently
+it outputs a blank line between subsections in the synopsis section.
+You can also use <SUBSECTION Standard> for standard GtkObject declarations,
+and <SUBSECTION Private> for private declarations which will not be output.
+
+Example section:
+
+<SECTION>
+<FILE>gnome-dateedit</FILE>
+<TITLE>GnomeDateEdit</TITLE>
+gnome_date_edit_new
+gnome_date_edit_set_time
+gnome_date_edit_set_popup_range
+gnome_date_edit_get_date
+<SUBSECTION Standard>
+GNOME_DATE_EDIT
+GNOME_IS_DATE_EDIT
+gnome_date_edit_get_type
+GNOME_DATE_EDIT_CLASS
+</SECTION>

@@ -6,11 +6,9 @@ bin_SCRIPTS = \
 	gtkdoc-mktmpl  \
 	gtkdoc-mkdb    \
 	gtkdoc-mkhtml  \
-	gtkdoc-mkman
+	gtkdoc-mkman   \
+	gtkdoc-fixxref
 	 
 gtkdocdatadir = $(datadir)/gtk-doc
 gtkdocdata_DATA = \
-	gtk-doc.dtd \
-        gtk-doc.dsl \
-	gtk-doc.cat
-
+        gtk-doc.dsl

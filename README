@@ -2,20 +2,17 @@
 GTK+ DocBook Documentation Generator
 ====================================
 
-This package automatically generates DocBook documentation for GTK+,
-and converts the DocBook documentation into HTML and man pages.
+This package automatically generates DocBook documentation for GTK+ and Gnome,
+and converts the DocBook documentation into HTML (and man pages in future).
+
 
 
 Requirements
 ============
 
-Perl v5 - the main scripts are in Perl, which is expected to be in /usr/bin.
-    You'll have to change the first lines, "!#/usr/bin/perl" if it isn't.
+Perl v5 - the main scripts are in Perl.
 
 DocBook DTD v3.0 - This is the DocBook SGML DTD.
-    gtk-doc.dtd extends DocBook slightly to support an "href" 
-    attribute on the <anchor> tag. This is used to enable global
-    cross-references in the generated HTML.
     http://www.ora.com/davenport
 
 Jade v1.1 - This is a DSSSL processor for converting SGML to various formats.
@@ -24,125 +21,156 @@ Jade v1.1 - This is a DSSSL processor for converting SGML to various formats.
 Modular DocBook Stylesheets (I've got 1.20, but v1.08+ should be OK)
     This is the DSSSL code to convert DocBook to HTML (and a few other
     formats). It's used together with jade.
-    I've customized the DSSSL code slightly, in gtk-doc.dsl, to stop the
-    output of the main table of contents, to add a border and colour to
+    I've customized the DSSSL code slightly, in gtk-doc.dsl, to colour
     the program code listings/declarations, and to support global
     cross-reference indices in the generated HTML.
     http://nwalsh.com/docbook/dsssl
 
-docbook-to-man - This converts the DocBook into man pages. I've customized
-    the 'translation spec' slightly, to capitalise section headings and add
-    the 'GTK Library' title at the top of the pages and the revision date
-    at the bottom.
+docbook-to-man - if you want to create man pages from the DocBook.
+    I've customized the 'translation spec' slightly, to capitalise section
+    headings and add the 'GTK Library' title at the top of the pages and the
+    revision date at the bottom.
     There is a link to this on http://www.ora.com/davenport
+    NOTE: This does not work yet.
 
 
 Overview
 ========
 
-These are the stages for producing the final HTML/man pages from a set
-of header files. See the later section for resyncing the documentation
-with the code.
+There are main 6 programs in gtk-doc. Most of them take a --module=XXX flag
+specifying the name of the module (we'll use MODULE below):
 
 
-1. Scanning the header files, to get function prototypes, structs,
-   enums, macros etc.
-
-  1.1. Run gtk-scan on the header files. Use the --module=blah
-       flag to indicate a name for your documentation module.
-       This generates files blah-decl-list.txt and blah-decl.txt
-
-  1.2  If the code you are documenting is GTK+ based, create a file
-       blah.types. This file contains two things:
-
-       a) #include lines necessary to compile a program against
-          your library.
-       b) The GtkObject types in your library, represented by lines
-          listing the name of a get_type() function.
-
-       An example file that does part of gtk would look like:
-
-============
-#include <gtk/gtk.h>
-gtk_object_get_type
-gtk_widget_get_type
-gtk_button_get_type
-============
-
-      Set the CFLAGS and LDFLAGS environment variables to the
-      values necessary to compile a program against your
-      library, then run 'gtkdoc-scanobj --module=blah'. This
-      generates files blah.signals and blah.heirarchy.
-
-  1.3  Copy the file blah-decl-list.txt to blah-sections.txt
-
-       The file blah-sections.txt is used to determine the order
-       and organization of the functions in the generated templates.
- 
-
-2. Creating blank template files.
-
-  Run 'gtkdoc-mktmpl --module=blah' to create empty templates for each
-  function etc. in the tmpl/ directory. It won't overwrite files, 
-  to avoid losing work work, so if you need to regenerate the blank 
-  documents you need to delete the current files.
+gtkdoc-scan:	Scans header files looking for declarations of functions,
+		macros, enums, structs, and union. It outputs two files -
+		MODULE-decl.txt which contains the declarations, and
+		MODULE-decl-list.txt which contains a list of their names.
 
 
-3. Manually editing documentation in gtkdocs/ directory.
+gtkdoc-scanobj:	Creates a small C program which is compiled and run to query
+		your library about which GtkObjects it contains and the
+		signals that they emit. If your module has no GtkObjects then
+		you don't need to use this.
 
-  See doc/authors.txt for a description of the abbreviations and DocBook
-  tags which can be used.
+		You need to create a MODULE.types file which contains:
+
+		a) #include lines necessary to compile a program against
+		   your library.
+		b) The GtkObject types in your library, represented by lines
+		   listing the name of a get_type() function.
+
+		An example file that does part of gtk would look like:
+
+		============
+		#include <gtk/gtk.h>
+		gtk_object_get_type
+		gtk_widget_get_type
+		gtk_button_get_type
+		============
+
+		Set the CFLAGS and LDFLAGS environment variables to the
+		values necessary to compile a program against your
+		library, then run 'gtkdoc-scanobj --module=MODULE'.
+
+		It outputs MODULE.hierarchy which contains your widgets and
+		their ancestors, and MODULE.signals which contains prototypes
+		of the signals that they emit.
 
 
-4. Creating the DocBook files and then the HTML or man pages.
+gtkdoc-mktmpl:	Uses MODULE-sections.txt to generate a set of template files
+		in tmpl/. MODULE-sections.txt is used to determine the order
+		and organization of the functions in the generated templates.
+		It is initially created by copying MODULE-decl-list.txt which
+		was generated by gtkdoc-scan, and then edited manually to
+		reorganise it.
 
-  4.1. Run 'gtkdoc-mkdb --module=blah' to generate the DocBook sgml files.
+		The template files are then filled in with descriptions of
+		the functions/macros etc. and their arguments.
+		(For Gnome, functions are described in the source code in
+		specially formatted comment blocks, but the templates are still
+		used for the section descriptions and for long examples.)
 
-  4.2. Create a driver file (conventionally called blah-docs.sgml).
-       When new files have been added to blah-sections.txt, you must also
-       add them here. This file should include all the entities
-       generated in sgml/gXXX-doc.top & sgml/gXXX-doc.bottom.
 
-  4.3. Make a directory 'html', cd there, and from there, run
-       'gtkdoc-mkhtml' to generate the HTML from the DocBook.
-       Note that it complains a lot about references to non-existent
-       IDs, but it still works OK.
+gtkdoc-mkdb:	Generates the DocBook SGML in sgml/, using MODULE-sections.txt
+		and the template files (and for Gnome it also uses the comment
+		blocks in the source code).
 
-  4.4. Run gtkdoc-mkman to generate the man pages from the DocBook files.
-       I customized docbook-to-man slightly. The script and transpec I use are
-       in db2man. [ This part probably needs work ]
+
+gtkdoc-mkhtml:	Turns the DocBook SGML into HTML, using the main SGML file
+		(typically called MODULE-docs.sgml) which you must create.
+		gtkdoc-mkdb creates the files sgml/MODULE-doc.top & 
+		sgml/MODULE-doc.bottom which contains all the entities which
+		were generated, so they should be included somewhere.
+		When new files have been added to MODULE-sections.txt, or when
+		titles of sections change, you must update the main SGML file.
+
+		Warnings output by gtkdoc-mkhtml about references to
+		non-existent entities can generally be ignored.
+
+		Warnings about not being able to find .sgml files usually
+		means that you haven't updated the main SGML file.
+
+
+gtkdoc-fixxref:	Fixes up the cross-references to documentation in other
+		modules. This is run immediately after installing the HTML
+		files.
+
+		We have customised the DSSSL code so that each module outputs
+		an index.sgml file containing relative URLs to all of the
+		functions/macro etc. descriptions, like this:
+
+	     <ANCHOR id ="GBOOLEAN" href="glib/glib-basic-types.html#GBOOLEAN">
+	     <ANCHOR id ="GPOINTER" href="glib/glib-basic-types.html#GPOINTER">
+
+		We have also changed the DSSSL so that if a link target can't
+		be found within the module it outputs
+		<GTKDOCLINK href="target-element-id">...</GTKDOCLINK>.
+		
+		gtkdoc-fixref reads all the available index.sgml files and
+		converts all of the GTKDOCLINK tags to proper links.
+
+
 
 Resyncing the Documentation with New Versions of the Source
 ===========================================================
 
-(This should be made simpler somehow)
+Run gtkdoc-scan (and gtkdoc-scanobj if necessary) to rescan the sources.
 
-Scan the header files again, as in (1) above.
+Run gtkdoc-mktmpl to merge the changes into the templates.
+This will output warnings about any declarations which have been added/removed.
 
-Compare the new blah-decl.txt files with the backups blah-decl.bak to
-see which functions/macros etc. have been added or changed.
-If an existing function prototype has been changed you will have to edit the
-bits in the gtkdocs directory to bring them up to date.
+Update the MODULE-sections.txt to include the new functions etc. in the
+appropriate sections, and delete ones which are no longer available.
 
-Update the blah-sections.txt to include the new functions etc. in the
-appropriate sections.
+Run gtkdoc-mktmpl again, until there are no warnings output.
 
-Add the new templates to the tmpl/ files. (I usually run gtkdoc-mktmpl
-with a different output directory and copy the new templates across.
-The output directory can be specified with --output-dir=DIR)
 
-Run gtkdoc-mkdb to generate the DocBook. It will complain about missing
-pieces and will output unused declarations to blah-unused.txt so you can
-go back and fix these and run it again until it is all OK.
-(Note: Currently I don't use the GTK object structs in the documentation so
-these always appear in gtk-unused.txt)
+Using automake & make
+=====================
+
+Rather than run the above scripts by hand, passing the appropriate arguments,
+its better to use automake & make and create special targets for gtk-doc.
+
+We've been using the targets:
+
+  make scan	 - to run gtkdoc-scan (& gtkdoc-scanobj if appropriate)
+
+  make templates - does the same as make scan but also runs gtkdoc-mktmpl
+		   to regerenate the templates
+
+  make sgml      - runs gtkdoc-mkdb to generate the DocBook SGML.
+
+  make html      - runs gtkdoc-mkhtml to convert the DocBook to HTML.
+
+We also added local clean and install commands.
+
 
 Examples
 ========
 
-ftp://ftp.gtk.org/pub/users/otaylor/gtk-doc/ for examples of
-documentation packages that use the above scripts, and of using
-automake to automate the process.
+The examples directory shows how libgnome and libgnomeui could be set up to
+use gtk-doc. (These are what I have been using to test gtk-doc.)
 
-Damon Chaplin (DAChaplin@msn.com), 10 Nov 1998.
+
+Damon Chaplin (DAChaplin@msn.com), 15 Dec 1998.
 

@@ -3,7 +3,7 @@
 
 PROJECT=gtk-doc
 TEST_TYPE=-f
-FILE=gtk-doc.dtd
+FILE=gtk-doc.dsl.in
 
 DIE=0
 
@@ -60,7 +60,7 @@ autoconf
 ./configure "$@"
 
 echo 
-echo "Now type 'make' to compile $PROJECT."
+echo "Now type 'make install' to install $PROJECT."
 
 
 
