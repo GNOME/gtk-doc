@@ -52,10 +52,6 @@ if ($PRINT_VERSION) {
     exit 0;
 }
 
-if (!$MODULE) {
-    $PRINT_HELP = 1;
-}
-
 if ($PRINT_HELP) {
     print "gtkdoc-fixxref version @VERSION@\n";
     print "\n--module=MODULE_NAME    Name of the doc module being parsed";

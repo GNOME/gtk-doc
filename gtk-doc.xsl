@@ -10,6 +10,7 @@
   <xsl:param name="toc.section.depth">1</xsl:param>
 
   <xsl:param name="default.encoding" select="'ISO-8859-1'"/>
+  <xsl:param name="chunk.fast" select="1"/> 
   <xsl:param name="chapter.autolabel" select="0"/>
   <xsl:param name="use.id.as.filename" select="'1'"/>
   <xsl:param name="html.ext" select="'.html'"/>
