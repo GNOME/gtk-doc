@@ -43,11 +43,11 @@ use Getopt::Long;
 # name of documentation module
 my $MODULE;
 my $OUTPUT_DIR;
-my $SOURCE_DIR;
+my @SOURCE_DIRS;
 my $IGNORE_HEADERS = "";
 
 my %optctl = (module => \$MODULE,
-	      'source-dir' => \$SOURCE_DIR,
+	      'source-dir' => \@SOURCE_DIRS,
 	      'ignore-headers' => \$IGNORE_HEADERS,
 	      'output-dir' => \$OUTPUT_DIR);
 GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
@@ -84,8 +84,8 @@ for $file (@ARGV) {
     &ScanHeader ($file, \$object_list, \$main_list);
 }
 
-if ($SOURCE_DIR) {
-    &ScanHeaders ($SOURCE_DIR, \$object_list, \$main_list);
+for $dir (@SOURCE_DIRS) {
+    &ScanHeaders ($dir, \$object_list, \$main_list);
 }
 
 print DECLLIST $object_list, $main_list;

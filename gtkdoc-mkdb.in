@@ -37,10 +37,10 @@ use Getopt::Long;
 my $MODULE;
 my $TMPL_DIR;
 my $SGML_OUTPUT_DIR;
-my $SOURCE_DIR;
+my @SOURCE_DIRS;
 
 my %optctl = (module => \$MODULE,
-	      'source-dir' => \$SOURCE_DIR,
+	      'source-dir' => \@SOURCE_DIRS,
 	      'output-dir' => \$SGML_OUTPUT_DIR,
 	      'tmpl-dir' => \$TMPL_DIR);
 GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s");
@@ -131,8 +131,8 @@ if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
     &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
 }
 
-if ($SOURCE_DIR) {
-    &ReadSourceDocumentation ($SOURCE_DIR);
+for $dir (@SOURCE_DIRS) {
+    &ReadSourceDocumentation ($dir);
 }
 
 &OutputSGML ("$ROOT_DIR/$MODULE-sections.txt");
