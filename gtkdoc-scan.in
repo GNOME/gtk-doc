@@ -238,7 +238,7 @@ sub ScanHeader {
 
 	    # TYPEDEF'D FUNCTIONS (i.e. user functions)
 
-	    } elsif (m/^typedef\s+((const\s+)?\w+)\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
+	    } elsif (m/^\s*typedef\s+((const\s+)?\w+)\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
 		$ret_type = "$1 $3";
 		$symbol = $4;
 		$decl = $';
@@ -247,7 +247,7 @@ sub ScanHeader {
 
 	    # ENUMS
 
-	    } elsif (s/^enum\s+_(\w+)\s+\{/enum $1 {/) {
+	    } elsif (s/^\s*enum\s+_(\w+)\s+\{/enum $1 {/) {
 		# We assume that 'enum _<enum_name> {' is really the
 		# declaration of enum <enum_name>.
 		$symbol = $1;
@@ -255,12 +255,12 @@ sub ScanHeader {
 		$decl = $_;
 		$in_declaration = "enum";
 
-	    } elsif (m/^typedef\s+enum\s+_(\w+)\s+\1\s*;/) {
+	    } elsif (m/^\s*typedef\s+enum\s+_(\w+)\s+\1\s*;/) {
 		# We skip 'typedef <enum_name> _<enum_name>;' as the enum will
 		# be declared elsewhere.
 #		print "DEBUG: skipping enum typedef: $1\n";
 
-	    } elsif (m/^typedef\s+enum/) {
+	    } elsif (m/^\s*typedef\s+enum/) {
 		$symbol = "";
 		$decl = $_;
 		$in_declaration = "enum";
@@ -268,7 +268,7 @@ sub ScanHeader {
 
 	    #STRUCTS
 
-	    } elsif (m/^typedef\s+struct\s+_(\w+)\s+\1\s*;/) {
+	    } elsif (m/^\s*typedef\s+struct\s+_(\w+)\s+\1\s*;/) {
 		# We've found a 'typedef struct _<name> <name>;'
 		# This could be an opaque data structure, so we output an
 		# empty declaration. If the structure is actually found that
@@ -277,16 +277,16 @@ sub ScanHeader {
 		&AddSymbolToList (\$list, $1);
 		print DECL "<STRUCT>\n<NAME>$1</NAME>\n</STRUCT>\n";
 
-	    } elsif (m/^typedef\s+struct\s*{/) {
+	    } elsif (m/^\s*typedef\s+struct\s*{/) {
 		$symbol = "";
 		$decl = $_;
 		$level = 0;
 		$in_declaration = "struct";
 
-	    } elsif (m/^struct\s+_(\w+)\s*;/) {
+	    } elsif (m/^\s*struct\s+_(\w+)\s*;/) {
 		# Skip private structs.
 
-	    } elsif (s/^struct\s+_(\w+)/struct $1/) {
+	    } elsif (s/^\s*struct\s+_(\w+)/struct $1/) {
 		# We assume that 'struct _<struct_name>' is really the
 		# declaration of struct <struct_name>.
 		$symbol = $1;
@@ -297,24 +297,24 @@ sub ScanHeader {
 
 	    # UNIONS
 
-	    } elsif (s/^union\s+_(\w+)/union $1/) {
+	    } elsif (s/^\s*union\s+_(\w+)/union $1/) {
 		$symbol = $1;
 		$decl = $_;
 		$in_declaration = "union";
 
-	    } elsif (m/^(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w\S*);/) {
+	    } elsif (m/^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w\S*);/) {
 		if ($2 !~ m/^struct\s/ && $2 !~ m/^union\s/) {
 #		    print "Found typedef: $_";
 		    &AddSymbolToList (\$list, $3);
 		    print DECL "<TYPEDEF>\n<NAME>$3</NAME>\n$_</TYPEDEF>\n";
 		}
-	    } elsif (m/^typedef\s+/) {
+	    } elsif (m/^\s*typedef\s+/) {
 #		print "Skipping typedef: $_";
 
 
 	    # VARIABLES (extern'ed variables)
 
-	    } elsif (m/^extern\s+((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*;/) {
+	    } elsif (m/^\s*extern\s+((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*;/) {
 		$symbol = $4;
 #		print "Possible extern: $_";
 		&AddSymbolToList (\$list, $symbol);
@@ -430,7 +430,12 @@ sub ScanHeader {
 		    push (@objects, $1);
 		} else {
 		    &AddSymbolToList (\$list, $symbol);
-		    print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$decl</STRUCT>\n";
+
+		    if ($decl =~ m/^\s*typedef\s+struct\s*{/) {
+		      print DECL "<TYPEDEF>\n<NAME>$symbol</NAME>\n$decl</TYPEDEF>\n";
+		    } else {
+		      print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$decl</STRUCT>\n";
+		    }
 		}
 		$in_declaration = "";
 	    } else {

@@ -1,3 +1,10 @@
+1999-09-09  Martin Baulig  <martin@home-of-linux.org>
+
+	* gtkdoc-scan.in (ScanHeader): Don't force typedefs and other
+	things to start in column 0; allow some spaces in front of them.
+	Output `typedef struct { ... } name' structs as typedef, not as
+	structure.
+
 1999-09-08  Martin Baulig  <martin@home-of-linux.org>
 
 	* gtkdoc-mkdb.in (CreateValidSGMLID): `s/::/-/g;' for CORBA objects.
