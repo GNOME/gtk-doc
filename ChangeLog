@@ -1,3 +1,11 @@
+2002-05-25  Matthias Clasen  <maclas@gmx.de>
+
+	* gtkdoc-mkdb.in (ConvertSGMLChars): New function which tries to
+	be a bit more clever when escaping SGML syntax characters. 
+	(ScanSourceFile): Use ConvertSGMLChars instead of CreateValidSGML.
+	This reduces the work needed to make gtk-doc emit XML (where <, &
+	and friends must always be escaped).
+
 2002-05-18  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkhtml.in: Detect whether we're processing SGML or XML. 

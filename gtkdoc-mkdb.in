@@ -1248,6 +1248,30 @@ sub CreateValidSGML {
     return $text;
 }
 
+#############################################################################
+# Function    : ConvertSGMLChars
+# Description : This turns chars which are used in SGML into entities,
+#		e.g. '<' into '&lt;'. Depending on $SGML_MODE, this is done
+#               unconditionally or only if the character doesn't seem to be 
+#               part of an SGML construct (tag or entity reference)
+# Arguments   : $text - the text to turn into proper SGML.
+#############################################################################
+
+sub ConvertSGMLChars {
+    my ($text) = @_;
+    if ($SGML_MODE) {
+	$text =~ s/&(?![[:alpha:]#])/&amp;/g;	# Do this first, or the others get messed up.
+	$text =~ s/<(?![[:alpha:]\/])/&lt;/g;
+	$text =~ s/(?<![[:alpha:]"'])>/&gt;/g;
+    }
+    else {
+	$text =~ s/&/&amp;/g;	# Do this first, or the others get messed up.
+	$text =~ s/</&lt;/g;
+	$text =~ s/>/&gt;/g;
+    }
+    return $text;
+}
+
 
 #############################################################################
 # Function    : ExpandAbbreviations
@@ -1708,14 +1732,12 @@ EOF
 		    push (@params, "Returns");
 		    push (@params, $return_desc);
 		}
-                # Convert special SGML characters, unless --sgml-mode is used.
-                if (!$SGML_MODE) {
-                    $description = &CreateValidSGML ($description);
-                    my $k;
-                    for ($k = 1; $k <= $#params; $k += 2) {
-                        $params[$k] = &CreateValidSGML ($params[$k]);
-                    }
-                }
+                # Convert special SGML characters
+                $description = &ConvertSGMLChars ($description);
+                my $k;
+                for ($k = 1; $k <= $#params; $k += 2) {
+		    $params[$k] = &ConvertSGMLChars ($params[$k]);
+		}
 
 		$SourceSymbolDocs{$symbol} = $description;
 		$SourceSymbolParams{$symbol} = [ @params ];
