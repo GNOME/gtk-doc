@@ -358,7 +358,7 @@ get_type_name (GtkType type, gboolean * is_pointer)
 
   case GTK_TYPE_ENUM:
   case GTK_TYPE_FLAGS:
-    /* We use a gint for both of these. Hopefully a subclass with a decent
+    /* We use a gint for both of these. Hopefully a subtype with a decent
        name will be registered and used instead, as GTK+ does itself. */
     return "gint";
 
@@ -375,6 +375,10 @@ get_type_name (GtkType type, gboolean * is_pointer)
        See the GtkArg struct in gtktypeutils.h and gtkargcollector.c.
        Fortunately I doubt anything uses these as signal args. */
     return "gpointer";
+
+  default:
+    break;
+  }
 
   /* For all GtkObject subclasses we can use the class name with a "*",
      e.g. 'GtkWidget *'. */
