@@ -46,6 +46,7 @@ my $PRINT_VERSION;
 my $PRINT_HELP;
 my $OUTPUT_ALL_SYMBOLS;
 my $MAIN_SGML_FILE;
+my $SGML_MODE;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
@@ -54,8 +55,9 @@ my %optctl = (module => \$MODULE,
 	      'version' => \$PRINT_VERSION,
 	      'help' => \$PRINT_HELP,
 	      'main-sgml-file' => \$MAIN_SGML_FILE,
-	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS);
-GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help");
+	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
+	      'sgml-mode' => \$SGML_MODE);
+GetOptions(\%optctl, "module=s", "source-dir:s", "output-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -70,6 +72,7 @@ if ($PRINT_HELP) {
     print "\n--output-dir=DIRNAME   Directory to put the generated Docbook files in";
     print "\n--tmpl-dir=DIRNAME     DIRECTORY in which template files may be found";
     print "\n--main-sgml-file=FILE  File containing the toplevel SGML file.";
+    print "\n--sgml-mode            Allow Docbook markup in inline documentation.";
     print "\n--version              Print the version of this program";
     print "\n--help                 Print this help\n";
     exit 0;
@@ -1637,6 +1640,15 @@ EOF
 		    push (@params, "Returns");
 		    push (@params, $return_desc);
 		}
+                # Convert special SGML characters, unless --sgml-mode is used.
+                if (!$SGML_MODE) {
+                    $description = &CreateValidSGML ($description);
+                    my $k;
+                    for ($k = 1; $k <= $#params; $k += 2) {
+                        $params[$k] = &CreateValidSGML ($params[$k]);
+                    }
+                }
+
 		$SourceSymbolDocs{$symbol} = $description;
 		$SourceSymbolParams{$symbol} = [ @params ];
 	    }
@@ -1830,11 +1842,6 @@ sub MergeSourceDocumentation {
                  $AllDocumentedSymbols{$symbol} = 1;
             }
 
-	    # Convert special SGML characters. I'm not sure if we want to do
-	    # this but currently there are a couple of '&'s in the source code
-	    # comment blocks which mess up the HTML output badly.
-	    $src_doc = &CreateValidSGML ($src_doc);
-
 	    # If there is a blank line, finish the paragraph and start another.
 	    if ($src_doc =~ s%\n{2,}%\n</para>\n<para>\n%g) {
 #		print "Converted blank lines:\n$src_doc\n";
@@ -1867,7 +1874,7 @@ sub MergeSourceDocumentation {
 			$found = 1;
 
 			# Override the description.
-			$$tmpl_params[$j + 1] = &CreateValidSGML ($param_desc);
+			$$tmpl_params[$j + 1] = $param_desc ;
 
 			# Set the name to "" to mark it as used.
 			$$params[$k] = "";

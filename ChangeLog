@@ -1,3 +1,10 @@
+2001-10-17  Damon Chaplin  <damon@ximian.com>
+
+	* gtkdoc-mkdb.in: applied patch from Matthias Clasen
+	<matthiasc@poet.de> to take a --sgml-mode argument which means
+	all comment blocks in the source code are assumed to be DocBook
+	(i.e. we don't convert '<', '>' and '&' to '&lt;' etc.
+
 2001-10-09  Damon Chaplin  <damon@ximian.com>
 
 	* gtkdoc-mkdb.in (OutputMissingDocumentation): changed %.2f to %.0f
