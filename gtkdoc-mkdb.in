@@ -877,7 +877,7 @@ sub OutputStruct {
 	my $decl_line;
 	my $decl = $declaration;
 
-	if ($decl =~ m/^\s*(typedef\s+)?struct\s*\w*\s*{(.*)}\s*\w*\s*;\s*$/s) {
+	if ($decl =~ m/^\s*(typedef\s+)?struct\s*\w*\s*(?:\/\*.*\*\/)?\s*{(.*)}\s*\w*\s*;\s*$/s) {
 	    my $struct_contents = $2;
 
 	    foreach $decl_line (split (/\n/, $struct_contents)) {

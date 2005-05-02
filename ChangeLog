@@ -1,3 +1,8 @@
+2005-05-02  Matthias Clasen <mclasen@redhat.com>
+
+	* gtkdoc-mkdb.in: Accept C comments between struct name
+	and struct definition. GObject has an instance of this.
+
 2005-03-21  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk-doc.dcl: Allow ':' in names. (#169087)
