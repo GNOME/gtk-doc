@@ -31,6 +31,10 @@ SCAN_OPTIONS=
 # e.g. MKDB_OPTIONS=--sgml-mode --output-format=xml
 MKDB_OPTIONS=--sgml-mode --output-format=xml
 
+# Extra options to supply to gtkdoc-mktmpl
+# e.g. MKTMPL_OPTIONS=--only-section-tmpl
+MKTMPL_OPTIONS=
+
 # Extra options to supply to gtkdoc-fixref. Not normally needed.
 # e.g. FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html
 FIXXREF_OPTIONS=
@@ -52,6 +56,11 @@ HTML_IMAGES=
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE).
 # e.g. content_files=running.sgml building.sgml changes-2.0.sgml
 content_files=
+
+# SGML files where gtk-doc abbrevations (#GtkWidget) are expanded
+# These files must be listed here *and* in content_files
+# e.g. expand_content_files=running.sgml
+expand_content_files=
 
 # CFLAGS and LDFLAGS for compiling gtkdoc-scangobj with your library.
 # Only needed if you are using gtkdoc-scangobj to dynamically query widget

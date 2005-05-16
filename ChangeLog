@@ -1,3 +1,21 @@
+2005-05-10  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkdoc-mkdb.in: Add an --expand-content-files option
+	to specify extra files to expand abbreviations in and
+	copy into the output directory.
+
+	* gtk-doc.make examples/Makefile.am: Add expand_content_files
+	variable.
+
+	* gtkdoc-mktmpl.in (OutputTemplateFile): Add an 
+	--only-section-tmpl flag so that projects that keep everything
+	but section descriptions inline can avoid cvs conflicts.
+
+	* gtk-doc.make examples/Makefile.am: Add support for
+	MKTMPL_OPTIONS
+
+	* configure.in: Up version to 1.4.
+
 2005-05-02  Matthias Clasen <mclasen@redhat.com>
 
 	* gtkdoc-mkdb.in: Accept C comments between struct name

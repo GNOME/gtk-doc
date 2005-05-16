@@ -65,13 +65,15 @@ my $TMPL_DIR;
 my $FLAG_CHANGES;
 my $PRINT_VERSION;
 my $PRINT_HELP;
+my $ONLY_SECTION_TMPL;
 
 my %optctl = (module => \$MODULE,
 	      'flag-changes' => \$FLAG_CHANGES,
 	      'output-dir' => \$TMPL_DIR,
+	      'only-section-tmpl' => \$ONLY_SECTION_TMPL,
 	      'version' => \$PRINT_VERSION,
 	      'help' => \$PRINT_HELP);
-GetOptions(\%optctl, "module=s", "flag-changes!", "output-dir:s", "version", "help");
+GetOptions(\%optctl, "module=s", "flag-changes!", "output-dir:s", "only-section-tmpl!", "version", "help");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -87,6 +89,7 @@ if ($PRINT_HELP) {
     print "\n--module=MODULE_NAME Name of the doc module being parsed";
     print "\n--flag-changes       If specified, changes in templates are flagged";
     print "\n--output-dir=DIRNAME The directory where the results are stored";
+    print "\n--only-section-tmpl  Only include section information in templates";
     print "\n--version            Print the version of this program";
     print "\n--help               Print this help\n";
     exit 0;
@@ -639,7 +642,7 @@ $stability
 
 EOF
 
-    print (OUTPUT $$output);
+    print (OUTPUT $$output) unless $ONLY_SECTION_TMPL;
     close (OUTPUT);
 
     return &UpdateFileIfChanged ($old_tmpl_file, $new_tmpl_file, 1);

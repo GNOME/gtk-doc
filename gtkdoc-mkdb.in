@@ -47,6 +47,7 @@ my $PRINT_VERSION;
 my $PRINT_HELP;
 my $OUTPUT_ALL_SYMBOLS;
 my $MAIN_SGML_FILE;
+my $EXPAND_CONTENT_FILES;
 my $SGML_MODE;
 my $DEFAULT_STABILITY;
 my $OUTPUT_FORMAT;
@@ -59,11 +60,12 @@ my %optctl = (module => \$MODULE,
 	      'version' => \$PRINT_VERSION,
 	      'help' => \$PRINT_HELP,
 	      'main-sgml-file' => \$MAIN_SGML_FILE,
+	      'expand-content-files' => \$EXPAND_CONTENT_FILES,
 	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
 	      'sgml-mode' => \$SGML_MODE,
 	      'default-stability' => \$DEFAULT_STABILITY,
 	      'output-format' => \$OUTPUT_FORMAT);
-GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "help", "sgml-mode", "default-stability:s", "output-format:s");
+GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols", "main-sgml-file:s", "extra-db-files:s", "help", "sgml-mode", "default-stability:s", "output-format:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -85,11 +87,12 @@ if ($PRINT_HELP) {
     print "\n--source-dir=DIRNAME   Directories which contain inline reference material";
     print "\n--ignore-files=FILES   Files or directories which should not be scanned";
     print "\n                       May be used more than once for multiple directories";
-    print "\n--output-dir=DIRNAME   Directory to put the generated Docbook files in";
+    print "\n--output-dir=DIRNAME   Directory to put the generated DocBook files in";
     print "\n--tmpl-dir=DIRNAME     Directory in which template files may be found";
-    print "\n--main-sgml-file=FILE  File containing the toplevel SGML file.";
+    print "\n--main-sgml-file=FILE  File containing the toplevel DocBook file.";
+    print "\n--expand-content-files=FILES Extra DocBook files to expand abbreviations in.";
     print "\n--output-format=FORMAT The format to use for the generated docbook, XML or SGML.";
-    print "\n--sgml-mode            Allow Docbook markup in inline documentation.";
+    print "\n--sgml-mode            Allow DocBook markup in inline documentation.";
     print "\n--default-stability=LEVEL Specify default stability Level. Valid values are";
     print "\n                       Stable, Unstable, or Private.";
     print "\n--version              Print the version of this program";
@@ -602,6 +605,13 @@ EOF
 	&OutputAllSymbols;
     }
 
+    for $file (split (' ', $EXPAND_CONTENT_FILES)) {
+	my $file_changed = &OutputExtraFile ($file);
+	if ($file_changed) {
+	    $changed = 1;
+	}
+    }
+    
     &OutputBook ($book_top, $book_bottom);
 
     return $changed;
@@ -1581,6 +1591,40 @@ EOF
     return &UpdateFileIfChanged ($old_sgml_file, $new_sgml_file, 0);
 }
 
+
+#############################################################################
+# Function    : OutputExtraFile
+# Description : Copies an "extra" DocBook file into the output directory,
+#               expanding abbreviations
+# Arguments   : $file - the source file.
+#############################################################################
+sub OutputExtraFile {
+    my ($file) = @_;
+
+    my $basename;
+
+    ($basename = $file) =~ s!^.*/!!;
+    
+    my $old_sgml_file = "$SGML_OUTPUT_DIR/$basename";
+    my $new_sgml_file = "$SGML_OUTPUT_DIR/$basename.new";
+
+    my $contents;
+    
+    open(EXTRA_FILE, "<$file") || die "Can't open $file";
+
+    {
+	local $/;
+	$contents = <EXTRA_FILE>;
+    }
+
+    open (OUTPUT, ">$new_sgml_file")
+	|| die "Can't create $new_sgml_file";
+
+    print OUTPUT &ExpandAbbreviations($contents);
+    close (OUTPUT);
+    
+    return &UpdateFileIfChanged ($old_sgml_file, $new_sgml_file, 0);
+}
 
 #############################################################################
 # Function    : OutputBook
