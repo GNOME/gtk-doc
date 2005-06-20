@@ -1436,7 +1436,7 @@ EOF
 # Description : Outputs the final DocBook file for one section.
 # Arguments   : $file - the name of the file.
 #		$title - the title from the $MODULE-sections.txt file, which
-#		  will be overriden by the title in the template file.
+#		  will be overridden by the title in the template file.
 #		$section_id - the SGML id to use for the toplevel tag.
 #		$includes - comma-separates list of include files added at top
 #		  of synopsis, with '<' '>' around them (if not already enclosed in "").
@@ -2883,7 +2883,7 @@ sub MergeSourceDocumentation {
 
 	    if ($have_tmpl_docs) {
 		    print <<EOF;
-WARNING: Documentation in template file for $symbol being overriden by inline comments
+WARNING: Documentation in template file for $symbol being overridden by inline comments
 EOF
 	    }
 
