@@ -1,5 +1,11 @@
 2005-07-26  Damon Chaplin  <damon@gnome.org>
 
+	* gtk-doc.make: Pass DOC_MAIN_SGML_FILE as the main filename to
+	gtkdoc-mkdb. Avoids creating spurious foo.sgml files in an XML build.
+	Patch from Malcolm Tredinnick. (#311344)
+
+2005-07-26  Damon Chaplin  <damon@gnome.org>
+
 	* README: removed comment about not being able to add section
 	documentation to source code files, which is not true any more.
 
