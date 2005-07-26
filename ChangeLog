@@ -4,6 +4,9 @@
 	gtkdoc-mkdb. Avoids creating spurious foo.sgml files in an XML build.
 	Patch from Malcolm Tredinnick. (#311344)
 
+	Prefix build messages with "gtk-doc: " rather than surrounding them
+	with "***" which looks like an error. (#170008)
+
 2005-07-26  Damon Chaplin  <damon@gnome.org>
 
 	* README: removed comment about not being able to add section
