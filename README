@@ -19,10 +19,6 @@ GTK-Doc allows your documentation to be written in 2 ways:
   b) Added to the 'template' files which gtk-doc outputs after scanning all
      the header files and parsing the declarations.
 
-(Note that currently the documentation describing each section can only be
-added to the template files, though in future that will also be allowed within
-the source code.)
-
 From these source code comments and template files GTK-Doc generates a Docbook
 XML (or SGML) document, which is then transformed into HTML.
 The generated HTML documentation can be browsed in an ordinary web browser or
