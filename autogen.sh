@@ -56,17 +56,17 @@ if test "$#" = 0; then
         echo "to pass any to it, please specify them on the $0 command line."
 fi
 
-$ACLOCAL $ACLOCAL_FLAGS
+$ACLOCAL $ACLOCAL_FLAGS || exit $?
 
-autoconf
+autoconf || exit $?
 # optionally feature autoheader
 #(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
-$AUTOMAKE --add-missing $am_opt
+$AUTOMAKE --add-missing $am_opt || exit $?
 
 cd "$THEDIR"
 
-$srcdir/configure --enable-maintainer-mode "$@"
+$srcdir/configure --enable-maintainer-mode "$@" || exit $?
 
 echo 
 echo "Now type 'make install' to install $PROJECT."
