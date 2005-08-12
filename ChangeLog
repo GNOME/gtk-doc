@@ -1,3 +1,8 @@
+2005-08-12  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-mkdb.in:
+        fix warning about uninitialized var EXPAND_CONTENT_FILES
+
 Tue Aug  9 12:01:27 2005  tjlocal  <timj@imendio.com>
 
 	* autogen.sh: bail out with exit $? for failing programs.
