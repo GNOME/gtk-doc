@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+SUBDIRS = help/manual/C
+
 bin_SCRIPTS = \
 	gtkdoc-scanobj  \
 	gtkdoc-scangobj \
@@ -64,4 +66,7 @@ EXTRA_DIST = \
   examples/Makefile.am  \
   tools/docpercentages.pl \
   tools/gtk-doc.el \
-  style.css
+  style.css \
+  COPYING-DOCS \
+  omf.make \
+  xmldocs.make

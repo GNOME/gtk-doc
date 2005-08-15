@@ -90,6 +90,17 @@ if test "x$GCC" = "xyes"; then
   fi
 fi
 
+# Check for scrollkeeper
+AC_PATH_PROG(scrollkeeper_config, scrollkeeper-config, no)
+if test x$scrollkeeper_config = xno; then
+  AC_MSG_WARN([Couldn't find scrollkeeper-config, please install the scrollkeeper package])
+#  if test x$xsltproc = xno; then
+#    AC_MSG_WARN([Couldn't find xsltproc, please install the libxml/libxslt package])
+#  fi
+fi
+AM_CONDITIONAL(ENABLE_SCROLLKEEPER, test ! x$scrollkeeper_config = xno)
+SCROLLKEEPER_BUILD_REQUIRED=0.3.5
+AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
 
 AC_CONFIG_FILES([Makefile 
 gtk-doc.pc
@@ -97,6 +108,8 @@ gtk-doc.dsl
 gtk-doc.spec
 gtk-doc.cat
 gtkdoc-common.pl
+help/manual/C/Makefile
+help/manual/C/gtk-doc-manual-C.omf
 ])
 
 dnl run chmod on these after parsing them.
