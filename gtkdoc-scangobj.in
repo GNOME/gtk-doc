@@ -155,11 +155,11 @@ print OUTPUT <<EOT;
  */
 
 /* The output files */
-gchar *signals_filename = "$new_signals_filename";
-gchar *hierarchy_filename = "$new_hierarchy_filename";
-gchar *interfaces_filename = "$new_interfaces_filename";
-gchar *prerequisites_filename = "$new_prerequisites_filename";
-gchar *args_filename = "$new_args_filename";
+const gchar *signals_filename = "$new_signals_filename";
+const gchar *hierarchy_filename = "$new_hierarchy_filename";
+const gchar *interfaces_filename = "$new_interfaces_filename";
+const gchar *prerequisites_filename = "$new_prerequisites_filename";
+const gchar *args_filename = "$new_args_filename";
 
 
 static void output_signals (void);
@@ -171,9 +171,9 @@ static void output_widget_signal (FILE *fp,
 				  guint signal_id);
 static const gchar * get_type_name (GType type,
 			            gboolean * is_pointer);
-static gchar * get_gdk_event (const gchar * signal_name);
-static gchar ** lookup_signal_arg_names (const gchar * type,
-					 const gchar * signal_name);
+static const gchar * get_gdk_event (const gchar * signal_name);
+static const gchar ** lookup_signal_arg_names (const gchar * type,
+					       const gchar * signal_name);
 
 static void output_widget_hierarchy (void);
 static void output_hierarchy (FILE *fp,
@@ -271,12 +271,12 @@ output_widget_signal (FILE *fp,
 		      guint signal_id)
 {
   GSignalQuery query_info;
-  const gchar *type_name, *ret_type, *object_arg;
-  gchar *pos, *arg_name, *object_arg_lower;
+  const gchar *type_name, *ret_type, *object_arg, *arg_name;
+  gchar *pos, *object_arg_lower;
   gboolean is_pointer;
   gchar ret_type_buffer[1024], buffer[1024];
   guint i, param;
-  gchar **arg_names;
+  const gchar **arg_names;
   gint param_num, widget_num, event_num, callback_num;
   gint *arg_num;
   gchar signal_name[128];
@@ -458,10 +458,10 @@ get_type_name (GType type, gboolean * is_pointer)
 }
 
 
-static gchar *
+static const gchar *
 get_gdk_event (const gchar * signal_name)
 {
-  static gchar *GbGDKEvents[] =
+  static const gchar *GbGDKEvents[] =
   {
     "button_press_event", "GdkEventButton",
     "button_release_event", "GdkEventButton",
@@ -514,12 +514,12 @@ get_gdk_event (const gchar * signal_name)
     It is passed a widget name, e.g. 'GtkCList' and a signal name, e.g.
     'select_row' and it returns a pointer to an array of argument types and
     names. */
-static gchar **
+static const gchar **
 lookup_signal_arg_names (const gchar * type, const gchar * signal_name)
 {
   /* Each arg array starts with the object type name and the signal name,
      and then signal arguments follow. */
-  static gchar *GbArgTable[][16] =
+  static const gchar *GbArgTable[][16] =
   {
     {"GtkCList", "select_row",
      "gint             row",
