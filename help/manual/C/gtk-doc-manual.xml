@@ -302,7 +302,8 @@
       </para>
 
       <para>
-        docfiles: xxx.types, xxx-docs.sgml, xxx-sections.txt
+        Now several file need to be prepared.
+        doc-files: xxx.types, xxx-docs.sgml, xxx-sections.txt
       </para>
 
       <para>
@@ -350,6 +351,31 @@ GTK_DOC_CHECK(1.4)
         <listitem><para>--with-html-dir=PATH : path to installed docs</para></listitem>
         <listitem><para>--enable-gtk-doc : use gtk-doc to build documentation</para></listitem>
       </orderedlist>
+      
+      <important>
+      	<para>
+	  Gtk-Doc is disabled by default! Remember to pass the option
+	  <option>'--enable-gtk-doc'</option> to the next
+	  <filename>configure</filename> run.
+	</para>
+      </important>
+
+      <para>
+        Furthermore it is recommended that you have the following line inside
+        you <filename>configure.ac</filename> script.
+        This allows <filename>gtkdocize</filename> to automatically copy the
+        macro definition for <function>GTK_DOC_CHECK</function> to your project.
+      </para>
+
+      <para>
+        <example><title>Preparation for gtkdocize</title>
+          <programlisting>
+<![CDATA[
+AC_CONFIG_MACRO_DIR(m4)
+]]>
+          </programlisting>
+        </example>
+      </para>
     </sect1>
     
     <sect1 id="settingup_automake">
@@ -362,14 +388,74 @@ GTK_DOC_CHECK(1.4)
         If you have multiple doc-packages repeat this for each one.
         Then edit the variables appropriately.
       </para>
+    </sect1>
+
+    <sect1 id="settingup_autogen">
+      <title>Integration with autogen</title>
+
       <para>
-        Also copy the <filename>gtk-doc.make</filename> for the toplevel dir of gtkdoc.
-        The recommended place for it is the directory <filename class='directory'>./docs/reference</filename>.
-        The <filename>Makefile.am</filename> files include this file at the last line.
-        Make sure the path used there is correct.
+        Most projects will have an <filename>autogen.sh</filename> script to
+        setup the build intfrastructure after a checkout from version control
+        system (such as cvs). Gtk-Doc comes with a tool called
+        <filename>gtkdocize</filename> which can be used in such a script.
+	It should be run before autoheader, automake or autoconf.
+      </para>
+
+      <para>
+        <example><title>Running gtkdocize from autogen.sh</title>
+          <programlisting>
+<![CDATA[
+gtkdocize || exit 1
+]]>
+          </programlisting>
+        </example>
+      </para>
+
+      <para>
+        When running <filename>gtkdocize</filename> it copies
+        <filename>gtk-doc.make</filename> to you project root (or any directory
+        specified by the --docdir option). If also check you configure script
+        for the <function>GTK_DOC_CHECK</function> invocation.
+        Finally the tool understand common parameters such as --help or --version.
       </para>
     </sect1>
 
+    <sect1 id="settingup_firstrun">
+      <title>Running the doc build</title>
+
+      <para>
+        After the previous steps its time to run the build. First we need to
+	rerun <filename>autogen.sh</filename>. If this script runs configure for
+	you, then give it the <option>--enable-gtk-doc</option> option.
+	Otherwise manually run <filename>configure</filename> with this option
+	afterwards.
+      </para>
+      <para>
+        The first make run generates several additional files in the doc-dirs.
+	One of the important ones is <filename>&lt;package&gt;-section.txt</filename>.
+      </para>
+      <para>
+        The second make run also generates a mast document template
+	(<filename>&lt;package&gt;-docs.sgml</filename>) for us.
+      </para>
+      <para>
+        <example><title>Running the doc build</title>
+          <programlisting>
+<![CDATA[
+./autogen.sh --enable-gtk-doc
+make
+make
+]]>
+          </programlisting>
+        </example>
+      </para>
+      <para>
+        Now you can point your browser to <filename>docs/reference/&lt;package&gt;/index.html</filename>.
+	Yes, its a bit disapoint still. But hang-on, during the next chapter we
+	tell you how to fill the pages with life.
+      </para>
+    </sect1>
+    
   </chapter>
 
   <chapter id="documenting">
@@ -382,13 +468,20 @@ GTK_DOC_CHECK(1.4)
       of the comments.
     </para>
 
-    <para>
-      (FIXME)
-    </para>
-
-    <para>
-      (suggest documenting inside the source)
-    </para>
+    <note>
+      <title>Documentation placement</title>
+      <para>
+        In the past most documentation had to be filled into files residing
+	inside the <filename>tmpl</filename> directory. This has the
+	disadvantages that the information is often not updated and also that
+	the file tend to cause conflicts with version control systems.
+      </para>
+      <para>
+        The avoid the aforementioned problems we suggest putting the
+	documentation inside the sources. This manaul will only describe this
+	way of documenting code.
+      </para>
+    </note>
 
     <sect1 id="documenting_syntax">
       <title>Documentation comments</title>
@@ -400,6 +493,7 @@ GTK_DOC_CHECK(1.4)
           <programlisting>
 <![CDATA[
 /**
+ * identifier:
  * documenation ,,,
  */
 ]]>
@@ -408,15 +502,35 @@ GTK_DOC_CHECK(1.4)
       </para>
       
       <para>
-        As already mentioned earlier Gtk-Doc is for documenting public API. Thus
-        one can't write documentation for static symbols. Nevertheless it is good
-        to comment those symbols too. This helps other to understand you code.
-        Therefore we recommend to comment these using normal comments (without the
-        2nd '*' in the first line).
-        If later the function needs to be made public, all one needs to do is to
-        add another '*' in the comment block and insert the symbol name at the
-        right place inside the sections file.
+        The 'identifier' is one line with the name of the item the comment is
+	related to. The	syntax differes a little depending on the item.
+	(TODO add table showing identifiers)
       </para>
+
+      <para>
+        The 'documentation' block is also different for each symbol type. Symbol
+	types that get parameters such as functions or macros have the parameter
+	description first followed by a blank line (just a '*').
+	Afterwards follows the detailed description. All lines just containing a
+	'*' are converted to paragraph breaks.
+      </para>
+      
+      <para>
+        (TODO --sgml-mode)
+      </para>
+      
+      <tip>
+	<para>
+	  As already mentioned earlier Gtk-Doc is for documenting public API. Thus
+	  one can't write documentation for static symbols. Nevertheless it is good
+	  to comment those symbols too. This helps other to understand you code.
+	  Therefore we recommend to comment these using normal comments (without the
+	  2nd '*' in the first line).
+	  If later the function needs to be made public, all one needs to do is to
+	  add another '*' in the comment block and insert the symbol name at the
+	  right place inside the sections file.
+	</para>
+      </tip>
     </sect1>
 
     <sect1 id="documenting_sections">
@@ -436,7 +550,12 @@ GTK_DOC_CHECK(1.4)
           <programlisting>
 <![CDATA[
 /**
+ * SECTION:meepapp
+ * @short_description: the application class
+ * @see_also: #MeepSettings
+ * @stability: stable
  *
+ * The application class handles ...
  */
 ]]>
           </programlisting>
@@ -451,6 +570,31 @@ GTK_DOC_CHECK(1.4)
       <para>
         (FIXME)
       </para>
+
+      <para>
+        <example><title>Symbol comment block</title>
+          <programlisting>
+<![CDATA[
+/**
+ *
+ */
+]]>
+          </programlisting>
+        </example>
+      </para>
+
+    </sect1>
+
+    <sect1 id="documenting_metafiles">
+      <title>Filling the extra files</title>
+      
+      <para>
+        (FIXME)
+      </para>
+
+      <para>
+        (sgml file, sections file, types file, ...)
+      </para>      
     </sect1>
 
     <sect1 id="documenting_reports">
@@ -470,11 +614,37 @@ GTK_DOC_CHECK(1.4)
   <chapter id="faq">
     <title>Frequently asked question</title>
     
-    <para>No class hierarchy.</para>
-    <para>No symbol index.</para>
-    <para>Symbols are not linked.</para>
-    <para>A new class does not appear in the docs.</para>
-    <para>A new symbol does not appear in the docs.</para>
+    <segmentedlist>
+      <?dbhtml list-presentation="list"?>
+      <segtitle>Question</segtitle>
+      <segtitle>Answer</segtitle>
+      <seglistitem>
+	<seg>No class hierarchy.</seg>
+	<seg>_get_type() function has not been entered into the <filename>.types</filename> file.</seg>
+      </seglistitem>
+      <seglistitem>
+	<seg>No symbol index.</seg>
+	<seg>FIXME (index tag in main sgml file)</seg>
+      </seglistitem>
+      <seglistitem>
+	<seg>Symbols are not linked to their doc-section.</seg>
+	<seg>FIXME (added #,% or () )</seg>
+      </seglistitem>
+      <seglistitem>
+	<seg>A new class does not appear in the docs.</seg>
+	<seg>FIXME (section file, types file, main-sgml file)</seg>
+      </seglistitem>
+      <seglistitem>
+	<seg>A new symbol does not appear in the docs.</seg>
+	<seg>FIXME (section file, proper doc comment)</seg>
+      </seglistitem>
+    
+      <!-- warnings: -->
+      <seglistitem>
+	<seg>Parameter described in source code comment block but does not exist</seg>
+	<seg>FIXME</seg>
+      </seglistitem>
+    </segmentedlist>
   </chapter>
   
   <!-- ======== Appendix: FDL ================================== -->
