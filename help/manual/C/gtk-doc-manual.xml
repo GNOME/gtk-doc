@@ -237,12 +237,9 @@
 
     </sect1>
 
+    <!-- not realy worth a section
     <sect1 id="whentousegtkdoc">
       <title>When to Use GTK-Doc</title>
-
-      <para>
-        (FIXME)
-      </para>
 
       <para>
         (What things GTK-Doc should, and shouldn't, be used for.)
@@ -251,6 +248,7 @@
       </para>
 
     </sect1>
+    -->
 
     <sect1 id="aboutgtkdoc">
       <title>About GTK-Doc</title>
@@ -299,11 +297,6 @@
         (this way you can also have docs/help for end-user documentation).
         It is recommended to create another subdirectory with the name of the doc-package.
         For packages with just one library this step is not neccesary.
-      </para>
-
-      <para>
-        Now several file need to be prepared.
-        doc-files: xxx.types, xxx-docs.sgml, xxx-sections.txt
       </para>
 
       <para>
@@ -359,7 +352,7 @@ GTK_DOC_CHECK(1.4)
 	  <filename>configure</filename> run.
 	</para>
       </important>
-
+      
       <para>
         Furthermore it is recommended that you have the following line inside
         you <filename>configure.ac</filename> script.
@@ -386,8 +379,31 @@ AC_CONFIG_MACRO_DIR(m4)
         to your project's API documentation directory (
         <filename class='directory'>./docs/reference/&lt;package&gt;</filename>).
         If you have multiple doc-packages repeat this for each one.
-        Then edit the variables appropriately.
       </para>
+
+      <para>
+        The next step is to edit the setting inside the <filename>Makefile.am</filename>.
+        All the settings have a comment above that desribes their purpose.
+        Most settings are extra flags passed to the respective tools. Every tool
+        has a variable of the form <option>&lt;TOOLNAME&gt;_OPTIONS</option>.       
+      </para>
+      
+      <para>
+        You may also want to enable gtk-doc for the distcheckmake target. Just
+        add then one-liner show in the next example to you top-level 
+        <filename>Makefile.am</filename>:
+      </para>
+      
+      <para>
+        <example><title>Enable gtk-doc during make distcheck</title>
+          <programlisting>
+<![CDATA[
+DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc
+]]>
+          </programlisting>
+        </example>
+      </para>
+      
     </sect1>
 
     <sect1 id="settingup_autogen">
@@ -432,7 +448,10 @@ gtkdocize || exit 1
       </para>
       <para>
         The first make run generates several additional files in the doc-dirs.
-	One of the important ones is <filename>&lt;package&gt;-section.txt</filename>.
+        The important ones are: 
+        <filename>&lt;package&gt;.types</filename>,
+        <filename>&lt;package&gt;-docs.sgml</filename>,
+        <filename>&lt;package&gt;-sections.txt</filename>.
       </para>
       <para>
         The second make run also generates a mast document template
@@ -482,6 +501,8 @@ make
 	way of documenting code.
       </para>
     </note>
+    
+    <!--  -->
 
     <sect1 id="documenting_syntax">
       <title>Documentation comments</title>
@@ -512,11 +533,46 @@ make
 	types that get parameters such as functions or macros have the parameter
 	description first followed by a blank line (just a '*').
 	Afterwards follows the detailed description. All lines just containing a
-	'*' are converted to paragraph breaks.
+	' * ' (blank-asterist-blank) are converted to paragraph breaks.
+        If you don't want a break (e.g. in preformated example listings) add
+        another space at the end of line.
       </para>
       
       <para>
-        (TODO --sgml-mode)
+        One advantage of hyper-text over plain-text is the ability to have links
+        in the document. Writing the correct markup for a link can be tedious
+        though. Gtk-Doc comes to help by providing several useful abbreviations.
+        <itemizedlist>
+          <listitem>
+            <para>
+              Use function() to refer to functions or macros which take arguments.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Use @param to refer to parameters. Also use this when referring to
+              parameters of other functions, related to the one being descrbed.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Use %constant to refer to a constant, e.g. %G_TRAVERSE_LEAFS.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Use #symbol to refer to other types of symbol, e.g. structs and
+              enums and macros which don't take arguments.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+
+      <para>
+        DocBook can do more that just links. One can also have lists, tables and
+        examples. To enable the usage of SGML/XML tags inside doc-comments you
+        need to have <option>--sgml-mode</option> in the variable 
+        <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</filename>.
       </para>
       
       <tip>
@@ -537,12 +593,9 @@ make
       <title>Documenting sections</title>
 
       <para>
-        Each section of the documentation cointains information about one class or one module.
-        To introduce the component one can write a section block.
-      </para>
-
-      <para>
-        (FIXME)
+        Each section of the documentation contains information about one class
+        or module. To introduce the component one can write a section block.
+        The short description is also used inside the table of contents.
       </para>
 
       <para>
@@ -561,6 +614,13 @@ make
           </programlisting>
         </example>
       </para>
+      
+      <tip>
+        <para>
+          To avoid uneccesary recompilation after doc-changes put the section
+          docs into the c-source where possible.
+        </para>
+      </tip>
 
     </sect1>
 
@@ -568,7 +628,11 @@ make
       <title>Documenting symbols</title>
 
       <para>
-        (FIXME)
+        Each symbol (function, macro, struct, enum, signal and property) is
+        documented in a separate block. The block is best placed close to the
+        definition of the sybols so that it is easy to keep them in sync.
+        Thus function are usually documented in the c-source and macros, struct
+        and enum in the header file.
       </para>
 
       <para>
@@ -576,8 +640,237 @@ make
           <programlisting>
 <![CDATA[
 /**
+ * function_name:
+ * @par1:  description of parameter 1. These can extend over more than
+ * one line.
+ * @par2:  description of parameter 2
  *
+ * The function description goes here. You can use @par1 to refer to parameters
+ * so that they are highlighted in the output. You can also use %constant
+ * for constants, function_name2() for functions and #GtkWidget for links to
+ * other declarations (which may be documented elsewhere).
+ * 
+ * Returns: an integer.
  */
+]]>
+          </programlisting>
+        </example>
+      </para>
+
+      <para>
+        (FIXME)
+      </para>
+
+      <para>
+        (FIXME)
+        (signals, glib-enums, properties, ...)
+      </para>
+      
+    </sect1>
+    
+    <sect1 id="documneting_docbook">
+      <title>Useful DocBook tags</title>
+
+      <para>      
+        Here are some DocBook tags which are most useful when documenting the
+        code.
+      </para>
+
+      <para>
+        To link to another section in the GTK docs:
+
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<link linkend="glib-Hash-Tables">Hash Tables</link>
+]]>
+          </programlisting>
+        </informalexample>
+        The linkend is the SGML id on the top item of the page you want to link to.
+        For most pages this is currently the part ("gtk", "gdk", glib") and then
+        the page title ("Hash Tables"). For widgets it is just the class name.
+        Spaces and underscores are converted to '-' to conform to SGML.
+      </para>
+
+      <para>
+        To refer to an external function, e.g. a standard C function:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<function>...</function> 
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+
+      <para>
+        To include example code:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<example>
+  <title>Using a GHashTable.</title>
+  <programlisting>
+      ...
+  </programlisting>
+</example>
+]]>
+          </programlisting>
+        </informalexample>
+        or possibly this, for very short code fragments which don't need a title:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<informalexample>
+  <programlisting>
+  ...
+  </programlisting>
+</informalexample>
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+
+      <para>
+        To include bulleted lists:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<itemizedlist>
+  <listitem>
+    <para>
+      ...
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      ...
+    </para>
+  </listitem>
+</itemizedlist>
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+
+      <para>
+        To include a note which stands out from the text:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<note>
+  <para>
+    Make sure you free the data after use.
+  </para>
+</note>
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+
+      <para>
+        To refer to a type:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<type>unsigned char</type>
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+
+      <para>
+        To refer to an external structure (not one described in the GTK docs):
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<structname>XFontStruct</structname>
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+
+      <para>
+        To refer to a field of a structure:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<structfield>len</structfield>
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+
+      <para>
+        To refer to a class name, we could possibly use:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<classname>GtkWidget</classname>
+]]>
+          </programlisting>
+        </informalexample>
+        but you'll probably be using #GtkWidget instead (to automatically create
+        a link to the GtkWidget page - see <link linkend="documenting_syntax">the abbreviations</link>).
+      </para>
+
+      <para>
+        To emphasize text:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<emphasis>This is important</emphasis>
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+
+      <para>
+        For filenames use:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<filename>c:\windows</filename>
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+    
+    </sect1>
+  </chapter>
+
+  <chapter id="metafiles">
+    <title>Filling the extra files</title>
+    
+    <para>
+      There are a couple of extra file, that need to be maintained along with
+      the inline source code comments: 
+      <filename>&lt;package&gt;.types</filename>,
+      <filename>&lt;package&gt;-docs.sgml</filename>,
+      <filename>&lt;package&gt;-sections.txt</filename>.
+    </para>
+    
+    <sect1 id="metafiles_types">
+      <title>Editing the types file</title>
+
+      <para>
+        If your library or application includes GtkObjects/GObjects, you want
+        their signals, arguments/parameters and position in the hierarchy to be
+        shown in the documentation. All you need to do, is to list the
+        <function>xxx_get_type</function> functions together with their include
+        inside the <filename>&lt;package&gt;.types</filename> file.
+      </para>
+
+      <para>
+        <example><title>Example types file snippet</title>
+          <programlisting>
+<![CDATA[
+#include <gtk/gtk.h>
+
+gtk_accel_label_get_type
+gtk_adjustment_get_type
+gtk_alignment_get_type
+gtk_arrow_get_type
 ]]>
           </programlisting>
         </example>
@@ -585,29 +878,143 @@ make
 
     </sect1>
 
-    <sect1 id="documenting_metafiles">
-      <title>Filling the extra files</title>
+    <sect1 id="metafiles_master">
+      <title>Editing the master document</title>
+
+      <para>
+        Gtk-Doc produces documentation in DocBook SGML/XML. When processing the
+        inline source comments, the Gtk-Doc tools generate one documentation
+        page per class or module as a separate file. The master document
+        includes them and place them in a order.
+      </para>
       
       <para>
-        (FIXME)
+        While Gtk-Doc creates a template master document for you, later run will
+        not touch it again. This means that one can freely structure the
+        documentation. That includes grouping pages and adding extra pages.
+      </para>
+
+      <tip>
+        <para>
+          Do not create tutorials as extra documents. Just write extra chapters.
+          The benefit of directly embeding the tutorial for your library into
+          the API documentation is that it is easy to link fro the tutorial to
+          symbol documentation. Apart chances are higher that the tutorial gets 
+          updates along with the library.
+        </para>
+      </tip>
+      
+      <para>
+        So what are the things to change inside the master document? For a start
+        is only a little. There are two placeholders for the package-name and
+        one for chapter title.
       </para>
 
       <para>
-        (sgml file, sections file, types file, ...)
-      </para>      
+        <example><title>Master document header</title>
+          <programlisting>
+<![CDATA[
+<bookinfo>
+  <title>[Insert name here] Reference Manual</title>
+</bookinfo>
+
+<chapter>
+  <title>[Insert title here]</title>
+]]>
+          </programlisting>
+        </example>
+      </para>
+      
     </sect1>
 
-    <sect1 id="documenting_reports">
-      <title>Controlling the result</title>
+    <sect1 id="metafiles_sections">
+      <title>Editing the section file</title>
 
       <para>
-        (FIXME)
+        The section file is used to organise the documentation output by 
+        Gtk-Doc. Here one specifies which symbol belongs to which module or
+        class and control the visibillity (public or private).
       </para>
 
       <para>
-        (locating uncomplete or totaly undocumented symbols)
+        The section file is a plain test file with xml like syntax (using tags).
+        Blank lines are ignored and lines starting with a '#' are treated as
+        comment lines.
       </para>
+      
+      <para>
+        The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name,
+        without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/FILE&gt;'
+        will result in the section declarations being output in the template
+        file <filename>tmpl/gnome-config.sgml</filename>, which will be
+        converted into the DocBook SGML file <filename>sgml/gnome-config.sgml</filename>
+        or .DocBook XML file <filename>xml/gnome-config.xml</filename>.
+        (The name of the html file is based on the module name and the section
+        title, or for gobjects it is based on the gobjects class name converted
+        to lower case).
+      </para>
+      
+      <para>        
+        The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of
+        the section. It is only useful before the templates are initially
+        created, since the title set in the template file overrides this.
+      </para>
+      
+      <para>
+        You can group items in the section by using the &lt;SUBSECTION&gt; tag.
+        Currently it outputs a blank line between subsections in the synopsis
+        section.
+        You can also use &lt;SUBSECTION Standard&gt; for standard GObject
+        declarations (e.g. the functions like g_object_get_type and macros like
+        G_OBJECT(), G_IS_OBJECT() etc.).
+        Currently these are left out of the documentation.
+        You can also use &lt;SUBSECTION Private&gt; for private declarations
+        which will not be output (It is a handy way to avoid warning messages
+        about unused declarations.).
+        If your library contains private types which you don't want to appear in
+        the object hierarchy and the list of implemented or required interfaces,
+        add them to a Private subsection.
+      </para>
+      
+      <para>
+        You can also use &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; to specify the
+        #include files which are shown in the synopsis sections.
+        It contains a comma-separate list of #include files, without the angle
+        brackets. If you set it outside of any sections, it acts for all
+        sections until the end of the file. If you set it within a section, it
+        only applies to that section.
+      </para>
+
     </sect1>
+    
+  </chapter>
+
+  <chapter id="reports">
+    <title>Controlling the result</title>
+
+    <para>
+      A Gtk-Doc run generates report files inside the documentation directory.
+      The generated files are named: 
+      <filename>&lt;package&gt;-undocumented.txt</filename> and
+      <filename>&lt;package&gt;-unused.txt</filename>.
+      Both are plain text files that can be viewed and portprocessed easily.
+    </para>
+    
+    <para>
+      The <filename>&lt;package&gt;-undocumented.txt</filename> file starts with
+      the documentation cooverage sumary. Below are two sections divided by
+      blank lines. The first section lists undocumneted or incomplete symbols.
+      The second section does the same for section docs. Incomplete entries are
+      those, which have documentation, but where e.g. a new parameter has been
+      added.
+    </para>
+    
+    <para>
+      The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol
+      names, where the Gtk-Doc scanner has found documentation, but does not
+      know where to put it. This means that the symbol has not yet been added to
+      the <filename>&lt;package&gt;-section.txt</filename> file.
+    </para>
 
   </chapter>
 
@@ -624,7 +1031,7 @@ make
       </seglistitem>
       <seglistitem>
 	<seg>No symbol index.</seg>
-	<seg>FIXME (index tag in main sgml file)</seg>
+	<seg>FIXME (&lt;index&gt; tag in main sgml file)</seg>
       </seglistitem>
       <seglistitem>
 	<seg>Symbols are not linked to their doc-section.</seg>
@@ -642,7 +1049,7 @@ make
       <!-- warnings: -->
       <seglistitem>
 	<seg>Parameter described in source code comment block but does not exist</seg>
-	<seg>FIXME</seg>
+	<seg>check if the prototype in the header has different parameter names as in the source</seg>
       </seglistitem>
     </segmentedlist>
   </chapter>
