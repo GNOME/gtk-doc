@@ -408,16 +408,16 @@ sub OutputSGML {
 
 		if ($signals_synop ne '') {
 		    $signals_synop = <<EOF;
-<refsect1>
-<title>Signal Prototypes</title>
+<refsect1 id="signal_proto">
+<title id="signal_proto.title">Signals</title>
 <synopsis>
 
 ${signals_synop}</synopsis>
 </refsect1>
 EOF
 		    $signals_desc  = <<EOF;
-<refsect1>
-<title>Signals</title>
+<refsect1 id="signals">
+<title id="signals.title">Signal Details</title>
 $signals_desc
 </refsect1>
 EOF
@@ -425,16 +425,16 @@ EOF
 
 		if ($args_synop ne '') {
 		    $args_synop = <<EOF;
-<refsect1>
-<title>Properties</title>
+<refsect1 id="properties">
+<title id="properties.title">Properties</title>
 <synopsis>
 
 ${args_synop}</synopsis>
 </refsect1>
 EOF
 		    $args_desc  = <<EOF;
-<refsect1>
-<title>Properties</title>
+<refsect1 id="property_details">
+<title id="property_details.title">Property Details</title>
 $args_desc
 </refsect1>
 EOF
@@ -442,16 +442,16 @@ EOF
 
 		if ($child_args_synop ne '') {
 		    $args_synop .= <<EOF;
-<refsect1>
-<title>Child Properties</title>
+<refsect1 id="child_properties">
+<title id="child_properties.title">Child Properties</title>
 <synopsis>
 
 ${child_args_synop}</synopsis>
 </refsect1>
 EOF
 		    $args_desc .= <<EOF;
-<refsect1>
-<title>Child Properties</title>
+<refsect1 id="child_property_details">
+<title id="child_property_details.title">Child Property Details</title>
 $child_args_desc
 </refsect1>
 EOF
@@ -459,16 +459,16 @@ EOF
 
 		if ($style_args_synop ne '') {
 		    $args_synop .= <<EOF;
-<refsect1>
-<title>Style Properties</title>
+<refsect1 id="style_properties">
+<title id="style_properties.title">Style Properties</title>
 <synopsis>
 
 ${style_args_synop}</synopsis>
 </refsect1>
 EOF
 		    $args_desc .= <<EOF;
-<refsect1>
-<title>Style Properties</title>
+<refsect1 id="style_properties_details">
+<title id="style_properties_details.title">Style Property Details</title>
 $style_args_desc
 </refsect1>
 EOF
@@ -476,8 +476,8 @@ EOF
 
 		if ($hierarchy ne "") {
 		    $hierarchy = <<EOF;
-<refsect1>
-<title>Object Hierarchy</title>
+<refsect1 id="object_hierarchy">
+<title id="object_hierarchy.title">Object Hierarchy</title>
 $hierarchy
 </refsect1>
 EOF
@@ -485,8 +485,8 @@ EOF
 
 		if ($interfaces ne "") {
 		    $interfaces = <<EOF;
-<refsect1>
-<title>Implemented Interfaces</title>
+<refsect1 id="impl_interfaces">
+<title id="impl_interfaces.title">Implemented Interfaces</title>
 $interfaces
 </refsect1>
 EOF
@@ -494,8 +494,8 @@ EOF
 
 		if ($implementations ne "") {
 		    $implementations = <<EOF;
-<refsect1>
-<title>Known Implementations</title>
+<refsect1 id="implementations">
+<title id="implementations.title">Known Implementations</title>
 $implementations
 </refsect1>
 EOF
@@ -503,8 +503,8 @@ EOF
 
 		if ($prerequisites ne "") {
 		    $prerequisites = <<EOF;
-<refsect1>
-<title>Prerequisites</title>
+<refsect1 id="prerequisites">
+<title id="prerequisites.title">Prerequisites</title>
 $prerequisites
 </refsect1>
 EOF
@@ -512,8 +512,8 @@ EOF
 
 		if ($derived ne "") {
 		    $derived = <<EOF;
-<refsect1>
-<title>Known Derived Interfaces</title>
+<refsect1 id="derived_interfaces">
+<title id="derived_interfaces.title">Known Derived Interfaces</title>
 $derived
 </refsect1>
 EOF
@@ -1531,9 +1531,6 @@ sub OutputSGMLFile {
 	$object_anchors .= "<anchor id=\"$id\"$empty_element_end";
     }
 
-    # Note: The refname and refpurpose are on the same line to stop
-    # docbook-to-man 1.08 putting them on separate lines.
-    #
     # We used to output this, but is messes up our UpdateFileIfChanged code
     # since it changes every day (and it is only used in the man pages):
     # "<refentry id="$section_id" revision="$mday $month $year">"
@@ -1545,16 +1542,19 @@ sub OutputSGMLFile {
     print OUTPUT <<EOF;
 <refentry id="$section_id">
 <refmeta>
-<refentrytitle>$title</refentrytitle>
+<refentrytitle id="top_of_page">$title</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>\U$MODULE\E Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>$title</refname><refpurpose>$short_desc</refpurpose>
+<refname>$title</refname>
+<refpurpose>$short_desc</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
 </refnamediv>
 $stability
-<refsynopsisdiv><title>Synopsis</title>
+<refsynopsisdiv id="synopsis">
+<title id="synopsis.title">Synopsis</title>
 $object_anchors
 <synopsis>
 
@@ -1571,13 +1571,13 @@ $$implementations
 $$args_synop
 $$signals_synop
 
-<refsect1>
-<title>Description</title>
+<refsect1 id="desc">
+<title id="desc.title">Description</title>
 $long_desc
 </refsect1>
 
-<refsect1>
-<title>Details</title>
+<refsect1 id="details">
+<title id="details.title">Details</title>
 $$details
 </refsect1>
 $$args_desc

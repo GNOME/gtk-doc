@@ -18,6 +18,7 @@
   <xsl:param name="default.encoding" select="'US-ASCII'"/>
   <xsl:param name="chunker.output.encoding" select="'US-ASCII'"/>
   <xsl:param name="chunker.output.indent" select="'yes'"/>
+  <xsl:param name="chunker.output.doctype-public" select="'-//W3C//DTD HTML 4.01 Transitional//EN'"/>
   <xsl:param name="chunk.fast" select="1"/> 
   <xsl:param name="chapter.autolabel" select="0"/>
   <xsl:param name="use.id.as.filename" select="1"/>
@@ -150,7 +151,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
   </xsl:template>
 
   <xsl:template match="title" mode="book.titlepage.recto.mode">
-    <table class="navigation" width="100%"
+    <table class="navigation" id="top" width="100%"
            cellpadding="2" cellspacing="0">
       <tr>
         <th valign="middle">
@@ -167,135 +168,241 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:param name="next" select="/foo"/>
     <xsl:variable name="home" select="/*[1]"/>
     <xsl:variable name="up" select="parent::*"/>
+    <xsl:variable name="sections" select="./refsect1[@id]"/>
+    <xsl:variable name="sect_object_hierarchy" select="./refsect1[@id='object_hierarchy']"/>
+    <xsl:variable name="sect_prerequisites" select="./refentry/refsect1[@id='prerequisites']"/>
+    <xsl:variable name="sect_derived_interfaces" select="./refentry/refsect1[@id='derived_interfaces']"/>
+    <xsl:variable name="sect_impl_interfaces" select="./refentry/refsect1[@id='impl_interfaces']"/>
+    <xsl:variable name="sect_implementations" select="./refentry/refsect1[@id='implementations']"/>
+    <xsl:variable name="sect_properties" select="./refsect1[@id='properties']"/>
+    <xsl:variable name="sect_child_properties" select="./refsect1[@id='child_properties']"/>
+    <xsl:variable name="sect_style_properties" select="./refsect1[@id='style_properties']"/>
+    <xsl:variable name="sect_signal_proto" select="./refsect1[@id='signal_proto']"/>
+    <xsl:variable name="sect_desc" select="./refsect1[@id='desc']"/>
+    <xsl:variable name="sect_synopsis" select="./refsynopsisdiv[@id='synopsis']"/>
+    <!--
+    <xsl:variable name="sect_details" select="./refsect1[@id='details']"/>
+    <xsl:variable name="sect_property_details" select="./refsect1[@id='property_details']"/>
+    <xsl:variable name="sect_child_property_details" select="./refsect1[@id='child_property_details']"/>
+    <xsl:variable name="sect_style_property_details" select="./refsect1[@id='style_property_details']"/>
+    <xsl:variable name="sect_signals" select="./refsect1[@id='signals']"/>
+    -->
 
     <xsl:if test="$suppress.navigation = '0' and $home != .">
-      <table class="navigation" width="100%"
+      <table class="navigation" id="top" width="100%"
              summary = "Navigation header" cellpadding="2" cellspacing="2">
         <tr valign="middle">
-          <xsl:if test="count($prev) > 0">
-            <td>
-              <a accesskey="p">
-                <xsl:attribute name="href">
-                  <xsl:call-template name="href.target">
-                    <xsl:with-param name="object" select="$prev"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <img src="left.png" width="24" height="24" border="0">
-                  <xsl:attribute name="alt">
-                    <xsl:call-template name="gentext">
-                      <xsl:with-param name="key">nav-prev</xsl:with-param>
+          <xsl:choose>
+            <xsl:when test="count($prev) > 0">
+              <td>
+                <a accesskey="p">
+                  <xsl:attribute name="href">
+                    <xsl:call-template name="href.target">
+                      <xsl:with-param name="object" select="$prev"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                </img>
-              </a>
-            </td>
-          </xsl:if>
-          <xsl:if test="count($up) > 0 and $up != $home">
-            <td>
-              <a accesskey="u">
-                <xsl:attribute name="href">
-                  <xsl:call-template name="href.target">
-                    <xsl:with-param name="object" select="$up"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <img src="up.png" width="24" height="24" border="0">
-                  <xsl:attribute name="alt">
-                    <xsl:call-template name="gentext">
-                      <xsl:with-param name="key">nav-up</xsl:with-param>
+                  <img src="left.png" width="24" height="24" border="0">
+                    <xsl:attribute name="alt">
+                      <xsl:call-template name="gentext">
+                        <xsl:with-param name="key">nav-prev</xsl:with-param>
+                      </xsl:call-template>
+                    </xsl:attribute>
+                  </img>
+                </a>
+              </td>
+            </xsl:when>
+            <xsl:otherwise>
+              <td>&#160;</td>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="count($up) > 0 and $up != $home">
+              <td>
+                <a accesskey="u">
+                  <xsl:attribute name="href">
+                    <xsl:call-template name="href.target">
+                      <xsl:with-param name="object" select="$up"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                </img>
-              </a>
-            </td>
-          </xsl:if>
-          <xsl:if test="$home != .">
-            <td>
-              <a accesskey="h">
-                <xsl:attribute name="href">
-                  <xsl:call-template name="href.target">
-                    <xsl:with-param name="object" select="$home"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <img src="home.png" width="24" height="24" border="0">
-                  <xsl:attribute name="alt">
-                    <xsl:call-template name="gentext">
-                      <xsl:with-param name="key">nav-home</xsl:with-param>
+                  <img src="up.png" width="24" height="24" border="0">
+                    <xsl:attribute name="alt">
+                      <xsl:call-template name="gentext">
+                        <xsl:with-param name="key">nav-up</xsl:with-param>
+                      </xsl:call-template>
+                    </xsl:attribute>
+                  </img>
+                </a>
+              </td>
+            </xsl:when>
+            <xsl:otherwise>
+              <td>&#160;</td>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="$home != .">
+              <td>
+                <a accesskey="h">
+                  <xsl:attribute name="href">
+                    <xsl:call-template name="href.target">
+                      <xsl:with-param name="object" select="$home"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                </img>
-              </a>
-            </td>
-          </xsl:if>
+                  <img src="home.png" width="24" height="24" border="0">
+                    <xsl:attribute name="alt">
+                      <xsl:call-template name="gentext">
+                        <xsl:with-param name="key">nav-home</xsl:with-param>
+                      </xsl:call-template>
+                    </xsl:attribute>
+                  </img>
+                </a>
+              </td>
+            </xsl:when>
+            <xsl:otherwise>
+              <td>&#160;</td>
+            </xsl:otherwise>
+          </xsl:choose>
           <th width="100%" align="center">
-            <xsl:apply-templates select="$home"
-                                 mode="object.title.markup"/>
+            <xsl:apply-templates select="$home" mode="object.title.markup"/>
           </th>
-          <xsl:if test="count($next) > 0">
-            <td>
-              <a accesskey="n">
-                <xsl:attribute name="href">
-                  <xsl:call-template name="href.target">
-                    <xsl:with-param name="object" select="$next"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <img src="right.png" width="24" height="24" border="0">
-                  <xsl:attribute name="alt">
-                    <xsl:call-template name="gentext">
-                      <xsl:with-param name="key">nav-next</xsl:with-param>
+          <xsl:choose>
+            <xsl:when test="count($next) > 0">
+              <td>
+                <a accesskey="n">
+                  <xsl:attribute name="href">
+                    <xsl:call-template name="href.target">
+                      <xsl:with-param name="object" select="$next"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                </img>
-              </a>
-            </td>
-          </xsl:if>
+                  <img src="right.png" width="24" height="24" border="0">
+                    <xsl:attribute name="alt">
+                      <xsl:call-template name="gentext">
+                        <xsl:with-param name="key">nav-next</xsl:with-param>
+                      </xsl:call-template>
+                    </xsl:attribute>
+                  </img>
+                </a>
+              </td>
+            </xsl:when>
+            <xsl:otherwise>
+              <td>&#160;</td>
+            </xsl:otherwise>
+          </xsl:choose>
         </tr>
+        <!--<xsl:if test="name()='refentry'"-->
+        <xsl:if test="count($sections) > 0">
+          <tr>
+            <td colspan="5" class="shortcuts">
+              <nobr>
+                <xsl:if test="count($sect_synopsis) > 0">
+                  <a href="#top_of_page" class="shortcut">Top</a>
+                </xsl:if>
+                <xsl:if test="count($sect_desc) > 0">
+                  &#160;|&#160;
+                  <a href="#desc" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='desc']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_object_hierarchy) > 0">
+                  &#160;|&#160;
+                  <a href="#object_hierarchy" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='object_hierarchy']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_impl_interfaces) > 0">
+                  &#160;|&#160;
+                  <a href="#impl_interfaces" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='impl_interfaces']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_prerequisites) > 0">
+                  &#160;|&#160;
+                  <a href="#object_prerequisites" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='object_prerequisites']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_derived_interfaces) > 0">
+                  &#160;|&#160;
+                  <a href="#derived_interfaces" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='derived_interfaces']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_impl_interfaces) > 0">
+                  &#160;|&#160;
+                  <a href="#impl_interfaces" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='properties']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_implementations) > 0">
+                  &#160;|&#160;
+                  <a href="#implementations" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='implementations']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_properties) > 0">
+                  &#160;|&#160;
+                  <a href="#properties" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='properties']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_child_properties) > 0">
+                  &#160;|&#160;
+                  <a href="#child_properties" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='child_properties']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_style_properties) > 0">
+                  &#160;|&#160;
+                  <a href="#style_properties" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='style_properties']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_signal_proto) > 0">
+                  &#160;|&#160;
+                  <a href="#signal_proto" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='signal_proto']/title"/>
+                  </a>
+                </xsl:if>
+                <!--
+                <xsl:if test="count($sect_details) > 0">
+                  <a href="#details" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='details']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                <xsl:if test="count($sect_property_details) > 0">
+                  <a href="#property_details" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='property_details']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                <xsl:if test="count($sect_child_property_details) > 0">
+                  <a href="#child_property_details" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='property_child_details']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                <xsl:if test="count($sect_style_property_details) > 0">
+                  <a href="#style_property_details" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='style_property_details']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                <xsl:if test="count($sect_signals) > 0">
+                  <a href="#signals" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='signals']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                -->
+              </nobr>
+            </td>
+          </tr>
+        </xsl:if>
       </table>
     </xsl:if>
   </xsl:template>
 
   <xsl:template name="footer.navigation">
-    <xsl:param name="prev" select="/foo"/>
-    <xsl:param name="next" select="/foo"/>
-
-    <xsl:if test="$suppress.navigation = '0'">
-      <table class="navigation" width="100%"
-             summary="Navigation footer" cellpadding="2" cellspacing="0">
-        <tr valign="middle">
-          <td align="left">
-            <xsl:if test="count($prev) > 0">
-              <a accesskey="p">
-                <xsl:attribute name="href">
-                  <xsl:call-template name="href.target">
-                    <xsl:with-param name="object" select="$prev"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <b>
-                  <xsl:text>&lt;&lt;&#160;</xsl:text>
-                  <xsl:apply-templates select="$prev"
-                                       mode="object.title.markup"/>
-                </b>
-              </a>
-            </xsl:if>
-          </td>
-          <td align="right">
-            <xsl:if test="count($next) > 0">
-              <a accesskey="n">
-                <xsl:attribute name="href">
-                  <xsl:call-template name="href.target">
-                    <xsl:with-param name="object" select="$next"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <b>
-                  <xsl:apply-templates select="$next"
-                                       mode="object.title.markup"/>
-                  <xsl:text>&#160;&gt;&gt;</xsl:text>
-                </b>
-              </a>
-            </xsl:if>
-          </td>
-        </tr>
-      </table>
-    </xsl:if>
   </xsl:template>
 
   <!-- avoid creating multiple identical indices 
