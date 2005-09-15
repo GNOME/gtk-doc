@@ -1,6 +1,11 @@
 2005-09-15  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-scanobj.in: 
+	* gtkdoc-scangobj.in: Output more messages about compilation, linking
+	and running of scanner, to try to help track down any problems.
+	(#167688)
+
+	* gtkdoc-scanobj.in: 
 	* gtkdoc-scangobj.in: patch from Stefan Kost to improve error messages,
 	though I changed it slightly so it doesn't output errno.
 

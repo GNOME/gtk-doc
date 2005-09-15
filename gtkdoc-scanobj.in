@@ -812,11 +812,16 @@ if ($CC =~ /libtool/) {
   $o_file = "$MODULE-scan.o"
 }
 
-$command = "$CC $CFLAGS -c -o $o_file $MODULE-scan.c && $LD -o $MODULE-scan $o_file $LDFLAGS";
+print "gtk-doc: Compiling scanner\n";
+$command = "$CC $CFLAGS -c -o $o_file $MODULE-scan.c"
+system($command) == 0 or die "Compilation of scanner failed: $!\n";
 
-system($command) == 0 or die "Compilation of scanner failed\n";
+print "gtk-doc: Linking scanner\n";
+$command = "$LD -o $MODULE-scan $o_file $LDFLAGS";
+system($command) == 0 or die "Linking of scanner failed: $!\n";
 
-system("./$MODULE-scan") == 0 or die "Scan failed\n";
+print "gtk-doc: Running scanner $MODULE-scan\n";
+system("./$MODULE-scan") == 0 or die "Scan failed: $!\n";
 
 unlink "./$MODULE-scan.c", "./$MODULE-scan.o", "./$MODULE-scan.lo", "./$MODULE-scan";
 
