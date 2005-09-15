@@ -1,6 +1,10 @@
 2005-09-15  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-scanobj.in: 
+	* gtkdoc-scangobj.in: Use brackets around open() arguments to avoid
+	precedence problems. (#314838)
+
+	* gtkdoc-scanobj.in: 
 	* gtkdoc-scangobj.in: Output more messages about compilation, linking
 	and running of scanner, to try to help track down any problems.
 	(#167688)

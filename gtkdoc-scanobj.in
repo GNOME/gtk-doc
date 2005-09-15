@@ -57,8 +57,8 @@ $OUTPUT_DIR = $OUTPUT_DIR ? $OUTPUT_DIR : ".";
 
 $TYPES_FILE = $TYPES_FILE ? $TYPES_FILE : "$OUTPUT_DIR/$MODULE.types";
 
-open TYPES, $TYPES_FILE || die "Cannot open $TYPES_FILE: $!\n";
-open OUTPUT, ">$MODULE-scan.c" || die "Cannot open $MODULE-scan.c: $!\n";
+open (TYPES, $TYPES_FILE) || die "Cannot open $TYPES_FILE: $!\n";
+open (OUTPUT, ">$MODULE-scan.c") || die "Cannot open $MODULE-scan.c: $!\n";
 
 my $old_signals_filename = "$OUTPUT_DIR/$MODULE.signals";
 my $new_signals_filename = "$OUTPUT_DIR/$MODULE.signals.new";
