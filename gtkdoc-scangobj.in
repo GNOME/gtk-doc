@@ -119,6 +119,7 @@ print OUTPUT <<EOT;
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 
 $includes
 #ifdef GTK_IS_WIDGET_CLASS
@@ -217,7 +218,7 @@ output_signals (void)
   fp = fopen (signals_filename, "w");
   if (fp == NULL)
     {
-      g_warning ("Couldn't open output file: %s", signals_filename);
+      g_warning ("Couldn't open output file: %s : %s", signals_filename, strerror(errno));
       return;
     }
 
@@ -744,7 +745,7 @@ output_widget_hierarchy (void)
   fp = fopen (hierarchy_filename, "w");
   if (fp == NULL)
     {
-      g_warning ("Couldn't open output file: %s", hierarchy_filename);
+      g_warning ("Couldn't open output file: %s : %s", hierarchy_filename, strerror(errno));
       return;
     }
   output_hierarchy (fp, G_TYPE_OBJECT, 0);
@@ -785,7 +786,7 @@ static void output_widget_interfaces (void)
   fp = fopen (interfaces_filename, "w");
   if (fp == NULL)
     {
-      g_warning ("Couldn't open output file: %s", interfaces_filename);
+      g_warning ("Couldn't open output file: %s : %s", interfaces_filename, strerror(errno));
       return;
     }
   output_interfaces (fp, G_TYPE_OBJECT);
@@ -829,7 +830,7 @@ static void output_interface_prerequisites (void)
   fp = fopen (prerequisites_filename, "w");
   if (fp == NULL)
     {
-      g_warning ("Couldn't open output file: %s", prerequisites_filename);
+      g_warning ("Couldn't open output file: %s : %s", prerequisites_filename, strerror(errno));
       return;
     }
   output_prerequisites (fp, G_TYPE_INTERFACE);
@@ -877,7 +878,7 @@ output_args (void)
   fp = fopen (args_filename, "w");
   if (fp == NULL)
     {
-      g_warning ("Couldn't open output file: %s", args_filename);
+      g_warning ("Couldn't open output file: %s : %s", args_filename, strerror(errno));
       return;
     }
 
