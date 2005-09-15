@@ -1,5 +1,8 @@
 2005-09-15  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-scangobj.in: Patch from Stepan Kasal to avoid some gcc
+	warnings. (#312985)
+	
 	* gtkdoc-scanobj.in: 
 	* gtkdoc-scangobj.in: Use brackets around open() arguments to avoid
 	precedence problems. (#314838)

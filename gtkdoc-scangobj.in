@@ -167,7 +167,6 @@ static void output_signals (void);
 static void output_widget_signals (FILE *fp,
 				   GType object_type);
 static void output_widget_signal (FILE *fp,
-				  GType object_type,
 				  const gchar *object_class_name,
 				  guint signal_id);
 static const gchar * get_type_name (GType type,
@@ -195,6 +194,9 @@ static void output_widget_args (FILE *fp, GType object_type);
 int
 main (int argc, char *argv[])
 {
+  /* Silence the compiler: */
+  if (argv != argv) argc = argc;
+
   $TYPE_INIT_FUNC;
 
   get_object_types ();
@@ -256,8 +258,7 @@ output_widget_signals (FILE *fp, GType object_type)
 
       for (sig = 0; sig < n_signals; sig++)
         {
-           output_widget_signal (fp, object_type, object_class_name,
-     		                 signals[sig]);
+           output_widget_signal (fp, object_class_name, signals[sig]);
         }
       g_free (signals);
    }
@@ -267,7 +268,6 @@ output_widget_signals (FILE *fp, GType object_type)
 /* This outputs one signal. */
 static void
 output_widget_signal (FILE *fp,
-		      GType object_type,
 		      const gchar *object_name,
 		      guint signal_id)
 {
@@ -283,8 +283,7 @@ output_widget_signal (FILE *fp,
   gchar signal_name[128];
 
 
-  /*  g_print ("Object: %s Type: %i Signal: %u\\n", object_name, object_type,
-      signal_id);*/
+  /*  g_print ("Object: %s Signal: %u\\n", object_name, signal_id);*/
 
   param_num = 1;
   widget_num = event_num = callback_num = 0;
@@ -902,22 +901,25 @@ compare_param_specs (const void *a, const void *b)
  * a bit nicer by spelling out the max constants.
  */
 
+/* Don't use "==" with floats, it might trigger a gcc warning.  */
+#define GTKDOC_COMPARE_FLOAT(x, y) (x <= y && x >= y)
+
 static gchar*
 describe_double_constant (gdouble value)
 {
   gchar *desc;
 
-  if (value == G_MAXDOUBLE)
+  if (GTKDOC_COMPARE_FLOAT (value, G_MAXDOUBLE))
     desc = g_strdup ("G_MAXDOUBLE");
-  else if (value == G_MINDOUBLE)
+  else if (GTKDOC_COMPARE_FLOAT (value, G_MINDOUBLE))
     desc = g_strdup ("G_MINDOUBLE");
-  else if (value == -G_MAXDOUBLE)
+  else if (GTKDOC_COMPARE_FLOAT (value, -G_MAXDOUBLE))
     desc = g_strdup ("-G_MAXDOUBLE");
-  else if (value == G_MAXFLOAT)
+  else if (GTKDOC_COMPARE_FLOAT (value, G_MAXFLOAT))
     desc = g_strdup ("G_MAXFLOAT");
-  else if (value == G_MINFLOAT)
+  else if (GTKDOC_COMPARE_FLOAT (value, G_MINFLOAT))
     desc = g_strdup ("G_MINFLOAT");
-  else if (value == -G_MAXFLOAT)
+  else if (GTKDOC_COMPARE_FLOAT (value, -G_MAXFLOAT))
     desc = g_strdup ("-G_MAXFLOAT");
   else
     desc = g_strdup_printf ("%lg", value);
@@ -959,20 +961,14 @@ describe_unsigned_constant (guint64 value)
 
   if (value == G_MAXINT)
     desc = g_strdup ("G_MAXINT");
-  else if (value == G_MININT)
-    desc = g_strdup ("G_MININT");
   else if (value == G_MAXUINT)
     desc = g_strdup ("G_MAXUINT");
   else if (value == G_MAXLONG)
     desc = g_strdup ("G_MAXLONG");
-  else if (value == G_MINLONG)
-    desc = g_strdup ("G_MINLONG");
   else if (value == G_MAXULONG)
     desc = g_strdup ("G_MAXULONG");
   else if (value == G_MAXINT64)
     desc = g_strdup ("G_MAXINT64");
-  else if (value == G_MININT64)
-    desc = g_strdup ("G_MININT64");
   else if (value == G_MAXUINT64)
     desc = g_strdup ("G_MAXUINT64");
   else
@@ -1131,11 +1127,14 @@ describe_type (GParamSpec *spec)
 
       lower = describe_double_constant (pspec->minimum);
       upper = describe_double_constant (pspec->maximum);
-      if (pspec->minimum == -G_MAXFLOAT && pspec->maximum == G_MAXFLOAT)
-	desc = g_strdup ("");
-      else if (pspec->minimum == -G_MAXFLOAT)
-	desc = g_strdup_printf ("<= %s", upper);
-      else if (pspec->maximum == G_MAXFLOAT)
+      if (GTKDOC_COMPARE_FLOAT (pspec->minimum, -G_MAXFLOAT))
+	{
+	  if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXFLOAT))
+	    desc = g_strdup ("");
+	  else
+	    desc = g_strdup_printf ("<= %s", upper);
+	}
+      else if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXFLOAT))
 	desc = g_strdup_printf (">= %s", lower);
       else
 	desc = g_strdup_printf ("[%s,%s]", lower, upper);
@@ -1148,11 +1147,14 @@ describe_type (GParamSpec *spec)
 
       lower = describe_double_constant (pspec->minimum);
       upper = describe_double_constant (pspec->maximum);
-      if (pspec->minimum == -G_MAXDOUBLE && pspec->maximum == G_MAXDOUBLE)
-	desc = g_strdup ("");
-      else if (pspec->minimum == -G_MAXDOUBLE)
-	desc = g_strdup_printf ("<= %s", upper);
-      else if (pspec->maximum == G_MAXDOUBLE)
+      if (GTKDOC_COMPARE_FLOAT (pspec->minimum, -G_MAXDOUBLE))
+	{
+	  if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXDOUBLE))
+	    desc = g_strdup ("");
+	  else
+	    desc = g_strdup_printf ("<= %s", upper);
+	}
+      else if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXDOUBLE))
 	desc = g_strdup_printf (">= %s", lower);
       else
 	desc = g_strdup_printf ("[%s,%s]", lower, upper);
