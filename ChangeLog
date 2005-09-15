@@ -1,5 +1,16 @@
 2005-09-15  Damon Chaplin  <damon@gnome.org>
 
+        Patch from Stepan Kasal:
+
+	* gtkdoc-mkhtml.in, gtkdoc-mkman.in, gtkdocize.in: Add datarootdir
+	variable, for compatibility with future Autoconf releases.
+
+	* configure.in (PACKAGE_DATA_DIR): Simplify the computation;
+	use a local macro AC_DEFINE_DIR, based on a macro from Autoconf
+	macro archive.
+
+2005-09-15  Damon Chaplin  <damon@gnome.org>
+	
 	* gtkdoc-scangobj.in: Patch from Stepan Kasal to avoid some gcc
 	warnings. (#312985)
 	
