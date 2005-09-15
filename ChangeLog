@@ -7,7 +7,7 @@
 	* gtkdoc-scanobj.in: 
 	* gtkdoc-scangobj.in: Output more messages about compilation, linking
 	and running of scanner, to try to help track down any problems.
-	(#167688)
+	Also use "sh -c" to run the scanner (#167688)
 
 	* gtkdoc-scanobj.in: 
 	* gtkdoc-scangobj.in: patch from Stefan Kost to improve error messages,
