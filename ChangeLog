@@ -1,5 +1,10 @@
 2005-09-15  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-scan.in (ScanHeader): 
+	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mkdb.in (OutputFunction): patch from dodji seketeli to handle
+	functions returning explicit enums. (#303337)
+
         Patch from Stepan Kasal:
 
 	* gtkdoc-mkhtml.in, gtkdoc-mkman.in, gtkdocize.in: Add datarootdir
@@ -7,7 +12,7 @@
 
 	* configure.in (PACKAGE_DATA_DIR): Simplify the computation;
 	use a local macro AC_DEFINE_DIR, based on a macro from Autoconf
-	macro archive.
+	macro archive. (#313876)
 
 2005-09-15  Damon Chaplin  <damon@gnome.org>
 	

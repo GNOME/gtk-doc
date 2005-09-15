@@ -371,7 +371,7 @@ EOF
     # For functions and function typedefs we also output the return value.
     if ($type eq "FUNCTION" || $type eq "USER_FUNCTION") {
 	# Take out the return type
-        $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*(restrict)?\s*)<\/RETURNS>\n//;
+        $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*(restrict)?\s*)<\/RETURNS>\n//;
 	my $ret_type_modifier = defined($1) ? $1 : "";
 	my $ret_type = $3;
 	my $ret_type_pointer = $4;
@@ -393,7 +393,7 @@ EOF
 					 $template_exists, 1, "");
 
 		# Try to match a standard parameter.
-	    } elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?((?:long\s+|short\s+)?\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(?:restrict)?\s*(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	    } elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+|enum\s+)?((?:long\s+|short\s+)?\w+)\s*(\**)\s*(const\s+)?(\**)?\s*(?:restrict)?\s*(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 		if (defined ($7)) {
 		    $name = $7;
 		} else {

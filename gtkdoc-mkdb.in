@@ -1161,7 +1161,7 @@ sub OutputFunction {
     my $id = &CreateValidSGMLID ($symbol);
 
     # Take out the return type
-    $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*(restrict)?\s*)<\/RETURNS>\n//;
+    $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*(restrict)?\s*)<\/RETURNS>\n//;
     my $type_modifier = defined($1) ? $1 : "";
     my $type = $3;
     my $pointer = $4;
