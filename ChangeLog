@@ -1,3 +1,15 @@
+2005-09-28 Matthias Clasen <mclasen@redhat.com>
+
+	Show signal flags:  (#316789)
+
+	* gtkdoc-scangobj.in: Emit flags for signals
+	as <FLAGS> element in $MODULE.signals
+
+	* gtkdoc-mkdb.in: Emit signal flags similar
+	to property flags.
+
+	* gtkdoc-mktmpl.in: Handle <FLAGS> here, too.
+
 2005-09-20  Stefan Kost  <ensonic@users.sf.net>
 
 	* doc/README:

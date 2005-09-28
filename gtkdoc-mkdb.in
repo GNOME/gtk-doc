@@ -164,6 +164,7 @@ my $ARGS_FILE = "$ROOT_DIR/$MODULE.args";
 my @SignalObjects;	# The GtkObject which emits the signal.
 my @SignalNames;	# The signal name.
 my @SignalReturns;	# The return type.
+my @SignalFlags;	# Flags for the signal
 my @SignalPrototypes;	# The rest of the prototype of the signal handler.
 
 # These global arrays store information on Args. Each Arg has an entry
@@ -2181,32 +2182,84 @@ sub GetSignals {
 	    my $sourceparams = $SourceSymbolParams{$symbol};
 	    my @params = split ("\n", $SignalPrototypes[$i]);
 	    my $j;
-	    for ($j = 0; $j <= $#params; $j++) {
-		# allow alphanumerics, '_', '[' & ']' in param names
-		if ($params[$j] =~ m/^\s*(\w+)\s*(\**)\s*([\w\[\]]+)\s*$/) {
-		    $type = $1;
-		    $pointer = $2;
-		    if (defined($sourceparams)) {
-			$name = $$sourceparams[2 * $j];
-		    }
-		    else {
-			$name = $3;
-		    }
-		    if (!defined($name)) {
-		        $name = "arg$j";
-		    }
-		    $xref = &MakeXRef ($type);
-		    $synop .= "$xref $pointer$name,\n";
-		    $synop .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
-		    $desc .= "$xref $pointer$name,\n";
-		    $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
-		} else {
-		    print "###Can't parse arg: $params[$j]\nArgs:$SignalPrototypes[$i]\n";
+	    my $l;
+	    my $pad;
+            my $type_len = length("gpointer");
+            $name_len = length("user_data");
+            # do two passes, the first one is to calculate padding
+	    for ($l = 0; $l < 2; $l++) {
+	        for ($j = 0; $j <= $#params; $j++) {
+		    # allow alphanumerics, '_', '[' & ']' in param names
+		    if ($params[$j] =~ m/^\s*(\w+)\s*(\**)\s*([\w\[\]]+)\s*$/) {
+		        $type = $1;
+		        $pointer = $2;
+		        if (defined($sourceparams)) {
+			    $name = $$sourceparams[2 * $j];
+		        }
+		        else {
+			    $name = $3;
+		        }
+		        if (!defined($name)) {
+		            $name = "arg$j";
+		        }
+                        if ($l == 0) {
+			    if (length($type) + length($pointer) > $type_len) {
+                                $type_len = length($type) + length($pointer);
+			    }
+			    if (length($name) > $name_len) {
+                                $name_len = length($name);
+			    }
+                        }
+                        else {
+		            $xref = &MakeXRef ($type);
+                            $pad = ' ' x ($type_len - length($type) - length($pointer));
+		            $synop .= "$xref$pad $pointer$name,\n";
+		            $synop .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
+		            $desc .= "$xref$pad $pointer$name,\n";
+		            $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
+			}
+		     } else {
+		         print "###Can't parse arg: $params[$j]\nArgs:$SignalPrototypes[$i]\n";
+		     }
 		}
 	    }
 	    $xref = &MakeXRef ("gpointer");
-	    $synop .= "$xref user_data);\n";
-	    $desc  .= "$xref user_data);</programlisting>\n";
+	    $pad = ' ' x ($type_len - length("gpointer"));
+	    $synop .= "$xref$pad user_data)";
+	    $desc  .= "$xref$pad user_data)";
+
+	    my $flags = $SignalFlags[$i];
+	    my $flags_string = "";
+
+	    if ($flags =~ m/f/) {
+	      $flags_string = "Run first";
+	    }
+	    elsif ($flags =~ m/l/) {
+	      $flags_string = "Run last";
+	    }
+	    elsif ($flags =~ m/l/) {
+	      $flags_string = "Cleanup";
+	    }
+	    if ($flags =~ m/r/) {
+	      if ($flags_string) { $flags_string .= " / "; }
+	      $flags_string .= "No recursion";
+	    }
+	    if ($flags =~ m/d/) {
+	      if ($flags_string) { $flags_string .= " / "; }
+	      $flags_string .= "Has details";
+	    }
+	    if ($flags =~ m/a/) {
+	      if ($flags_string) { $flags_string .= " / "; }
+	      $flags_string .= "Action";
+	    }
+	    if ($flags =~ m/h/) {
+	      if ($flags_string) { $flags_string .= " / "; }
+	      $flags_string .= "No hooks";
+	    }
+
+	    $pad = ' ' x (5 + $name_len - length("user_data"));
+	    $synop .= "$pad : $flags_string\n";
+	    $desc  .= "$pad : $flags_string</programlisting>\n";
 
 	    my $parameters = &OutputParamDescriptions ("SIGNAL", $symbol);
 	    my $parameters_output = 0;
@@ -3188,12 +3241,14 @@ sub ReadSignalsFile {
     my $signal_object;
     my $signal_name;
     my $signal_returns;
+    my $signal_flags;
     my $signal_prototype;
 
     # Reset the signal info.
     @SignalObjects = ();
     @SignalNames = ();
     @SignalReturns = ();
+    @SignalFlags = ();
     @SignalPrototypes = ();
 
     if (! -f $file) {
@@ -3224,11 +3279,14 @@ sub ReadSignalsFile {
 		}
 	    } elsif (m/^<RETURNS>(.*)<\/RETURNS>/) {
 		$signal_returns = $1;
+	    } elsif (m/^<FLAGS>(.*)<\/FLAGS>/) {
+		$signal_flags = $1;
 	    } elsif (m%^</SIGNAL>%) {
 #		print "Found end of signal: ${signal_object}::${signal_name}\nReturns: ${signal_returns}\n${signal_prototype}";
 		push (@SignalObjects, $signal_object);
 		push (@SignalNames, $signal_name);
 		push (@SignalReturns, $signal_returns);
+		push (@SignalFlags, $signal_flags);
 	        push (@SignalPrototypes, $signal_prototype);
 		$in_signal = 0;
 	    } else {

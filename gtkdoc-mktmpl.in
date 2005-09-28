@@ -117,6 +117,7 @@ my $CHANGES_FLAG = $FLAG_CHANGES ? "FIXME" : "";
 my @SignalObjects;	# The GtkObject which emits the signal.
 my @SignalNames;	# The signal name.
 my @SignalReturns;	# The return type.
+my @SignalFlags;	# Flags for the signal
 my @SignalPrototypes;	# The rest of the prototype of the signal handler.
 
 # These global arrays store information on Args. Each Arg has an entry
@@ -945,12 +946,14 @@ sub ReadSignalsFile {
     my $signal_object;
     my $signal_name;
     my $signal_returns;
+    my $signal_flags;
     my $signal_prototype;
 
     # Reset the signal info.
     @SignalObjects = ();
     @SignalNames = ();
     @SignalReturns = ();
+    @SignalFlags = ();
     @SignalPrototypes = ();
 
     if (! -f $file) {
@@ -981,11 +984,14 @@ sub ReadSignalsFile {
 		}
 	    } elsif (m/^<RETURNS>(.*)<\/RETURNS>/) {
 		$signal_returns = $1;
+	    } elsif (m/^<FLAGS>(.*)<\/FLAGS>/) {
+		$signal_flags = $1;
 	    } elsif (m%^</SIGNAL>%) {
 #		print "Found end of signal: ${signal_object}::${signal_name}\nReturns: ${signal_returns}\n${signal_prototype}";
 		push (@SignalObjects, $signal_object);
 		push (@SignalNames, $signal_name);
 		push (@SignalReturns, $signal_returns);
+		push (@SignalFlags, $signal_flags);
 	        push (@SignalPrototypes, $signal_prototype);
 		$in_signal = 0;
 	    } else {

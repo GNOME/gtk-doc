@@ -281,7 +281,7 @@ output_widget_signal (FILE *fp,
   gint param_num, widget_num, event_num, callback_num;
   gint *arg_num;
   gchar signal_name[128];
-
+  gchar flags[16];
 
   /*  g_print ("Object: %s Signal: %u\\n", object_name, signal_id);*/
 
@@ -384,9 +384,27 @@ output_widget_signal (FILE *fp,
 	}
     }
 
+  pos = flags;
+  /* We use one-character flags for simplicity. */
+  if (query_info.signal_flags & G_SIGNAL_RUN_FIRST)
+    *pos++ = 'f';
+  if (query_info.signal_flags & G_SIGNAL_RUN_LAST)
+    *pos++ = 'l';
+  if (query_info.signal_flags & G_SIGNAL_RUN_CLEANUP)
+    *pos++ = 'c';
+  if (query_info.signal_flags & G_SIGNAL_NO_RECURSE)
+    *pos++ = 'r';
+  if (query_info.signal_flags & G_SIGNAL_DETAILED)
+    *pos++ = 'd';
+  if (query_info.signal_flags & G_SIGNAL_ACTION)
+    *pos++ = 'a';
+  if (query_info.signal_flags & G_SIGNAL_NO_HOOKS)
+    *pos++ = 'h';
+  *pos = 0;
+
   fprintf (fp,
-	   "<SIGNAL>\\n<NAME>%s::%s</NAME>\\n<RETURNS>%s</RETURNS>\\n%s</SIGNAL>\\n\\n",
-	   object_name, query_info.signal_name, ret_type_buffer, buffer);
+	   "<SIGNAL>\\n<NAME>%s::%s</NAME>\\n<RETURNS>%s</RETURNS>\\n<FLAGS>%s</FLAGS>\\n%s</SIGNAL>\\n\\n",
+	   object_name, query_info.signal_name, ret_type_buffer, flags, buffer);
 }
 
 
