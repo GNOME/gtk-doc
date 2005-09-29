@@ -2473,7 +2473,7 @@ sub ReadSourceDocumentation {
 #############################################################################
 # Function    : ScanSourceFile
 # Description : Scans one source file looking for specially-formatted comment
-#		blocks. It calls &MergeSourceDocumentation to merge any
+#		blocks. Later &MergeSourceDocumentation is used to merge any
 #		documentation found with the documentation already read in
 #		from the template files.
 #		
@@ -3025,6 +3025,11 @@ EOF
 		for ($j = 0; $j <= $#$params; $j += 2) {
 		    my $param_name = $$params[$j];
 		    if ($param_name) {
+                        # the template builder cannot detect if a macro returns
+                        # a result or not
+                        if(($type eq "MACRO") && ($param_name eq "Returns")) {
+                            next;
+                        }
 			print <<EOF;
 WARNING: $item described in source code comment block but does not exist -
          $type: $symbol $item: $param_name.
