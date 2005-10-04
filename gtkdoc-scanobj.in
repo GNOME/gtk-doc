@@ -813,7 +813,7 @@ if ($CC =~ /libtool/) {
 }
 
 print "gtk-doc: Compiling scanner\n";
-$command = "$CC $CFLAGS -c -o $o_file $MODULE-scan.c"
+$command = "$CC $CFLAGS -c -o $o_file $MODULE-scan.c";
 system($command) == 0 or die "Compilation of scanner failed: $!\n";
 
 print "gtk-doc: Linking scanner\n";
