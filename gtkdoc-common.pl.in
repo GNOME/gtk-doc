@@ -169,7 +169,7 @@ sub ParseStructDeclaration {
 	    if ($output_function_params) {
 	      push @result, "$mod1$ptype$ptr1$mod2$ptr2 (*$pname) ($func_params)";
 	    } else {
-	      push @result, "$pname&#160;()";
+	      push @result, "$pname&nbsp;()";
 	    }
 
 
@@ -188,8 +188,8 @@ sub ParseStructDeclaration {
 	    my $mod2 = defined($4) ? " " . $4 : "";
 	    my $list = $5;
 
-	    $mod1 =~ s/ /&#160;/g;
-	    $mod2 =~ s/ /&#160;/g;
+	    $mod1 =~ s/ /&nbsp;/g;
+	    $mod2 =~ s/ /&nbsp;/g;
 
 	    my @names = split /,/, $list;
 	    for my $n (@names) {
@@ -204,14 +204,14 @@ sub ParseStructDeclaration {
 		    my $bits =  defined($4) ? " $4" : "";
 
 		    if ($ptrs && $ptrs !~ m/\*$/) { $ptrs .= " "; }
-		    $array =~ s/ /&#160;/g;
-		    $bits =~ s/ /&#160;/g;
+		    $array =~ s/ /&nbsp;/g;
+		    $bits =~ s/ /&nbsp;/g;
 
 		    push @result, $name;
 		    if (defined $namefunc) {
 		        $name = $namefunc->($name);
 		    }
-		    push @result, "$mod1$ptype$mod2&#160;$ptrs$name$array$bits;";
+		    push @result, "$mod1$ptype$mod2&nbsp;$ptrs$name$array$bits;";
 
 #		    print "***** Matched line: $mod1$ptype$mod2 $ptrs$name$array$bits\n";
 		} else {
