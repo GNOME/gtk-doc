@@ -722,9 +722,11 @@ sub OutputDeclaration {
 sub OutputMacro {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
+    my $condition = &MakeConditionDescription ($symbol);
     my $synop = "#define     <link linkend=\"$id\">$symbol</link>";
     my $desc;
     my $args = "";
+    
     if ($declaration =~ m/^\s*#\s*define\s+\w+(\([^\)]*\))/) {
 	$args = $1;
 
@@ -735,11 +737,11 @@ sub OutputMacro {
 	$synop .= &CreateValidSGML ($args);
     }
     $synop .= "\n";
-
+    
     if ($args ne "") {
-	$desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}${symbol}()</title>\n";
+	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"macro\"${condition}${empty_element_end}${symbol}()</title>\n";
     } else {
-	$desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
+	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"macro\"${condition}${empty_element_end}$symbol</title>\n";
     }
     $desc .= MakeIndexterms($symbol);
 
@@ -799,8 +801,9 @@ sub OutputMacro {
 sub OutputTypedef {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
+    my $condition = &MakeConditionDescription ($symbol);
     my $synop = "typedef     <link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"typedef\"${condition}${empty_element_end}$symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol);
 
@@ -848,10 +851,13 @@ sub OutputStruct {
     }
 
     my $id;
+    my $condition;
     if ($is_widget_struct) {
 	$id = &CreateValidSGMLID ($symbol . "_struct");
+        $condition = &MakeConditionDescription ($symbol . "_struct");
     } else {
 	$id = &CreateValidSGMLID ($symbol);
+	$condition = &MakeConditionDescription ($symbol);
     }
 
     # Determine if it is a simple struct or it also has a typedef.
@@ -865,10 +871,10 @@ sub OutputStruct {
     if ($has_typedef) {
         # For structs with typedefs we just output the struct name.
         $synop = "            <link linkend=\"$id\">$symbol</link>;\n";
-	$desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
+	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"struct\"${condition}${empty_element_end}$symbol</title>\n";
     } else {
         $synop = "struct      <link linkend=\"$id\">$symbol</link>;\n";
-	$desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}struct $symbol</title>\n";
+	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"struct\"${condition}${empty_element_end}struct $symbol</title>\n";
     }
 
     $desc .= MakeIndexterms($symbol);
@@ -1007,8 +1013,9 @@ EOF
 sub OutputEnum {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
+    my $condition = &MakeConditionDescription ($symbol);
     my $synop = "enum        <link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}enum $symbol</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"enum\"${condition}${empty_element_end}enum $symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol);
 
@@ -1081,8 +1088,9 @@ EOF
 sub OutputUnion {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
+    my $condition = &MakeConditionDescription ($symbol);
     my $synop = "union       <link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}union $symbol</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"union\"${condition}${empty_element_end}union $symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol);
 
@@ -1115,6 +1123,7 @@ sub OutputUnion {
 sub OutputVariable {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
+    my $condition = &MakeConditionDescription ($symbol);
 
     my $synop;
     if ($declaration =~ m/^\s*extern\s+((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)(\s*)([A-Za-z]\w*)\s*;/) {
@@ -1127,7 +1136,7 @@ sub OutputVariable {
 	$synop = "extern      <link linkend=\"$id\">$symbol</link>;\n";
     }
 
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}$symbol</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"variable\"${condition}${empty_element_end}$symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol);
 
@@ -1160,6 +1169,7 @@ sub OutputVariable {
 sub OutputFunction {
     my ($symbol, $declaration, $symbol_type) = @_;
     my $id = &CreateValidSGMLID ($symbol);
+    my $condition = &MakeConditionDescription ($symbol);
 
     # Take out the return type
     $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*(restrict)?\s*)<\/RETURNS>\n//;
@@ -1216,7 +1226,7 @@ sub OutputFunction {
     }
 
     my $synop = $ret_type_output . $symbol_output . '(';
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\"${empty_element_end}${symbol} ()</title>\n";
+    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"function\"${condition}${empty_element_end}${symbol} ()</title>\n";
 
     $desc .= MakeIndexterms($symbol);
 
@@ -1887,6 +1897,53 @@ sub MakeDeprecationNote {
     return $desc;
 }
 
+#############################################################################
+# Function    : MakeConditionDescription
+# Description : This returns a sumary of conditions for the given symbol.
+# Arguments   : $symbol - the symbol to try to create the sumary.
+#############################################################################
+
+sub MakeConditionDescription {
+    my ($symbol) = $_[0];
+    my $desc = "";
+
+    if (exists $Deprecated{$symbol}) {
+	if ($desc ne "") {
+            $desc .= "|";
+        }
+
+	if ($Deprecated{$symbol} =~ /^\s*(.*?)\s*$/) {
+		$desc .= "deprecated:$1";
+        } else {
+		$desc .= "deprecated";
+	}
+    }
+    
+    if (exists $Since{$symbol}) {
+	if ($desc ne "") {
+            $desc .= "|";
+        }
+    
+	if ($Since{$symbol} =~ /^\s*(.*?)\s*$/) {
+		$desc .= "since:$1";
+        } else {
+		$desc .= "since";
+	}
+    }
+    
+    if (exists $StabilityLevel{$symbol}) {
+	if ($desc ne "") {
+            $desc .= "|";
+        }
+        $desc .= "stability:".$StabilityLevel{$symbol};
+    }
+    
+    if ($desc ne "") {
+        $desc=" condition=\"".$desc."\"";
+        print ">>>>[$symbol] $desc\n";
+    }
+    return $desc;
+}
 
 #############################################################################
 # Function    : GetHierarchy
