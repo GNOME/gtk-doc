@@ -1940,7 +1940,7 @@ sub MakeConditionDescription {
     
     if ($desc ne "") {
         $desc=" condition=\"".$desc."\"";
-        print ">>>>[$symbol] $desc\n";
+        #print "condition for '$symbol' = '$desc'\n";
     }
     return $desc;
 }
