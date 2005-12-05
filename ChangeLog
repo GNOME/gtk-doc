@@ -1,3 +1,9 @@
+2005-12-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mkdb.in (OutputFunction): Allow parameters to be declared
+	volatile (this happens in GLib nowadays)
+
 2005-10-11  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in:
