@@ -474,6 +474,19 @@ make
 	tell you how to fill the pages with life.
       </para>
     </sect1>
+
+    <sect1 id="settingup_vcs">
+      <title>Integration with version control systems</title>
+
+      <para>
+        (FIXME)
+      </para>
+
+      <para>
+        (which files belong into a vcs (like cvs, svn))
+      </para>
+      
+    </sect1>
     
   </chapter>
 
@@ -515,7 +528,7 @@ make
 <![CDATA[
 /**
  * identifier:
- * documenation ,,,
+ * documenation ...
  */
 ]]>
           </programlisting>
@@ -578,7 +591,7 @@ make
       <tip>
 	<para>
 	  As already mentioned earlier Gtk-Doc is for documenting public API. Thus
-	  one can't write documentation for static symbols. Nevertheless it is good
+	  one cannot write documentation for static symbols. Nevertheless it is good
 	  to comment those symbols too. This helps other to understand you code.
 	  Therefore we recommend to comment these using normal comments (without the
 	  2nd '*' in the first line).
@@ -606,13 +619,91 @@ make
  * SECTION:meepapp
  * @short_description: the application class
  * @see_also: #MeepSettings
- * @stability: stable
+ * @stability: Stable
  *
  * The application class handles ...
  */
 ]]>
           </programlisting>
         </example>
+      </para>
+      
+      <variablelist>
+        <varlistentry>
+          <term>@short_description</term>
+          <listitem>
+            <para>
+              A one line description of the section, that later will appear after 
+              the links in the TOC and at the top of the section page.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>@see_also</term>
+          <listitem>
+            <para>
+              A list of symbols that are related to this section..
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>@stability</term>
+          <listitem>
+            <para>
+              A informal description of the stabillity level this API has.
+              We reccomend the use of one of these terms:
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    Stable
+                    - The intention of a Stable interface is to enable arbitrary
+                    third parties to develop applications to these interfaces,
+                    release them, and have confidence that they will run on all
+                    minor releases of the product (after the one in which the 
+                    interface was introduced, and within the same major release).
+                    Even at a major release, incompatible changes are expected
+                    to be rare, and to have strong justifications.
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Unstable
+                    - Unstable interfaces are experimental or transitional.
+                    They are typically used to give outside developers early
+                    access to new or rapidly changing technology, or to provide
+                    an interim solution to a problem where a more general
+                    solution is anticipated.
+                    No claims are made about either source or binary
+                    compatibility from one minor release to the next.
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Private
+                    - An interface that can be used within the GNOME stack
+                    itself, but that is not documented for end-users. Such
+                    functions should only be used in specified and documented
+                    ways.
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Internal
+                    - An interface that is internal to a module and does not
+                    require end-user documentation. Functions that are
+                    undocumented are assumed to be Internal.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      
+      <para>
+        FIXME
+        having @title here, would put this title into a newly generated section
+        file, but later would be osolete (right?)
       </para>
       
       <tip>
@@ -657,18 +748,48 @@ make
         </example>
       </para>
 
+      <variablelist>
+        <varlistentry>
+          <term>Returns:</term>
+          <listitem>
+            <para>
+              Paragraph describing the returned result.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Deprecated:</term>
+          <listitem>
+            <para>
+              Paragraph denoting that this function should no be used anymore.
+              The description should point the reader to the new API.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Since:</term>
+          <listitem>
+            <para>
+              Description since which version of the code the API is available.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      
       <para>
-        (FIXME)
+        Gtk-doc assumes all symbols (macros, functions) starting with '_' are
+        private. They are treated like static functions.
       </para>
 
       <para>
         (FIXME)
+        (stabillity)
         (signals, glib-enums, properties, ...)
       </para>
       
     </sect1>
     
-    <sect1 id="documneting_docbook">
+    <sect1 id="documenting_docbook">
       <title>Useful DocBook tags</title>
 
       <para>      
@@ -1027,7 +1148,11 @@ gtk_arrow_get_type
       <segtitle>Answer</segtitle>
       <seglistitem>
 	<seg>No class hierarchy.</seg>
-	<seg>_get_type() function has not been entered into the <filename>.types</filename> file.</seg>
+	<seg>The objects _get_type() function has not been entered into the <filename>.types</filename> file.</seg>
+      </seglistitem>
+      <seglistitem>
+	<seg>Still no class hierarchy.</seg>
+	<seg>Wrong naming in section file (see <ulink url="http://mail.gnome.org/archives/gtk-doc-list/2003-October/msg00006.html">explanation</ulink>)</seg>
       </seglistitem>
       <seglistitem>
 	<seg>No symbol index.</seg>
@@ -1050,6 +1175,10 @@ gtk_arrow_get_type
       <seglistitem>
 	<seg>Parameter described in source code comment block but does not exist</seg>
 	<seg>check if the prototype in the header has different parameter names as in the source</seg>
+      </seglistitem>
+      <seglistitem>
+	<seg>multiple "IDs" for constraint linkend: XYZ</seg>
+	<seg>Symbol XYZ appears twice in -section.txt file</seg>
       </seglistitem>
     </segmentedlist>
   </chapter>
