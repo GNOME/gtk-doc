@@ -21,6 +21,7 @@ gtkdocdata_DATA = \
 	gtk-doc.xsl		\
 	version-greater-or-equal.xsl \
 	devhelp.xsl		\
+	devhelp2.xsl		\
 	gtk-doc.make		\
 	home.png		\
 	left.png		\
@@ -48,6 +49,7 @@ EXTRA_DIST = \
   gtk-doc.xsl     \
   version-greater-or-equal.xsl \
   devhelp.xsl     \
+  devhelp2.xsl     \
   gtk-doc.cat.in  \
   home.png  \
   left.png  \

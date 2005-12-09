@@ -1255,8 +1255,8 @@ sub OutputFunction {
 		    . " ...";
 	    }
 
-	    # allow alphanumerics, '_', '[' & ']' in param names
-	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+|volatile\s+)*(struct\s+)?((?:long\s+|short\s+)?\w+)\s*(\**(?:\s*restrict)?)\s*(const\s+)?(\**(?:\s*restrict)?)?\s*(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	# allow alphanumerics, '_', '[' & ']' in param names
+	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+|volatile\s+)*(struct\s+)?((?:long\s+|short\s+)?\w+)\s*(\**(?:\s*restrict)?)\s*(const\s*)?(\**(?:\s*restrict)?)?\s*(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
@@ -2287,32 +2287,34 @@ sub GetSignals {
 
 	    my $flags = $SignalFlags[$i];
 	    my $flags_string = "";
-
-	    if ($flags =~ m/f/) {
-	      $flags_string = "Run first";
-	    }
-	    elsif ($flags =~ m/l/) {
-	      $flags_string = "Run last";
-	    }
-	    elsif ($flags =~ m/l/) {
-	      $flags_string = "Cleanup";
-	    }
-	    if ($flags =~ m/r/) {
-	      if ($flags_string) { $flags_string .= " / "; }
-	      $flags_string .= "No recursion";
-	    }
-	    if ($flags =~ m/d/) {
-	      if ($flags_string) { $flags_string .= " / "; }
-	      $flags_string .= "Has details";
-	    }
-	    if ($flags =~ m/a/) {
-	      if ($flags_string) { $flags_string .= " / "; }
-	      $flags_string .= "Action";
-	    }
-	    if ($flags =~ m/h/) {
-	      if ($flags_string) { $flags_string .= " / "; }
-	      $flags_string .= "No hooks";
-	    }
+            
+            if (defined ($flags)) {  
+              if ($flags =~ m/f/) {
+                $flags_string = "Run first";
+              }
+              elsif ($flags =~ m/l/) {
+                $flags_string = "Run last";
+              }
+              elsif ($flags =~ m/l/) {
+                $flags_string = "Cleanup";
+              }
+              if ($flags =~ m/r/) {
+                if ($flags_string) { $flags_string .= " / "; }
+                $flags_string .= "No recursion";
+              }
+              if ($flags =~ m/d/) {
+                if ($flags_string) { $flags_string .= " / "; }
+                $flags_string .= "Has details";
+              }
+              if ($flags =~ m/a/) {
+                if ($flags_string) { $flags_string .= " / "; }
+                $flags_string .= "Action";
+              }
+              if ($flags =~ m/h/) {
+                if ($flags_string) { $flags_string .= " / "; }
+                $flags_string .= "No hooks";
+              }
+            }
 
 	    $pad = ' ' x (5 + $name_len - length("user_data"));
 	    $synop .= "$pad : $flags_string\n";
@@ -2767,7 +2769,7 @@ EOF
 	    next;
 	}
 
-	# If we're in the description part, check for the 'Return' line.
+	# If we're in the description part, check for the 'Returns:' line.
 	# If that isn't found, add the text to the end.
 	if ($in_description) {
 	    # Get rid of 'Description:'

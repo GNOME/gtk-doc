@@ -1,3 +1,20 @@
+2005-12-09  Stefan Kost  <ensonic@users.sf.net>
+
+	* Makefile.am:
+	  add devhelp2 files
+	* autogen.sh:
+	  create a autoregen.sh
+	* devhelp.xsl:
+	* devhelp2.xsl:
+	* gtk-doc.xsl:
+	  generate two separate versions
+	* gtkdoc-mkdb.in:
+	  fix parsing const after type (#322556)
+	* gtkdoc-mktmpl.in:
+	  fix parseing multiline macro heads (#320588)
+	* gtkdoc-scangobj.in:
+	  allow additional root types (#323581)
+
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtkdoc-mktmpl.in (OutputDeclaration): 

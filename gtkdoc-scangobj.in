@@ -151,7 +151,7 @@ print OUTPUT <<EOT;
 }
 
 /*
- * This uses GTK type functions to output signal prototypes and the widget
+ * This uses GObject type functions to output signal prototypes and the object
  * hierarchy.
  */
 
@@ -164,9 +164,9 @@ const gchar *args_filename = "$new_args_filename";
 
 
 static void output_signals (void);
-static void output_widget_signals (FILE *fp,
+static void output_object_signals (FILE *fp,
 				   GType object_type);
-static void output_widget_signal (FILE *fp,
+static void output_object_signal (FILE *fp,
 				  const gchar *object_class_name,
 				  guint signal_id);
 static const gchar * get_type_name (GType type,
@@ -175,12 +175,12 @@ static const gchar * get_gdk_event (const gchar * signal_name);
 static const gchar ** lookup_signal_arg_names (const gchar * type,
 					       const gchar * signal_name);
 
-static void output_widget_hierarchy (void);
+static void output_object_hierarchy (void);
 static void output_hierarchy (FILE *fp,
 			      GType type,
 			      guint level);
 
-static void output_widget_interfaces (void);
+static void output_object_interfaces (void);
 static void output_interfaces (FILE *fp,
 			       GType type);
 
@@ -189,7 +189,7 @@ static void output_prerequisites (FILE *fp,
 			          GType type);
 
 static void output_args (void);
-static void output_widget_args (FILE *fp, GType object_type);
+static void output_object_args (FILE *fp, GType object_type);
 
 int
 main (int argc, char *argv[])
@@ -202,8 +202,8 @@ main (int argc, char *argv[])
   get_object_types ();
 
   output_signals ();
-  output_widget_hierarchy ();
-  output_widget_interfaces ();
+  output_object_hierarchy ();
+  output_object_interfaces ();
   output_interface_prerequisites ();
   output_args ();
 
@@ -225,7 +225,7 @@ output_signals (void)
     }
 
   for (i = 0; object_types[i]; i++)
-    output_widget_signals (fp, object_types[i]);
+    output_object_signals (fp, object_types[i]);
 
   fclose (fp);
 }
@@ -239,9 +239,9 @@ compare_signals (const void *a, const void *b)
   return strcmp (g_signal_name (*signal_a), g_signal_name (*signal_b));
 }
 
-/* This outputs all the signals of one widget. */
+/* This outputs all the signals of one object. */
 static void
-output_widget_signals (FILE *fp, GType object_type)
+output_object_signals (FILE *fp, GType object_type)
 {
   const gchar *object_class_name;
   guint *signals, n_signals;
@@ -258,7 +258,7 @@ output_widget_signals (FILE *fp, GType object_type)
 
       for (sig = 0; sig < n_signals; sig++)
         {
-           output_widget_signal (fp, object_class_name, signals[sig]);
+           output_object_signal (fp, object_class_name, signals[sig]);
         }
       g_free (signals);
    }
@@ -267,7 +267,7 @@ output_widget_signals (FILE *fp, GType object_type)
 
 /* This outputs one signal. */
 static void
-output_widget_signal (FILE *fp,
+output_object_signal (FILE *fp,
 		      const gchar *object_name,
 		      guint signal_id)
 {
@@ -459,7 +459,7 @@ get_type_name (GType type, gboolean * is_pointer)
     break;
   }
 
-  /* For all GtkObject subclasses we can use the class name with a "*",
+  /* For all GObject subclasses we can use the class name with a "*",
      e.g. 'GtkWidget *'. */
   if (g_type_is_a (type, G_TYPE_OBJECT))
     *is_pointer = TRUE;
@@ -752,12 +752,13 @@ lookup_signal_arg_names (const gchar * type, const gchar * signal_name)
   return NULL;
 }
 
-/* This outputs the hierarchy of all widgets which have been initialized,
+/* This outputs the hierarchy of all objects which have been initialized,
    i.e. by calling their XXX_get_type() initialization function. */
 static void
-output_widget_hierarchy (void)
+output_object_hierarchy (void)
 {
   FILE *fp;
+  gint i;
 
   fp = fopen (hierarchy_filename, "w");
   if (fp == NULL)
@@ -767,6 +768,16 @@ output_widget_hierarchy (void)
     }
   output_hierarchy (fp, G_TYPE_OBJECT, 0);
   output_hierarchy (fp, G_TYPE_INTERFACE, 0);
+  
+  for (i=0; object_types[i]; i++) {
+    if (!g_type_parent (object_types[i]) &&
+      (object_types[i] != G_TYPE_OBJECT) &&
+      (object_types[i] != G_TYPE_INTERFACE)
+    ) {
+      output_hierarchy (fp, object_types[i], 0);
+    }
+  }
+
   fclose (fp);
 }
 
@@ -796,7 +807,7 @@ output_hierarchy (FILE  *fp,
   g_free (children);
 }
 
-static void output_widget_interfaces (void)
+static void output_object_interfaces (void)
 {
   FILE *fp;
 
@@ -899,8 +910,9 @@ output_args (void)
       return;
     }
 
-  for (i = 0; object_types[i]; i++)
-    output_widget_args (fp, object_types[i]);
+  for (i = 0; object_types[i]; i++) {
+    output_object_args (fp, object_types[i]);
+  }
 
   fclose (fp);
 }
@@ -1333,7 +1345,7 @@ describe_default (GParamSpec *spec)
 
 
 static void
-output_widget_args (FILE *fp, GType object_type)
+output_object_args (FILE *fp, GType object_type)
 {
   gpointer class;
   const gchar *object_class_name;
@@ -1346,7 +1358,7 @@ output_widget_args (FILE *fp, GType object_type)
   gchar *type_desc;
   gchar *default_value;
 
-  if (G_TYPE_IS_CLASSED (object_type))
+  if (G_TYPE_IS_OBJECT (object_type))
     {
       class = g_type_class_peek (object_type);
       if (!class)

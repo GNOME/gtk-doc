@@ -314,7 +314,7 @@ sub CheckAllDeclarationsOutput {
     open (UNUSED, ">$new_unused_file")
 	|| die "Can't open $new_unused_file";
     my ($symbol);
-    foreach $symbol (keys (%Declarations)) {
+    foreach $symbol (sort keys (%Declarations)) {
 	if (!defined ($DeclarationOutput{$symbol})) {
 	    print (UNUSED "$symbol\n");
 	    $num_unused++;
@@ -430,8 +430,11 @@ EOF
 
     if ($type eq "MACRO") {
 	if ($declaration =~ m/^\s*#\s*define\s+\w+\(([^\)]*)\)/) {
+            my ($params) = $1;
 	    my ($param);
-	    foreach $param (split (/,/, $1)) {
+            
+            $params =~ s/\\\n//g;
+	    foreach $param (split (/,/, $params)) {
 		$param =~ s/^\s+//;
 		$param =~ s/\s*$//;
 		if ($param =~ m/\S/) {

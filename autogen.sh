@@ -5,6 +5,11 @@ PROJECT=gtk-doc
 TEST_TYPE=-f
 FILE=gtk-doc.dsl.in
 
+# a silly hack that generates autoregen.sh but it's handy
+echo "#!/bin/sh" > autoregen.sh
+echo "./autogen.sh $@ \$@" >> autoregen.sh
+chmod +x autoregen.sh
+
 DIE=0
 
 srcdir=`dirname $0`

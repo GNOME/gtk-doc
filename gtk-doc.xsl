@@ -5,6 +5,7 @@
   <!-- import the chunked XSL stylesheet -->
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
   <xsl:include href="devhelp.xsl"/>
+  <xsl:include href="devhelp2.xsl"/>
   <xsl:include href="version-greater-or-equal.xsl"/>
 
   <!-- change some parameters -->
@@ -58,6 +59,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <!-- generate the index.sgml href index -->
     <xsl:call-template name="generate.index"/>
     <xsl:call-template name="generate.devhelp"/>
+    <xsl:call-template name="generate.devhelp2"/>
   </xsl:template>
 
   <xsl:template name="generate.index">
