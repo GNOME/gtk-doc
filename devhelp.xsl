@@ -2,8 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version='1.0'
                 xmlns="http://www.devhelp.net/book"
-                xmlns:str="http://exslt.org/strings"
-                exclude-result-prefixes="str">
+                exclude-result-prefixes="#default">
 
   <xsl:template name="generate.devhelp">
     <xsl:call-template name="write.chunk">
@@ -88,8 +87,6 @@
   <xsl:template match="*" mode="generate.devhelp.index.mode">
     <xsl:variable name="title" select="title"/>
     <xsl:variable name="anchor" select="title/anchor"/>
-    <xsl:variable name="type" select="title/anchor/@role"/>
-    <xsl:variable name="condition" select="title/anchor/@condition"/>
     <xsl:variable name="target">
       <xsl:choose>
         <xsl:when test="$anchor">
@@ -103,28 +100,6 @@
       </xsl:choose>
     </xsl:variable>
     <function name="{$title}" link="{$target}"/>
-    <keyword type="{$type}" name="{$title}" link="{$target}">
-      <xsl:if test="$condition">
-        <xsl:for-each select="str:split($condition,'|')">
-          <xsl:variable name="attrname">
-            <xsl:value-of select="substring-before(.,':')"/>
-          </xsl:variable>
-          <xsl:choose>
-            <xsl:when test="string-length($attrname)=0">
-              <xsl:variable name="attrname2">
-                <xsl:value-of select="."/>
-              </xsl:variable>
-              <xsl:attribute name="{$attrname2}"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:attribute name="{$attrname}">
-                <xsl:value-of select="substring-after(.,':')"/>
-              </xsl:attribute>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:for-each>
-     </xsl:if>
-    </keyword>
   </xsl:template>
 
   <!-- get title -->
