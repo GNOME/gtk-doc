@@ -1,3 +1,12 @@
+2005-12-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtkdoc-mktmpl.in: Use \w+: instead of \S+: when
+	matching parameter names, so that @Deprecated:2.10:
+	works in template files like in source code comments.
+
+	* gtkdoc-mkdb.in: Add a missing "and" to the versioned
+	deprecation note.
+
 2005-12-09  Stefan Kost  <ensonic@users.sf.net>
 
 	* devhelp.xsl:

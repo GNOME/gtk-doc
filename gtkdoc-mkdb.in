@@ -1880,7 +1880,7 @@ sub MakeDeprecationNote {
 	$desc .= "<warning>";
 
 	if ($Deprecated{$symbol} =~ /^\s*([0-9\.]+)\s*:/) {
-		$desc .= "<para><literal>$symbol</literal> has been deprecated since version $1 should not be used in newly-written code.";
+		$desc .= "<para><literal>$symbol</literal> has been deprecated since version $1 and should not be used in newly-written code.";
         } else {
 		$desc .= "<para><literal>$symbol</literal> is deprecated and should not be used in newly-written code.";
 	}
