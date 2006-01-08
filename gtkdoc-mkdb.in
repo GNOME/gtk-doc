@@ -42,18 +42,20 @@ my $MODULE;
 my $TMPL_DIR;
 my $SGML_OUTPUT_DIR;
 my @SOURCE_DIRS;
+my $SOURCE_SUFFIXES = "";
 my $IGNORE_FILES = "";
 my $PRINT_VERSION;
 my $PRINT_HELP;
 my $OUTPUT_ALL_SYMBOLS;
 my $MAIN_SGML_FILE;
-my $EXPAND_CONTENT_FILES="";
+my $EXPAND_CONTENT_FILES = "";
 my $SGML_MODE;
 my $DEFAULT_STABILITY;
 my $OUTPUT_FORMAT;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
+	      'source-suffixes' => \$SOURCE_SUFFIXES,
 	      'ignore-files' => \$IGNORE_FILES,
 	      'output-dir' => \$SGML_OUTPUT_DIR,
 	      'tmpl-dir' => \$TMPL_DIR,
@@ -65,7 +67,7 @@ my %optctl = (module => \$MODULE,
 	      'sgml-mode' => \$SGML_MODE,
 	      'default-stability' => \$DEFAULT_STABILITY,
 	      'output-format' => \$OUTPUT_FORMAT);
-GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols", "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help", "sgml-mode", "default-stability:s", "output-format:s");
+GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s", "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols", "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help", "sgml-mode", "default-stability:s", "output-format:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -85,6 +87,7 @@ if ($PRINT_HELP) {
     print "gtkdoc-mkdb version @VERSION@\n";
     print "\n--module=MODULE_NAME   Name of the doc module being parsed";
     print "\n--source-dir=DIRNAME   Directories which contain inline reference material";
+    print "\n--source-suffixes=SUFFIXES Suffixes of source files to scan, comma-separated";
     print "\n--ignore-files=FILES   Files or directories which should not be scanned";
     print "\n                       May be used more than once for multiple directories";
     print "\n--output-dir=DIRNAME   Directory to put the generated DocBook files in";
@@ -2501,27 +2504,35 @@ sub GetArgs {
 
 sub ReadSourceDocumentation {
     my ($source_dir) = @_;
+    my ($file, $dir, @suffix_list, $suffix);
 #    print "Scanning source directory: $source_dir\n";
 
     # This array holds any subdirectories found.
     my (@subdirs) = ();
-    
+
+    @suffix_list = split (/,/, $SOURCE_SUFFIXES);
+
     opendir (SRCDIR, $source_dir)
 	|| die "Can't open source directory $source_dir: $!";
-    my $file;
+
     foreach $file (readdir (SRCDIR)) {
-	if ($file =~ /^\./) {
-	    next;
-	} elsif (-d "$source_dir/$file") {
-	    push (@subdirs, $file);
-	} elsif ($file =~ m/\.[ch]$/) {
+      if ($file =~ /^\./) {
+	next;
+      } elsif (-d "$source_dir/$file") {
+	push (@subdirs, $file);
+      } elsif (@suffix_list) {
+	foreach $suffix (@suffix_list) {
+	  if ($file =~ m/\.\Q${suffix}\E$/) {
 	    &ScanSourceFile ("$source_dir/$file");
+	  }
 	}
+      } elsif ($file =~ m/\.[ch]$/) {
+	&ScanSourceFile ("$source_dir/$file");
+      }
     }
     closedir (SRCDIR);
 
     # Now recursively scan the subdirectories.
-    my $dir;
     foreach $dir (@subdirs) {
 	next if ($IGNORE_FILES =~ m/(\s|^)\Q${dir}\E(\s|$)/);
 	&ReadSourceDocumentation ("$source_dir/$dir");

@@ -1,3 +1,9 @@
+2006-01-08  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in: patch from Jonathan Blandford to add support for a
+	"--source-suffixes" option so you can scan files with any suffixes
+	you want (e.g. C++ files).
+
 2005-12-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtkdoc-mktmpl.in: Use \w+: instead of \S+: when
