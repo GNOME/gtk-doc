@@ -2298,7 +2298,7 @@ sub GetSignals {
               elsif ($flags =~ m/l/) {
                 $flags_string = "Run last";
               }
-              elsif ($flags =~ m/l/) {
+              elsif ($flags =~ m/c/) {
                 $flags_string = "Cleanup";
               }
               if ($flags =~ m/r/) {
