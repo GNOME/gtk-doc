@@ -521,7 +521,7 @@ sub ScanHeader {
 
 		if ($symbol =~ m/^(\S+)Class/) {
 #		    print "Found object: $1\n";
-		    $list .= "<TITLE>$1</TITLE>\n";
+		    $list .= "<TITLE>$1</TITLE>\n$1\n";
 		    push (@objects, $1);
 		}
 		&AddSymbolToList (\$list, $symbol);

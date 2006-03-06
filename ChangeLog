@@ -1,3 +1,9 @@
+2006-03-06  Tommi Komulainen  <tommi.komulainen@nokia.com>
+
+	* gtkdoc-scan.in (ScanHeader): Print object name after <TITLE> in
+	order to get get object hierarchy, signals and properties
+	documentation appear automatically (#333380)
+
 2006-01-24  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in: patch from Damon Chaplin to fix signal flag parsing
