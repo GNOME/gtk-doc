@@ -1,4 +1,19 @@
 
+GTK-Doc 1.5     (Mar 7 2006)
+===========
+
+ o Output the new version of devhelp2 information, but still generate the old
+   devhelp files so older versions of DevHelp still work OK.
+ o Fixed the initial creation of the *-sections.txt file so the object
+   hierarchy, signals and properties all work automatically.
+ o Show information about signal flags (run first/last).
+ o Support a --source-suffixes argument specifying which source files to scan.
+ o Support other root object types besides GObject and GInterface.
+ o Use a fixed navigation bar for the generated documentation.
+ o New documentation from Stefan Kost.
+ o Handle more variations of C syntax.
+
+
 GTK-Doc 1.4     (Jul 3 2005)
 ===========
 
