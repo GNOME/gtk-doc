@@ -1,3 +1,9 @@
+2006-03-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtkdoc-mkdb.in (MakeIndexterms): Create separate indexterms
+	for different roles, since the docbook stylesheets don't handle
+	multiple roles in one attribute.  (#331586, Tommi Komulainen)
+
 2006-03-07  Damon Chaplin  <damon@gnome.org>
 
 	* Released 1.5.

@@ -1849,24 +1849,21 @@ sub MakeXRef {
 
 sub MakeIndexterms {
   my ($symbol) = $_[0];
-  my $role = "";
+  my $terms =  "";
 
   if (exists $Deprecated{$symbol}) {
-      $role = "deprecated";
+      $terms .= "<indexterm role=\"deprecated\"><primary>$symbol</primary></indexterm>"
   }
   if (exists $Since{$symbol}) {
      my $since = $Since{$symbol};
      $since =~ s/^\s+//;
      $since =~ s/\s+$//;
-     if ($role ne "") {
-         $role .= " ";
+     if ($since ne "") {
+         $terms .= "<indexterm role=\"$since\"><primary>$symbol</primary></indexterm>";
      }
-     $role .= $since;
   }
-  if ($role ne "") {
-      $role = " role=\"$role\"";
-  }
-  return "<indexterm$role><primary>$symbol</primary></indexterm>";
+
+  return $terms;
  }
 
 #############################################################################
