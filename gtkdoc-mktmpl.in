@@ -567,7 +567,11 @@ sub OutputOldParams {
 
 	    if ($param_name ne "") {
 		$param_desc =~ s/\s+$//;
-		$output .= "\@$param_name: $param_desc\n";
+
+		# There's no point keeping it if it has no docs.
+		if ($param_desc ne "") {
+		  $output .= "\@$param_name: $param_desc\n";
+		}
 	    }
 	}
     }

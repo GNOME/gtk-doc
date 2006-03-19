@@ -1,5 +1,10 @@
 2006-03-19  Damon Chaplin  <damon@gnome.org>
 
+	(OutputOldParams): don't bother outputting unused parameters if they
+	don't have any documentation as that is pointless.
+
+2006-03-19  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-mktmpl.in (ReadTemplateFile): Add a workaround for an old
 	bug handling macros with arguments spread over several lines. (#318666)
 
