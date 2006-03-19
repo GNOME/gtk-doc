@@ -203,23 +203,27 @@ sub ScanHeader {
     my ($input_file, $object_list, $main_list) = @_;
 #    print "DEBUG: Scanning $input_file\n";
 
-    my $list = "";		# Holds the resulting list of declarations.
-    my ($in_comment) = 0;	# True if we are in a comment.
-    my ($in_declaration) = "";	# The type of declaration we are in, e.g.
-				#   'function' or 'macro'.
-    my ($symbol);		# The current symbol being declared.
-    my ($decl);			# Holds the declaration of the current symbol.
-    my ($ret_type);		# For functions and function typedefs this
-				#   holds the function's return type.
-    my ($previous_line) = "";	# The previous line read in - some Gnome
-				#   functions have the return type on one line
-				#   and the rest of the declaration after.
-    my ($first_macro) = 1;	# Used to try to skip the standard #ifdef XXX
-				#   #define XXX at the start of headers.
-    my ($level);		# Used to handle structs which contain nested
-				#   structs or unions.
-    my @objects = ();		# Holds declarations that look like GtkObject
-				#   subclasses, which we remove from the list.
+    my $list = "";		  # Holds the resulting list of declarations.
+    my ($in_comment) = 0;	  # True if we are in a comment.
+    my ($in_declaration) = "";	  # The type of declaration we are in, e.g.
+				  #   'function' or 'macro'.
+    my ($symbol);		  # The current symbol being declared.
+    my ($decl);			  # Holds the declaration of the current symbol.
+    my ($ret_type);		  # For functions and function typedefs this
+				  #   holds the function's return type.
+    my ($pre_previous_line) = ""; # The pre-previous line read in - some Gnome
+				  #   functions have the return type on one
+                                  #   line, the function name on the next,
+				  #   and the rest of the declaration after.
+    my ($previous_line) = "";	  # The previous line read in - some Gnome
+				  #   functions have the return type on one line
+				  #   and the rest of the declaration after.
+    my ($first_macro) = 1;	  # Used to try to skip the standard #ifdef XXX
+				  #   #define XXX at the start of headers.
+    my ($level);		  # Used to handle structs which contain nested
+				  #   structs or unions.
+    my @objects = ();		  # Holds declarations that look like GtkObject
+				  #   subclasses, which we remove from the list.
 
     my $file_basename;
     
@@ -454,7 +458,7 @@ sub ScanHeader {
 		}
 
 	    # Try to catch function declarations with the return type and name
-	    # on the previous line, and the start of the parameters on this.
+	    # on the previous line(s), and the start of the parameters on this.
 	    } elsif (m/^\s*\(/) {
 		$decl = $';
 		if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
@@ -462,6 +466,17 @@ sub ScanHeader {
 		    $symbol = $3;
 #		    print "Function: $symbol, Returns: $ret_type\n";
 		    $in_declaration = "function";
+
+		} elsif ($previous_line =~ m/^\s*\w+\s*$/
+			 && $pre_previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$/) {
+			$ret_type = $1;
+                        $ret_type =~ s/\s*\n//;
+			$in_declaration = "function";
+
+                        $symbol = $previous_line;
+                        $symbol =~ s/^\s+//;
+                        $symbol =~ s/\s*\n//;
+			print "Function: $symbol, Returns: $ret_type\n";
 		}
 
 #	    } elsif (m/^extern\s+/) {
@@ -550,6 +565,7 @@ sub ScanHeader {
 	    }
 	}
 
+	$pre_previous_line = $previous_line;
 	$previous_line = $_;
     }
     close(INPUT);

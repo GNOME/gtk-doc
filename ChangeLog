@@ -1,5 +1,10 @@
 2006-03-19  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-scan.in (ScanHeader): try to handle the start of function
+	declarations spread over 3 lines. (#321708, Jorn Baayen)
+
+2006-03-19  Damon Chaplin  <damon@gnome.org>
+
 	(OutputOldParams): don't bother outputting unused parameters if they
 	don't have any documentation as that is pointless.
 
