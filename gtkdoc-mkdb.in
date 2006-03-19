@@ -1875,6 +1875,9 @@ sub MakeIndexterms {
          $terms .= "<indexterm role=\"$since\"><primary>$symbol</primary></indexterm>";
      }
   }
+  if ($terms eq "") {
+     $terms .= "<indexterm><primary>$symbol</primary></indexterm>";
+  }
 
   return $terms;
  }

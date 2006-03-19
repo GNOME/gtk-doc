@@ -1,5 +1,11 @@
 2006-03-19  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (MakeIndexterms): Make sure we still output an index
+	term if there isn't 'deprecated' or 'since' info.
+	(#334851, Tommi Komulainen).
+
+2006-03-19  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-scan.in (ScanHeader): added "--ignore-decorators" option to
 	ignore a list of declarators in function declarations.
 	(#316512, Bertram Felgenhauer).
