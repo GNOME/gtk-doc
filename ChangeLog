@@ -1,5 +1,11 @@
 2006-03-19  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-scan.in (ScanHeader): added "--ignore-decorators" option to
+	ignore a list of declarators in function declarations.
+	(#316512, Bertram Felgenhauer).
+
+2006-03-19  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-mkdb.in (GetSignals, GetArgs): call MakeIndexTerms() to make
 	sure that signals appear in the deprecated/new symbol indices.
 	(#332007, Tommi Komulainen).

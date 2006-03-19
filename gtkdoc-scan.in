@@ -55,6 +55,8 @@ my $PRINT_HELP;
 # e.g. 'GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED'
 # these are detected if they are used as #if FOO, #ifndef FOO, or #ifdef FOO
 my $DEPRECATED_GUARDS;
+# regexp matching decorators that should be ignored
+my $IGNORE_DECORATORS;
 
 my %optctl = (module => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
@@ -62,10 +64,11 @@ my %optctl = (module => \$MODULE,
 	      'output-dir' => \$OUTPUT_DIR,
 	      'version' => \$PRINT_VERSION,
 	      'help' => \$PRINT_HELP,
-              'deprecated-guards' => \$DEPRECATED_GUARDS);
+              'deprecated-guards' => \$DEPRECATED_GUARDS,
+	      'ignore-decorators' => \$IGNORE_DECORATORS);
 GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
 	   "output-dir:s", "version", "help",
-           "deprecated-guards:s");
+           "deprecated-guards:s", "ignore-decorators:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -83,12 +86,15 @@ if ($PRINT_HELP) {
     print "\n--ignore-headers=FILES     A space-separated list of header files not to scan";
     print "\n--output-dir=DIRNAME       The directory where the results are stored";
     print "\n--deprecated-guards=GUARDS A |-separated list of symbols used as deprecation guards";
+    print "\n--ignore-decorators=DECS   A |-separated list of addition decorators in declarations that should be ignored";
     print "\n--version                  Print the version of this program";
     print "\n--help                     Print this help\n";
     exit 0;
 }
 
 $DEPRECATED_GUARDS = $DEPRECATED_GUARDS ? $DEPRECATED_GUARDS : "does_not_match_any_cpp_symbols_at_all_nope";
+
+$IGNORE_DECORATORS = $IGNORE_DECORATORS || "(?=no)match";
 
 $OUTPUT_DIR = $OUTPUT_DIR ? $OUTPUT_DIR : ".";
 
@@ -421,9 +427,9 @@ sub ScanHeader {
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-	    } elsif (m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(\**\s+\**(const|G_CONST_RETURN))?(\s+|\s*\*+))\s*([A-Za-z]\w*)\s*\(/) {
-		$ret_type = $3;
-		$symbol = $8;
+	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*([A-Za-z]\w*)\s*\(/) {
+		$ret_type = $1;
+		$symbol = $2;
 		$decl = $';
 
 #		print "Function: $symbol, Returns: $ret_type\n";
@@ -439,9 +445,9 @@ sub ScanHeader {
 		$decl = $';
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
 		    && $previous_line !~ m/^\s*static\s+/) {
-		    if ($previous_line =~ m/^\s*(extern)?\s*((const\s*|G_CONST_RETURN\s*|unsigned\s*|enum\s+)?\w+)(\s*\*+)?\s*$/) {
-			$ret_type = $2;
-			if (defined ($4)) { $ret_type .= " $4"; }
+		    if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s*|G_CONST_RETURN\s*|unsigned\s*|enum\s+)?\w+)(\s*\*+)?\s*$/) {
+			$ret_type = $1;
+			if (defined ($2)) { $ret_type .= " $2"; }
 #			print "Function: $symbol, Returns: $ret_type\n";
 			$in_declaration = "function";
 		    }
@@ -451,9 +457,9 @@ sub ScanHeader {
 	    # on the previous line, and the start of the parameters on this.
 	    } elsif (m/^\s*\(/) {
 		$decl = $';
-		if ($previous_line =~ m/^\s*(extern)?\s*(G_INLINE_FUNC)?\s*((const\s+|G_CONST_RETURN\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
-		    $ret_type = "$3 $5";
-		    $symbol = $6;
+		if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
+		    $ret_type = "$1 $2";
+		    $symbol = $3;
 #		    print "Function: $symbol, Returns: $ret_type\n";
 		    $in_declaration = "function";
 		}
