@@ -2233,6 +2233,7 @@ sub GetSignals {
 	    }
 
 	    $desc .= "<refsect2><title><anchor id=\"$id\"${empty_element_end}The &quot;$name&quot; signal</title>\n";
+	    $desc .= MakeIndexterms($symbol);
 	    $desc .= "<programlisting>";
 
 	    $SignalReturns[$i] =~ m/\s*(const\s*)?(\w+)\s*(\**)/;
@@ -2462,6 +2463,7 @@ sub GetArgs {
 
  	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output $pad2 : $flags_string\n";
 	    my $arg_desc = "<refsect2><title><anchor id=\"$id\"${empty_element_end}The &quot;<literal>$name</literal>&quot; $kind</title>\n";
+	    $arg_desc .= MakeIndexterms($symbol);
 	    $arg_desc .= "<programlisting>  &quot;$name&quot;$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
 	    $arg_desc .= $blurb;
 	    if ($range ne "") {

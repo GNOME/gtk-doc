@@ -1,5 +1,11 @@
 2006-03-19  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (GetSignals, GetArgs): call MakeIndexTerms() to make
+	sure that signals appear in the deprecated/new symbol indices.
+	(#332007, Tommi Komulainen).
+
+2006-03-19  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-mkdb.in (OutputEnum, ExpandAbbreviations, symbolify): 
 	allow use of 'Object::signal' and 'Object:property' to link to signals
 	and properties, and add links to enum constant values.
