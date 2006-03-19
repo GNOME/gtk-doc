@@ -1084,6 +1084,14 @@ sub ReadTemplateFile {
 	    next;
 
 	} else {
+	    # Workaround for an old bug that left a mess in the templates.
+	    # This happened with macros with args spread over several lines.
+	    if (m/^\@\\$/) {
+	      # Skip the next line.
+	      $_ = <DOCS>;
+	      next;
+	    }
+
 	    # Check if param found
 	    if (s/^\@(\w+):\040?//) {
 		my $param_name = $1;

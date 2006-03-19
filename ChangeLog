@@ -1,5 +1,10 @@
 2006-03-19  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mktmpl.in (ReadTemplateFile): Add a workaround for an old
+	bug handling macros with arguments spread over several lines. (#318666)
+
+2006-03-19  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-mkdb.in (MakeIndexterms): Make sure we still output an index
 	term if there isn't 'deprecated' or 'since' info.
 	(#334851, Tommi Komulainen).
