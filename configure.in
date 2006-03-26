@@ -19,6 +19,9 @@ AC_SUBST([ACLOCAL_AMFLAGS], ["\${ACLOCAL_FLAGS}"])
 AC_ISC_POSIX
 AC_PROG_CC
 
+# Make sure we have pkg-config >= 0.19, so installing in $(datadir) is OK.
+PKG_PROG_PKG_CONFIG([0.19])
+
 dnl
 dnl Check for Perl.
 dnl

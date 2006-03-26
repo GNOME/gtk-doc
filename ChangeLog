@@ -1,5 +1,7 @@
 2006-03-26  Damon Chaplin  <damon@gnome.org>
 
+	* configure.in: check for pkg-config >= 0.19.
+
 	* Makefile.am (pkgconfigdir): put the .pc file in $(datadir) rather
 	than $(libdir), since gtk-doc is architecture-independant.
 
