@@ -1,3 +1,12 @@
+2006-03-26  Damon Chaplin  <damon@gnome.org>
+
+	* Makefile.am (pkgconfigdir): put the .pc file in $(datadir) rather
+	than $(libdir), since gtk-doc is architecture-independant.
+
+	* configure.in: removed the hard dependancy on openjade or jade, since
+	XML is used mostly now rather than SGML. We just output a warning
+	rather than an error if neither openjade or jade are found.
+
 2006-03-21  Stefan Kost  <ensonic@users.sf.net>
 
 	* style.css:

@@ -29,7 +29,7 @@ gtkdocdata_DATA = \
 	up.png			\
 	style.css
 
-pkgconfigdir = $(libdir)/pkgconfig
+pkgconfigdir = $(datadir)/pkgconfig
 pkgconfig_DATA = gtk-doc.pc
 
 aclocaldir = $(datadir)/aclocal

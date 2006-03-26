@@ -48,7 +48,7 @@ if test -z "$JADE"; then
   SGML_FORMAT_TYPE=sgml
   AC_PATH_PROG([JADE], [jade])
   if test -z "$JADE"; then
-    AC_MSG_ERROR([openjade/jade not found])
+    AC_MSG_WARN([Could not find openjade or jade, so SGML is not supported])
   fi
 fi
 AC_SUBST([SGML_FORMAT_TYPE])
