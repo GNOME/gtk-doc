@@ -3019,7 +3019,10 @@ sub MergeSourceDocumentation {
 	    $src_doc =~ s/^\s+//;
 	    $src_doc =~ s/\s+$//;
 
-	    if ($have_tmpl_docs) {
+	    # Don't output warnings for overridden titles as titles are
+	    # automatically generated in the -sections.txt file so are often
+	    # overridden.
+	    if ($have_tmpl_docs && $symbol !~ m/:Title$/) {
 		    print <<EOF;
 WARNING: Documentation in template file for $symbol being overridden by inline comments
 EOF

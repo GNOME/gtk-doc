@@ -1,5 +1,8 @@
 2006-03-26  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (MergeSourceDocumentation): don't output warnings
+	for overridden titles, since that happens a lot. (#320010)
+
 	* configure.in: check for pkg-config >= 0.19.
 
 	* Makefile.am (pkgconfigdir): put the .pc file in $(datadir) rather
