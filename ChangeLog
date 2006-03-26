@@ -3,7 +3,7 @@
 	* configure.in: check for pkg-config >= 0.19.
 
 	* Makefile.am (pkgconfigdir): put the .pc file in $(datadir) rather
-	than $(libdir), since gtk-doc is architecture-independant.
+	than $(libdir), since gtk-doc is architecture-independant. (#120950)
 
 	* configure.in: removed the hard dependancy on openjade or jade, since
 	XML is used mostly now rather than SGML. We just output a warning
