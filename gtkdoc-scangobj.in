@@ -463,7 +463,11 @@ get_type_name (GType type, gboolean * is_pointer)
      e.g. 'GtkWidget *'. */
   if (g_type_is_a (type, G_TYPE_OBJECT))
     *is_pointer = TRUE;
-
+  
+  /* Also catch non GObject root types */
+  if (G_TYPE_IS_CLASSED (type))
+    *is_pointer = TRUE;
+  
   /* All boxed subtypes will be pointers as well. */
   if (g_type_is_a (type, G_TYPE_BOXED))
     *is_pointer = TRUE;
@@ -1358,7 +1362,7 @@ output_object_args (FILE *fp, GType object_type)
   gchar *type_desc;
   gchar *default_value;
 
-  if (G_TYPE_IS_OBJECT (object_type))
+  if (G_TYPE_IS_CLASSED (object_type))
     {
       class = g_type_class_peek (object_type);
       if (!class)
