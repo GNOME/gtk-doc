@@ -1810,7 +1810,7 @@ sub ExpandAbbreviations {
     # Convert '#symbol'
     # if $1 is Object::signal change id to Object-signal
     # if $1 is Object:property change id to Object--property
-    $text =~ s/#([\w\-:]+)/&MakeXRef(&symbolify($1), &tagify($1, "type"));/eg;
+    $text =~ s/#([\w\-:]+)/&MakeXRef(&symbolify($1), &tagify2($1, "type"));/eg;
 
     return $text;
 }
@@ -1826,6 +1826,15 @@ sub symbolify {
 
 sub tagify {
    my ($text, $elem) = @_;
+   return "<" . $elem . ">" . $text . "</" . $elem . ">";
+}
+
+sub tagify2 {
+   my ($text, $elem) = @_;
+
+   # Get rid of special '-struct' suffix.
+   $text =~ s/-struct$//;
+
    return "<" . $elem . ">" . $text . "</" . $elem . ">";
 }
 
