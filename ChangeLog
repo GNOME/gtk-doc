@@ -1,3 +1,12 @@
+2006-04-13  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in (ReadArgsFile): When outputting a warning about a
+	property, use a single colon ':', since that is what is used to
+	document properties in the source code. (2 colons are used for signals)
+
+	* gtk-doc.make (sgml-build.stamp): added $(HFILE_GLOB) here, to
+	catch any new documentation in the headers.
+
 2006-04-12  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (tagify2): strip special "-struct" suffix from

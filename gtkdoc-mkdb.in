@@ -3787,7 +3787,7 @@ sub ReadArgsFile {
 		if ($arg_blurb eq "(null)") {
 		  $arg_blurb = "";
 		  print <<EOF;
-WARNING: Property ${arg_object}::${arg_name} has no documentation.
+WARNING: Property ${arg_object}:${arg_name} has no documentation.
 EOF
 		}
 	    } elsif (m/^<DEFAULT>(.*)<\/DEFAULT>/) {
