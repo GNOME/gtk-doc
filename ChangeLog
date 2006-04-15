@@ -1,3 +1,14 @@
+2006-04-15  Damon Chaplin  <damon@gnome.org>
+
+	* tools/gtk-doc.el: Output "Returns:" rather than "Return value:",
+	and a "C-x4s" binding for inserting a blank section header.
+
+	* gtk-doc.make (sgml-build.stamp): added $(DOC_MODULE)-sections.txt
+	to the dependencies, since although the templates depend on it, they
+	may not be changed, but the XML should still be rebuilt.
+
+	* gtkdoc-mkdb.in (ScanSourceFile): allow whitespace after "SECTION:".
+
 2006-04-13  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (ReadArgsFile): When outputting a warning about a

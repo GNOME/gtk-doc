@@ -27,6 +27,8 @@
 ;;  the current function.  You have to be somewhere in the body of the
 ;;  function you wish to document.
 
+;;  You can also now use C-x4s to insert a blank section header.
+
 ;;  The default header format is setup to do 'gnome' style headers.
 ;;  These headers are used in the Gnome project to automatically
 ;;  produce SGML API documentation directly from the source code.
@@ -41,7 +43,7 @@
 ;;   *
 ;;   * _
 ;;   *
-;;   * Return Value: 
+;;   * Returns: 
 ;;   **/
 ;;  int function_name(char *param1, int param2)
 ;;  {
@@ -81,7 +83,7 @@
 ;;    
 ;;    _
 ;;    
-;;    Return Value: 
+;;    Returns: 
 ;;    */
 
 ;; With the blank line defined as "", a much more
@@ -90,7 +92,7 @@
 ;; /* function_name
 ;;    param1: 
 ;;    param2: _
-;;    Return Value: 
+;;    Returns: 
 ;;    */
 
 ;;;;
@@ -134,7 +136,7 @@ Using '%s' will be replaced with the name of the parameter."
   "How to define a new section in the output.
 
 Using '%s' is replaced with the name of the section.
-Currently this will only be used to define the 'return value' field."
+Currently this will only be used to define the 'returns' field."
   :type '(string)
   :group 'gnome-doc)
 
@@ -246,11 +248,11 @@ Only C/C++ function types are properly supported currently."
 		;; record the point of insertion
 		(setq c-insert-here (- (point) 1))
 
-		;; only insert a returnvalue if we have one ...
+		;; only insert a returns if we have one ...
 		(if (not c-isvoid)
 		    (progn
 		      (gnome-doc-insert-blank)
-		      (gnome-doc-insert-section "Return value")))
+		      (gnome-doc-insert-section "Returns")))
 	      
 		(gnome-doc-insert-footer c-funcname))))))
 	
@@ -261,3 +263,21 @@ Only C/C++ function types are properly supported currently."
 ;; set global binding for this key (follows the format for
 ;;   creating a changelog entry ...)
 (global-set-key "\C-x4h"  'gtk-doc-insert)
+
+
+;; Define another function for inserting a section header.
+(defun gtk-doc-insert-section ()
+  "Add a section documentation header at the current position."
+  (interactive)
+  (insert "/**\n"
+	  " * SECTION:\n"
+	  " * @Title: \n"
+	  " * @Short_Description: \n"
+	  " * @Stability_Level: \n"
+	  " * @See_Also: \n"
+	  " *\n"
+	  " * \n"
+	  " */\n"))
+
+;; Set the key binding.
+(global-set-key "\C-x4s" 'gtk-doc-insert-section)
