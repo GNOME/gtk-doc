@@ -1,5 +1,8 @@
 2006-04-15  Damon Chaplin  <damon@gnome.org>
 
+	* xmldocs.make: use gtkdochelpdir rather than docdir to avoid clash
+	with autoconf. (#316508)
+
 	* tools/gtk-doc.el: Output "Returns:" rather than "Return value:",
 	and a "C-x4s" binding for inserting a blank section header.
 

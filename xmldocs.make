@@ -34,10 +34,10 @@
 
 
 # ************* Begin of section some packagers may need to modify  **************
-# This variable (docdir) specifies where the documents should be installed.
+# This variable (gtkdochelpdir) specifies where the documents should be installed.
 # This default value should work for most packages.
-# docdir = $(datadir)/@PACKAGE@/doc/$(docname)/$(lang)
-docdir = $(datadir)/gnome/help/$(docname)/$(lang)
+# gtkdochelpdir = $(datadir)/@PACKAGE@/doc/$(docname)/$(lang)
+gtkdochelpdir = $(datadir)/gnome/help/$(docname)/$(lang)
 
 # **************  You should not have to edit below this line  *******************
 xml_files = $(entities) $(docname).xml
@@ -65,15 +65,15 @@ app-dist-hook:
 	fi
 
 install-data-local: omf
-	$(mkinstalldirs) $(DESTDIR)$(docdir)
+	$(mkinstalldirs) $(DESTDIR)$(gtkdochelpdir)
 	for file in $(xml_files); do \
-	  cp $(srcdir)/$$file $(DESTDIR)$(docdir); \
+	  cp $(srcdir)/$$file $(DESTDIR)$(gtkdochelpdir); \
 	done
 	if test "$(figdir)"; then \
-	  $(mkinstalldirs) $(DESTDIR)$(docdir)/$(figdir); \
+	  $(mkinstalldirs) $(DESTDIR)$(gtkdochelpdir)/$(figdir); \
 	  for file in $(srcdir)/$(figdir)/*.png; do \
 	    basefile=`echo $$file | sed -e  's,^.*/,,'`; \
-	    $(INSTALL_DATA) $$file $(DESTDIR)$(docdir)/$(figdir)/$$basefile; \
+	    $(INSTALL_DATA) $$file $(DESTDIR)$(gtkdochelpdir)/$(figdir)/$$basefile; \
 	  done \
 	fi
 
@@ -85,12 +85,12 @@ uninstall-local-doc:
 	-if test "$(figdir)"; then \
 	  for file in $(srcdir)/$(figdir)/*.png; do \
 	    basefile=`echo $$file | sed -e  's,^.*/,,'`; \
-	    rm -f $(docdir)/$(figdir)/$$basefile; \
+	    rm -f $(gtkdochelpdir)/$(figdir)/$$basefile; \
 	  done; \
-	  rmdir $(DESTDIR)$(docdir)/$(figdir); \
+	  rmdir $(DESTDIR)$(gtkdochelpdir)/$(figdir); \
 	fi
 	-for file in $(xml_files); do \
-	  rm -f $(DESTDIR)$(docdir)/$$file; \
+	  rm -f $(DESTDIR)$(gtkdochelpdir)/$$file; \
 	done
-	-rmdir $(DESTDIR)$(docdir)
+	-rmdir $(DESTDIR)$(gtkdochelpdir)
 
