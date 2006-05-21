@@ -404,7 +404,7 @@ EOF
 					 "");
 
 		# Try to match parameters which are functions.
-	    } elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict)?\s*(const\s+)?\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+	    } elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
 	        $name = $6;
 		$output .= &OutputParam ($symbol, $name, $template_exists, 1,
 					 "");

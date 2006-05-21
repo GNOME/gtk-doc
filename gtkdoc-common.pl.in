@@ -144,11 +144,12 @@ sub ParseStructDeclaration {
 
         # Try to match structure members which are functions
 	if ($line =~ m/^
-		 (const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?  # mod1
+		 (const\s+|G_CONST_RETURN\s+|unsigned\s+|signed\s+|long\s+|short\s+)*(struct\s+)?  # mod1
 		 (\w+)\s*                             # type
 	         (\**(?:\s*restrict)?)\s*             # ptr1
 		 (const\s+)?                          # mod2
 		 (\**\s*)			      # ptr2
+		 (const\s+)?                          # mod3
 		 \(\s*\*\s*(\w+)\s*\)\s*              # name
 		 \(([^)]*)\)\s*                       # func_params
 		            $/x) {
@@ -159,15 +160,16 @@ sub ParseStructDeclaration {
 	    my $ptr1 = $4;
 	    my $mod2 = defined($5) ? $5 : "";
 	    my $ptr2 = $6;
-	    my $name = $7;
-	    my $func_params = $8;
+	    my $mod3 = defined($7) ? $7 : "";
+	    my $name = $8;
+	    my $func_params = $9;
 	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
 	    my $pname = defined $namefunc ? $namefunc->($name) : $name;
 
 	    push @result, $name;
 
 	    if ($output_function_params) {
-	      push @result, "$mod1$ptype$ptr1$mod2$ptr2 (*$pname) ($func_params)";
+	      push @result, "$mod1$ptype$ptr1$mod2$ptr2$mod3 (*$pname) ($func_params)";
 	    } else {
 	      push @result, "$pname&nbsp;()";
 	    }
@@ -175,7 +177,7 @@ sub ParseStructDeclaration {
 
 	# Try to match normal struct fields of comma-separated variables/
 	} elsif ($line =~ m/^
-	    ((?:const\s+|unsigned\s+|volatile\s+|signed\s+|short\s+)*)(struct\s+)? # mod1
+	    ((?:const\s+|unsigned\s+|volatile\s+|signed\s+|short\s+|long\s+)*)(struct\s+)? # mod1
 	    (\w+)\s*                            # type
 	    (\** \s* const\s+)?                 # mod2
 	    (.*)				# variables

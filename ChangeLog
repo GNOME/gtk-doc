@@ -1,3 +1,11 @@
+2006-05-21  Jody Goldberg <jody@gnome.org>
+
+	* gtkdoc-common.pl.in (ParseStructDeclaration) : Support
+	  'long double foo' and
+	  'T const * const *foo' (#341872)
+	* gtkdoc-mktmpl.in (OutputDeclaration) : handle ptrs to ptrs to
+	  functions 'void func (void (**ptr2ptr2func)(int a))'
+
 2006-05-21  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (ScanSourceFile): don't check basename for '.[hc]'
