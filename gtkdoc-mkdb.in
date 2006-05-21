@@ -2578,7 +2578,7 @@ sub ScanSourceFile {
     my ($file) = @_;
     my $basename;
 
-    if ($file =~ m/^.*[\/\\]([^\/\\]*\.[hc])$/) {
+    if ($file =~ m/^.*[\/\\]([^\/\\]*)$/) {
 	$basename = $1;
     } else {
 	print "WARNING: Can't find basename of file $file\n";

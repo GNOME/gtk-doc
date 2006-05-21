@@ -1,3 +1,13 @@
+2006-05-21  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in (ScanSourceFile): don't check basename for '.[hc]'
+	suffix since we allow other suffixes as well now. (#340199)
+
+	* gtkdoc-mktmpl.in (OutputSignalTemplates): check if the parameter
+	is actually in the source code comment block. If not, use the default
+	name. Otherwise we were outputting an empty "@:" in the templates.
+	(ReadTemplateFile): remove empty "@:" lines caused by above bug.
+
 2006-04-15  Damon Chaplin  <damon@gnome.org>
 
 	* xmldocs.make: use gtkdochelpdir rather than docdir to avoid clash

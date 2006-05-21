@@ -702,14 +702,16 @@ EOF
 		if ($param =~ m/^void$/) { next; }
 
 		if ($param =~ m/^\s*(\w+)\s*(\**)\s*([\w\[\]]+)?\s*$/) {
-		    if (defined($sourceparams)) {
+		    if (defined ($sourceparams)) {
 			$name = $$sourceparams[2 * $j];
-		    }
-		    elsif (defined($3)) {
-			$name = $3;
 		    } else {
+			$name = $3;
+		    }
+
+		    if (!defined ($name)) {
 			$name = "Param" . ($j + 1);
 		    }
+
 		    if ($j == 0) {
 			$output .= &OutputParam ($symbol, $name,
 						 $template_exists, 1,
@@ -1095,6 +1097,12 @@ sub ReadTemplateFile {
 	      $_ = <DOCS>;
 	      next;
 	    }
+
+	    # Workaround for an old bug that left '@:' at start of lines.
+	    if (m/^\@:$/) {
+	      next;
+	    }
+
 
 	    # Check if param found
 	    if (s/^\@(\w+):\040?//) {
