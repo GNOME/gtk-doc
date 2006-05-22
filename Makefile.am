@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = help/manual/C
+SUBDIRS = help
 
 bin_SCRIPTS = \
 	gtkdoc-scanobj  \

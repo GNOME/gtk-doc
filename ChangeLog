@@ -1,3 +1,11 @@
+2006-05-22  Damon Chaplin  <damon@gnome.org>
+
+	* configure.in: 
+	* Makefile.am: 
+	* help/Makefile.am: 
+	* help/manual/Makefile.am: use a separate Makefile.am for each
+	subdirectory rather than using "SUBDIRS=help/manual/C".
+
 2006-05-21  Jody Goldberg <jody@gnome.org>
 
 	* gtkdoc-common.pl.in (ParseStructDeclaration) : Support
