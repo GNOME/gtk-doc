@@ -185,7 +185,7 @@ sub FixHTMLFile {
     my $entire_file = <HTMLFILE>;
     close (HTMLFILE);
 
-    $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($1, $2); %ge;
+    $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($1, $2); %gse;
 
     open (NEWFILE, ">$file.new")
 	|| die "Can't open $file: $!";

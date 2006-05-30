@@ -1,3 +1,9 @@
+2006-05-30  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-fixxref.in (FixHTMLFile): Use the 's' modifier to the
+	substitution so we handle links spanning more than one line.
+	(#342845).
+
 2006-05-22  Damon Chaplin  <damon@gnome.org>
 
 	* configure.in: 
