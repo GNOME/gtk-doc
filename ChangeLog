@@ -1,3 +1,11 @@
+2006-06-09  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in: 
+	* gtk-doc.xsl: use the 'role' attribute rather than the 'id' attribute
+	to identify the different sections for the navigation bar, since 'id'
+	must be unique throughout the entire document. Also fixed a few minor
+	issues with the output. (#342861, Leonardo Boshell)
+
 2006-05-30  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-fixxref.in (FixHTMLFile): Use the 's' modifier to the

@@ -170,18 +170,18 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:param name="next" select="/foo"/>
     <xsl:variable name="home" select="/*[1]"/>
     <xsl:variable name="up" select="parent::*"/>
-    <xsl:variable name="sections" select="./refsect1[@id]"/>
-    <xsl:variable name="sect_object_hierarchy" select="./refsect1[@id='object_hierarchy']"/>
-    <xsl:variable name="sect_prerequisites" select="./refentry/refsect1[@id='prerequisites']"/>
-    <xsl:variable name="sect_derived_interfaces" select="./refentry/refsect1[@id='derived_interfaces']"/>
-    <xsl:variable name="sect_impl_interfaces" select="./refentry/refsect1[@id='impl_interfaces']"/>
-    <xsl:variable name="sect_implementations" select="./refentry/refsect1[@id='implementations']"/>
-    <xsl:variable name="sect_properties" select="./refsect1[@id='properties']"/>
-    <xsl:variable name="sect_child_properties" select="./refsect1[@id='child_properties']"/>
-    <xsl:variable name="sect_style_properties" select="./refsect1[@id='style_properties']"/>
-    <xsl:variable name="sect_signal_proto" select="./refsect1[@id='signal_proto']"/>
-    <xsl:variable name="sect_desc" select="./refsect1[@id='desc']"/>
-    <xsl:variable name="sect_synopsis" select="./refsynopsisdiv[@id='synopsis']"/>
+    <xsl:variable name="sections" select="./refsect1[@role]"/>
+    <xsl:variable name="sect_object_hierarchy" select="./refsect1[@role='object_hierarchy']"/>
+    <xsl:variable name="sect_prerequisites" select="./refsect1[@role='prerequisites']"/>
+    <xsl:variable name="sect_derived_interfaces" select="./refsect1[@role='derived_interfaces']"/>
+    <xsl:variable name="sect_impl_interfaces" select="./refsect1[@role='impl_interfaces']"/>
+    <xsl:variable name="sect_implementations" select="./refsect1[@role='implementations']"/>
+    <xsl:variable name="sect_properties" select="./refsect1[@role='properties']"/>
+    <xsl:variable name="sect_child_properties" select="./refsect1[@role='child_properties']"/>
+    <xsl:variable name="sect_style_properties" select="./refsect1[@role='style_properties']"/>
+    <xsl:variable name="sect_signal_proto" select="./refsect1[@role='signal_proto']"/>
+    <xsl:variable name="sect_desc" select="./refsect1[@role='desc']"/>
+    <xsl:variable name="sect_synopsis" select="./refsynopsisdiv[@role='synopsis']"/>
     <!--
     <xsl:variable name="sect_details" select="./refsect1[@id='details']"/>
     <xsl:variable name="sect_property_details" select="./refsect1[@id='property_details']"/>
@@ -296,72 +296,66 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
             <td colspan="5" class="shortcuts">
               <nobr>
                 <xsl:if test="count($sect_synopsis) > 0">
-                  <a href="#top_of_page" class="shortcut">Top</a>
+                  <a href="#{generate-id(.//*[@role='top_of_page'])}" class="shortcut">Top</a>
                 </xsl:if>
                 <xsl:if test="count($sect_desc) > 0">
                   &#160;|&#160;
-                  <a href="#desc" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='desc']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='desc'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='desc']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_object_hierarchy) > 0">
                   &#160;|&#160;
-                  <a href="#object_hierarchy" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='object_hierarchy']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='object_hierarchy'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='object_hierarchy']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_impl_interfaces) > 0">
                   &#160;|&#160;
-                  <a href="#impl_interfaces" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='impl_interfaces']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='impl_interfaces'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='impl_interfaces']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_prerequisites) > 0">
                   &#160;|&#160;
-                  <a href="#object_prerequisites" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='object_prerequisites']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='object_prerequisites'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='object_prerequisites']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_derived_interfaces) > 0">
                   &#160;|&#160;
-                  <a href="#derived_interfaces" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='derived_interfaces']/title"/>
-                  </a>
-                </xsl:if>
-                <xsl:if test="count($sect_impl_interfaces) > 0">
-                  &#160;|&#160;
-                  <a href="#impl_interfaces" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='properties']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='derived_interfaces'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='derived_interfaces']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_implementations) > 0">
                   &#160;|&#160;
-                  <a href="#implementations" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='implementations']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='implementations'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='implementations']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_properties) > 0">
                   &#160;|&#160;
-                  <a href="#properties" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='properties']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='properties'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='properties']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_child_properties) > 0">
                   &#160;|&#160;
-                  <a href="#child_properties" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='child_properties']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='child_properties'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='child_properties']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_style_properties) > 0">
                   &#160;|&#160;
-                  <a href="#style_properties" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='style_properties']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='style_properties'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='style_properties']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_signal_proto) > 0">
                   &#160;|&#160;
-                  <a href="#signal_proto" class="shortcut">
-                    <xsl:value-of select="./refsect1[@id='signal_proto']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='signal_proto'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='signal_proto']/title"/>
                   </a>
                 </xsl:if>
                 <!--
@@ -497,6 +491,13 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         </td></tr>
        </table>
      </div>
+  </xsl:template>
+
+  <!-- Add anchor with ID. Note that elements such as refsect1 don't need this
+       since the docbook stylesheets should add it -->
+  <xsl:template match="*[@role='top_of_page']">
+    <a name="{generate-id(.)}"/>
+    <xsl:apply-imports/>
   </xsl:template>
   
 </xsl:stylesheet>
