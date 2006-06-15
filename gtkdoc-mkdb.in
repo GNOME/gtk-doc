@@ -1261,58 +1261,62 @@ sub OutputFunction {
 	    }
 
 	# allow alphanumerics, '_', '[' & ']' in param names
-	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+|volatile\s+)*(struct\s+)?((?:long\s+|short\s+)?\w+)\s*(\**(?:\s*restrict)?)\s*(const\s*)?(\**(?:\s*restrict)?)?\s*(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
-	    my $mod1 = defined($1) ? $1 : "";
-	    if (defined($2)) { $mod1 .= $2; }
-	    my $type = $3;
-	    my $ptr1 = $4;
-	    my $mod2 = defined($5) ? $5 : "";
-	    my $ptr2 = $6;
-	    my $name = defined($7) ? $7 : "";
-	    my $array = defined($8) ? $8 : "";
+	} elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned|signed|long|short|volatile|const)\s+)*((?:struct|enum)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*(?:const|restrict)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	    my $pre	= defined($1) ? $1 : "";
+	    my $type	= $2;
+	    my $ptr	= defined($3) ? $3 : "";
+	    my $name	= defined($4) ? $4 : "";
+	    my $array	= defined($5) ? $5 : "";
 
-	    if ($ptr1 && $ptr1 !~ m/\*$/) { $ptr1 .= " "; }
-	    if ($name) { $ptr1 = " " . $ptr1; }
-	    if ($ptr2 && $ptr2 !~ m/\*$/) { $ptr2 .= " "; }
+	    $pre  =~ s/\s+/ /g;
+	    $type =~ s/\s+/ /g;
+	    $ptr  =~ s/\s+/ /g;
+	    $ptr  =~ s/\s+$//;
+	    if ($ptr && $ptr !~ m/\*$/) { $ptr .= " "; }
 	    my $xref = &MakeXRef ($type);
+	    my $label	= "$pre$xref $ptr$name$array";
 
-#	    print "Type: $mod1$type $ptr1 $mod2 $name $array\n";
+#	    print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
+
 	    if ($param_num == 0) {
-		$synop .= "$mod1$xref$ptr1$mod2$ptr2$name$array";
-		$desc  .= "$mod1$xref$ptr1$mod2$ptr2$name$array";
+		$synop .= "$label";
+		$desc  .= "$label";
 	    } else {
 		$synop .= ",\n"
 		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " $mod1$xref$ptr1$mod2$ptr2$name$array";
+		    . " $label";
 		$desc  .= ",\n"
 		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " $mod1$xref$ptr1$mod2$ptr2$name$array";
+		    . " $label";
 	    }
 
 	    # Try to match parameters which are functions.
-	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**(?:\s*restrict)?)\s*(const\s+)?\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**(?:\s*restrict)?)\s*(const\s+)?\((\s*\*)+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
 	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
 	    my $ptr1 = $4;
 	    my $mod2 = defined($5) ? $5 : "";
-	    my $name = $6;
-	    my $func_params = $7;
+	    my $func_ptr = $6;
+	    my $name = $7;
+	    my $func_params = $8;
 
 	    if ($ptr1 && $ptr1 !~ m/\*$/) { $ptr1 .= " "; }
+	    $func_ptr  =~ s/\s+//g;
 	    my $xref = &MakeXRef ($type);
+	    my $label = "$mod1$xref$ptr1$mod2 ($func_ptr$name) ($func_params)";
 
-#	    print "Type: $mod1$type$ptr1$mod2(*$name)($func_params)\n";
+#	    print "Type: $mod1$type$ptr1$mod2($func_ptr$name)($func_params)\n";
 	    if ($param_num == 0) {
-		$synop .= "$mod1$xref$ptr1$mod2 (*$name) ($func_params)";
-		$desc  .= "$mod1$xref$ptr1$mod2 (*$name) ($func_params)";
+		$synop .= "$label";
+		$desc  .= "$label";
 	    } else {
 		$synop .= ",\n"
 		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " $mod1$xref$ptr1$mod2 (*$name) ($func_params)";
+		    . " $label";
 		$desc  .= ",\n"
 		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " $mod1$xref$ptr1$mod2 (*$name) ($func_params)";
+		    . " $label";
 	    }
 
 	} else {

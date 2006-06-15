@@ -1,3 +1,14 @@
+2006-06-15  Jody Goldberg <jody@gnome.org>
+
+	* gtkdoc-mkdb.in (OutputFunction) : finish off #341872
+	  Support 'T const * const *foo' and other more complex types.
+	  Support ptr2ptr2func as a func argument.
+	    'void foo (void (**func) (void))'
+	* gtkdoc-mktmpl.in : ditto.
+
+	  (committed by Damon with minor changes to spacing so GTK+ docs are
+	   unchanged).
+
 2006-06-09  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in: 
