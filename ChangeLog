@@ -1,3 +1,8 @@
+2006-06-30  Damon Chaplin  <damon@gnome.org>
+
+	* gtk-doc.make (all-local, docs): added separate 'docs' target that can
+	be used even when the '--disable-gtk-doc' configure option is used.
+
 2006-06-15  Jody Goldberg <jody@gnome.org>
 
 	* gtkdoc-mkdb.in (OutputFunction) : finish off #341872
