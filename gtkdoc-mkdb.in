@@ -2713,7 +2713,7 @@ EOF
 
 	# If we haven't found the symbol name yet, look for it.
 	if (!$symbol) {
-	    if (m%^\s*(SECTION:\s*\w+)%) {
+	    if (m%^\s*(SECTION:\s*\S+)%) {
 		$symbol = $1;
 	    } elsif (m%^\s*([\w:-]*\w)\s*:?%) {
 		$symbol = $1;

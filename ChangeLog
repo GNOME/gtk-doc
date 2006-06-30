@@ -1,5 +1,8 @@
 2006-06-30  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (ScanSourceFile): fix regexp to allow section names
+	with '-' in them.
+
 	* gtk-doc.make (all-local, docs): added separate 'docs' target that can
 	be used even when the '--disable-gtk-doc' configure option is used.
 
