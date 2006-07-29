@@ -1,4 +1,19 @@
 
+GTK-Doc 1.7     (Jul 29 2006)
+===========
+
+ o Fixed bug that resulted in empty "@:" lines in the templates.
+ o Fixed a few bugs with the XSL code.
+ o Supported a few more variations of C syntax.
+ o Remove the internally-used '-struct' suffix from links to widget structs.
+ o Fixed a few missing build dependencies.
+ o Added a new "C-x4s" binding to the emacs lisp code, to insert a blank
+   section header in the source code.
+ o Fixed bug that ignored inline section header docs with '-' in their names.
+ o Added a 'make docs' target that can be used to build the docs even when
+   gtk-doc has been disabled at configure time.
+
+
 GTK-Doc 1.6     (Apr 9 2006)
 ===========
 
