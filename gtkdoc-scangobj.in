@@ -476,6 +476,11 @@ get_type_name (GType type, gboolean * is_pointer)
   if (g_type_is_a (type, G_TYPE_POINTER))
     *is_pointer = TRUE;
 
+  /* But enums are not */
+  if (g_type_is_a (type, G_TYPE_ENUM) ||
+      g_type_is_a (type, G_TYPE_FLAGS))
+    *is_pointer = FALSE;
+
   return type_name;
 }
 

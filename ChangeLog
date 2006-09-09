@@ -1,3 +1,8 @@
+2006-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtkdoc-scangobj.in (get_type_name): Don't set is_pointer 
+	to TRUE for enum and flags types.  (#354880, Yevgen Muntyan)
+
 2006-07-29  Damon Chaplin  <damon@gnome.org>
 
 	* Released 1.7.
