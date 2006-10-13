@@ -822,6 +822,7 @@ output_hierarchy (FILE  *fp,
 
 static void output_object_interfaces (void)
 {
+  guint i;
   FILE *fp;
 
   fp = fopen (interfaces_filename, "w");
@@ -831,6 +832,16 @@ static void output_object_interfaces (void)
       return;
     }
   output_interfaces (fp, G_TYPE_OBJECT);
+
+  for (i = 0; object_types[i]; i++)
+    {
+      if (!g_type_parent (object_types[i]) &&
+          (object_types[i] != G_TYPE_OBJECT) &&
+          G_TYPE_IS_INSTANTIATABLE (object_types[i]))
+        {
+          output_interfaces (fp, object_types[i]);
+        }
+    }
   fclose (fp);
 }
 
@@ -1371,7 +1382,9 @@ output_object_args (FILE *fp, GType object_type)
   gchar *type_desc;
   gchar *default_value;
 
-  if (G_TYPE_IS_CLASSED (object_type))
+  if (!G_TYPE_IS_OBJECT (object_type))
+    return;
+  else if (G_TYPE_IS_CLASSED (object_type))
     {
       class = g_type_class_peek (object_type);
       if (!class)
