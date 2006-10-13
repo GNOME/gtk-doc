@@ -716,6 +716,26 @@ sub OutputDeclaration {
 
 
 #############################################################################
+# Function    : OutputSymbolTraits
+# Description : Returns the Since and StabilityLevel paragraphs for a symbol.
+# Arguments   : $symbol - the name of the function/macro begin described.
+#############################################################################
+
+sub OutputSymbolTraits {
+    my ($symbol) = @_;
+    my $desc = "";
+
+    if (exists $Since{$symbol}) {
+	$desc .= "<para role=\"since\">Since $Since{$symbol}</para>";
+    }
+    if (exists $StabilityLevel{$symbol}) {
+	$desc .= "<para role=\"stability\">Stability Level: $StabilityLevel{$symbol}</para>";
+    }
+    return $desc;
+}
+
+
+#############################################################################
 # Function    : OutputMacro
 # Description : Returns the synopsis and detailed description of a macro.
 # Arguments   : $symbol - the macro.
@@ -782,12 +802,7 @@ sub OutputMacro {
 	$desc .= $parameters;
     }
 
-    if (exists $Since{$symbol}) {
-	$desc .= "<para>Since $Since{$symbol}</para>";
-    }
-    if (exists $StabilityLevel{$symbol}) {
-	$desc .= "<para>Stability Level: $StabilityLevel{$symbol}</para>";
-    }
+    $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -820,12 +835,7 @@ sub OutputTypedef {
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
     }
-    if (exists $Since{$symbol}) {
-	$desc .= "<para>Since $Since{$symbol}</para>";
-    }
-    if (exists $StabilityLevel{$symbol}) {
-	$desc .= "<para>Stability Level: $StabilityLevel{$symbol}</para>";
-    }
+    $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -995,12 +1005,7 @@ EOF
     
 	$desc .= "</variablelist>";
     }
-    if (exists $Since{$symbol}) {
-	$desc .= "<para>Since $Since{$symbol}</para>";
-    }
-    if (exists $StabilityLevel{$symbol}) {
-	$desc .= "<para>Stability Level: $StabilityLevel{$symbol}</para>";
-    }
+    $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -1072,12 +1077,7 @@ EOF
 	$desc .= "</variablelist>";
     }
 
-    if (exists $Since{$symbol}) {
-	$desc .= "<para>Since $Since{$symbol}</para>";
-    }
-    if (exists $StabilityLevel{$symbol}) {
-	$desc .= "<para>Stability Level: $StabilityLevel{$symbol}</para>";
-    }
+    $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -1107,12 +1107,7 @@ sub OutputUnion {
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
     }
-    if (exists $Since{$symbol}) {
-	$desc .= "<para>Since $Since{$symbol}</para>";
-    }
-    if (exists $StabilityLevel{$symbol}) {
-	$desc .= "<para>Stability Level: $StabilityLevel{$symbol}</para>";
-    }
+    $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -1153,12 +1148,7 @@ sub OutputVariable {
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
     }
-    if (exists $Since{$symbol}) {
-	$desc .= "<para>Since $Since{$symbol}</para>";
-    }
-    if (exists $StabilityLevel{$symbol}) {
-	$desc .= "<para>Stability Level: $StabilityLevel{$symbol}</para>";
-    }
+    $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
@@ -1348,13 +1338,7 @@ sub OutputFunction {
 	$desc .= $parameters;
     }
 
-    if (exists $Since{$symbol}) {
-	$desc .= "<para>Since $Since{$symbol}</para>";
-    }
-    if (exists $StabilityLevel{$symbol}) {
-	$desc .= "<para>Stability Level: $StabilityLevel{$symbol}</para>";
-    }
-
+    $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
 }
