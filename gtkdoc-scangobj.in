@@ -144,8 +144,12 @@ print OUTPUT <<EOT;
      * their signals and properties.
      */
     for (i=0; object_types[i]; i++)
-      if (G_TYPE_IS_CLASSED (object_types[i]))
-      g_type_class_ref (object_types[i]);
+      {
+        if (G_TYPE_IS_CLASSED (object_types[i]))
+          g_type_class_ref (object_types[i]);
+        if (G_TYPE_IS_INTERFACE (object_types[i]))
+          g_type_default_interface_ref (object_types[i]);
+      }
 
     return object_types;
 }

@@ -1,5 +1,10 @@
 2006-10-13  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-scangobj.in: make sure interfaces are initialized so the
+	signals query works. (#355352)
+
+2006-10-13  Damon Chaplin  <damon@gnome.org>
+
 	* style.css: Make sure appendix title isn't obscured by navigation bar
 	(#360967, Philip Kovacs).
 
