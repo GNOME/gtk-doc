@@ -1,5 +1,11 @@
 2006-10-14  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (ExpandAbbreviationsExceptCDATA): new function used
+	to expand abbreviations in extra files, but leaving CDATA sections
+	as they are. (#360579)
+
+2006-10-14  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-mkdb.in (OutputSGML): Allow the section id to be set from
 	within the source code "SECTION:" comment block. (#349855)
 

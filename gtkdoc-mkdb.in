@@ -1626,7 +1626,7 @@ sub OutputExtraFile {
     open (OUTPUT, ">$new_sgml_file")
 	|| die "Can't create $new_sgml_file";
 
-    print OUTPUT &ExpandAbbreviations($contents);
+    print OUTPUT &ExpandAbbreviationsExceptCDATA($contents);
     close (OUTPUT);
     
     return &UpdateFileIfChanged ($old_sgml_file, $new_sgml_file, 0);
@@ -1803,6 +1803,35 @@ sub ExpandAbbreviations {
     $text =~ s/#([\w\-:]+)/&MakeXRef(&symbolify($1), &tagify2($1, "type"));/eg;
 
     return $text;
+}
+
+#############################################################################
+# Function    : ExpandAbbreviationsExceptCDATA
+# Description : Expands abbreviations like ExpandAbbreviations keeping CDATA
+# 		sections intact.
+# Arguments   : $text - the text to expand.
+#############################################################################
+
+sub ExpandAbbreviationsExceptCDATA {
+    my ($p, $i, $part, @out);
+
+    foreach $part (split /<!\[CDATA\[/, $_[0]) {
+	if (defined $i) {
+	    my @p = split /]]>/, $part;
+	    if (scalar @p != 2) {
+		warn "Cannot find CDATA section end";
+		@p = ('', join(']]>', @p));
+	    }
+	    $p[1] = ExpandAbbreviations $p[1];
+	    push @out, join(']]>', @p);
+	}
+	else {
+	    push @out, ExpandAbbreviations $part;
+	}
+	$i = 'really inside CDATA';
+    }
+
+    return join('<![CDATA[', @out);
 }
 
 sub symbolify {
