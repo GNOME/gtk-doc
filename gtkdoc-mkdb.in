@@ -390,14 +390,16 @@ sub OutputSGML {
 
 	    $file =~ s/\s/_/g;
 
-	    # GtkObjects use their class name as the ID.
-	    my $section_id;
-	    if (&CheckIsObject ($title)) {
+	    my $section_id = $SourceSymbolDocs{"$TMPL_DIR/$file:Section_Id"};
+	    if (defined ($section_id) && $section_id !~ m/^\s*$/) {
+	        # Do nothing. Use section_id as it is.
+	    } elsif (&CheckIsObject ($title)) {
+		# GtkObjects use their class name as the ID.
 		$section_id = &CreateValidSGMLID ($title);
 	    } else {
 		$section_id = &CreateValidSGMLID ("$MODULE-$title");
 	    }
-	    
+
 	    if ($num_symbols > 0) {
 		if (lc($OUTPUT_FORMAT) eq "xml") {
 		    $book_bottom .= "    <xi:include href=\"xml/$file.xml\"/>\n";
@@ -2653,6 +2655,8 @@ EOF
                             $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Title"}=$params[$k+1];
                         } elsif ($params[$k] eq "stability") {
                             $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Stability_Level"}=$params[$k+1];
+                        } elsif ($params[$k] eq "section_id") {
+                            $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Section_Id"}=$params[$k+1];
                         }
                     }
                     $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Long_Description"}=$description;
