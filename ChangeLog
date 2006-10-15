@@ -1,3 +1,19 @@
+2006-10-15  Damon Chaplin  <damon@gnome.org>
+
+	Bug #338517: Automatically creating/updating .types file:
+	
+	* gtkdoc-scan.in: added a '--scan-types' option which will
+	automatically update the .types file using all _get_type() functions
+	found in the headers. (It will also do this if no .types file is found,
+	i.e. when gtk-doc is first run on a project.)
+
+	* gtk-doc.make (scan-build.stamp): run gtkdoc-scan before
+	gtkdoc-scangobj so we can use the generated .types file.
+
+	* gtkdoc-scangobj.in: if the .types file doesn't have any #include
+	directives, just output "extern GType *get_type();" declarations for
+	each *_get_type() function.
+
 2006-10-14  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (ExpandAbbreviationsExceptCDATA): new function used

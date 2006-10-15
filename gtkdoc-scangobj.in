@@ -120,8 +120,20 @@ print OUTPUT <<EOT;
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#include <glib-object.h>
 
-$includes
+EOT
+
+if ($includes) {
+    print OUTPUT $includes;
+} else {
+    for (@types) {
+	print OUTPUT "extern GType $_ (void);\n";
+    }
+}
+
+print OUTPUT <<EOT;
+
 #ifdef GTK_IS_WIDGET_CLASS
 #include <gtk/gtkversion.h>
 #endif
