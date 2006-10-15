@@ -50,6 +50,7 @@ my $OUTPUT_DIR;
 my @SOURCE_DIRS;
 my $IGNORE_HEADERS = "";
 my $REBUILD_TYPES;
+my $REBUILD_SECTIONS;
 my $PRINT_VERSION;
 my $PRINT_HELP;
 # regexp matching cpp symbols which surround deprecated stuff
@@ -64,13 +65,14 @@ my %optctl = (module => \$MODULE,
 	      'ignore-headers' => \$IGNORE_HEADERS,
 	      'output-dir' => \$OUTPUT_DIR,
 	      'rebuild-types' => \$REBUILD_TYPES,
+              'rebuild-sections' => \$REBUILD_SECTIONS,
 	      'version' => \$PRINT_VERSION,
 	      'help' => \$PRINT_HELP,
 	      'deprecated-guards' => \$DEPRECATED_GUARDS,
 	      'ignore-decorators' => \$IGNORE_DECORATORS);
 GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
-	   "output-dir:s", "rebuild-types", "version", "help",
-           "deprecated-guards:s", "ignore-decorators:s");
+	   "output-dir:s", "rebuild-types", "rebuild-sections", "version",
+	   "help", "deprecated-guards:s", "ignore-decorators:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -89,6 +91,7 @@ if ($PRINT_HELP) {
     print "\n--output-dir=DIRNAME       The directory where the results are stored";
     print "\n--deprecated-guards=GUARDS A |-separated list of symbols used as deprecation guards";
     print "\n--ignore-decorators=DECS   A |-separated list of addition decorators in declarations that should be ignored";
+    print "\n--rebuild-sections         Rebuild (overwrite) the MODULE-sections.txt file";
     print "\n--rebuild-types            Automatically recreate the MODULE.types file using all the *_get_type() functions found";
     print "\n--version                  Print the version of this program";
     print "\n--help                     Print this help\n";
@@ -145,10 +148,11 @@ close (TYPES) if ($REBUILD_TYPES);
 &UpdateFileIfChanged ($old_decl, $new_decl, 1);
 &UpdateFileIfChanged ($old_types, $new_types, 1) if ($REBUILD_TYPES);
 
-# If there is no MODULE-sections.txt file yet, we copy the MODULE-decl-list.txt
-# file into its place. The user can tweak it later if they want.
+# If there is no MODULE-sections.txt file yet or we are asked to rebuild it,
+# we copy the MODULE-decl-list.txt file into its place. The user can tweak it
+# later if they want.
 my $sections_file = "${OUTPUT_DIR}/$MODULE-sections.txt";
-if (! -e $sections_file) {
+if ($REBUILD_SECTIONS || ! -e $sections_file) {
   `cp $old_decl_list $sections_file`;
 }
 

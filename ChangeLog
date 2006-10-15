@@ -1,8 +1,14 @@
 2006-10-15  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-scan.in: added a '--rebuild-sections' option that will
+	automatically recreate the MODULE-sections.txt file each time.
+	(This only works for projects with very neat header files.) #310494.
+
+2006-10-15  Damon Chaplin  <damon@gnome.org>
+
 	Bug #338517: Automatically creating/updating .types file:
 	
-	* gtkdoc-scan.in: added a '--scan-types' option which will
+	* gtkdoc-scan.in: added a '--rebuild-types' option which will
 	automatically update the .types file using all _get_type() functions
 	found in the headers. (It will also do this if no .types file is found,
 	i.e. when gtk-doc is first run on a project.)
