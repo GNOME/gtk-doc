@@ -1138,7 +1138,6 @@ describe_type (GParamSpec *spec)
   else if (G_IS_PARAM_SPEC_ULONG (spec))
     {
       GParamSpecULong *pspec = G_PARAM_SPEC_ULONG (spec);
-      gchar *upper;
 
       lower = describe_unsigned_constant (pspec->minimum);
       upper = describe_unsigned_constant (pspec->maximum);

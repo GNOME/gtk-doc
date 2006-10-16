@@ -1,3 +1,8 @@
+2006-10-16  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-scangobj.in: remove a shadow declaration to avoid compiler
+	warnings. #362475
+
 2006-10-15  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-scan.in: added a '--rebuild-sections' option that will
