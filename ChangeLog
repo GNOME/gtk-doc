@@ -1,3 +1,9 @@
+2006-12-04  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-scangobj.in: added a '--query-child-properties' argument to
+	allow you to specify a function to return a list of child properties
+	for a class (similar to GtkContainer child properties). #379203
+
 2006-10-16  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-scangobj.in: remove a shadow declaration to avoid compiler

@@ -41,17 +41,19 @@ my $OUTPUT_DIR;
 my $PRINT_VERSION;
 my $PRINT_HELP;
 my $TYPE_INIT_FUNC="g_type_init ()";
+my $QUERY_CHILD_PROPERTIES;
 
 # --nogtkinit is deprecated, as it is the default now anyway.
 %optctl = (module => \$MODULE,
 	   types => \$TYPES_FILE,
 	   nogtkinit => \$NO_GTK_INIT,
 	   'type-init-func' => \$TYPE_INIT_FUNC,
+	   'query-child-properties' => \$QUERY_CHILD_PROPERTIES,
 	   'output-dir' => \$OUTPUT_DIR,
 	   'version' => \$PRINT_VERSION,
 	   'help' => \$PRINT_HELP);
 	   
-GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "type-init-func:s", "version", "help");
+GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "type-init-func:s", "query-child-properties:s", "version", "help");
 
 if ($NO_GTK_INIT) {
   # Do nothing. This just avoids a warning.
@@ -71,6 +73,8 @@ if ($PRINT_HELP) {
     print "\n--module=MODULE_NAME  Name of the doc module being parsed";
     print "\n--types=FILE          The name of the file to store the types in";
     print "\n--type-init-func=FUNC The init function to call instead of g_type_init ()";
+    print "\n--query-child-properties=FUNC A function that returns a list of child";
+    print "\n                      properties for a class";
     print "\n--output-dir=DIRNAME  The directory where the results are stored";
     print "\n--version             Print the version of this program";
     print "\n--help                Print this help\n";
@@ -130,6 +134,12 @@ if ($includes) {
     for (@types) {
 	print OUTPUT "extern GType $_ (void);\n";
     }
+}
+
+if ($QUERY_CHILD_PROPERTIES) {
+  print OUTPUT <<EOT;
+extern GParamSpec** $QUERY_CHILD_PROPERTIES (gpointer class, guint *n_properties);
+EOT
 }
 
 print OUTPUT <<EOT;
@@ -1486,6 +1496,22 @@ output_object_args (FILE *fp, GType object_type)
 #endif
 #endif
 
+EOT
+
+if ($QUERY_CHILD_PROPERTIES) {
+  print OUTPUT <<EOT;
+    if (!child_prop) {
+      properties = $QUERY_CHILD_PROPERTIES (class, &n_properties);
+      if (properties) {
+        child_prop = TRUE;
+        continue;
+      }
+   }
+
+EOT
+}
+
+print OUTPUT <<EOT;
     break;
   }
 }
