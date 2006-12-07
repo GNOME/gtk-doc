@@ -737,7 +737,7 @@ make
       </para>
 
       <para>
-        <example><title>Symbol comment block</title>
+        <example><title>Function comment block</title>
           <programlisting>
 <![CDATA[
 /**
@@ -794,9 +794,54 @@ make
       <para>
         (FIXME)
         (stabillity)
-        (signals, glib-enums, properties, ...)
+        (glib-enums, ...)
       </para>
-      
+
+      <example><title>Property comment block</title>
+        <programlisting>
+<![CDATA[
+/**
+ * SomeWidget:some-property:
+ *
+ * Here you can document a property.
+ */
+g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);
+]]></programlisting>
+      </example>
+
+      <example><title>Signal comment block</title>
+        <programlisting>
+<![CDATA[
+/**
+ * FooWidget::foobarized:
+ * @widget: the widget that received the signal
+ * @foo: some foo
+ * @bar: some bar
+ *
+ * The ::foobarized signal is emitted each time someone tries to foobarize @widget.
+ */
+foo_signals[FOOBARIZE] =
+  g_signal_new ("foobarize",
+                ...
+]]></programlisting>
+      </example>
+   
+         <example><title>Struct comment block</title>
+        <programlisting>
+<![CDATA[
+/**
+ * FooWidget:
+ * @bar: some #gboolean
+ *
+ * This is the best widget, ever.
+ */
+typedef struct _FooWidget {
+  GtkWidget parent;
+  /*< public >*/
+  gboolean bar;
+} FooWidget;
+]]></programlisting>
+      </example>
     </sect1>
     
     <sect1 id="documenting_docbook">
