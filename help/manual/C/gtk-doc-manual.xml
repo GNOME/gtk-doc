@@ -290,13 +290,13 @@
     </para>
     
     <sect1 id="settingup_docfiles">
-      <title>Setting up a skelleton documentation</title>
+      <title>Setting up a skeleton documentation</title>
 
       <para>
         Under your top-level project directory create folders called docs/reference
         (this way you can also have docs/help for end-user documentation).
         It is recommended to create another subdirectory with the name of the doc-package.
-        For packages with just one library this step is not neccesary.
+        For packages with just one library this step is not necessary.
       </para>
 
       <para>
@@ -383,7 +383,7 @@ AC_CONFIG_MACRO_DIR(m4)
 
       <para>
         The next step is to edit the setting inside the <filename>Makefile.am</filename>.
-        All the settings have a comment above that desribes their purpose.
+        All the settings have a comment above that describes their purpose.
         Most settings are extra flags passed to the respective tools. Every tool
         has a variable of the form <option>&lt;TOOLNAME&gt;_OPTIONS</option>.       
       </para>
@@ -411,7 +411,7 @@ DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc
 
       <para>
         Most projects will have an <filename>autogen.sh</filename> script to
-        setup the build intfrastructure after a checkout from version control
+        setup the build infrastructure after a checkout from version control
         system (such as cvs). Gtk-Doc comes with a tool called
         <filename>gtkdocize</filename> which can be used in such a script.
 	It should be run before autoheader, automake or autoconf.
@@ -440,7 +440,7 @@ gtkdocize || exit 1
       <title>Running the doc build</title>
 
       <para>
-        After the previous steps its time to run the build. First we need to
+        After the previous steps it's time to run the build. First we need to
 	rerun <filename>autogen.sh</filename>. If this script runs configure for
 	you, then give it the <option>--enable-gtk-doc</option> option.
 	Otherwise manually run <filename>configure</filename> with this option
@@ -470,7 +470,7 @@ make
       </para>
       <para>
         Now you can point your browser to <filename>docs/reference/&lt;package&gt;/index.html</filename>.
-	Yes, its a bit disapoint still. But hang-on, during the next chapter we
+	Yes, it's a bit disappointing still. But hang-on, during the next chapter we
 	tell you how to fill the pages with life.
       </para>
     </sect1>
@@ -479,8 +479,8 @@ make
       <title>Integration with version control systems</title>
 
       <para>
-        As a rule of the thum, its those files you edit, that should go under 
-        version control. For typical projects its these files:
+        As a rule of the thumb, it's those files you edit, that should go under 
+        version control. For typical projects it's these files:
         <filename>&lt;package&gt;.types</filename>
         <filename>&lt;package&gt;-docs.sgml</filename>
         <filename>&lt;package&gt;-sections.txt</filename>
@@ -510,7 +510,7 @@ make
       </para>
       <para>
         The avoid the aforementioned problems we suggest putting the
-	documentation inside the sources. This manaul will only describe this
+	documentation inside the sources. This manual will only describe this
 	way of documenting code.
       </para>
     </note>
@@ -521,14 +521,14 @@ make
       <title>Documentation comments</title>
 
       <para>
-        A multiline comment that starts with an aditional '*' marks a
+        A multiline comment that starts with an additional '*' marks a
         documentation block that will be processed by the Gtk-Doc tools.
         <example><title>Gtk-Doc comment block</title>
           <programlisting>
 <![CDATA[
 /**
  * identifier:
- * documenation ...
+ * documentation ...
  */
 ]]>
           </programlisting>
@@ -537,7 +537,7 @@ make
       
       <para>
         The 'identifier' is one line with the name of the item the comment is
-	related to. The	syntax differes a little depending on the item.
+	related to. The	syntax differs a little depending on the item.
 	(TODO add table showing identifiers)
       </para>
 
@@ -546,8 +546,8 @@ make
 	types that get parameters such as functions or macros have the parameter
 	description first followed by a blank line (just a '*').
 	Afterwards follows the detailed description. All lines just containing a
-	' * ' (blank-asterist-blank) are converted to paragraph breaks.
-        If you don't want a break (e.g. in preformated example listings) add
+	' * ' (blank-asterisk-blank) are converted to paragraph breaks.
+        If you don't want a break (e.g. in preformatted example listings) add
         another space at the end of line.
       </para>
       
@@ -564,7 +564,7 @@ make
           <listitem>
             <para>
               Use @param to refer to parameters. Also use this when referring to
-              parameters of other functions, related to the one being descrbed.
+              parameters of other functions, related to the one being described.
             </para>
           </listitem>
           <listitem>
@@ -660,8 +660,8 @@ make
           <term>@stability</term>
           <listitem>
             <para>
-              A informal description of the stabillity level this API has.
-              We reccomend the use of one of these terms:
+              A informal description of the stability level this API has.
+              We recommend the use of one of these terms:
               <itemizedlist>
                 <listitem>
                   <para>
@@ -713,12 +713,12 @@ make
       <para>
         FIXME
         having @title here, would put this title into a newly generated section
-        file, but later would be osolete (right?)
+        file, but later would be obsolete (right?)
       </para>
       
       <tip>
         <para>
-          To avoid uneccesary recompilation after doc-changes put the section
+          To avoid unnecessary recompilation after doc-changes put the section
           docs into the c-source where possible.
         </para>
       </tip>
@@ -731,7 +731,7 @@ make
       <para>
         Each symbol (function, macro, struct, enum, signal and property) is
         documented in a separate block. The block is best placed close to the
-        definition of the sybols so that it is easy to keep them in sync.
+        definition of the symbols so that it is easy to keep them in sync.
         Thus function are usually documented in the c-source and macros, struct
         and enum in the header file.
       </para>
@@ -793,7 +793,7 @@ make
 
       <para>
         (FIXME)
-        (stabillity)
+        (stability)
         (glib-enums, ...)
       </para>
 
@@ -1073,8 +1073,8 @@ gtk_arrow_get_type
       <tip>
         <para>
           Do not create tutorials as extra documents. Just write extra chapters.
-          The benefit of directly embeding the tutorial for your library into
-          the API documentation is that it is easy to link fro the tutorial to
+          The benefit of directly embedding the tutorial for your library into
+          the API documentation is that it is easy to link for the tutorial to
           symbol documentation. Apart chances are higher that the tutorial gets 
           updates along with the library.
         </para>
@@ -1109,7 +1109,7 @@ gtk_arrow_get_type
       <para>
         The section file is used to organise the documentation output by 
         Gtk-Doc. Here one specifies which symbol belongs to which module or
-        class and control the visibillity (public or private).
+        class and control the visibility (public or private).
       </para>
 
       <para>
@@ -1173,13 +1173,13 @@ gtk_arrow_get_type
       The generated files are named: 
       <filename>&lt;package&gt;-undocumented.txt</filename> and
       <filename>&lt;package&gt;-unused.txt</filename>.
-      Both are plain text files that can be viewed and portprocessed easily.
+      Both are plain text files that can be viewed and postprocessed easily.
     </para>
     
     <para>
       The <filename>&lt;package&gt;-undocumented.txt</filename> file starts with
-      the documentation cooverage sumary. Below are two sections divided by
-      blank lines. The first section lists undocumneted or incomplete symbols.
+      the documentation coverage summary. Below are two sections divided by
+      blank lines. The first section lists undocumented or incomplete symbols.
       The second section does the same for section docs. Incomplete entries are
       those, which have documentation, but where e.g. a new parameter has been
       added.
