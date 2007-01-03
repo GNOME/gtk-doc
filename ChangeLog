@@ -1,5 +1,11 @@
 2007-01-03  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mkdb.in (OutputFunction): fix parsing of "char * const"
+	arguments, with an extra "\s*". #387681
+	
+2007-01-03  Damon Chaplin  <damon@gnome.org>
+
 	* omf.make: 
 	* xmldocs.make: updated to new versions from gnome-common. #363622
 	Also reverted the changes made for #316508 since they may cause

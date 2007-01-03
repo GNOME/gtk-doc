@@ -394,7 +394,7 @@ EOF
 					 $template_exists, 1, "");
 
 		# Try to match a standard parameter.
-	    } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned|signed|long|short|volatile|const)\s+)*((?:struct|enum)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*(?:const|restrict)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	    } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned|signed|long|short|volatile|const)\s+)*((?:struct|enum)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*\s*(?:const|restrict)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 		if (defined ($4)) {
 		    $name = $4;
 		} else {
