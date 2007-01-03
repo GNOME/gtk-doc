@@ -1,3 +1,11 @@
+2007-01-03  Damon Chaplin  <damon@gnome.org>
+
+	* omf.make: 
+	* xmldocs.make: updated to new versions from gnome-common. #363622
+	Also reverted the changes made for #316508 since they may cause
+	problems. We'll let the scrollkeeper/gnome-common/autoconf people
+	sort out that issue.
+
 2006-12-07  Ross Burton  <ross@burtonini.com>
 
 	* help/manual/C/gtk-doc-manual.xml:

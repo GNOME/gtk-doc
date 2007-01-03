@@ -33,19 +33,17 @@
 #
 
 
-# ************* Begin of section some packagers may need to modify  **************
-# This variable (gtkdochelpdir) specifies where the documents should be installed.
+# **********  Begin of section some packagers may need to modify  **********
+# This variable (docdir) specifies where the documents should be installed.
 # This default value should work for most packages.
-# gtkdochelpdir = $(datadir)/@PACKAGE@/doc/$(docname)/$(lang)
-gtkdochelpdir = $(datadir)/gnome/help/$(docname)/$(lang)
+docdir = $(datadir)/gnome/help/$(docname)/$(lang)
 
-# **************  You should not have to edit below this line  *******************
+# **********  You should not have to edit below this line  **********
 xml_files = $(entities) $(docname).xml
 
 EXTRA_DIST = $(xml_files) $(omffile)
 CLEANFILES = omf_timestamp
 
-# If the following file is in a subdir (like help/) you need to add that to the path
 include $(top_srcdir)/omf.make
 
 all: omf
@@ -65,15 +63,15 @@ app-dist-hook:
 	fi
 
 install-data-local: omf
-	$(mkinstalldirs) $(DESTDIR)$(gtkdochelpdir)
+	$(mkinstalldirs) $(DESTDIR)$(docdir)
 	for file in $(xml_files); do \
-	  cp $(srcdir)/$$file $(DESTDIR)$(gtkdochelpdir); \
+	  cp $(srcdir)/$$file $(DESTDIR)$(docdir); \
 	done
 	if test "$(figdir)"; then \
-	  $(mkinstalldirs) $(DESTDIR)$(gtkdochelpdir)/$(figdir); \
+	  $(mkinstalldirs) $(DESTDIR)$(docdir)/$(figdir); \
 	  for file in $(srcdir)/$(figdir)/*.png; do \
 	    basefile=`echo $$file | sed -e  's,^.*/,,'`; \
-	    $(INSTALL_DATA) $$file $(DESTDIR)$(gtkdochelpdir)/$(figdir)/$$basefile; \
+	    $(INSTALL_DATA) $$file $(DESTDIR)$(docdir)/$(figdir)/$$basefile; \
 	  done \
 	fi
 
@@ -85,12 +83,19 @@ uninstall-local-doc:
 	-if test "$(figdir)"; then \
 	  for file in $(srcdir)/$(figdir)/*.png; do \
 	    basefile=`echo $$file | sed -e  's,^.*/,,'`; \
-	    rm -f $(gtkdochelpdir)/$(figdir)/$$basefile; \
+	    rm -f $(DESTDIR)$(docdir)/$(figdir)/$$basefile; \
 	  done; \
-	  rmdir $(DESTDIR)$(gtkdochelpdir)/$(figdir); \
+	  rmdir $(DESTDIR)$(docdir)/$(figdir); \
 	fi
 	-for file in $(xml_files); do \
-	  rm -f $(DESTDIR)$(gtkdochelpdir)/$$file; \
+	  rm -f $(DESTDIR)$(docdir)/$$file; \
 	done
-	-rmdir $(DESTDIR)$(gtkdochelpdir)
+	-rmdir $(DESTDIR)$(docdir)
 
+clean-local: clean-local-doc clean-local-omf
+
+# for non-srcdir builds, remove the copied entities.
+clean-local-doc:
+	if test $(srcdir) != .; then \
+	  rm -f $(entities); \
+	fi
