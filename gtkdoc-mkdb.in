@@ -221,9 +221,9 @@ if (! -e $SGML_OUTPUT_DIR) {
 }
 
 # Function and other declaration output settings.
-my $RETURN_TYPE_FIELD_WIDTH = 12;
-my $SYMBOL_FIELD_WIDTH = 32;
-my $SIGNAL_FIELD_WIDTH = 12;
+my $RETURN_TYPE_FIELD_WIDTH = 20;
+my $SYMBOL_FIELD_WIDTH = 36;
+my $SIGNAL_FIELD_WIDTH = 16;
 
 &ReadKnownSymbols ("$ROOT_DIR/$MODULE-sections.txt");
 &ReadSignalsFile ($SIGNALS_FILE);
@@ -748,7 +748,7 @@ sub OutputMacro {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
-    my $synop = "#define     <link linkend=\"$id\">$symbol</link>";
+    my $synop = &MakeReturnField("#define") . "<link linkend=\"$id\">$symbol</link>";
     my $desc;
     my $args = "";
     
@@ -779,7 +779,7 @@ sub OutputMacro {
 	$declaration = &CreateValidSGML ($declaration);
 	$desc .= "<programlisting>$declaration</programlisting>\n";
     } else {
-	$desc .= "<programlisting>#define     $symbol";
+	$desc .= "<programlisting>" . &MakeReturnField("#define") . "$symbol";
 	$desc .= &CreateValidSGML ($args);
 	$desc .= "</programlisting>\n";
     }
@@ -822,7 +822,7 @@ sub OutputTypedef {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
-    my $synop = "typedef     <link linkend=\"$id\">$symbol</link>;\n";
+    my $synop = &MakeReturnField("typedef") . "<link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"typedef\"${condition}${empty_element_end}$symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol);
@@ -885,10 +885,10 @@ sub OutputStruct {
     my $desc;
     if ($has_typedef) {
         # For structs with typedefs we just output the struct name.
-        $synop = "            <link linkend=\"$id\">$symbol</link>;\n";
+        $synop = &MakeReturnField("") . "<link linkend=\"$id\">$symbol</link>;\n";
 	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"struct\"${condition}${empty_element_end}$symbol</title>\n";
     } else {
-        $synop = "struct      <link linkend=\"$id\">$symbol</link>;\n";
+        $synop = &MakeReturnField("struct") . "<link linkend=\"$id\">$symbol</link>;\n";
 	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"struct\"${condition}${empty_element_end}struct $symbol</title>\n";
     }
 
@@ -1024,7 +1024,7 @@ sub OutputEnum {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
-    my $synop = "enum        <link linkend=\"$id\">$symbol</link>;\n";
+    my $synop = &MakeReturnField("enum") . "<link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"enum\"${condition}${empty_element_end}enum $symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol);
@@ -1096,7 +1096,7 @@ sub OutputUnion {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
-    my $synop = "union       <link linkend=\"$id\">$symbol</link>;\n";
+    my $synop = &MakeReturnField("union") . "<link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"union\"${condition}${empty_element_end}union $symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol);
@@ -1132,10 +1132,10 @@ sub OutputVariable {
 	my $mod = defined ($1) ? $1 : "";
 	my $ptr = defined ($3) ? $3 : "";
 	my $space = defined ($4) ? $4 : "";
-	$synop = "extern      $mod$ptr$space<link linkend=\"$id\">$symbol</link>;\n";
+	$synop = &MakeReturnField("extern") . "$mod$ptr$space<link linkend=\"$id\">$symbol</link>;\n";
 
     } else {
-	$synop = "extern      <link linkend=\"$id\">$symbol</link>;\n";
+	$synop = &MakeReturnField("extern") . "<link linkend=\"$id\">$symbol</link>;\n";
     }
 
     my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"variable\"${condition}${empty_element_end}$symbol</title>\n";
@@ -2254,14 +2254,8 @@ sub GetSignals {
 	    my $symbol = "${object}::${name}";
 	    my $id = &CreateValidSGMLID ("$object-$name");
 
-	    my $name_len = length ($name) + 2;
-	    if ($name_len < $SIGNAL_FIELD_WIDTH) {
-		$synop .= "&quot;<link linkend=\"$id\">$name</link>&quot;"
-		    . (' ' x ($SIGNAL_FIELD_WIDTH - $name_len));
-	    } else {
-		$synop .= "&quot;<link linkend=\"$id\">$name</link>&quot;\n"
-		    . (' ' x $SIGNAL_FIELD_WIDTH);
-	    }
+	    my $pad = ' ' x (46 - length($name));
+	    $synop .= "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad ";
 
 	    $desc .= "<refsect2><title><anchor id=\"$id\"${empty_element_end}The &quot;$name&quot; signal</title>\n";
 	    $desc .= MakeIndexterms($symbol);
@@ -2278,16 +2272,14 @@ sub GetSignals {
 	    my $ret_type_output = "$type_modifier$xref$pointer"
 		. (' ' x ($RETURN_TYPE_FIELD_WIDTH - $ret_type_len));
 
-	    $synop .= "${ret_type_output}user_function      (";
-	    $desc  .= "${ret_type_output}user_function                  (";
+	    $desc  .= "${ret_type_output}user_function " . &MakeReturnField("") . " (";
 
 	    my $sourceparams = $SourceSymbolParams{$symbol};
 	    my @params = split ("\n", $SignalPrototypes[$i]);
 	    my $j;
 	    my $l;
-	    my $pad;
             my $type_len = length("gpointer");
-            $name_len = length("user_data");
+            my $name_len = length("user_data");
             # do two passes, the first one is to calculate padding
 	    for ($l = 0; $l < 2; $l++) {
 	        for ($j = 0; $j <= $#params; $j++) {
@@ -2315,8 +2307,6 @@ sub GetSignals {
                         else {
 		            $xref = &MakeXRef ($type);
                             $pad = ' ' x ($type_len - length($type) - length($pointer));
-		            $synop .= "$xref$pad $pointer$name,\n";
-		            $synop .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
 		            $desc .= "$xref$pad $pointer$name,\n";
 		            $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
 			}
@@ -2327,7 +2317,6 @@ sub GetSignals {
 	    }
 	    $xref = &MakeXRef ("gpointer");
 	    $pad = ' ' x ($type_len - length("gpointer"));
-	    $synop .= "$xref$pad user_data)";
 	    $desc  .= "$xref$pad user_data)";
 
 	    my $flags = $SignalFlags[$i];
@@ -2335,21 +2324,21 @@ sub GetSignals {
             
             if (defined ($flags)) {  
               if ($flags =~ m/f/) {
-                $flags_string = "Run first";
+                $flags_string = "Run First";
               }
               elsif ($flags =~ m/l/) {
-                $flags_string = "Run last";
+                $flags_string = "Run Last";
               }
               elsif ($flags =~ m/c/) {
                 $flags_string = "Cleanup";
               }
               if ($flags =~ m/r/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string .= "No recursion";
+                $flags_string .= "No Recursion";
               }
               if ($flags =~ m/d/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string .= "Has details";
+                $flags_string .= "Has Details";
               }
               if ($flags =~ m/a/) {
                 if ($flags_string) { $flags_string .= " / "; }
@@ -2357,13 +2346,21 @@ sub GetSignals {
               }
               if ($flags =~ m/h/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string .= "No hooks";
+                $flags_string .= "No Hooks";
               }
             }
 
-	    $pad = ' ' x (5 + $name_len - length("user_data"));
-	    $synop .= "$pad : $flags_string\n";
-	    $desc  .= "$pad : $flags_string</programlisting>\n";
+	    if ($flags_string)
+	      {
+		$synop .= ": $flags_string\n";
+
+		$pad = ' ' x (5 + $name_len - length("user_data"));
+		$desc  .= "$pad : $flags_string</programlisting>\n";
+	      }
+	    else
+	      {
+		$desc  .= "</programlisting>\n";
+	      }
 
 	    my $parameters = &OutputParamDescriptions ("SIGNAL", $symbol);
 	    my $parameters_output = 0;
@@ -2478,7 +2475,7 @@ sub GetArgs {
 		$blurb = "<para>" . &CreateValidSGML ($ArgBlurbs[$i]) . "</para>";
 	    }
 
-	    my $pad1 = " " x (20 - length ($name));
+	    my $pad1 = " " x (24 - length ($name));
 	    my $pad2 = " " x (20 - length ($type));
 	    my $kind = "";
 
@@ -3854,4 +3851,16 @@ sub CheckIsObject {
     return 0;
 }
 
+
+#############################################################################
+# Function    : MakeReturnField
+# Description : Pads a string to $RETURN_TYPE_FIELD_WIDTH.
+# Arguments   : $str - the string to pad.
+#############################################################################
+
+sub MakeReturnField {
+    my ($str) = @_;
+
+    return $str . (' ' x ($RETURN_TYPE_FIELD_WIDTH - length ($str)));
+}
 

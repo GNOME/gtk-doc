@@ -1,9 +1,16 @@
 2007-01-03  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in: improved output a little - made field widths larger,
+	removed signal prototypes from synopsis, and capitalized all signal
+	flags (to be consistent with argument capitalization). #384247,
+	Hans Petter Jansson.
+
+2007-01-03  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-mktmpl.in (OutputDeclaration): 
 	* gtkdoc-mkdb.in (OutputFunction): fix parsing of "char * const"
 	arguments, with an extra "\s*". #387681
-	
+
 2007-01-03  Damon Chaplin  <damon@gnome.org>
 
 	* omf.make: 
