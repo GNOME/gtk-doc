@@ -1,3 +1,8 @@
+2007-01-04  Damon Chaplin  <damon@gnome.org>
+
+	* gtk-doc.make (dist-hook): abort dist if html docs aren't generated.
+	#166462, Gustavo Carneiro.
+
 2007-01-03  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in: improved output a little - made field widths larger,
