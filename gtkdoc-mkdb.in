@@ -768,19 +768,26 @@ sub OutputMacro {
     my $condition = &MakeConditionDescription ($symbol);
     my $synop = &MakeReturnField("#define") . "<link linkend=\"$id\">$symbol</link>";
     my $desc;
+    my $padding = "";
     my $args = "";
-    
-    if ($declaration =~ m/^\s*#\s*define\s+\w+(\([^\)]*\))/) {
-	$args = $1;
+    my $pad;
+
+    if ($declaration =~ m/^\s*#\s*define(\s+)\w+(\([^\)]*\))/) {
+	$padding = $1;
+	$args = $2;
 
 	if (length ($symbol) < $SYMBOL_FIELD_WIDTH) {
 	    $synop .= (' ' x ($SYMBOL_FIELD_WIDTH - length ($symbol)));
 	}
 
-	$synop .= &CreateValidSGML ($args);
+	# Try to align all the lines of args correctly.
+	$pad = ' ' x ($RETURN_TYPE_FIELD_WIDTH + $SYMBOL_FIELD_WIDTH + 1);
+	my $args_padded = $args;
+	$args_padded =~ s/ *\\\n */\n$pad/gm;
+	$synop .= &CreateValidSGML ($args_padded);
     }
     $synop .= "\n";
-    
+
     if ($args ne "") {
 	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"macro\"${condition}${empty_element_end}${symbol}()</title>\n";
     } else {
@@ -798,6 +805,9 @@ sub OutputMacro {
 	$desc .= "<programlisting>$declaration</programlisting>\n";
     } else {
 	$desc .= "<programlisting>" . &MakeReturnField("#define") . "$symbol";
+	# Align each line so that if should all line up OK.
+	$pad = ' ' x ($RETURN_TYPE_FIELD_WIDTH - length ("#define "));
+	$args =~ s/\n/\n$pad/gm;
 	$desc .= &CreateValidSGML ($args);
 	$desc .= "</programlisting>\n";
     }

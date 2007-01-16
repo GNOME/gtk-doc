@@ -1,5 +1,10 @@
 2007-01-16  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in (OutputMacro): try to line up multiple lines of
+	arguments if possible. #384249
+
+2007-01-16  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-scan.in (ScanHeader): for headers marked private, return
 	immediately so we don't add anything to the sections file. #395005.
 
