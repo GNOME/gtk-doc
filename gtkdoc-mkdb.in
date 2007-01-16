@@ -214,6 +214,24 @@ my %Prerequisites;
 # holds the symbols which are mentioned in $MODULE-sections.txt
 my %KnownSymbols;
 
+# Standard C preprocessor directives, which we ignore for '#' abbreviations.
+my %PreProcessorDirectives;
+$PreProcessorDirectives{"assert"} = 1;
+$PreProcessorDirectives{"define"} = 1;
+$PreProcessorDirectives{"elif"} = 1;
+$PreProcessorDirectives{"else"} = 1;
+$PreProcessorDirectives{"endif"} = 1;
+$PreProcessorDirectives{"error"} = 1;
+$PreProcessorDirectives{"if"} = 1;
+$PreProcessorDirectives{"ifdef"} = 1;
+$PreProcessorDirectives{"ifndef"} = 1;
+$PreProcessorDirectives{"include"} = 1;
+$PreProcessorDirectives{"line"} = 1;
+$PreProcessorDirectives{"pragma"} = 1;
+$PreProcessorDirectives{"unassert"} = 1;
+$PreProcessorDirectives{"undef"} = 1;
+$PreProcessorDirectives{"warning"} = 1;
+
 # Create the root DocBook output directory if it doens't exist.
 if (! -e $SGML_OUTPUT_DIR) {
     mkdir ("$SGML_OUTPUT_DIR", 0777)
@@ -790,7 +808,7 @@ sub OutputMacro {
     my $parameters_output = 0;
 
     if (defined ($SymbolDocs{$symbol})) {
-	my $symbol_docs = &ExpandAbbreviations($SymbolDocs{$symbol});
+	my $symbol_docs = &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
 
 	# Try to insert the parameter table at the author's desired position.
 	# Otherwise we need to tag it onto the end.
@@ -835,7 +853,7 @@ sub OutputTypedef {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	$desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
     }
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
@@ -957,7 +975,7 @@ sub OutputStruct {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	$desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
     }
 
     # Create a table of fields and descriptions
@@ -998,7 +1016,7 @@ EOF
 
 	    $desc .= "<varlistentry>\n<term>$text</term>\n";
 	    if (defined $field_descr) {
-		$desc .= "<listitem><simpara>".&ExpandAbbreviations($field_descr)."</simpara></listitem>\n";
+		$desc .= "<listitem><simpara>".&ExpandAbbreviations($symbol, $field_descr)."</simpara></listitem>\n";
 	    } else {
 		$desc .= "<listitem></listitem>\n";
 	    }
@@ -1035,7 +1053,7 @@ sub OutputEnum {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	$desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
     }
 
     # Create a table of fields and descriptions
@@ -1069,7 +1087,7 @@ EOF
 	    $condition = &MakeConditionDescription ($member_name);
 	    $desc .= "<varlistentry>\n<term><anchor id=\"$id\" role=\"constant\"${condition}${empty_element_end}<literal>$member_name</literal></term>\n";
 	    if (defined $member_descr) {
-		$desc .= "<listitem><simpara>".&ExpandAbbreviations($member_descr)."</simpara></listitem>\n";
+		$desc .= "<listitem><simpara>".&ExpandAbbreviations($symbol, $member_descr)."</simpara></listitem>\n";
 	    } else {
 		$desc .= "<listitem></listitem>\n";
 	    }
@@ -1107,7 +1125,7 @@ sub OutputUnion {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	$desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
     }
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
@@ -1148,7 +1166,7 @@ sub OutputVariable {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-	$desc .= &ExpandAbbreviations($SymbolDocs{$symbol});
+	$desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
     }
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
@@ -1326,7 +1344,7 @@ sub OutputFunction {
     my $parameters_output = 0;
 
     if (defined ($SymbolDocs{$symbol})) {
-	my $symbol_docs = &ExpandAbbreviations($SymbolDocs{$symbol});
+	my $symbol_docs = &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
 
 	# Try to insert the parameter table at the author's desired position.
 	# Otherwise we need to tag it onto the end.
@@ -1367,12 +1385,12 @@ sub OutputParamDescriptions {
 	    my $param_name = $$params[$j];
 	    my $param = $$params[$j + 1];
 	    if ($param_name eq "Returns") {
-		$returns = &ExpandAbbreviations($param);
+		$returns = &ExpandAbbreviations($symbol, $param);
 	    } else {
 		if ($param_name eq "Varargs") {
 		    $param_name = "...";
 		}
-		$param = &ExpandAbbreviations($param);
+		$param = &ExpandAbbreviations($symbol, $param);
 		$params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&nbsp;:</term>\n<listitem><simpara>$param</simpara></listitem></varlistentry>\n";
 	    }
 	}
@@ -1474,21 +1492,23 @@ sub OutputSGMLFile {
 #	$short_desc = "one line description goes here.";
 	$short_desc = "";
     } else {
-	$short_desc = &ExpandAbbreviations($short_desc);
+	$short_desc = &ExpandAbbreviations("$title:Short_description",
+					   $short_desc);
 #	print "Found short_desc: $short_desc";
     }
     my $long_desc = $SymbolDocs{"$TMPL_DIR/$file:Long_Description"};
     if (!defined ($long_desc) || $long_desc =~ m/^\s*$/) {
 	$long_desc = "<para>\nA longer description goes here.\n</para>\n";
     } else {
-	$long_desc = &ExpandAbbreviations($long_desc);
+	$long_desc = &ExpandAbbreviations("$title:Long_description",
+					  $long_desc);
 #	print "Found long_desc: $long_desc";
     }
     my $see_also = $SymbolDocs{"$TMPL_DIR/$file:See_Also"};
     if (!defined ($see_also) || $see_also =~ m%^\s*(<para>)?\s*(</para>)?\s*$%) {
 	$see_also = "";
     } else {
-	$see_also = &ExpandAbbreviations($see_also);
+	$see_also = &ExpandAbbreviations("$title:See_Also", $see_also);
 #	print "Found see_also: $see_also";
     }
     if ($see_also) {
@@ -1626,7 +1646,7 @@ sub OutputExtraFile {
     open (OUTPUT, ">$new_sgml_file")
 	|| die "Can't create $new_sgml_file";
 
-    print OUTPUT &ExpandAbbreviationsExceptCDATA($contents);
+    print OUTPUT &ExpandAbbreviations ("$basename file", $contents);
     close (OUTPUT);
     
     return &UpdateFileIfChanged ($old_sgml_file, $new_sgml_file, 0);
@@ -1755,26 +1775,79 @@ sub CreateValidSGML {
 
 #############################################################################
 # Function    : ConvertSGMLChars
-# Description : This turns chars which are used in SGML into entities,
-#		e.g. '<' into '&lt;'. Depending on $SGML_MODE, this is done
-#               unconditionally or only if the character doesn't seem to be 
-#               part of an SGML construct (tag or entity reference)
+# Description : This is used for text in source code comment blocks, to turn
+#               chars which are used in SGML into entities, e.g. '<' into
+#               '&lt;'. Depending on $SGML_MODE, this is done
+#               unconditionally or only if the character doesn't seem to be
+#               part of an SGML construct (tag or entity reference).
 # Arguments   : $text - the text to turn into proper SGML.
 #############################################################################
 
 sub ConvertSGMLChars {
-    my ($text) = @_;
+    my ($symbol, $text) = @_;
+
     if ($SGML_MODE) {
-	$text =~ s/&(?![a-zA-Z#])/&amp;/g;	# Do this first, or the others get messed up.
-	$text =~ s/<(?![a-zA-Z\/!])/&lt;/g;
-	$text =~ s/(?<![a-zA-Z0-9"'\/-])>/&gt;/g;
-    }
-    else {
+        # For the SGML mode only convert to entities outside CDATA sections.
+        return &ModifyXMLElements ($text, $symbol,
+				   "<!\\[CDATA\\[|<programlisting[^>]*>",
+				   \&ConvertSGMLCharsEndTag,
+				   \&ConvertSGMLCharsCallback);
+    } else {
+        # For the simple non-sgml mode, convert to entities everywhere.
 	$text =~ s/&/&amp;/g;	# Do this first, or the others get messed up.
 	$text =~ s/</&lt;/g;
 	$text =~ s/>/&gt;/g;
+	return $text;
     }
-    return $text;
+}
+
+
+sub ConvertSGMLCharsEndTag {
+  if ($_[0] eq "<!\[CDATA\[") {
+    return "]]>";
+  } else {
+    return "</programlisting>";
+  }
+}
+
+sub ConvertSGMLCharsCallback {
+  my ($text, $symbol, $tag) = @_;
+
+  if ($tag =~ m/^<programlisting/) {
+    # We can handle <programlisting> specially here.
+    return &ModifyXMLElements ($text, $symbol,
+			       "<!\\[CDATA\\[",
+			       \&ConvertSGMLCharsEndTag,
+			       \&ConvertSGMLCharsCallback2);
+  } elsif ($tag eq "") {
+    # If we're not in CDATA convert to entities.
+    $text =~ s/&(?![a-zA-Z#]+;)/&amp;/g;	# Do this first, or the others get messed up.
+    $text =~ s/<(?![a-zA-Z\/!])/&lt;/g;
+    $text =~ s/(?<![a-zA-Z0-9"'\/-])>/&gt;/g;
+
+    # Handle "#include <xxxxx>"
+    $text =~ s/#include(\s+)<([^>]+)>/#include$1&lt;$2&gt;/g;
+  }
+
+  return $text;
+}
+
+sub ConvertSGMLCharsCallback2 {
+  my ($text, $symbol, $tag) = @_;
+
+  # If we're not in CDATA convert to entities.
+  # We could handle <programlisting> differently, though I'm not sure it helps.
+  if ($tag eq "") {
+    $text =~ s/&(?![a-zA-Z#]+;)/&amp;/g;	# Do this first, or the others get messed up.
+#    $text =~ s/&/&amp;/g;	# Do this first, or the others get messed up.
+    $text =~ s/<(?![a-zA-Z\/!])/&lt;/g;
+    $text =~ s/(?<![a-zA-Z0-9"'\/-])>/&gt;/g;
+
+    # Handle "#include <xxxxx>"
+    $text =~ s/#include(\s+)<([^>]+)>/#include$1&lt;$2&gt;/g;
+  }
+
+  return $text;
 }
 
 
@@ -1782,11 +1855,43 @@ sub ConvertSGMLChars {
 # Function    : ExpandAbbreviations
 # Description : This turns the abbreviations function(), macro(), @param,
 #		%constant, and #symbol into appropriate DocBook markup.
-# Arguments   : $text - the text to expand.
+#               CDATA sections and <programlisting> parts are skipped.
+# Arguments   : $symbol - the symbol being documented, for error messages.
+#		$text - the text to expand.
 #############################################################################
 
 sub ExpandAbbreviations {
-    my ($text) = @_;
+  my ($symbol, $text) = @_;
+
+  # Convert "|[" and "]|" into the start and end of program listing examples.
+  $text =~ s%\|\[%<informalexample><programlisting>%g;
+  $text =~ s%\]\|%</programlisting></informalexample>%g;
+
+  return &ModifyXMLElements ($text, $symbol,
+			     "<!\\[CDATA\\[|<programlisting[^>]*>",
+			     \&ExpandAbbreviationsEndTag,
+			     \&ExpandAbbreviationsCallback);
+}
+
+
+sub ExpandAbbreviationsEndTag {
+  if ($_[0] eq "<!\[CDATA\[") {
+    return "]]>";
+  } else {
+    return "</programlisting>";
+  }
+}
+
+sub ExpandAbbreviationsCallback {
+  my ($text, $symbol, $tag) = @_;
+
+  if ($tag =~ m/^<programlisting/) {
+    return &ModifyXMLElements ($text, $symbol,
+			       "<!\\[CDATA\\[",
+			       \&ExpandAbbreviationsEndTag,
+			       \&ExpandAbbreviationsCallback2);
+  } elsif ($tag eq "") {
+    # Only expand abbreviations if not in CDATA.
 
     # Convert 'function()' or 'macro()'
     $text =~ s/(\w+)\s*\(\)/&MakeXRef($1, &tagify($1 . "()", "function"));/eg;
@@ -1800,38 +1905,92 @@ sub ExpandAbbreviations {
     # Convert '#symbol'
     # if $1 is Object::signal change id to Object-signal
     # if $1 is Object:property change id to Object--property
-    $text =~ s/#([\w\-:]+)/&MakeXRef(&symbolify($1), &tagify2($1, "type"));/eg;
+    $text =~ s/#([\w\-:]+)/&MakeHashXRef(&symbolify($1), &tagify2($1, "type"));/eg;
+  }
 
-    return $text;
+  return $text;
 }
 
-#############################################################################
-# Function    : ExpandAbbreviationsExceptCDATA
-# Description : Expands abbreviations like ExpandAbbreviations keeping CDATA
-# 		sections intact.
-# Arguments   : $text - the text to expand.
-#############################################################################
+sub ExpandAbbreviationsCallback2 {
+  my ($text, $symbol, $tag) = @_;
 
-sub ExpandAbbreviationsExceptCDATA {
-    my ($p, $i, $part, @out);
+  # If we're not in CDATA convert '#symbol' to a simple cross-reference.
+  if ($tag eq "") {
+    $text =~ s/#(\w+)/&MakeHashXRef($1, $1);/eg;
+  }
 
-    foreach $part (split /<!\[CDATA\[/, $_[0]) {
-	if (defined $i) {
-	    my @p = split /]]>/, $part;
-	    if (scalar @p != 2) {
-		warn "Cannot find CDATA section end";
-		@p = ('', join(']]>', @p));
-	    }
-	    $p[1] = ExpandAbbreviations $p[1];
-	    push @out, join(']]>', @p);
-	}
-	else {
-	    push @out, ExpandAbbreviations $part;
-	}
-	$i = 'really inside CDATA';
+  return $text;
+}
+
+sub MakeHashXRef {
+    my ($symbol, $text) = @_;;
+
+    # Check for things like '#include', '#define', and skip them.
+    if ($PreProcessorDirectives{$symbol}) {
+      return "#$symbol";
+    } else {
+      return &MakeXRef($symbol, $text);
+    }
+}
+
+
+#############################################################################
+# Function    : ModifyXMLElements
+# Description : Looks for given XML element tags within the text, and calls
+#               the callback on pieces of text inside & outside those elements.
+#               Used for special handling of text inside things like CDATA
+#               and <programlisting>.
+# Arguments   : $text - the text.
+#               $symbol - the symbol currently being documented (only used for
+#                      error messages).
+#               $start_tag_regexp - the regular expression to match start tags.
+#                      e.g. "<!\\[CDATA\\[|<programlisting[^>]*>" to match
+#                      CDATA sections or programlisting elements.
+#               $end_tag_func - function which is passed the matched start tag
+#                      and should return the appropriate end tag string.
+#               $callback - callback called with each part of the text. It is
+#                      called with a piece of text, the symbol being
+#                      documented, and the matched start tag or "" if the text
+#                      is outside the XML elements being matched.
+#############################################################################
+sub ModifyXMLElements {
+    my ($text, $symbol, $start_tag_regexp, $end_tag_func, $callback) = @_;
+    my ($before_tag, $start_tag, $end_tag_regexp, $end_tag);
+    my $result = "";
+
+    while ($text =~ m/$start_tag_regexp/s) {
+      $before_tag = $`;
+      $start_tag = $&;
+      $text = $';
+
+      $result .= &$callback ($before_tag, $symbol, "");
+      $result .= $start_tag;
+
+      $end_tag_regexp = &$end_tag_func ($start_tag);
+
+      if ($text =~ m/$end_tag_regexp/s) {
+	$before_tag = $`;
+	$end_tag = $&;
+	$text = $';
+
+	$result .= &$callback ($before_tag, $symbol, $start_tag);
+	$result .= $end_tag;
+      } else {
+	print "WARNING: Can't find tag end: $end_tag_regexp in docs for: $symbol\n";
+	# Just assume it is all inside the tag.
+	$result .= &$callback ($text, $symbol, $start_tag);
+	$text = "";
+      }
     }
 
-    return join('<![CDATA[', @out);
+    # Handle any remaining text outside the tags.
+    $result .= &$callback ($text, $symbol, "");
+
+    return $result;
+}
+
+sub noop {
+  return $_[0];
 }
 
 sub symbolify {
@@ -1929,7 +2088,7 @@ sub MakeDeprecationNote {
 		$desc .= "<para><literal>$symbol</literal> is deprecated and should not be used in newly-written code.";
 	}
 	if ($Deprecated{$symbol} ne "") {
-	    $note = &ExpandAbbreviations($Deprecated{$symbol});
+	    $note = &ExpandAbbreviations($symbol, $Deprecated{$symbol});
 	    $note =~ s/^\s*([0-9\.]+)\s*:\s*//;
 	    $note =~ s/^\s+//;
 	    $note =~ s/\s+$//;
@@ -2368,7 +2527,7 @@ sub GetSignals {
 
 	    $AllSymbols{$symbol} = 1;
 	    if (defined ($SymbolDocs{$symbol})) {
-	        my $symbol_docs = &ExpandAbbreviations($SymbolDocs{$symbol});
+	        my $symbol_docs = &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
 
 		# Try to insert the parameter table at the author's desired
 		# position. Otherwise we need to tag it onto the end.
@@ -2466,7 +2625,7 @@ sub GetArgs {
 	    my $blurb;
 	    if (defined($SymbolDocs{$symbol}) &&
 		!IsEmptyDoc($SymbolDocs{$symbol})) {
-		$blurb = &ExpandAbbreviations($SymbolDocs{$symbol});
+		$blurb = &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
 		$AllDocumentedSymbols{$symbol} = 1;
 	    }
 	    else {
@@ -2659,10 +2818,10 @@ EOF
 		    push (@params, $return_desc);
 		}
                 # Convert special SGML characters
-                $description = &ConvertSGMLChars ($description);
+                $description = &ConvertSGMLChars ($symbol, $description);
                 my $k;
                 for ($k = 1; $k <= $#params; $k += 2) {
-		    $params[$k] = &ConvertSGMLChars ($params[$k]);
+		    $params[$k] = &ConvertSGMLChars ($symbol, $params[$k]);
 		}
 
                 # Handle Section docs
@@ -2693,12 +2852,12 @@ EOF
                 }
 
 		if ($since_desc) {
-		    $Since{$symbol} = &ConvertSGMLChars ($since_desc);
+		    $Since{$symbol} = &ConvertSGMLChars ($symbol, $since_desc);
 		}
 
 		if ($stability_desc) {
 		    $stability_desc = &ParseStabilityLevel($stability_desc, "Stability level for $symbol");
-		    $StabilityLevel{$symbol} = &ConvertSGMLChars ($stability_desc);
+		    $StabilityLevel{$symbol} = &ConvertSGMLChars ($symbol, $stability_desc);
 		}
 
 		if ($deprecated_desc) {
@@ -2711,7 +2870,7 @@ WARNING: $symbol is deprecated in the inline comments
          (See the --deprecated-guards option for gtkdoc-scan.)
 EOF
 		    }
-		    $Deprecated{$symbol} = &ConvertSGMLChars ($deprecated_desc);
+		    $Deprecated{$symbol} = &ConvertSGMLChars ($symbol, $deprecated_desc);
 		}
 	    }
 
@@ -3067,9 +3226,7 @@ EOF
 	    $src_doc =~ s%\n+\s*<!--PARAMETERS-->\s*\n+%\n</para>\n<!--PARAMETERS-->\n<para>\n%g;
 
 	    # If there is a blank line, finish the paragraph and start another.
-	    if ($src_doc =~ s%\n{2,}%\n</para>\n<para>\n%g) {
-#		print "Converted blank lines:\n$src_doc\n";
-	    }
+	    $src_doc = &ConvertBlankLines ($src_doc, $symbol);
 
             if ($symbol =~ m/$TMPL_DIR\/.+:Long_Description/) {
                 # FIXME: should we check for empty $tmpl_doc ?
@@ -3215,6 +3372,40 @@ sub IsEmptyDoc {
 	return 0;
     }
 }
+
+
+# This converts blank lines to "</para><para>", but only outside CDATA and
+# <programlisting> tags.
+sub ConvertBlankLines {
+    return &ModifyXMLElements ($_[0], $_[1],
+			       "<!\\[CDATA\\[|<programlisting[^>]*>|\\|\\[",
+			       \&ConvertBlankLinesEndTag,
+			       \&ConvertBlankLinesCallback);
+}
+
+
+sub ConvertBlankLinesEndTag {
+  if ($_[0] eq "<!\[CDATA\[") {
+    return "]]>";
+  } elsif ($_[0] eq "|[") {
+    return "]\\|";
+  } else {
+    return "</programlisting>";
+  }
+}
+
+sub ConvertBlankLinesCallback {
+  my ($text, $symbol, $tag) = @_;
+
+  # If we're not in CDATA or a <programlisting> we convert blank lines so
+  # they start a new <para>.
+  if ($tag eq "") {
+    $text =~ s%\n{2,}%\n</para>\n<para>\n%g;
+  }
+
+  return $text;
+}
+
 
 #############################################################################
 # LIBRARY FUNCTIONS -	These functions are used in both gtkdoc-mkdb and
@@ -3516,7 +3707,7 @@ sub ReadTemplateFile {
 
 	} else {
 	    # Check if param found
-	    if (s/^\@(\S+):\040?//) {
+	    if (s/^\@(\w+|\.\.\.):\040?//) {
 		my $param_name = $1;
 		# Allow variations of 'Returns'
 		if ($param_name =~ m/^[Rr]eturns?$/) {

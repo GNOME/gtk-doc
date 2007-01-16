@@ -1,3 +1,27 @@
+2007-01-16  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in: a number of changes to help when adding example code
+	to the docs (#368382):
+
+	 a) Support CDATA in source code comments. (We don't touch anything in
+	    CDATA.)
+	 b) Support |[ ... ]| to include example code. (Just gets converted to
+            <informalexample><programlisting>)
+         c) Improve <programlisting> handling, by not inserting <para></para>
+	    and not expanding "()", "@" or "%". (It still expands '#' so people
+	    can use cross-references to any symbols if they want to.).
+	 d) Improve '#' links a bit by skipping symbols that look like C
+	    preprocessor directives (e.g. "#include").
+	 e) Improve '&' handling a bit by converting to '&amp;' if it doesn't
+            already look like the start of an entity reference.
+	 f) Added special case for "#include <xxxx>" in <programlisting> so the
+	    "<" and ">" get replaced by entities.
+
+	* gtkdoc-mktmpl.in (ReadTemplateFile): 
+	* gtkdoc-mkdb.in (ReadTemplateFile): fixed param regexp so it handles
+	"@...:" for varargs again. It also cleans up messed up template files
+	luckily.
+
 2007-01-04  Damon Chaplin  <damon@gnome.org>
 
 	* gtk-doc.make (dist-hook): abort dist if html docs aren't generated.
