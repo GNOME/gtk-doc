@@ -426,6 +426,14 @@ sub OutputSGML {
 		    $book_bottom .= "    &$section_id;\n";
 		}
 
+		if (defined ($SourceSymbolDocs{"$TMPL_DIR/$file:Include"})) {
+		    if ($section_includes) {
+			print <<EOF;
+WARNING: Section <INCLUDE> for file $file being overridden by inline comments
+EOF
+		    }
+		    $section_includes = $SourceSymbolDocs{"$TMPL_DIR/$file:Include"};
+		}
 		if ($section_includes eq "") {
 		    $section_includes = $includes;
 		}
@@ -1549,6 +1557,7 @@ sub OutputSGMLFile {
             $include_output .= "#include ${include}\n";
         }
         else {
+	    $include =~ s/^\s+|\s+$//gs;
             $include_output .= "#include &lt;${include}&gt;\n";
         }
     }
@@ -2853,6 +2862,8 @@ EOF
                             $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Stability_Level"}=$params[$k+1];
                         } elsif ($params[$k] eq "section_id") {
                             $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Section_Id"}=$params[$k+1];
+                        } elsif ($params[$k] eq "include") {
+                            $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Include"}=$params[$k+1];
                         }
                     }
                     $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Long_Description"}=$description;
@@ -3084,7 +3095,7 @@ sub OutputMissingDocumentation {
           || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt";
 
      foreach $symbol (sort (keys (%AllSymbols))) {
-          if ($symbol !~ /:(Title|Long_Description|Short_Description|See_Also|Stability_Level)/) {
+          if ($symbol !~ /:(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include)/) {
 	      $total++;
               if (exists ($AllDocumentedSymbols{$symbol})) {
 		  $n_documented++;
@@ -3669,7 +3680,8 @@ sub ReadTemplateFile {
 		|| $symbol eq "Short_Description"
 		|| $symbol eq "Long_Description"
 		|| $symbol eq "See_Also"
-		|| $symbol eq "Stability_Level") {
+		|| $symbol eq "Stability_Level"
+		|| $symbol eq "Include") {
 
 		$symbol = $docsfile . ":" . $symbol;
 	    }
