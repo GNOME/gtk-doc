@@ -271,7 +271,8 @@ sub ScanHeader {
     while(<INPUT>) {
 	# If this is a private header, skip it.
 	if (m%^\s*/\*\s*<\s*private_header\s*>\s*\*/%) {
-	    last;
+	    close(INPUT);
+	    return;
 	}
 
 	# Skip to the end of the current comment.
