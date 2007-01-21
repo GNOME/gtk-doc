@@ -3728,8 +3728,8 @@ sub ReadTemplateFile {
 	    next;
 
 	} else {
-	    # Check if param found
-	    if (s/^\@(\w+|\.\.\.):\040?//) {
+	    # Check if param found. Need to handle "..." and "format...".
+	    if (s/^\@([\w\.]+):\040?//) {
 		my $param_name = $1;
 		# Allow variations of 'Returns'
 		if ($param_name =~ m/^[Rr]eturns?$/) {

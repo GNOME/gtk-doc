@@ -1,3 +1,9 @@
+2007-01-21  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mktmpl.in (ReadTemplateFile): 
+	* gtkdoc-mkdb.in (ReadTemplateFile): improved param regexp to handle
+	weird macro vararg names like "format...". #398971.
+
 2007-01-16  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in: support "Include" setting in section docs in source
