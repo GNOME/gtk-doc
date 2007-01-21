@@ -630,6 +630,7 @@ make
  * @short_description: the application class
  * @see_also: #MeepSettings
  * @stability: Stable
+ * @include: meep/app.h
  *
  * The application class handles ...
  */
@@ -705,6 +706,17 @@ make
                   </para>
                 </listitem>
               </itemizedlist>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>@include</term>
+          <listitem>
+            <para>
+              The <literal>#include</literal> files to show in the section
+              synopsis (a comma separated list), overriding the global
+              value from the <link linkend="metafiles_sections">section
+              file</link> or command line.  This item is optional.
             </para>
           </listitem>
         </varlistentry>

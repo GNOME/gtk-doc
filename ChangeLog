@@ -1,5 +1,14 @@
 2007-01-21  Damon Chaplin  <damon@gnome.org>
 
+	* gtkdoc-mkdb.in: added "--default-includes" option to specify the
+	default "#include"s to place at the top of the synopsis of each
+	section. Normally this is specified in a <INCLUDE>...</INCLUDE> line
+	in MODULE-sections.txt, but if you are using the "--rebuild-sections"
+	option to automatically rebuild the MODULE-sections.txt file you can't
+	use that. #395023.
+
+2007-01-21  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-mktmpl.in (ReadTemplateFile): 
 	* gtkdoc-mkdb.in (ReadTemplateFile): improved param regexp to handle
 	weird macro vararg names like "format...". #398971.

@@ -51,6 +51,7 @@ my $MAIN_SGML_FILE;
 my $EXPAND_CONTENT_FILES = "";
 my $SGML_MODE;
 my $DEFAULT_STABILITY;
+my $DEFAULT_INCLUDES;
 my $OUTPUT_FORMAT;
 
 my %optctl = (module => \$MODULE,
@@ -66,8 +67,9 @@ my %optctl = (module => \$MODULE,
 	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
 	      'sgml-mode' => \$SGML_MODE,
 	      'default-stability' => \$DEFAULT_STABILITY,
+	      'default-includes' => \$DEFAULT_INCLUDES,
 	      'output-format' => \$OUTPUT_FORMAT);
-GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s", "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols", "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help", "sgml-mode", "default-stability:s", "output-format:s");
+GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s", "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols", "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help", "sgml-mode", "default-stability:s", "default-includes:s", "output-format:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -98,6 +100,7 @@ if ($PRINT_HELP) {
     print "\n--sgml-mode            Allow DocBook markup in inline documentation.";
     print "\n--default-stability=LEVEL Specify default stability Level. Valid values are";
     print "\n                       Stable, Unstable, or Private.";
+    print "\n--default-includes=FILENAMES Specify default includes for section Synopsis";
     print "\n--version              Print the version of this program";
     print "\n--help                 Print this help\n";
     exit 0;
@@ -334,7 +337,7 @@ sub OutputSGML {
 	|| die "Can't open $file";
     my $book_top = "";
     my $book_bottom = "";
-    my $includes = "";
+    my $includes = (defined $DEFAULT_INCLUDES) ? $DEFAULT_INCLUDES : "";
     my $section_includes = "";
     my $in_section = 0;
     my $title = "";
@@ -397,7 +400,14 @@ sub OutputSGML {
 	    if ($in_section) {
 		$section_includes = $1;
 	    } else {
-		$includes = $1;
+		if (defined $DEFAULT_INCLUDES) {
+		    print <<EOF;
+WARNING: Default <INCLUDE> being overridden by command line option
+EOF
+		}
+		else {
+		    $includes = $1;
+		}
 	    }
 
 	} elsif (m/^<\/SECTION>/) {
