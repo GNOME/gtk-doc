@@ -1,5 +1,11 @@
 2007-02-07  Damon Chaplin  <damon@gnome.org>
 
+	* gtk-doc.make: make $(DOC_MODULE)-sections.txt and
+	$(DOC_MODULE)-overrides.txt depend on scan-build.stamp, so that
+	parallel make works. #404122, Ed Catmur.
+
+2007-02-07  Damon Chaplin  <damon@gnome.org>
+
 	* gtkdoc-scangobj.in: don't return if !G_TYPE_IS_OBJECT (object_type)
 	as that means interface properties don't get output. This was broken
 	by the patch for #348058.
