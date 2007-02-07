@@ -1,3 +1,9 @@
+2007-02-07  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-scangobj.in: don't return if !G_TYPE_IS_OBJECT (object_type)
+	as that means interface properties don't get output. This was broken
+	by the patch for #348058.
+
 2007-01-21  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in: added "--default-includes" option to specify the

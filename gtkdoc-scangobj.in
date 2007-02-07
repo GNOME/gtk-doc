@@ -1403,9 +1403,7 @@ output_object_args (FILE *fp, GType object_type)
   gchar *type_desc;
   gchar *default_value;
 
-  if (!G_TYPE_IS_OBJECT (object_type))
-    return;
-  else if (G_TYPE_IS_CLASSED (object_type))
+  if (G_TYPE_IS_OBJECT (object_type))
     {
       class = g_type_class_peek (object_type);
       if (!class)
