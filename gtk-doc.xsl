@@ -172,9 +172,9 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:variable name="up" select="parent::*"/>
     <xsl:variable name="sections" select="./refsect1[@role]"/>
     <xsl:variable name="sect_object_hierarchy" select="./refsect1[@role='object_hierarchy']"/>
+    <xsl:variable name="sect_impl_interfaces" select="./refsect1[@role='impl_interfaces']"/>
     <xsl:variable name="sect_prerequisites" select="./refsect1[@role='prerequisites']"/>
     <xsl:variable name="sect_derived_interfaces" select="./refsect1[@role='derived_interfaces']"/>
-    <xsl:variable name="sect_impl_interfaces" select="./refsect1[@role='impl_interfaces']"/>
     <xsl:variable name="sect_implementations" select="./refsect1[@role='implementations']"/>
     <xsl:variable name="sect_properties" select="./refsect1[@role='properties']"/>
     <xsl:variable name="sect_child_properties" select="./refsect1[@role='child_properties']"/>
@@ -318,8 +318,8 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                 </xsl:if>
                 <xsl:if test="count($sect_prerequisites) > 0">
                   &#160;|&#160;
-                  <a href="#{generate-id(./refsect1[@role='object_prerequisites'])}" class="shortcut">
-                    <xsl:value-of select="./refsect1[@role='object_prerequisites']/title"/>
+                  <a href="#{generate-id(./refsect1[@role='prerequisites'])}" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='prerequisites']/title"/>
                   </a>
                 </xsl:if>
                 <xsl:if test="count($sect_derived_interfaces) > 0">
