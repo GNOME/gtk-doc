@@ -1,3 +1,16 @@
+2007-02-16  Damon Chaplin  <damon@gnome.org>
+
+	* Released 1.8.
+
+2007-02-16  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-scan.in: only rebuild the .types file automatically on the
+	very first run (i.e. when there are no sections or types files).
+
+	* gtkdoc-scangobj.in: skip gnome_keyring_item_info_get_type if it is
+	in the .types file as it isn't a real GObject type. This is a hack to
+	avoid breaking the GNOME build. See bug #386508.
+
 2007-02-11  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtk-doc.xsl: fix prerequisite section in nav-header

@@ -107,6 +107,9 @@ $includes = "";
 for (<TYPES>) {
     if (/^#include/) {
 	$includes .= $_;
+    } elsif (/^gnome_keyring_item_info_get_type$/) {
+        # HACK: This isn't really a GObject type so skip it.
+        next;
     } elsif (/^%/) {
 	next;
     } elsif (/^\s*$/) {

@@ -114,8 +114,12 @@ my $old_decl = "${OUTPUT_DIR}/$MODULE-decl.txt";
 my $new_decl = "${OUTPUT_DIR}/$MODULE-decl.new";
 my $old_types = "${OUTPUT_DIR}/$MODULE.types";
 my $new_types = "${OUTPUT_DIR}/$MODULE.types.new";
+my $sections_file = "${OUTPUT_DIR}/$MODULE-sections.txt";
 
-$REBUILD_TYPES ||= !-f $old_types;
+# If this is the very first run then we create the .types file automatically.
+if (! -e $sections_file && ! -e $old_types) {
+    $REBUILD_TYPES = 1;
+}
 
 open (DECLLIST, ">$new_decl_list")
     || die "Can't open $new_decl_list";
@@ -151,7 +155,6 @@ close (TYPES) if ($REBUILD_TYPES);
 # If there is no MODULE-sections.txt file yet or we are asked to rebuild it,
 # we copy the MODULE-decl-list.txt file into its place. The user can tweak it
 # later if they want.
-my $sections_file = "${OUTPUT_DIR}/$MODULE-sections.txt";
 if ($REBUILD_SECTIONS || ! -e $sections_file) {
   `cp $old_decl_list $sections_file`;
 }
