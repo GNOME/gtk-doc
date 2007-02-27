@@ -13,6 +13,8 @@
   <xsl:param name="generate.toc">
     book	toc
     chapter	toc
+    part	toc
+    reference	toc
   </xsl:param>
 
   
