@@ -138,6 +138,11 @@ sub ParseStructDeclaration {
 
 	# FIXME: Just ignore nested structs and unions for now
 	next if $line =~ /{/;
+        
+        # ignore preprocessor directives
+        while ($line =~ /^#.*?\n\s*(.*)/msg) {
+            $line=$1;          
+        }
 
 	# FIXME: The regexes here are the same as in OutputFunction; 
 	#        this functionality should be separated out.
@@ -271,6 +276,11 @@ sub ParseEnumDeclaration {
 	my $line = $1;
 	my $terminator = $2;
 
+        # ignore preprocessor directives
+        while ($line =~ /^#.*?\n\s*(.*)/msg) {
+            $line=$1;          
+        }
+        
 	if ($line =~ m/^(\w+)\s*(=.*)?$/msg) {
 	    push @result, $1;
 
