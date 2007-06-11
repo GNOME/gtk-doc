@@ -1,3 +1,13 @@
+2007-06-11  Damon Chaplin  <damon@gnome.org>
+
+	* gtkdoc-mkdb.in (ExpandAbbreviations): just output "signal" and
+	"property" as the text for cross-reference links to signals and
+	properties, rather than something like "Object::signal" which can get
+	a bit long. Also tidied up the code a little.
+	(GetArgs): put the " inside the literal element.
+	(GetSignals): use a literal element for the signal name in the title,
+	to match the properties.
+
 2007-03-16  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-common.pl.in: handle preprocessor statements in enum and

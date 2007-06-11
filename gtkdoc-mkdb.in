@@ -1903,6 +1903,7 @@ sub ExpandAbbreviations {
 }
 
 
+# Returns the end tag corresponding to the given start tag.
 sub ExpandAbbreviationsEndTag {
   if ($_[0] eq "<!\[CDATA\[") {
     return "]]>";
@@ -1911,16 +1912,19 @@ sub ExpandAbbreviationsEndTag {
   }
 }
 
+# Called inside or outside each CDATA or <programlisting> section.
 sub ExpandAbbreviationsCallback {
   my ($text, $symbol, $tag) = @_;
 
   if ($tag =~ m/^<programlisting/) {
+    # Handle any embedded CDATA sections.
     return &ModifyXMLElements ($text, $symbol,
 			       "<!\\[CDATA\\[",
 			       \&ExpandAbbreviationsEndTag,
 			       \&ExpandAbbreviationsCallback2);
   } elsif ($tag eq "") {
-    # Only expand abbreviations if not in CDATA.
+    # We are outside any CDATA or <programlisting> sections, so we expand
+    # any gtk-doc abbreviations.
 
     # Convert 'function()' or 'macro()'
     $text =~ s/(\w+)\s*\(\)/&MakeXRef($1, &tagify($1 . "()", "function"));/eg;
@@ -1932,34 +1936,54 @@ sub ExpandAbbreviationsCallback {
     $text =~ s/\%(-?\w+)/&MakeXRef($1, &tagify($1, "literal"));/eg;
 
     # Convert '#symbol'
-    # if $1 is Object::signal change id to Object-signal
-    # if $1 is Object:property change id to Object--property
-    $text =~ s/#([\w\-:]+)/&MakeHashXRef(&symbolify($1), &tagify2($1, "type"));/eg;
+    $text =~ s/#([\w\-:]+)/&MakeHashXRef($1, "type");/eg;
   }
 
   return $text;
 }
 
+# This is called inside a <programlisting>
 sub ExpandAbbreviationsCallback2 {
   my ($text, $symbol, $tag) = @_;
 
-  # If we're not in CDATA convert '#symbol' to a simple cross-reference.
   if ($tag eq "") {
-    $text =~ s/#(\w+)/&MakeHashXRef($1, $1);/eg;
+    # We are inside a <programlisting> but outside any CDATA sections,
+    # so we expand any gtk-doc abbreviations.
+    $text =~ s/#(\w+)/&MakeHashXRef($1, "");/eg;
   }
 
   return $text;
 }
 
 sub MakeHashXRef {
-    my ($symbol, $text) = @_;;
+    my ($symbol, $tag) = @_;;
+    my $text = $symbol;
 
     # Check for things like '#include', '#define', and skip them.
     if ($PreProcessorDirectives{$symbol}) {
       return "#$symbol";
-    } else {
-      return &MakeXRef($symbol, $text);
     }
+
+    # Get rid of any special '-struct' suffix.
+    $text =~ s/-struct$//;
+
+    # If the symbol is in the form "Object::signal", then change the symbol to
+    # "Object-signal" and use "signal" as the text.
+    if ($symbol =~ s/::/-/) {
+      $text = "\"$'\"";
+    }
+
+    # If the symbol is in the form "Object:property", then change the symbol to
+    # "Object--property" and use "property" as the text.
+    if ($symbol =~ s/:/--/) {
+      $text = "\"$'\"";
+    }
+
+    if ($tag ne "") {
+      $text = tagify ($text, $tag);
+    }
+
+    return &MakeXRef($symbol, $text);
 }
 
 
@@ -2022,28 +2046,13 @@ sub noop {
   return $_[0];
 }
 
-sub symbolify {
-  my ($symbol) = @_;
-
-  $symbol =~ s/::/-/;
-  $symbol =~ s/:/--/;
-  
-  return $symbol;
-}
-
+# Adds a tag around some text.
+# e.g tagify("Text", "literal") => "<literal>Text</literal>".
 sub tagify {
    my ($text, $elem) = @_;
    return "<" . $elem . ">" . $text . "</" . $elem . ">";
 }
 
-sub tagify2 {
-   my ($text, $elem) = @_;
-
-   # Get rid of special '-struct' suffix.
-   $text =~ s/-struct$//;
-
-   return "<" . $elem . ">" . $text . "</" . $elem . ">";
-}
 
 #############################################################################
 # Function    : MakeXRef
@@ -2445,7 +2454,7 @@ sub GetSignals {
 	    my $pad = ' ' x (46 - length($name));
 	    $synop .= "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad ";
 
-	    $desc .= "<refsect2><title><anchor id=\"$id\"${empty_element_end}The &quot;$name&quot; signal</title>\n";
+	    $desc .= "<refsect2><title><anchor id=\"$id\"${empty_element_end}The <literal>&quot;$name&quot;</literal> signal</title>\n";
 	    $desc .= MakeIndexterms($symbol);
 	    $desc .= "<programlisting>";
 
@@ -2679,7 +2688,7 @@ sub GetArgs {
 	    }
 
  	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output $pad2 : $flags_string\n";
-	    my $arg_desc = "<refsect2><title><anchor id=\"$id\"${empty_element_end}The &quot;<literal>$name</literal>&quot; $kind</title>\n";
+	    my $arg_desc = "<refsect2><title><anchor id=\"$id\"${empty_element_end}The <literal>&quot;$name&quot;</literal> $kind</title>\n";
 	    $arg_desc .= MakeIndexterms($symbol);
 	    $arg_desc .= "<programlisting>  &quot;$name&quot;$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
 	    $arg_desc .= $blurb;
