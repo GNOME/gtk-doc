@@ -591,6 +591,16 @@ make
         </itemizedlist>
       </para>
 
+      <tip>
+	<para>
+	  If you need to use the special characters '()', '@', '%', or '#'
+	  in your documentation without gtk-doc changing them you can use the
+	  XML entities
+	  "&amp;lpar;", "&amp;rpar;", "&amp;commat;", "&amp;percnt;" and
+	  "&amp;num;" respectively.
+	</para>
+      </tip>
+
       <para>
         DocBook can do more that just links. One can also have lists, tables and
         examples. To enable the usage of SGML/XML tags inside doc-comments you
