@@ -1,3 +1,9 @@
+2007-06-14  Loïc Minier  <lool@dooz.org>
+
+	* gtk-doc.m4:
+	Fix warnings in m4 macros when running "autoreconf -fi -Wall";
+	Guillem Jover. Fixes #428596.
+
 2007-06-11  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (ExpandAbbreviations): just output "signal" and
