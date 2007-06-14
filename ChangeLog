@@ -1,5 +1,11 @@
 2007-06-14  Loïc Minier  <lool@dooz.org>
 
+	* gtk-doc.make:
+	Cleanup $(DOC_MODULE)-undocumented.txt files in
+	maintainer-clean-local.  Fixes #415388.
+
+2007-06-14  Loïc Minier  <lool@dooz.org>
+
 	* gtk-doc.m4:
 	Fix warnings in m4 macros when running "autoreconf -fi -Wall";
 	Guillem Jover. Fixes #428596.
