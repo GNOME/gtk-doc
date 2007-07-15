@@ -66,6 +66,15 @@ if ($PRINT_HELP) {
 
 # This contains all the entities and their relative URLs.
 my %Links;
+# This hold the path entries we already scanned
+my @VisitedPaths;
+
+
+my $path_prefix="";
+if ($HTML_DIR =~ m%(.*?)/share/gtk-doc/html%) {
+    $path_prefix=$1;
+#    print "Path prefix: $path_prefix\n";
+}
 
 my $dir;
 
@@ -76,7 +85,12 @@ $dir =~ s/\s+$//;
 $dir = $dir . "/share/gtk-doc/html";
 if (-d $dir && $dir ne $HTML_DIR) {
 #    print "Scanning GLib directory: $dir\n";
-    &ScanIndices ($dir, 1);
+    if ($dir !~ m%^\Q$path_prefix\E/%) {
+        &ScanIndices ($dir, 1);
+    } else {
+        &ScanIndices ($dir, 0);
+    }
+    push (@VisitedPaths, $dir);
 }
 
 if (defined ($ENV{"GNOME2_PATH"})) {
@@ -84,18 +98,41 @@ if (defined ($ENV{"GNOME2_PATH"})) {
         $dir = $dir . "/share/gtk-doc/html";
 	if (-d $dir && $dir ne $HTML_DIR) {
 #	    print "Scanning GNOME2_PATH directory: $dir\n";
-	    &ScanIndices ($dir, 1);
+	    if ($dir !~ m%^\Q$path_prefix\E/%) {
+                &ScanIndices ($dir, 1);
+            } else {
+                &ScanIndices ($dir, 0);
+            }
+            push (@VisitedPaths, $dir);
 	}
+        # ubuntu started to compress this as index.sgml.gz :/
+        # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
     }
 }
 
 #print "Scanning HTML_DIR directory: $HTML_DIR\n";
 &ScanIndices ($HTML_DIR, 0);
+push (@VisitedPaths, $HTML_DIR);
+
+# check all extra dirs, but skip already scanned dirs ord subdirs of those
 foreach my $dir (@EXTRA_DIRS) {
+    my $vdir;
+    my $skip = 0;
+
+    foreach $vdir (@VisitedPaths) {
+        if ($dir eq $vdir || $dir =~ m%^\Q$vdir\E/%) {
+#            print "Skipping EXTRA_DIR directory: $dir\n";
+            $skip=1;
+        }
+    }
+    next if $skip;
 #    print "Scanning EXTRA_DIR directory: $dir\n";
-    # If the --extra-dir option is an absolute directory, we use absolute
-    # directories for the links. Support Unix '/' or Win32 'C:\'.
-    if ($dir =~ m%^(/|[A-Z]:\\)%) {
+    push (@VisitedPaths, $dir);
+
+    # If the --extra-dir option is not relative and is not sharing the same
+    # prefix as the target directory of the docs, we need to use absolute
+    # directories for the links
+    if ($dir !~m/^\.\./ &&  $dir !~ m%\Q$path_prefix\E/%) {
         &ScanIndices ($dir, 1);
     } else {
         &ScanIndices ($dir, 0);
@@ -106,6 +143,7 @@ foreach my $dir (@EXTRA_DIRS) {
 
 sub ScanIndices {
     my ($scan_dir, $use_absolute_links) = @_;
+
 #    print "Scanning source directory: $scan_dir absolute: $use_absolute_links\n";
 
     # This array holds any subdirectories found.
@@ -121,6 +159,8 @@ sub ScanIndices {
 	} elsif ($file eq "index.sgml") {
 	    &ScanIndex ("$scan_dir/$file", $use_absolute_links);
 	}
+        # ubuntu started to compress this as index.sgml.gz :/
+        # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
     }
     closedir (HTMLDIR);
 
@@ -203,7 +243,9 @@ sub MakeXRef {
     my ($id, $text) = @_;
 
     my $href = $Links{$id};
+
     if ($href) {
+#        print "  Fixing link: $id, $href, $text\n";
         return "<a\nhref=\"$href\"\n>$text</a>";
     } else {
 	return $text;
