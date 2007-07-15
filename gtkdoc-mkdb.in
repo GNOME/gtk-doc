@@ -2833,6 +2833,7 @@ sub ScanSourceFile {
 		$in_since = 0;
 		$in_deprecated = 0;
 		$description = "";
+		$return_start = "";
 		$return_desc = "";
 		$since_desc = "";
 		$stability_desc = "";
