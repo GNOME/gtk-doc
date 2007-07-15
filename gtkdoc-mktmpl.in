@@ -396,9 +396,26 @@ EOF
 	    # Try to match a standard parameter (keep in sync with gtkdoc-mkdb)
 	    #                                $1                                                                              $2                         $3                                                       $4       $5
 	    } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned|signed|long|short|volatile|const)\s+)*((?:struct|enum)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*?\s*(?:const|restrict)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
-		if (defined ($4)) {
-		    $name = $4;
-		} else {
+ 		my $pre		= defined($1) ? $1 : "";
+ 		my $type	= $2;
+ 		my $ptr		= defined($3) ? $3 : "";
+ 		my $name	= defined($4) ? $4 : "";
+
+ 		$pre  =~ s/\s+/ /g;
+ 		$type =~ s/\s+/ /g;
+ 		$ptr  =~ s/\s+/ /g;
+ 		$ptr  =~ s/\s+$//;
+ 		if ($ptr && $ptr !~ m/\*$/) { $ptr .= " "; }
+
+ 		if (($name eq "") && $pre =~ m/^(un)?(signed)\s?/ ) {
+ 		    $name = $type;
+ 		    $type = "$1$2";
+ 		    $pre = "";
+ 		}
+
+ 		#print "$symbol: '$pre' '$type' '$ptr' '$name' \n";
+
+ 		if ($name eq "") {
 		    $name = "Param" . ($param_num + 1);
 		}
 		$output .= &OutputParam ($symbol, $name, $template_exists, 1,

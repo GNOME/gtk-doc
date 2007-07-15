@@ -1313,10 +1313,17 @@ sub OutputFunction {
 	    $ptr  =~ s/\s+/ /g;
 	    $ptr  =~ s/\s+$//;
 	    if ($ptr && $ptr !~ m/\*$/) { $ptr .= " "; }
+
+            if (($name eq "") && $pre =~ m/^(un)?(signed)\s?/ ) {
+                $name = $type;
+                $type = "$1$2";
+                $pre = "";
+            }
+
 	    my $xref = &MakeXRef ($type);
 	    my $label	= "$pre$xref $ptr$name$array";
 
-#	    print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
+	    #print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
 
 	    if ($param_num == 0) {
 		$synop .= "$label";
@@ -1347,7 +1354,7 @@ sub OutputFunction {
 	    my $xref = &MakeXRef ($type);
 	    my $label = "$mod1$xref$ptr1$mod2 ($func_ptr$name) ($func_params)";
 
-#	    print "Type: $mod1$type$ptr1$mod2($func_ptr$name)($func_params)\n";
+	    #print "Type: $mod1$type$ptr1$mod2($func_ptr$name)($func_params)\n";
 	    if ($param_num == 0) {
 		$synop .= "$label";
 		$desc  .= "$label";
