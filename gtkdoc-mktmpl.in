@@ -393,8 +393,9 @@ EOF
 		$output .= &OutputParam ($symbol, "Varargs",
 					 $template_exists, 1, "");
 
-		# Try to match a standard parameter.
-	    } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned|signed|long|short|volatile|const)\s+)*((?:struct|enum)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*\s*(?:const|restrict)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	    # Try to match a standard parameter (keep in sync with gtkdoc-mkdb)
+	    #                                $1                                                                              $2                         $3                                                       $4       $5
+	    } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned|signed|long|short|volatile|const)\s+)*((?:struct|enum)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*?\s*(?:const|restrict)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 		if (defined ($4)) {
 		    $name = $4;
 		} else {
@@ -403,7 +404,8 @@ EOF
 		$output .= &OutputParam ($symbol, $name, $template_exists, 1,
 					 "");
 
-		# Try to match parameters which are functions.
+	    # Try to match parameters which are functions (keep in sync with gtkdoc-mkdb)
+	    #                            $1                                       $2          $3      $4                      $5                    $7             $8
 	    } elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
 	        $name = $6;
 		$output .= &OutputParam ($symbol, $name, $template_exists, 1,
@@ -432,7 +434,7 @@ EOF
 	if ($declaration =~ m/^\s*#\s*define\s+\w+\(([^\)]*)\)/) {
             my ($params) = $1;
 	    my ($param);
-            
+
             $params =~ s/\\\n//g;
 	    foreach $param (split (/,/, $params)) {
 		$param =~ s/^\s+//;
@@ -720,9 +722,9 @@ EOF
 			$output .= &OutputParam ($symbol, $name,
 						 $template_exists, 1, "");
 		    }
-		}	
+		}
 	    }
-	    
+
 	    if ($SignalReturns[$i] ne "void") {
 		$output .= &OutputParam ($symbol, "Returns", $template_exists,
 					 1, "");
@@ -836,7 +838,7 @@ EOF
 # Function    : ReadDeclarationsFile
 # Description : This reads in a file containing the function/macro/enum etc.
 #		declarations.
-#		
+#
 #		Note that in some cases there are several declarations with
 #		the same name, e.g. for conditional macros. In this case we
 #		set a flag in the %DeclarationConditional hash so the
@@ -849,7 +851,7 @@ EOF
 #		_name name;' in which case the declaration may be empty.
 #		The structure may have been found later in the header, so
 #		that overrides the empty declaration.
-#		
+#
 # Arguments   : $file - the declarations file to read
 #		$override - if declarations in this file should override
 #			any current declaration.
@@ -1032,7 +1034,7 @@ sub ReadTemplateFile {
 #    print "Reading $docsfile\n";
     if (! -f $docsfile) {
 	print "File doesn't exist: $docsfile\n";
-	return; 
+	return;
     }
 
     my $CurrentType = "";	# Type of symbol being read.
@@ -1060,7 +1062,7 @@ sub ReadTemplateFile {
 #		print "Found symbol: $symbol\n";
 	    }
 
-	    # Canonicalize signal and argument names to have -, not _ 
+	    # Canonicalize signal and argument names to have -, not _
 	    if ($type eq "ARG" || $type eq "SIGNAL") {
               $symbol =~ s/_/-/g;
             }
@@ -1153,11 +1155,11 @@ sub ReadTemplateFile {
 #		It places them in the @Objects array, and places their level
 #		in the widget hierarchy in the @ObjectLevels array, at the
 #		same index. GtkObject, the root object, has a level of 1.
-#   
+#
 #               FIXME: the version in gtkdoc-mkdb also generates tree_index.sgml
 #               as it goes along, this should be split out into a separate
 #               function.
-# 
+#
 # Arguments   : none
 #############################################################################
 

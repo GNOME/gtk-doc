@@ -331,7 +331,7 @@ EOF
 
 sub OutputSGML {
     my ($file) = @_;
-    
+
 #    print "Reading: $file\n";
     open (INPUT, $file)
 	|| die "Can't open $file";
@@ -653,7 +653,7 @@ EOF
 	    $changed = 1;
 	}
     }
-    
+
     &OutputBook ($book_top, $book_bottom);
 
     return $changed;
@@ -673,7 +673,7 @@ sub ReadKnownSymbols {
     my ($file) = @_;
 
     my $subsection = "";
- 
+
 #    print "Reading: $file\n";
     open (INPUT, $file)
 	|| die "Can't open $file";
@@ -1019,7 +1019,7 @@ sub OutputStruct {
     my $params = $SymbolParams{$symbol};
 
     # If no parameters are filled in, we don't generate the description
-    # table, for backwards compatibility 
+    # table, for backwards compatibility
 
     my $found = 0;
     if (defined $params) {
@@ -1030,10 +1030,10 @@ sub OutputStruct {
 	    }
 	}
     }
-    
+
     if ($found) {
 	my %field_descrs = @$params;
-	
+
 	    $desc .= <<EOF;
 <variablelist role="struct">
 EOF
@@ -1050,7 +1050,7 @@ EOF
 	    }
             $desc .= "</varlistentry>\n";
 	}
-    
+
 	$desc .= "</variablelist>";
     }
     $desc .= OutputSymbolTraits ($symbol);
@@ -1090,7 +1090,7 @@ sub OutputEnum {
     my $params = $SymbolParams{$symbol};
 
     # If no parameters are filled in, we don't generate the description
-    # table, for backwards compatibility 
+    # table, for backwards compatibility
 
     my $found = 0;
     if (defined $params) {
@@ -1101,16 +1101,16 @@ sub OutputEnum {
 	    }
 	}
     }
-    
+
     if ($found) {
 	my %member_descrs = @$params;
-	
+
 	    $desc .= <<EOF;
 <variablelist role="enum">
 EOF
 	for my $member_name (@members) {
 	    my $member_descr = $member_descrs{$member_name};
-	    
+
 	    $id = &CreateValidSGMLID ($member_name);
 	    $condition = &MakeConditionDescription ($member_name);
 	    $desc .= "<varlistentry>\n<term><anchor id=\"$id\" role=\"constant\"${condition}${empty_element_end}<literal>$member_name</literal></term>\n";
@@ -1121,7 +1121,7 @@ EOF
 	    }
             $desc .= "</varlistentry>\n";
 	}
-    
+
 	$desc .= "</variablelist>";
     }
 
@@ -1299,7 +1299,9 @@ sub OutputFunction {
 	    }
 
 	# allow alphanumerics, '_', '[' & ']' in param names
-	} elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned|signed|long|short|volatile|const)\s+)*((?:struct|enum)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*\s*(?:const|restrict)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	# Try to match a standard parameter (keep in sync with gtkdoc-mktmpl)
+	#                                $1                                                                              $2                         $3                                                       $4       $5
+	} elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned|signed|long|short|volatile|const)\s+)*((?:struct|enum)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*?\s*(?:const|restrict)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 	    my $pre	= defined($1) ? $1 : "";
 	    my $type	= $2;
 	    my $ptr	= defined($3) ? $3 : "";
@@ -1328,8 +1330,9 @@ sub OutputFunction {
 		    . " $label";
 	    }
 
-	    # Try to match parameters which are functions.
-	} elsif ($declaration =~ s/^(const\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**(?:\s*restrict)?)\s*(const\s+)?\((\s*\*)+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+	# Try to match parameters which are functions (keep in sync with gtkdoc-mktmpl)
+	#                            $1                                       $2          $3      $4                      $5                    $7             $8
+	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
 	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
@@ -1659,12 +1662,12 @@ sub OutputExtraFile {
     my $basename;
 
     ($basename = $file) =~ s!^.*/!!;
-    
+
     my $old_sgml_file = "$SGML_OUTPUT_DIR/$basename";
     my $new_sgml_file = "$SGML_OUTPUT_DIR/$basename.new";
 
     my $contents;
-    
+
     open(EXTRA_FILE, "<$file") || die "Can't open $file";
 
     {
@@ -1677,7 +1680,7 @@ sub OutputExtraFile {
 
     print OUTPUT &ExpandAbbreviations ("$basename file", $contents);
     close (OUTPUT);
-    
+
     return &UpdateFileIfChanged ($old_sgml_file, $new_sgml_file, 0);
 }
 
@@ -1725,7 +1728,7 @@ sub OutputBook {
       if (lc($OUTPUT_FORMAT) eq "xml") {
 	  print OUTPUT <<EOF;
 <?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
 EOF
@@ -2159,26 +2162,26 @@ sub MakeConditionDescription {
 		$desc .= "deprecated";
 	}
     }
-    
+
     if (exists $Since{$symbol}) {
 	if ($desc ne "") {
             $desc .= "|";
         }
-    
+
 	if ($Since{$symbol} =~ /^\s*(.*?)\s*$/) {
 		$desc .= "since:$1";
         } else {
 		$desc .= "since";
 	}
     }
-    
+
     if (exists $StabilityLevel{$symbol}) {
 	if ($desc ne "") {
             $desc .= "|";
         }
         $desc .= "stability:".$StabilityLevel{$symbol};
     }
-    
+
     if ($desc ne "") {
         $desc=" condition=\"".$desc."\"";
         #print "condition for '$symbol' = '$desc'\n";
@@ -2189,7 +2192,7 @@ sub MakeConditionDescription {
 #############################################################################
 # Function    : GetHierarchy
 # Description : Returns the DocBook output describing the ancestors and
-#               immediate children of a GObject subclass. It uses the 
+#               immediate children of a GObject subclass. It uses the
 #               global @Objects and @ObjectLevels arrays to walk the tree.
 # Arguments   : $object - the GtkObject subclass.
 #############################################################################
@@ -2268,7 +2271,7 @@ sub GetHierarchy {
 
 #############################################################################
 # Function    : GetInterfaces
-# Description : Returns the DocBook output describing the interfaces 
+# Description : Returns the DocBook output describing the interfaces
 #               implemented by a class. It uses the global %Interfaces hash.
 # Arguments   : $object - the GtkObject subclass.
 #############################################################################
@@ -2308,7 +2311,7 @@ EOF
 
 #############################################################################
 # Function    : GetImplementations
-# Description : Returns the DocBook output describing the implementations 
+# Description : Returns the DocBook output describing the implementations
 #               of an interface. It uses the global %Interfaces hash.
 # Arguments   : $object - the GtkObject subclass.
 #############################################################################
@@ -2518,8 +2521,8 @@ sub GetSignals {
 
 	    my $flags = $SignalFlags[$i];
 	    my $flags_string = "";
-            
-            if (defined ($flags)) {  
+
+            if (defined ($flags)) {
               if ($flags =~ m/f/) {
                 $flags_string = "Run First";
               }
@@ -2728,7 +2731,7 @@ sub GetArgs {
 # Function    : ReadSourceDocumentation
 # Description : This reads in the documentation embedded in comment blocks
 #		in the source code (for Gnome).
-#		
+#
 #		Parameter descriptions override any in the template files.
 #		Function descriptions are placed before any description from
 #		the template files.
@@ -2784,7 +2787,7 @@ sub ReadSourceDocumentation {
 #		blocks. Later &MergeSourceDocumentation is used to merge any
 #		documentation found with the documentation already read in
 #		from the template files.
-#		
+#
 # Arguments   : $file - the file to scan.
 #############################################################################
 
@@ -3147,13 +3150,13 @@ sub OutputMissingDocumentation {
                   $n_documented++;
               } else {
                   $symbol =~ m/^.*\/(.*)$/;
-                  $buffer_descriptions .= $1 . "\n";                  
+                  $buffer_descriptions .= $1 . "\n";
               }
           }
      }
 
      $buffer .= "\n" . $buffer_deprecated . "\n" . $buffer_descriptions;
-     
+
      if ($total == 0) {
 	  $percent = 100;
      } else {
@@ -3366,7 +3369,7 @@ EOF
             my $tmpl_params = $SymbolParams{$symbol};
             if (defined ($tmpl_params)) {
                 my $type = $DeclarationTypes {$symbol};
-    
+
                 my $item = "Parameter";
                 if (defined ($type)) {
                     if ($type eq 'STRUCT') {
@@ -3379,7 +3382,7 @@ EOF
                 } else {
                     $type="SIGNAL";
                 }
-    
+
                 my $j;
                 for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
                     # Output a warning if the parameter is empty and
@@ -3457,7 +3460,7 @@ sub ConvertBlankLinesCallback {
 # Function    : ReadDeclarationsFile
 # Description : This reads in a file containing the function/macro/enum etc.
 #		declarations.
-#		
+#
 #		Note that in some cases there are several declarations with
 #		the same name, e.g. for conditional macros. In this case we
 #		set a flag in the %DeclarationConditional hash so the
@@ -3470,7 +3473,7 @@ sub ConvertBlankLinesCallback {
 #		_name name;' in which case the declaration may be empty.
 #		The structure may have been found later in the header, so
 #		that overrides the empty declaration.
-#		
+#
 # Arguments   : $file - the declarations file to read
 #		$override - if declarations in this file should override
 #			any current declaration.
@@ -3673,7 +3676,7 @@ sub ReadTemplateFile {
 #    print "Reading $template\n";
     if (! -f $template) {
 	print "File doesn't exist: $template\n";
-	return; 
+	return;
     }
 
     my $current_type = "";	# Type of symbol being read.
@@ -3969,7 +3972,7 @@ sub ReadPrerequisites {
 # Function    : ReadArgsFile
 # Description : This reads in an existing file which contains information on
 #		all GTK args. It creates the arrays @ArgObjects, @ArgNames,
-#		@ArgTypes, @ArgFlags, @ArgNicks and @ArgBlurbs containing info 
+#		@ArgTypes, @ArgFlags, @ArgNicks and @ArgBlurbs containing info
 #               on the args.
 # Arguments   : $file - the file containing the arg information.
 #############################################################################
