@@ -57,7 +57,7 @@ if ($PRINT_HELP) {
     print "\n--module=MODULE_NAME    Name of the doc module being parsed";
     print "\n--module-dir=MODULE_DIR The directory which contains the generated HTML";
     print "\n--html-dir=HTML_DIR     The directory where gtk-doc generated documentation is installed";
-    print "\n--extra-dir=EXTRA_DIR   Directories to scan for indices in addition to HTML_DIR";
+    print "\n--extra-dir=EXTRA_DIR   Directories to recursively scan for indices (index.sgml) in addition to HTML_DIR";
     print "\n                        May be used more than once for multiple directories";
     print "\n--version               Print the version of this program";
     print "\n--help                  Print this help\n";
