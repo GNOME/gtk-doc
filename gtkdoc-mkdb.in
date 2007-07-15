@@ -2812,7 +2812,8 @@ sub ScanSourceFile {
     my $in_comment_block = 0;
     my $symbol;
     my ($in_description, $in_return, $in_since, $in_stability, $in_deprecated);
-    my ($description, $return_desc, $return_start, $since_desc, $stability_desc, $deprecated_desc);
+    my ($description, $return_desc, $return_start, $return_style);
+    my ($since_desc, $stability_desc, $deprecated_desc);
     my $current_param;
     my $ignore_returns;
     my @params;
@@ -2835,6 +2836,7 @@ sub ScanSourceFile {
 		$description = "";
 		$return_start = "";
 		$return_desc = "";
+		$return_style = "";
 		$since_desc = "";
 		$stability_desc = "";
 		$in_stability = 0;
@@ -2858,6 +2860,12 @@ EOF
 		if ($return_desc) {
 		    push (@params, "Returns");
 		    push (@params, $return_desc);
+		    if ($return_style eq 'broken') {
+			print <<EOF;
+WARNING: Free-form return value description in $symbol.
+         Use `Returns:' to avoid ambiguities.
+EOF
+		    }
 		}
                 # Convert special SGML characters
                 $description = &ConvertSGMLChars ($symbol, $description);
@@ -2943,9 +2951,20 @@ EOF
 	if ($in_return) {
 	    # If we find another valid returns line, we assume that the first
 	    # one was really part of the description.
-	    if (m%^\s*(returns:|return\s+value:|returns\s*)%i) {
+	    if (m%^\s*(returns:|return\s+value:)%i) {
 		$description .= $return_start . $return_desc;
 		$return_start = $1;
+		if ($return_style eq 'sane') {
+		    print <<EOF
+WARNING: Multiple Returns for $symbol
+EOF
+		}
+		$return_style = 'sane';
+		$return_desc = $';
+	    } elsif ($return_style ne 'sane' and m%^\s*(returns\b\s*)%i) {
+		$description .= $return_start . $return_desc;
+		$return_start = $1;
+		$return_style = 'broken';
 		$return_desc = $';
 	    } elsif (m%^\s*since:%i) {
 		$since_desc = $';
@@ -2966,9 +2985,10 @@ EOF
 	}
 
 	if ($in_since) {
-	    if (m%^\s*(returns:|return\s+value:|returns\s*)%i) {
+	    if (m%^\s*(returns:|return\s+value:|returns\b\s*)%i) {
 		$description .= $return_start . $return_desc;
 		$return_start = $1;
+		$return_style = substr($1, -1) eq ':' ? 'sane' : 'broken';
 		$return_desc = $';
 		$in_return = 1;
 		$in_since = 0;
@@ -2987,9 +3007,10 @@ EOF
 	}
 
 	if ($in_stability) {
-	    if (m%^\s*(returns:|return\s+value:|returns\s*)%i) {
+	    if (m%^\s*(returns:|return\s+value:|returns\b\s*)%i) {
 		$description .= $return_start . $return_desc;
 		$return_start = $1;
+		$return_style = substr($1, -1) eq ':' ? 'sane' : 'broken';
 		$return_desc = $';
 		$in_return = 1;
 		$in_stability = 0;
@@ -3008,9 +3029,10 @@ EOF
 	}
 
 	if ($in_deprecated) {
-	    if (m%^\s*(returns:|return\s+value:|returns\s*)%i) {
+	    if (m%^\s*(returns:|return\s+value:|returns\b\s*)%i) {
 		$description .= $return_start . $return_desc;
 		$return_start = $1;
+		$return_style = substr($1, -1) eq ':' ? 'sane' : 'broken';
 		$return_desc = $';
 		$in_return = 1;
 		$in_deprecated = 0;
@@ -3034,8 +3056,23 @@ EOF
 	    # Get rid of 'Description:'
 	    s%^\s*Description:%%;
 
-	    if (!$ignore_returns && m%^\s*(returns:|return\s+value:|returns\s*)%i) {
+	    if (!$ignore_returns && m%^\s*(returns:|return\s+value:)%i) {
 		$return_start = $1;
+		if ($return_style eq 'sane') {
+		    print <<EOF
+WARNING: Multiple Returns for $symbol
+EOF
+		}
+		$return_style = 'sane';
+		$return_desc = $';
+		$in_return = 1;
+		next;
+	    }
+	    elsif (!$ignore_returns
+		   && $return_style ne 'sane'
+		   && m%^\s*(returns\b\s*)%i) {
+		$return_start = $1;
+		$return_style = 'broken';
 		$return_desc = $';
 		$in_return = 1;
 		next;
