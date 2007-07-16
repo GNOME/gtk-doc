@@ -2841,7 +2841,6 @@ sub ScanSourceFile {
 		$in_since = 0;
 		$in_deprecated = 0;
 		$description = "";
-		$return_start = "";
 		$return_desc = "";
 		$return_style = "";
 		$since_desc = "";
@@ -2993,7 +2992,6 @@ EOF
 
 	if ($in_since) {
 	    if (m%^\s*(returns:|return\s+value:|returns\b\s*)%i) {
-		$description .= $return_start . $return_desc;
 		$return_start = $1;
 		$return_style = substr($1, -1) eq ':' ? 'sane' : 'broken';
 		$return_desc = $';
@@ -3015,7 +3013,6 @@ EOF
 
 	if ($in_stability) {
 	    if (m%^\s*(returns:|return\s+value:|returns\b\s*)%i) {
-		$description .= $return_start . $return_desc;
 		$return_start = $1;
 		$return_style = substr($1, -1) eq ':' ? 'sane' : 'broken';
 		$return_desc = $';
@@ -3037,7 +3034,6 @@ EOF
 
 	if ($in_deprecated) {
 	    if (m%^\s*(returns:|return\s+value:|returns\b\s*)%i) {
-		$description .= $return_start . $return_desc;
 		$return_start = $1;
 		$return_style = substr($1, -1) eq ':' ? 'sane' : 'broken';
 		$return_desc = $';
