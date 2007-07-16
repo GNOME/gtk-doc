@@ -1,3 +1,11 @@
+2007-07-16  Stefan Kost  <ensonic@users.sf.net>
+
+	Patch by: Petteri RÃ¤ty <betelgeuse@gentoo.org>
+
+	* gtk-doc.m4:
+	Make gtk-doc.m4 fail when needed gtk-doc is not installed and notify
+	user. Fixes #323938 and #450338.
+
 2007-07-15  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in:
@@ -10,7 +18,7 @@
 
 	* gtkdoc-mkdb.in:
 	Improve handling of legacy "return" statement doc parsing. Warn about
-	those. 
+	those.
 
 2007-07-15  Stefan Kost  <ensonic@users.sf.net>
 
@@ -34,13 +42,13 @@
 	Improve detection of absolute/relatives paths. Skip duplicate paths.
 	Fixes #453717.
 
-2007-06-14  Loïc Minier  <lool@dooz.org>
+2007-06-14  Loï¿½c Minier  <lool@dooz.org>
 
 	* gtk-doc.make:
 	Cleanup $(DOC_MODULE)-undocumented.txt files in
 	maintainer-clean-local.  Fixes #415388.
 
-2007-06-14  Loïc Minier  <lool@dooz.org>
+2007-06-14  Loï¿½c Minier  <lool@dooz.org>
 
 	* gtk-doc.m4:
 	Fix warnings in m4 macros when running "autoreconf -fi -Wall";
@@ -112,7 +120,7 @@
 
 2007-01-21  Damon Chaplin  <damon@gnome.org>
 
-	* gtkdoc-mktmpl.in (ReadTemplateFile): 
+	* gtkdoc-mktmpl.in (ReadTemplateFile):
 	* gtkdoc-mkdb.in (ReadTemplateFile): improved param regexp to handle
 	weird macro vararg names like "format...". #398971.
 
@@ -151,7 +159,7 @@
 	 f) Added special case for "#include <xxxx>" in <programlisting> so the
 	    "<" and ">" get replaced by entities.
 
-	* gtkdoc-mktmpl.in (ReadTemplateFile): 
+	* gtkdoc-mktmpl.in (ReadTemplateFile):
 	* gtkdoc-mkdb.in (ReadTemplateFile): fixed param regexp so it handles
 	"@...:" for varargs again. It also cleans up messed up template files
 	luckily.
@@ -170,13 +178,13 @@
 
 2007-01-03  Damon Chaplin  <damon@gnome.org>
 
-	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mktmpl.in (OutputDeclaration):
 	* gtkdoc-mkdb.in (OutputFunction): fix parsing of "char * const"
 	arguments, with an extra "\s*". #387681
 
 2007-01-03  Damon Chaplin  <damon@gnome.org>
 
-	* omf.make: 
+	* omf.make:
 	* xmldocs.make: updated to new versions from gnome-common. #363622
 	Also reverted the changes made for #316508 since they may cause
 	problems. We'll let the scrollkeeper/gnome-common/autoconf people
@@ -208,7 +216,7 @@
 2006-10-15  Damon Chaplin  <damon@gnome.org>
 
 	Bug #338517: Automatically creating/updating .types file:
-	
+
 	* gtkdoc-scan.in: added a '--rebuild-types' option which will
 	automatically update the .types file using all _get_type() functions
 	found in the headers. (It will also do this if no .types file is found,
@@ -259,7 +267,7 @@
 
 2006-09-09  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtkdoc-scangobj.in (get_type_name): Don't set is_pointer 
+	* gtkdoc-scangobj.in (get_type_name): Don't set is_pointer
 	to TRUE for enum and flags types.  (#354880, Yevgen Muntyan)
 
 2006-07-29  Damon Chaplin  <damon@gnome.org>
@@ -287,7 +295,7 @@
 
 2006-06-09  Damon Chaplin  <damon@gnome.org>
 
-	* gtkdoc-mkdb.in: 
+	* gtkdoc-mkdb.in:
 	* gtk-doc.xsl: use the 'role' attribute rather than the 'id' attribute
 	to identify the different sections for the navigation bar, since 'id'
 	must be unique throughout the entire document. Also fixed a few minor
@@ -301,9 +309,9 @@
 
 2006-05-22  Damon Chaplin  <damon@gnome.org>
 
-	* configure.in: 
-	* Makefile.am: 
-	* help/Makefile.am: 
+	* configure.in:
+	* Makefile.am:
+	* help/Makefile.am:
 	* help/manual/Makefile.am: use a separate Makefile.am for each
 	subdirectory rather than using "SUBDIRS=help/manual/C".
 
@@ -421,7 +429,7 @@
 
 2006-03-19  Damon Chaplin  <damon@gnome.org>
 
-	* gtkdoc-mkdb.in (OutputEnum, ExpandAbbreviations, symbolify): 
+	* gtkdoc-mkdb.in (OutputEnum, ExpandAbbreviations, symbolify):
 	allow use of '#Object::signal' and '#Object:property' to link to
 	signals and properties, and add links to enum constant values.
 	(#332483, Stefan Kost)
@@ -485,7 +493,7 @@
 
 2005-12-05  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mktmpl.in (OutputDeclaration):
 	* gtkdoc-mkdb.in (OutputFunction): Allow parameters to be declared
 	volatile (this happens in GLib nowadays)
 
@@ -543,8 +551,8 @@
 
 2005-09-15  Damon Chaplin  <damon@gnome.org>
 
-	* gtkdoc-scan.in (ScanHeader): 
-	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-scan.in (ScanHeader):
+	* gtkdoc-mktmpl.in (OutputDeclaration):
 	* gtkdoc-mkdb.in (OutputFunction): patch from dodji seketeli to handle
 	functions returning explicit enums. (#303337)
 
@@ -558,27 +566,27 @@
 	macro archive. (#313876)
 
 2005-09-15  Damon Chaplin  <damon@gnome.org>
-	
+
 	* gtkdoc-scangobj.in: Patch from Stepan Kasal to avoid some gcc
 	warnings. (#312985)
-	
-	* gtkdoc-scanobj.in: 
+
+	* gtkdoc-scanobj.in:
 	* gtkdoc-scangobj.in: Use brackets around open() arguments to avoid
 	precedence problems. (#314838)
 
-	* gtkdoc-scanobj.in: 
+	* gtkdoc-scanobj.in:
 	* gtkdoc-scangobj.in: Output more messages about compilation, linking
 	and running of scanner, to try to help track down any problems.
 	Also use "sh -c" to run the scanner (#167688)
 
-	* gtkdoc-scanobj.in: 
+	* gtkdoc-scanobj.in:
 	* gtkdoc-scangobj.in: patch from Stefan Kost to improve error messages,
 	though I changed it slightly so it doesn't output errno.
 
 2005-09-09  Damon Chaplin  <damon@gnome.org>
 
-	* gtkdoc-mkdb.in: 
-	* style.css: 
+	* gtkdoc-mkdb.in:
+	* style.css:
 	* gtk-doc.xsl: Use a fixed navigation bar at the top of the page.
 	Patch from Stefan Kost with minor changes by me. (#313569)
 
@@ -644,7 +652,7 @@ Tue Aug  9 12:01:27 2005  tjlocal  <timj@imendio.com>
 	* gtk-doc.make examples/Makefile.am: Add expand_content_files
 	variable.
 
-	* gtkdoc-mktmpl.in (OutputTemplateFile): Add an 
+	* gtkdoc-mktmpl.in (OutputTemplateFile): Add an
 	--only-section-tmpl flag so that projects that keep everything
 	but section descriptions inline can avoid cvs conflicts.
 
@@ -696,12 +704,12 @@ Tue Aug  9 12:01:27 2005  tjlocal  <timj@imendio.com>
 	from Stefan Kost to support section documentation within the source
 	code (long description, short description, see also and title).
 
-	* gtkdoc-mkdb.in: 
+	* gtkdoc-mkdb.in:
 	* gtkdoc-mktmpl.in: patch from Brian Cameron to support stability
 	levels.
 
-	* gtkdoc-mkdb.in (OutputFunction): 
-	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mkdb.in (OutputFunction):
+	* gtkdoc-mktmpl.in (OutputDeclaration):
 	* gtkdoc-common.pl.in (ParseStructDeclaration): patch from Roger Leigh
 	to add support for the "restrict" keyword.
 
@@ -744,7 +752,7 @@ Tue Aug  9 12:01:27 2005  tjlocal  <timj@imendio.com>
 	* gtkdoc-common.pl.in (ParseStructDeclaration): return an empty array
 	for forward struct declarations. Part of #156318.
 
-	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mktmpl.in:
 	* gtkdoc-mkdb.in: updated a few of the warnings to make them a bit
 	easier to understand.
 
@@ -780,8 +788,8 @@ Tue Aug  9 12:01:27 2005  tjlocal  <timj@imendio.com>
 
 2004-10-28  Damon Chaplin  <damon@gnome.org>
 
-	* gtkdoc-mktmpl.in (ReadDeclarationsFile): 
-	* gtkdoc-mkdb.in (ReadDeclarationsFile): 
+	* gtkdoc-mktmpl.in (ReadDeclarationsFile):
+	* gtkdoc-mkdb.in (ReadDeclarationsFile):
 	* gtkdoc-scan.in (ScanHeader): handle opaque/forward struct
 	declarations. #156318.
 
@@ -816,8 +824,8 @@ Tue Aug  9 12:01:27 2005  tjlocal  <timj@imendio.com>
 	* gtkdoc-common.pl.in (ParseStructDeclaration): support function
 	pointers that return "foo const *" #141870.
 
-	* gtkdoc-scan.in (ScanHeader): 
-	* gtkdoc-mkdb.in (OutputFunction): 
+	* gtkdoc-scan.in (ScanHeader):
+	* gtkdoc-mkdb.in (OutputFunction):
 	* gtkdoc-mktmpl.in (OutputDeclaration): handle functions with const
 	or struct return types. #141870 and #148507.
 
@@ -835,17 +843,17 @@ Tue Aug  9 12:01:27 2005  tjlocal  <timj@imendio.com>
 	declarations in the output.
 	Also take an extra arg specifying whether to include parameters in
 	the function pointer fields.
-	
+
 	* gtkdoc-scan.in (ScanHeader): Deal with array types in typedefs.
 	(Eg, "typedef unsigned char MD5Digest[16];") From Dan Winship.
 	Last bit of #151219.
-	
+
 2004-10-14  Damon Chaplin  <damon@gnome.org>
 
 	* gtkdoc-mkdb.in (CreateValidSGMLID): use ":CAPS" rather than
 	"-CAPS" to distinguish all-caps identifiers, to avoid clashing with
 	identifiers ending in _caps! Bug #113120.
- 
+
 	* gtkdoc-mkdb.in (MergeSourceDocumentation): if it looks like a
 	parameter has been described, but not in the right place, output
 	a better error message. Bug #141871.
@@ -870,21 +878,21 @@ Tue Aug  9 12:01:27 2005  tjlocal  <timj@imendio.com>
 	function pointers, only return the function name, as otherwise the
 	output gets really messy. Fixes #66618.
 
-	* gtkdoc-mktmpl.in: 
-	* gtkdoc-mkdb.in: 
-	* gtkdoc-scan.in: 
-	* gtkdoc-scanobj.in: 
+	* gtkdoc-mktmpl.in:
+	* gtkdoc-mkdb.in:
+	* gtkdoc-scan.in:
+	* gtkdoc-scanobj.in:
 	* gtkdoc-scangobj.in: use '@PACKAGE_DATA_DIR@' instead of
 	"@PACKAGE_DATA_DIR@" so that it isn't interpolated. It failed when
 	$prefix was /software/@sys/usr. Fixes #113456.
 
 2004-10-13  Damon Chaplin  <damon@gnome.org>
 
-	* gtkdoc-scanobj.in: 
+	* gtkdoc-scanobj.in:
 	* gtkdoc-scangobj.in: patch from Olexiy Avramchenko to add 3 new
 	GdkEvent subtypes.
 
-	* gtkdoc-scanobj.in: 
+	* gtkdoc-scanobj.in:
 	* gtkdoc-scangobj.in: patch from Benjamin Otte to get rid of
 	-Wsign-compare warnings. Bug #137013.
 
@@ -924,8 +932,8 @@ Fri Sep 17 00:30:16 2004  Matthias Clasen  <maclas@gmx.de>
 
 Wed Sep  8 01:12:25 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-scan.in (ScanHeader): 
-	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-scan.in (ScanHeader):
+	* gtkdoc-mktmpl.in (OutputDeclaration):
 	* gtkdoc-mkdb.in (OutputFunction): Accept mixtures of *
 	and const in return types.
 
@@ -936,7 +944,7 @@ Wed Sep 01 05:58:08 2004  Matthias Clasen  <maclas@gmx.de>
 Tue Aug 24 02:30:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk-doc.xsl: Add support for a gallery of widget images.
-	
+
 Wed Jul 28 13:00:54 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk-doc.xsl: remove the examples from the toc.
@@ -960,12 +968,12 @@ Fri Jul 23 13:21:34 2004  Matthias Clasen  <maclas@gmx.de>
 2004-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* style.css: Add a missing '}' and align arguments to the
-	top of their descriptions.  (#145363, #145364, Mariano 
-	Suárez-Alvarez)
+	top of their descriptions.  (#145363, #145364, Mariano
+	Suï¿½rez-Alvarez)
 
 2004-05-18  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk-doc.xsl: Let the docbook stylesheets generate 
+	* gtk-doc.xsl: Let the docbook stylesheets generate
 	extra <link rel=...> elements.  (#140221, Geert Stappers)
 
 2004-05-10  Geert Stappers  <stappers@stappers.nl>
@@ -998,7 +1006,7 @@ Fri Jul 23 13:21:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (ReadKnownSymbols): New function which
 	extracts information about public and private symbols from
-	the $MODULE-sections.txt file. 
+	the $MODULE-sections.txt file.
 	(ReadObjectHierarchy): Prune the tree, based on the information
 	collected by ReadKnownSymbols.
 	(ReadInterfaces): Also filter out private interfaces here
@@ -1031,12 +1039,12 @@ Fri Jul 23 13:21:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* Makefile.am (gtkdocdata_DATA): Add style.css
 
-	* gtk-doc.xsl: Use a stylesheet instead of hardwiring 
+	* gtk-doc.xsl: Use a stylesheet instead of hardwiring
 	styles.  (#134683, Vincent Torri)
 
-	* gtkdoc-mkdb.in (GetSignals): Organize the properties 
-	descriptions to fit better with the other sections, and 
-	also display information about allowed and default values. 
+	* gtkdoc-mkdb.in (GetSignals): Organize the properties
+	descriptions to fit better with the other sections, and
+	also display information about allowed and default values.
 
 2004-04-15  Matthias Clasen  <mclasen@redhat.com>
 
@@ -1066,12 +1074,12 @@ Fri Jul 23 13:21:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 Sat Feb 14 02:14:27 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk-doc.m4: Avoid unnecessary checks if gtk-doc is 
+	* gtk-doc.m4: Avoid unnecessary checks if gtk-doc is
 	disabled.  (#134221, Julio M. Merino Vidal)
 
 Sat Feb 14 02:03:01 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk-doc.make: Don't create unneeded empty 
+	* gtk-doc.make: Don't create unneeded empty
 	directories.  (#134319, Julio M. Merino Vidal)
 
 Sat Feb 14 01:37:38 2004  Matthias Clasen  <maclas@gmx.de>
@@ -1101,26 +1109,26 @@ Thu Jan 15 23:06:10 2004  Matthias Clasen  <maclas@gmx.de>
 
 Thu Jan 15 23:05:23 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-fixxref.in: Make it work again without explicit 
+	* gtkdoc-fixxref.in: Make it work again without explicit
 	--module.
 
 Sat Dec 27 01:36:08 2003  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-scangobj.in: 
-	* gtkdoc-mktmpl.in: 
-	* gtkdoc-scan.in: 
+	* gtkdoc-scangobj.in:
+	* gtkdoc-mktmpl.in:
+	* gtkdoc-scan.in:
 	* gtkdoc-fixxref.in: Add --help.  (#126915)
 
 Sat Dec 27 00:43:42 2003  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mkdb.in (ParseEnumDeclaration): 
+	* gtkdoc-mkdb.in (ParseEnumDeclaration):
 	* gtkdoc-mktmpl.in (ParseEnumDeclaration): Support a trailing ,
-	in enum declarations. These are a GNU C extension, but also 
+	in enum declarations. These are a GNU C extension, but also
 	blessed by C99.  (#129949, Thomas Vander Stichele)
 
 Sun Nov 16 00:29:03 2003  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-scangobj.in: Don't use g_strdown(). (#127028, 
+	* gtkdoc-scangobj.in: Don't use g_strdown(). (#127028,
 	David Schleef)
 
 Sun Nov 16 00:26:05 2003  Matthias Clasen  <maclas@gmx.de>
@@ -1137,28 +1145,28 @@ Sun Nov 16 00:26:05 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk-doc.make (CLEANFILES): Remove $(MODULE)-scan.o from here
 	(clean-local): rm -rf .libs
-	
+
 Wed Oct  8 01:21:54 2003  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-scan.in (ScanHeader): Make gtkdoc-scan grok 
+	* gtkdoc-scan.in (ScanHeader): Make gtkdoc-scan grok
 	typedef struct { } foo; in addition to the more baroque
 	typedef struct _foo foo; struct _foo { };
 	(#116807, Malcolm Tredinnick)
 
 Wed Oct  8 01:21:35 2003  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mkdb.in (OutputParamDescriptions): Remove a pointless 
+	* gtkdoc-mkdb.in (OutputParamDescriptions): Remove a pointless
 	warning.
 
 2003-10-01  Matthias Clasen  <maclas@gmx.de>
 
-	Make signals and properties end up in the right template 
+	Make signals and properties end up in the right template
 	file (#116569, Owen Taylor):
 
-	* gtkdoc-mktmpl.in (OutputSignalTemplates): 
-	(OutputArgTemplates): Return a string rather than directly 
-	writing to OUTPUT. 
-	(OutputTemplateFile): Don't interpret $title as the name of 
+	* gtkdoc-mktmpl.in (OutputSignalTemplates):
+	(OutputArgTemplates): Return a string rather than directly
+	writing to OUTPUT.
+	(OutputTemplateFile): Don't interpret $title as the name of
 	the object to print signal and property templates for.
 	(UpdateTemplates): Collect signal and property templates for all
 	objects contained in the section.
@@ -1172,11 +1180,11 @@ Wed Oct  8 01:21:35 2003  Matthias Clasen  <maclas@gmx.de>
 
 2003-08-03  Matthias Clasen  <maclas@gmx.de>
 
-	* doc/gnome.txt: Add some hints regarding markup of examples. 
+	* doc/gnome.txt: Add some hints regarding markup of examples.
 
 2003-07-22  Matthias Clasen  <maclas@gmx.de>
 
-	* configure.in: 
+	* configure.in:
 	* gtk-doc.cat: Fix a problem with the previous commit.
 
 2003-07-21  Matthias Clasen  <maclas@gmx.de>
@@ -1192,7 +1200,7 @@ Wed Oct  8 01:21:35 2003  Matthias Clasen  <maclas@gmx.de>
 
 2003-07-09  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mktmpl.in (ParseStructDeclaration): 
+	* gtkdoc-mktmpl.in (ParseStructDeclaration):
 	* gtkdoc-mkdb.in (ParseStructDeclaration): Accept volatile struct members, which have just
 	made their appearance in glib.
 
@@ -1204,7 +1212,7 @@ Wed Oct  8 01:21:35 2003  Matthias Clasen  <maclas@gmx.de>
 2003-06-25  Matthias Clasen  <maclas@gmx.de>
 
 	Changes for #115528:
-	
+
 	* gtkdoc-mkdb.in (OutputSGML): Collect hierarchy, interfaces, implementations, prerequisites
 	and derived interfaces separately.
 	(OutputSGMLFile): Take two more arguments: implementations and derived interfaces.
@@ -1215,21 +1223,21 @@ Wed Oct  8 01:21:35 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (MakeXRef): Accept a second, optional parameter for the
 	text of the link.
-	(ExpandAbbreviations): Add semantic markup inside the links, so that 
+	(ExpandAbbreviations): Add semantic markup inside the links, so that
 	non-crossreferenced symbols come out properly formatted after link
 	removal.  (#61345)
 
 2003-06-15  Matthias Clasen  <maclas@gmx.de>
 
 	Support for a flat index of all symbols.  (#92861)
-	To use, put an empty <index/> element in your driver document. 
-	
+	To use, put an empty <index/> element in your driver document.
+
 	* gtkdoc-mkdb.in (MakeIndexterms): New function, emits an indexterm.
 	(OutputMacro, OutputTypedef, OutputStruct, OutputEnum,
 	OutputUnion, OutputVariable, OutputFunction): Use MakeIndexterms.
-	to emit indexterms for symbols. 
-	
-	* gtkdoc-mkdb.in (GetSignals): 
+	to emit indexterms for symbols.
+
+	* gtkdoc-mkdb.in (GetSignals):
 	(GetArgs): Emit Since: information for signals and properties.
 
 Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
@@ -1243,12 +1251,12 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 2003-06-03  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk-doc.spec.in: Add a missing Provides: and include the .pc file.  
+	* gtk-doc.spec.in: Add a missing Provides: and include the .pc file.
 	(#106568, Joe Pranevich)
 
 2003-05-27  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mkdb.in (GetSignals): 
+	* gtkdoc-mkdb.in (GetSignals):
 	(GetArgs): Add signals and properties to the statistics.
 	(OutputMissingDocumentation): Emit undocumented signals and
 	properties.  (#113645)
@@ -1256,7 +1264,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 2003-04-21  Matthias Clasen  <maclas@gmx.de>
 
 	* tools/docpercentages.pl: Fix autolinkification for undocumented
-	symbols.  
+	symbols.
 
 	* doc/style-guide.txt: Typo fix.
 
@@ -1273,8 +1281,8 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 2003-03-14  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (OutputBook): Fix the public identifier for
-	DocBook V3.0: Davenport, not DavenPort.  
-	(#108343, Mariano Suarez-Alvarez) 
+	DocBook V3.0: Davenport, not DavenPort.
+	(#108343, Mariano Suarez-Alvarez)
 
 2003-03-10  James Henstridge  <james@daa.com.au>
 
@@ -1320,7 +1328,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 2003-02-18  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mkhtml.in (declaration): Avoid the unportable grep 
+	* gtkdoc-mkhtml.in (declaration): Avoid the unportable grep
 	option -q.  (#105311)
 
 2003-02-19  James Henstridge  <james@daa.com.au>
@@ -1430,7 +1438,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkdoc-scan.in (ScanHeader): Remove special cases for Pango and
 	Bonobo.
-	* gtkdoc-mkdb.in (OutputDeclaration): 
+	* gtkdoc-mkdb.in (OutputDeclaration):
 	* gtkdoc-mktmpl.in (OutputDeclaration): Remove special cases for
 	structs named BlablaClass.  (#95398)
 
@@ -1461,7 +1469,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 	stylesheet hackery.
 
 2002-12-13  Matthias Clasen  <maclas@gmx.de>
-	
+
 	* gtkdoc-mkdb.in: Add an --ignore-files option which can be used
 	to omit files or directories from scanning.
 	(OutputSGMLFile): Emit anchors for all objects contained in the
@@ -1476,7 +1484,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 2002-12-11  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk-doc.xsl: Change XPath path to "//anchor|//refentry" for the 
+	* gtk-doc.xsl: Change XPath path to "//anchor|//refentry" for the
 	generation of index.sgml. The previous path "//anchor|refentry"
 	was not matching any refentrys.
 
@@ -1497,9 +1505,9 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 2002-12-06  Matthias Clasen  <maclas@gmx.de>
 
 	Improved /*< private >*/ handling:  (#95398)
-	
-	* gtkdoc-mkdb.in (OutputStruct): Handle /*< public >*/ and 
-	/*< private >*/ for all structs. Default to private for object and 
+
+	* gtkdoc-mkdb.in (OutputStruct): Handle /*< public >*/ and
+	/*< private >*/ for all structs. Default to private for object and
 	class structs, to public for all other structs.
 
 	* gtkdoc-scan.in (ScanHeader): Emit declarations for class structs
@@ -1507,7 +1515,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 2002-12-05  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mktmpl.in (OutputDeclaration):
 	* gtkdoc-mkdb.in (ReadTemplateFile): Support @Since: and
 	@Deprecated: as a way to specify since and deprecated information
 	in template files. This works for all kinds of symbols, even those
@@ -1515,7 +1523,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 2002-12-02  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mkdb.in (MakeDeprecationNote): Support multi-paragraph 
+	* gtkdoc-mkdb.in (MakeDeprecationNote): Support multi-paragraph
 	deprecation notes.
 
 2002-11-29  James Henstridge  <james@daa.com.au>
@@ -1529,8 +1537,8 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 2002-11-29  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-scan.in (ScanHeader): Make deprecation guards work with
-	both 
-	#ifndef DEPRECATION_GUARD  
+	both
+	#ifndef DEPRECATION_GUARD
 	#if !defined(DEPRECATION_GUARD) || defined(FOO_COMPILATION)
 	The second form is used in GDK and GTK+ to include selected
 	deprecated symbols when compiling the library itself.
@@ -1542,7 +1550,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 	tag. Emit the Since: information (which is expected to be just a
 	version number) after the parameters and the Deprecated:
 	information (which is expected to be one or more full sentences)
-	inside the deprecation warning. 
+	inside the deprecation warning.
 	Warn if a Deprecated: tag is found on a symbol which is not
 	guarded by a deprecation guard in the header.
 
@@ -1575,7 +1583,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: added news for 0.10
 
-	* MAINTAINERS: 
+	* MAINTAINERS:
 	* AUTHORS: updated my email address.
 
 2002-11-16  James Henstridge  <james@daa.com.au>
@@ -1611,8 +1619,8 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 2002-11-10  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mkdb.in (GetArgs): Expand abbreviations in source doc 
-	comments.	
+	* gtkdoc-mkdb.in (GetArgs): Expand abbreviations in source doc
+	comments.
 
 2002-11-09  Matthias Clasen  <maclas@gmx.de>
 
@@ -1620,7 +1628,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 	param names with meaningless argn names generated by gtkdoc-scangobj.
 
 	* gtkdoc-mkdb.in (GetSignals): Use argument names from source doc
-	comments, if available. 
+	comments, if available.
 	(GetArgs): Use source doc comments instead of blurb, if available.
 	(ScanSourceFile): Also accept object::signal and object:property
 	symbols.
@@ -1649,14 +1657,14 @@ Mon Nov  4 17:17:40 2002  Owen Taylor  <otaylor@redhat.com>
 	in lookup_signal_arg_names() changed GtkNotebook::switch-page
 	page argument to guint. And fixed a few other entries.
 	Also fixed argument numbering, so we don't get 2 "widget" arguments.
-	
+
 	* gtkdoc-scanobj.in: add ';' after unlink command to avoid warning.
 
 2002-10-20  Matthias Clasen  <maclas@gmx.de>
 
 	* examples/Makefile.am (SCANOBJ_FILES): Add $(DOC_MODULE).prerequisites.
 
-	* gtkdoc-mkdb.in: Read $MODULE.prerequisites and put list of 
+	* gtkdoc-mkdb.in: Read $MODULE.prerequisites and put list of
 	prerequisites below the object hierarchy for interfaces.
 
 	* gtkdoc-scangobj.in: Write information about interface
@@ -1671,11 +1679,11 @@ Mon Nov  4 17:17:40 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* examples/Makefile.am (SCANOBJ_FILES): Add $(DOC_MODULE).interfaces.
 
-	* gtkdoc-mkdb.in: Read $MODULE.interfaces and put lists of 
-	implemented interfaces/known implementations below the object 
+	* gtkdoc-mkdb.in: Read $MODULE.interfaces and put lists of
+	implemented interfaces/known implementations below the object
 	hierarchy for classes/interfaces.
 
-	* gtkdoc-scangobj.in: Write interface information to 
+	* gtkdoc-scangobj.in: Write interface information to
 	$MODULE.interfaces.
 
 2002-10-12  Matthias Clasen  <maclas@gmx.de>
@@ -1751,13 +1759,13 @@ Tue Sep 17 01:07:51 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtkdoc-mkdb.in: Make header-grabbing work without an explicit
 	--main-sgml-file argument.
-	
+
 	* gtkdoc-mkdb.in: Emit the object hierarchy as a <screen> rather
 	than a <literallayout>, since the Docbook XSL stylesheets don't
-	handle <link>s inside <literallayout>. 
-	
-	* gtkdoc-mkdb.in: Decide wether to generate standalone documents 
-	for XIncluding or entities based on the presence of the XInclude 
+	handle <link>s inside <literallayout>.
+
+	* gtkdoc-mkdb.in: Decide wether to generate standalone documents
+	for XIncluding or entities based on the presence of the XInclude
 	namespace declaration on the document element.
 
 2002-06-09  James Henstridge  <james@daa.com.au>
@@ -1784,12 +1792,12 @@ Tue Sep 17 01:07:51 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtkdoc-mkdb.in (ConvertSGMLChars): Don't use Posix character
 	classes. Perl < 5.6 doesn't have them; and the API doc autobuilder
-	on widget.gnome.org has an old Perl. 
+	on widget.gnome.org has an old Perl.
 
 2002-05-29  Matthias Clasen  <maclas@gmx.de>
 
 	Fixes for #77193:
-	
+
 	* gtkdoc-mkdb.in (OutputSGML): Call GetSignals, GetArgs and
 	GetHierarchy for each symbol here and accumulate.
 	(OutputSGMLFile): Get signal, argument and hierarchy information
@@ -1804,29 +1812,29 @@ Tue Sep 17 01:07:51 2002  Jonathan Blandford  <jrb@gnome.org>
 
 2002-05-27  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mkdb.in (ReadTemplateFile, OutputSGMLFile): 
+	* gtkdoc-mkdb.in (ReadTemplateFile, OutputSGMLFile):
 	Use only the basename of the template file in the key for the
 	symbol table, in order to decouple the file extensions of the
 	template files and the generated entities (we want to generate
-	.xml entities from .sgml template files when emitting XML). 
+	.xml entities from .sgml template files when emitting XML).
 
 2002-05-25  Matthias Clasen  <maclas@gmx.de>
 
 	* gtkdoc-mkdb.in (ConvertSGMLChars): New function which tries to
-	be a bit more clever when escaping SGML syntax characters. 
+	be a bit more clever when escaping SGML syntax characters.
 	(ScanSourceFile): Use ConvertSGMLChars instead of CreateValidSGML.
 	This reduces the work needed to make gtk-doc emit XML (where <, &
 	and friends must always be escaped).
 
 2002-05-18  Matthias Clasen  <maclas@gmx.de>
 
-	* gtkdoc-mkhtml.in: Detect whether we're processing SGML or XML. 
+	* gtkdoc-mkhtml.in: Detect whether we're processing SGML or XML.
 
 	* gtkdoc-mkdb.in: New option --output-format to switch between
 	SGML and XML output.
 
 	* Makefile.am (EXTRA_DIST): Add xml.dcl
-	
+
 	* xml.dcl: The XML declaration.
 
 2002-05-06  jacob berkman  <jacob@ximian.com>
@@ -1848,12 +1856,12 @@ Tue Sep 17 01:07:51 2002  Jonathan Blandford  <jrb@gnome.org>
 
 2002-05-01  Matthias Clasen  <maclas@gmx.de>
 
-	* tools/docpercentages.pl: Add the script which Owen uses for the 
+	* tools/docpercentages.pl: Add the script which Owen uses for the
 	d.g.o online API docs. Its easier to keep in sync here.
 
 	* gtkdoc-mkdb.in (OutputMissingDocumentation): Fix
 	$MODULE-undocumented.txt for d.g.o online API docs.
-	
+
 	* gtkdoc-mkdb.in (GetArgs): Use blurbs for property documentation.
 
 	* gtkdoc-scangobj.in: Output child properties. Output nicks and
@@ -1958,7 +1966,7 @@ Wed Nov 21 16:00:45 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-10-02  Damon Chaplin  <damon@ximian.com>
 
-	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mktmpl.in (OutputDeclaration):
 	* gtkdoc-mkdb.in (OutputFunction): applied patch from
 	matthiasc@poet.de (Matthias Clasen) to handle G_CONST_RETURN in a
 	parameter list. Bug #61341.
@@ -1986,7 +1994,7 @@ Sat Sep  8 14:08:51 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 2001-09-08  Havoc Pennington  <hp@pobox.com>
 
-	* gtkdoc-mkdb.in (GetArgs): Title the section on object properties 
+	* gtkdoc-mkdb.in (GetArgs): Title the section on object properties
 	"Properties" instead of "Args"
 
 2001-08-14  Laszlo Peter  <laca@ireland.sun.com>
@@ -1996,7 +2004,7 @@ Sat Sep  8 14:08:51 2001  Jonathan Blandford  <jrb@webwynk.net>
 	generating C code.
 
 2001-08-12  Jens Finke <jens@gnome.org>
-	
+
 	* Updated gtk-doc.spec.in file to match gpp standard.
 
 2001-08-04  Damon Chaplin  <damon@ximian.com>
@@ -2005,7 +2013,7 @@ Sat Sep  8 14:08:51 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 2001-08-04  Damon Chaplin  <damon@ximian.com>
 
-	* gtkdoc-mkdb.in (OutputFunction): 
+	* gtkdoc-mkdb.in (OutputFunction):
 	* gtkdoc-mktmpl.in (OutputDeclaration): patch from Lowell Johnson
 	<ldjohn@usgs.gov> to accept things like "long long", "short int",
 	"char test[][CLEN]" as function parameters.
@@ -2026,7 +2034,7 @@ Thu Jun 21 11:57:16 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-05-25  Peter Williams  <peterw@ximian.com>
 
-	* gtkdoc-mkdb.in (ScanSourceFile): Skip single-line comments -- 
+	* gtkdoc-mkdb.in (ScanSourceFile): Skip single-line comments --
 	prevents barfing on ORBit-generated files.
 
 2001-05-20  Damon Chaplin  <damon@ximian.com>
@@ -2040,7 +2048,7 @@ Thu Jun 21 11:57:16 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-05-19  Damon Chaplin  <damon@ximian.com>
 
-	* README: 
+	* README:
 	* doc/README:
 	* doc/setting-up.txt:
 	* doc/sections-file.txt:
@@ -2072,14 +2080,14 @@ Thu Jun 21 11:57:16 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-05-19  Damon Chaplin  <damon@ximian.com>
 
-	* gtkdoc-mktmpl.in (OutputDeclaration): 
+	* gtkdoc-mktmpl.in (OutputDeclaration):
 	* gtkdoc-mkdb.in (OutputFunction): changed a '?' to a '*' so we accept
 	multi-dimensional array function parameters. Patch from Paolo Casarini
 	<casarini@CS.UniBO.IT>
 
 2001-05-12  Damon Chaplin  <damon@ximian.com>
 
-	* gtkdoc-scangobj.in: 
+	* gtkdoc-scangobj.in:
 	* gtkdoc-scanobj.in: used "*pos = 0" to avoid problems with backslashes
 	in '\0'.
 
@@ -2165,7 +2173,7 @@ Sat Mar  3 17:43:42 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-02-17  Damon Chaplin  <damon@ximian.com>
 
-	* gtkdoc-scan.in (ScanHeaders): 
+	* gtkdoc-scan.in (ScanHeaders):
 	(ScanHeader): patch from Johannes Stezenbach <js@convergence.de>
 	so we don't use '\b' in the regexp to match files/dirs to ignore.
 	'\b' can match '_' so we matched things we shouldn't have.
@@ -2193,16 +2201,16 @@ Mon Feb  5 16:48:51 2001  Owen Taylor  <otaylor@redhat.com>
 2001-01-30  Havoc Pennington  <hp@pobox.com>
 
 	* gtkdoc-fixxref.in, gtkdoc-mkdb.in, gtkdoc-mktmpl.in,
-	gtkdoc-scan.in, gtkdoc-scangobj.in, gtkdoc-scanobj.in:	
+	gtkdoc-scan.in, gtkdoc-scangobj.in, gtkdoc-scanobj.in:
 	Added -*- cperl -*- magic, and --deprecated-guards
 	option.
 
 2001-01-23  Damon Chaplin  <damon@helixcode.com>
 
-	* gtkdoc-scangobj.in: 
-	* gtkdoc-scanobj.in: 
-	* gtkdoc-scan.in: 
-	* gtkdoc-mkdb.in: 
+	* gtkdoc-scangobj.in:
+	* gtkdoc-scanobj.in:
+	* gtkdoc-scan.in:
+	* gtkdoc-mkdb.in:
 	* gtkdoc-mktmpl.in: changed so that they only update files when
 	necessary (they write new versions of the files out, then use 'cmp'
 	to compare with the existing versions to see if they have changed.)
@@ -2219,17 +2227,17 @@ Mon Feb  5 16:48:51 2001  Owen Taylor  <otaylor@redhat.com>
 		$(MAKE) templates
 		$(MAKE) sgml
 		$(MAKE) html.stamp
-	
+
 	html.stamp: sgml.stamp $(EXTRA_SGML_FILES)
 		$(MAKE) html
 
 	(I've tried this with the old GTK+ reference API docs and it seems to
 	work well.)
 
-	* gtkdoc-scangobj.in: 
-	* gtkdoc-scanobj.in: 
-	* gtkdoc-scan.in: 
-	* gtkdoc-mkdb.in: 
+	* gtkdoc-scangobj.in:
+	* gtkdoc-scanobj.in:
+	* gtkdoc-scan.in:
+	* gtkdoc-mkdb.in:
 	* gtkdoc-mktmpl.in:
 	* gtkdoc-mkhtml.in:
 	* gtkdoc-mkman.in:
@@ -2266,18 +2274,18 @@ Mon Jan  8 14:57:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkdoc-scangobj.in: Fix up for GParamSpec.
 
-2001-01-04  Frédéric Gobry  <frederic.gobry@smartdata.ch>
+2001-01-04  Frï¿½dï¿½ric Gobry  <frederic.gobry@smartdata.ch>
 
 	* gtkdoc-scan.in: fixed matching of < private_header > directive
 
 2000-12-19  Damon Chaplin  <damon@helixcode.com>
 
-	* gtkdoc-scanobj.in: 
+	* gtkdoc-scanobj.in:
 	* gtkdoc-scangobj.in: added default cases to get_type_name().
 
 2000-12-10  Arturo Tena  <arturo@directmail.org>
 
-	* gtkdoc-scanobj.in (get_type_name): 
+	* gtkdoc-scanobj.in (get_type_name):
 	* gtkdoc-scangobj.in (get_type_name): fixed syntax error: forgotten
 	to close a switch statement.
 
@@ -2290,7 +2298,7 @@ Mon Jan  8 14:57:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am: uncommented spec file stuff, now that we have one.
 
-	* gtkdoc-scanobj.in (get_type_name): 
+	* gtkdoc-scanobj.in (get_type_name):
 	* gtkdoc-scangobj.in (get_type_name): updated to use the type numbers
 	rather than the type names, which were changed in GTK+ 1.2. This
 	should fix a problem where GTK_TYPE_STRING arguments were output as
@@ -2321,7 +2329,7 @@ Fri Nov  3 07:21:34 2000  Tim Janik  <timj@gtk.org>
 
 Fri Nov  3 07:15:58 2000  Tim Janik  <timj@gtk.org>
 
-	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mktmpl.in:
 	* gtkdoc-mkdb.in:
 	(ReadTemplateFile): only eat up the first space (if at all
 	present) after "@param:" to preserve indentation for multiline
@@ -2332,7 +2340,7 @@ Fri Nov  3 07:15:58 2000  Tim Janik  <timj@gtk.org>
 	* gtkdoc-mkdb.in (ParseStructDeclaration):
 	Stop scanning at '}' only when it starts a line.
 	* gtkdoc-mktmpl.in (ParseStructDeclaration): Likewise.
-	
+
 Mon Oct 30 02:59:54 2000  Tim Janik  <timj@gtk.org>
 
 	* gtkdoc-scangobj.in: use g_signal_list_ids().
@@ -2352,7 +2360,7 @@ Sun Oct 29 01:02:35 2000  Owen Taylor  <otaylor@redhat.com>
 
 2000-10-14  Damon Chaplin  <damon@helixcode.com>
 
-	* AUTHORS: 
+	* AUTHORS:
 	* MAINTAINERS: changed my email address.
 
 	* Makefile.am (dist-hook): remove the CVS dirs from the dist.
@@ -2369,7 +2377,7 @@ Thu Sep  7 11:41:12 2000  Owen Taylor  <otaylor@redhat.com>
 	* gtkdoc-mkdb.in: Ignore all . files when scanning directories.
 
 	* gtkdoc-scan.in: Add support for GLIB_VAR, GDKVAR,
-	etc when looking for variable declarations. 
+	etc when looking for variable declarations.
 
 	* gtkdoc-scan.in: Recognize GET_CLASS macros.
 
@@ -2397,13 +2405,13 @@ Tue Sep  5 23:37:53 2000  Owen Taylor  <otaylor@redhat.com>
 	appearing in --ignore-headers.
 
 	* gtkdoc-mkdb.in: Append -CAPS to all all-caps identifiers
-	to prevent an infinite expansion of special cases. 
+	to prevent an infinite expansion of special cases.
 
 	* gtkdoc-fixxref.in: Add a --module-dir option to
 	allow fixing references in an uninstalled tree.
 
 	* gtkdoc-mkdb.in gtkdoc-mkhtml.in: Simple handling
-	for macros with embedded commas in enumeration 
+	for macros with embedded commas in enumeration
 	declarations.
 
 Mon Aug 28 18:18:53 2000  Owen Taylor  <otaylor@redhat.com>
@@ -2424,7 +2432,7 @@ Wed Feb  9 11:29:25 2000  Owen Taylor  <otaylor@redhat.com>
 1999-12-15  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* gtk-doc.dsl.in ($generate-chapter-toc$): Add missing close
-	paranthesis. 
+	paranthesis.
 
 1999-11-23  Raja R Harinath  <harinath@cs.umn.edu>
 
@@ -2451,7 +2459,7 @@ Wed Feb  9 11:29:25 2000  Owen Taylor  <otaylor@redhat.com>
 
 Mon Sep 20 09:09:12 1999  Owen Taylor  <otaylor@redhat.com>
 
-	* gtkdoc-mkdb.in gtkdoc-mktmpl.in: (ParseStructDeclaration): 
+	* gtkdoc-mkdb.in gtkdoc-mktmpl.in: (ParseStructDeclaration):
 	Fixed up the code to do /*< private >*/ ... stripping.
 
 1999-09-10  Martin Baulig  <martin@home-of-linux.org>
@@ -2478,7 +2486,7 @@ Mon Sep 20 09:09:12 1999  Owen Taylor  <otaylor@redhat.com>
 
 1999-08-22  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
-	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mktmpl.in:
 	* gtkdoc-mkdb.in: a few fixes to ParseStructDeclaration. It still
 	has problems with nested structs/unions like those which occur in
 	gtkclist.h and gtktypeutils.h.
@@ -2510,7 +2518,7 @@ Wed Aug 18 23:25:23 1999  Owen Taylor  <otaylor@redhat.com>
 
 1999-08-12  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
-	* gtkdoc-mkdb.in: 
+	* gtkdoc-mkdb.in:
 	* gtkdoc-mktmpl.in: Added special case in ParseEnumDeclaration to
 	handle GIOCondition which uses strange macros like this:
 	typedef enum
@@ -2559,7 +2567,7 @@ Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 	In general, the coding here is pretty clean, though
 	the style is a little different. (I'm interating
-	through strings with m/.../msg; instead of 
+	through strings with m/.../msg; instead of
 	s/^...//; for one thing.) However, there are a some
 	of FIXME's where I've whimped out on try to handle
 	real C syntax, and the need to split out and librarize
@@ -2588,7 +2596,7 @@ Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: update version to 0.2 for next release.
 
-	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mktmpl.in:
 	* gtkdoc-mkdb.in: added support for 'See Also' section.
 
 	* gtk-doc.dsl.in: changed green background color slightly, and
@@ -2616,13 +2624,13 @@ Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 1999-03-11  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
-	* examples/gnomeui/Makefile.am (clean-local): 
+	* examples/gnomeui/Makefile.am (clean-local):
 	* examples/gnome/Makefile.am (clean-local): added *.args
 
 	* gtkdoc-mkdb.in: added support for Args and variables. Also a few
 	minor changes in the output, e.g. don't show macros > 2 lines long.
 
-	* gtkdoc-mktmpl.in: 
+	* gtkdoc-mktmpl.in:
 	* gtkdoc-scanobj.in: added support for Args.
 
 	* gtkdoc-scan.in: added support for extern'ed variables. Also
@@ -2651,14 +2659,14 @@ Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
 	changing section titles means you have to recreate the main SGML file.
 
 1999-02-03  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
-	
+
 	* configure.in: find perl in $PATH, generate the perl programs
 	from their *.in counterparts.
-	
+
 	* gtkdoc-fixxref, gtkdoc-mkdb, gtkdoc-mktmpl, gtkdoc-scan,
 	gtkdoc-scanobj: Renamed to *.in and changed /usr/bin/perl to
 	@PERL@, as determined by configure.
-	
+
 	* .cvsignore: Added diverse config* stuff and the new generated
 	perl programs.
 
@@ -2709,15 +2717,15 @@ Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
 	* gtkdoc-mktmpl (UpdateTemplates): We include widget structs now,
 	so we do want warnings if they aren't used.
 
-	* examples/gnomeui/gnomeui-docs.sgml: 
+	* examples/gnomeui/gnomeui-docs.sgml:
 	* examples/gnomeui/gnomeui-sections.txt:
 	* examples/gnomeui/gnomeui.types:
-	* examples/gnome/gnome-docs.sgml: 
+	* examples/gnome/gnome-docs.sgml:
 	* examples/gnome/gnome-sections.txt: sync with latest source.
 
 	* examples/configure.in: Add --with-gnome-libs-dir option, so it can
 	be configured easily.
-	* examples/gnomeui/Makefile.am (DOC_SOURCE_DIR): 
+	* examples/gnomeui/Makefile.am (DOC_SOURCE_DIR):
 	* examples/gnome/Makefile.am (DOC_SOURCE_DIR): use the new
 	GNOME_LIBS_DIR.
 
@@ -2734,7 +2742,7 @@ Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* doc/sections-file.txt: added description of <INCLUDE> tag.
 
-	* examples/gnomeui/gnomeui-sections.txt: 
+	* examples/gnomeui/gnomeui-sections.txt:
 	* examples/gnome/gnome-sections.txt: added use of <INCLUDE>
 
 	* examples/configure.in: changed 'gtk-reference' to
@@ -2771,19 +2779,19 @@ Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
 	* examples directory added with an example for setting up modules to
 	use gtk-doc
 	* documentation updated
-	
+
 
 1998-11-28  Damon Chaplin  <DAChaplin@msn.com>
 
-	* gtkdoc-scanobj: 
-	* gtkdoc-scan: 
-	* gtkdoc-mktmpl: 
+	* gtkdoc-scanobj:
+	* gtkdoc-scan:
+	* gtkdoc-mktmpl:
 	* gtkdoc-mkdb: Major changes to make it easy to update the docs
 	when the API changes. It's pretty much all automatic now.
 	Also added licenses and function comments, and added 'use strict'.
 	The Gnome widgets should now be visible in the hierarchy.
 	Removed a few 'mkdir's which I don't think are necessary now.
-	
+
 Tue Nov 24 16:32:23 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* README doc/authors.txt: Updated to describe the

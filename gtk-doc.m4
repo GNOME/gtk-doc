@@ -21,32 +21,16 @@ AC_DEFUN([GTK_DOC_CHECK],
                    [use gtk-doc to build documentation [[default=no]]]),,
     [enable_gtk_doc=no])
 
-  have_gtk_doc=no
   if test x$enable_gtk_doc = xyes; then
-    if test -z "$PKG_CONFIG"; then
-      AC_PATH_PROG([PKG_CONFIG], [pkg-config], [no])
-    fi
-    if test "$PKG_CONFIG" != "no" && $PKG_CONFIG --exists gtk-doc; then
-      have_gtk_doc=yes
-    fi
-
-  dnl do we want to do a version check?
-ifelse([$1],[],,
-    [gtk_doc_min_version=$1
-    if test "$have_gtk_doc" = yes; then
-      AC_MSG_CHECKING([gtk-doc version >= $gtk_doc_min_version])
-      if $PKG_CONFIG --atleast-version $gtk_doc_min_version gtk-doc; then
-        AC_MSG_RESULT([yes])
-      else
-        AC_MSG_RESULT([no])
-        have_gtk_doc=no
-      fi
-    fi
-])
-    if test "$have_gtk_doc" != yes; then
-      enable_gtk_doc=no
-    fi
+    ifelse([$1],[],
+      [PKG_CHECK_EXISTS([gtk-doc],, 
+                        AC_MSG_ERROR([gtk-doc not installed and --enable-gtk-doc requested]))],
+      [PKG_CHECK_EXISTS([gtk-doc >= $1],,
+                        AC_MSG_ERROR([You need to have gtk-doc >= $1 installed to build gtk-doc]))])
   fi
+
+  AC_MSG_CHECKING([whether to build gtk-doc documentation])
+  AC_MSG_RESULT($enable_gtk_doc)
 
   AM_CONDITIONAL([ENABLE_GTK_DOC], [test x$enable_gtk_doc = xyes])
   AM_CONDITIONAL([GTK_DOC_USE_LIBTOOL], [test -n "$LIBTOOL"])
