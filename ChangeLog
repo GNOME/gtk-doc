@@ -1,5 +1,17 @@
 2007-07-17  Stefan Kost  <ensonic@users.sf.net>
 
+	Patch by: Yeti <yeti@physics.muni.cz>
+
+	* gtkdoc-common.pl.in:
+	* gtkdoc-mkdb.in:
+	* gtkdoc-mktmpl.in:
+	* gtkdoc-scan.in:
+	  Improve paramenter parsing to allow parameter names that contain
+	  const or restricted. Fixes #419997
+	  Also fix the signed/unsigned more.
+
+2007-07-17  Stefan Kost  <ensonic@users.sf.net>
+
 	* Makefile.am:
 	* autogen.sh:
 	* configure.in:

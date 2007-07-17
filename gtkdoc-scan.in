@@ -470,7 +470,7 @@ sub ScanHeader {
 		$decl = $';
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
 		    && $previous_line !~ m/^\s*static\s+/) {
-		    if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s*|G_CONST_RETURN\s*|unsigned\s*|enum\s+)?\w+)(\s*\*+)?\s*$/) {
+		    if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|enum\s+)?\w+)(\s*\*+)?\s*$/) {
 			$ret_type = $1;
 			if (defined ($2)) { $ret_type .= " $2"; }
 #			print "Function: $symbol, Returns: $ret_type\n";
