@@ -14,15 +14,6 @@
 //-- methods
 
 /**
- * bug_445693:
- * @pid: arg
- *
- * http://bugzilla.gnome.org/show_bug.cgi?id=445693
- */
-void bug_445693 (unsigned long pid) {
-}
-
-/**
  * bug_141869_a:
  * @pid: arg
  *
@@ -38,5 +29,26 @@ void bug_141869_a (unsigned pid) {
  * http://bugzilla.gnome.org/show_bug.cgi?id=141869
  */
 void bug_141869_b (signed pid) {
+}
+
+
+/**
+ * bug_379466:
+ * @pid: arg
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=379466
+ */
+void bug_379466 (int
+  pid) {
+}
+
+
+/**
+ * bug_445693:
+ * @pid: arg
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=445693
+ */
+void bug_445693 (unsigned long pid) {
 }
 

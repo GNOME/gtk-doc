@@ -472,7 +472,7 @@ uninstall-am: uninstall-info-am
 
 #### xml ####
 
-@ENABLE_GTK_DOC_TRUE@sgml-build.stamp: tmpl.stamp $(CFILE_GLOB) $(srcdir)/tmpl/*.sgml $(expand_content_files)
+@ENABLE_GTK_DOC_TRUE@sgml-build.stamp: tmpl.stamp $(CFILE_GLOB) $(expand_content_files)
 @ENABLE_GTK_DOC_TRUE@	@echo 'gtk-doc: Building XML'
 @ENABLE_GTK_DOC_TRUE@	@-chmod -R u+w $(srcdir)
 @ENABLE_GTK_DOC_TRUE@	cd $(srcdir) && \
@@ -487,11 +487,11 @@ uninstall-am: uninstall-info-am
 @ENABLE_GTK_DOC_TRUE@html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 @ENABLE_GTK_DOC_TRUE@	@echo 'gtk-doc: Building HTML'
 @ENABLE_GTK_DOC_TRUE@	@-chmod -R u+w $(srcdir)
-@ENABLE_GTK_DOC_TRUE@	rm -rf $(srcdir)/html 
+@ENABLE_GTK_DOC_TRUE@	rm -rf $(srcdir)/html
 @ENABLE_GTK_DOC_TRUE@	mkdir $(srcdir)/html
 @ENABLE_GTK_DOC_TRUE@	cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)  $(MKHTML_OPTIONS)
 @ENABLE_GTK_DOC_TRUE@	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
-@ENABLE_GTK_DOC_TRUE@	@echo 'gtk-doc: Fixing cross-references' 
+@ENABLE_GTK_DOC_TRUE@	@echo 'gtk-doc: Fixing cross-references'
 @ENABLE_GTK_DOC_TRUE@	cd $(srcdir) && gtkdoc-fixxref --module-dir=html $(FIXXREF_OPTIONS)
 @ENABLE_GTK_DOC_TRUE@	touch html-build.stamp
 @ENABLE_GTK_DOC_FALSE@all-local:

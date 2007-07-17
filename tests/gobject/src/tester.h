@@ -25,13 +25,14 @@ typedef struct _GtkdocTesterClass GtkdocTesterClass;
  */
 struct _GtkdocTester {
   GObject parent;
-  
+
   /*< private >*/
   gchar *test_string;
 };
 
 /**
  * GtkdocTesterClass:
+ * @parent: this is a bug :/
  *
  * class data of gtk-doc unit test class
  */

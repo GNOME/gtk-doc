@@ -76,7 +76,7 @@ tmpl.stamp: tmpl-build.stamp
 
 #### xml ####
 
-sgml-build.stamp: tmpl.stamp $(CFILE_GLOB) $(srcdir)/tmpl/*.sgml $(expand_content_files)
+sgml-build.stamp: tmpl.stamp $(CFILE_GLOB) $(expand_content_files)
 	@echo 'gtk-doc: Building XML'
 	@-chmod -R u+w $(srcdir)
 	cd $(srcdir) && \
@@ -91,11 +91,11 @@ sgml.stamp: sgml-build.stamp
 html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo 'gtk-doc: Building HTML'
 	@-chmod -R u+w $(srcdir)
-	rm -rf $(srcdir)/html 
+	rm -rf $(srcdir)/html
 	mkdir $(srcdir)/html
 	cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)  $(MKHTML_OPTIONS)
 	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
-	@echo 'gtk-doc: Fixing cross-references' 
+	@echo 'gtk-doc: Fixing cross-references'
 	cd $(srcdir) && gtkdoc-fixxref --module-dir=html $(FIXXREF_OPTIONS)
 	touch html-build.stamp
 else
