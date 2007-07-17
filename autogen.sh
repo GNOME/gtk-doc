@@ -67,11 +67,13 @@ autoconf || exit $?
 # optionally feature autoheader
 #(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
+libtoolize --copy --force
+
 $AUTOMAKE --add-missing $am_opt || exit $?
 
 cd "$THEDIR"
 
 $srcdir/configure --enable-maintainer-mode "$@" || exit $?
 
-echo 
+echo
 echo "Now type 'make install' to install $PROJECT."

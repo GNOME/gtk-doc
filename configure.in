@@ -18,6 +18,7 @@ AC_SUBST([ACLOCAL_AMFLAGS], ["\${ACLOCAL_FLAGS}"])
 
 AC_ISC_POSIX
 AC_PROG_CC
+AC_PROG_LIBTOOL
 
 # Make sure we have pkg-config >= 0.19, so installing in $(datadir) is OK.
 PKG_PROG_PKG_CONFIG([0.19])
@@ -108,9 +109,25 @@ AM_CONDITIONAL(ENABLE_SCROLLKEEPER, test ! x$scrollkeeper_config = xno)
 SCROLLKEEPER_BUILD_REQUIRED=0.3.5
 AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
 
-AC_CONFIG_FILES([Makefile 
+# if glib is available we can enable the tests
+PKG_CHECK_MODULES(TEST_DEPS, glib-2.0 >= 2.2.0 gobject-2.0  >= 2.6.0, [
+    AM_CONDITIONAL(BUILD_TESTS, true)
+    AC_DEFINE(BUILD_TESTS, [1], [Define to 1 if we build the tests])
+    AC_PROG_LIBTOOL
+    AM_CONDITIONAL(ENABLE_GTK_DOC, true)
+    AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, test -n "$LIBTOOL")
+  ],[
+    AM_CONDITIONAL(BUILD_TESTS, false)
+  ]
+)
+
+glib_prefix="`pkg-config --variable=prefix glib-2.0`"
+AC_SUBST(glib_prefix)
+
+
+AC_CONFIG_FILES([Makefile
 gtk-doc.pc
-gtk-doc.dsl 
+gtk-doc.dsl
 gtk-doc.spec
 gtk-doc.cat
 gtkdoc-common.pl
@@ -118,6 +135,13 @@ help/Makefile
 help/manual/Makefile
 help/manual/C/Makefile
 help/manual/C/gtk-doc-manual-C.omf
+tests/Makefile
+tests/gobject/Makefile
+tests/gobject/src/Makefile
+tests/gobject/docs/Makefile
+tests/bugs/Makefile
+tests/bugs/src/Makefile
+tests/bugs/docs/Makefile
 ])
 
 dnl run chmod on these after parsing them.

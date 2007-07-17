@@ -1,3 +1,36 @@
+2007-07-17  Stefan Kost  <ensonic@users.sf.net>
+
+	* Makefile.am:
+	* autogen.sh:
+	* configure.in:
+	* tests/Makefile.am:
+	* tests/bugs.sh:
+	* tests/bugs/Makefile.am:
+	* tests/bugs/docs/Makefile.am:
+	* tests/bugs/docs/Makefile.in:
+	* tests/bugs/docs/tester-docs.sgml:
+	* tests/bugs/docs/tester-sections.txt:
+	* tests/bugs/docs/tester.types:
+	* tests/bugs/src/Makefile.am:
+	* tests/bugs/src/tester.c: (bug_445693), (bug_141869_a),
+	(bug_141869_b):
+	* tests/bugs/src/tester.h:
+	* tests/gobject.sh:
+	* tests/gobject/Makefile.am:
+	* tests/gobject/docs/Makefile.am:
+	* tests/gobject/docs/Makefile.in:
+	* tests/gobject/docs/tester-docs.sgml:
+	* tests/gobject/docs/tester-sections.txt:
+	* tests/gobject/docs/tester.types:
+	* tests/gobject/src/Makefile.am:
+	* tests/gobject/src/tester.c: (gtkdoc_tester_new),
+	(gtkdoc_tester_get_property), (gtkdoc_tester_set_property),
+	(gtkdoc_tester_class_init), (gtkdoc_tester_get_type):
+	* tests/gobject/src/tester.h:
+	* tests/gtk-doc.make:
+	* tests/gtkdoctest.sh:
+	Add test-suite. Fixes #457173
+
 2007-07-16  Stefan Kost  <ensonic@users.sf.net>
 
 	Patch by: Yeti <yeti@physics.muni.cz>
