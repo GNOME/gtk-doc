@@ -4,13 +4,14 @@
  * @short_description: class for gtk-doc unit test
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
- *
- */ 
+ * We can link to the #GtkdocTester:test property and the #GtkdocTester::test
+ * signal.
+ */
 
 #include <glib.h>
 #include <glib-object.h>
 
-#include "tester.h" 
+#include "tester.h"
 
 //-- property ids
 
@@ -60,6 +61,21 @@ static void gtkdoc_tester_class_init(GtkdocTesterClass *klass) {
 
   gobject_class->set_property = gtkdoc_tester_set_property;
   gobject_class->get_property = gtkdoc_tester_get_property;
+
+  /**
+   * GtkdocTester::test:
+   * @self: myself
+   *
+   * The event has been triggered.
+   */
+  g_signal_new("test", G_TYPE_FROM_CLASS(klass),
+                G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                G_STRUCT_OFFSET(GtkdocTesterClass,test),
+                NULL, // accumulator
+                NULL, // acc data
+                g_cclosure_marshal_VOID__OBJECT,
+                G_TYPE_NONE, // return type
+                0); // n_params
 
   g_object_class_install_property(gobject_class,GTKDOC_TESTER_TEST,
                                   g_param_spec_string("test",

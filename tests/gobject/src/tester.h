@@ -40,6 +40,7 @@ struct _GtkdocTesterClass {
   GObjectClass parent;
 
   /* class methods */
+  void (*test)(const GtkdocTester * const self, gconstpointer const user_data);
 };
 
 GType  gtkdoc_tester_get_type(void) G_GNUC_CONST;
