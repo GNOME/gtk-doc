@@ -2885,6 +2885,7 @@ EOF
                     my $real_symbol=$1;
                     my $k;
 
+                    #print "SECTION DOCS found in source for : '$real_symbol'\n";
                     $ignore_broken_returns = 1;
                     for ($k = 0; $k <= $#params; $k += 2) {
                         #print "   '".$params[$k]."'\n";
@@ -2947,6 +2948,7 @@ EOF
 	if (!$symbol) {
 	    if (m%^\s*(SECTION:\s*\S+)%) {
 		$symbol = $1;
+                #print "SECTION DOCS found in source for : '$symbol'\n";
                 $ignore_broken_returns = 1;
 	    } elsif (m%^\s*([\w:-]*\w)\s*:?%) {
 		$symbol = $1;
@@ -3111,7 +3113,6 @@ EOF
 		next;
 	    } elsif (!$ignore_broken_returns && m/^\s*(returns\b\s*)/i) {
 		$return_start = $1;
-                print "  broken #5\n";
 		$return_style = 'broken';
 		$return_desc = $';
 		$in_return = 1;

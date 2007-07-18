@@ -1,5 +1,14 @@
 2007-07-18  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-mkdb.in:
+	  Readd two debug prints and remove one obsolete one.
+
+	* tests/bugs/Makefile.am:
+	* tests/gobject/Makefile.am:
+	  Enforce 'make clean' before 'make check'.
+
+2007-07-18  Stefan Kost  <ensonic@users.sf.net>
+
 	Patch by: Yeti <yeti@physics.muni.cz>
 
 	* gtkdoc-mkdb.in:
