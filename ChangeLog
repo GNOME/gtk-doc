@@ -1,5 +1,21 @@
 2007-07-18  Stefan Kost  <ensonic@users.sf.net>
 
+	Patch by: Yeti <yeti@physics.muni.cz>
+
+	* gtkdoc-mkdb.in:
+	  Cleanup broek-return handling and add ignore_broken_returns for
+	  section docs. Fixes #457077
+
+	* tests/bugs/docs/Makefile.in:
+	* tests/gobject/docs/Makefile.in:
+	  Remove.
+
+	* tests/gtk-doc.make:
+	  Use the local tools so that 'make check' works uninstalled.
+	  
+
+2007-07-18  Stefan Kost  <ensonic@users.sf.net>
+
 	* tests/bugs/docs/tester-sections.txt:
 	* tests/bugs/src/tester.c: (bug_419997):
 	* tests/bugs/src/tester.h:
@@ -14,8 +30,6 @@
 	* tests/bugs/src/tester.c: (bug_141869_a), (bug_141869_b),
 	(bug_379466), (bug_445693):
 	* tests/bugs/src/tester.h:
-	* tests/gobject/docs/Makefile.in:
-	* tests/gobject/src/tester.h:
 	* tests/gtk-doc.make:
 	* tests/gtkdoctest.sh:
 	  Improve test suite.
