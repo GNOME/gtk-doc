@@ -1202,9 +1202,10 @@ gtk_arrow_get_type
     <para>
       A Gtk-Doc run generates report files inside the documentation directory.
       The generated files are named:
-      <filename>&lt;package&gt;-undocumented.txt</filename> and
+      <filename>&lt;package&gt;-undocumented.txt</filename>,
+      <filename>&lt;package&gt;-undeclared.txt</filename> and
       <filename>&lt;package&gt;-unused.txt</filename>.
-      Both are plain text files that can be viewed and postprocessed easily.
+      All those are plain text files that can be viewed and postprocessed easily.
     </para>
 
     <para>
@@ -1214,6 +1215,13 @@ gtk_arrow_get_type
       The second section does the same for section docs. Incomplete entries are
       those, which have documentation, but where e.g. a new parameter has been
       added.
+    </para>
+
+    <para>
+      The <filename>&lt;package&gt;-undeclared.txt</filename> file lists symbols
+      given in the <filename>&lt;package&gt;-section.txt</filename> but not
+      found in the sources. Check if they have been removed or if they are
+      misspelled.
     </para>
 
     <para>
