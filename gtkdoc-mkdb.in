@@ -207,6 +207,9 @@ my %AllSymbols;
 my %AllIncompleteSymbols;
 my %AllDocumentedSymbols;
 
+# Undeclared yet documented symbols
+my %UndeclaredSymbols;
+
 # These global arrays store GtkObject and subclasses and the hierarchy.
 my @Objects;
 my @ObjectLevels;
@@ -634,6 +637,7 @@ EOF
 		# Note that the declaration has been output.
 		$DeclarationOutput{$symbol} = 1;
 	    } elsif ($subsection ne "Standard" && $subsection ne "Private") {
+		$UndeclaredSymbols{$1} = 1;
 		print "WARNING: No declaration found for: $1\n";
 	    }
 	    $num_symbols++;
@@ -642,6 +646,7 @@ EOF
     close (INPUT);
 
     &OutputMissingDocumentation;
+    &OutputUndeclaredSymbols;
 
     if ($OUTPUT_ALL_SYMBOLS) {
 	&OutputAllSymbols;
@@ -3251,6 +3256,26 @@ sub OutputMissingDocumentation {
      close (UNDOCUMENTED);
 
      printf (("%.0f%% symbol docs coverage ($n_documented symbols documented, $n_incomplete symbols incomplete, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
+}
+
+
+#############################################################################
+# Function    : OutputUndeclaredSymbols
+# Description : Outputs symbols that are undeclared yet documented to a file
+#
+# Arguments   : none
+#############################################################################
+
+sub OutputUndeclaredSymbols {
+    open(UNDECLARED, ">$ROOT_DIR/$MODULE-undeclared.txt")
+	|| die "Can't create $ROOT_DIR/$MODULE-undeclared.txt";
+
+    if (%UndeclaredSymbols) {
+	print UNDECLARED (join("\n", sort keys %UndeclaredSymbols));
+	print UNDECLARED "\n";
+	print "See $MODULE-undeclared.txt for the list of undeclared symbols.\n"
+    }
+    close(UNDECLARED);
 }
 
 
