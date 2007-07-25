@@ -2818,6 +2818,8 @@ sub ScanSourceFile {
     if ($IGNORE_FILES =~ m/(\s|^)\Q${basename}\E(\s|$)/) {
 	return;
     }
+    
+#    print "DEBUG: Scanning $file\n";
 
     open (SRCFILE, $file)
 	|| die "Can't open $file: $!";
@@ -2845,13 +2847,13 @@ sub ScanSourceFile {
 		$in_return = 0;
 		$in_since = 0;
 		$in_deprecated = 0;
+		$in_stability = 0;
 		$description = "";
 		$return_desc = "";
 		$return_style = "";
 		$since_desc = "";
-		$stability_desc = "";
-		$in_stability = 0;
 		$deprecated_desc = "";
+		$stability_desc = "";
 		$current_param = -1;
 		$ignore_broken_returns = 0;
 		@params = ();
@@ -2911,6 +2913,7 @@ EOF
                     }
                     $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Long_Description"}=$description;
                 } else {
+                    #print "SYMBOL DOCS found in source for : '$symbol' ",length($description), "\n";
                     $SourceSymbolDocs{$symbol} = $description;
                     $SourceSymbolParams{$symbol} = [ @params ];
                 }
@@ -2948,6 +2951,7 @@ EOF
 	if (!$_) {
 	    $_ = "\n";
 	}
+#	print "DEBUG: scanning :$_";
 
 	# If we haven't found the symbol name yet, look for it.
 	if (!$symbol) {
@@ -2957,6 +2961,7 @@ EOF
                 $ignore_broken_returns = 1;
 	    } elsif (m%^\s*([\w:-]*\w)\s*:?%) {
 		$symbol = $1;
+		#print "SYMBOL DOCS found in source for : '$symbol'\n";
 	    }
 	    next;
 	}
@@ -3140,7 +3145,7 @@ EOF
 	    next;
 	}
 
-	# We must be in the parameters. Check for the empty line at the end.
+	# We must be in the parameters. Check for the empty line below them.
 	if (m%^\s*$%) {
 	    $in_description = 1;
 	    next;

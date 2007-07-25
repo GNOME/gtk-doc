@@ -373,6 +373,7 @@ sub ScanHeader {
 
 	    } elsif (m/^\s*typedef\s+enum/) {
 		$symbol = "";
+#		print "DEBUG: typedef enum: -\n";
 		$decl = $_;
 		$in_declaration = "enum";
 
@@ -497,7 +498,7 @@ sub ScanHeader {
                         $symbol = $previous_line;
                         $symbol =~ s/^\s+//;
                         $symbol =~ s/\s*\n//;
-			print "Function: $symbol, Returns: $ret_type\n";
+#			print "Function: $symbol, Returns: $ret_type\n";
 		}
 
 #	    } elsif (m/^extern\s+/) {
