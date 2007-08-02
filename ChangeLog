@@ -1,5 +1,23 @@
 2007-08-02  Stefan Kost  <ensonic@users.sf.net>
 
+	Patch by: Yeti <yeti@physics.muni.cz>
+
+	* gtk-doc.xsl:
+	  Generate ONLINE tag in index.sgml.
+
+	* gtkdoc-fixxref.in:
+	  Allow to base links against online versions of xreffed docs.
+	  Fixes #454916.
+	  
+	* gtkdoc-mkdb.in:
+	  Add releaseinfo to doctemplates.
+
+	* tests/bugs/docs/tester-docs.sgml:
+	* tests/gobject/docs/tester-docs.sgml:
+	  Update templates.
+
+2007-08-02  Stefan Kost  <ensonic@users.sf.net>
+
 	* tests/bugs/docs/Makefile.am:
 	* tests/gobject/docs/Makefile.am:
 	* tests/gtk-doc.make:

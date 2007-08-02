@@ -1757,7 +1757,12 @@ EOF
 
 print OUTPUT <<EOF;
   <bookinfo>
-    <title>[Insert name here] Reference Manual</title>
+    <title>$MODULE Reference Manual</title>
+    <releaseinfo>
+      for $MODULE [VERSION]
+      The latest version of this documentation can be found on-line at
+      <ulink role="online-location" url="http://[SERVER]/$MODULE/index.html">http://[SERVER]/$MODULE/</ulink>.
+    </releaseinfo>
   </bookinfo>
 
   <chapter>
@@ -2818,7 +2823,7 @@ sub ScanSourceFile {
     if ($IGNORE_FILES =~ m/(\s|^)\Q${basename}\E(\s|$)/) {
 	return;
     }
-    
+
 #    print "DEBUG: Scanning $file\n";
 
     open (SRCFILE, $file)
