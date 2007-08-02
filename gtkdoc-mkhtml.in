@@ -17,9 +17,16 @@ fi
 module=$1
 document=$2
 
-prefix=@prefix@
-datarootdir=@datarootdir@
-gtkdocdir=@datadir@/gtk-doc/data
+# FIXME: this is a hack to run uninstalled
+if test "x$0" = "x../../../../gtkdoc-mkhtml" ; then
+      # uninstalled
+      gtkdocdir=`dirname $0`
+else
+      # installed
+      prefix=@prefix@
+      datarootdir=@datarootdir@
+      gtkdocdir=@datadir@/gtk-doc/data
+fi
 
 declaration=$gtkdocdir/gtk-doc.dcl
 
