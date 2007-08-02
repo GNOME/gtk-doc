@@ -11,6 +11,7 @@ bin_SCRIPTS = \
 	gtkdoc-mkhtml   \
 	gtkdoc-mkman    \
 	gtkdoc-fixxref  \
+	gtkdoc-rebase   \
 	gtkdocize
 
 gtkdocdatadir = $(datadir)/gtk-doc/data

@@ -1,11 +1,20 @@
 2007-08-02  Stefan Kost  <ensonic@users.sf.net>
 
+	patch by: David Nečas <yeti@physics.muni.cz>
+
+	* Makefile.am:
+	* configure.in:
+	* gtkdoc-rebase.in:
+	  Allow rebasing crossreferences in generated docs. Fixes #434134.
+
+2007-08-02  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-mkhtml.in:
 	  Add a hack to gtkdoc-mkhtml to run uninstalled too.
 
 2007-08-02  Stefan Kost  <ensonic@users.sf.net>
 
-	Patch by: Yeti <yeti@physics.muni.cz>
+	Patch by: David Nečas <yeti@physics.muni.cz>
 
 	* gtk-doc.xsl:
 	  Generate ONLINE tag in index.sgml.
