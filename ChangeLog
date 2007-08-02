@@ -1,3 +1,13 @@
+2007-08-02  Stefan Kost  <ensonic@users.sf.net>
+
+	* tests/bugs/docs/Makefile.am:
+	* tests/gobject/docs/Makefile.am:
+	* tests/gtk-doc.make:
+	  Use PERL5LIB envvar to use uninstalled gtkdoc-common.pl for tests.
+	  Use tee to both show and redirect logs.
+	  Build test-docs in check-local instead of all-local.
+	  Fixes #459725.
+
 2007-07-25  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in:

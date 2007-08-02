@@ -41,7 +41,7 @@ SCANOBJ_FILES = 		 \
 CLEANFILES = $(SCANOBJ_FILES) $(DOC_MODULE)-unused.txt $(DOC_STAMPS)
 
 if ENABLE_GTK_DOC
-all-local: html-build.stamp
+check-local: html-build.stamp
 
 #### scan ####
 
@@ -49,7 +49,7 @@ scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
 	@echo 'gtk-doc: Scanning header files'
 	@-chmod -R u+w $(srcdir)
 	if grep -l '^..*$$' $(srcdir)/$(DOC_MODULE).types > /dev/null 2>&1 ; then \
-	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" $(top_builddir)/gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) --output-dir=$(srcdir) ; \
+	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" $(top_builddir)/gtkdoc-scangobj --module=$(DOC_MODULE) --output-dir=$(srcdir) $(SCANGOBJ_OPTIONS) ; \
 	else \
 	    cd $(srcdir) ; \
 	    for i in $(SCANOBJ_FILES) ; do \
@@ -57,7 +57,7 @@ scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
 	    done \
 	fi
 	cd $(srcdir) && \
-	  $(top_builddir)/gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(SCAN_OPTIONS) $(EXTRA_HFILES)
+	PERL5LIB=$(top_builddir):$(PERL5LIB) $(top_builddir)/gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(EXTRA_HFILES) $(SCAN_OPTIONS)
 	touch scan-build.stamp
 
 $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES): scan-build.stamp
@@ -68,7 +68,8 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES): scan-build.stamp
 tmpl-build.stamp: $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
 	@echo 'gtk-doc: Rebuilding template files'
 	@-chmod -R u+w $(srcdir)
-	cd $(srcdir) && $(top_builddir)/gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
+	cd $(srcdir) && \
+    PERL5LIB=$(top_builddir):$(PERL5LIB) $(top_builddir)/gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
 	touch tmpl-build.stamp
 
 tmpl.stamp: tmpl-build.stamp
@@ -80,7 +81,7 @@ sgml-build.stamp: tmpl.stamp $(CFILE_GLOB) $(expand_content_files)
 	@echo 'gtk-doc: Building XML'
 	@-chmod -R u+w $(srcdir)
 	cd $(srcdir) && \
-	$(top_builddir)/gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $(MKDB_OPTIONS)
+	PERL5LIB=$(top_builddir):$(PERL5LIB) $(top_builddir)/gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $(MKDB_OPTIONS)
 	touch sgml-build.stamp
 
 sgml.stamp: sgml-build.stamp
@@ -93,13 +94,15 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@-chmod -R u+w $(srcdir)
 	rm -rf $(srcdir)/html
 	mkdir $(srcdir)/html
-	cd $(srcdir)/html && ../$(top_builddir)/gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)  $(MKHTML_OPTIONS)
+	cd $(srcdir)/html && \
+    PERL5LIB=$(top_builddir):$(PERL5LIB) ../$(top_builddir)/gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)  $(MKHTML_OPTIONS)
 	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
 	@echo 'gtk-doc: Fixing cross-references'
-	cd $(srcdir) && $(top_builddir)/gtkdoc-fixxref --module-dir=html $(FIXXREF_OPTIONS)
+	cd $(srcdir) && \
+    PERL5LIB=$(top_builddir):$(PERL5LIB) $(top_builddir)/gtkdoc-fixxref --module-dir=html $(FIXXREF_OPTIONS)
 	touch html-build.stamp
 else
-all-local:
+check-local:
 endif
 
 ##############

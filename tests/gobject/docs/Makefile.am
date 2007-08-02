@@ -15,24 +15,24 @@ DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.sgml
 DOC_SOURCE_DIR=$(top_srcdir)/tests/gobject/src
 
 # Extra options to pass to gtkdoc-scangobj. Not normally needed.
-SCANGOBJ_OPTIONS=>gtkdoc-scangobj.log 2>&1
+SCANGOBJ_OPTIONS=2>&1 | tee gtkdoc-scangobj.log
 
 # Extra options to supply to gtkdoc-scan.
-SCAN_OPTIONS=>gtkdoc-scan.log 2>&1 --deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED"
+SCAN_OPTIONS=--deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED" 2>&1 | tee gtkdoc-scan.log
 
 # Extra options to supply to gtkdoc-mkdb.
-MKDB_OPTIONS=>gtkdoc-mkdb.log 2>&1 --sgml-mode --output-format=xml
+MKDB_OPTIONS=--sgml-mode --output-format=xml 2>&1 | tee gtkdoc-mkdb.log
 
 # Extra options to supply to gtkdoc-mktmpl
 # e.g. MKTMPL_OPTIONS=--only-section-tmpl
-MKTMPL_OPTIONS=>gtkdoc-mktmpl.log 2>&1
+MKTMPL_OPTIONS=2>&1 | tee gtkdoc-mktmpl.log
 
 # Extra options to supply to gtkdoc-mkhtml
-MKHTML_OPTIONS=>../gtkdoc-mkhtml.log 2>&1
+MKHTML_OPTIONS=2>&1 | tee ../gtkdoc-mkhtml.log
 
 # Extra options to supply to gtkdoc-fixref. Not normally needed.
 # --html-dir=$(HTML_DIR)
-FIXXREF_OPTIONS=>gtkdoc-fixxref.log 2>&1 --extra-dir=$(glib_prefix)/share/gtk-doc/html/gobject
+FIXXREF_OPTIONS=--extra-dir=$(glib_prefix)/share/gtk-doc/html 2>&1 | tee gtkdoc-fixxref.log
 
 # Used for dependencies. The docs will be rebuilt if any of these change.
 HFILE_GLOB=$(top_srcdir)/tests/gobject/src/*.h
