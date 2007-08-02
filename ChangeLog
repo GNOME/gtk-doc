@@ -1,11 +1,19 @@
 2007-08-02  Stefan Kost  <ensonic@users.sf.net>
 
+	patch by: Sven Herzberg <herzi@gnome-de.org>
+
+	* gtk-doc.make:
+	* tests/gtk-doc.make:
+	  Rebuild documentation of $(DOC_MODULE).types changed. Fixes #433338
+
+2007-08-02  Stefan Kost  <ensonic@users.sf.net>
+
 	patch by: David Nečas <yeti@physics.muni.cz>
 
 	* Makefile.am:
 	* configure.in:
 	* gtkdoc-rebase.in:
-	  Allow rebasing crossreferences in generated docs. Fixes #434134.
+	  Allow rebasing cross-references in generated docs. Fixes #434134.
 
 2007-08-02  Stefan Kost  <ensonic@users.sf.net>
 

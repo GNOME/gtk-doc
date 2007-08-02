@@ -45,7 +45,7 @@ check-local: html-build.stamp
 
 #### scan ####
 
-scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
+scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB) $(srcdir)/$(DOC_MODULE).types
 	@echo 'gtk-doc: Scanning header files'
 	@-chmod -R u+w $(srcdir)
 	if grep -l '^..*$$' $(srcdir)/$(DOC_MODULE).types > /dev/null 2>&1 ; then \
