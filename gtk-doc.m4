@@ -23,7 +23,7 @@ AC_DEFUN([GTK_DOC_CHECK],
 
   if test x$enable_gtk_doc = xyes; then
     ifelse([$1],[],
-      [PKG_CHECK_EXISTS([gtk-doc],, 
+      [PKG_CHECK_EXISTS([gtk-doc],,
                         AC_MSG_ERROR([gtk-doc not installed and --enable-gtk-doc requested]))],
       [PKG_CHECK_EXISTS([gtk-doc >= $1],,
                         AC_MSG_ERROR([You need to have gtk-doc >= $1 installed to build gtk-doc]))])
@@ -31,6 +31,8 @@ AC_DEFUN([GTK_DOC_CHECK],
 
   AC_MSG_CHECKING([whether to build gtk-doc documentation])
   AC_MSG_RESULT($enable_gtk_doc)
+
+  AC_PATH_PROGS(GTKDOC_CHECK,gtkdoc-check,)
 
   AM_CONDITIONAL([ENABLE_GTK_DOC], [test x$enable_gtk_doc = xyes])
   AM_CONDITIONAL([GTK_DOC_USE_LIBTOOL], [test -n "$LIBTOOL"])

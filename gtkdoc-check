@@ -1,0 +1,50 @@
+#!/bin/sh
+
+res=0
+fails=0;
+checks=0;
+report="\n"
+
+module=`grep -e "^DOC_MODULE[[:blank:]]*=" Makefile.am  | sed -e "s/^DOC_MODULE[ \t]=[ \t]*//"`
+
+echo -n "Running suite(s): gtkdoc-"
+dir=`dirname $PWD`
+echo -n `basename $dir`-$module ""
+
+file=$module-undocumented.txt;
+if [ -e $file ]; then
+  checks=$(($checks+3))
+
+  if [ `head -n1 $file | cut -d% -f1` -ne "100" ]; then
+    res=1
+    fails=$(($fails+1))
+    report="$report$file:1:E: undocumented symbols\n"
+  fi
+  file=$module-unused.txt;
+  if [ -e $file ]; then
+    lines=`wc -l $file | cut -f1 -d\ `
+    if [ $lines -gt 0 ]; then
+      res=1
+      fails=$(($fails+1))
+      report="$report$file:1:E: $lines unused documentation entries\n"
+    fi
+  fi
+  file=$module-undeclared.txt;
+  if [ -e $file ]; then
+    lines=`wc -l $file | cut -f1 -d\ `
+    if [ $lines -gt 0 ]; then
+      res=1
+      fails=$((fails+1))
+      report="$report$file:1:E: $lines undeclared symbols\n"
+    fi
+  fi
+fi
+
+echo
+if [ $checks -gt 0 ];then
+  rate=$((($checks-$fails)*100/$checks))
+  echo -n "$rate%: Checks: $checks, Failures: $fails"
+  echo -e -n $report
+fi
+
+exit $res

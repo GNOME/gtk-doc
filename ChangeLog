@@ -1,3 +1,15 @@
+2007-08-10  Stefan Kost  <ensonic@users.sf.net>
+
+	* examples/Makefile.am:
+	  Add commented out TESTS.
+
+	* gtk-doc.m4:
+	  Check for location of gtkdoc-check.
+
+	* Makefile.am:
+	* gtkdoc-check:
+	  Test doc status and print result in check like layout.
+
 2007-08-02  Stefan Kost  <ensonic@users.sf.net>
 
 	patch by: Sven Herzberg <herzi@gnome-de.org>
