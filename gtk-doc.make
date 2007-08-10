@@ -38,7 +38,12 @@ SCANOBJ_FILES = 		 \
 	$(DOC_MODULE).prerequisites \
 	$(DOC_MODULE).signals
 
-CLEANFILES = $(SCANOBJ_FILES) $(DOC_MODULE)-unused.txt $(DOC_STAMPS)
+REPORT_FILES = \
+	$(DOC_MODULE)-undocumented.txt \
+	$(DOC_MODULE)-undeclared.txt \
+	$(DOC_MODULE)-unused.txt
+
+CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
 
 if ENABLE_GTK_DOC
 all-local: html-build.stamp
@@ -111,7 +116,8 @@ clean-local:
 	rm -rf .libs
 
 maintainer-clean-local: clean
-	cd $(srcdir) && rm -rf xml html $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt $(DOC_MODULE)-undocumented.txt $(DOC_MODULE)-undeclared.txt
+	cd $(srcdir) && rm -rf xml html \
+	$(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt $(REPORT_FILES)
 
 install-data-local:
 	installfiles=`echo $(srcdir)/html/*`; \
