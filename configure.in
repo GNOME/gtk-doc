@@ -111,15 +111,20 @@ AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
 
 # if glib is available we can enable the tests
 PKG_CHECK_MODULES(TEST_DEPS, glib-2.0 >= 2.2.0 gobject-2.0  >= 2.6.0, [
-    AM_CONDITIONAL(BUILD_TESTS, true)
     AC_DEFINE(BUILD_TESTS, [1], [Define to 1 if we build the tests])
     AC_PROG_LIBTOOL
-    AM_CONDITIONAL(ENABLE_GTK_DOC, true)
-    AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, test -n "$LIBTOOL")
+    enable_gtk_doc=true
+    gtk_doc_use_libtool=true
+    build_tests=true
   ],[
-    AM_CONDITIONAL(BUILD_TESTS, false)
+    enable_gtk_doc=false
+    gtk_doc_use_libtool=false
+    build_tests=false
   ]
 )
+AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, test -n "$LIBTOOL" -a x$gtk_doc_use_libtool = xtrue )
+AM_CONDITIONAL(ENABLE_GTK_DOC, test x$enable_gtk_doc = xtrue)
+AM_CONDITIONAL(BUILD_TESTS, test x$build_tests = xtrue)
 
 glib_prefix="`pkg-config --variable=prefix glib-2.0`"
 AC_SUBST(glib_prefix)
