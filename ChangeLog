@@ -1,6 +1,13 @@
 2007-08-10  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtk-doc.make:
+	* tests/gtk-doc.make:
+	  Revert fix for #433338 and reopen bug. Breaks if file is not there,
+	  e.g. if --rebuild-types is used.
+
+2007-08-10  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtk-doc.make:
 	  Some cleanups.
 
 	* tests/gtk-doc.make:
