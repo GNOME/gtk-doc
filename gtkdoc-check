@@ -5,7 +5,7 @@ fails=0;
 checks=0;
 report="\n"
 
-module=`grep -e "^DOC_MODULE[[:blank:]]*=" Makefile.am  | sed -e "s/^DOC_MODULE[ \t]=[ \t]*//"`
+module=`grep -e "^DOC_MODULE[[:blank:]]*=" Makefile.am  | sed -e "s/^DOC_MODULE[ \t]*=[ \t]*//"`
 
 echo -n "Running suite(s): gtkdoc-"
 dir=`dirname $PWD`
