@@ -637,8 +637,8 @@ EOF
 		# Note that the declaration has been output.
 		$DeclarationOutput{$symbol} = 1;
 	    } elsif ($subsection ne "Standard" && $subsection ne "Private") {
-		$UndeclaredSymbols{$1} = 1;
-		print "WARNING: No declaration found for: $1\n";
+		$UndeclaredSymbols{$symbol} = 1;
+		print "WARNING: No declaration found for: $symbol\n";
 	    }
 	    $num_symbols++;
 	}
@@ -2917,10 +2917,12 @@ EOF
                         }
                     }
                     $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Long_Description"}=$description;
+                    # FIXME $SourceSymbolTypes{XXX} = "STRUCT,SIGNAL,ARG,FUNCTION,MACRO";
                 } else {
                     #print "SYMBOL DOCS found in source for : '$symbol' ",length($description), "\n";
                     $SourceSymbolDocs{$symbol} = $description;
                     $SourceSymbolParams{$symbol} = [ @params ];
+                    # FIXME $SourceSymbolTypes{XXX} = "";
                 }
 
 		if ($since_desc) {
@@ -3328,7 +3330,15 @@ sub OutputAllSymbols {
 
 sub MergeSourceDocumentation {
     my $symbol;
-    foreach $symbol (keys (%SymbolDocs)) {
+    my @Symbols;
+
+    if (scalar %SymbolDocs) {
+        @Symbols=keys (%SymbolDocs);
+    }
+    else {
+        @Symbols=keys (%SourceSymbolDocs);
+    }
+    foreach $symbol (@Symbols) {
         $AllSymbols{$symbol} = 1;
 
 	my $have_tmpl_docs = 0;
@@ -3342,10 +3352,14 @@ sub MergeSourceDocumentation {
 	    $have_tmpl_docs = 1;
 	}
 
+        print "merging $symbol\n";
+
 	if (exists ($SourceSymbolDocs{$symbol})) {
 	    my $src_doc = $SourceSymbolDocs{$symbol};
 	    my $tmpl_doc = $SymbolDocs{$symbol};
 	    my $type = $DeclarationTypes {$symbol};
+
+            print "... from source\n";
 
 	    my $item = "Parameter";
             if (defined ($type)) {
@@ -3471,6 +3485,9 @@ EOF
 	} else {
 	    if ($have_tmpl_docs) {
 		$AllDocumentedSymbols{$symbol} = 1;
+            }
+            else {
+                print "... undocumented\n";
             }
         }
         # if this symbol is documented, check if docs are complete
@@ -3788,7 +3805,7 @@ sub ReadTemplateFile {
     my $template = "$docsfile.sgml";
 #    print "Reading $template\n";
     if (! -f $template) {
-	print "File doesn't exist: $template\n";
+#	print "File doesn't exist: $template\n";
 	return;
     }
 
