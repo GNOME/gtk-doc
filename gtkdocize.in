@@ -13,11 +13,12 @@ datadir=@datadir@
 # options
 docdir=.
 copy=no
+makefile=gtk-doc.make
 
 while test $# -gt 0; do
   case "$1" in
   --help)
-    echo "usage: $progname [ --copy ] [ --docdir DIR ]" 1>&2
+    echo "usage: $progname [ --copy ] [ --docdir DIR ] [ --flavour {legacy|no-tmpl} ]" 1>&2
     exit 1 ;;
   --version)
     echo "$PROGRAM ($PACKAGE) $VERSION"
@@ -29,13 +30,28 @@ while test $# -gt 0; do
     shift
     docdir="$1"
     shift ;;
+  --flavour)
+    shift
+    flavour="$1"
+    case "$flavour" in
+      legacy)
+        ;;
+      no-tmpl)
+        makefile=gtk-doc.notmpl.make
+        ;;
+      *)
+        echo "$progname: invalid value for --flavour" 1>&2
+        echo "usage: $progname [ --copy ] [ --docdir DIR ] [--flavour {legacy|no-tmpl} ]" 1>&2
+        exit 1 ;;
+    esac
+    shift ;;
   -*)
     echo "$progname: unrecognised option '$1'" 1>&2
-    echo "usage: $progname [ --copy ] [ --docdir DIR ]" 1>&2
+    echo "usage: $progname [ --copy ] [ --docdir DIR ] [--flavour {legacy|no-tmpl} ]" 1>&2
     exit 1 ;;
   *)
     echo "$progname: too many arguments" 1>&2
-    echo "usage: $progname [ --copy ] [ --docdir DIR ]" 1>&2
+    echo "usage: $progname [ --copy ] [ --docdir DIR ] [--flavour {legacy|no-tmpl} ]" 1>&2
     exit 1 ;;
   esac
 done
@@ -68,7 +84,7 @@ if test -n "$m4dir"; then
     cp -f $datadir/aclocal/gtk-doc.m4 $m4dir/ ||
       exit 1
   else
-    ln -sf $datadir/aclocal/gtk-doc.m4 $m4dir/ || 
+    ln -sf $datadir/aclocal/gtk-doc.m4 $m4dir/ ||
       cp -f $datadir/aclocal/gtk-doc.m4 $m4dir/ ||
       exit 1
   fi
@@ -76,10 +92,10 @@ fi
 
 rm -f $docdir/gtk-doc.make
 if test "$copy" = yes; then
-  cp -f $datadir/gtk-doc/data/gtk-doc.make $docdir/ ||
+  cp -f $datadir/gtk-doc/data/$makefile $docdir/gtk-doc.make ||
     exit 1
 else
-  ln -sf $datadir/gtk-doc/data/gtk-doc.make $docdir/ ||
-    cp -f $datadir/gtk-doc/data/gtk-doc.make $docdir/ ||
+  ln -sf $datadir/gtk-doc/data/$makefile $docdir/gtk-doc.make ||
+    cp -f $datadir/gtk-doc/data/$makefile $docdir/gtk-doc.make ||
     exit 1
 fi

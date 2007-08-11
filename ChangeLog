@@ -1,5 +1,16 @@
 2007-08-11  Stefan Kost  <ensonic@users.sf.net>
 
+	* Makefile.am:
+	  Install new makefile.
+
+	* configure.in:
+	  Bump version as we're working on 1.9.
+
+	* gtkdocize.in:
+	  Add option to select makefile-flavour.
+
+2007-08-11  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtk-doc.make:
 	  Add dummy rule to make first build run through. Fixes #156643
 

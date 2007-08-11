@@ -18,13 +18,14 @@ bin_SCRIPTS = \
 gtkdocdatadir = $(datadir)/gtk-doc/data
 gtkdocdata_DATA = \
 	gtkdoc-common.pl	\
-        gtk-doc.dsl		\
+	gtk-doc.dsl		\
 	gtk-doc.dcl		\
 	gtk-doc.xsl		\
 	version-greater-or-equal.xsl \
 	devhelp.xsl		\
 	devhelp2.xsl		\
 	gtk-doc.make		\
+	gtk-doc.notmpl.make		\
 	home.png		\
 	left.png		\
 	right.png		\
