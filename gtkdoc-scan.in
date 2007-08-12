@@ -183,7 +183,7 @@ sub ScanHeaders {
 
     # This array holds any subdirectories found.
     my (@subdirs) = ();
-    
+
     opendir (SRCDIR, $source_dir)
 	|| die "Can't open source directory $source_dir: $!";
     my $file;
@@ -246,7 +246,7 @@ sub ScanHeader {
 				  #   subclasses, which we remove from the list.
 
     my $file_basename;
-    
+
     my $deprecated_conditional_nest = 0;
 
     my $deprecated = "";
@@ -317,13 +317,15 @@ sub ScanHeader {
 	    # Skip top-level comments.
 	    if (s%^\s*/\*%%) {
 		if (m%\*/%) {
-#		    print "Found one-line comment: $_";
+		    #print "Found one-line comment: $_";
 		} else {
 		    $in_comment = 1;
-#		    print "Found start of comment: $_";
+		    #print "Found start of comment: $_";
 		}
 		next;
 	    }
+
+            #print "0: $_";
 
 	    # MACROS
 
@@ -345,6 +347,7 @@ sub ScanHeader {
 		    $in_declaration = "macro";
 		}
 		$first_macro = 0;
+                #print "DEBUG: Macro: $symbol\n";
 
 
 	    # TYPEDEF'D FUNCTIONS (i.e. user functions)
@@ -354,6 +357,7 @@ sub ScanHeader {
 		$symbol = $4;
 		$decl = $';
 		$in_declaration = "user_function";
+                #print "DEBUG: user function: $symbol\n";
 
 
 	    # ENUMS
@@ -362,18 +366,18 @@ sub ScanHeader {
 		# We assume that 'enum _<enum_name> {' is really the
 		# declaration of enum <enum_name>.
 		$symbol = $1;
-#		print "DEBUG: plain enum: $symbol\n";
+		#print "DEBUG: plain enum: $symbol\n";
 		$decl = $_;
 		$in_declaration = "enum";
 
 	    } elsif (m/^\s*typedef\s+enum\s+_(\w+)\s+\1\s*;/) {
 		# We skip 'typedef <enum_name> _<enum_name>;' as the enum will
 		# be declared elsewhere.
-#		print "DEBUG: skipping enum typedef: $1\n";
+		#print "DEBUG: skipping enum typedef: $1\n";
 
 	    } elsif (m/^\s*typedef\s+enum/) {
 		$symbol = "";
-#		print "DEBUG: typedef enum: -\n";
+		#print "DEBUG: typedef enum: -\n";
 		$decl = $_;
 		$in_declaration = "enum";
 
@@ -385,17 +389,19 @@ sub ScanHeader {
 		# This could be an opaque data structure, so we output an
 		# empty declaration. If the structure is actually found that
 		# will override this.
-#		print "DEBUG: struct typedef: $1\n";
+		#print "DEBUG: struct typedef: $1\n";
 		&AddSymbolToList (\$list, $1);
 		print DECL "<STRUCT>\n<NAME>$1</NAME>\n$deprecated</STRUCT>\n";
 
 	    } elsif (m/^\s*struct\s+_(\w+)\s*;/) {
 		# Skip private structs.
+                #print "DEBUG: private struct\n";
 
 	    } elsif (m/^\s*struct\s+(\w+)\s*;/) {
 	        # Do a similar thing for normal structs as for typedefs above.
 	        # But we output the declaration as well in this case, so we
 	        # can differentiate it from a typedef.
+                #print "DEBUG: struct: $1\n";
 		&AddSymbolToList (\$list, $1);
 		print DECL "<STRUCT>\n<NAME>$1</NAME>\n$_$deprecated</STRUCT>\n";
 
@@ -404,39 +410,23 @@ sub ScanHeader {
  		$decl = $_;
 		$level = 0;
 		$in_declaration = "struct";
-
-	    } elsif (m/^\s*struct\s+_?(\w+)/) {
-		# We assume that 'struct _<struct_name>' is really the
-		# declaration of struct <struct_name>.
-		$symbol = $1;
-		$decl = $_;
-		$level = 0;
-		$in_declaration = "struct";
-
-
-	    # UNIONS
-
-	    } elsif (s/^\s*union\s+_(\w+)/union $1/) {
-		$symbol = $1;
-		$decl = $_;
-		$in_declaration = "union";
-
+                #print "DEBUG: struct\n";
 
 	    # OTHER TYPEDEFS
 
 	    } elsif (m/^\s*typedef\s+struct\s+\w+[\s\*]+(\w+)\s*;/) {
-#	        print "Found struct* typedef: $_";
+	        #print "DEBUG: Found struct* typedef: $_";
 		&AddSymbolToList (\$list, $1);
 		print DECL "<TYPEDEF>\n<NAME>$1</NAME>\n$deprecated$_</TYPEDEF>\n";
 
 	    } elsif (m/^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w+)(\s*\[[^\]]+\])*\s*;/) {
 		if ($2 !~ m/^struct\s/ && $2 !~ m/^union\s/) {
-#		    print "Found typedef: $_";
+		    #print "DEBUG: Found typedef: $_";
 		    &AddSymbolToList (\$list, $3);
 		    print DECL "<TYPEDEF>\n<NAME>$3</NAME>\n$deprecated$_</TYPEDEF>\n";
 		}
 	    } elsif (m/^\s*typedef\s+/) {
-#		print "Skipping typedef: $_";
+		#print "DEBUG: Skipping typedef: $_";
 
 
 	    # VARIABLES (extern'ed variables)
@@ -444,7 +434,7 @@ sub ScanHeader {
 	    } elsif (m/^\s*(extern|[A-Za-z_]+VAR)\s+((const\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*;/) {
 		$symbol = $5;
 	        s/^\s*([A-Za-z_]+VAR)\b/extern/;
-#		print "Possible extern: $_";
+		#print "DEBUG: Possible extern: $_";
 		&AddSymbolToList (\$list, $symbol);
 		print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$_</VARIABLE>\n";
 
@@ -458,7 +448,7 @@ sub ScanHeader {
 		$symbol = $2;
 		$decl = $';
 
-#		print "Function: $symbol, Returns: $ret_type\n";
+		#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
 
 		$in_declaration = "function";
 
@@ -469,12 +459,13 @@ sub ScanHeader {
 	    } elsif (m/^\s*([A-Za-z]\w*)\s*\(/) {
 		$symbol = $1;
 		$decl = $';
+
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
 		    && $previous_line !~ m/^\s*static\s+/) {
-		    if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|enum\s+)?\w+)(\s*\*+)?\s*$/) {
+		    if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)?\w+)(\s*\*+)?\s*$/) {
 			$ret_type = $1;
 			if (defined ($2)) { $ret_type .= " $2"; }
-#			print "Function: $symbol, Returns: $ret_type\n";
+			#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
 			$in_declaration = "function";
 		    }
 		}
@@ -486,30 +477,56 @@ sub ScanHeader {
 		if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
 		    $ret_type = "$1 $2";
 		    $symbol = $3;
-#		    print "Function: $symbol, Returns: $ret_type\n";
+		    #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
 		    $in_declaration = "function";
 
 		} elsif ($previous_line =~ m/^\s*\w+\s*$/
 			 && $pre_previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$/) {
 			$ret_type = $1;
-                        $ret_type =~ s/\s*\n//;
+			$ret_type =~ s/\s*\n//;
 			$in_declaration = "function";
 
                         $symbol = $previous_line;
                         $symbol =~ s/^\s+//;
                         $symbol =~ s/\s*\n//;
-#			print "Function: $symbol, Returns: $ret_type\n";
+			#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
 		}
 
-#	    } elsif (m/^extern\s+/) {
-#		print "Skipping extern: $_";
+	    #} elsif (m/^extern\s+/) {
+		#print "DEBUG: Skipping extern: $_";
 
+
+	    # STRUCTS
+
+	    } elsif (m/^\s*struct\s+_(\w+)/) {
+		# We assume that 'struct _<struct_name>' is really the
+		# declaration of struct <struct_name>.
+		$symbol = $1;
+		$decl = $_;
+		$level = 0;
+		$in_declaration = "struct";
+                #print "DEBUG: Struct(_): $symbol\n";
+
+
+	    # UNIONS
+
+	    } elsif (s/^\s*union\s+_(\w+)/union $1/) {
+		$symbol = $1;
+		$decl = $_;
+		$in_declaration = "union";
+                #print "DEBUG: Union: $symbol\n";
 	    }
+
 	} else {
+            #print "1: $_";
 	    # If we were already in the middle of a declaration, we simply add
 	    # the current line onto the end of it.
 	    $decl .= $_;
 	}
+
+        #if ($in_declaration ne '') {
+        #    print "= $decl\n";
+        #}
 
 	# Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);' or
 	# ') __attribute__ (...);'.
@@ -567,6 +584,7 @@ sub ScanHeader {
 		    $list .= "<TITLE>$1</TITLE>\n$1\n";
 		    push (@objects, $1);
 		}
+                #print "Store struct: $symbol\n";
 		&AddSymbolToList (\$list, $symbol);
 
 		print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";

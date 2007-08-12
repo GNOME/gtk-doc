@@ -46,6 +46,20 @@ void bug_379466 (int
 
 
 /**
+ * bug_411739:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=411739
+ *
+ * Returns: result
+ */
+
+struct bug *
+bug_411739 (void) {
+  return NULL;
+}
+
+
+/**
  * bug_419997:
  * @pid: arg
  *

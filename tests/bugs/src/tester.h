@@ -5,11 +5,18 @@
 
 #include <glib.h>
 
+struct bug {
+  int test;
+};
+
 void bug_141869_a (unsigned pid);
 void bug_141869_b (signed pid);
 
 void bug_379466 (int
   pid);
+
+struct bug *
+bug_411739 (void);
 
 void bug_419997 (int const_values);
 

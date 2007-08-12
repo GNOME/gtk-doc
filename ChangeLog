@@ -1,5 +1,13 @@
 2007-08-12  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-scan.in:
+	* tests/bugs/docs/tester-sections.txt:
+	* tests/bugs/src/tester.c:
+	* tests/bugs/src/tester.h:
+	  Improved scan logic. Fixes #411739.
+
+2007-08-12  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-mkdb.in:
 	* tests/bugs/src/tester.h:
 	  Handle newline in declarations better. Fixes #379466.
