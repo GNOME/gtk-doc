@@ -1,6 +1,14 @@
 2007-08-12  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in:
+	* tests/bugs/src/tester.h:
+	  Handle newline in declarations better. Fixes #379466.
+	  Ensure space in multiline declarations when removing the newline.
+	  Fix missing argument docs in template free build.
+
+2007-08-12  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-mkdb.in:
 	* gtkdoc-mktmpl.in:
 	  Handle "unsigned long|unsigned short|signed long|signed short".
 	  Fixes #445693.
