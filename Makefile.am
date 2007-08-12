@@ -3,16 +3,16 @@
 SUBDIRS = help tests
 
 bin_SCRIPTS = \
-	gtkdoc-scanobj  \
-	gtkdoc-scangobj \
-	gtkdoc-scan     \
-	gtkdoc-mktmpl   \
+	gtkdoc-check    \
+	gtkdoc-fixxref  \
 	gtkdoc-mkdb     \
 	gtkdoc-mkhtml   \
 	gtkdoc-mkman    \
-	gtkdoc-fixxref  \
+	gtkdoc-mktmpl   \
 	gtkdoc-rebase   \
-	gtkdoc-check    \
+	gtkdoc-scan     \
+	gtkdoc-scangobj \
+	gtkdoc-scanobj  \
 	gtkdocize
 
 gtkdocdatadir = $(datadir)/gtk-doc/data

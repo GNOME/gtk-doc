@@ -1,5 +1,14 @@
 2007-08-12  Stefan Kost  <ensonic@users.sf.net>
 
+	* Makefile.am:
+	* configure.in:
+	* gtkdoc-check:
+	* gtkdoc-check.in:
+	  Replacing my shell based test script by Davids perl based one. Add
+	  licence, copyright and docs header. Integrate with build.
+
+2007-08-12  Stefan Kost  <ensonic@users.sf.net>
+
 	patch by: David Nečas <yeti@physics.muni.cz>
 
 	* gtkdoc-scangobj.in:
