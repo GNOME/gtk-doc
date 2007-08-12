@@ -5,6 +5,26 @@
 
 #include <glib.h>
 
+#define _PADDDING 4
+/**
+ * bug_460127:
+ * @a: field
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=460127
+ */
+struct _bug_460127 {
+  /*< public >*/
+  gint a;
+
+  /*< private >*/
+  union {
+    struct {
+      gint b;
+    } ABI;
+    gpointer _reserved[_PADDDING + 0];
+  } abidata;
+};
+
 struct bug {
   int test;
 };
