@@ -40,7 +40,7 @@ my $MODULE;
 my $OUTPUT_DIR;
 my $PRINT_VERSION;
 my $PRINT_HELP;
-my $TYPE_INIT_FUNC="g_type_init ()";
+my $TYPE_INIT_FUNC="g_type_init(); g_type_class_ref(G_TYPE_OBJECT)";
 my $QUERY_CHILD_PROPERTIES;
 
 # --nogtkinit is deprecated, as it is the default now anyway.
