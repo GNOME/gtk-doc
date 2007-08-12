@@ -1282,6 +1282,8 @@ sub OutputFunction {
 
     my $param_num = 0;
     while ($declaration ne "") {
+        #print "$declaration";
+
 	if ($declaration =~ s/^[\s,]+//) {
 	    # skip whitespace and commas
 	    next;
@@ -1305,8 +1307,8 @@ sub OutputFunction {
 
 	# allow alphanumerics, '_', '[' & ']' in param names
 	# Try to match a standard parameter (keep in sync with gtkdoc-mktmpl)
-	#                                $1                                                                              $2                             $3                                                           $4       $5
-	} elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	#                                $1                                                                                                                                    $2                             $3                                                           $4       $5
+	} elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 	    my $pre	= defined($1) ? $1 : "";
 	    my $type	= $2;
 	    my $ptr	= defined($3) ? $3 : "";
@@ -1319,7 +1321,9 @@ sub OutputFunction {
 	    $ptr  =~ s/\s+$//;
 	    if ($ptr && $ptr !~ m/\*$/) { $ptr .= " "; }
 
-            if (($name eq "") && $pre =~ m/^((un)?signed)\s?/ ) {
+            #print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
+
+            if (($name eq "") && $pre =~ m/^((un)?signed .*)\s?/ ) {
                 $name = $type;
                 $type = "$1";
                 $pre = "";
@@ -3352,14 +3356,14 @@ sub MergeSourceDocumentation {
 	    $have_tmpl_docs = 1;
 	}
 
-        print "merging $symbol\n";
+        #print "merging $symbol\n";
 
 	if (exists ($SourceSymbolDocs{$symbol})) {
 	    my $src_doc = $SourceSymbolDocs{$symbol};
 	    my $tmpl_doc = $SymbolDocs{$symbol};
 	    my $type = $DeclarationTypes {$symbol};
 
-            print "... from source\n";
+            #print "... from source\n";
 
 	    my $item = "Parameter";
             if (defined ($type)) {
@@ -3487,7 +3491,7 @@ EOF
 		$AllDocumentedSymbols{$symbol} = 1;
             }
             else {
-                print "... undocumented\n";
+                #print "... undocumented\n";
             }
         }
         # if this symbol is documented, check if docs are complete
