@@ -23,6 +23,7 @@ struct _bug_460127 {
     } ABI;
     gpointer _reserved[_PADDDING + 0];
   } abidata;
+
 };
 
 struct bug {

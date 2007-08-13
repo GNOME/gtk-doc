@@ -503,7 +503,11 @@ sub ScanHeader {
 		# declaration of struct <struct_name>.
 		$symbol = $1;
 		$decl = $_;
-		$level = 0;
+		if (m/^\s*struct\s+_(\w+)\s*{/) {
+		    $level = 1;
+		} else {
+		    $level = 0;
+		}
 		$in_declaration = "struct";
                 #print "DEBUG: Struct(_): $symbol\n";
 
