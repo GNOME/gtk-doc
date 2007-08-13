@@ -2982,7 +2982,9 @@ EOF
 	    # If we find another valid returns line, we assume that the first
 	    # one was really part of the description.
 	    if (m/^\s*(returns:|return\s+value:)/i) {
-		$description .= $return_start . $return_desc;
+		if ($return_style eq 'broken') {
+		    $description .= $return_start . $return_desc;
+		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
 		    print <<EOF
@@ -3017,7 +3019,9 @@ EOF
 
 	if ($in_since) {
 	    if (m/^\s*(returns:|return\s+value:)/i) {
-		$description .= $return_start . $return_desc;
+		if ($return_style eq 'broken') {
+		    $description .= $return_start . $return_desc;
+		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
 		    print <<EOF
@@ -3051,7 +3055,9 @@ EOF
 
 	if ($in_stability) {
 	    if (m/^\s*(returns:|return\s+value:)/i) {
-		$description .= $return_start . $return_desc;
+		if ($return_style eq 'broken') {
+		    $description .= $return_start . $return_desc;
+		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
 		    print <<EOF
@@ -3085,7 +3091,9 @@ EOF
 
 	if ($in_deprecated) {
 	    if (m/^\s*(returns:|return\s+value:)/i) {
-		$description .= $return_start . $return_desc;
+		if ($return_style eq 'broken') {
+		    $description .= $return_start . $return_desc;
+		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
 		    print <<EOF
@@ -3124,7 +3132,9 @@ EOF
 	    s%^\s*Description:%%;
 
 	    if (m/^\s*(returns:|return\s+value:)/i) {
-		$description .= $return_start . $return_desc;
+		if ($return_style eq 'broken') {
+		    $description .= $return_start . $return_desc;
+		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
 		    print <<EOF
