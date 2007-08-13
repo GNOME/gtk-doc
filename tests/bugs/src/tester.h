@@ -35,6 +35,8 @@ void bug_141869_b (signed pid);
 void bug_379466 (int
   pid);
 
+int bug_380824 (int arg);
+
 struct bug *
 bug_411739 (void);
 

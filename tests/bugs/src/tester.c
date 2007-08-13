@@ -46,6 +46,21 @@ void bug_379466 (int
 
 
 /**
+ * bug_380824:
+ * @arg: arg
+ *
+ * Returns a value.
+ * http://bugzilla.gnome.org/show_bug.cgi?id=380824
+ *
+ * Since: 0.1
+ *
+ * Returns: result
+ */
+int bug_380824 (int arg) {
+  return 0;
+}
+
+/**
  * bug_411739:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=411739
