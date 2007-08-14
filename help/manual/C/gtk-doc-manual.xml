@@ -10,7 +10,7 @@
 <book id="index">
   <bookinfo>
     <title>GTK-Doc Manual</title>
-    <edition>1.8</edition>
+    <edition>1.9</edition>
     <authorgroup>
       <author>
         <firstname>Chris</firstname>
@@ -149,17 +149,26 @@
             information gathered in the first step. (Note that this can be run
             repeatedly. It will try to ensure that no documentation is ever lost.)
           </para>
+          <note>
+            <para>
+              Since gtk-doc 1.9 the templates can be avoided. We encourage people to keep
+              documentation in the code. <application>gtkdocize</application> supports now
+              a --flavour=no-tmpl option that chooses a makefile that skips tmpl usage totally.
+              If you have never changed file in tmpl by hand, please remove the dir once.
+            </para>
+          </note>
         </listitem>
 
         <listitem>
           <para>
-            <guilabel>Generating the SGML and HTML.</guilabel>
+            <guilabel>Generating the SGML/XML and HTML.</guilabel>
 
             <application>gtkdoc-mkdb</application> turns the template files into
             SGML or XML files in the <filename class='directory'>sgml/</filename>
             or <filename class='directory'>xml/</filename> subdirectory.
-            (If the source code contains documentation on functions, using the
-            special comment blocks, it gets merged in here.)
+            If the source code contains documentation on functions, using the
+            special comment blocks, it gets merged in here. If there are no tmpl files used
+            it only reads takes docs from sources and introspection data.
 
             <application>gtkdoc-mkhtml</application> turns the SGML files into HTML
             files in the <filename class='directory'>html/</filename>  subdirectory.
@@ -177,6 +186,11 @@
             After installing the HTML files, <application>gtkdoc-fixxref</application> can be run to fix up any
             cross-references between separate documents. For example, the GTK+
             documentation contains many cross-references to types documented in the GLib manual.
+
+            When creating the source tarball for distribution, <application>gtkdoc-rebase</application>
+            turns all external links into web-links. When installing distributed (pregenerated) docs
+            the same application will try to turn links back to local links
+            (where those docs are installed).
           </para>
         </listitem>
       </orderedlist>
@@ -337,7 +351,7 @@ meep/
           <programlisting>
 <![CDATA[
 # check for gtk-doc
-GTK_DOC_CHECK(1.4)
+GTK_DOC_CHECK(1.9)
 ]]>
           </programlisting>
         </example>
@@ -356,7 +370,8 @@ GTK_DOC_CHECK(1.4)
       	<para>
           Gtk-Doc is disabled by default! Remember to pass the option
           <option>'--enable-gtk-doc'</option> to the next
-          <filename>configure</filename> run.
+          <filename>configure</filename> run. Otherwise pregenerated documentation is installed
+          (which makes sense for users but not for developers).
         </para>
       </important>
 
@@ -396,6 +411,8 @@ AC_CONFIG_MACRO_DIR(m4)
         All the tools support <option>--help</option> to list the supported
         parameters.
       </para>
+
+      <!-- FIXME: explain options ? -->
 
       <para>
         You may also want to enable gtk-doc for the distcheckmake target. Just
@@ -441,7 +458,16 @@ gtkdocize || exit 1
         <filename>gtk-doc.make</filename> to you project root (or any directory
         specified by the --docdir option). If also check you configure script
         for the <function>GTK_DOC_CHECK</function> invocation.
-        Finally the tool understand common parameters such as --help or --version.
+      </para>
+
+      <para>
+        Historically gtk-doc was gerating template files where developers entered the docs.
+        this turned out to be not so good. Since a few version gtk-doc could also get all
+        the information from source comments.
+        Since gtk-doc 1.9 the templates can be avoided. We encourage people to keep
+        documentation in the code. <application>gtkdocize</application> supports now
+        a --flavour=no-tmpl option that chooses a makefile that skips tmpl usage totally.
+        If you have never changed file in tmpl by hand, please remove the dir once.
       </para>
     </sect1>
 
@@ -463,15 +489,10 @@ gtkdocize || exit 1
         <filename>&lt;package&gt;-sections.txt</filename>.
       </para>
       <para>
-        The second make run also generates a mast document template
-	(<filename>&lt;package&gt;-docs.sgml</filename>) for us.
-      </para>
-      <para>
         <example><title>Running the doc build</title>
           <programlisting>
 <![CDATA[
 ./autogen.sh --enable-gtk-doc
-make
 make
 ]]>
           </programlisting>
@@ -1083,6 +1104,12 @@ gtk_arrow_get_type
         </example>
       </para>
 
+      <para>
+        Since gtk-doc 1.8 <application>gtkdoc-scan</application> can generate this list for you.
+        Just add "--rebuild-types" to SCAN_OPTIONS in <filename>Makefile.am</filename>. If you
+        use this approach you should not dist the types file nor have it under version control.
+      </para>
+
     </sect1>
 
     <sect1 id="metafiles_master">
@@ -1099,6 +1126,9 @@ gtk_arrow_get_type
         While Gtk-Doc creates a template master document for you, later run will
         not touch it again. This means that one can freely structure the
         documentation. That includes grouping pages and adding extra pages.
+        Gtk-doc has now a test suite, where also the master-document is recreated from scratch.
+        Its a good idea to look at this from time to time to see if there are some new goodies
+        introduced there.
       </para>
 
       <tip>
@@ -1113,8 +1143,8 @@ gtk_arrow_get_type
 
       <para>
         So what are the things to change inside the master document? For a start
-        is only a little. There are two placeholders for the package-name and
-        one for chapter title.
+        is only a little. There are some placeholders (text in square brackets)
+        there which you should take care of.
       </para>
 
       <para>
@@ -1122,7 +1152,12 @@ gtk_arrow_get_type
           <programlisting>
 <![CDATA[
 <bookinfo>
-  <title>[Insert name here] Reference Manual</title>
+  <title>MODULENAME Reference Manual</title>
+  <releaseinfo>
+    for MODULENAME [VERSION]
+    The latest version of this documentation can be found on-line at
+    <ulink role="online-location" url="http://[SERVER]/MODULENAME/index.html">http://[SERVER]/MODULENAME/</ulink>.
+  </releaseinfo>
 </bookinfo>
 
 <chapter>
@@ -1231,6 +1266,14 @@ gtk_arrow_get_type
       the <filename>&lt;package&gt;-section.txt</filename> file.
     </para>
 
+    <tip>
+      <para>
+        Enable or add the <code>TESTS=($GTKDOC_CHECK)</code> line in Makefile.am.
+        If at least gtk-doc 1.9 is installed, this will run sanity checks during 
+        make check run.
+      </para>
+    </tip>
+
   </chapter>
 
   <chapter id="faq">
@@ -1272,11 +1315,11 @@ gtk_arrow_get_type
       <!-- warnings: -->
       <seglistitem>
 	<seg>Parameter described in source code comment block but does not exist</seg>
-	<seg>check if the prototype in the header has different parameter names as in the source</seg>
+	<seg>Check if the prototype in the header has different parameter names as in the source.</seg>
       </seglistitem>
       <seglistitem>
 	<seg>multiple "IDs" for constraint linkend: XYZ</seg>
-	<seg>Symbol XYZ appears twice in -section.txt file</seg>
+	<seg>Symbol XYZ appears twice in -section.txt file.</seg>
       </seglistitem>
     </segmentedlist>
   </chapter>
