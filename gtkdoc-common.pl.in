@@ -293,6 +293,10 @@ sub ParseEnumDeclaration {
 	} elsif ($line =~ m/^#include/) {
 	    last;
 
+	# Special case for #ifdef/#endif, just ignore it
+	} elsif ($line =~ m/^#(?:if|endif)/) {
+	    last;
+
 	} else {
 	    warn "Cannot parse enumeration member \"$line\"";
 	}

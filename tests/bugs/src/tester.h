@@ -5,6 +5,22 @@
 
 #include <glib.h>
 
+/**
+ * bug_324535:
+ * @BUG_324535_A: enum 1
+ * @BUG_324535_B: enum 2
+ * @BUG_324535_C: enum 3
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=324535
+ */
+typedef enum {
+  BUG_324535_A,
+#ifdef GTK_DISABLE_DEPRECATED
+  BUG_324535_B,
+#endif
+  BUG_324535_C,
+} bug_324535;
+
 #define _PADDDING 4
 /**
  * bug_460127:

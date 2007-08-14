@@ -1,5 +1,12 @@
 2007-08-14  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-common.pl.in:
+	* tests/bugs/docs/tester-sections.txt:
+	* tests/bugs/src/tester.h:
+	  Don't die when encountering #if/#endif in enums. Fixes #324535.
+
+2007-08-14  Stefan Kost  <ensonic@users.sf.net>
+
 	patch by: Frederic Peters <fpeters@0d.be>
 
 	* style.css:
