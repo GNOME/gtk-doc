@@ -28,6 +28,7 @@
 use strict;
 use bytes;
 use Getopt::Long;
+use Cwd qw(realpath);
 
 # Options
 
@@ -60,7 +61,7 @@ if ($PRINT_VERSION) {
 }
 
 if ($PRINT_HELP) {
-    print "gtkdoc-fixxref version @VERSION@\n";
+    print "gtkdoc-rebase version @VERSION@\n";
     print "\n--html-dir=HTML_DIR     The directory which contains the installed HTML";
     print "\n--other-dir=OTHER_DIR   Directories to recursively scan for indices (index.sgml)";
     print "\n                        May be used more than once for multiple directories";
@@ -87,6 +88,8 @@ if (!$HTML_DIR) {
 # This maps all seen URIs of a package to fix broken links in the process:
 # RevMap: URI => package
 my (%OnlineMap, %LocalMap, %RevMap);
+# Remember what mangling we did.
+my %Mapped;
 
 my $dir;
 
@@ -123,6 +126,7 @@ if ($RELATIVE) {
 }
 
 &RebaseReferences($HTML_DIR);
+&PrintWhatWeHaveDone();
 
 
 sub ScanDirectory {
@@ -165,6 +169,7 @@ sub ScanDirectory {
     }
 }
 
+
 sub AddMap {
     my ($dir) = @_;
     my $file = "$dir/index.sgml";
@@ -202,6 +207,8 @@ sub RelativizeLocalMap {
     my ($self) = @_;
     my $prefix;
 
+    $self = realpath $self;
+    $self =~ s#/?$#/#;
     ($prefix = $self) =~ s#[^/]+/$##;
     foreach my $package (keys %LocalMap) {
 	$dir = $LocalMap{ $package };
@@ -250,13 +257,16 @@ sub RebaseFile {
 
 sub RebaseLink {
     my ($href) = @_;
-    my ($dir, $file, $package);
+    my ($dir, $origdir, $file, $package);
 
     if ($href =~ m#^(.*/)([^/]*)$#) {
-	$dir = $1;
+	$dir = $origdir = $1;
 	$file = $2;
 	if ($RevMap{ $dir }) {
 	    $package = $RevMap{ $dir };
+	}
+	elsif ($dir =~ m#^\.\./([^/]+)/#) {
+	    $package = $1
 	}
 	elsif ($AGGRESSIVE) {
 	    $dir =~ m#([^/]+)/$#;
@@ -272,7 +282,23 @@ sub RebaseLink {
 	    }
 	    $href = $dir . $file;
 	}
+	if ($dir ne $origdir) {
+	    if ($Mapped{ $origdir }) {
+		$Mapped{ $origdir }->[1]++;
+	    }
+	    else {
+		$Mapped{ $origdir } = [ $dir, 1 ];
+	    }
+	}
     }
     return $href;
 }
 
+
+sub PrintWhatWeHaveDone {
+    my ($origdir, $info);
+    foreach $origdir (sort keys %Mapped) {
+	$info = $Mapped{$origdir};
+	print "$origdir -> ", $info->[0], " (", $info->[1], ")\n";
+    }
+}

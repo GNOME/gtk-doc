@@ -121,6 +121,7 @@ install-data-local:
 	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
 	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR) || :; \
 	fi
+	-gtkdoc-rebase --relative --destdir=$(DESTDIR) --html-dir=$(DESTDIR)$(TARGET_DIR)
 
 uninstall-local:
 	rm -f $(DESTDIR)$(TARGET_DIR)/*
@@ -144,5 +145,6 @@ dist-hook: dist-check-gtkdoc dist-hook-local
 	if test -f $(srcdir)/$(DOC_MODULE).types; then \
 	  cp $(srcdir)/$(DOC_MODULE).types $(distdir)/$(DOC_MODULE).types; \
 	fi
+	-gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
 
 .PHONY : dist-hook-local docs
