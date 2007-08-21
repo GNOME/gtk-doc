@@ -1658,8 +1658,12 @@ $$args_desc
 $$signals_desc
 
 $see_also
+
+<refsect1><refsect2 /><refsect2 /></refsect1>
 </refentry>
 EOF
+# This above is a hack to get a final <hr> in the output
+
     close (OUTPUT);
 
     return &UpdateFileIfChanged ($old_sgml_file, $new_sgml_file, 0);
