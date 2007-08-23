@@ -395,7 +395,7 @@ EOF
 
 	    # Try to match a standard parameter (keep in sync with gtkdoc-mkdb)
 	    #                                $1                                                                                                                                    $2                             $3                                                           $4       $5
-	    } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const|restrict)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	    } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const\b|restrict\b)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
  		my $pre		= defined($1) ? $1 : "";
  		my $type	= $2;
  		my $ptr		= defined($3) ? $3 : "";
