@@ -106,17 +106,21 @@ if ($PRINT_HELP) {
     exit 0;
 }
 
-if (!$MAIN_SGML_FILE) {
-    $MAIN_SGML_FILE="${MODULE}-docs.sgml";
-}
-
 my ($empty_element_end, $doctype_header);
 
 if (lc($OUTPUT_FORMAT) eq "xml") {
+    if (!$MAIN_SGML_FILE) {
+        # backwards compatibility
+        if (-e "${MODULE}-docs.sgml") {
+            $MAIN_SGML_FILE="${MODULE}-docs.sgml";
+        } else {
+            $MAIN_SGML_FILE="${MODULE}-docs.xml";
+        }
+    }
     $OUTPUT_FORMAT = "xml";
     $empty_element_end = "/>";
 
-    if ($MAIN_SGML_FILE && -e $MAIN_SGML_FILE) {
+    if (-e $MAIN_SGML_FILE) {
         open(INPUT, "<$MAIN_SGML_FILE") || die "Can't open $MAIN_SGML_FILE";
 	$doctype_header = "";
 	while (<INPUT>) {
@@ -136,7 +140,10 @@ if (lc($OUTPUT_FORMAT) eq "xml") {
 "               \"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd\">\n";
     }
     $doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
-  } else {
+} else {
+    if (!$MAIN_SGML_FILE) {
+        $MAIN_SGML_FILE="${MODULE}-docs.sgml";
+    }
     $OUTPUT_FORMAT = "sgml";
     $doctype_header = "";
     $empty_element_end = ">";
