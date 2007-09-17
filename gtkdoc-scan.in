@@ -443,13 +443,22 @@ sub ScanHeader {
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-            #                                                                        $1                                                                                                                       $2
+            #                                                                        $1                                                                                                                                 $2
+	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*\(\s*\*+\s*([A-Za-z]\w*)\s*\)\s*\(/o) {
+		$ret_type = $1;
+		$symbol = $2;
+		$decl = $';
+
+		#print "DEBUG: FunctionPointer: $symbol, Returns: $ret_type\n";
+
+		$in_declaration = "function";
+
 	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*([A-Za-z]\w*)\s*\(/o) {
 		$ret_type = $1;
 		$symbol = $2;
 		$decl = $';
 
-		print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+		#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
 
 		$in_declaration = "function";
 
