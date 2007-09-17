@@ -1,4 +1,3 @@
-// $Id$
 /**
  * SECTION:tester
  * @short_description: module for gtk-doc unit test
@@ -12,8 +11,6 @@
 #include <glib.h>
 
 #include "tester.h"
-
-//-- methods
 
 /**
  * bug_141869_a:
@@ -60,6 +57,7 @@ int bug_380824 (int arg) {
   return 0;
 }
 
+
 /**
  * bug_411739:
  *
@@ -67,7 +65,6 @@ int bug_380824 (int arg) {
  *
  * Returns: result
  */
-
 struct bug *
 bug_411739 (void) {
   return NULL;
@@ -91,5 +88,17 @@ void bug_419997 (int const_values) {
  * http://bugzilla.gnome.org/show_bug.cgi?id=445693
  */
 void bug_445693 (unsigned long pid) {
+}
+
+
+/**
+ * bug_471014:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=471014
+ *
+ * Returns: result
+ */
+G_CONST_RETURN gchar* G_CONST_RETURN * bug_471014 (void) {
+  return NULL;
 }
 

@@ -7,7 +7,7 @@ AUTOMAKE_OPTIONS = 1.6
 DOC_MODULE=tester
 
 # The top-level SGML file. You can change this if you want to.
-DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.sgml
+DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.xml
 
 # The directory containing the source code. Relative to $(srcdir).
 # gtk-doc will search all .c & .h files beneath here for inline comments
@@ -18,7 +18,9 @@ DOC_SOURCE_DIR=$(top_srcdir)/tests/bugs/src
 SCANGOBJ_OPTIONS=2>&1 | tee gtkdoc-scangobj.log
 
 # Extra options to supply to gtkdoc-scan.
-SCAN_OPTIONS=--deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED" 2>&1 | tee gtkdoc-scan.log
+SCAN_OPTIONS=--deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED" \
+  --ignore-decorators="GLIB_VAR" \
+  2>&1 | tee gtkdoc-scan.log
 
 # Extra options to supply to gtkdoc-mkdb.
 MKDB_OPTIONS=--sgml-mode --output-format=xml 2>&1 | tee gtkdoc-mkdb.log

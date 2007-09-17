@@ -1,4 +1,3 @@
-// $Id$
 /**
  * SECTION:tester
  * @short_description: class for gtk-doc unit test
@@ -6,6 +5,7 @@
  * This file contains non-sense code for the sole purpose of testing the docs.
  * We can link to the #GtkdocTester:test property and the #GtkdocTester::test
  * signal.
+ * A new instance can be created using the gtkdoc_tester_new() function.
  */
 
 #include <glib.h>
@@ -13,13 +13,13 @@
 
 #include "tester.h"
 
-//-- property ids
+/* property ids */
 
 enum {
   GTKDOC_TESTER_TEST=1
 };
 
-//-- constructor methods
+/* constructor methods */
 
 /**
  * gtkdoc_tester_new:
@@ -28,36 +28,28 @@ enum {
  *
  * Returns: the instance or %NULL in case of an error
  */
-GtkdocTester *gtkdoc_tester_new(void) {
+GtkdocTester *gtkdoc_tester_new (void) {
   return(NULL);
 }
 
-//-- methods
+/* methods */
 
-//-- wrapper
+/* class internals */
 
-//-- class internals
-
-/* returns a property for the given property_id for this object */
-static void gtkdoc_tester_get_property(GObject      *object,
-                               guint         property_id,
-                               GValue       *value,
-                               GParamSpec   *pspec)
+static void gtkdoc_tester_get_property (GObject  *object, guint property_id,
+    GValue *value, GParamSpec *pspec)
 {
 
 }
 
-/* sets the given properties for this object */
-static void gtkdoc_tester_set_property(GObject      *object,
-                              guint         property_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
+static void gtkdoc_tester_set_property (GObject  *object, guint property_id,
+    const GValue *value, GParamSpec *pspec)
 {
 
 }
 
-static void gtkdoc_tester_class_init(GtkdocTesterClass *klass) {
-  GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+static void gtkdoc_tester_class_init (GtkdocTesterClass *klass) {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->set_property = gtkdoc_tester_set_property;
   gobject_class->get_property = gtkdoc_tester_get_property;
@@ -68,17 +60,17 @@ static void gtkdoc_tester_class_init(GtkdocTesterClass *klass) {
    *
    * The event has been triggered.
    */
-  g_signal_new("test", G_TYPE_FROM_CLASS(klass),
+  g_signal_new ("test", G_TYPE_FROM_CLASS (klass),
                 G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-                G_STRUCT_OFFSET(GtkdocTesterClass,test),
+                G_STRUCT_OFFSET (GtkdocTesterClass,test),
                 NULL, // accumulator
                 NULL, // acc data
                 g_cclosure_marshal_VOID__OBJECT,
                 G_TYPE_NONE, // return type
                 0); // n_params
 
-  g_object_class_install_property(gobject_class,GTKDOC_TESTER_TEST,
-                                  g_param_spec_string("test",
+  g_object_class_install_property (gobject_class,GTKDOC_TESTER_TEST,
+                                  g_param_spec_string ("test",
                                      "test prop",
                                      "dummy property for test",
                                      "dummy", /* default value */
@@ -86,7 +78,7 @@ static void gtkdoc_tester_class_init(GtkdocTesterClass *klass) {
 
 }
 
-GType gtkdoc_tester_get_type(void) {
+GType gtkdoc_tester_get_type (void) {
   static GType type = 0;
   if (type == 0) {
     static const GTypeInfo info = {

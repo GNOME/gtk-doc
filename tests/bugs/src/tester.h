@@ -1,5 +1,3 @@
-// $Id$
-
 #ifndef GTKDOC_TESTER_H
 #define GTKDOC_TESTER_H
 
@@ -20,6 +18,7 @@ typedef enum {
 #endif
   BUG_324535_C,
 } bug_324535;
+
 
 #define _PADDDING 4
 /**
@@ -42,9 +41,19 @@ struct _bug_460127 {
 
 };
 
+
+/**
+ * bug_477532:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=477532
+ */
+GLIB_VAR guint64 (*bug_477532) (void);
+
+
 struct bug {
   int test;
 };
+
 
 void bug_141869_a (unsigned pid);
 void bug_141869_b (signed pid);
@@ -60,6 +69,9 @@ bug_411739 (void);
 void bug_419997 (int const_values);
 
 void bug_445693 (unsigned long pid);
+
+G_CONST_RETURN gchar* G_CONST_RETURN *
+bug_471014 (void);
 
 #endif // GTKDOC_TESTER_H
 

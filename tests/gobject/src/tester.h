@@ -1,5 +1,3 @@
-// $Id$
-
 #ifndef GTKDOC_TESTER_H
 #define GTKDOC_TESTER_H
 

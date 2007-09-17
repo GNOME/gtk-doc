@@ -443,12 +443,13 @@ sub ScanHeader {
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*([A-Za-z]\w*)\s*\(/) {
+            #                                                                        $1                                                                                                                       $2
+	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*([A-Za-z]\w*)\s*\(/o) {
 		$ret_type = $1;
 		$symbol = $2;
 		$decl = $';
 
-		#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+		print "DEBUG: Function: $symbol, Returns: $ret_type\n";
 
 		$in_declaration = "function";
 
@@ -462,7 +463,7 @@ sub ScanHeader {
 
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
 		    && $previous_line !~ m/^\s*static\s+/) {
-		    if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)?\w+)(\s*\*+)?\s*$/) {
+		    if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)?\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
 			$ret_type = $1;
 			if (defined ($2)) { $ret_type .= " $2"; }
 			#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
@@ -474,14 +475,14 @@ sub ScanHeader {
 	    # on the previous line(s), and the start of the parameters on this.
 	    } elsif (m/^\s*\(/) {
 		$decl = $';
-		if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/) {
+		if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/o) {
 		    $ret_type = "$1 $2";
 		    $symbol = $3;
 		    #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
 		    $in_declaration = "function";
 
 		} elsif ($previous_line =~ m/^\s*\w+\s*$/
-			 && $pre_previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$/) {
+			 && $pre_previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$/o) {
 			$ret_type = $1;
 			$ret_type =~ s/\s*\n//;
 			$in_declaration = "function";

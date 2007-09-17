@@ -1,3 +1,19 @@
+2007-09-18  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: David Nečas <yeti@physics.muni.cz>
+
+	* gtkdoc-scan.in:
+	  Parse reoccuring const. Fixes #471014.
+
+	* tests/bugs/docs/Makefile.am:
+	* tests/bugs/docs/tester-sections.txt:
+	* tests/bugs/src/tester.c:
+	* tests/bugs/src/tester.h:
+	* tests/gobject/docs/Makefile.am:
+	* tests/gobject/src/tester.c:
+	* tests/gobject/src/tester.h:
+	  Add more tests and cleanup the test-code a little.
+
 2007-09-17  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtk-doc.make:
