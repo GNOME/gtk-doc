@@ -1,3 +1,10 @@
+2007-09-17  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	  Revert some Makefile improvements, as we can't control the quoting
+	  reliably.
+
 2007-09-11  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in:
@@ -9,6 +16,7 @@
 
 	* gtk-doc.make:
 	* gtk-doc.notmpl.make:
+	  Makefile improvements.
 
 2007-09-03  Stefan Kost  <ensonic@users.sf.net>
 

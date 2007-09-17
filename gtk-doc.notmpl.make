@@ -108,12 +108,6 @@ distclean-local:
 	cd $(srcdir) && \
 	  rm -rf xml $(REPORT_FILES) \
 	         $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
-	case "x $(SCAN_OPTIONS) " in \
-	  *' --rebuild-types '*) rm -f $(srcdir)/$(DOC_MODULE).types;; \
-	esac
-	case "x $(SCAN_OPTIONS) " in \
-	  *' --rebuild-sections '*) rm -f $(srcdir)/$(DOC_MODULE)-sections.txt;; \
-	esac
 
 maintainer-clean-local: clean
 	cd $(srcdir) && rm -rf html
@@ -150,14 +144,8 @@ endif
 dist-hook: dist-check-gtkdoc dist-hook-local
 	mkdir $(distdir)/html
 	cp $(srcdir)/html/* $(distdir)/html
-	case "x $(SCAN_OPTIONS) " in \
-	  *' --rebuild-types '*) ;; \
-	  *) cp $(srcdir)/$(DOC_MODULE).types $(distdir)/;; \
-	esac
-	case "x $(SCAN_OPTIONS) " in \
-	  *' --rebuild-sections '*) ;; \
-	  *) cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/;; \
-	esac
+	cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
+	cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
 	-gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
 
 .PHONY : dist-hook-local docs
