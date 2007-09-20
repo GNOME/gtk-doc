@@ -37,17 +37,15 @@ my $HTML_DIR = "";
 my @EXTRA_DIRS;
 my $PRINT_VERSION;
 my $PRINT_HELP;
-my $ONLINE = 0;
 
 my %optctl = (module => \$MODULE,
 	      'module-dir' => \$MODULE_DIR,
 	      'html-dir' => \$HTML_DIR,
 	      'extra-dir' => \@EXTRA_DIRS,
-	      'online' => \$ONLINE,
 	      'version' => \$PRINT_VERSION,
 	      'help' => \$PRINT_HELP);
 GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir=s", "extra-dir=s@",
-		     "online", "version", "help");
+	"version", "help");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -61,7 +59,6 @@ if ($PRINT_HELP) {
     print "\n--html-dir=HTML_DIR     The directory where gtk-doc generated documentation is installed";
     print "\n--extra-dir=EXTRA_DIR   Directories to recursively scan for indices (index.sgml) in addition to HTML_DIR";
     print "\n                        May be used more than once for multiple directories";
-    print "\n--online                Prefer cross-references to online documents";
     print "\n--version               Print the version of this program";
     print "\n--help                  Print this help\n";
     exit 0;
@@ -89,9 +86,9 @@ $dir = $dir . "/share/gtk-doc/html";
 if (-d $dir && $dir ne $HTML_DIR) {
 #    print "Scanning GLib directory: $dir\n";
     if ($dir !~ m%^\Q$path_prefix\E/%) {
-        &ScanIndices ($dir, 1, $ONLINE);
+        &ScanIndices ($dir, 1);
     } else {
-        &ScanIndices ($dir, 0, $ONLINE);
+        &ScanIndices ($dir, 0);
     }
     push (@VisitedPaths, $dir);
 }
@@ -102,9 +99,9 @@ if (defined ($ENV{"GNOME2_PATH"})) {
 	if (-d $dir && $dir ne $HTML_DIR) {
 #	    print "Scanning GNOME2_PATH directory: $dir\n";
 	    if ($dir !~ m%^\Q$path_prefix\E/%) {
-                &ScanIndices ($dir, 1, $ONLINE);
+                &ScanIndices ($dir, 1);
             } else {
-                &ScanIndices ($dir, 0, $ONLINE);
+                &ScanIndices ($dir, 0);
             }
             push (@VisitedPaths, $dir);
 	}
@@ -114,7 +111,7 @@ if (defined ($ENV{"GNOME2_PATH"})) {
 }
 
 #print "Scanning HTML_DIR directory: $HTML_DIR\n";
-&ScanIndices ($HTML_DIR, 0, $ONLINE);
+&ScanIndices ($HTML_DIR, 0);
 push (@VisitedPaths, $HTML_DIR);
 
 # check all extra dirs, but skip already scanned dirs ord subdirs of those
@@ -136,16 +133,16 @@ foreach my $dir (@EXTRA_DIRS) {
     # prefix as the target directory of the docs, we need to use absolute
     # directories for the links
     if ($dir !~m/^\.\./ &&  $dir !~ m%\Q$path_prefix\E/%) {
-        &ScanIndices ($dir, 1, $ONLINE);
+        &ScanIndices ($dir, 1);
     } else {
-        &ScanIndices ($dir, 0, $ONLINE);
+        &ScanIndices ($dir, 0);
     }
 }
 
 &FixCrossReferences (defined $MODULE_DIR ? $MODULE_DIR : "$HTML_DIR/$MODULE");
 
 sub ScanIndices {
-    my ($scan_dir, $use_absolute_links, $use_online_location) = @_;
+    my ($scan_dir, $use_absolute_links) = @_;
 
 #    print "Scanning source directory: $scan_dir absolute: $use_absolute_links\n";
 
@@ -160,7 +157,7 @@ sub ScanIndices {
 	} elsif (-d "$scan_dir/$file") {
 	    push (@subdirs, $file);
 	} elsif ($file eq "index.sgml") {
-	    &ScanIndex ("$scan_dir/$file", $use_absolute_links, $use_online_location);
+	    &ScanIndex ("$scan_dir/$file", $use_absolute_links);
 	}
         # ubuntu started to compress this as index.sgml.gz :/
         # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
@@ -170,12 +167,12 @@ sub ScanIndices {
     # Now recursively scan the subdirectories.
     my $dir;
     foreach $dir (@subdirs) {
-	&ScanIndices ("$scan_dir/$dir", $use_absolute_links, $use_online_location);
+	&ScanIndices ("$scan_dir/$dir", $use_absolute_links);
     }
 }
 
 sub ScanIndex {
-    my ($file, $use_absolute_links, $use_online_location) = @_;
+    my ($file, $use_absolute_links) = @_;
 #    print "Scanning index file: $file absolute: $use_absolute_links\n";
 
     # Determine the absolute directory, to be added to links in index.sgml
@@ -184,39 +181,22 @@ sub ScanIndex {
     # We want the part up to 'html' since the links in index.sgml include
     # the rest.
     my $dir = "../";
-    my $onlinedir = '';
-    my $seen_anchor = 0;
     if ($use_absolute_links) {
-	$file =~ /(.*\/)(.*?)\/index\.sgml/;
-	$dir = "$1";
-    }
-    else {
-	# FIXME: This needs some clarification of what we are actually
-	# attempting to achieve.  But relative links are links to self and
-	# probably should remain so, on-line or not.
-	$use_online_location = 0;
+        $file =~ /(.*\/)(.*?)\/index\.sgml/;
+        $dir = $1;
     }
 
     open (INDEXFILE, $file)
 	|| die "Can't open $file: $!";
     while (<INDEXFILE>) {
-	if (m/^<ANCHOR\s+id\s*=\s*"([^"]*)"\s+href\s*=\s*"([^"]*)\/([^"]*)"\s*>/) {
-#	    print "Found id: $1 href: $2$3\n";
-	    $use_online_location = 0 if !$onlinedir;
-	    $Links{$1} = $use_online_location? "$onlinedir$3" : "$dir$2/$3";
-	    $seen_anchor = 'yes';
-	}
-	elsif (m/^<ONLINE\s+href\s*=\s*"([^"]+)"\s*>/) {
-	    if ($seen_anchor) {
-		die "<ONLINE> must come before any <ANCHOR> in $file"
-	    }
-	    $onlinedir = $1;
-	    # Remove trailing non-directory component.
-	    $onlinedir =~ s#(.*/).*#$1#;
+	if (m/^<ANCHOR\s+id\s*=\s*"([^"]*)"\s+href\s*=\s*"([^"]*)"\s*>/) {
+#	    print "Found id: $1 href: $2\n";
+	    $Links{$1} = "$dir$2";
 	}
     }
     close (INDEXFILE);
 }
+
 
 sub FixCrossReferences {
     my ($scan_dir) = @_;
