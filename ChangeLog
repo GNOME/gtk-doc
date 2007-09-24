@@ -1,12 +1,5 @@
 2007-09-24  Stefan Kost  <ensonic@users.sf.net>
 
-	patch by: David Nečas <yeti@physics.muni.cz>
-
-	* Makefile.am:
-	  Add gtk-doc.notmpl.make to EXTRA_DIST. Fixes #479913.
-
-2007-09-21  Stefan Kost  <ensonic@users.sf.net>
-
 	* MAINTAINERS:
 	  Make mango happy.
 
@@ -14,6 +7,13 @@
 	* gtk-doc.make:
 	* gtk-doc.notmpl.make:
 	  Process files from DISTCLEANFILES in the dist-hooks.
+
+2007-09-24  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: David Nečas <yeti@physics.muni.cz>
+
+	* Makefile.am:
+	  Add gtk-doc.notmpl.make to EXTRA_DIST. Fixes #479913.
 
 2007-09-20  Stefan Kost  <ensonic@users.sf.net>
 
