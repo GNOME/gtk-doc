@@ -119,8 +119,13 @@ clean-local:
 	rm -f *~ *.bak
 	rm -rf .libs
 
+distclean-local:
+	cd $(srcdir) && \
+	  rm -rf xml $(REPORT_FILES) \
+	         $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
+
 maintainer-clean-local: clean
-	cd $(srcdir) && rm -rf xml html \
+	cd $(srcdir) && rm -rf html \
 	$(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt $(REPORT_FILES)
 
 # do not install test-suite docs along with gtk-doc
@@ -154,9 +159,7 @@ dist-check-gtkdoc:
 endif
 
 dist-hook: dist-check-gtkdoc dist-hook-local
-	mkdir $(distdir)/xml
 	mkdir $(distdir)/html
-	-cp $(srcdir)/xml/*.xml $(distdir)/xml
 	-cp $(srcdir)/html/* $(distdir)/html
 	if test -f $(srcdir)/$(DOC_MODULE).types; then \
 	  cp $(srcdir)/$(DOC_MODULE).types $(distdir)/$(DOC_MODULE).types; \
