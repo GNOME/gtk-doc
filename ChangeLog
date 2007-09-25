@@ -1,3 +1,15 @@
+2007-09-25  Stefan Kost  <ensonic@users.sf.net>
+
+	* tests/Makefile.am:
+	* tests/bugs.sh:
+	* tests/gobject.sh:
+	* tests/gtkdoctest.sh:
+	  Try to get make distcheck to run.
+
+	* tests/gtk-doc.make:
+	  Don't dist docs generated during test runs and remove some cruft.
+
+
 2007-09-24  Stefan Kost  <ensonic@users.sf.net>
 
 	patch by: David Nečas <yeti@physics.muni.cz>

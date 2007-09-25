@@ -5,6 +5,7 @@ SUBDIRS = gobject bugs .
 if BUILD_TESTS
 
 TESTS = gobject.sh bugs.sh
+TESTS_ENVIRONMENT = PATH=$(srcdir):$(PATH)
 
 endif
 

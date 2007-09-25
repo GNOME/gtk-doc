@@ -1,4 +1,4 @@
 #!/bin/sh
 
-./gtkdoctest.sh gobject
+gtkdoctest.sh gobject
 

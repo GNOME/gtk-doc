@@ -88,7 +88,6 @@ tmpl.stamp: tmpl-build.stamp
 #### xml ####
 
 sgml-build.stamp: $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt $(expand_content_files)
-#sgml-build.stamp: tmpl.stamp $(HFILE_GLOB) $(CFILE_GLOB) $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(expand_content_files)
 	@echo 'gtk-doc: Building XML'
 	@-chmod -R u+w $(srcdir)
 	cd $(srcdir) && \
@@ -128,39 +127,7 @@ maintainer-clean-local: clean
 	cd $(srcdir) && rm -rf html \
 	$(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt $(REPORT_FILES)
 
-# do not install test-suite docs along with gtk-doc
-#
-#install-data-local:
-#	installfiles=`echo $(srcdir)/html/*`; \
-#	if test "$$installfiles" = '$(srcdir)/html/*'; \
-#	then echo '-- Nothing to install' ; \
-#	else \
-#	  $(mkinstalldirs) $(DESTDIR)$(TARGET_DIR); \
-#	  for i in $$installfiles; do \
-#	    echo '-- Installing '$$i ; \
-#	    $(INSTALL_DATA) $$i $(DESTDIR)$(TARGET_DIR); \
-#	  done; \
-#	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
-#	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR) || :; \
-#	fi
-#
-#uninstall-local:
-#	rm -f $(DESTDIR)$(TARGET_DIR)/*
-
-#
-# Require gtk-doc when making dist
-#
-if ENABLE_GTK_DOC
-dist-check-gtkdoc:
-else
-dist-check-gtkdoc:
-	@echo "*** gtk-doc must be installed and enabled in order to make dist"
-	@false
-endif
-
-dist-hook: dist-check-gtkdoc dist-hook-local
-	mkdir $(distdir)/html
-	-cp $(srcdir)/html/* $(distdir)/html
+dist-hook: dist-hook-local
 	if test -f $(srcdir)/$(DOC_MODULE).types; then \
 	  cp $(srcdir)/$(DOC_MODULE).types $(distdir)/$(DOC_MODULE).types; \
 	fi

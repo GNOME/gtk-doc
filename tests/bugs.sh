@@ -1,4 +1,4 @@
 #!/bin/sh
 
-./gtkdoctest.sh bugs
+gtkdoctest.sh bugs
 
