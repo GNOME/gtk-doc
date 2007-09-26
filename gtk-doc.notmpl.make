@@ -147,6 +147,10 @@ dist-hook: dist-check-gtkdoc dist-hook-local
 	cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
 	cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
 	cd $(distdir) && rm -f $(DISTCLEANFILES)
-	-gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
+	if test "x$(DESTDIR)" = "x"; then \
+	  -gtkdoc-rebase --relative --html-dir=$(TARGET_DIR) \
+	else \
+	  -gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$(DESTDIR)$(TARGET_DIR)
+	fi
 
 .PHONY : dist-hook-local docs
