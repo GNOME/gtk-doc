@@ -124,11 +124,13 @@ install-data-local:
 	  done; \
 	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
 	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR) || :; \
-	  -if test "x$(DESTDIR)" = "x"; then \
-	    gtkdoc-rebase --relative --html-dir=$(TARGET_DIR) ; \
-	  else \
-	    gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$(DESTDIR)$(TARGET_DIR) ; \
-	  fi
+	  if test `which gtkdoc-rebase` != ""; then \
+	    if test "x$(DESTDIR)" = "x"; then \
+	      gtkdoc-rebase --relative --html-dir=$(TARGET_DIR) ; \
+	    else \
+	      gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$(DESTDIR)$(TARGET_DIR) ; \
+		fi \
+	  fi \
 	fi
 
 uninstall-local:
