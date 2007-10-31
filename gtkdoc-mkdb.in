@@ -2932,12 +2932,15 @@ EOF
                         }
                     }
                     $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Long_Description"}=$description;
-                    # FIXME $SourceSymbolTypes{XXX} = "STRUCT,SIGNAL,ARG,FUNCTION,MACRO";
+                    #$SourceSymbolTypes{$symbol} = "SECTION";
                 } else {
                     #print "SYMBOL DOCS found in source for : '$symbol' ",length($description), "\n";
                     $SourceSymbolDocs{$symbol} = $description;
                     $SourceSymbolParams{$symbol} = [ @params ];
-                    # FIXME $SourceSymbolTypes{XXX} = "";
+                    # FIXME $SourceSymbolTypes{$symbol} = "STRUCT,SIGNAL,ARG,FUNCTION,MACRO";
+                    #if (defined $DeclarationTypes{$symbol}) {
+                    #    $SourceSymbolTypes{$symbol} = $DeclarationTypes{$symbol}
+                    #}
                 }
 
 		if ($since_desc) {
@@ -2953,11 +2956,15 @@ EOF
 		    if (exists $Deprecated{$symbol}) {
 		    }
 		    else {
-			print <<EOF;
+                         # don't warn for signals and properties
+                         #if ($symbol !~ m/::?(.*)/) {
+                         if (defined $DeclarationTypes{$symbol}) {
+                             print <<EOF;
 WARNING: $symbol is deprecated in the inline comments
          but no deprecation guards were found around the declaration.
          (See the --deprecated-guards option for gtkdoc-scan.)
 EOF
+                         }
 		    }
 		    $Deprecated{$symbol} = &ConvertSGMLChars ($symbol, $deprecated_desc);
 		}
@@ -3488,7 +3495,7 @@ EOF
                         # in the right place, try to explain a bit better.
                         if ((!$found) && ($src_doc =~ m/\@$tmpl_param_name:/)) {
                             print <<EOF;
-         Parameters must start on the line immediately after the function
+         Parameters for $symbol must start on the line immediately after the function
 	 or macro name.
 EOF
                         }

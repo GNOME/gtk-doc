@@ -1,5 +1,11 @@
 2007-10-31  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-mkdb.in:
+	  Only warn about missing deprecation guards for declared symbols.
+	  Fixes #492005.
+
+2007-10-31  Stefan Kost  <ensonic@users.sf.net>
+
 	* tests/gtk-doc.make:
 	* tests/gtkdoctest.sh:
 	  Run our own check script. Clean the make output a bit.
