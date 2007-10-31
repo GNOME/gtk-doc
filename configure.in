@@ -110,20 +110,17 @@ SCROLLKEEPER_BUILD_REQUIRED=0.3.5
 AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
 
 # if glib is available we can enable the tests
-PKG_CHECK_MODULES(TEST_DEPS, [glib-2.0 >= 2.2.0 gobject-2.0 >= 2.6.0], [
-    AC_PROG_LIBTOOL
+PKG_CHECK_MODULES(TEST_DEPS, [glib-2.0 >= 2.6.0 gobject-2.0 >= 2.6.0], [
     glib_prefix="`$PKG_CONFIG --variable=prefix glib-2.0`"
-    enable_gtk_doc=true
     gtk_doc_use_libtool=true
     build_tests=true
   ],[
-    enable_gtk_doc=false
     gtk_doc_use_libtool=false
     build_tests=false
   ]
 )
 AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, test -n "$LIBTOOL" -a x$gtk_doc_use_libtool = xtrue )
-AM_CONDITIONAL(ENABLE_GTK_DOC, test x$enable_gtk_doc = xtrue)
+dnl this enable the rule in test/Makefile.am
 AM_CONDITIONAL(BUILD_TESTS, test x$build_tests = xtrue)
 AC_SUBST(glib_prefix)
 

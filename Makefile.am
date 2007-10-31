@@ -46,7 +46,7 @@ EXTRA_DIST = \
   gtk-doc.pc.in   \
   gtk-doc.m4      \
   gtk-doc.make    \
-  gtk-doc.notmpl.make \
+  gtk-doc.notmpl.make    \
   gtk-doc.spec.in \
   gtk-doc.spec    \
   gtk-doc.dcl     \

@@ -45,11 +45,7 @@ REPORT_FILES = \
 
 CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
 
-if ENABLE_GTK_DOC
 check-local: html-build.stamp
-else
-check-local:
-endif
 
 docs: html-build.stamp
 
