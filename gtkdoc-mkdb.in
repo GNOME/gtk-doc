@@ -460,7 +460,7 @@ EOF
 
 		if ($signals_synop ne '') {
 		    $signals_synop = <<EOF;
-<refsect1 role="signal_proto">
+<refsect1 id="$section_id.signals" role="signal_proto">
 <title role="signal_proto.title">Signals</title>
 <synopsis>
 
@@ -468,7 +468,7 @@ ${signals_synop}</synopsis>
 </refsect1>
 EOF
 		    $signals_desc  = <<EOF;
-<refsect1 role="signals">
+<refsect1 id="$section_id.signal-details" role="signals">
 <title role="signals.title">Signal Details</title>
 $signals_desc
 </refsect1>
@@ -477,7 +477,7 @@ EOF
 
 		if ($args_synop ne '') {
 		    $args_synop = <<EOF;
-<refsect1 role="properties">
+<refsect1 id="$section_id.properties" role="properties">
 <title role="properties.title">Properties</title>
 <synopsis>
 
@@ -485,7 +485,7 @@ ${args_synop}</synopsis>
 </refsect1>
 EOF
 		    $args_desc  = <<EOF;
-<refsect1 role="property_details">
+<refsect1 id="$section_id.property-details" role="property_details">
 <title role="property_details.title">Property Details</title>
 $args_desc
 </refsect1>
@@ -494,7 +494,7 @@ EOF
 
 		if ($child_args_synop ne '') {
 		    $args_synop .= <<EOF;
-<refsect1 role="child_properties">
+<refsect1 id="$section_id.child-properties" role="child_properties">
 <title role="child_properties.title">Child Properties</title>
 <synopsis>
 
@@ -502,7 +502,7 @@ ${child_args_synop}</synopsis>
 </refsect1>
 EOF
 		    $args_desc .= <<EOF;
-<refsect1 role="child_property_details">
+<refsect1 id="$section_id.child-property-details" role="child_property_details">
 <title role="child_property_details.title">Child Property Details</title>
 $child_args_desc
 </refsect1>
@@ -511,7 +511,7 @@ EOF
 
 		if ($style_args_synop ne '') {
 		    $args_synop .= <<EOF;
-<refsect1 role="style_properties">
+<refsect1 id="$section_id.style-properties" role="style_properties">
 <title role="style_properties.title">Style Properties</title>
 <synopsis>
 
@@ -519,7 +519,7 @@ ${style_args_synop}</synopsis>
 </refsect1>
 EOF
 		    $args_desc .= <<EOF;
-<refsect1 role="style_properties_details">
+<refsect1 id="$section_id.style-property-details" role="style_properties_details">
 <title role="style_properties_details.title">Style Property Details</title>
 $style_args_desc
 </refsect1>
@@ -528,7 +528,7 @@ EOF
 
 		if ($hierarchy ne "") {
 		    $hierarchy = <<EOF;
-<refsect1 role="object_hierarchy">
+<refsect1 id="$section_id.object-hierarchy" role="object_hierarchy">
 <title role="object_hierarchy.title">Object Hierarchy</title>
 $hierarchy
 </refsect1>
@@ -537,7 +537,7 @@ EOF
 
 		if ($interfaces ne "") {
 		    $interfaces = <<EOF;
-<refsect1 role="impl_interfaces">
+<refsect1 id="$section_id.implemented-interfaces" role="impl_interfaces">
 <title role="impl_interfaces.title">Implemented Interfaces</title>
 $interfaces
 </refsect1>
@@ -546,7 +546,7 @@ EOF
 
 		if ($implementations ne "") {
 		    $implementations = <<EOF;
-<refsect1 role="implementations">
+<refsect1 id="$section_id.implementations" role="implementations">
 <title role="implementations.title">Known Implementations</title>
 $implementations
 </refsect1>
@@ -555,7 +555,7 @@ EOF
 
 		if ($prerequisites ne "") {
 		    $prerequisites = <<EOF;
-<refsect1 role="prerequisites">
+<refsect1 id="$section_id.prerequisites" role="prerequisites">
 <title role="prerequisites.title">Prerequisites</title>
 $prerequisites
 </refsect1>
@@ -564,7 +564,7 @@ EOF
 
 		if ($derived ne "") {
 		    $derived = <<EOF;
-<refsect1 role="derived_interfaces">
+<refsect1 id="$section_id.derived-interfaces" role="derived_interfaces">
 <title role="derived_interfaces.title">Known Derived Interfaces</title>
 $derived
 </refsect1>
@@ -818,12 +818,9 @@ sub OutputMacro {
     }
     $synop .= "\n";
 
-    if ($args ne "") {
-	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"macro\"${condition}${empty_element_end}${symbol}()</title>\n";
-    } else {
-	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"macro\"${condition}${empty_element_end}$symbol</title>\n";
-    }
-    $desc .= MakeIndexterms($symbol);
+    my $title = $symbol . ($args ? "()" : "");
+    $desc = "<refsect2 id=\"$id\" role=\"macro\"$condition>\n<title>$title</title>\n";
+    $desc .= MakeIndexterms($symbol, $id);
 
     # Don't output the macro definition if is is a conditional macro or it
     # looks like a function, i.e. starts with "g_" or "_?gnome_", or it is
@@ -881,9 +878,9 @@ sub OutputTypedef {
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
     my $synop = &MakeReturnField("typedef") . "<link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"typedef\"${condition}${empty_element_end}$symbol</title>\n";
+    my $desc = "<refsect2 id=\"$id\" role=\"typedef\"$condition>\n<title>$symbol</title>\n";
 
-    $desc .= MakeIndexterms($symbol);
+    $desc .= MakeIndexterms($symbol, $id);
 
     if (!defined ($DeclarationConditional{$symbol})) {
 	$declaration = &CreateValidSGML ($declaration);
@@ -944,13 +941,13 @@ sub OutputStruct {
     if ($has_typedef) {
         # For structs with typedefs we just output the struct name.
         $synop = &MakeReturnField("") . "<link linkend=\"$id\">$symbol</link>;\n";
-	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"struct\"${condition}${empty_element_end}$symbol</title>\n";
+	$desc = "<refsect2 id=\"$id\" role=\"struct\"$condition>\n<title>$symbol</title>\n";
     } else {
         $synop = &MakeReturnField("struct") . "<link linkend=\"$id\">$symbol</link>;\n";
-	$desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"struct\"${condition}${empty_element_end}struct $symbol</title>\n";
+	$desc = "<refsect2 id=\"$id\" role=\"struct\"$condition>\n<title>struct $symbol</title>\n";
     }
 
-    $desc .= MakeIndexterms($symbol);
+    $desc .= MakeIndexterms($symbol, $id);
 
     # Form a pretty-printed, private-data-removed form of the declaration
 
@@ -1083,9 +1080,9 @@ sub OutputEnum {
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
     my $synop = &MakeReturnField("enum") . "<link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"enum\"${condition}${empty_element_end}enum $symbol</title>\n";
+    my $desc = "<refsect2 id=\"$id\" role=\"enum\"$condition>\n<title>enum $symbol</title>\n";
 
-    $desc .= MakeIndexterms($symbol);
+    $desc .= MakeIndexterms($symbol, $id);
 
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
@@ -1125,7 +1122,7 @@ EOF
 
 	    $id = &CreateValidSGMLID ($member_name);
 	    $condition = &MakeConditionDescription ($member_name);
-	    $desc .= "<varlistentry>\n<term><anchor id=\"$id\" role=\"constant\"${condition}${empty_element_end}<literal>$member_name</literal></term>\n";
+	    $desc .= "<varlistentry id=\"$id\" role=\"constant\"$condition>\n<term><literal>$member_name</literal></term>\n";
 	    if (defined $member_descr) {
 		$desc .= "<listitem><simpara>".&ExpandAbbreviations($symbol, $member_descr)."</simpara></listitem>\n";
 	    } else {
@@ -1155,9 +1152,9 @@ sub OutputUnion {
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
     my $synop = &MakeReturnField("union") . "<link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"union\"${condition}${empty_element_end}union $symbol</title>\n";
+    my $desc = "<refsect2 id=\"$id\" role=\"union\"$condition>\n<title>union $symbol</title>\n";
 
-    $desc .= MakeIndexterms($symbol);
+    $desc .= MakeIndexterms($symbol, $id);
 
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
@@ -1196,9 +1193,9 @@ sub OutputVariable {
 	$synop = &MakeReturnField("extern") . "<link linkend=\"$id\">$symbol</link>;\n";
     }
 
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"variable\"${condition}${empty_element_end}$symbol</title>\n";
+    my $desc = "<refsect2 id=\"$id\" role=\"variable\"$condition>\n<title>$symbol</title>\n";
 
-    $desc .= MakeIndexterms($symbol);
+    $desc .= MakeIndexterms($symbol, $id);
 
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
@@ -1281,9 +1278,9 @@ sub OutputFunction {
     }
 
     my $synop = $ret_type_output . $symbol_output . '(';
-    my $desc = "<refsect2>\n<title><anchor id=\"$id\" role=\"function\"${condition}${empty_element_end}${symbol} ()</title>\n";
+    my $desc = "<refsect2 id=\"$id\" role=\"function\"$condition>\n<title>${symbol} ()</title>\n";
 
-    $desc .= MakeIndexterms($symbol);
+    $desc .= MakeIndexterms($symbol, $id);
 
     $desc  .= "<programlisting>${ret_type_output}$symbol_desc_output(";
 
@@ -1566,7 +1563,7 @@ sub OutputSGMLFile {
 #	print "Found see_also: $see_also";
     }
     if ($see_also) {
-	$see_also = "<refsect1>\n<title>See Also</title>\n$see_also\n</refsect1>\n";
+	$see_also = "<refsect1 id=\"$section_id.see-also\">\n<title>See Also</title>\n$see_also\n</refsect1>\n";
     }
     my $stability = $SymbolDocs{"$TMPL_DIR/$file:Stability_Level"};
     if (!defined ($stability) || $stability =~ m/^\s*$/) {
@@ -1576,9 +1573,9 @@ sub OutputSGMLFile {
 #	print "Found stability: $stability";
     }
     if ($stability) {
-	$stability = "<refsect1>\n<title>Stability Level</title>\n$stability, unless otherwise indicated\n</refsect1>\n";
+	$stability = "<refsect1 id=\"$section_id.stability-level\">\n<title>Stability Level</title>\n$stability, unless otherwise indicated\n</refsect1>\n";
     } elsif ($DEFAULT_STABILITY) {
-	$stability = "<refsect1>\n<title>Stability Level</title>\n$DEFAULT_STABILITY, unless otherwise indicated\n</refsect1>\n";
+	$stability = "<refsect1 id=\"$section_id.stability-level\">\n<title>Stability Level</title>\n$DEFAULT_STABILITY, unless otherwise indicated\n</refsect1>\n";
     }
 
     my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) =
@@ -1623,7 +1620,7 @@ sub OutputSGMLFile {
     print OUTPUT <<EOF;
 <refentry id="$section_id">
 <refmeta>
-<refentrytitle role="top_of_page">$title</refentrytitle>
+<refentrytitle role="top_of_page" id="$section_id.top_of_page">$title</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>\U$MODULE\E Library</refmiscinfo>
 </refmeta>
@@ -1634,7 +1631,7 @@ sub OutputSGMLFile {
 <!--[<xref linkend="desc" endterm="desc.title"/>]-->
 </refnamediv>
 $stability
-<refsynopsisdiv role="synopsis">
+<refsynopsisdiv id="$section_id.synopsis" role="synopsis">
 <title role="synopsis.title">Synopsis</title>
 $object_anchors
 <synopsis>
@@ -1652,12 +1649,12 @@ $$implementations
 $$args_synop
 $$signals_synop
 
-<refsect1 role="desc">
+<refsect1 id="$section_id.description" role="desc">
 <title role="desc.title">Description</title>
 $long_desc
 </refsect1>
 
-<refsect1 role="details">
+<refsect1 id="$section_id.details" role="details">
 <title role="details.title">Details</title>
 $$details
 </refsect1>
@@ -2116,22 +2113,22 @@ sub MakeXRef {
 #############################################################################
 
 sub MakeIndexterms {
-  my ($symbol) = $_[0];
+  my ($symbol, $id) = @_;
   my $terms =  "";
 
   if (exists $Deprecated{$symbol}) {
-      $terms .= "<indexterm role=\"deprecated\"><primary>$symbol</primary></indexterm>"
+      $terms .= "<indexterm zone=\"$id\" role=\"deprecated\"><primary>$symbol</primary></indexterm>"
   }
   if (exists $Since{$symbol}) {
      my $since = $Since{$symbol};
      $since =~ s/^\s+//;
      $since =~ s/\s+$//;
      if ($since ne "") {
-         $terms .= "<indexterm role=\"$since\"><primary>$symbol</primary></indexterm>";
+         $terms .= "<indexterm zone=\"$id\" role=\"$since\"><primary>$symbol</primary></indexterm>";
      }
   }
   if ($terms eq "") {
-     $terms .= "<indexterm><primary>$symbol</primary></indexterm>";
+     $terms .= "<indexterm zone=\"$id\"><primary>$symbol</primary></indexterm>";
   }
 
   return $terms;
@@ -2484,8 +2481,8 @@ sub GetSignals {
 	    my $pad = ' ' x (46 - length($name));
 	    $synop .= "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad ";
 
-	    $desc .= "<refsect2><title><anchor id=\"$id\"${empty_element_end}The <literal>&quot;$name&quot;</literal> signal</title>\n";
-	    $desc .= MakeIndexterms($symbol);
+	    $desc .= "<refsect2 id=\"$id\"><title>The <literal>&quot;$name&quot;</literal> signal</title>\n";
+	    $desc .= MakeIndexterms($symbol, $id);
 	    $desc .= "<programlisting>";
 
 	    $SignalReturns[$i] =~ m/\s*(const\s+)?(\w+)\s*(\**)/;
@@ -2720,8 +2717,8 @@ sub GetArgs {
 	    }
 
  	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output $pad2 : $flags_string\n";
-	    my $arg_desc = "<refsect2><title><anchor id=\"$id\"${empty_element_end}The <literal>&quot;$name&quot;</literal> $kind</title>\n";
-	    $arg_desc .= MakeIndexterms($symbol);
+	    my $arg_desc = "<refsect2 id=\"$id\"><title>The <literal>&quot;$name&quot;</literal> $kind</title>\n";
+	    $arg_desc .= MakeIndexterms($symbol, $id);
 	    $arg_desc .= "<programlisting>  &quot;$name&quot;$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
 	    $arg_desc .= $blurb;
 	    if ($range ne "") {
