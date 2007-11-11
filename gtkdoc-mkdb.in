@@ -2664,13 +2664,15 @@ sub GetArgs {
 	    my $default = $ArgDefaults[$i];
 	    my $default_output = CreateValidSGML($default);
 
+	    if ($type eq "GtkString") {
+		$type = "char*";
+	    }
 	    if ($type eq "GtkSignal") {
 		$type = "GtkSignalFunc, gpointer";
 		$type_output = &MakeXRef ("GtkSignalFunc") . ", "
 		    . &MakeXRef ("gpointer");
-	    } elsif ($type eq "GtkString") {
-		$type = "gchar*";
-		$type_output = &MakeXRef ("gchar") . "*";
+	    } elsif ($type =~ m/^(\w+)\*$/) {
+		$type_output = &MakeXRef ($1) . "*";
 	    } else {
 		$type_output = &MakeXRef ($type);
 	    }
