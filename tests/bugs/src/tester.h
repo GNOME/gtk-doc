@@ -73,5 +73,10 @@ void bug_445693 (unsigned long pid);
 G_CONST_RETURN gchar* G_CONST_RETURN *
 bug_471014 (void);
 
+typedef enum _Bug446648 Bug446648;
+enum _Bug446648 {
+    BUG_446648_FOO
+};
+
 #endif // GTKDOC_TESTER_H
 

@@ -245,6 +245,11 @@ sub ParseStructDeclaration {
 sub ParseEnumDeclaration {
     my ($declaration, $is_object) = @_;
 
+    # For forward enum declarations just return an empty array.
+    if ($declaration =~ m/enum\s+\S+\s*;/msg) {
+	return ();
+    }
+
     # Remove comments;
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
 
@@ -267,8 +272,8 @@ sub ParseEnumDeclaration {
     $declaration =~ s/,(\s*})/$1/g;
 
     # Prime match after "typedef enum {" declaration
-    if (!scalar($declaration =~ m/typedef\s+enum\s*(\S+\s*)?\{/msg)) {
-	die "Enum declaration '$declaration' does not begin with typedef enum {\n";
+    if (!scalar($declaration =~ m/(typedef\s+)?enum\s*(\S+\s*)?\{/msg)) {
+	die "Enum declaration '$declaration' does not begin with 'typedef enum {' or 'enum XXX {'\n";
     }
 
     # Treat lines in sequence.
