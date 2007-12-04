@@ -1,3 +1,11 @@
+2007-12-02  Loïc Minier  <lool@dooz.org>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	  Add double-quotes around `which gtkdoc-rebase` to prevent "test"
+	  from failing with "/bin/sh: line 11: test: !=: unary operator
+	  expected ".  Fixes #501066.
+
 2007-11-11  Stefan Kost  <ensonic@users.sf.net>
 
 	patch by: David Nečas <yeti@physics.muni.cz>
