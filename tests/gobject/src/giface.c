@@ -11,7 +11,6 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "gobject.h"
 #include "giface.h"
 
 /* constructor methods */
@@ -32,17 +31,17 @@ gboolean gtkdoc_iface_configure (gchar *config) {
 
 /* class internals */
 
-static void gtkdoc_iface_class_init (gpointer g_class) {
+static void gtkdoc_iface_base_init (gpointer g_class) {
   static gboolean initialized = FALSE;
 
-  if (!initialized) {    
+  if (!initialized) {
     /**
      * GtkdocIface::test:
      * @self: myself
      *
      * The event has been triggered.
      */
-    g_signal_new ("test", G_TYPE_FROM_CLASS (g_class),
+    g_signal_new ("itest", G_TYPE_FROM_CLASS (g_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
                   G_STRUCT_OFFSET (GtkdocIfaceInterface,test),
                   NULL, // accumulator
@@ -52,9 +51,9 @@ static void gtkdoc_iface_class_init (gpointer g_class) {
                   0); // n_params
   
     g_object_interface_install_property (g_class ,
-                                    g_param_spec_string ("test",
-                                       "test prop",
-                                       "dummy property for test",
+                                    g_param_spec_string ("itest",
+                                       "itest prop",
+                                       "dummy property for iface",
                                        "dummy", /* default value */
                                        G_PARAM_READWRITE));
     initialized = TRUE;
@@ -66,7 +65,7 @@ GType gtkdoc_iface_get_type (void) {
   if (type == 0) {
     static const GTypeInfo info = {
       (guint16)sizeof(GtkdocIfaceInterface),
-      NULL, // base_init
+      gtkdoc_iface_base_init, // base_init
       NULL, // base_finalize
       NULL, // class_init
       NULL, // class_finalize
@@ -77,7 +76,6 @@ GType gtkdoc_iface_get_type (void) {
       NULL // value_table
     };
     type = g_type_register_static(G_TYPE_INTERFACE,"GtkdocIface",&info,0);
-    g_type_interface_add_prerequisite (type, GTKDOC_TYPE_OBJECT);
   }
   return type;
 }

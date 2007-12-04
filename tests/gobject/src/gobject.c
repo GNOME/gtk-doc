@@ -60,7 +60,7 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
    *
    * The event has been triggered.
    */
-  g_signal_new ("test", G_TYPE_FROM_CLASS (klass),
+  g_signal_new ("otest", G_TYPE_FROM_CLASS (klass),
                 G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
                 G_STRUCT_OFFSET (GtkdocObjectClass,test),
                 NULL, // accumulator
@@ -70,9 +70,9 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
                 0); // n_params
 
   g_object_class_install_property (gobject_class,GTKDOC_OBJECT_TEST,
-                                  g_param_spec_string ("test",
-                                     "test prop",
-                                     "dummy property for test",
+                                  g_param_spec_string ("otest",
+                                     "otest prop",
+                                     "dummy property for object",
                                      "dummy", /* default value */
                                      G_PARAM_READWRITE));
 
