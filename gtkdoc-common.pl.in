@@ -144,6 +144,8 @@ sub ParseStructDeclaration {
             $line=$1;          
         }
 
+        last if $line =~ /^\s*\}\s*\w*\s*$/;
+
 	# FIXME: The regexes here are the same as in OutputFunction; 
 	#        this functionality should be separated out.
 
@@ -220,7 +222,7 @@ sub ParseStructDeclaration {
 		    }
 		    push @result, "$mod1$ptype$mod2&nbsp;$ptrs$name$array$bits;";
 
-#		    print "***** Matched line: $mod1$ptype$mod2 $ptrs$name$array$bits\n";
+		    #print "***** Matched line: $mod1$ptype$mod2 $ptrs$name$array$bits\n";
 		} else {
 		    print "WARNING: Couldn't parse struct field: $n\n";
 		}
@@ -298,8 +300,8 @@ sub ParseEnumDeclaration {
 	} elsif ($line =~ m/^#include/) {
 	    last;
 
-	# Special case for #ifdef/#endif, just ignore it
-	} elsif ($line =~ m/^#(?:if|endif)/) {
+	# Special case for #ifdef/#else/#endif, just ignore it
+	} elsif ($line =~ m/^#(?:if|else|endif)/) {
 	    last;
 
 	} else {

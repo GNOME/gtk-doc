@@ -1,5 +1,14 @@
 2007-12-04  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-common.pl.in:
+	* tests/bugs/docs/tester-sections.txt:
+	* tests/bugs/src/tester.h:
+	  Add testcase for #501038. Improve struct parsing to correctly finish
+	  if the last line in struct declaration was a preprocessor statement.
+	  Fixes  #501038.
+
+2007-12-04  Stefan Kost  <ensonic@users.sf.net>
+
 	patch by: David Nečas <yeti@physics.muni.cz>
 
 	* gtkdoc-common.pl.in:

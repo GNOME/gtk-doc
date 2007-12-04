@@ -20,6 +20,21 @@ typedef enum {
 } bug_324535;
 
 
+/**
+ * bug_501038:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=501038
+ */
+struct _bug_501038 {
+  gint a;
+#ifdef GTK_DISABLE_DEPRECATED
+  gint b;
+#else
+  gint _b;
+#endif
+};
+
+
 #define _PADDDING 4
 /**
  * bug_460127:
@@ -73,6 +88,12 @@ void bug_445693 (unsigned long pid);
 G_CONST_RETURN gchar* G_CONST_RETURN *
 bug_471014 (void);
 
+/**
+ * Bug446648:
+ * @BUG_446648_FOO: field
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=446648
+ */
 typedef enum _Bug446648 Bug446648;
 enum _Bug446648 {
     BUG_446648_FOO
