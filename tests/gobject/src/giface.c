@@ -3,7 +3,7 @@
  * @short_description: interface for gtk-doc unit test
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
- * We can link to the #GtkdocIface:test property and the #GtkdocIface::test
+ * We can link to the #GtkdocIface:itest property and the #GtkdocIface::itest
  * signal.
  * An instance can be configured using the gtkdoc_iface_configure() function.
  */
@@ -36,7 +36,7 @@ static void gtkdoc_iface_base_init (gpointer g_class) {
 
   if (!initialized) {
     /**
-     * GtkdocIface::test:
+     * GtkdocIface::itest:
      * @self: myself
      *
      * The event has been triggered.

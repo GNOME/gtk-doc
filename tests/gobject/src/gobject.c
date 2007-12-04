@@ -3,7 +3,7 @@
  * @short_description: class for gtk-doc unit test
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
- * We can link to the #GtkdocObject:test property and the #GtkdocObject::test
+ * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
  * signal.
  * A new instance can be created using the gtkdoc_object_new() function.
  */
@@ -55,7 +55,7 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
   gobject_class->get_property = gtkdoc_object_get_property;
 
   /**
-   * GtkdocObject::test:
+   * GtkdocObject::otest:
    * @self: myself
    *
    * The event has been triggered.
