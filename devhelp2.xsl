@@ -88,8 +88,8 @@
   <xsl:template match="*" mode="generate.devhelp2.index.mode">
     <xsl:variable name="title" select="title"/>
     <xsl:variable name="anchor" select="title/anchor"/>
-    <xsl:variable name="type" select="title/anchor/@role"/>
-    <xsl:variable name="condition" select="title/anchor/@condition"/>
+    <xsl:variable name="type" select="@role"/>
+    <xsl:variable name="condition" select="@condition"/>
     <xsl:variable name="target">
       <xsl:choose>
         <xsl:when test="$anchor">
