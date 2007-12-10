@@ -40,6 +40,14 @@ else
 fi
 
 dnl
+dnl Check for Python.
+dnl
+AC_PATH_PROG([PYTHON], [python2.5])
+if test -z "$PYTHON"; then
+  AC_MSG_ERROR([python 2.5 not found])
+fi
+
+dnl
 dnl Check for jade or openjade.
 dnl
 dnl We prefer to use openjade with the '-t sgml-raw' option, since '-t sgml'
@@ -146,6 +154,7 @@ tests/bugs/docs/Makefile
 
 dnl run chmod on these after parsing them.
 AC_CONFIG_FILES([gtkdoc-check],    [chmod +x gtkdoc-check])
+AC_CONFIG_FILES([gtkdoc-depscan],  [chmod +x gtkdoc-depscan])
 AC_CONFIG_FILES([gtkdoc-fixxref],  [chmod +x gtkdoc-fixxref])
 AC_CONFIG_FILES([gtkdoc-mkdb],     [chmod +x gtkdoc-mkdb])
 AC_CONFIG_FILES([gtkdoc-mkhtml],   [chmod +x gtkdoc-mkhtml])

@@ -4,6 +4,7 @@ SUBDIRS = help tests
 
 bin_SCRIPTS = \
 	gtkdoc-check    \
+	gtkdoc-depscan  \
 	gtkdoc-fixxref  \
 	gtkdoc-mkdb     \
 	gtkdoc-mkhtml   \
