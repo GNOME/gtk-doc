@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema
-  xmlns="http://www.devhelp.net/book"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  targetNamespace="http://www.devhelp.net/book"
+  xmlns="urn:devhelp"
+  targetNamespace="urn:devhelp"
   elementFormDefault="qualified">
 
+  <xsd:simpleType name="keyword-type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="enum"/>
+      <xsd:enumeration value="function"/>
+      <xsd:enumeration value="macro"/>
+      <xsd:enumeration value="struct"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  
   <xsd:attribute name="title" type="xsd:string"/>
   <xsd:attribute name="link" type="xsd:string"/>
   <xsd:attribute name="author" type="xsd:string"/>
   <xsd:attribute name="name" type="xsd:string"/>
   <xsd:attribute name="version" type="xsd:integer"/>
 
-  <xsd:attribute name="type" type="xsd:string"/>
+  <xsd:attribute name="type" type="keyword-type"/>
   <xsd:attribute name="since" type="xsd:float"/>
   <xsd:attribute name="deprecated" type="xsd:boolean"/>
 
