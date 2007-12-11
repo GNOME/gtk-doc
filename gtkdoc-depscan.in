@@ -259,15 +259,19 @@ def merge_gnome_path(options):
     path = environ.get('GNOME2_PATH')
     path = path.split(':') if path else []
 
-    glib_prefix = popen(
+    prefix = popen(
         'pkg-config --variable=prefix glib-2.0'
         ).readline().rstrip()
 
-    if glib_prefix:
-      path.insert(0, glib_prefix)
-
+    path.insert(0, prefix)
     path = filter(None, [p.strip() for p in path])
-    path = [os.path.join(p, 'share', 'gtk-doc', 'html') for p in path]
+
+    path = [[
+        os.path.join(p, 'share', 'devhelp', 'books'),
+        os.path.join(p, 'share', 'gtk-doc', 'html')]
+        for p in path]
+
+    path = reduce(list.__add__, path)
     path = filter(os.path.isdir, path)
 
     options.dirs += path
