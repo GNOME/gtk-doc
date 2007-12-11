@@ -295,19 +295,27 @@ if '__main__' == __name__:
             print >>stderr, 'WARNING: %s.' % e
 
     def scan_source_file(name):
-        trace('scanning: %s', name)
-        contents = __comment_regex.sub('', file(name).read())
-        lines = contents.split('\n')
+        contents = None
 
-        for lineno in range(len(lines)):
-            for word in __word_regex.findall(lines[lineno]):
-                symbol = symbols.get(word)
+        try:
+            contents = __comment_regex.sub('', file(name).read())
 
-                if symbol:
-                    symbol.matches.append((name, lineno, symbol))
+        except IOError, e:
+            print >>stderr, e
 
-                elif options.unknown and word.find('_') > 0:
-                    unknown_symbols.append((name, lineno, word))
+        if contents:
+            trace('scanning: %s', name)
+            lines = contents.split('\n')
+
+            for lineno in range(len(lines)):
+                for word in __word_regex.findall(lines[lineno]):
+                    symbol = symbols.get(word)
+
+                    if symbol:
+                        symbol.matches.append((name, lineno, symbol))
+
+                    elif options.unknown and word.find('_') > 0:
+                        unknown_symbols.append((name, lineno, word))
 
     unknown_symbols = []
     matches, symbols = dict(), dict()
