@@ -288,7 +288,7 @@ if '__main__' == __name__:
 
     def parse_book(name):
         try:
-            match = re.match(r'^(.*?)(?:-(\d+(?:\.\d+)*))?$', name)
+            match = re.match(r'^(.*?)(?::(\d+(?:\.\d+)*))?$', name)
             name, version = match.groups()
             trace('reading book: %s', name)
 
