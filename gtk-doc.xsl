@@ -12,14 +12,13 @@
   <xsl:param name="toc.section.depth">2</xsl:param>
   <xsl:param name="generate.toc">
     book	toc
-    chapter	toc
+    chapter toc
     part	toc
-    reference	toc
+    reference toc
   </xsl:param>
 
-
-  <xsl:param name="default.encoding" select="'US-ASCII'"/>
-  <xsl:param name="chunker.output.encoding" select="'US-ASCII'"/>
+  <xsl:param name="default.encoding" select="'UTF-8'"/>
+  <xsl:param name="chunker.output.encoding" select="'UTF-8'"/>
   <xsl:param name="chunker.output.indent" select="'yes'"/>
   <xsl:param name="chunker.output.doctype-public" select="'-//W3C//DTD HTML 4.01 Transitional//EN'"/>
   <xsl:param name="chunk.fast" select="1"/>
@@ -74,7 +73,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         <xsl:apply-templates select="//anchor|//refentry|//refsect1|//refsect2|//refsynopsisdiv"
                              mode="generate.index.mode"/>
       </xsl:with-param>
-      <xsl:with-param name="encoding" select="'utf-8'"/>
+      <xsl:with-param name="encoding" select="'UTF-8'"/>
     </xsl:call-template>
   </xsl:template>
 
