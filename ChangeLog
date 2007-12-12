@@ -2,7 +2,13 @@
 
 	* gtk-doc.make:
 	* gtk-doc.notmpl.make:
-	  Use content_files as a dependency the sgml-build.stamp.Fixes #503119.
+	  Revert last change and reopen #503119. Needs a different fix.
+
+2007-12-12  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	  Use content_files as a dependency the sgml-build.stamp.
 
 2007-12-11  Mathias Hasselmann  <mathias@openismus.com>
 
