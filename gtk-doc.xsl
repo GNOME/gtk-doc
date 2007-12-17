@@ -82,22 +82,22 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
       <xsl:text>&lt;ANCHOR id=&quot;</xsl:text>
       <xsl:value-of select="@id"/>
       <xsl:text>&quot; href=&quot;</xsl:text>
-      <xsl:if test="$gtkdoc.bookname">
-        <xsl:value-of select="$gtkdoc.bookname"/>
-        <xsl:text>/</xsl:text>
-      </xsl:if>
-      <xsl:call-template name="href.target"/>
-      <xsl:text>&quot;&gt;
-</xsl:text>
+        <xsl:if test="$gtkdoc.bookname">
+          <xsl:value-of select="$gtkdoc.bookname"/>
+          <xsl:text>/</xsl:text>
+        </xsl:if>
+        <xsl:call-template name="href.target"/>
+        <xsl:text>&quot;&gt;
+      </xsl:text>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="//releaseinfo/ulink" mode="generate.index.mode">
     <xsl:if test="@role='online-location'">
       <xsl:text>&lt;ONLINE href=&quot;</xsl:text>
-      <xsl:value-of select="@url"/>
-      <xsl:text>&quot;&gt;
-</xsl:text>
+        <xsl:value-of select="@url"/>
+        <xsl:text>&quot;&gt;
+      </xsl:text>
     </xsl:if>
   </xsl:template>
 
@@ -522,6 +522,50 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
 
   <!-- Exterminate any trace of indexterms in the main flow -->
   <xsl:template match="indexterm">
+  </xsl:template>
+  
+  <!-- ==================================================================== -->
+
+  <xsl:template match="acronym">
+    <xsl:call-template name="generate.acronym.link"/>
+  </xsl:template>
+  
+  <xsl:template name="generate.acronym.link">
+    <xsl:param name="acronym">
+      <xsl:apply-templates/>
+    </xsl:param>
+    <!--
+      We use for-each to change context to the database document because key() 
+      only locates elements in the same document as the context node!
+    -->
+   
+    <xsl:param name="value" >
+      <xsl:value-of select="//glossentry/glossterm[text()=$acronym]/../glossdef/para[1]" />
+    </xsl:param>
+    <xsl:choose>
+      <xsl:when test="$value=''">
+        <!-- debug -->
+        <xsl:message>
+          In gtk-doc.xsl: For acronym (<xsl:value-of select="$acronym"/>) no value found! 
+        </xsl:message>
+        <a>
+          <xsl:attribute name="href">
+            <xsl:text>http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?query=</xsl:text>
+	        <xsl:value-of select="$acronym"/>
+          </xsl:attribute>
+          <xsl:call-template name="inline.charseq"/>
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- found -->
+        <acronym>
+          <xsl:attribute name="title">
+            <xsl:value-of select="$value"/>
+          </xsl:attribute>
+          <xsl:call-template name="inline.charseq"/>
+        </acronym>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>
