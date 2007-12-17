@@ -42,10 +42,7 @@ fi
 dnl
 dnl Check for Python.
 dnl
-AC_PATH_PROG([PYTHON], [python2.5])
-if test -z "$PYTHON"; then
-  AC_MSG_ERROR([python 2.5 not found])
-fi
+AM_PATH_PYTHON([2.5])
 
 dnl
 dnl Check for jade or openjade.
