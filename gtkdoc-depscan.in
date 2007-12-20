@@ -185,7 +185,7 @@ class Symbol(object):
 
         if name.endswith('()'):
             if not type in ('function', 'macro'):
-                type = ('function' if name[0].islower() else 'macro')
+                type = (name[0].islower() and 'function' or 'macro')
 
             name = name[:-2].strip()
 
@@ -257,7 +257,7 @@ def parse_cmdline():
 
 def merge_gnome_path(options):
     path = environ.get('GNOME2_PATH')
-    path = path.split(':') if path else []
+    path = path and path.split(':') or []
 
     prefix = popen(
         'pkg-config --variable=prefix glib-2.0'
@@ -292,7 +292,7 @@ if '__main__' == __name__:
             name, version = match.groups()
             trace('reading book: %s', name)
 
-            version = Symbol.VersionInfo(version) if version else None
+            version = version and Symbol.VersionInfo(version)
             return name, Book(name, options.dirs, version)
 
         except IOError, e:
@@ -368,4 +368,4 @@ if '__main__' == __name__:
 
         print 'unknown prefixes: %s' % ', '.join(unknown)
 
-    raise SystemExit(1 if matches else 0)
+    raise SystemExit(matches and 1 or 0)

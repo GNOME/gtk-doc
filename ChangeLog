@@ -1,3 +1,10 @@
+2007-12-20  Mathias Hasselmann  <mathias@openismus.com>
+
+	* gtkdoc-depscan.in:
+	Use old and/or pattern instead of the new ternary operator.
+	This drops the Python 2.5 dependency for that script.
+	Original patch by Frederic Peters. (#503054)
+
 2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
 
 	* configure.in:
