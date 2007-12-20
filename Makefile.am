@@ -4,7 +4,6 @@ SUBDIRS = help tests
 
 bin_SCRIPTS = \
 	gtkdoc-check    \
-	gtkdoc-depscan  \
 	gtkdoc-fixxref  \
 	gtkdoc-mkdb     \
 	gtkdoc-mkhtml   \
@@ -15,6 +14,11 @@ bin_SCRIPTS = \
 	gtkdoc-scangobj \
 	gtkdoc-scanobj  \
 	gtkdocize
+
+if HAVE_PYTHON
+bin_SCRIPTS += \
+	gtkdoc-depscan
+endif
 
 gtkdocdatadir = $(datadir)/gtk-doc/data
 gtkdocdata_DATA = \

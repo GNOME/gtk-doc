@@ -42,7 +42,8 @@ fi
 dnl
 dnl Check for Python.
 dnl
-AM_PATH_PYTHON([2.5])
+AM_PATH_PYTHON([2.3],,)
+AM_CONDITIONAL([HAVE_PYTHON], [test -n "$PYTHON"])
 
 dnl
 dnl Check for jade or openjade.
@@ -117,16 +118,16 @@ AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
 # if glib is available we can enable the tests
 PKG_CHECK_MODULES(TEST_DEPS, [glib-2.0 >= 2.6.0 gobject-2.0 >= 2.6.0], [
     glib_prefix="`$PKG_CONFIG --variable=prefix glib-2.0`"
-    gtk_doc_use_libtool=true
-    build_tests=true
+    gtk_doc_use_libtool=yes
+    build_tests=yes
   ],[
-    gtk_doc_use_libtool=false
-    build_tests=false
+    gtk_doc_use_libtool=no
+    build_tests=no
   ]
 )
-AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, test -n "$LIBTOOL" -a x$gtk_doc_use_libtool = xtrue )
+AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, test -n "$LIBTOOL" -a x$gtk_doc_use_libtool = xyes )
 dnl this enable the rule in test/Makefile.am
-AM_CONDITIONAL(BUILD_TESTS, test x$build_tests = xtrue)
+AM_CONDITIONAL(BUILD_TESTS, test x$build_tests = xyes)
 AC_SUBST(glib_prefix)
 
 
@@ -164,3 +165,21 @@ AC_CONFIG_FILES([gtkdoc-scanobj],  [chmod +x gtkdoc-scanobj])
 AC_CONFIG_FILES([gtkdocize],       [chmod +x gtkdocize])
 
 AC_OUTPUT
+
+AC_MSG_NOTICE([
+gtk-doc was configured with the following options:
+==================================================])
+
+test -n "$PYTHON" \
+    && AC_MSG_NOTICE([** Python based tools enabled, using $PYTHON]) \
+    || AC_MSG_NOTICE([   Python based tools disabled])
+test -n "$JADE" \
+    && AC_MSG_NOTICE([** SGML support enabled, using $JADE]) \
+    || AC_MSG_NOTICE([   SGML support disabled])
+test x$scrollkeeper_config != xno \
+    && AC_MSG_NOTICE([** Scrollkeeper support enabled]) \
+    || AC_MSG_NOTICE([   Scrollkeeper support disabled])
+test x$build_tests != xno \
+    && AC_MSG_NOTICE([** Building regression tests]) \
+    || AC_MSG_NOTICE([   Skipping regression tests])
+

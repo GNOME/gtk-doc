@@ -1,5 +1,14 @@
 2007-12-20  Mathias Hasselmann  <mathias@openismus.com>
 
+	* configure.in:
+	Lower Python dependency to 2.3 (#503054). Just warn when Python
+	wasn't found. Print a configuration summary before leaving the
+	configure script.
+	* Makefile.am:
+	Do not install gtkdoc-depscan when Python wasn't found.
+
+2007-12-20  Mathias Hasselmann  <mathias@openismus.com>
+
 	* gtkdoc-depscan.in:
 	Use old and/or pattern instead of the new ternary operator.
 	This drops the Python 2.5 dependency for that script.
