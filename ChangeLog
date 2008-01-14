@@ -1,3 +1,11 @@
+2008-01-14  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: Joe Marcus Clarke <marcus@freebsd.org>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	  Do not abort the build, if gtk-doc is not installed. Fixes #508897
+
 2007-12-20  Mathias Hasselmann  <mathias@openismus.com>
 
 	* configure.in:

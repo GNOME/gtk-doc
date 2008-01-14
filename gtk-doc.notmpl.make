@@ -113,7 +113,7 @@ maintainer-clean-local: clean
 	cd $(srcdir) && rm -rf html
 
 install-data-local:
-	installfiles=`echo $(srcdir)/html/*`; \
+	-installfiles=`echo $(srcdir)/html/*`; \
 	if test "$$installfiles" = '$(srcdir)/html/*'; \
 	then echo '-- Nothing to install' ; \
 	else \
