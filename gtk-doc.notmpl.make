@@ -145,8 +145,8 @@ endif
 dist-hook: dist-check-gtkdoc dist-hook-local
 	mkdir $(distdir)/html
 	cp $(srcdir)/html/* $(distdir)/html
-	cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
-	cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
+	-cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
+	-cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
 	cd $(distdir) && rm -f $(DISTCLEANFILES)
 	-gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
 

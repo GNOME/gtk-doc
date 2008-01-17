@@ -1,3 +1,16 @@
+2008-01-17  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	  Don't fail in dist when no .types file is present. Fixes #509539.
+
+2008-01-16  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-mkdb.in:
+	* gtkdoc-mktmpl.in:
+	  Give file and line number when complaining about duplicate
+	  definitions.
+
 2008-01-14  Stefan Kost  <ensonic@users.sf.net>
 
 	patch by: Joe Marcus Clarke <marcus@freebsd.org>
