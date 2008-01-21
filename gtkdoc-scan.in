@@ -370,8 +370,8 @@ sub ScanHeader {
 		$decl = $_;
 		$in_declaration = "enum";
 
-	    } elsif (m/^\s*typedef\s+enum\s+_(\w+)\s+\1\s*;/) {
-		# We skip 'typedef <enum_name> _<enum_name>;' as the enum will
+	    } elsif (m/^\s*typedef\s+enum\s+_?(\w+)\s+\1\s*;/) {
+		# We skip 'typedef enum <enum_name> _<enum_name>;' as the enum will
 		# be declared elsewhere.
 		#print "DEBUG: skipping enum typedef: $1\n";
 
@@ -401,7 +401,7 @@ sub ScanHeader {
 	        # Do a similar thing for normal structs as for typedefs above.
 	        # But we output the declaration as well in this case, so we
 	        # can differentiate it from a typedef.
-                #print "DEBUG: struct: $1\n";
+	        #print "DEBUG: struct: $1\n";
 		&AddSymbolToList (\$list, $1);
 		print DECL "<STRUCT>\n<NAME>$1</NAME>\n$_$deprecated</STRUCT>\n";
 
@@ -415,7 +415,7 @@ sub ScanHeader {
 	    # OTHER TYPEDEFS
 
 	    } elsif (m/^\s*typedef\s+struct\s+\w+[\s\*]+(\w+)\s*;/) {
-	        #print "DEBUG: Found struct* typedef: $_";
+		#print "DEBUG: Found struct* typedef: $_";
 		&AddSymbolToList (\$list, $1);
 		print DECL "<TYPEDEF>\n<NAME>$1</NAME>\n$deprecated$_</TYPEDEF>\n";
 
@@ -448,18 +448,14 @@ sub ScanHeader {
 		$ret_type = $1;
 		$symbol = $2;
 		$decl = $';
-
 		#print "DEBUG: FunctionPointer: $symbol, Returns: $ret_type\n";
-
 		$in_declaration = "function";
 
 	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*([A-Za-z]\w*)\s*\(/o) {
 		$ret_type = $1;
 		$symbol = $2;
 		$decl = $';
-
 		#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
-
 		$in_declaration = "function";
 
 	    # Try to catch function declarations which have the return type on

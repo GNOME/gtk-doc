@@ -16,6 +16,9 @@
 typedef struct _GtkdocObject GtkdocObject;
 typedef struct _GtkdocObjectClass GtkdocObjectClass;
 
+typedef struct GtkdocHelperStruct GtkdocHelperStruct;
+typedef enum GtkdocHelperEnum GtkdocHelperEnum;
+
 /**
  * GtkdocObject:
  *
@@ -39,6 +42,15 @@ struct _GtkdocObjectClass {
 
   /* class methods */
   void (*test)(const GtkdocObject * const self, gconstpointer const user_data);
+};
+
+struct GtkdocHelperStruct {
+  int a;
+};
+
+enum GtkdocHelperEnum {
+  GTKDOC_HELPER_ENUM_A,
+  GTKDOC_HELPER_ENUM_B
 };
 
 GType  gtkdoc_object_get_type(void) G_GNUC_CONST;

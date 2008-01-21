@@ -3709,7 +3709,7 @@ sub ReadDeclarationsFile {
 			    } elsif ($declaration =~ m/^\s*(struct\s+\w+\s*;)?\s*$/) {
 				# Ignore an empty or forward declaration.
 			    } else {
-				print "WARNING: Structure has multiple definitions: $declaration_name\n";
+				print "WARNING: Structure $declaration_name has multiple definitions: $file:$.\n";
 			    }
 
 			} else {
@@ -3718,7 +3718,7 @@ sub ReadDeclarationsFile {
 			    $DeclarationConditional{$declaration_name} = 1;
 			}
 		    } else {
-			print "ERROR: $declaration_name has multiple definitions\n";
+			print "ERROR: $declaration_name has multiple definitions: $file:$.\n";
 		    }
 		} else {
 		    if ($is_deprecated) {
