@@ -151,7 +151,7 @@ sub ParseStructDeclaration {
 
         # Try to match structure members which are functions
 	if ($line =~ m/^
-		 (const\s+|G_CONST_RETURN\s+|unsigned\s+|signed\s+|long\s+|short\s+)*(struct\s+)?  # mod1
+		 (const\s+|G_CONST_RETURN\s+|unsigned\s+|signed\s+|long\s+|short\s+)*(struct\s+|enum\s+)?  # mod1
 		 (\w+)\s*                             # type
 	         (\**(?:\s*restrict)?)\s*             # ptr1
 		 (const\s+)?                          # mod2
@@ -184,7 +184,7 @@ sub ParseStructDeclaration {
 
 	# Try to match normal struct fields of comma-separated variables/
 	} elsif ($line =~ m/^
-	    ((?:const\s+|unsigned\s+|volatile\s+|signed\s+|short\s+|long\s+)*)(struct\s+)? # mod1
+	    ((?:const\s+|unsigned\s+|volatile\s+|signed\s+|short\s+|long\s+)*)(struct\+|enum\s+)? # mod1
 	    (\w+)\s*                            # type
 	    (\** \s* const\s+)?                 # mod2
 	    (.*)				# variables
