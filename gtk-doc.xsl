@@ -73,7 +73,8 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         <xsl:apply-templates select="//anchor|//refentry|//refsect1|//refsect2|//refsynopsisdiv"
                              mode="generate.index.mode"/>
       </xsl:with-param>
-      <xsl:with-param name="encoding" select="'UTF-8'"/>
+      <xsl:with-param name="default.encoding" select="'UTF-8'"/>
+      <xsl:with-param name="chunker.output.indent" select="'no'"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -87,8 +88,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
           <xsl:text>/</xsl:text>
         </xsl:if>
         <xsl:call-template name="href.target"/>
-        <xsl:text>&quot;&gt;
-      </xsl:text>
+        <xsl:text>&quot;&gt;&#10;</xsl:text>
     </xsl:if>
   </xsl:template>
 
@@ -96,8 +96,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:if test="@role='online-location'">
       <xsl:text>&lt;ONLINE href=&quot;</xsl:text>
         <xsl:value-of select="@url"/>
-        <xsl:text>&quot;&gt;
-      </xsl:text>
+        <xsl:text>&quot;&gt;&#10;</xsl:text>
     </xsl:if>
   </xsl:template>
 

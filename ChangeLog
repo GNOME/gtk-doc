@@ -1,3 +1,13 @@
+2008-01-24  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtk-doc.xsl:
+	  Unbreak fixxref. The index.sgml file should not have leading
+	  whitespace. These were caused by indenting the xsl, which is dangerous
+	  in case of <xsl:text>.
+
+	* gtkdoc-fixxref.in:
+	  Debug logging.
+
 2008-01-21  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-common.pl.in:

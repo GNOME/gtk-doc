@@ -114,7 +114,7 @@ if (defined ($ENV{"GNOME2_PATH"})) {
 &ScanIndices ($HTML_DIR, 0);
 push (@VisitedPaths, $HTML_DIR);
 
-# check all extra dirs, but skip already scanned dirs ord subdirs of those
+# check all extra dirs, but skip already scanned dirs or subdirs of those
 foreach my $dir (@EXTRA_DIRS) {
     my $vdir;
     my $skip = 0;
@@ -173,7 +173,7 @@ sub ScanIndices {
 
 sub ScanIndex {
     my ($file, $use_absolute_links) = @_;
-#    print "Scanning index file: $file absolute: $use_absolute_links\n";
+    #print "Scanning index file: $file absolute: $use_absolute_links\n";
 
     # Determine the absolute directory, to be added to links in index.sgml
     # if we need to use an absolute link.
@@ -190,7 +190,7 @@ sub ScanIndex {
 	|| die "Can't open $file: $!";
     while (<INDEXFILE>) {
 	if (m/^<ANCHOR\s+id\s*=\s*"([^"]*)"\s+href\s*=\s*"([^"]*)"\s*>/) {
-#	    print "Found id: $1 href: $2\n";
+	    #print "Found id: $1 href: $2\n";
 	    $Links{$1} = "$dir$2";
 	}
     }
@@ -217,7 +217,7 @@ sub FixCrossReferences {
 
 sub FixHTMLFile {
     my ($file) = @_;
-#    print "Fixing file: $file\n";
+    #print "Fixing file: $file\n";
 
     open (HTMLFILE, $file)
 	|| die "Can't open $file: $!";
@@ -245,9 +245,10 @@ sub MakeXRef {
     my $href = $Links{$id};
 
     if ($href) {
-#        print "  Fixing link: $id, $href, $text\n";
+        # print "  Fixing link: $id, $href, $text\n";
         return "<a\nhref=\"$href\"\n>$text</a>";
     } else {
+        # print "  no link for: $id, $text\n";
 	return $text;
     }
 }
