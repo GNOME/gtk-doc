@@ -458,15 +458,18 @@ EOF
 		    $section_includes = $includes;
 		}
 
+                 $signals_synop =~ s/^\n*//g;
+                 $signals_synop =~ s/\n+$/\n/g;
 		if ($signals_synop ne '') {
 		    $signals_synop = <<EOF;
 <refsect1 id="$section_id.signals" role="signal_proto">
 <title role="signal_proto.title">Signals</title>
 <synopsis>
-
 ${signals_synop}</synopsis>
 </refsect1>
 EOF
+                     $signals_desc =~ s/^\n*//g;
+                     $signals_desc =~ s/\n+$/\n/g;
 		    $signals_desc  = <<EOF;
 <refsect1 id="$section_id.signal-details" role="signals">
 <title role="signals.title">Signal Details</title>
@@ -475,15 +478,18 @@ $signals_desc
 EOF
 		}
 
+                 $args_synop =~ s/^\n*//g;
+                 $args_synop =~ s/\n+$/\n/g;
 		if ($args_synop ne '') {
 		    $args_synop = <<EOF;
 <refsect1 id="$section_id.properties" role="properties">
 <title role="properties.title">Properties</title>
 <synopsis>
-
 ${args_synop}</synopsis>
 </refsect1>
 EOF
+                     $args_desc =~ s/^\n*//g;
+                     $args_desc =~ s/\n+$/\n/g;
 		    $args_desc  = <<EOF;
 <refsect1 id="$section_id.property-details" role="property_details">
 <title role="property_details.title">Property Details</title>
@@ -492,15 +498,18 @@ $args_desc
 EOF
 		}
 
+                 $child_args_synop =~ s/^\n*//g;
+                 $child_args_synop =~ s/\n+$/\n/g;
 		if ($child_args_synop ne '') {
 		    $args_synop .= <<EOF;
 <refsect1 id="$section_id.child-properties" role="child_properties">
 <title role="child_properties.title">Child Properties</title>
 <synopsis>
-
 ${child_args_synop}</synopsis>
 </refsect1>
 EOF
+                     $args_desc =~ s/^\n*//g;
+                     $args_desc =~ s/\n+$/\n/g;
 		    $args_desc .= <<EOF;
 <refsect1 id="$section_id.child-property-details" role="child_property_details">
 <title role="child_property_details.title">Child Property Details</title>
@@ -509,15 +518,18 @@ $child_args_desc
 EOF
 		}
 
+                 $style_args_synop =~ s/^\n*//g;
+                 $style_args_synop =~ s/\n+$/\n/g;
 		if ($style_args_synop ne '') {
 		    $args_synop .= <<EOF;
 <refsect1 id="$section_id.style-properties" role="style_properties">
 <title role="style_properties.title">Style Properties</title>
 <synopsis>
-
 ${style_args_synop}</synopsis>
 </refsect1>
 EOF
+                     $args_desc =~ s/^\n*//g;
+                     $args_desc =~ s/\n+$/\n/g;
 		    $args_desc .= <<EOF;
 <refsect1 id="$section_id.style-property-details" role="style_properties_details">
 <title role="style_properties_details.title">Style Property Details</title>
@@ -526,6 +538,8 @@ $style_args_desc
 EOF
 		}
 
+                 $hierarchy =~ s/^\n*//g;
+                 $hierarchy =~ s/\n+$/\n/g;
 		if ($hierarchy ne "") {
 		    $hierarchy = <<EOF;
 <refsect1 id="$section_id.object-hierarchy" role="object_hierarchy">
@@ -535,6 +549,8 @@ $hierarchy
 EOF
 		}
 
+                 $interfaces =~ s/^\n*//g;
+                 $interfaces =~ s/\n+$/\n/g;
 		if ($interfaces ne "") {
 		    $interfaces = <<EOF;
 <refsect1 id="$section_id.implemented-interfaces" role="impl_interfaces">
@@ -544,6 +560,8 @@ $interfaces
 EOF
 		}
 
+                 $implementations =~ s/^\n*//g;
+                 $implementations =~ s/\n+$/\n/g;
 		if ($implementations ne "") {
 		    $implementations = <<EOF;
 <refsect1 id="$section_id.implementations" role="implementations">
@@ -553,6 +571,8 @@ $implementations
 EOF
 		}
 
+                 $prerequisites =~ s/^\n*//g;
+                 $prerequisites =~ s/\n+$/\n/g;
 		if ($prerequisites ne "") {
 		    $prerequisites = <<EOF;
 <refsect1 id="$section_id.prerequisites" role="prerequisites">
@@ -562,6 +582,8 @@ $prerequisites
 EOF
 		}
 
+                 $derived =~ s/^\n*//g;
+                 $derived =~ s/\n+$/\n/g;
 		if ($derived ne "") {
 		    $derived = <<EOF;
 <refsect1 id="$section_id.derived-interfaces" role="derived_interfaces">
@@ -571,6 +593,8 @@ $derived
 EOF
 		}
 
+                 $synopsis =~ s/^\n*//g;
+                 $synopsis =~ s/\n+$/\n/g;
 		my $file_changed = &OutputSGMLFile ($file, $title, $section_id,
 						    $section_includes,
 						    \$synopsis, \$details,
@@ -1594,6 +1618,9 @@ sub OutputSGMLFile {
             $include_output .= "#include &lt;${include}&gt;\n";
         }
     }
+    if ($include_output ne '') {
+        $include_output = "\n$include_output\n";
+    }
 
     my $old_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT";
     my $new_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT.new";
@@ -1605,7 +1632,7 @@ sub OutputSGMLFile {
     foreach my $object (@$file_objects) {
 	next if ($object eq $section_id);
 	my $id = CreateValidSGMLID($object);
-#	print "Debug: Adding anchor for $object\n";
+        #print "Debug: Adding anchor for $object\n";
 	$object_anchors .= "<anchor id=\"$id\"$empty_element_end";
     }
 
@@ -1635,10 +1662,7 @@ $stability
 <title role="synopsis.title">Synopsis</title>
 $object_anchors
 <synopsis>
-
-$include_output
-
-$${synopsis}</synopsis>
+$include_output$${synopsis}</synopsis>
 </refsynopsisdiv>
 
 $$hierarchy
@@ -2263,7 +2287,7 @@ sub GetHierarchy {
     }
 
     # Output the ancestors list, indented and with links.
-    my $hierarchy = "<synopsis>\n\n";
+    my $hierarchy = "<synopsis>\n";
     $level = 0;
     for ($i = $#ancestors; $i >= 0; $i--) {
 	my $link_text;
