@@ -99,5 +99,15 @@ enum _Bug446648 {
     BUG_446648_FOO
 };
 
+/**
+ * Bug512154:
+ * @index: field
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=512154
+ */
+typedef struct {
+  unsigned long        index;
+} Bug512154;
+
 #endif // GTKDOC_TESTER_H
 
