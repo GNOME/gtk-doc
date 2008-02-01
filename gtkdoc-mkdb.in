@@ -3480,6 +3480,7 @@ EOF
 		} else {
                     my $params = $SourceSymbolParams{$symbol};
                     my $j;
+                    #print "Merge needed for $symbol, tmpl_params: ",$#$tmpl_params,", source_params: ",$#$params," \n";
                     for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
                         my $tmpl_param_name = $$tmpl_params[$j];
 

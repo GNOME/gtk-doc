@@ -146,9 +146,6 @@ sub ParseStructDeclaration {
 
         last if $line =~ /^\s*\}\s*\w*\s*$/;
 
-	# FIXME: The regexes here are the same as in OutputFunction; 
-	#        this functionality should be separated out.
-
         # Try to match structure members which are functions
 	if ($line =~ m/^
 		 (const\s+|G_CONST_RETURN\s+|unsigned\s+|signed\s+|long\s+|short\s+)*(struct\s+|enum\s+)?  # mod1
@@ -184,7 +181,7 @@ sub ParseStructDeclaration {
 
 	# Try to match normal struct fields of comma-separated variables/
 	} elsif ($line =~ m/^
-	    ((?:const\s+|unsigned\s+|volatile\s+|signed\s+|short\s+|long\s+)*)(struct\+|enum\s+)? # mod1
+	    ((?:const\s+|volatile\s+|unsigned\s+|signed\s+|short\s+|long\s+)?)(struct\s+|enum\s+)? # mod1
 	    (\w+)\s*                            # type
 	    (\** \s* const\s+)?                 # mod2
 	    (.*)				# variables
@@ -196,6 +193,8 @@ sub ParseStructDeclaration {
 	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
 	    my $mod2 = defined($4) ? " " . $4 : "";
 	    my $list = $5;
+
+            #print "'$mod1' '$type' '$mod2' '$list' \n";
 
 	    $mod1 =~ s/ /&nbsp;/g;
 	    $mod2 =~ s/ /&nbsp;/g;

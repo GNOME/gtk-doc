@@ -349,7 +349,7 @@ sub OutputDeclaration {
     my ($type, $symbol, $declaration) = @_;
     my ($output) = "";
 
-#    print "Outputting $type: $symbol\n";
+    #print "Outputting $type: $symbol\n";
 
     # See if symbol already has a description.
     my ($symbol_desc) = $SymbolDocs{$symbol};
@@ -434,7 +434,6 @@ EOF
 	    }
 	    $param_num++;
 	}
-
 
 	if ($ret_type ne "void" || $ret_type_modifier || $ret_type_pointer) {
 	    $output .= &OutputParam ($symbol, "Returns", $template_exists, 1,
