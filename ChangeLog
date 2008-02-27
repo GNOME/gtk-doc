@@ -1,3 +1,10 @@
+2008-02-27  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: Carlos Garnacho <carlos@imendio.com>
+
+	* tools/gtk-doc.el:
+	  Update emacs mode to work with emacs22. Fixes #513318.
+
 2008-02-01  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-common.pl.in:
@@ -11,15 +18,6 @@
 	* tests/bugs/docs/tester-sections.txt:
 	* tests/bugs/src/tester.h:
 	  Add testcase for #512154.
-
-2008-01-30  Stefan Kost  <ensonic@users.sf.net>
-
-	reviewed by: <delete if not using a buddy>
-	patch by: <delete if not someone else's patch>
-
-	* gtkdoc-mkman.in:
-	* tests/bugs/docs/tester-sections.txt:
-	* tests/bugs/src/tester.h:
 
 2008-01-28  Stefan Kost  <ensonic@users.sf.net>
 

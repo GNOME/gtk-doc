@@ -113,8 +113,13 @@ Using '%s' will expand to the name of the function."
   :type '(string)
   :group 'gnome-doc)
 
-(defcustom gnome-doc-blank " * \n"
+(defcustom gnome-doc-blank " *\n"
   "Used to put a blank line into the header."
+  :type '(string)
+  :group 'gnome-doc)
+
+(defcustom gnome-doc-blank-space " * \n"
+  "Used to put a blank line into the header, plus a space"
   :type '(string)
   :group 'gnome-doc)
 
@@ -164,6 +169,7 @@ at least the first line of this which matches gnome-doc-match-block"
 (make-variable-buffer-local 'gnome-doc-parameter)
 (make-variable-buffer-local 'gnome-doc-section)
 (make-variable-buffer-local 'gnome-doc-blank)
+(make-variable-buffer-local 'gnome-doc-blank-space)
 (make-variable-buffer-local 'gnome-doc-match-block)
 (make-variable-buffer-local 'gnome-doc-match-header)
 
@@ -178,6 +184,10 @@ at least the first line of this which matches gnome-doc-match-block"
 ;; insert a 'blank' comment line
 (defun gnome-doc-insert-blank ()
   (insert gnome-doc-blank))
+
+;; insert a 'blank-space' comment line
+(defun gnome-doc-insert-blank-space ()
+  (insert gnome-doc-blank-space))
 
 ;; insert a section comment line
 (defun gnome-doc-insert-section (section)
@@ -198,12 +208,10 @@ Only C/C++ function types are properly supported currently."
 	(narrow-to-page)
 	(let (c-arglist
 	      c-funcname
-	      (c-point (point))
+	      c-point
 	      c-comment-point
 	      c-isvoid
 	      c-doinsert)
-	  (search-backward "(")
-	  (forward-line -2)
 	  (while (or (looking-at "^$")
 		     (looking-at "^ *}")
 		     (looking-at "^ \\*")
@@ -212,6 +220,9 @@ Only C/C++ function types are properly supported currently."
 	  (if (or (looking-at ".*void.*(")
 		  (looking-at ".*void[ \t]*$"))
 	      (setq c-isvoid 1))
+
+	  (setq c-point point)
+
 	  (save-excursion
 	    (if (re-search-forward "\\([A-Za-z0-9_:~]+\\)[ \t\n]*\\(([^)]*)\\)" c-point nil)
 		(let ((c-argstart (match-beginning 2))
@@ -244,7 +255,7 @@ Only C/C++ function types are properly supported currently."
 	
 		;; finish it off
 		(gnome-doc-insert-blank)
-		(gnome-doc-insert-blank)
+		(gnome-doc-insert-blank-space)
 		;; record the point of insertion
 		(setq c-insert-here (- (point) 1))
 
