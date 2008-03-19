@@ -22,6 +22,11 @@
 
 /* this is needed so that the local anchors are displayed below the naviagtion */
 @media screen {
+  sup a.footnote
+  {
+    position: relative;
+    top: 0em ! important;
+  }
   div.refnamediv a[name], div.refsect1 a[name]
   {
     position: relative;

@@ -1,0 +1,29 @@
+Testing
+=======
+
+jhbuild --no-interact build 2>&1 | tee build.log
+grep "gtkdoc-* line" build.log
+
+jhbuild buildone --no-net glib
+
+Releasing
+=========
+
+http://live.gnome.org/MaintainersCorner/Releasing
+
+~/projects/gstreamer-0.10/www/bin/bugzilla general 1.9 gtk-doc >RELNOTES.fixes.xml
+./xml2txt.sh
+moap cl contributors
+add then to NEWS
+
+make dist
+svn cp svn+ssh://<user>@svn.gnome.org/svn/gtk-doc/trunk svn+ssh://<user>@svn.gnome.org/svn/gtk-doc/tags/GTK_DOC_1_9/
+
+scp gtk-doc-1.9.tar.gz <user>@master.gnome.org:
+ssh <user>@master.gnome.org
+install-module gtk-doc-<ver>.tar.gz
+
+bump versions in:
+  configure.in
+  help/manual/C/gtk-doc-manual.xml
+  

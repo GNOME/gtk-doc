@@ -1,3 +1,43 @@
+GTK-Doc 1.10    (Mar 20 2008)
+============
+
+ Changes
+
+ o 460753 : enable vpath build in gtkdoc-mkhtml
+ o 503119 : Add dependency on content_files to SGML target
+ o 127049 : building reference documentation fails when builddir != s...
+ o 481811 : Inline function bodies are confused with declarations
+ o 448879 : Use a footer when generating HTML documentation
+ o 492005 : Deprecation guard warnings for properties and signals
+ o 498521 : Inconsistent compiler flags passed in gtk-doc.make
+ o 365913 : gtk-doc output is not predictable
+ o 446648 : gtk-doc does not handle forward typedef'd enums
+ o 468278 : Display proper types for properties
+ o 497367 : don't use US-ASCII for output encoding
+ o 501066 : Missing quotes around gtkdoc-rebase check cause a warning
+ o 508897 : [PATCH] Fix build when gtk-doc is not installed
+ o 509539 : Building documentation aborts when no .types file is present
+ o 512154 : Struct member type attributes are limited to one token
+ o 513318 : gtk-doc.el doesn't work fine with emacs22
+
+
+ Contributors
+
+ Benjamin Otte
+ Carlos Garnacho
+ Damon Chaplin
+ David Nečas
+ Frederic Peters
+ Joe Marcus Clarke
+ Kouhei Sutou
+ Loïc Minier
+ Mathias Hasselmann
+ Petteri Räty
+ Rouslan Solomakhin
+ Stefan Kost
+ Sven Herzberg
+ Yeti
+
 GTK-Doc 1.9     (Sep 30 2007)
 ===========
 
