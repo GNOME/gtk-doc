@@ -79,5 +79,8 @@ EXTRA_DIST = \
   tools/gtk-doc.el \
   style.css \
   COPYING-DOCS \
-  omf.make \
-  xmldocs.make
+  gnome-doc-utils.make \
+  m4
+
+DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
+DISTCLEANFILES = gnome-doc-utils.make

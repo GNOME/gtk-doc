@@ -11,6 +11,7 @@
   <bookinfo>
     <title>GTK-Doc Manual</title>
     <edition>1.11</edition>
+    <abstract role="description"><para>User manual for developers with instructions of GTK-Doc usage.</para></abstract>
     <authorgroup>
       <author>
         <firstname>Chris</firstname>
@@ -40,6 +41,7 @@
         </affiliation>
       </author>
     </authorgroup>
+    <publisher role="maintainer"><address><email>gtk-doc-list@gnome.org</email></address></publisher>
     <copyright>
       <year>2000, 2005, 2007-2008</year>
       <holder>Dan Mueth and Chris Lyttle and Stefan Kost</holder>
@@ -69,6 +71,15 @@
         or initial caps.
       </para>
     </legalnotice>
+    
+    <revhistory>
+      <revision>
+	<revnumber>1.11</revnumber>
+	<date>22 March 2008</date>
+	<authorinitials>mal</authorinitials>
+	<revremark>GNOME doc-utils migration</revremark>
+      </revision>
+    </revhistory>
 
   </bookinfo>
 
@@ -1269,7 +1280,7 @@ gtk_arrow_get_type
     <tip>
       <para>
         Enable or add the <option>TESTS=($GTKDOC_CHECK)</option> line in Makefile.am.
-        If at least gtk-doc 1.9 is installed, this will run sanity checks during 
+        If at least gtk-doc 1.9 is installed, this will run sanity checks during
         make check run.
       </para>
     </tip>

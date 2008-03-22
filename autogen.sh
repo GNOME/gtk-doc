@@ -19,6 +19,12 @@ THEDIR="`pwd`"
 
 cd "$srcdir"
 
+which gnome-doc-prepare || {
+    echo "You need to install gnome-doc-utils to build this package"
+    exit 1
+}
+gnome-doc-prepare
+
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "You must have autoconf installed to compile $PROJECT."
@@ -64,14 +70,18 @@ if test "$#" = 0; then
         echo "to pass any to it, please specify them on the $0 command line."
 fi
 
+echo "* Running $ACLOCAL"
 $ACLOCAL $ACLOCAL_FLAGS || exit $?
 
+echo "* Running autoconf"
 autoconf || exit $?
 # optionally feature autoheader
 #(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
+echo "* Running libtoolize"
 libtoolize --copy --force
 
+echo "* Running $AUTOMAKE"
 $AUTOMAKE --add-missing $am_opt || exit $?
 
 cd "$THEDIR"

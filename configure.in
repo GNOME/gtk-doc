@@ -8,10 +8,13 @@ m4_define(gtk_doc_version, 1.11)
 AC_INIT([gtk-doc], [gtk_doc_version],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc])
 
+AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([gtk-doc.dsl.in])
 
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
+
+GNOME_DOC_INIT
 
 # make sure $ACLOCAL_FLAGS are used during a rebuild.
 AC_SUBST([ACLOCAL_AMFLAGS], ["\${ACLOCAL_FLAGS}"])
@@ -111,9 +114,6 @@ if test x$scrollkeeper_config = xno; then
 #    AC_MSG_WARN([Couldn't find xsltproc, please install the libxml/libxslt package])
 #  fi
 fi
-AM_CONDITIONAL(ENABLE_SCROLLKEEPER, test ! x$scrollkeeper_config = xno)
-SCROLLKEEPER_BUILD_REQUIRED=0.3.5
-AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
 
 # if glib is available we can enable the tests
 PKG_CHECK_MODULES(TEST_DEPS, [glib-2.0 >= 2.6.0 gobject-2.0 >= 2.6.0], [
@@ -139,8 +139,6 @@ gtk-doc.cat
 gtkdoc-common.pl
 help/Makefile
 help/manual/Makefile
-help/manual/C/Makefile
-help/manual/C/gtk-doc-manual-C.omf
 tests/Makefile
 tests/gobject/Makefile
 tests/gobject/src/Makefile
