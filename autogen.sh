@@ -82,7 +82,7 @@ echo "* Running libtoolize"
 libtoolize --copy --force
 
 echo "* Running $AUTOMAKE"
-$AUTOMAKE --add-missing $am_opt || exit $?
+$AUTOMAKE --add-missing -Wno-portability $am_opt || exit $?
 
 cd "$THEDIR"
 

@@ -1,3 +1,12 @@
+2008-03-23  Stefan Kost  <ensonic@users.sf.net>
+
+	* autogen.sh:
+	  Tell automake to not warn us about portabillity issues. Its too late
+	  for that.
+
+	* ChangeLog:
+	  Surgery for the bugnumber.
+
 2008-03-21  Marc-Andre Lureau <marcandre.lureau@gmail.com>
 
 	* .svnignore, Makefile.am, autogen.sh, configure.in,
@@ -6,7 +15,7 @@
 	help/manual/C/gtk-doc-manual.xml, help/manual/ChangeLog,
 	help/manual/Makefile.am, help/manual/gtk-doc-manual.omf.in,
 	m4/.svnignore, omf.make, xmldocs.make:
-	GNOME doc-utils migration.  (Closes #335239)
+	GNOME doc-utils migration.  Fixes #335239
 
 2008-03-22  Stefan Kost  <ensonic@users.sf.net>
 
