@@ -20,11 +20,18 @@ make dist
 svn cp svn+ssh://<user>@svn.gnome.org/svn/gtk-doc/trunk svn+ssh://<user>@svn.gnome.org/svn/gtk-doc/tags/GTK_DOC_1_9/
 
 scp gtk-doc-1.9.tar.gz <user>@master.gnome.org:
+scp NEWS <user>@master.gnome.org:gtk-doc-1.9.news
+scp ChangeLog-1.9 <user>@master.gnome.org:gtk-doc-1.9.changes
 ssh <user>@master.gnome.org
 install-module gtk-doc-<ver>.tar.gz
+
+(how to install the 'gtk-doc-1.9.news' and 'gtk-doc-1.9.changes')
 
 bump versions in:
   add delimiter to ChangeLog
   configure.in
   help/manual/C/gtk-doc-manual.xml
+
+if we want a icon on the newsfeed, we should copy a icon like on
+  http://ftp.acc.umu.se/pub/GNOME/sources/rhythmbox/rhythmbox.png
 

@@ -2913,7 +2913,7 @@ EOF
 		    push (@params, $return_desc);
 		    if ($return_style eq 'broken') {
 			print <<EOF;
-WARNING: Free-form return value description in $symbol.
+WARNING: Free-form return value description in $symbol: $file:$.
          Use `Returns:' to avoid ambiguities.
 EOF
 		    }

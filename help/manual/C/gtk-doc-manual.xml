@@ -138,11 +138,19 @@
           <para>
             <guilabel>Gathering information about the code.</guilabel>
 
-            <application>gtkdoc-scan</application> scans the header files of the code looking for declarations of
-            functions, macros, enums, structs, and unions. It creates a list of the
+            <application>gtkdoc-scan</application> scans the header files of the
+            code looking for declarations of functions, macros, enums, structs, and unions.
+            It creates the file <filename>&lt;module&gt;-decl-list.txt</filename> containg a list of the
             declarations, placing them into sections according to which header file they
-            are in. The author can rearrange the sections, and the order of the
+            are in. On the first run this file is copied to <filename>&lt;module&gt;-sections.txt</filename>
+            The author can rearrange the sections, and the order of the
             declarations within them, to produce the final desired order.
+            The second file it generates is <filename>&lt;module&gt;-decl.txt</filename>.
+            This file conatins the full declarations found by the scanner. If for
+            some reason one would like some sybols to show up in the docs, where
+            the full declaration cannot be found by th scanner or the declaration
+            should appear differently, one can place enties similar to the ones in
+            <filename>&lt;module&gt;-decl.txt</filename> into <filename>&lt;module&gt;-overrides.txt</filename>.
 
             <application>gtkdoc-scanobj</application> can also be used to dynamically query a library about
             any GtkObject subclasses it exports. It saves information about each
