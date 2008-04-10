@@ -21,8 +21,8 @@
 
 #
 # These are functions used by several of the gtk-doc Perl scripts.
-# I'll move more of the common routines here eventually, though I need to
-# stop them from using global variables.
+# We'll move more of the common routines here eventually, though they need to
+# stop using global variables first.
 #
 
 1;
@@ -312,3 +312,17 @@ sub ParseEnumDeclaration {
 
     return @result;
 }
+
+#############################################################################
+# Function    : LogWarning
+# Description : Log a warning in gcc style format
+# Arguments   : $file - the file the error comes from
+#		$line - line number for the wrong entry
+#		$message - description of the issue
+#############################################################################
+sub LogWarning {
+    my ($file, $line, $message) = @_;
+    
+    print "$file:$line: warning: $message\n"
+}
+

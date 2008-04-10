@@ -86,23 +86,26 @@ if ($DEFAULT_STABILITY && $DEFAULT_STABILITY ne "Stable"
 }
 
 if ($PRINT_HELP) {
-    print "gtkdoc-mkdb version @VERSION@\n";
-    print "\n--module=MODULE_NAME   Name of the doc module being parsed";
-    print "\n--source-dir=DIRNAME   Directories which contain inline reference material";
-    print "\n--source-suffixes=SUFFIXES Suffixes of source files to scan, comma-separated";
-    print "\n--ignore-files=FILES   Files or directories which should not be scanned";
-    print "\n                       May be used more than once for multiple directories";
-    print "\n--output-dir=DIRNAME   Directory to put the generated DocBook files in";
-    print "\n--tmpl-dir=DIRNAME     Directory in which template files may be found";
-    print "\n--main-sgml-file=FILE  File containing the toplevel DocBook file.";
-    print "\n--expand-content-files=FILES Extra DocBook files to expand abbreviations in.";
-    print "\n--output-format=FORMAT The format to use for the generated docbook, XML or SGML.";
-    print "\n--sgml-mode            Allow DocBook markup in inline documentation.";
-    print "\n--default-stability=LEVEL Specify default stability Level. Valid values are";
-    print "\n                       Stable, Unstable, or Private.";
-    print "\n--default-includes=FILENAMES Specify default includes for section Synopsis";
-    print "\n--version              Print the version of this program";
-    print "\n--help                 Print this help\n";
+    print <<EOF;
+gtkdoc-mkdb version @VERSION@
+
+--module=MODULE_NAME       Name of the doc module being parsed
+--source-dir=DIRNAME       Directories which contain inline reference material
+--source-suffixes=SUFFIXES Suffixes of source files to scan, comma-separated
+--ignore-files=FILES       Files or directories which should not be scanned
+                           May be used more than once for multiple directories
+--output-dir=DIRNAME       Directory to put the generated DocBook files in
+--tmpl-dir=DIRNAME         Directory in which template files may be found
+--main-sgml-file=FILE      File containing the toplevel DocBook file.
+--expand-content-files=FILES Extra DocBook files to expand abbreviations in.
+--output-format=FORMAT     Format to use for the generated docbook, XML or SGML.
+--sgml-mode                Allow DocBook markup in inline documentation.
+--default-stability=LEVEL  Specify default stability Level. Valid values are
+                           Stable, Unstable, or Private.
+--default-includes=FILENAMES Specify default includes for section Synopsis
+--version                  Print the version of this program
+--help                     Print this help
+EOF
     exit 0;
 }
 
@@ -204,6 +207,8 @@ my %StructHasTypedef;
 my %SymbolDocs;
 my %SymbolTypes;
 my %SymbolParams;
+my %SymbolSourceFile;
+my %SymbolSourceLine;
 
 # These global hashes store documentation scanned from the source files.
 my %SourceSymbolDocs;
@@ -342,9 +347,10 @@ EOF
 sub OutputSGML {
     my ($file) = @_;
 
-#    print "Reading: $file\n";
+    #print "Reading: $file\n";
     open (INPUT, $file)
 	|| die "Can't open $file";
+    my $filename = "";
     my $book_top = "";
     my $book_bottom = "";
     my $includes = (defined $DEFAULT_INCLUDES) ? $DEFAULT_INCLUDES : "";
@@ -390,7 +396,7 @@ sub OutputSGML {
 
 	} elsif (m/^<TITLE>(.*)<\/TITLE>/) {
 	    $title = $1;
-#	    print "Section: $title\n";
+	    #print "Section: $title\n";
 
 	    # We don't want warnings if object & class structs aren't used.
 	    $DeclarationOutput{$title} = 1;
@@ -399,11 +405,11 @@ sub OutputSGML {
 	} elsif (m/^<FILE>(.*)<\/FILE>/) {
             my $sym;
 
-	    $file = $1;
+	    $filename = $1;
 	    %SymbolDocs = ();
 	    %SymbolTypes = ();
 	    %SymbolParams = ();
-	    &ReadTemplateFile ("$TMPL_DIR/$file", 1);
+	    &ReadTemplateFile ("$TMPL_DIR/$filename", 1);
 	    &MergeSourceDocumentation;
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
@@ -411,9 +417,7 @@ sub OutputSGML {
 		$section_includes = $1;
 	    } else {
 		if (defined $DEFAULT_INCLUDES) {
-		    print <<EOF;
-WARNING: Default <INCLUDE> being overridden by command line option
-EOF
+                    &LogWarning ($file, $., "Default <INCLUDE> being overridden by command line option.");
 		}
 		else {
 		    $includes = $1;
@@ -422,13 +426,13 @@ EOF
 
 	} elsif (m/^<\/SECTION>/) {
 	    if ($title eq "") {
-		$title = $file;
+		$title = $filename;
 	    }
-#	    print "End of section: $title\n";
+	    #print "End of section: $title\n";
 
-	    $file =~ s/\s/_/g;
+	    $filename =~ s/\s/_/g;
 
-	    my $section_id = $SourceSymbolDocs{"$TMPL_DIR/$file:Section_Id"};
+	    my $section_id = $SourceSymbolDocs{"$TMPL_DIR/$filename:Section_Id"};
 	    if (defined ($section_id) && $section_id !~ m/^\s*$/) {
 	        # Do nothing. Use section_id as it is.
 	    } elsif (&CheckIsObject ($title)) {
@@ -440,19 +444,17 @@ EOF
 
 	    if ($num_symbols > 0) {
 		if (lc($OUTPUT_FORMAT) eq "xml") {
-		    $book_bottom .= "    <xi:include href=\"xml/$file.xml\"/>\n";
+		    $book_bottom .= "    <xi:include href=\"xml/$filename.xml\"/>\n";
 		} else {
-		    $book_top.="<!ENTITY $section_id SYSTEM \"sgml/$file.sgml\">\n";
+		    $book_top.="<!ENTITY $section_id SYSTEM \"sgml/$filename.sgml\">\n";
 		    $book_bottom .= "    &$section_id;\n";
 		}
 
-		if (defined ($SourceSymbolDocs{"$TMPL_DIR/$file:Include"})) {
+		if (defined ($SourceSymbolDocs{"$TMPL_DIR/$filename:Include"})) {
 		    if ($section_includes) {
-			print <<EOF;
-WARNING: Section <INCLUDE> for file $file being overridden by inline comments
-EOF
+			&LogWarning ($file, $., "Section <INCLUDE> being overridden by inline comments.");
 		    }
-		    $section_includes = $SourceSymbolDocs{"$TMPL_DIR/$file:Include"};
+		    $section_includes = $SourceSymbolDocs{"$TMPL_DIR/$filename:Include"};
 		}
 		if ($section_includes eq "") {
 		    $section_includes = $includes;
@@ -595,7 +597,7 @@ EOF
 
                  $synopsis =~ s/^\n*//g;
                  $synopsis =~ s/\n+$/\n/g;
-		my $file_changed = &OutputSGMLFile ($file, $title, $section_id,
+		my $file_changed = &OutputSGMLFile ($filename, $title, $section_id,
 						    $section_includes,
 						    \$synopsis, \$details,
 						    \$signals_synop, \$signals_desc,
@@ -628,7 +630,7 @@ EOF
 
 	} elsif (m/^(\S+)/) {
 	    my $symbol = $1;
-#	    print "  Symbol: $symbol\n";
+	    #print "  Symbol: $symbol\n";
 
 	    my $declaration = $Declarations{$symbol};
 	    if (defined ($declaration)) {
@@ -669,7 +671,7 @@ EOF
 		$DeclarationOutput{$symbol} = 1;
 	    } elsif ($subsection ne "Standard" && $subsection ne "Private") {
 		$UndeclaredSymbols{$symbol} = 1;
-		print "WARNING: No declaration found for: $symbol\n";
+		&LogWarning ($file, $., "No declaration found for $symbol.");
 	    }
 	    $num_symbols++;
 	}
@@ -683,8 +685,8 @@ EOF
 	&OutputAllSymbols;
     }
 
-    for $file (split (' ', $EXPAND_CONTENT_FILES)) {
-	my $file_changed = &OutputExtraFile ($file);
+    for $filename (split (' ', $EXPAND_CONTENT_FILES)) {
+	my $file_changed = &OutputExtraFile ($filename);
 	if ($file_changed) {
 	    $changed = 1;
 	}
@@ -710,7 +712,7 @@ sub ReadKnownSymbols {
 
     my $subsection = "";
 
-#    print "Reading: $file\n";
+    #print "Reading: $file\n";
     open (INPUT, $file)
 	|| die "Can't open $file";
 
@@ -939,8 +941,8 @@ sub OutputStruct {
     my $is_widget_struct = 0;
     my $default_to_public = 1;
     if (&CheckIsObject ($symbol)) {
-#	print "Found widget struct: $symbol\n";
-	$is_widget_struct = 1;
+    #print "Found widget struct: $symbol\n";
+    $is_widget_struct = 1;
 	$default_to_public = 0;
     }
 
@@ -977,10 +979,10 @@ sub OutputStruct {
 
     my $decl_out = "";
     if ($declaration =~ m/^\s*$/) {
-#	print "Found opaque struct: $symbol\n";
+	#print "Found opaque struct: $symbol\n";
 	$decl_out = "typedef struct _$symbol $symbol;";
     } elsif ($declaration =~ m/^\s*struct\s+\w+\s*;\s*$/) {
-#	print "Found opaque struct: $symbol\n";
+	#print "Found opaque struct: $symbol\n";
 	$decl_out = "struct $symbol;";
     } else {
 	my $public = $default_to_public;
@@ -992,7 +994,7 @@ sub OutputStruct {
 	    my $struct_contents = $2;
 
 	    foreach $decl_line (split (/\n/, $struct_contents)) {
-#	        print "Struct line: $decl_line\n";
+	        #print "Struct line: $decl_line\n";
 	        if ($decl_line =~ m%/\*\s*<\s*public\s*>\s*\*/%) {
 		    $public = 1;
 		} elsif ($decl_line =~ m%/\*\s*<\s*(private|protected)\s*>\s*\*/%) {
@@ -1016,7 +1018,8 @@ sub OutputStruct {
 		}
 	    }
 	} else {
-	    print "WARNING: Couldn't parse struct:\n$declaration\n";
+	    &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+                "Couldn't parse struct:\n$declaration");
 	}
 
 	# If we couldn't parse the struct or it was all private, output an
@@ -1252,12 +1255,12 @@ sub OutputFunction {
     my $type_modifier = defined($1) ? $1 : "";
     my $type = $3;
     my $pointer = $4;
-#   print "$symbol pointer is $pointer\n";
+    #print "$symbol pointer is $pointer\n";
     my $xref = &MakeXRef ($type);
     my $start = "";
-    if ($symbol_type eq 'USER_FUNCTION') {
-#	$start = "typedef ";
-    }
+    #if ($symbol_type eq 'USER_FUNCTION') {
+    #    $start = "typedef ";
+    #}
 
     # We output const rather than G_CONST_RETURN.
     $type_modifier =~ s/G_CONST_RETURN/const/g;
@@ -1384,14 +1387,19 @@ sub OutputFunction {
 	    my $mod2 = defined($5) ? $5 : "";
 	    my $func_ptr = $6;
 	    my $name = $7;
-	    my $func_params = $8;
+	    my $func_params = defined($8) ? $8 : "";
+            
+            #if (!defined($type)) { print "## no type\n"; };
+            #if (!defined($ptr1)) { print "## no ptr1\n"; };
+            #if (!defined($func_ptr)) { print "## no func_ptr\n"; };
+            #if (!defined($name)) { print "## no name\n"; };
 
 	    if ($ptr1 && $ptr1 !~ m/\*$/) { $ptr1 .= " "; }
 	    $func_ptr  =~ s/\s+//g;
 	    my $xref = &MakeXRef ($type);
 	    my $label = "$mod1$xref$ptr1$mod2 ($func_ptr$name) ($func_params)";
 
-	    #print "Type: $mod1$type$ptr1$mod2($func_ptr$name)($func_params)\n";
+	    #print "Type: [$mod1][$xref][$ptr1][$mod2] ([$func_ptr][$name]) ($func_params)\n";
 	    if ($param_num == 0) {
 		$synop .= "$label";
 		$desc  .= "$label";
@@ -1405,7 +1413,8 @@ sub OutputFunction {
 	    }
 
 	} else {
-	    print "###Can't parse args for function $symbol: $declaration\n";
+	    &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+                "Can't parse args for function $symbol: $declaration");
 	    last;
 	}
 	$param_num++;
@@ -1504,13 +1513,14 @@ EOF
 # Description : Parses a stability level and outputs a warning if it isn't
 #               valid.
 # Arguments   : $stability - the stability text.
+#		$file, $line - context for error message
 #		$message - description of where the level is from, to use in
 #               any error message.
 # Returns     : The parsed stability level string.
 #############################################################################
 
 sub ParseStabilityLevel {
-    my ($stability, $message) = @_;
+    my ($stability, $file, $line, $message) = @_;
 
     $stability =~ s/^\s*//;
     $stability =~ s/\s*$//;
@@ -1521,10 +1531,8 @@ sub ParseStabilityLevel {
     } elsif ($stability =~ m/^private$/i) {
         $stability = "Private";
     } else {
-	print <<EOF;
-WARNING: $message is $stability.
-It should be one of these: Stable, Unstable, or Private.
-EOF
+        &LogWarning ($file, $line, "$message is $stability.".
+            "It should be one of these: Stable, Unstable, or Private.");
     }
     return $stability;
 }
@@ -1560,16 +1568,15 @@ sub OutputSGMLFile {
     my $new_title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
     if (defined ($new_title) && $new_title !~ m/^\s*$/) {
 	$title = $new_title;
-#	print "Found title: $title\n";
+	#print "Found title: $title\n";
     }
     my $short_desc = $SymbolDocs{"$TMPL_DIR/$file:Short_Description"};
     if (!defined ($short_desc) || $short_desc =~ m/^\s*$/) {
-#	$short_desc = "one line description goes here.";
 	$short_desc = "";
     } else {
 	$short_desc = &ExpandAbbreviations("$title:Short_description",
 					   $short_desc);
-#	print "Found short_desc: $short_desc";
+	#print "Found short_desc: $short_desc";
     }
     my $long_desc = $SymbolDocs{"$TMPL_DIR/$file:Long_Description"};
     if (!defined ($long_desc) || $long_desc =~ m/^\s*$/) {
@@ -1577,14 +1584,14 @@ sub OutputSGMLFile {
     } else {
 	$long_desc = &ExpandAbbreviations("$title:Long_description",
 					  $long_desc);
-#	print "Found long_desc: $long_desc";
+	#print "Found long_desc: $long_desc";
     }
     my $see_also = $SymbolDocs{"$TMPL_DIR/$file:See_Also"};
     if (!defined ($see_also) || $see_also =~ m%^\s*(<para>)?\s*(</para>)?\s*$%) {
 	$see_also = "";
     } else {
 	$see_also = &ExpandAbbreviations("$title:See_Also", $see_also);
-#	print "Found see_also: $see_also";
+	#print "Found see_also: $see_also";
     }
     if ($see_also) {
 	$see_also = "<refsect1 id=\"$section_id.see-also\">\n<title>See Also</title>\n$see_also\n</refsect1>\n";
@@ -1593,8 +1600,8 @@ sub OutputSGMLFile {
     if (!defined ($stability) || $stability =~ m/^\s*$/) {
 	$stability = "";
     } else {
-        $stability = &ParseStabilityLevel($stability, "Section stability level for $file");
-#	print "Found stability: $stability";
+        $stability = &ParseStabilityLevel($stability, $file, $., "Section stability level");
+        #print "Found stability: $stability";
     }
     if ($stability) {
 	$stability = "<refsect1 id=\"$section_id.stability-level\">\n<title>Stability Level</title>\n$stability, unless otherwise indicated\n</refsect1>\n";
@@ -2080,7 +2087,8 @@ sub ModifyXMLElements {
 	$result .= &$callback ($before_tag, $symbol, $start_tag);
 	$result .= $end_tag;
       } else {
-	print "WARNING: Can't find tag end: $end_tag_regexp in docs for: $symbol\n";
+	&LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+            "Can't find tag end: $end_tag_regexp in docs for: $symbol.");
 	# Just assume it is all inside the tag.
 	$result .= &$callback ($text, $symbol, $start_tag);
 	$text = "";
@@ -2276,13 +2284,13 @@ sub GetHierarchy {
     # Walk up the hierarchy, pushing ancestors onto the ancestors array.
     my @ancestors = ();
     push (@ancestors, $object);
-#    print "Level: $level\n";
+    #print "Level: $level\n";
     while ($level > 1) {
 	$j--;
 	if ($ObjectLevels[$j] < $level) {
 	    push (@ancestors, $Objects[$j]);
 	    $level = $ObjectLevels[$j];
-#	    print "Level: $level\n";
+	    #print "Level: $level\n";
 	}
     }
 
@@ -2497,7 +2505,7 @@ sub GetSignals {
     my $i;
     for ($i = 0; $i <= $#SignalObjects; $i++) {
 	if ($SignalObjects[$i] eq $object) {
-#	    print "Found signal: $SignalNames[$i]\n";
+	    #print "Found signal: $SignalNames[$i]\n";
 	    my $name = $SignalNames[$i];
 	    my $symbol = "${object}::${name}";
 	    my $id = &CreateValidSGMLID ("$object-$name");
@@ -2558,9 +2566,10 @@ sub GetSignals {
 		            $desc .= "$xref$pad $pointer$name,\n";
 		            $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
 			}
-		     } else {
-		         print "###Can't parse arg: $params[$j]\nArgs:$SignalPrototypes[$i]\n";
-		     }
+		    } else {
+		        &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+                             "Can't parse arg: $params[$j]\nArgs:$SignalPrototypes[$i]");
+		    }
 		}
 	    }
 	    $xref = &MakeXRef ("gpointer");
@@ -2666,7 +2675,7 @@ sub GetArgs {
     my $i;
     for ($i = 0; $i <= $#ArgObjects; $i++) {
 	if ($ArgObjects[$i] eq $object) {
-#	    print "Found arg: $ArgNames[$i]\n";
+	    #print "Found arg: $ArgNames[$i]\n";
 	    my $name = $ArgNames[$i];
 	    # Remember only one colon so we don't clash with signals.
 	    my $symbol = "${object}:${name}";
@@ -2796,7 +2805,7 @@ sub GetArgs {
 sub ReadSourceDocumentation {
     my ($source_dir) = @_;
     my ($file, $dir, @suffix_list, $suffix);
-#    print "Scanning source directory: $source_dir\n";
+    #print "Scanning source directory: $source_dir\n";
 
     # This array holds any subdirectories found.
     my (@subdirs) = ();
@@ -2875,7 +2884,7 @@ sub ScanSourceFile {
 	    if (m%^\s*/\*.*\*/%) {
 	        #one-line comment - not gtkdoc
 	    } elsif (m%^\s*/\*\*\s%) {
-#	      print "Found comment block start\n";
+		#print "Found comment block start\n";
 
 		$in_comment_block = 1;
 
@@ -2902,20 +2911,14 @@ sub ScanSourceFile {
 	# We're in a comment block. Check if we've found the end of it.
 	if (m%^\s*\*+/%) {
 	    if (!$symbol) {
-		print <<EOF;
-WARNING: Symbol name not found at the start of the comment block.
- $file line $.
-EOF
+		&LogWarning ($file, $., "Symbol name not found at the start of the comment block.");
 	    } else {
 		# Add the return value description onto the end of the params.
 		if ($return_desc) {
 		    push (@params, "Returns");
 		    push (@params, $return_desc);
 		    if ($return_style eq 'broken') {
-			print <<EOF;
-WARNING: Free-form return value description in $symbol: $file:$.
-         Use `Returns:' to avoid ambiguities.
-EOF
+			&LogWarning ($file, $., "Free-form return value description in $symbol. Use `Returns:' to avoid ambiguities.");
 		    }
 		}
                 # Convert special SGML characters
@@ -2966,7 +2969,7 @@ EOF
 		}
 
 		if ($stability_desc) {
-		    $stability_desc = &ParseStabilityLevel($stability_desc, "Stability level for $symbol");
+		    $stability_desc = &ParseStabilityLevel($stability_desc, $file, $., "Stability level for $symbol");
 		    $StabilityLevel{$symbol} = &ConvertSGMLChars ($symbol, $stability_desc);
 		}
 
@@ -2977,11 +2980,9 @@ EOF
                          # don't warn for signals and properties
                          #if ($symbol !~ m/::?(.*)/) {
                          if (defined $DeclarationTypes{$symbol}) {
-                             print <<EOF;
-WARNING: $symbol is deprecated in the inline comments
-         but no deprecation guards were found around the declaration.
-         (See the --deprecated-guards option for gtkdoc-scan.)
-EOF
+                             &LogWarning ($file, $., 
+                                 "$symbol is deprecated in the inline comments, but no deprecation guards were found around the declaration.".
+                                 " (See the --deprecated-guards option for gtkdoc-scan.)");
                          }
 		    }
 		    $Deprecated{$symbol} = &ConvertSGMLChars ($symbol, $deprecated_desc);
@@ -2998,14 +2999,14 @@ EOF
 	if (!$_) {
 	    $_ = "\n";
 	}
-#	print "DEBUG: scanning :$_";
+	#print "DEBUG: scanning :$_";
 
 	# If we haven't found the symbol name yet, look for it.
 	if (!$symbol) {
 	    if (m%^\s*(SECTION:\s*\S+)%) {
 		$symbol = $1;
-                #print "SECTION DOCS found in source for : '$symbol'\n";
-                $ignore_broken_returns = 1;
+		#print "SECTION DOCS found in source for : '$symbol'\n";
+		$ignore_broken_returns = 1;
 	    } elsif (m%^\s*([\w:-]*\w)\s*:?%) {
 		$symbol = $1;
 		#print "SYMBOL DOCS found in source for : '$symbol'\n";
@@ -3023,9 +3024,7 @@ EOF
 		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
-		    print <<EOF
-WARNING: Multiple Returns for $symbol
-EOF
+		    &LogWarning ($file, $., "Multiple Returns for $symbol.");
 		}
 		$return_style = 'sane';
 		$ignore_broken_returns = 1;
@@ -3060,9 +3059,7 @@ EOF
 		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
-		    print <<EOF
-WARNING: Multiple Returns for $symbol
-EOF
+		    &LogWarning ($file, $., "Multiple Returns for $symbol.");
 		}
 		$return_style = 'sane';
 		$ignore_broken_returns = 1;
@@ -3096,9 +3093,7 @@ EOF
 		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
-		    print <<EOF
-WARNING: Multiple Returns for $symbol
-EOF
+		    &LogWarning ($file, $., "Multiple Returns for $symbol.");
 		}
 		$return_style = 'sane';
 		$ignore_broken_returns = 1;
@@ -3132,9 +3127,7 @@ EOF
 		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
-		    print <<EOF
-WARNING: Multiple Returns for $symbol
-EOF
+		    &LogWarning ($file, $., "Multiple Returns for $symbol.");
 		}
 		$return_style = 'sane';
 		$ignore_broken_returns = 1;
@@ -3173,9 +3166,7 @@ EOF
 		}
 		$return_start = $1;
 		if ($return_style eq 'sane') {
-		    print <<EOF
-WARNING: Multiple Returns for $symbol
-EOF
+		    &LogWarning ($file, $., "Multiple Returns for $symbol.");
 		}
 		$return_style = 'sane';
 		$ignore_broken_returns = 1;
@@ -3233,10 +3224,7 @@ EOF
 	# We must be in the middle of a parameter description, so add it on
 	# to the last element in @params.
 	if ($current_param == -1) {
-	    print <<EOF
-ERROR parsing comment block file : parameter expected -
- $file:$.
-EOF
+	    &LogWarning ($file, $., "Parsing comment block file : parameter expected.");
 	} else {
 	    $params[$#params] .= $_;
 	}
@@ -3436,9 +3424,8 @@ sub MergeSourceDocumentation {
 	    # automatically generated in the -sections.txt file so are often
 	    # overridden.
 	    if ($have_tmpl_docs && $symbol !~ m/:Title$/) {
-		    print <<EOF;
-WARNING: Documentation in template file for $symbol being overridden by inline comments
-EOF
+                &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+                    "Documentation in template file for $symbol being overridden by inline comments.");
 	    }
 
             if ($src_doc ne "") {
@@ -3513,10 +3500,8 @@ EOF
                         # If it looks like the parameters are there, but not
                         # in the right place, try to explain a bit better.
                         if ((!$found) && ($src_doc =~ m/\@$tmpl_param_name:/)) {
-                            print <<EOF;
-         Parameters for $symbol must start on the line immediately after the function
-	 or macro name.
-EOF
+                            &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+                                "Parameters for $symbol must start on the line immediately after the function or macro name.");
                         }
                     }
 
@@ -3530,10 +3515,8 @@ EOF
                             if(($type eq "MACRO") && ($param_name eq "Returns")) {
                                 next;
                             }
-                            print <<EOF;
-WARNING: $item described in source code comment block but does not exist -
-         $type: $symbol $item: $param_name.
-EOF
+                            &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+                                "$item described in source code comment block but does not exist. $type: $symbol $item: $param_name.");
                         }
 		    }
 		}
@@ -3686,7 +3669,7 @@ sub ReadDeclarationsFile {
 	    if (m/^<([^>]+)>/) {
 		$declaration_type = $1;
 		$declaration_name = "";
-#		print "Found declaration: $declaration_type\n";
+		#print "Found declaration: $declaration_type\n";
 		$declaration = "";
 	    }
 	} else {
@@ -3695,7 +3678,7 @@ sub ReadDeclarationsFile {
             } elsif (m%^<DEPRECATED/>%) {
                 $is_deprecated = 1;
             } elsif (m%^</$declaration_type>%) {
-#		print "Found end of declaration: $declaration_name\n";
+		#print "Found end of declaration: $declaration_name\n";
 		# Check that the declaration has a name
 		if ($declaration_name eq "") {
 		    print "ERROR: $declaration_type has no name $file:$.\n";
@@ -3705,7 +3688,7 @@ sub ReadDeclarationsFile {
 		# set the flag to indicate the struct has a typedef.
 	        if ($declaration_type eq 'STRUCT'
 		    && $declaration =~ m/^\s*$/) {
-#		    print "Struct has typedef: $declaration_name\n";
+		    #print "Struct has typedef: $declaration_name\n";
 		    $StructHasTypedef{$declaration_name} = 1;
 		}
 
@@ -3724,7 +3707,7 @@ sub ReadDeclarationsFile {
 		    } elsif ($DeclarationTypes{$declaration_name}
 			      eq $declaration_type) {
 			# If the existing declaration is empty, or is just a
-		        # forward declaration of a struct, override it.
+			# forward declaration of a struct, override it.
 			if ($declaration_type eq 'STRUCT') {
 			    if ($Declarations{$declaration_name} =~ m/^\s*(struct\s+\w+\s*;)?\s*$/) {
 				if ($is_deprecated) {
@@ -3734,16 +3717,15 @@ sub ReadDeclarationsFile {
 			    } elsif ($declaration =~ m/^\s*(struct\s+\w+\s*;)?\s*$/) {
 				# Ignore an empty or forward declaration.
 			    } else {
-				print "WARNING: Structure $declaration_name has multiple definitions: $file:$.\n";
+				&LogWarning ($file, $., "Structure $declaration_name has multiple definitions.");
 			    }
-
 			} else {
 			    # set flag in %DeclarationConditional hash for
 			    # multiply defined macros/typedefs.
 			    $DeclarationConditional{$declaration_name} = 1;
 			}
 		    } else {
-			print "ERROR: $declaration_name has multiple definitions: $file:$.\n";
+			&LogWarning ($file, $., "$declaration_name has multiple definitions.");
 		    }
 		} else {
 		    if ($is_deprecated) {
@@ -3816,21 +3798,21 @@ sub ReadSignalsFile {
 		if ($signal_name =~ m/^(.*)::(.*)$/) {
 		    $signal_object = $1;
 		    ($signal_name = $2) =~ s/_/-/g;
-#		    print "Found signal: $signal_name\n";
+		    #print "Found signal: $signal_name\n";
 		} else {
-		    print "Invalid signal name: $signal_name\n";
+		    &LogWarning ($file, $., "Invalid signal name: $signal_name.");
 		}
 	    } elsif (m/^<RETURNS>(.*)<\/RETURNS>/) {
 		$signal_returns = $1;
 	    } elsif (m/^<FLAGS>(.*)<\/FLAGS>/) {
 		$signal_flags = $1;
 	    } elsif (m%^</SIGNAL>%) {
-#		print "Found end of signal: ${signal_object}::${signal_name}\nReturns: ${signal_returns}\n${signal_prototype}";
+		#print "Found end of signal: ${signal_object}::${signal_name}\nReturns: ${signal_returns}\n${signal_prototype}";
 		push (@SignalObjects, $signal_object);
 		push (@SignalNames, $signal_name);
 		push (@SignalReturns, $signal_returns);
 		push (@SignalFlags, $signal_flags);
-	        push (@SignalPrototypes, $signal_prototype);
+		push (@SignalPrototypes, $signal_prototype);
 		$in_signal = 0;
 	    } else {
 		$signal_prototype .= $_;
@@ -3859,9 +3841,9 @@ sub ReadTemplateFile {
     my ($docsfile, $skip_unused_params) = @_;
 
     my $template = "$docsfile.sgml";
-#    print "Reading $template\n";
+    #print "Reading $template\n";
     if (! -f $template) {
-#	print "File doesn't exist: $template\n";
+	#print "File doesn't exist: $template\n";
 	return;
     }
 
@@ -3894,7 +3876,10 @@ sub ReadTemplateFile {
 		$symbol = $docsfile . ":" . $symbol;
 	    }
 
-#	    print "Found symbol: $symbol\n";
+	    #print "Found symbol: $symbol\n";
+	    # Remember file and line for the symbol
+	    $SymbolSourceFile{$symbol} = $template;
+	    $SymbolSourceLine{$symbol} = $.;
 
 	    # Store previous symbol, but remove any trailing blank lines.
 	    if ($current_symbol ne "") {
@@ -3904,7 +3889,7 @@ sub ReadTemplateFile {
 
 		# Check that the stability level is valid.
 		if ($StabilityLevel{$current_symbol}) {
-		    $StabilityLevel{$current_symbol} = &ParseStabilityLevel($StabilityLevel{$current_symbol}, "Stability level for $current_symbol");
+		    $StabilityLevel{$current_symbol} = &ParseStabilityLevel($StabilityLevel{$current_symbol}, $template, $., "Stability level for $current_symbol");
 		}
 
 		if ($current_param >= 0) {
@@ -3926,13 +3911,13 @@ sub ReadTemplateFile {
 	    @params = ();
 
 	} elsif (m/^<!-- # Unused Parameters # -->/) {
-#	    print "DEBUG: Found unused parameters\n";
+	    #print "DEBUG: Found unused parameters\n";
 	    $in_unused_params = 1;
 	    next;
 
 	} elsif ($in_unused_params && $skip_unused_params) {
 	    # When outputting the DocBook we skip unused parameters.
-#	    print "DEBUG: Skipping unused param: $_";
+	    #print "DEBUG: Skipping unused param: $_";
 	    next;
 
 	} else {
@@ -3943,7 +3928,7 @@ sub ReadTemplateFile {
 		if ($param_name =~ m/^[Rr]eturns?$/) {
 		    $param_name = "Returns";
 		}
-#               print "Found param for symbol $current_symbol : '$param_name'= '$_'\n";
+		#print "Found param for symbol $current_symbol : '$param_name'= '$_'\n";
 
 		if ($param_name eq "Deprecated") {
 		    $in_deprecated = 1;
@@ -3984,7 +3969,7 @@ sub ReadTemplateFile {
 
 	# Check that the stability level is valid.
 	if ($StabilityLevel{$current_symbol}) {
-	    $StabilityLevel{$current_symbol} = &ParseStabilityLevel($StabilityLevel{$current_symbol}, "Stability level for $current_symbol");
+	    $StabilityLevel{$current_symbol} = &ParseStabilityLevel($StabilityLevel{$current_symbol}, $template, $., "Stability level for $current_symbol");
 	}
 
 	if ($current_param >= 0) {
@@ -4212,9 +4197,9 @@ sub ReadArgsFile {
 		if ($arg_name =~ m/^(.*)::(.*)$/) {
 		    $arg_object = $1;
 		    ($arg_name = $2) =~ s/_/-/g;
-#		    print "Found arg: $arg_name\n";
+		    #print "Found arg: $arg_name\n";
 		} else {
-		    print "Invalid arg name: $arg_name\n";
+		    &LogWarning ($file, $., "Invalid argument name: $arg_name");
 		}
 	    } elsif (m/^<TYPE>(.*)<\/TYPE>/) {
 		$arg_type = $1;
@@ -4228,14 +4213,12 @@ sub ReadArgsFile {
 		$arg_blurb = $1;
 		if ($arg_blurb eq "(null)") {
 		  $arg_blurb = "";
-		  print <<EOF;
-WARNING: Property ${arg_object}:${arg_name} has no documentation.
-EOF
+		  &LogWarning ($file, $., "Property ${arg_object}:${arg_name} has no documentation.");
 		}
 	    } elsif (m/^<DEFAULT>(.*)<\/DEFAULT>/) {
 		$arg_default = $1;
 	    } elsif (m%^</ARG>%) {
-#		print "Found end of arg: ${arg_object}::${arg_name}\n${arg_type} : ${arg_flags}\n";
+		#print "Found end of arg: ${arg_object}::${arg_name}\n${arg_type} : ${arg_flags}\n";
 		push (@ArgObjects, $arg_object);
 		push (@ArgNames, $arg_name);
 		push (@ArgTypes, $arg_type);
