@@ -17,3 +17,5 @@ and join discussion about future features.
 Developer can also add items here :)
 * there is a bunch of #print statements for tracing
   => add a sub Trace() to gtkdoc-common.pl
+  => use @TRACE@ "..." and depending on configure flag
+     turn that into "print" or "#" (should be a function still and the function should support loglevels and sourcefile/line logs);

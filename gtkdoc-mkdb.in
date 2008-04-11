@@ -213,6 +213,8 @@ my %SymbolSourceLine;
 # These global hashes store documentation scanned from the source files.
 my %SourceSymbolDocs;
 my %SourceSymbolParams;
+my %SourceSymbolSourceFile;
+my %SourceSymbolSourceLine;
 
 # all documentation goes in here, so we can do coverage analysis
 my %AllSymbols;
@@ -283,7 +285,7 @@ my $changed = &OutputSGML ("$ROOT_DIR/$MODULE-sections.txt");
 # it can be used for Makefile dependencies).
 if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
     open (TIMESTAMP, ">$ROOT_DIR/sgml.stamp")
-	|| die "Can't create $ROOT_DIR/sgml.stamp";
+	|| die "Can't create $ROOT_DIR/sgml.stamp: $!";
     print (TIMESTAMP "timestamp");
     close (TIMESTAMP);
 }
@@ -302,7 +304,7 @@ sub OutputObjectList {
     my $new_object_index = "$SGML_OUTPUT_DIR/object_index.new";
 
     open (OUTPUT, ">$new_object_index")
-	|| die "Can't create $new_object_index";
+	|| die "Can't create $new_object_index: $!";
     print (OUTPUT <<EOF);
 <informaltable pgwide="1" frame="none">
 <tgroup cols="$cols">
@@ -349,7 +351,7 @@ sub OutputSGML {
 
     #print "Reading: $file\n";
     open (INPUT, $file)
-	|| die "Can't open $file";
+	|| die "Can't open $file: $!";
     my $filename = "";
     my $book_top = "";
     my $book_bottom = "";
@@ -409,8 +411,9 @@ sub OutputSGML {
 	    %SymbolDocs = ();
 	    %SymbolTypes = ();
 	    %SymbolParams = ();
-	    &ReadTemplateFile ("$TMPL_DIR/$filename", 1);
-	    &MergeSourceDocumentation;
+	    if (&ReadTemplateFile ("$TMPL_DIR/$filename", 1) == 1) {
+                &MergeSourceDocumentation;
+            }
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
 	    if ($in_section) {
@@ -677,6 +680,9 @@ EOF
 	}
     }
     close (INPUT);
+    
+    # if there were no templates, merge the source docs
+    &MergeSourceDocumentation;
 
     &OutputMissingDocumentation;
     &OutputUndeclaredSymbols;
@@ -714,7 +720,7 @@ sub ReadKnownSymbols {
 
     #print "Reading: $file\n";
     open (INPUT, $file)
-	|| die "Can't open $file";
+	|| die "Can't open $file: $!";
 
     while (<INPUT>) {
 	if (m/^#/) {
@@ -1018,7 +1024,7 @@ sub OutputStruct {
 		}
 	    }
 	} else {
-	    &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+	    &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                 "Couldn't parse struct:\n$declaration");
 	}
 
@@ -1413,7 +1419,7 @@ sub OutputFunction {
 	    }
 
 	} else {
-	    &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+	    &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                 "Can't parse args for function $symbol: $declaration");
 	    last;
 	}
@@ -1633,7 +1639,7 @@ sub OutputSGMLFile {
     my $new_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT.new";
 
     open (OUTPUT, ">$new_sgml_file")
-	|| die "Can't create $new_sgml_file";
+	|| die "Can't create $new_sgml_file: $!";
 
     my $object_anchors = "";
     foreach my $object (@$file_objects) {
@@ -1727,7 +1733,7 @@ sub OutputExtraFile {
     }
 
     open (OUTPUT, ">$new_sgml_file")
-	|| die "Can't create $new_sgml_file";
+	|| die "Can't create $new_sgml_file: $!";
 
     print OUTPUT &ExpandAbbreviations ("$basename file", $contents);
     close (OUTPUT);
@@ -1751,7 +1757,7 @@ sub OutputBook {
     my $new_file = "$SGML_OUTPUT_DIR/$MODULE-doc.top.new";
 
     open (OUTPUT, ">$new_file")
-	|| die "Can't create $new_file";
+	|| die "Can't create $new_file: $!";
     print OUTPUT $book_top;
     close (OUTPUT);
 
@@ -1762,7 +1768,7 @@ sub OutputBook {
     $new_file = "$SGML_OUTPUT_DIR/$MODULE-doc.bottom.new";
 
     open (OUTPUT, ">$new_file")
-	|| die "Can't create $new_file";
+	|| die "Can't create $new_file: $!";
     print OUTPUT $book_bottom;
     close (OUTPUT);
 
@@ -1773,7 +1779,7 @@ sub OutputBook {
     # The user can tweak it later.
     if ($MAIN_SGML_FILE && ! -e $MAIN_SGML_FILE) {
       open (OUTPUT, ">$MAIN_SGML_FILE")
-	|| die "Can't create $MAIN_SGML_FILE";
+	|| die "Can't create $MAIN_SGML_FILE: $!";
 
       if (lc($OUTPUT_FORMAT) eq "xml") {
 	  print OUTPUT <<EOF;
@@ -2087,7 +2093,7 @@ sub ModifyXMLElements {
 	$result .= &$callback ($before_tag, $symbol, $start_tag);
 	$result .= $end_tag;
       } else {
-	&LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+	&LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
             "Can't find tag end: $end_tag_regexp in docs for: $symbol.");
 	# Just assume it is all inside the tag.
 	$result .= &$callback ($text, $symbol, $start_tag);
@@ -2567,7 +2573,7 @@ sub GetSignals {
 		            $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
 			}
 		    } else {
-		        &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+		        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                              "Can't parse arg: $params[$j]\nArgs:$SignalPrototypes[$i]");
 		    }
 		}
@@ -2962,6 +2968,8 @@ sub ScanSourceFile {
                     #if (defined $DeclarationTypes{$symbol}) {
                     #    $SourceSymbolTypes{$symbol} = $DeclarationTypes{$symbol}
                     #}
+                    $SourceSymbolSourceFile{$symbol} = $file;
+                    $SourceSymbolSourceLine{$symbol} = $.;
                 }
 
 		if ($since_desc) {
@@ -3251,7 +3259,7 @@ sub OutputMissingDocumentation {
      my $buffer_descriptions = "";
 
      open (UNDOCUMENTED, ">$ROOT_DIR/$MODULE-undocumented.txt")
-          || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt";
+          || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt: $!";
 
      foreach $symbol (sort (keys (%AllSymbols))) {
           if ($symbol !~ /:(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include)/) {
@@ -3348,7 +3356,7 @@ sub OutputAllSymbols {
      my $msg;
 
      open (SYMBOLS, ">$ROOT_DIR/$MODULE-symbols.txt")
-          || die "Can't create $ROOT_DIR/$MODULE-symbols.txt";
+          || die "Can't create $ROOT_DIR/$MODULE-symbols.txt: $!";
 
      foreach $symbol (sort (keys (%AllSymbols))) {
           print SYMBOLS $symbol . "\n"
@@ -3378,23 +3386,36 @@ sub MergeSourceDocumentation {
         @Symbols=keys (%SymbolDocs);
     }
     else {
-        @Symbols=keys (%SourceSymbolDocs);
+        # filter scanned declarations, with what we suppress from -sections.txt
+        my %tmp;
+        foreach $symbol (keys (%Declarations)) {
+            if ($KnownSymbols{$symbol}) {
+                $tmp{$symbol}=1;
+            }
+        }
+        # and add whats found in the source
+        foreach $symbol (keys (%SourceSymbolDocs)) {
+            $tmp{$symbol}=1;
+        }
+        @Symbols = keys (%tmp);       
+        #print "num entries: ".(scalar @Symbols)."\n";
     }
-    foreach $symbol (@Symbols) {
+    foreach $symbol (@Symbols) {        
         $AllSymbols{$symbol} = 1;
 
 	my $have_tmpl_docs = 0;
 
-	## See if the symbol is documented out-of-line
+	## See if the symbol is documented in template
 	my $tmpl_doc = $SymbolDocs{$symbol};
 	$tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
 	$tmpl_doc =~ s/<\/?[a-z]+>//g;
 	$tmpl_doc =~ s/\s//g;
 	if ($tmpl_doc ne "") {
 	    $have_tmpl_docs = 1;
+            #print "## [$tmpl_doc]\n";
 	}
 
-        #print "merging $symbol\n";
+	#print "merging $symbol\n";
 
 	if (exists ($SourceSymbolDocs{$symbol})) {
 	    my $src_doc = $SourceSymbolDocs{$symbol};
@@ -3424,8 +3445,8 @@ sub MergeSourceDocumentation {
 	    # automatically generated in the -sections.txt file so are often
 	    # overridden.
 	    if ($have_tmpl_docs && $symbol !~ m/:Title$/) {
-                &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
-                    "Documentation in template file for $symbol being overridden by inline comments.");
+                &LogWarning ($SourceSymbolSourceFile{$symbol}, $SourceSymbolSourceLine{$symbol},
+                    "Documentation in template ".$SymbolSourceFile{$symbol}.":".$SymbolSourceLine{$symbol}." for $symbol being overridden by inline comments.");
 	    }
 
             if ($src_doc ne "") {
@@ -3500,7 +3521,7 @@ sub MergeSourceDocumentation {
                         # If it looks like the parameters are there, but not
                         # in the right place, try to explain a bit better.
                         if ((!$found) && ($src_doc =~ m/\@$tmpl_param_name:/)) {
-                            &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+                            &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                                 "Parameters for $symbol must start on the line immediately after the function or macro name.");
                         }
                     }
@@ -3515,7 +3536,7 @@ sub MergeSourceDocumentation {
                             if(($type eq "MACRO") && ($param_name eq "Returns")) {
                                 next;
                             }
-                            &LogWarning ($SymbolSourceFile{$symbol}, $SymbolSourceLine{$symbol},
+                            &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                                 "$item described in source code comment block but does not exist. $type: $symbol $item: $param_name.");
                         }
 		    }
@@ -3659,7 +3680,7 @@ sub ReadDeclarationsFile {
     }
 
     open (INPUT, $file)
-	|| die "Can't open $file";
+	|| die "Can't open $file: $!";
     my $declaration_type = "";
     my $declaration_name;
     my $declaration;
@@ -3844,7 +3865,7 @@ sub ReadTemplateFile {
     #print "Reading $template\n";
     if (! -f $template) {
 	#print "File doesn't exist: $template\n";
-	return;
+	return 0;
     }
 
     my $current_type = "";	# Type of symbol being read.
@@ -3861,7 +3882,7 @@ sub ReadTemplateFile {
     my $in_stability = 0;
 
     open (DOCS, "$template")
-	|| die "Can't open file $template: $!";
+	|| die "Can't open $template: $!";
     while (<DOCS>) {
 	if (m/^<!-- ##### ([A-Z_]+) (\S+) ##### -->/) {
 	    my $type = $1;
@@ -3982,6 +4003,7 @@ sub ReadTemplateFile {
     }
 
     close (DOCS);
+    return 1;
 }
 
 
@@ -4019,7 +4041,7 @@ sub ReadObjectHierarchy {
     $tree_header =~ s/<!DOCTYPE \w+/<!DOCTYPE screen/;
 
     open (OUTPUT, ">$new_tree_index")
-	|| die "Can't create $new_tree_index";
+	|| die "Can't create $new_tree_index: $!";
     print (OUTPUT "$tree_header<screen>\n");
 
     # Only emit objects if they are supposed to be documented, or if
@@ -4267,5 +4289,41 @@ sub MakeReturnField {
     my ($str) = @_;
 
     return $str . (' ' x ($RETURN_TYPE_FIELD_WIDTH - length ($str)));
+}
+
+#############################################################################
+# Function    : GetSymbolSourceFile
+# Description : Get the filename where the symbol docs where taken from.
+# Arguments   : $symbol - the symbol name
+#############################################################################
+
+sub GetSymbolSourceFile {
+    my ($symbol) = @_;
+
+    if (defined($SourceSymbolSourceFile{$symbol})) {
+        return $SourceSymbolSourceFile{$symbol};
+    } elsif (defined($SymbolSourceFile{$symbol})) {
+        return $SymbolSourceFile{$symbol};
+    } else {
+        return "";
+    }
+}
+
+#############################################################################
+# Function    : GetSymbolSourceLine
+# Description : Get the file line where the symbol docs where taken from.
+# Arguments   : $symbol - the symbol name
+#############################################################################
+
+sub GetSymbolSourceLine {
+    my ($symbol) = @_;
+
+    if (defined($SourceSymbolSourceLine{$symbol})) {
+        return $SourceSymbolSourceLine{$symbol};
+    } elsif (defined($SymbolSourceLine{$symbol})) {
+        return $SymbolSourceLine{$symbol};
+    } else {
+        return 0;
+    }
 }
 

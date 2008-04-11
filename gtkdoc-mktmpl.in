@@ -1050,7 +1050,7 @@ sub ReadTemplateFile {
 #    print "Reading $docsfile\n";
     if (! -f $docsfile) {
 	print "File doesn't exist: $docsfile\n";
-	return;
+	return 0;
     }
 
     my $CurrentType = "";	# Type of symbol being read.
@@ -1160,6 +1160,7 @@ sub ReadTemplateFile {
     }
 
     close (DOCS);
+    return 1;
 }
 
 
