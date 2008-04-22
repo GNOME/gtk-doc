@@ -377,7 +377,6 @@ sub OutputSGML {
     my $implementations = "";
     my $prerequisites = "";
     my $derived = "";
-    my $have_tmpl = 0;
     my @file_objects = ();
 
     # merge the source docs, in case there are no templates
@@ -392,7 +391,6 @@ sub OutputSGML {
 	    $details = "";
 	    $num_symbols = 0;
 	    $in_section = 1;
-	    $have_tmpl = 0;
 	    @file_objects = ();
 
 	} elsif (m/^<SUBSECTION\s*(.*)>/i) {
@@ -413,7 +411,9 @@ sub OutputSGML {
             my $sym;
 
 	    $filename = $1;
-	    $have_tmpl = &ReadTemplateFile ("$TMPL_DIR/$filename", 1);
+	    if (&ReadTemplateFile ("$TMPL_DIR/$filename", 1)) {
+                &MergeSourceDocumentation;
+            }
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
 	    if ($in_section) {
@@ -607,9 +607,6 @@ EOF
 
 		$synopsis =~ s/^\n*//g;
 		$synopsis =~ s/\n+$/\n/g;
-		if ($have_tmpl) {
-		    &MergeSourceDocumentation;
-		}
 		my $file_changed = &OutputSGMLFile ($filename, $title, $section_id,
 						    $section_includes,
 						    \$synopsis, \$details,
@@ -3403,6 +3400,7 @@ sub MergeSourceDocumentation {
     if (scalar %SymbolDocs) {
         @Symbols=keys (%SymbolDocs);
         #print "num existing entries: ".(scalar @Symbols)."\n";
+        #print "  ",$Symbols[0], " ",$Symbols[1],"\n";
     }
     else {
         # filter scanned declarations, with what we suppress from -sections.txt
@@ -3416,10 +3414,10 @@ sub MergeSourceDocumentation {
         foreach $symbol (keys (%SourceSymbolDocs)) {
             $tmp{$symbol}=1;
         }
-        @Symbols = keys (%tmp);       
+        @Symbols = keys (%tmp);
         #print "num source entries: ".(scalar @Symbols)."\n";
     }
-    foreach $symbol (@Symbols) {        
+    foreach $symbol (@Symbols) {
         $AllSymbols{$symbol} = 1;
 
 	my $have_tmpl_docs = 0;
@@ -3434,13 +3432,11 @@ sub MergeSourceDocumentation {
             #print "## [$tmpl_doc]\n";
 	}
 
-	#print "merging [$symbol]\n";
-
 	if (exists ($SourceSymbolDocs{$symbol})) {
 	    my $src_doc = $SourceSymbolDocs{$symbol};
 	    my $type = $DeclarationTypes {$symbol};
 
-            #print "... from source\n";
+            #print "merging [$symbol] from source\n";
 
 	    my $item = "Parameter";
             if (defined ($type)) {
@@ -3562,9 +3558,10 @@ sub MergeSourceDocumentation {
 	} else {
 	    if ($have_tmpl_docs) {
 		$AllDocumentedSymbols{$symbol} = 1;
+		#print "merging [$symbol] from template\n";
             }
             else {
-                #print "... undocumented\n";
+		#print "[$symbol] undocumented\n";
             }
         }
 
@@ -3881,11 +3878,11 @@ sub ReadTemplateFile {
     my ($docsfile, $skip_unused_params) = @_;
 
     my $template = "$docsfile.sgml";
-    #print "Reading $template\n";
     if (! -f $template) {
 	#print "File doesn't exist: $template\n";
 	return 0;
     }
+    #print "Reading $template\n";
 
     # start with empty hashes, we merge the source comment for each file
     # afterwards

@@ -139,7 +139,7 @@ AC_ARG_ENABLE(
   [enable_debug="no"])
 AC_MSG_RESULT($enable_debug)
 if test "$enable_debug" = "yes"; then
-  TRACE="print"
+  TRACE="print __FILE__ . \":\" . __LINE__ . \":\" ."
 else
   TRACE="#"
 fi
