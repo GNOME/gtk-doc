@@ -138,7 +138,7 @@ my %SymbolDocs;
 my %SymbolTypes;
 my %SymbolParams;
 
-# These global arrays store GtkObject and subclasses and the hierarchy.
+# These global arrays store GObject and subclasses and the hierarchy.
 my @Objects;
 my @ObjectLevels;
 
@@ -268,7 +268,7 @@ sub UpdateTemplates {
 	    my $declaration = $Declarations{$1};
 	    if (defined ($declaration)) {
 		# We don't want templates for standard macros/functions of
-		# GtkObjects or private declarations.
+		# GObjects or private declarations.
 		if ($subsection ne "Standard" && $subsection ne "Private") {
 		    $output .= &OutputDeclaration ($DeclarationTypes {$symbol},
 						   $symbol, $declaration);
@@ -301,7 +301,7 @@ sub UpdateTemplates {
 #		makes sure that each one has been output, by checking the
 #		corresponding flag in the %DeclarationOutput hash. It is
 #		intended to check that any new declarations in new versions
-#		of GTK/Gnome get added to the $MODULE-sections.txt file.
+#		of the module get added to the $MODULE-sections.txt file.
 # Arguments   : none
 #############################################################################
 
@@ -956,7 +956,7 @@ sub ReadDeclarationsFile {
 #############################################################################
 # Function    : ReadSignalsFile
 # Description : This reads in an existing file which contains information on
-#		all GTK signals. It creates the arrays @SignalNames and
+#		all GObject signals. It creates the arrays @SignalNames and
 #		@SignalPrototypes containing info on the signals. The first
 #		line of the SignalPrototype is the return type of the signal
 #		handler. The remaining lines are the parameters passed to it.
@@ -1209,7 +1209,7 @@ sub ReadObjectHierarchy {
 #############################################################################
 # Function    : ReadArgsFile
 # Description : This reads in an existing file which contains information on
-#		all GTK args. It creates the arrays @ArgObjects, @ArgNames,
+#		all GObject args. It creates the arrays @ArgObjects, @ArgNames,
 #		@ArgTypes and @ArgFlags containing info on the args.
 # Arguments   : $file - the file containing the arg information.
 #############################################################################
@@ -1275,10 +1275,10 @@ sub ReadArgsFile {
 
 #############################################################################
 # Function    : CheckIsObject
-# Description : Returns 1 if the given name is a GtkObject or a subclass.
+# Description : Returns 1 if the given name is a GObject or a subclass.
 #		It uses the global @Objects array.
 #		Note that the @Objects array only contains classes in the
-#		current module and their ancestors - not all GTK classes.
+#		current module and their ancestors - not all GObject classes.
 # Arguments   : $name - the name to check.
 #############################################################################
 
