@@ -109,5 +109,14 @@ typedef struct {
   unsigned long index;
 } Bug512154;
 
+/**
+ * BUG_530758:
+ *
+ * <![CDATA[http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1]]>
+ * 
+ * <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1">Test</ulink>
+ */
+#define BUG_530758 "dummy"
+
 #endif // GTKDOC_TESTER_H
 

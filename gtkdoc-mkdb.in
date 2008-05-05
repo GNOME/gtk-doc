@@ -1966,8 +1966,10 @@ sub ExpandAbbreviations {
   $text =~ s%\|\[%<informalexample><programlisting>%g;
   $text =~ s%\]\|%</programlisting></informalexample>%g;
 
+  # keep CDATA unmodified, preserve ulink tags (ideally we preseve all tags
+  # as such)
   return &ModifyXMLElements ($text, $symbol,
-			     "<!\\[CDATA\\[|<programlisting[^>]*>",
+			     "<!\\[CDATA\\[|<ulink[^>]*>|<programlisting[^>]*>",
 			     \&ExpandAbbreviationsEndTag,
 			     \&ExpandAbbreviationsCallback);
 }
@@ -1975,10 +1977,12 @@ sub ExpandAbbreviations {
 
 # Returns the end tag corresponding to the given start tag.
 sub ExpandAbbreviationsEndTag {
-  if ($_[0] eq "<!\[CDATA\[") {
+  my ($start_tag) = @_;
+
+  if ($start_tag eq "<!\[CDATA\[") {
     return "]]>";
-  } else {
-    return "</programlisting>";
+  } elsif ($start_tag =~ m/<(\w+)/) {
+    return "</$1>";
   }
 }
 
@@ -2000,13 +2004,19 @@ sub ExpandAbbreviationsCallback {
     $text =~ s/(\w+)\s*\(\)/&MakeXRef($1, &tagify($1 . "()", "function"));/eg;
 
     # Convert '@param'
-    $text =~ s/\@(\w+((\.|->)\w+)*)/<parameter>$1<\/parameter>/g;
+    #$text =~ s/\@(\w+((\.|->)\w+)*)/<parameter>$1<\/parameter>/g;
+    $text =~ s/[^\\]\@(\w+((\.|->)\w+)*)/<parameter>$1<\/parameter>/g;
+    $text =~ s/\\\@(\w+((\.|->)\w+)*)/\@$1/g;
 
     # Convert '%constant'. Also allow negative numbers, e.g. %-1.
-    $text =~ s/\%(-?\w+)/&MakeXRef($1, &tagify($1, "literal"));/eg;
+    #$text =~ s/\%(-?\w+)/&MakeXRef($1, &tagify($1, "literal"));/eg;
+    $text =~ s/[^\\]\%(-?\w+)/&MakeXRef($1, &tagify($1, "literal"));/eg;
+    $text =~ s/\\\%(-?\w+)/\%$1/g;
 
     # Convert '#symbol'
-    $text =~ s/#([\w\-:]+)/&MakeHashXRef($1, "type");/eg;
+    #$text =~ s/#([\w\-:]+)/&MakeHashXRef($1, "type");/eg;
+    $text =~ s/[^\\]#([\w\-:]+)/&MakeHashXRef($1, "type");/eg;
+    $text =~ s/\\#([\w\-:]+)/#$1/g;
   }
 
   return $text;
@@ -2019,6 +2029,8 @@ sub ExpandAbbreviationsCallback2 {
   if ($tag eq "") {
     # We are inside a <programlisting> but outside any CDATA sections,
     # so we expand any gtk-doc abbreviations.
+    # FIXME: why is this different from &ExpandAbbreviationsCallback(),
+    #        why not just call it
     $text =~ s/#(\w+)/&MakeHashXRef($1, "");/eg;
   }
 
@@ -2082,13 +2094,14 @@ sub ModifyXMLElements {
     my $result = "";
 
     while ($text =~ m/$start_tag_regexp/s) {
-      $before_tag = $`;
-      $start_tag = $&;
-      $text = $';
+      $before_tag = $`; # Prematch for last successful match string
+      $start_tag = $&;  # Last successful match
+      $text = $';       # Postmatch for last successful match string
 
       $result .= &$callback ($before_tag, $symbol, "");
       $result .= $start_tag;
 
+      # get the mathing end-tag for current tag
       $end_tag_regexp = &$end_tag_func ($start_tag);
 
       if ($text =~ m/$end_tag_regexp/s) {
@@ -3600,6 +3613,8 @@ sub MergeSourceDocumentation {
                         } else {
                             $AllIncompleteSymbols{$symbol}=$tmpl_param_name;
                         }
+                        &LogWarning ($SourceSymbolSourceFile{$symbol}, $SourceSymbolSourceLine{$symbol},
+                            "$item description for $tmpl_param_name is missing in source code comment block.");
 #                        print <<EOF;
 #WARNING: $item description missing in source code comment block -
 # $type: $symbol $item: $tmpl_param_name.
