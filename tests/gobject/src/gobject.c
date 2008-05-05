@@ -5,7 +5,14 @@
  * This file contains non-sense code for the sole purpose of testing the docs.
  * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
  * signal.
- * A new instance can be created using the gtkdoc_object_new() function.
+ * A new instance can be created using the gtkdoc_object_new() function. The
+ * whole lifecycle usualy looks like shown in this example: |[
+ * GObject *myobj;
+ * 
+ * myobj = gtkdoc_object_new();
+ * // do somehing
+ * g_object_unref (myobj);
+ * ]|
  */
 
 #include <glib.h>

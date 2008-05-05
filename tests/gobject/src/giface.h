@@ -11,6 +11,11 @@
 
 /* type macros */
 
+/**
+ * GtkdocIface:
+ *
+ * opaque instance of gtk-doc unit test interface
+ */
 typedef struct _GtkdocIface GtkdocIface;
 typedef struct _GtkdocIfaceInterface GtkdocIfaceInterface;
 
@@ -18,7 +23,7 @@ typedef struct _GtkdocIfaceInterface GtkdocIfaceInterface;
  * GtkdocIfaceInterface:
  * @parent: this is a bug :/
  *
- * class data of gtk-doc unit test class
+ * class data of gtk-doc unit test interface
  */
 struct _GtkdocIfaceInterface {
   GTypeInterface parent;

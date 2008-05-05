@@ -41,7 +41,10 @@
         </affiliation>
       </author>
     </authorgroup>
-    <publisher role="maintainer"><address><email>gtk-doc-list@gnome.org</email></address></publisher>
+    <publisher role="maintainer">
+      <publishername>GTK-Doc project</publishername>
+      <address><email>gtk-doc-list@gnome.org</email></address>
+    </publisher>
     <copyright>
       <year>2000, 2005, 2007-2008</year>
       <holder>Dan Mueth and Chris Lyttle and Stefan Kost</holder>
@@ -976,6 +979,12 @@ typedef struct _FooWidget {
 ]]>
           </programlisting>
         </informalexample>
+        For the latter gtk-doc also supports an abbreviation:
+<![CDATA[
+|[
+  ...
+]|
+]]>
       </para>
 
       <para>
