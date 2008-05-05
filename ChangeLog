@@ -1,6 +1,12 @@
 2008-05-05  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in:
+	  Fix regexps changes from previous commit. When using /e the
+	  replacement part has to be a perl snippet.
+
+2008-05-05  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-mkdb.in:
 	* tests/bugs/docs/tester-sections.txt:
 	* tests/bugs/src/tester.h:
 	  Don't expand '#' in ulink tags. Also allow to escape "#%@" with '\'.
