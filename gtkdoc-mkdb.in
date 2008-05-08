@@ -3435,15 +3435,18 @@ sub MergeSourceDocumentation {
         $AllSymbols{$symbol} = 1;
 
 	my $have_tmpl_docs = 0;
+	my $check_tmpl_doc = "";
 
 	## See if the symbol is documented in template
 	my $tmpl_doc = $SymbolDocs{$symbol};
-	$tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
-	$tmpl_doc =~ s/<\/?[a-z]+>//g;
-	$tmpl_doc =~ s/\s//g;
-	if ($tmpl_doc ne "") {
+	$check_tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
+	# remove all xml-tags and whitespaces
+	$check_tmpl_doc =~ s/<\/?[a-z]+>//g;
+	$check_tmpl_doc =~ s/\s//g;
+	# anything left ?
+	if ($check_tmpl_doc ne "") {
 	    $have_tmpl_docs = 1;
-            #print "## [$tmpl_doc]\n";
+            #print "## [$check_tmpl_doc]\n";
 	}
 
 	if (exists ($SourceSymbolDocs{$symbol})) {
@@ -3883,7 +3886,7 @@ sub ReadSignalsFile {
 #		insert the documentation at the appropriate places.
 #		It outputs %SymbolTypes, %SymbolDocs and %SymbolParams, which
 #		is a hash of arrays.
-#		NOTE: This function is duplicated in gtkdoc-mkdb (but
+#		NOTE: This function is duplicated in gtkdoc-mktmpl (but
 #		slightly different).
 # Arguments   : $docsfile - the template file to read in.
 #		$skip_unused_params - 1 if the unused parameters should be

@@ -1053,7 +1053,7 @@ sub ReadTemplateFile {
 	return 0;
     }
 
-    my $CurrentType = "";	# Type of symbol being read.
+    my $CurrentType = ""; 	# Type of symbol being read.
     my $CurrentSymbol = "";	# Name of symbol being read.
     my $SymbolDoc = "";		# Description of symbol being read.
     my @Params;			# Parameter names and descriptions of current
@@ -1075,8 +1075,8 @@ sub ReadTemplateFile {
 		|| $symbol eq "See_Also"
 		|| $symbol eq "Stability_Level") {
 		$symbol = $docsfile . ":" . $symbol;
-#		print "Found symbol: $symbol\n";
 	    }
+#	    print "Found symbol: $symbol\n";
 
 	    # Canonicalize signal and argument names to have -, not _
 	    if ($type eq "ARG" || $type eq "SIGNAL") {
@@ -1088,6 +1088,7 @@ sub ReadTemplateFile {
 		$SymbolDoc =~ s/\s+$//;
 		$SymbolTypes{$CurrentSymbol} = $CurrentType;
 		$SymbolDocs{$CurrentSymbol} = $SymbolDoc;
+
 		if ($CurrentParam >= 0) {
 		    $SymbolParams{$CurrentSymbol} = [ @Params ];
 		} else {
@@ -1149,9 +1150,11 @@ sub ReadTemplateFile {
 
     # Remember to finish the current symbol doccs.
     if ($CurrentSymbol ne "") {
+
 	$SymbolDoc =~ s/\s+$//;
 	$SymbolTypes{$CurrentSymbol} = $CurrentType;
 	$SymbolDocs{$CurrentSymbol} = $SymbolDoc;
+
 	if ($CurrentParam >= 0) {
 	    $SymbolParams{$CurrentSymbol} = [ @Params ];
 	} else {
