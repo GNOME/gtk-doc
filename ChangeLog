@@ -1,5 +1,17 @@
 2008-05-23  Stefan Kost  <ensonic@users.sf.net>
 
+	* configure.in:
+	* tests/gobject/Makefile.am:
+	* tests/gobject/docs-tmpl/Makefile.am:
+	* tests/gobject/docs-tmpl/tester-docs.xml:
+	* tests/gobject/docs-tmpl/tester-sections.txt:
+	* tests/gobject/docs-tmpl/tester.types:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	  Build same docs once again with old tmpl approach.
+
+2008-05-23  Stefan Kost  <ensonic@users.sf.net>
+
 	* tests/bugs/docs/Makefile.am:
 	* tests/gobject/docs/Makefile.am:
 	* tests/gtk-doc.make:

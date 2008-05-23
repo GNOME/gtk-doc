@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <bookinfo>
+    <title>tester Reference Manual</title>
+    <releaseinfo>
+      for tester [VERSION]
+      The latest version of this documentation can be found on-line at
+      <ulink role="online-location" url="http://[SERVER]/tester/index.html">http://[SERVER]/tester/</ulink>.
+    </releaseinfo>
+  </bookinfo>
+
+  <chapter id="intro">
+    <title>Introduction</title>
+    <para>
+      This document is for testing purpose only.
+      It is generated from Docbook-<acronym>XML</acronym>.
+    </para>
+  </chapter>
+
+  <chapter>
+    <title>Tests</title>
+    <xi:include href="xml/object.xml"/>
+    <xi:include href="xml/iface.xml"/>
+  </chapter>
+
+  <chapter id="object-tree">
+    <title>Object Hierarchy</title>
+     <xi:include href="xml/tree_index.sgml" />
+  </chapter>
+
+  <glossary>
+    <glossdiv id="glossary-X"><title>X</title>
+      <glossentry>
+        <glossterm><anchor id="glossterm-XML"/>XML</glossterm>
+        <glossdef>
+          <para>Extensible Markup Language</para>
+        </glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm><anchor id="glossterm-XSL"/>XSL</glossterm>
+        <glossdef>
+          <para>XML Stylesheet Language</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+  </glossary>
+</book>
