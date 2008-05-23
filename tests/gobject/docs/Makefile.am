@@ -60,7 +60,7 @@ INCLUDES = -I$(top_builddir) -I$(top_builddir)/tests/gobject/src $(TEST_DEPS_CFL
 GTKDOC_LIBS = $(TEST_DEPS_LIBS) $(top_builddir)/tests/gobject/src/libtester.la
 
 # include generic part
-include $(top_srcdir)/tests/gtk-doc.make
+include $(top_srcdir)/tests/gtk-doc.notmpl.make
 
 # Other files to distribute
 # e.g. EXTRA_DIST += version.xml.in
