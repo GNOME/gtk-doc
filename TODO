@@ -15,6 +15,8 @@ and join discussion about future features.
 
 
 Developer can also add items here :)
+
+= Tracing =
 * there is a bunch of #print statements for tracing
   => add a sub Trace() to gtkdoc-common.pl
   => use @TRACE@ "..." and depending on configure flag
@@ -23,10 +25,19 @@ Developer can also add items here :)
      should be a function and the function should support loglevels and an
        envar to enable/disable conditionally;
 
-More abbreviations:
+= More abbreviations =
 * expand urls
 
-Testing:
+= Testing =
 cd test/gobject
 diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
+
+= Issues =
+* gtkdoc-fixxref makefile targets use $HTML_DIR
+  * HTML_DIR: The directory where gtk-doc generated documentation is installed
+  * automake exports $htmldir which is by default:
+    ${prefix}/share/doc/${PACKAGE_TARNAME}
+  * the Makefile uses $(DESTDIR)$(TARGET_DIR)
+    where TARGET_DIR = $(HTML_DIR)/$(DOC_MODULE)
+    http://www.gnu.org/software/libtool/manual/automake/DESTDIR.html
 

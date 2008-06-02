@@ -44,7 +44,7 @@ my %optctl = (module => \$MODULE,
 	      'extra-dir' => \@EXTRA_DIRS,
 	      'version' => \$PRINT_VERSION,
 	      'help' => \$PRINT_HELP);
-GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir=s", "extra-dir=s@",
+GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir:s", "extra-dir=s@",
 	"version", "help");
 
 if ($PRINT_VERSION) {

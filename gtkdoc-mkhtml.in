@@ -4,6 +4,8 @@
 usage="\
 Usage: gtkdoc-mkhtml MODULE DRIVER_FILE"
 
+#echo "args $0\n";
+
 if test "x$1" = "x--version"; then
       echo "@VERSION@"
       exit 0
@@ -18,7 +20,7 @@ module=$1
 document=$2
 
 # FIXME: this is a hack to run uninstalled
-if test "x$0" = "x../../../../gtkdoc-mkhtml" ; then
+if test "x$0" = "x../../../gtkdoc-mkhtml" ; then
       # uninstalled
       gtkdocdir=`dirname $0`
 else
@@ -27,8 +29,6 @@ else
       datarootdir=@datarootdir@
       gtkdocdir=@datadir@/gtk-doc/data
 fi
-
-declaration=$gtkdocdir/gtk-doc.dcl
 
 if head -n 1 $document | grep "<?xml" > /dev/null; then
   is_xml=true
@@ -52,7 +52,7 @@ else
       $gtkdocdir/gtk-doc.dcl $document || exit $?
 fi
 
-# copy navigation images to html directory ...
+# copy navigation images and stylesheets to html directory ...
 cp -f $gtkdocdir/*.png .
 cp -f $gtkdocdir/*.css .
 

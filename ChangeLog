@@ -1,5 +1,20 @@
 2008-06-02  Stefan Kost  <ensonic@users.sf.net>
 
+	* TODO:
+	  tody up and add some comments regarding HTML_DIR.
+
+	* gtkdoc-fixxref.in:
+	  HTML_DIR is not neccesarily set.
+
+	* gtkdoc-mkhtml.in:
+	  Fix uninstalled.
+
+	* tests/gobject/docs-tmpl/tester-docs.xml:
+	* tests/gobject/docs/tester-docs.xml:
+	  Add more chapter id's and experiment with an index chapter.	  
+
+2008-06-02  Stefan Kost  <ensonic@users.sf.net>
+
 	* style.css:
 	  Improve spacing on indicies and glossaries.
 
