@@ -34,6 +34,8 @@ enum {
  * Create a new instance
  *
  * Returns: the instance or %NULL in case of an error
+ *
+ * Since: 0.1
  */
 GtkdocObject *gtkdoc_object_new (void) {
   return(NULL);
@@ -47,11 +49,25 @@ GtkdocObject *gtkdoc_object_new (void) {
  * Set the #GtkdocObject:otest property.
  *
  * Deprecated: Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.
+ *
+ * Since: 0.5
  */
 void gtkdoc_object_set_otest (GObject *self, const gchar *value) {
   
 }
 
+/**
+ * gtkdoc_object_frobnicate:
+ * @self: the object
+ * @n: number of iterations
+ *
+ * Frobnicate the content of @self @n times.
+ *
+ * Since: 0.5
+ */
+void gtkdoc_object_frobnicate (GObject *self, gint n) {
+  
+}
 /* methods */
 
 /* class internals */

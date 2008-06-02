@@ -24,6 +24,8 @@
  * Configure a new instance
  *
  * Returns: %TRUE for sucess or %FALSE in case of an error
+ *
+ * Since: 0.1
  */
 gboolean gtkdoc_iface_configure (gchar *config) {
   return(TRUE);
