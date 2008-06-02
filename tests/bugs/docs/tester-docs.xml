@@ -12,7 +12,18 @@
   </bookinfo>
 
   <chapter>
-    <title>[Insert title here]</title>
+    <title>Tests</title>
     <xi:include href="xml/tester.xml"/>
   </chapter>
+
+  <index id="api-index">
+    <title>API Index</title>
+  </index>
+  <index id="deprecated-api-index" role="deprecated">
+    <title>Index of deprecated API</title>
+  </index>
+  <!--index id="api-index-0-9" role="0.9">
+    <title>Index of new API in 0.9</title>
+  </index-->
+
 </book>

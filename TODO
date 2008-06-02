@@ -26,3 +26,7 @@ Developer can also add items here :)
 More abbreviations:
 * expand urls
 
+Testing:
+cd test/gobject
+diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
+

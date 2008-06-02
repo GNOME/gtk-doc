@@ -4,6 +4,7 @@
 GtkdocObject
 GtkdocObjectClass
 gtkdoc_object_new
+gtkdoc_object_set_otest
 GTKDOC_OBJECT_MACRO_DUMMY
 GTKDOC_OBJECT_MACRO_SUM
 <SUBSECTION Standard>
@@ -29,6 +30,6 @@ GTKDOC_IFACE
 GTKDOC_IS_IFACE
 GTKDOC_TYPE_IFACE
 gtkdoc_iface_get_type
-GTKDOC_OBJECT_GET_INTERFACE
+GTKDOC_IFACE_GET_INTERFACE
 </SECTION>
 

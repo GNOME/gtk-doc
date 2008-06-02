@@ -39,6 +39,19 @@ GtkdocObject *gtkdoc_object_new (void) {
   return(NULL);
 }
 
+/**
+ * gtkdoc_object_set_otest:
+ * @self: the object
+ * @value: the new otest value
+ *
+ * Set the #GtkdocObject:otest property.
+ *
+ * Deprecated: Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.
+ */
+void gtkdoc_object_set_otest (GObject *self, const gchar *value) {
+  
+}
+
 /* methods */
 
 /* class internals */

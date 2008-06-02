@@ -56,6 +56,7 @@ enum GtkdocHelperEnum {
 GType  gtkdoc_object_get_type(void) G_GNUC_CONST;
 
 GtkdocObject *gtkdoc_object_new(void);
+void gtkdoc_object_set_otest (GObject *self, const gchar *value);
 
 /**
  * GTKDOC_OBJECT_MACRO_DUMMY:
