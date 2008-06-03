@@ -51,7 +51,7 @@ my %optctl = ('html-dir' => \$HTML_DIR,
 	      'verbose' => \$VERBOSE,
 	      'version' => \$PRINT_VERSION,
 	      'help' => \$PRINT_HELP);
-GetOptions(\%optctl, 'html-dir=s', 'other-dir=s@', 'dest-dir=s',
+GetOptions(\%optctl, 'html-dir=s', 'other-dir=s@', 'dest-dir:s',
 		     'online', 'relative', 'aggressive', 'verbose',
 		     'version', 'help');
 

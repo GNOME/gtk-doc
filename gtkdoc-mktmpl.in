@@ -137,6 +137,8 @@ my %DeclarationOutput;
 my %SymbolDocs;
 my %SymbolTypes;
 my %SymbolParams;
+my %SymbolSourceFile;
+my %SymbolSourceLine;
 
 # These global arrays store GObject and subclasses and the hierarchy.
 my @Objects;
@@ -285,7 +287,7 @@ sub UpdateTemplates {
 		}
 
 	    } else {
-		print "WARNING: No declaration found for: $1\n";
+		&LogWarning ($file, $., "No declaration found for: $1");
 	    }
 	}
     }
@@ -322,13 +324,8 @@ sub CheckAllDeclarationsOutput {
     }
     close (UNUSED);
     if ($num_unused != 0) {
-	print <<EOF;
-=============================================================================
-WARNING: $num_unused unused declarations.
-  These can be found in $MODULE-unused.txt.
-  They should be added to $MODULE-sections.txt in the appropriate place.
-=============================================================================
-EOF
+        &LogWarning ($old_unused_file, 1, "$num_unused unused declarations.".
+            "They should be added to $MODULE-sections.txt in the appropriate place.");
     }
 
     return &UpdateFileIfChanged ($old_unused_file, $new_unused_file, 0);
@@ -378,7 +375,6 @@ EOF
 	my $ret_type_pointer = $4;
 
 	my ($param_num) = 0;
-	my ($name);
 	while ($declaration ne "") {
 	    if ($declaration =~ s/^[\s,]+//) {
 		# skip whitespace and commas
@@ -386,7 +382,7 @@ EOF
 
 	    } elsif ($declaration =~ s/^void\s*[,\n]//) {
 		if ($param_num != 0) {
-		    print "WARNING: void used as parameter in function $symbol\n";
+		    &LogWarning ($SymbolSourceFile{$symbol},$SymbolSourceLine{$symbol}, "void used as parameter in function $symbol");
 		}
 
 	    } elsif ($declaration =~ s/^...\s*[,\n]//) {
@@ -397,34 +393,33 @@ EOF
 	    #                                $1                                                                                                                                    $2                             $3                                                           $4       $5
 	    } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const\b|restrict\b)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
  		my $pre		= defined($1) ? $1 : "";
- 		my $type	= $2;
+ 		my $vtype	= $2;
  		my $ptr		= defined($3) ? $3 : "";
  		my $name	= defined($4) ? $4 : "";
 
- 		$pre  =~ s/\s+/ /g;
- 		$type =~ s/\s+/ /g;
- 		$ptr  =~ s/\s+/ /g;
- 		$ptr  =~ s/\s+$//;
+ 		$pre   =~ s/\s+/ /g;
+ 		$vtype =~ s/\s+/ /g;
+ 		$ptr   =~ s/\s+/ /g;
+ 		$ptr   =~ s/\s+$//;
  		if ($ptr && $ptr !~ m/\*$/) { $ptr .= " "; }
 
  		if (($name eq "") && $pre =~ m/^((un)?signed .*)\s?/ ) {
- 		    $name = $type;
- 		    $type = "$1";
- 		    $pre = "";
+ 		    $name  = $vtype;
+ 		    $vtype = "$1";
+ 		    $pre   = "";
  		}
 
- 		#print "$symbol: '$pre' '$type' '$ptr' '$name' \n";
+ 		#print "$symbol: '$pre' '$vtype' '$ptr' '$name' \n";
 
  		if ($name eq "") {
 		    $name = "Param" . ($param_num + 1);
 		}
-		$output .= &OutputParam ($symbol, $name, $template_exists, 1,
-					 "");
+		$output .= &OutputParam ($symbol, $name, $template_exists, 1, "");
 
 	    # Try to match parameters which are functions (keep in sync with gtkdoc-mkdb)
 	    #                              $1                                       $2          $3      $4                      $5                    $7             $8
 	    } elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict\b)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
-	        $name = $6;
+		my $name = $6;
 		$output .= &OutputParam ($symbol, $name, $template_exists, 1,
 					 "");
 
@@ -815,7 +810,7 @@ sub OutputUnusedTemplates {
 	my $type = $SymbolTypes{$symbol};
 	if (!defined ($type)) {
 	    $type = "UNKNOWN";
-	    print "WARNING: Unused symbol $symbol has unknown type\n";
+	    &LogWarning ($SymbolSourceFile{$symbol},$SymbolSourceLine{$symbol}, "Unused symbol $symbol has unknown type.");
 	}
 
     $output .= <<EOF;
@@ -928,7 +923,7 @@ sub ReadDeclarationsFile {
 			    } elsif ($declaration =~ m/^\s*(struct\s+\w+\s*;)?\s*$/) {
 				# Ignore an empty or forward declaration.
 			    } else {
-				print "WARNING: Structure $declaration_name has multiple definitions: $file:$.\n";
+				&LogWarning ($file, $., "Structure $declaration_name has multiple definitions.");
 			    }
 
 			} else {
@@ -937,7 +932,7 @@ sub ReadDeclarationsFile {
 			    $DeclarationConditional{$declaration_name} = 1;
 			}
 		    } else {
-			print "ERROR: $declaration_name has multiple definitions: $file:$.\n";
+			&LogWarning ($file, $., "$declaration_name has multiple definitions.");
 		    }
 		} else {
 		    $Declarations{$declaration_name} = $declaration;
@@ -1076,7 +1071,11 @@ sub ReadTemplateFile {
 		|| $symbol eq "Stability_Level") {
 		$symbol = $docsfile . ":" . $symbol;
 	    }
-#	    print "Found symbol: $symbol\n";
+
+	    #print "Found symbol: $symbol\n";
+	    # Remember file and line for the symbol
+	    $SymbolSourceFile{$symbol} = $docsfile;
+	    $SymbolSourceLine{$symbol} = $.;
 
 	    # Canonicalize signal and argument names to have -, not _
 	    if ($type eq "ARG" || $type eq "SIGNAL") {

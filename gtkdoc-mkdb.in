@@ -378,6 +378,7 @@ sub OutputSGML {
     my $prerequisites = "";
     my $derived = "";
     my @file_objects = ();
+    my %templates = ();
 
     # merge the source docs, in case there are no templates
     &MergeSourceDocumentation;
@@ -411,8 +412,13 @@ sub OutputSGML {
             my $sym;
 
 	    $filename = $1;
-	    if (&ReadTemplateFile ("$TMPL_DIR/$filename", 1)) {
-                &MergeSourceDocumentation;
+	    if (! defined $templates{$filename}) {
+	       if (&ReadTemplateFile ("$TMPL_DIR/$filename", 1)) {
+                   &MergeSourceDocumentation;
+                   $templates{$filename}=1;
+               }
+            } else {
+                &LogWarning ($file, $., "Double <FILE>$filename</FILE> entry.");
             }
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
@@ -2883,7 +2889,7 @@ sub ScanSourceFile {
     if ($file =~ m/^.*[\/\\]([^\/\\]*)$/) {
 	$basename = $1;
     } else {
-	print "WARNING: Can't find basename of file $file\n";
+	&LogWarning ($file, 1, "Can't find basename for this filename.");
 	$basename = $file;
     }
 
@@ -2957,7 +2963,6 @@ sub ScanSourceFile {
                 # Handle Section docs
                 if ($symbol =~ m/SECTION:\s*(.*)/) {
                     my $real_symbol=$1;
-                    my $k;
                     my $key;
 
                     #print "SECTION DOCS found in source for : '$real_symbol'\n";
@@ -3524,7 +3529,7 @@ sub MergeSourceDocumentation {
 
                         # Allow '...' as the Varargs parameter.
                         if ($tmpl_param_name eq "...") {
-                          $tmpl_param_name = "Varargs";
+                            $tmpl_param_name = "Varargs";
                         }
 
                         # Try to find the param in the source comment documentation.
@@ -3540,7 +3545,7 @@ sub MergeSourceDocumentation {
                                 $found = 1;
 
                                 # Override the description.
-                                $$tmpl_params[$j + 1] = $param_desc ;
+                                $$tmpl_params[$j + 1] = $param_desc;
 
                                 # Set the name to "" to mark it as used.
                                 $$params[$k] = "";
@@ -3569,7 +3574,7 @@ sub MergeSourceDocumentation {
                             &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                                 "$item described in source code comment block but does not exist. $type: $symbol $item: $param_name.");
                         }
-		    }
+                    }
 		}
 	    }
 	} else {
@@ -3580,7 +3585,7 @@ sub MergeSourceDocumentation {
             else {
 		#print "[$symbol] undocumented\n";
             }
-        }
+	}
 
 	# if this symbol is documented, check if docs are complete
 	$tmpl_doc = $SymbolDocs{$symbol};
@@ -3605,6 +3610,8 @@ sub MergeSourceDocumentation {
                     $type="SIGNAL";
                 }
 
+                #print "Check param docs for $symbol, tmpl_params: ",$#$tmpl_params,"\n";
+
                 my $j;
                 for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
                     # Output a warning if the parameter is empty and
@@ -3619,10 +3626,6 @@ sub MergeSourceDocumentation {
                         }
                         &LogWarning ($SourceSymbolSourceFile{$symbol}, $SourceSymbolSourceLine{$symbol},
                             "$item description for $tmpl_param_name is missing in source code comment block.");
-#                        print <<EOF;
-#WARNING: $item description missing in source code comment block -
-# $type: $symbol $item: $tmpl_param_name.
-#EOF
                     }
                 }
             }
