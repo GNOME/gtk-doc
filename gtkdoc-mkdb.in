@@ -3440,13 +3440,13 @@ sub MergeSourceDocumentation {
         $AllSymbols{$symbol} = 1;
 
 	my $have_tmpl_docs = 0;
-	my $check_tmpl_doc = "";
 
 	## See if the symbol is documented in template
-	my $tmpl_doc = $SymbolDocs{$symbol};
-	$check_tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
+	my $tmpl_doc = defined ($SymbolDocs{$symbol}) ? $SymbolDocs{$symbol} : "";
+	my $check_tmpl_doc =$tmpl_doc;
 	# remove all xml-tags and whitespaces
-	$check_tmpl_doc =~ s/<\/?[a-z]+>//g;
+	#$check_tmpl_doc =~ s/<\/?[a-z]+>//g;
+	$check_tmpl_doc =~ s/<.*?>//g;
 	$check_tmpl_doc =~ s/\s//g;
 	# anything left ?
 	if ($check_tmpl_doc ne "") {
@@ -3455,7 +3455,6 @@ sub MergeSourceDocumentation {
 	}
 
 	if (exists ($SourceSymbolDocs{$symbol})) {
-	    my $src_doc = $SourceSymbolDocs{$symbol};
 	    my $type = $DeclarationTypes {$symbol};
 
             #print "merging [$symbol] from source\n";
@@ -3473,7 +3472,8 @@ sub MergeSourceDocumentation {
                 $type="SIGNAL";
             }
 
-	    $tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
+	    my $src_doc = $SourceSymbolDocs{$symbol};
+	    # remove leading and training whitespaces
 	    $src_doc =~ s/^\s+//;
 	    $src_doc =~ s/\s+$//;
 
@@ -3481,8 +3481,12 @@ sub MergeSourceDocumentation {
 	    # automatically generated in the -sections.txt file, and thus they
 	    # are often overridden.
 	    if ($have_tmpl_docs && $symbol !~ m/:Title$/) {
-                &LogWarning ($SourceSymbolSourceFile{$symbol}, $SourceSymbolSourceLine{$symbol},
-                    "Documentation in template ".$SymbolSourceFile{$symbol}.":".$SymbolSourceLine{$symbol}." for $symbol being overridden by inline comments.");
+	        # check if content is different
+                if ($tmpl_doc ne $src_doc) {
+                    #print "[$tmpl_doc] [$src_doc]\n";
+                    &LogWarning ($SourceSymbolSourceFile{$symbol}, $SourceSymbolSourceLine{$symbol},
+                        "Documentation in template ".$SymbolSourceFile{$symbol}.":".$SymbolSourceLine{$symbol}." for $symbol being overridden by inline comments.");
+                }
 	    }
 
             if ($src_doc ne "") {
@@ -3588,11 +3592,12 @@ sub MergeSourceDocumentation {
 	}
 
 	# if this symbol is documented, check if docs are complete
-	$tmpl_doc = $SymbolDocs{$symbol};
-	$tmpl_doc = defined ($tmpl_doc) ? $tmpl_doc : "";
-	$tmpl_doc =~ s/<\/?[a-z]+>//g;
-	$tmpl_doc =~ s/\s//g;
-	if ($tmpl_doc ne "") {
+	$check_tmpl_doc = defined ($SymbolDocs{$symbol}) ? $SymbolDocs{$symbol} : "";
+	# remove all xml-tags and whitespaces
+	#$check_tmpl_doc =~ s/<\/?[a-z]+>//g;
+	$check_tmpl_doc =~ s/<.*?>//g;
+	$check_tmpl_doc =~ s/\s//g;
+	if ($check_tmpl_doc ne "") {
             my $tmpl_params = $SymbolParams{$symbol};
             if (defined ($tmpl_params)) {
                 my $type = $DeclarationTypes {$symbol};
