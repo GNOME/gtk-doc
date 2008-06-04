@@ -19,11 +19,10 @@ THEDIR="`pwd`"
 
 cd "$srcdir"
 
-which gnome-doc-prepare || {
-    echo "You need to install gnome-doc-utils to build this package"
-    exit 1
+which >/dev/null gnome-doc-prepare || {
+	echo "You need to install gnome-doc-utils to build this package"
+	DIE=1
 }
-gnome-doc-prepare
 
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
 	echo
@@ -69,6 +68,9 @@ if test "$#" = 0; then
 	echo "I am going to run ./configure with no arguments - if you wish "
         echo "to pass any to it, please specify them on the $0 command line."
 fi
+
+echo "* Running gnome-doc-prepare"
+gnome-doc-prepare --force --automake
 
 echo "* Running $ACLOCAL"
 $ACLOCAL $ACLOCAL_FLAGS || exit $?
