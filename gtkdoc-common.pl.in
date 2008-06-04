@@ -323,6 +323,9 @@ sub ParseEnumDeclaration {
 sub LogWarning {
     my ($file, $line, $message) = @_;
     
+    $file="unknown" if !defined($file);
+    $line="0" if !defined($line);
+    
     print "$file:$line: warning: $message\n"
 }
 

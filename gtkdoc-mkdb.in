@@ -379,6 +379,7 @@ sub OutputSGML {
     my $derived = "";
     my @file_objects = ();
     my %templates = ();
+    my %symbols = ();
 
     # merge the source docs, in case there are no templates
     &MergeSourceDocumentation;
@@ -393,6 +394,7 @@ sub OutputSGML {
 	    $num_symbols = 0;
 	    $in_section = 1;
 	    @file_objects = ();
+	    %symbols = ();
 
 	} elsif (m/^<SUBSECTION\s*(.*)>/i) {
 	    $synopsis .= "\n";
@@ -415,10 +417,11 @@ sub OutputSGML {
 	    if (! defined $templates{$filename}) {
 	       if (&ReadTemplateFile ("$TMPL_DIR/$filename", 1)) {
                    &MergeSourceDocumentation;
-                   $templates{$filename}=1;
+                   $templates{$filename}=$.;
                }
             } else {
-                &LogWarning ($file, $., "Double <FILE>$filename</FILE> entry.");
+                &LogWarning ($file, $., "Double <FILE>$filename</FILE> entry. ".
+                    "Previous occurrence on line ".$templates{$filename}.".");
             }
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
@@ -648,48 +651,56 @@ EOF
 	    my $symbol = $1;
 	    #print "  Symbol: $symbol\n";
 
-	    my $declaration = $Declarations{$symbol};
-	    if (defined ($declaration)) {
-		# We don't want standard macros/functions of GtkObjects,
-		# or private declarations.
-		if ($subsection ne "Standard" && $subsection ne "Private") {
-		    if (&CheckIsObject ($symbol)) {
-			push @file_objects, $symbol;
-		    }
-		    my ($synop, $desc) = &OutputDeclaration ($symbol,
-							     $declaration);
-		    my ($sig_synop, $sig_desc) = &GetSignals ($symbol);
-		    my ($arg_synop, $child_arg_synop, $style_arg_synop,
-			$arg_desc, $child_arg_desc, $style_arg_desc) = &GetArgs ($symbol);
-		    my $hier = &GetHierarchy ($symbol);
-		    my $ifaces = &GetInterfaces ($symbol);
-		    my $impls = &GetImplementations ($symbol);
-		    my $prereqs = &GetPrerequisites ($symbol);
-		    my $der = &GetDerived ($symbol);
-		    $synopsis .= $synop;
-		    $details .= $desc;
-		    $signals_synop .= $sig_synop;
-		    $signals_desc .= $sig_desc;
-		    $args_synop .= $arg_synop;
-		    $child_args_synop .= $child_arg_synop;
-		    $style_args_synop .= $style_arg_synop;
-		    $args_desc .= $arg_desc;
-		    $child_args_desc .= $child_arg_desc;
-		    $style_args_desc .= $style_arg_desc;
-		    $hierarchy .= $hier;
-		    $interfaces .= $ifaces;
-		    $implementations .= $impls;
-		    $prerequisites .= $prereqs;
-		    $derived .= $der;
-		}
-
-		# Note that the declaration has been output.
-		$DeclarationOutput{$symbol} = 1;
-	    } elsif ($subsection ne "Standard" && $subsection ne "Private") {
-		$UndeclaredSymbols{$symbol} = 1;
-		&LogWarning ($file, $., "No declaration found for $symbol.");
-	    }
-	    $num_symbols++;
+            # FIXME: check for duplicate entries
+	    if (! defined $symbols{$symbol}) {
+                my $declaration = $Declarations{$symbol};
+                if (defined ($declaration)) {
+                    # We don't want standard macros/functions of GtkObjects,
+                    # or private declarations.
+                    if ($subsection ne "Standard" && $subsection ne "Private") {
+                        if (&CheckIsObject ($symbol)) {
+                            push @file_objects, $symbol;
+                        }
+                        my ($synop, $desc) = &OutputDeclaration ($symbol,
+                                                                 $declaration);
+                        my ($sig_synop, $sig_desc) = &GetSignals ($symbol);
+                        my ($arg_synop, $child_arg_synop, $style_arg_synop,
+                            $arg_desc, $child_arg_desc, $style_arg_desc) = &GetArgs ($symbol);
+                        my $hier = &GetHierarchy ($symbol);
+                        my $ifaces = &GetInterfaces ($symbol);
+                        my $impls = &GetImplementations ($symbol);
+                        my $prereqs = &GetPrerequisites ($symbol);
+                        my $der = &GetDerived ($symbol);
+                        $synopsis .= $synop;
+                        $details .= $desc;
+                        $signals_synop .= $sig_synop;
+                        $signals_desc .= $sig_desc;
+                        $args_synop .= $arg_synop;
+                        $child_args_synop .= $child_arg_synop;
+                        $style_args_synop .= $style_arg_synop;
+                        $args_desc .= $arg_desc;
+                        $child_args_desc .= $child_arg_desc;
+                        $style_args_desc .= $style_arg_desc;
+                        $hierarchy .= $hier;
+                        $interfaces .= $ifaces;
+                        $implementations .= $impls;
+                        $prerequisites .= $prereqs;
+                        $derived .= $der;
+                    }
+    
+                    # Note that the declaration has been output.
+                    $DeclarationOutput{$symbol} = 1;
+                } elsif ($subsection ne "Standard" && $subsection ne "Private") {
+                    $UndeclaredSymbols{$symbol} = 1;
+                    &LogWarning ($file, $., "No declaration found for $symbol.");
+                }
+                $num_symbols++;
+                $symbols{$symbol}=$.;
+            }
+            else {
+                &LogWarning ($file, $., "Double symbol entry for $symbol. ".
+                    "Previous occurrence on line ".$symbols{$symbol}.".");
+            }
 	}
     }
     close (INPUT);
@@ -3629,7 +3640,7 @@ sub MergeSourceDocumentation {
                         } else {
                             $AllIncompleteSymbols{$symbol}=$tmpl_param_name;
                         }
-                        &LogWarning ($SourceSymbolSourceFile{$symbol}, $SourceSymbolSourceLine{$symbol},
+                        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                             "$item description for $tmpl_param_name is missing in source code comment block.");
                     }
                 }

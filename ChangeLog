@@ -1,5 +1,15 @@
 2008-06-04  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-common.pl.in:
+	  Handle file or line being undefined.
+
+	* gtkdoc-mkdb.in:
+	  Warn about repeated symbols in sections. Also give line of previous
+	  occurrance. Also give that info for double file entries. Fixes #473342
+          Give correct error locate for one warning. Fixes #532395 partialy
+
+2008-06-04  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-mkdb.in:
 	  Don't warn about overriden docs comment if its the same text.
 
