@@ -67,7 +67,7 @@ my $PRINT_VERSION;
 my $PRINT_HELP;
 my $ONLY_SECTION_TMPL;
 
-my %optctl = (module => \$MODULE,
+my %optctl = ('module' => \$MODULE,
 	      'flag-changes' => \$FLAG_CHANGES,
 	      'output-dir' => \$TMPL_DIR,
 	      'only-section-tmpl' => \$ONLY_SECTION_TMPL,
@@ -85,13 +85,16 @@ if (!$MODULE) {
 }
 
 if ($PRINT_HELP) {
-    print "gtkdoc-mktmpl version @VERSION@\n";
-    print "\n--module=MODULE_NAME Name of the doc module being parsed";
-    print "\n--flag-changes       If specified, changes in templates are flagged";
-    print "\n--output-dir=DIRNAME The directory where the results are stored";
-    print "\n--only-section-tmpl  Only include section information in templates";
-    print "\n--version            Print the version of this program";
-    print "\n--help               Print this help\n";
+    print <<EOF;
+gtkdoc-mktmpl version @VERSION@
+
+--module=MODULE_NAME Name of the doc module being parsed
+--flag-changes       If specified, changes in templates are flagged
+--output-dir=DIRNAME The directory where the results are stored
+--only-section-tmpl  Only include section information in templates
+--version            Print the version of this program
+--help               Print this help
+EOF
     exit 0;
 }
 

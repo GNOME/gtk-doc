@@ -38,7 +38,7 @@ my @EXTRA_DIRS;
 my $PRINT_VERSION;
 my $PRINT_HELP;
 
-my %optctl = (module => \$MODULE,
+my %optctl = ('module' => \$MODULE,
 	      'module-dir' => \$MODULE_DIR,
 	      'html-dir' => \$HTML_DIR,
 	      'extra-dir' => \@EXTRA_DIRS,

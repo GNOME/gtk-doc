@@ -54,7 +54,7 @@ my $DEFAULT_STABILITY;
 my $DEFAULT_INCLUDES;
 my $OUTPUT_FORMAT;
 
-my %optctl = (module => \$MODULE,
+my %optctl = ('module' => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
 	      'source-suffixes' => \$SOURCE_SUFFIXES,
 	      'ignore-files' => \$IGNORE_FILES,
@@ -411,8 +411,6 @@ sub OutputSGML {
 	    $DeclarationOutput{"${title}Class"} = 1;
 
 	} elsif (m/^<FILE>(.*)<\/FILE>/) {
-            my $sym;
-
 	    $filename = $1;
 	    if (! defined $templates{$filename}) {
 	       if (&ReadTemplateFile ("$TMPL_DIR/$filename", 1)) {
