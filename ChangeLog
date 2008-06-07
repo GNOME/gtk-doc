@@ -1,3 +1,10 @@
+2008-06-07  Sebastian Dröge  <slomo@circular-chaos.org>
+
+	* gtkdoc-scangobj.in:
+	* gtkdoc-scanobj.in:
+	Add "%s" format strings to printf-like functions when printing
+	a string. Fixes #536980.
+
 2008-06-05  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-fixxref.in:
