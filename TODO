@@ -41,3 +41,8 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
     where TARGET_DIR = $(HTML_DIR)/$(DOC_MODULE)
     http://www.gnu.org/software/libtool/manual/automake/DESTDIR.html
 
+= Output =
+* html
+  * would be good to be able to have page titles as a concatenation of document
+    name and page name (gtk+:GtkWIdget)
+

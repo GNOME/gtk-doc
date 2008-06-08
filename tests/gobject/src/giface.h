@@ -22,6 +22,7 @@ typedef struct _GtkdocIfaceInterface GtkdocIfaceInterface;
 /**
  * GtkdocIfaceInterface:
  * @parent: this is a bug :/
+ * @test: overideable method
  *
  * class data of gtk-doc unit test interface
  */

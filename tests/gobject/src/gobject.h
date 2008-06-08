@@ -34,6 +34,7 @@ struct _GtkdocObject {
 /**
  * GtkdocObjectClass:
  * @parent: this is a bug :/
+ * @test: overideable method
  *
  * class data of gtk-doc unit test class
  */

@@ -718,8 +718,7 @@ output_hierarchy (FILE *fp,
 
   for (i = 0; i < level; i++)
     fprintf (fp, "  ");
-  fprintf (fp, "%s", gtk_type_name (type));
-  fprintf (fp, "\\n");
+  fprintf (fp, "%s\\n", gtk_type_name (type));
 
   list = gtk_type_children_types (type);
 
