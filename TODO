@@ -35,6 +35,7 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
 = Issues =
 * gtkdoc-fixxref makefile targets use $HTML_DIR
   * HTML_DIR: The directory where gtk-doc generated documentation is installed
+    it comes from gtk-doc.m4 (--with-html-dir) but has no default
   * automake exports $htmldir which is by default:
     ${prefix}/share/doc/${PACKAGE_TARNAME}
   * the Makefile uses $(DESTDIR)$(TARGET_DIR)
@@ -42,7 +43,13 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
     http://www.gnu.org/software/libtool/manual/automake/DESTDIR.html
 
 = Output =
-* html
+* multipage-html
   * would be good to be able to have page titles as a concatenation of document
     name and page name (gtk+:GtkWIdget)
-
+* formats
+  http://bugzilla.gnome.org/show_bug.cgi?id=531572
+  http://bugzilla.gnome.org/show_bug.cgi?id=466535
+  we need more configure options in gtk-doc.m4:
+  --(enable|disable)-gtk-doc-(html|pdf|man|html-single)
+  - html : enabled by default
+  - html-single : is single page html
