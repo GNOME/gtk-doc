@@ -1,3 +1,12 @@
+2008-06-10  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	  Include original CFLAGS / LDFLAGS when building the scanner. Allows to
+	  have own FLAGS defined in addition.
+
 2008-06-08  Stefan Kost  <ensonic@users.sf.net>
 
 	* TODO:
