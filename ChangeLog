@@ -1,3 +1,11 @@
+2008-06-16  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-mktmpl.in:
+	  Don't reuse file var, fixes warning context.
+  
+	* gtkdoc-scan.in:
+	  Also accept *.hh as headers suffix.
+
 2008-06-10  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtk-doc.make:

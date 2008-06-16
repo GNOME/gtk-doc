@@ -225,6 +225,7 @@ sub UpdateTemplates {
 	    || die "Can't create directory: $TMPL_DIR";
     }
 
+    my $filename = "";
     my $title = "";
     my $subsection = "";
     my $output;
@@ -245,21 +246,21 @@ sub UpdateTemplates {
 #	    print "Section: $title\n";
 
 	} elsif (m/^<FILE>(.*)<\/FILE>/) {
-	    $file = $1;
+	    $filename = $1;
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
 	    next;
 
 	} elsif (m/^<\/SECTION>/) {
 	    if ($title eq "") {
-		$title = $file;
+		$title = $filename;
 	    }
 #	    print "End of section: $title\n";
 
-	    $file =~ s/\s/_/g;
-	    $file .= ".sgml";
+	    $filename =~ s/\s/_/g;
+	    $filename .= ".sgml";
 
-	    if (&OutputTemplateFile ($file, $title, \$output)) {
+	    if (&OutputTemplateFile ($filename, $title, \$output)) {
 	      $changed = 1;
 	    }
 

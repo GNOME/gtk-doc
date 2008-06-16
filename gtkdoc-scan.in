@@ -251,7 +251,7 @@ sub ScanHeader {
 
     my $deprecated = "";
 
-    if ($input_file =~ m/^.*[\/\\](.*)\.h$/) {
+    if ($input_file =~ m/^.*[\/\\](.*)\.h+$/) {
 	$file_basename = $1;
     } else {
 	print "WARNING: Can't find basename of file $input_file\n";
@@ -265,7 +265,7 @@ sub ScanHeader {
     }
 
     if (! -f $input_file) {
-	print "File doesn't exist: $input_file\n";
+	print "WARNING: File doesn't exist: $input_file\n";
 	return;
     }
 
