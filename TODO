@@ -53,3 +53,8 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   --(enable|disable)-gtk-doc-(html|pdf|man|html-single)
   - html : enabled by default
   - html-single : is single page html
+  
+= Cleanup =
+* can we deprecate title in the sectionfile and request people to have this in
+  the SECTION comment?
+

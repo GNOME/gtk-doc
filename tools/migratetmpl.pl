@@ -303,6 +303,9 @@ EOF
     if (defined($short_desc) && ($short_desc ne "")) {
         print (OUTPUT " * \@Short_description: $short_desc\n");
     }
+    if (defined($title) && ($title ne "")) {
+        print (OUTPUT " * \@Title: $title\n");
+    }
     if (defined($see_also) && ($see_also ne "")) {
         my $line;
         my $first="\@See_also:";
