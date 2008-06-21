@@ -1,6 +1,12 @@
 2008-06-21  Stefan Kost  <ensonic@users.sf.net>
 
 	* tools/migratetmpl.pl:
+	  Use $file in section comment not title. Convert only standalone para
+	  tags.
+
+2008-06-21  Stefan Kost  <ensonic@users.sf.net>
+
+	* tools/migratetmpl.pl:
 	  Convert @Varargs: to @...:
 
 2008-06-21  Stefan Kost  <ensonic@users.sf.net>

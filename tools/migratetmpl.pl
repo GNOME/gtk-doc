@@ -298,7 +298,7 @@ sub OutputSourceFile {
 
     print (OUTPUT <<EOF);
 /**
- * SECTION:$title
+ * SECTION:$file
 EOF
     if (defined($short_desc) && ($short_desc ne "")) {
         print (OUTPUT " * \@Short_description: $short_desc\n");
@@ -439,10 +439,11 @@ sub ConvertNewlines {
     my ($istr) = @_;
     my ($line,$ostr);
     
+    $ostr="";
     for $line (split (/\n/, $istr)) {
-        if ($line =~ m/<para>/) {
+        if ($line =~ m/<para>\s*$/) {
             next;
-        } elsif ($line =~ m/<\/para>/) {
+        } elsif ($line =~ m/<\/para>\s*$/) {
             $ostr.="\n";
         } else {
             $ostr.="$line\n";
@@ -461,6 +462,7 @@ sub ConvertComments {
     my ($istr) = @_;
     my ($line,$ostr);
     
+    $ostr="";
     for $line (split (/\n/, $istr)) {
         if ($line =~ m#/\*.*\*/#) {
             $line =~ s#/\*#//#;
