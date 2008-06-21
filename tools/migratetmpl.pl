@@ -387,6 +387,10 @@ EOF
             }
             $param_desc=$stripped;
             
+            if ($param_name eq "Varargs") {
+                $param_name="...";
+            }
+            
             if ($param_name eq "Returns") {
                 $returns = $param_desc;
                 chomp($returns);
