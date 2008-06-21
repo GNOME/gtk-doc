@@ -283,6 +283,7 @@ sub OutputSourceFile {
     if (defined ($SymbolDocs{"$TMPL_DIR/$file:Long_Description"})) {
         $long_desc = $SymbolDocs{"$TMPL_DIR/$file:Long_Description"};
         $long_desc = &ConvertNewlines ($long_desc);
+        $long_desc = &ConvertComments ($long_desc);
         delete $SymbolDocs{"$TMPL_DIR/$file:Long_Description"};
     }
     if (defined ($SymbolDocs{"$TMPL_DIR/$file:See_Also"})) {
@@ -360,6 +361,7 @@ sub GetSymbolDoc {
     }
     $long_desc = $SymbolDocs{$symbol};
     $long_desc = &ConvertNewlines ($long_desc);
+    $long_desc = &ConvertComments ($long_desc);
     
     $str=<<EOF;
 /**
@@ -375,7 +377,12 @@ EOF
             
             for $line (split (/\n/, $param_desc)) {
                 if ($line ne "") {
-                    $stripped=$stripped."$line\n";
+                    $line =~ m/\s*(.*)\s*/g;
+                    if ($stripped eq "") {
+                        $stripped=$stripped."$1\n";
+                    } else {
+                        $stripped=$stripped." *  $1\n";
+                    }
                 }
             }
             $param_desc=$stripped;
@@ -436,6 +443,26 @@ sub ConvertNewlines {
         } else {
             $ostr.="$line\n";
         }
+    }
+    
+    return $ostr;
+}
+
+#############################################################################
+# Function    : ConvertComments
+# Description : Convert signle line c comments to c++ comments
+# Arguments   : $istr -  string to convert
+#############################################################################
+sub ConvertComments {
+    my ($istr) = @_;
+    my ($line,$ostr);
+    
+    for $line (split (/\n/, $istr)) {
+        if ($line =~ m#/\*.*\*/#) {
+            $line =~ s#/\*#//#;
+            $line =~ s#\s*\*/##;
+        }
+        $ostr.="$line\n";
     }
     
     return $ostr;
