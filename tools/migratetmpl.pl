@@ -358,6 +358,7 @@ sub GetSymbolDoc {
     }
     if (defined ($Deprecated{$symbol})) {
         $deprecated = $Deprecated{$symbol};
+        $deprecated = &FormatMultiline ($deprecated);
     }
     if (defined ($Since{$symbol})) {
         ($since, undef) = split (/\n/,$Since{$symbol});
@@ -376,19 +377,7 @@ EOF
             my $param_name = $$params[$j];
             my $param_desc = $$params[$j+1];
             my $line;
-            my $stripped="";
-            
-            for $line (split (/\n/, $param_desc)) {
-                if ($line ne "") {
-                    $line =~ m/\s*(.*)\s*/g;
-                    if ($stripped eq "") {
-                        $stripped=$stripped."$1\n";
-                    } else {
-                        $stripped=$stripped." *  $1\n";
-                    }
-                }
-            }
-            $param_desc=$stripped;
+            $param_desc = &FormatMultiline ($param_desc);
             
             if ($param_name eq "Varargs") {
                 $param_name="...";
@@ -415,7 +404,7 @@ EOF
         $spacer="";
     }
     if (defined($deprecated) && ($deprecated ne "")) {
-        $str = $str.$spacer." * Deprecated: $deprecated\n";
+        $str = $str.$spacer." * Deprecated: $deprecated";
         $spacer="";
     }
     if (defined($since) && ($since ne "")) {
@@ -481,3 +470,29 @@ sub ConvertComments {
     
     return $ostr;
 }
+
+#############################################################################
+# Function    : FormatMultiline
+# Description : Format multiline text and remove blank lines
+# Arguments   : $istr -  string to convert
+#############################################################################
+sub FormatMultiline {
+    my ($istr) = @_;
+    my ($line,$ostr);
+    
+    $ostr="";
+    for $line (split (/\n/, $istr)) {
+        if ($line ne "") {
+            $line =~ m/\s*(.*)\s*/g;
+            if ($ostr eq "") {
+                $ostr.="$1\n";
+            } else {
+                $ostr.=" *  $1\n";
+            }
+        }
+    }
+
+    return $ostr;
+}
+
+
