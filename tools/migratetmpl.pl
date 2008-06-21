@@ -282,13 +282,13 @@ sub OutputSourceFile {
     }
     if (defined ($SymbolDocs{"$TMPL_DIR/$file:Long_Description"})) {
         $long_desc = $SymbolDocs{"$TMPL_DIR/$file:Long_Description"};
-        $long_desc = &ConvertNewlines ($long_desc);
+        $long_desc = &ConvertMarkup ($long_desc);
         $long_desc = &ConvertComments ($long_desc);
         delete $SymbolDocs{"$TMPL_DIR/$file:Long_Description"};
     }
     if (defined ($SymbolDocs{"$TMPL_DIR/$file:See_Also"})) {
         $see_also = $SymbolDocs{"$TMPL_DIR/$file:See_Also"};
-        $see_also = &ConvertNewlines ($see_also);
+        $see_also = &ConvertMarkup ($see_also);
         delete $SymbolDocs{"$TMPL_DIR/$file:See_Also"};
     }
     if (defined ($SymbolDocs{"$TMPL_DIR/$file:Stability_Level"})) {
@@ -363,7 +363,7 @@ sub GetSymbolDoc {
         ($since, undef) = split (/\n/,$Since{$symbol});
     }
     $long_desc = $SymbolDocs{$symbol};
-    $long_desc = &ConvertNewlines ($long_desc);
+    $long_desc = &ConvertMarkup ($long_desc);
     $long_desc = &ConvertComments ($long_desc);
     
     $str=<<EOF;
@@ -434,11 +434,11 @@ EOF
 }
 
 #############################################################################
-# Function    : ConvertNewlines
-# Description : Convert para tags to newlines
+# Function    : ConvertMarkup
+# Description : Convert para tags to newlines and character entities back 
 # Arguments   : $istr -  string to convert
 #############################################################################
-sub ConvertNewlines {
+sub ConvertMarkup {
     my ($istr) = @_;
     my ($line,$ostr);
     
@@ -449,6 +449,11 @@ sub ConvertNewlines {
         } elsif ($line =~ m/<\/para>\s*$/) {
             $ostr.="\n";
         } else {
+            # convert character entities back.
+            $line =~ s/&amp;/&/g;
+            $line =~ s/&num;/#/g;
+            $line =~ s/&lt;/</g;
+            $line =~ s/&gt;/>/g;
             $ostr.="$line\n";
         }
     }

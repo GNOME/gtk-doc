@@ -1952,8 +1952,8 @@ sub ConvertSGMLCharsCallback2 {
   # If we're not in CDATA convert to entities.
   # We could handle <programlisting> differently, though I'm not sure it helps.
   if ($tag eq "") {
+    # replace only if its not a tag
     $text =~ s/&(?![a-zA-Z#]+;)/&amp;/g;	# Do this first, or the others get messed up.
-#    $text =~ s/&/&amp;/g;	# Do this first, or the others get messed up.
     $text =~ s/<(?![a-zA-Z\/!])/&lt;/g;
     $text =~ s/(?<![a-zA-Z0-9"'\/-])>/&gt;/g;
 
