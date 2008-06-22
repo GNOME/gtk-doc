@@ -1,5 +1,12 @@
 2008-06-22  Stefan Kost  <ensonic@users.sf.net>
 
+	* tools/migratetmpl.pl:
+	  We were still removing too many <para>s.
+	  Also add andrews trick to escape the c comments.
+	  Add a newline to empty param docs.
+
+2008-06-22  Stefan Kost  <ensonic@users.sf.net>
+
 	* m4/gnome-doc-utils.m4:
 	  Add this to svn, so that bootstrap work where no gnome-doc-utils is
 	  available yet.

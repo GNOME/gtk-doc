@@ -433,9 +433,9 @@ sub ConvertMarkup {
     
     $ostr="";
     for $line (split (/\n/, $istr)) {
-        if ($line =~ m/<para>\s*$/) {
+        if ($line =~ m/\s*<para>\s*$/) {
             next;
-        } elsif ($line =~ m/<\/para>\s*$/) {
+        } elsif ($line =~ m/\s*<\/para>\s*$/) {
             $ostr.="\n";
         } else {
             # convert character entities back.
@@ -465,6 +465,8 @@ sub ConvertComments {
             $line =~ s#/\*#//#;
             $line =~ s#\s*\*/##;
         }
+        $line =~ s#/\*#/<!---->\*#;
+        $line =~ s#\*/#\*<!---->/#;
         $ostr.="$line\n";
     }
     
@@ -490,6 +492,9 @@ sub FormatMultiline {
                 $ostr.=" *  $1\n";
             }
         }
+    }
+    if ($ostr eq "") {
+        $ostr="\n";
     }
 
     return $ostr;
