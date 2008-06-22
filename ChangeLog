@@ -1,5 +1,11 @@
 2008-06-22  Stefan Kost  <ensonic@users.sf.net>
 
+	* autogen.sh:
+	  To support timj aclocal setup we are shipping gnome-doc-utils.m4
+	  and making sure automake picks it up ;)
+
+2008-06-22  Stefan Kost  <ensonic@users.sf.net>
+
 	* tools/migratetmpl.pl:
 	  We were still removing too many <para>s.
 	  Also add andrews trick to escape the c comments.

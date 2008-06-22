@@ -72,8 +72,10 @@ fi
 echo "* Running gnome-doc-prepare"
 gnome-doc-prepare --force --automake
 
+# to support timj aclocal setup we are shipping gnome-doc-utils.m4
+# and making sure automake picks it up ;)
 echo "* Running $ACLOCAL"
-$ACLOCAL $ACLOCAL_FLAGS || exit $?
+$ACLOCAL $ACLOCAL_FLAGS -I m4 || exit $?
 
 echo "* Running autoconf"
 autoconf || exit $?
