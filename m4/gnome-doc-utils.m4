@@ -1,0 +1,1 @@
+/usr/share/aclocal/gnome-doc-utils.m4
