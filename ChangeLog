@@ -1,3 +1,15 @@
+2008-06-28  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: David Nečas <yeti@physics.muni.cz>
+
+	* examples/Makefile.am:
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	* gtkdoc-mkhtml.in:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	  Add searchpath to gtkdoc.mkhtml. Fixes #460753
+
 2008-06-22  Stefan Kost  <ensonic@users.sf.net>
 
 	* autogen.sh:

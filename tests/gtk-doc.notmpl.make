@@ -89,7 +89,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	rm -rf $(srcdir)/html
 	mkdir $(srcdir)/html
 	@PATH=$(top_builddir):$(PATH) PERL5LIB=$(top_builddir):$(PERL5LIB) && cd $(srcdir)/html && \
-	gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)  $(MKHTML_OPTIONS)
+	gtkdoc-mkhtml --path="$(srcdir)" $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)  $(MKHTML_OPTIONS)
 	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
 	@echo 'gtk-doc: Fixing cross-references'
 	@PATH=$(top_builddir):$(PATH) PERL5LIB=$(top_builddir):$(PERL5LIB) && cd $(srcdir) && \

@@ -35,6 +35,9 @@ MKDB_OPTIONS=--sgml-mode --output-format=xml
 # e.g. MKTMPL_OPTIONS=--only-section-tmpl
 MKTMPL_OPTIONS=
 
+# Extra options to supply to gtkdoc-mkhtml
+MKHTML_OPTIONS=
+
 # Extra options to supply to gtkdoc-fixref. Not normally needed.
 # e.g. FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html
 FIXXREF_OPTIONS=

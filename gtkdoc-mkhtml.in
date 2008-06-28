@@ -2,22 +2,26 @@
 #
 
 usage="\
-Usage: gtkdoc-mkhtml MODULE DRIVER_FILE"
+Usage: gtkdoc-mkhtml [--path=SEARCH_PATH] MODULE DRIVER_FILE [BACKEND_OPTIONS...]"
 
 #echo "args $0\n";
 
-if test "x$1" = "x--version"; then
-      echo "@VERSION@"
-      exit 0
-fi
-
-if test $# -ne 2; then
+searchpath=
+case "X$1" in
+    X--version) echo "@VERSION@"; exit 0;;
+    X--help) echo "$usage"; exit 0;;
+    X--path=*) searchpath="${1#*=}"; shift;;
+esac
+ 
+if test $# -lt 2; then
       echo "${usage}" 1>&2
       exit 1
 fi
 
 module=$1
-document=$2
+shift
+document=$1
+shift
 
 # FIXME: this is a hack to run uninstalled
 if test "x$0" = "x../../../gtkdoc-mkhtml" ; then
@@ -32,8 +36,16 @@ fi
 
 if head -n 1 $document | grep "<?xml" > /dev/null; then
   is_xml=true
+  path_option='--path'
 else
   is_xml=false
+  path_option='--directory'
+fi
+
+if test "X$searchpath" == "X"; then
+    path_arg=
+else
+    path_arg="$path_option $searchpath"
 fi
 
 # Delete the old index.sgml file, if it exists.
@@ -42,14 +54,14 @@ if test -f index.sgml; then
 fi
 
 if $is_xml; then
-  @XSLTPROC@ --nonet --xinclude \
+  @XSLTPROC@ $path_arg --nonet --xinclude \
       --stringparam gtkdoc.bookname $module \
       --stringparam gtkdoc.version "@VERSION@" \
-      $gtkdocdir/gtk-doc.xsl $document || exit $?
+      "$@" $gtkdocdir/gtk-doc.xsl $document || exit $?
 else
-  @JADE@ -t @SGML_FORMAT_TYPE@ -w no-idref -d $gtkdocdir/gtk-doc.dsl \
+  @JADE@ $path_arg -t @SGML_FORMAT_TYPE@ -w no-idref -d $gtkdocdir/gtk-doc.dsl \
       -V "gtkdoc-bookname=$module" -V "gtkdoc-version=@VERSION@" \
-      $gtkdocdir/gtk-doc.dcl $document || exit $?
+      "$@" $gtkdocdir/gtk-doc.dcl $document || exit $?
 fi
 
 # copy navigation images and stylesheets to html directory ...
