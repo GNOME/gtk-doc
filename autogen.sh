@@ -74,6 +74,7 @@ gnome-doc-prepare --force --automake
 
 # to support timj aclocal setup we are shipping gnome-doc-utils.m4
 # and making sure automake picks it up ;)
+# this is bad as -I prepends to the search path
 echo "* Running $ACLOCAL"
 $ACLOCAL $ACLOCAL_FLAGS -I m4 || exit $?
 
