@@ -221,7 +221,6 @@ sub ScanHeaders {
 
 sub ScanHeader {
     my ($input_file, $object_list, $main_list) = @_;
-#    print "DEBUG: Scanning $input_file\n";
 
     my $list = "";		  # Holds the resulting list of declarations.
     my ($in_comment) = 0;	  # True if we are in a comment.
@@ -260,7 +259,7 @@ sub ScanHeader {
 
     # Check if the basename is in the list of headers to ignore.
     if ($IGNORE_HEADERS =~ m/(\s|^)\Q${file_basename}\E\.h(\s|$)/) {
-#	print "DEBUG: File ignored: $input_file\n";
+	#print "DEBUG: File ignored: $input_file\n";
 	return;
     }
 
@@ -268,6 +267,8 @@ sub ScanHeader {
 	print "WARNING: File doesn't exist: $input_file\n";
 	return;
     }
+
+    #print "DEBUG: Scanning $input_file\n";
 
     open(INPUT, $input_file)
 	|| die "Can't open $input_file: $!";
@@ -280,7 +281,7 @@ sub ScanHeader {
 
 	# Skip to the end of the current comment.
 	if ($in_comment) {
-#	    print "Comment: $_";
+	    #print "Comment: $_";
 	    if (m%\*/%) {
 		$in_comment = 0;
 	    }
@@ -495,7 +496,7 @@ sub ScanHeader {
                         $symbol = $previous_line;
                         $symbol =~ s/^\s+//;
                         $symbol =~ s/\s*\n//;
-			#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+                        #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
 		}
 
 	    #} elsif (m/^extern\s+/) {
@@ -509,13 +510,10 @@ sub ScanHeader {
 		# declaration of struct <struct_name>.
 		$symbol = $1;
 		$decl = $_;
-		if (m/^\s*struct\s+_(\w+)\s*{/) {
-		    $level = 1;
-		} else {
-		    $level = 0;
-		}
+                # we will find the correct level as below we do $level += tr/{//;
+		$level = 0;
 		$in_declaration = "struct";
-                #print "DEBUG: Struct(_): $symbol\n";
+		#print "DEBUG: Struct(_): $symbol\n";
 
 
 	    # UNIONS
@@ -543,8 +541,8 @@ sub ScanHeader {
 	if ($in_declaration eq 'function') {
 	    if ($decl =~ s/\)\s*(G_GNUC_.*|__attribute__\s*\(.*\)\s*)?;.*$//) {
 		$decl =~ s%/\*.*?\*/%%gs;	# remove comments.
-#		$decl =~ s/^\s+//;		# remove leading whitespace.
-#		$decl =~ s/\s+$//;		# remove trailing whitespace.
+		#$decl =~ s/^\s+//;		# remove leading whitespace.
+		#$decl =~ s/\s+$//;		# remove trailing whitespace.
 		$decl =~ s/\s*\n\s*//g;		# remove whitespace at start
 						# and end of lines.
 		$ret_type =~ s%/\*.*?\*/%%g;	# remove comments in ret type.
@@ -590,11 +588,11 @@ sub ScanHeader {
 		}
 
 		if ($symbol =~ m/^(\S+)Class/) {
-#		    print "Found object: $1\n";
+		    #print "Found object: $1\n";
 		    $list .= "<TITLE>$1</TITLE>\n$1\n";
 		    push (@objects, $1);
 		}
-                #print "Store struct: $symbol\n";
+		#print "Store struct: $symbol\n";
 		&AddSymbolToList (\$list, $symbol);
 
 		print DECL "<STRUCT>\n<NAME>$symbol</NAME>\n$deprecated$decl</STRUCT>\n";
@@ -604,6 +602,7 @@ sub ScanHeader {
 		# $level accordingly.
 		$level += tr/{//;
 		$level -= tr/}//;
+		#print "struct/union level : $level\n";
 	    }
 	}
 
@@ -619,6 +618,8 @@ sub ScanHeader {
 	$previous_line = $_;
     }
     close(INPUT);
+    
+    #print "DEBUG: Scanning $input_file done\n\n\n";
 
     # Take out any object structs from the list of declarations as we don't
     # want them included.

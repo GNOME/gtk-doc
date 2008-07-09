@@ -1,3 +1,10 @@
+2008-07-09  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-scan.in:
+	  Fix struct/enum level parsing which could go one to high and then the
+	  main struct would never be closed. 
+	  Fixes #542137
+
 2008-06-28  Stefan Kost  <ensonic@users.sf.net>
 
 	* autogen.sh:
