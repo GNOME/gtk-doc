@@ -6,12 +6,18 @@ Usage: gtkdoc-mkhtml [--path=SEARCH_PATH] MODULE DRIVER_FILE [BACKEND_OPTIONS...
 
 #echo "args $0\n";
 
+# parse options, ignore unknown options for future extensions
+
 searchpath=
-case "X$1" in
-    X--version) echo "@VERSION@"; exit 0;;
-    X--help) echo "$usage"; exit 0;;
-    X--path=*) searchpath="${1#*=}"; shift;;
-esac
+while true; do
+    case "X$1" in
+        X--version) echo "@VERSION@"; exit 0;;
+        X--help) echo "$usage"; exit 0;;
+        X--path=*) searchpath=`echo $1 | sed s/.*=//`; shift;;
+        X--*) shift;;
+        X*) break;;
+    esac
+done
  
 if test $# -lt 2; then
       echo "${usage}" 1>&2
@@ -29,6 +35,7 @@ if test "x$0" = "x../../../gtkdoc-mkhtml" ; then
       gtkdocdir=`dirname $0`
 else
       # installed
+      # the first two are needed to resolve datadir
       prefix=@prefix@
       datarootdir=@datarootdir@
       gtkdocdir=@datadir@/gtk-doc/data

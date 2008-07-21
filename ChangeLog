@@ -1,3 +1,13 @@
+2008-07-21  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	  Only specify options if gtkdoc-mkhtml can take them. Fixes #543855.
+
+	* gtkdoc-mkhtml.in:
+	  Don't use bash specific features. Be more flexible so that we can add
+	  more options.
+
 2008-07-09  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-scan.in:

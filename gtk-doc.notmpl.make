@@ -92,7 +92,12 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@-chmod -R u+w $(srcdir)
 	rm -rf $(srcdir)/html
 	mkdir $(srcdir)/html
-	cd $(srcdir)/html && gtkdoc-mkhtml --path="$(srcdir)" $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE) $(MKHTML_OPTIONS)
+	mkhtml_options=""; \
+	gtkdoc-mkhtml 2>&1 --help | grep  >/dev/null "\-\-path"; \
+	if test "$(?)" = "0"; then \
+	  mkhtml_options=--path="$(srcdir)"; \
+	fi
+	cd $(srcdir)/html && gtkdoc-mkhtml $(mkhtml_options) $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
 	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
 	@echo 'gtk-doc: Fixing cross-references'
 	cd $(srcdir) && gtkdoc-fixxref --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
