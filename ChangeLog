@@ -1,3 +1,11 @@
+2008-07-23  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-mkdb.in:
+	* gtkdoc-scan.in:
+	* tests/bugs/docs/tester-sections.txt:
+	* tests/bugs/src/tester.h:
+	  Accept "char const *" as well. Fixes #544172.
+
 2008-07-21  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtk-doc.make:

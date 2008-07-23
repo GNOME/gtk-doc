@@ -118,5 +118,15 @@ typedef struct {
  */
 #define BUG_530758 "dummy"
 
+/** 
+ * bug_544172:
+ * @self: object pointer.
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=544172
+ *
+ * Returns: result or %NULL.
+ **/
+typedef char const * (*bug_544172) (char const *self);
+
 #endif // GTKDOC_TESTER_H
 

@@ -353,12 +353,14 @@ sub ScanHeader {
 
 	    # TYPEDEF'D FUNCTIONS (i.e. user functions)
 
-	    } elsif (m/^\s*typedef\s+((const\s+|G_CONST_RETURN\s+)?\w+)\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
-		$ret_type = "$1 $3";
-		$symbol = $4;
+            #                        $1                                $3            $4             $5
+	    } elsif (m/^\s*typedef\s+((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
+		my $p3 = defined($3) ? $3 : "";
+		$ret_type = "$1$p3 $4";
+		$symbol = $5;
 		$decl = $';
 		$in_declaration = "user_function";
-                #print "DEBUG: user function: $symbol\n";
+		print "DEBUG: user function: $symbol\n";
 
 
 	    # ENUMS
