@@ -1340,14 +1340,19 @@ gtk_arrow_get_type
 	<seg>FIXME (section file, proper doc comment)</seg>
       </seglistitem>
 
-      <!-- warnings: -->
+      <!-- gtk-doc warnings: -->
       <seglistitem>
 	<seg>Parameter described in source code comment block but does not exist</seg>
 	<seg>Check if the prototype in the header has different parameter names as in the source.</seg>
       </seglistitem>
+      <!-- docbook warnings: -->
       <seglistitem>
 	<seg>multiple "IDs" for constraint linkend: XYZ</seg>
 	<seg>Symbol XYZ appears twice in -section.txt file.</seg>
+      </seglistitem>
+      <seglistitem>
+	<seg>Element typename in namespace '' encountered in para, but no template matches.</seg>
+        <seg />
       </seglistitem>
     </segmentedlist>
   </chapter>

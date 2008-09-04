@@ -21,7 +21,7 @@ SCANGOBJ_OPTIONS=2>&1 | tee gtkdoc-scangobj.log
 SCAN_OPTIONS=--deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED" 2>&1 | tee gtkdoc-scan.log
 
 # Extra options to supply to gtkdoc-mkdb.
-MKDB_OPTIONS=--sgml-mode --output-format=xml 2>&1 | tee gtkdoc-mkdb.log
+MKDB_OPTIONS=--sgml-mode --name-space=gtkdoc 2>&1 | tee gtkdoc-mkdb.log
 
 # Extra options to supply to gtkdoc-mktmpl
 # e.g. MKTMPL_OPTIONS=--only-section-tmpl

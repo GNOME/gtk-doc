@@ -3,6 +3,7 @@
 #
 # gtk-doc - GTK DocBook documentation generator.
 # Copyright (C) 1998  Damon Chaplin
+#               2007,2008  Stefan Kost
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -53,6 +54,7 @@ my $SGML_MODE;
 my $DEFAULT_STABILITY;
 my $DEFAULT_INCLUDES;
 my $OUTPUT_FORMAT;
+my $NAME_SPACE = "";
 
 my %optctl = ('module' => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
@@ -68,8 +70,13 @@ my %optctl = ('module' => \$MODULE,
 	      'sgml-mode' => \$SGML_MODE,
 	      'default-stability' => \$DEFAULT_STABILITY,
 	      'default-includes' => \$DEFAULT_INCLUDES,
-	      'output-format' => \$OUTPUT_FORMAT);
-GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s", "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols", "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help", "sgml-mode", "default-stability:s", "default-includes:s", "output-format:s");
+	      'output-format' => \$OUTPUT_FORMAT,
+	      'name-space' => \$NAME_SPACE);
+GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s", 
+    "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols",
+     "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help",
+     "sgml-mode", "default-stability:s", "default-includes:s", "output-format:s",
+     "name-space:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -103,6 +110,7 @@ gtkdoc-mkdb version @VERSION@
 --default-stability=LEVEL  Specify default stability Level. Valid values are
                            Stable, Unstable, or Private.
 --default-includes=FILENAMES Specify default includes for section Synopsis
+--name-space=NS            Omit namespace in index.
 --version                  Print the version of this program
 --help                     Print this help
 EOF
@@ -139,8 +147,8 @@ if (lc($OUTPUT_FORMAT) eq "xml") {
     } else {
         $doctype_header =
 "<?xml version=\"1.0\"?>\n" .
-"<!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.1.2//EN\"\n" .
-"               \"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd\">\n";
+"<!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.3//EN\"\n" .
+"               \"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd\">\n";
     }
     $doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
 } else {
@@ -224,7 +232,7 @@ my %AllDocumentedSymbols;
 # Undeclared yet documented symbols
 my %UndeclaredSymbols;
 
-# These global arrays store GtkObject and subclasses and the hierarchy.
+# These global arrays store GObject, subclasses and the hierarchy.
 my @Objects;
 my @ObjectLevels;
 
@@ -233,6 +241,11 @@ my %Prerequisites;
 
 # holds the symbols which are mentioned in $MODULE-sections.txt
 my %KnownSymbols;
+
+# collects index entries
+my %IndexEntriesFull;
+my %IndexEntriesSince;
+my %IndexEntriesDeprecated;
 
 # Standard C preprocessor directives, which we ignore for '#' abbreviations.
 my %PreProcessorDirectives;
@@ -284,6 +297,11 @@ my $changed = &OutputSGML ("$ROOT_DIR/$MODULE-sections.txt");
 # If any of the DocBook SGML files have changed, update the timestamp file (so
 # it can be used for Makefile dependencies).
 if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
+
+    &OutputIndexFull;
+    &OutputDeprecatedIndex;
+    &OutputSinceIndexes;
+
     open (TIMESTAMP, ">$ROOT_DIR/sgml.stamp")
 	|| die "Can't create $ROOT_DIR/sgml.stamp: $!";
     print (TIMESTAMP "timestamp");
@@ -300,11 +318,22 @@ if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
 
 sub OutputObjectList {
     my $cols = 3;
+    
+    # FIXME: use $OUTPUT_FORMAT
+    # my $old_object_index = "$SGML_OUTPUT_DIR/object_index.$OUTPUT_FORMAT";
     my $old_object_index = "$SGML_OUTPUT_DIR/object_index.sgml";
     my $new_object_index = "$SGML_OUTPUT_DIR/object_index.new";
 
     open (OUTPUT, ">$new_object_index")
 	|| die "Can't create $new_object_index: $!";
+
+    if (lc($OUTPUT_FORMAT) eq "xml") {
+        my $header = $doctype_header;
+
+        $header =~ s/<!DOCTYPE \w+/<!DOCTYPE informaltable/;
+        print (OUTPUT "$header");
+    }
+
     print (OUTPUT <<EOF);
 <informaltable pgwide="1" frame="none">
 <tgroup cols="$cols">
@@ -316,7 +345,7 @@ EOF
 
     my $count = 0;
     my $object;
-    foreach $object (sort(@Objects)) {
+    foreach $object (sort (@Objects)) {
 	my $xref = &MakeXRef ($object);
 	if ($count % $cols == 0) { print (OUTPUT "<row>\n"); }
 	print (OUTPUT "<entry>$xref</entry>\n");
@@ -326,6 +355,9 @@ EOF
     if ($count == 0) {
         # emit an empty row, since empty tables are invalid
 	print (OUTPUT "<row><entry> </entry></row>\n");
+    }
+    else {
+        print (OUTPUT "</row>\n");
     }
 
     print (OUTPUT <<EOF);
@@ -460,6 +492,7 @@ sub OutputSGML {
 	    }
 
 	    if ($num_symbols > 0) {
+		# collect documents
 		if (lc($OUTPUT_FORMAT) eq "xml") {
 		    $book_bottom .= "    <xi:include href=\"xml/$filename.xml\"/>\n";
 		} else {
@@ -489,6 +522,7 @@ ${signals_synop}</synopsis>
 EOF
                      $signals_desc =~ s/^\n*//g;
                      $signals_desc =~ s/\n+$/\n/g;
+                     $signals_desc =~ s/(\s|\n)+$//ms;
 		    $signals_desc  = <<EOF;
 <refsect1 id="$section_id.signal-details" role="signals">
 <title role="signals.title">Signal Details</title>
@@ -509,6 +543,7 @@ ${args_synop}</synopsis>
 EOF
                      $args_desc =~ s/^\n*//g;
                      $args_desc =~ s/\n+$/\n/g;
+                     $args_desc =~ s/(\s|\n)+$//ms;
 		    $args_desc  = <<EOF;
 <refsect1 id="$section_id.property-details" role="property_details">
 <title role="property_details.title">Property Details</title>
@@ -527,8 +562,9 @@ EOF
 ${child_args_synop}</synopsis>
 </refsect1>
 EOF
-                     $args_desc =~ s/^\n*//g;
-                     $args_desc =~ s/\n+$/\n/g;
+                     $child_args_desc =~ s/^\n*//g;
+                     $child_args_desc =~ s/\n+$/\n/g;
+                     $child_args_desc =~ s/(\s|\n)+$//ms;
 		    $args_desc .= <<EOF;
 <refsect1 id="$section_id.child-property-details" role="child_property_details">
 <title role="child_property_details.title">Child Property Details</title>
@@ -547,8 +583,9 @@ EOF
 ${style_args_synop}</synopsis>
 </refsect1>
 EOF
-                     $args_desc =~ s/^\n*//g;
-                     $args_desc =~ s/\n+$/\n/g;
+                     $style_args_desc =~ s/^\n*//g;
+                     $style_args_desc =~ s/\n+$/\n/g;
+                     $style_args_desc =~ s/(\s|\n)+$//ms;
 		    $args_desc .= <<EOF;
 <refsect1 id="$section_id.style-property-details" role="style_properties_details">
 <title role="style_properties_details.title">Style Property Details</title>
@@ -559,6 +596,7 @@ EOF
 
                  $hierarchy =~ s/^\n*//g;
                  $hierarchy =~ s/\n+$/\n/g;
+                 $hierarchy =~ s/(\s|\n)+$//ms;
 		if ($hierarchy ne "") {
 		    $hierarchy = <<EOF;
 <refsect1 id="$section_id.object-hierarchy" role="object_hierarchy">
@@ -570,6 +608,7 @@ EOF
 
                  $interfaces =~ s/^\n*//g;
                  $interfaces =~ s/\n+$/\n/g;
+                 $interfaces =~ s/(\s|\n)+$//ms;
 		if ($interfaces ne "") {
 		    $interfaces = <<EOF;
 <refsect1 id="$section_id.implemented-interfaces" role="impl_interfaces">
@@ -581,6 +620,7 @@ EOF
 
                  $implementations =~ s/^\n*//g;
                  $implementations =~ s/\n+$/\n/g;
+                 $implementations =~ s/(\s|\n)+$//ms;
 		if ($implementations ne "") {
 		    $implementations = <<EOF;
 <refsect1 id="$section_id.implementations" role="implementations">
@@ -592,6 +632,7 @@ EOF
 
                  $prerequisites =~ s/^\n*//g;
                  $prerequisites =~ s/\n+$/\n/g;
+                 $prerequisites =~ s/(\s|\n)+$//ms;
 		if ($prerequisites ne "") {
 		    $prerequisites = <<EOF;
 <refsect1 id="$section_id.prerequisites" role="prerequisites">
@@ -603,6 +644,7 @@ EOF
 
                  $derived =~ s/^\n*//g;
                  $derived =~ s/\n+$/\n/g;
+                 $derived =~ s/(\s|\n)+$//ms;
 		if ($derived ne "") {
 		    $derived = <<EOF;
 <refsect1 id="$section_id.derived-interfaces" role="derived_interfaces">
@@ -720,6 +762,113 @@ EOF
     &OutputBook ($book_top, $book_bottom);
 
     return $changed;
+}
+
+#############################################################################
+# Function    : OutputIndex
+# Description : This writes an indexlist that can be included into the main-
+#               document into an <index> tag.
+#############################################################################
+
+sub OutputIndex {
+    my ($basename, $apiindexref ) = @_;
+    my %apiindex = %{$apiindexref};
+    my $old_index = "$SGML_OUTPUT_DIR/$basename.xml";
+    my $new_index = "$SGML_OUTPUT_DIR/$basename.new";
+    my $lastletter = " ";
+    my $divopen = 0;
+    my $symbol;
+    my $short_symbol;
+
+    open (OUTPUT, ">$new_index")
+	|| die "Can't create $new_index";
+
+    my $header = $doctype_header;
+    $header =~ s/<!DOCTYPE \w+/<!DOCTYPE indexdiv/;
+
+    print (OUTPUT "$header<indexdiv>\n");
+
+    #print "generate $basename index (".%apiindex." entries)\n";
+    
+    # do a case insensitive sort while chopping off the prefix
+    foreach my $hash (
+        sort { $$a{kriterium} cmp $$b{kriterium} }
+        map { my $x = uc($_); $x =~ s/^$NAME_SPACE\_?(.*)/$1/i; { kriterium => $x, original => $_, short => $1 } } 
+        keys %apiindex) {
+
+        $symbol = $$hash{original};
+        $short_symbol = $$hash{short};
+
+        my $xref = &MakeXRef ($symbol);
+        my $curletter = uc(substr($short_symbol,0,1));
+        my $id = $apiindex{$symbol};
+        
+        #print "  add symbol $symbol with $id to index\n";
+
+        if ($curletter ne $lastletter) {
+            $lastletter = $curletter;
+      
+            if ($divopen == 1) {
+                print (OUTPUT "</indexdiv>\n");
+            }
+            print (OUTPUT "<indexdiv><title>$curletter</title>\n");
+            $divopen = 1;
+        }
+
+        print (OUTPUT <<EOF);
+<indexentry><primaryie linkends="$id">$xref</primaryie></indexentry>
+EOF
+    }
+
+    if ($divopen == 1) {
+        print (OUTPUT "</indexdiv>\n");
+    }
+    print (OUTPUT "</indexdiv>\n");
+    close (OUTPUT);
+
+    &UpdateFileIfChanged ($old_index, $new_index, 0);
+}
+
+
+#############################################################################
+# Function    : OutputIndexFull
+# Description : This writes the full api indexlist that can be included into the
+#               main document into an <index> tag.
+#############################################################################
+
+sub OutputIndexFull {
+    &OutputIndex ("api-index-full", \%IndexEntriesFull);
+}
+
+
+#############################################################################
+# Function    : OutputDeprecatedIndex
+# Description : This writes the deprecated api indexlist that can be included
+#               into the main document into an <index> tag.
+#############################################################################
+
+sub OutputDeprecatedIndex {
+    &OutputIndex ("api-index-deprecated", \%IndexEntriesDeprecated);
+}
+
+
+#############################################################################
+# Function    : OutputSinceIndexes
+# Description : This writes the 'since' api indexlists that can be included into
+#               the main document into an <index> tag.
+#############################################################################
+
+sub OutputSinceIndexes {
+    my @sinces = keys %{{ map { $_ => 1 } values %Since }};
+
+    foreach my $version (@sinces) {
+        #print "Since : [$version]\n";
+        # todo make filtered hash
+        #my %index = grep { $Since{$_} eq $version } %IndexEntriesSince;
+        my %index = map { $_ => $IndexEntriesSince{$_} } grep { $Since{$_} eq $version } keys %IndexEntriesSince;
+
+        &OutputIndex ("api-index-$version", \%index);
+    }
 }
 
 
@@ -1069,7 +1218,7 @@ sub OutputStruct {
 
     # Create a table of fields and descriptions
 
-    # FIXME: Inserting &nbsp's into the produced type declarations here would
+    # FIXME: Inserting &#160's into the produced type declarations here would
     #        improve the output in most situations ... except for function
     #        members of structs!
     my @fields = ParseStructDeclaration($declaration, !$default_to_public,
@@ -1107,7 +1256,7 @@ EOF
 	    if (defined $field_descr) {
 		$desc .= "<listitem><simpara>".&ExpandAbbreviations($symbol, $field_descr)."</simpara></listitem>\n";
 	    } else {
-		$desc .= "<listitem></listitem>\n";
+		$desc .= "<listitem><simpara /></listitem>\n";
 	    }
             $desc .= "</varlistentry>\n";
 	}
@@ -1501,13 +1650,13 @@ sub OutputParamDescriptions {
 		    $param_name = "...";
 		}
 		$param = &ExpandAbbreviations($symbol, $param);
-		$params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&nbsp;:</term>\n<listitem><simpara>$param</simpara></listitem></varlistentry>\n";
+		$params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&#160;:</term>\n<listitem><simpara>$param</simpara></listitem></varlistentry>\n";
 	    }
 	}
 
 	# Signals have an implicit user_data parameter which we describe.
 	if ($symbol_type eq "SIGNAL") {
-	    $params_desc .= "<varlistentry><term><parameter>user_data</parameter>&nbsp;:</term>\n<listitem><simpara>user data set when the signal handler was connected.</simpara></listitem></varlistentry>\n";
+	    $params_desc .= "<varlistentry><term><parameter>user_data</parameter>&#160;:</term>\n<listitem><simpara>user data set when the signal handler was connected.</simpara></listitem></varlistentry>\n";
 	}
 
 	# Start a table if we need one.
@@ -1523,7 +1672,7 @@ EOF
 
 	    # Output the returns info last.
 	    if ($returns) {
-		$output .= "<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>$returns</simpara></listitem></varlistentry>\n";
+		$output .= "<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>$returns</simpara></listitem></varlistentry>\n";
 	    }
 
 	    # Finish the table.
@@ -1690,7 +1839,6 @@ sub OutputSGMLFile {
 <refnamediv>
 <refname>$title</refname>
 <refpurpose>$short_desc</refpurpose>
-<!--[<xref linkend="desc" endterm="desc.title"/>]-->
 </refnamediv>
 $stability
 <refsynopsisdiv id="$section_id.synopsis" role="synopsis">
@@ -1806,9 +1954,12 @@ sub OutputBook {
       if (lc($OUTPUT_FORMAT) eq "xml") {
 	  print OUTPUT <<EOF;
 <?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
-<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+]>
+<book id="index">
 EOF
       } else {
 	print OUTPUT <<EOF;
@@ -1868,6 +2019,7 @@ sub CreateValidSGMLID {
     $id =~ s/[,\.]//g;
     $id =~ s/^-*//;
     $id =~ s/::/-/g;
+    $id =~ s/:/--/g;
 
     return $id;
 }
@@ -2189,20 +2341,33 @@ sub MakeXRef {
 sub MakeIndexterms {
   my ($symbol, $id) = @_;
   my $terms =  "";
+  my $sortas = "";
+  
+  # make the index useful, by ommiting the namespace when sorting
+  if (defined($NAME_SPACE)) {
+    if ($symbol =~ m/^$NAME_SPACE\_?(.*)/i) {
+       $sortas=" sortas=\"$1\"";
+    }
+  }
 
   if (exists $Deprecated{$symbol}) {
-      $terms .= "<indexterm zone=\"$id\" role=\"deprecated\"><primary>$symbol</primary></indexterm>"
+      $terms .= "<indexterm zone=\"$id\" role=\"deprecated\"><primary$sortas>$symbol</primary></indexterm>";
+      $IndexEntriesDeprecated{$symbol}=$id;
+      $IndexEntriesFull{$symbol}=$id;
   }
   if (exists $Since{$symbol}) {
      my $since = $Since{$symbol};
      $since =~ s/^\s+//;
      $since =~ s/\s+$//;
      if ($since ne "") {
-         $terms .= "<indexterm zone=\"$id\" role=\"$since\"><primary>$symbol</primary></indexterm>";
+         $terms .= "<indexterm zone=\"$id\" role=\"$since\"><primary$sortas>$symbol</primary></indexterm>";
      }
+     $IndexEntriesSince{$symbol}=$id;
+     $IndexEntriesFull{$symbol}=$id;
   }
   if ($terms eq "") {
-     $terms .= "<indexterm zone=\"$id\"><primary>$symbol</primary></indexterm>";
+     $terms .= "<indexterm zone=\"$id\"><primary$sortas>$symbol</primary></indexterm>";
+     $IndexEntriesFull{$symbol}=$id;
   }
 
   return $terms;
@@ -3017,7 +3182,14 @@ sub ScanSourceFile {
                 }
 
 		if ($since_desc) {
-		    $Since{$symbol} = &ConvertSGMLChars ($symbol, $since_desc);
+                     ($since_desc, my @extra_lines) = split ("\n", $since_desc);
+                     $since_desc =~ s/^\s+//;
+                     $since_desc =~ s/\s+$//;
+                     #print "Since($symbol) : [$since_desc]\n";
+                     $Since{$symbol} = &ConvertSGMLChars ($symbol, $since_desc);
+                     if(scalar @extra_lines) {
+                         &LogWarning ($file, $., "multi-line since docs found");
+                     }
 		}
 
 		if ($stability_desc) {
@@ -4008,13 +4180,18 @@ sub ReadTemplateFile {
 		if ($param_name =~ m/^[Rr]eturns?$/) {
 		    $param_name = "Returns";
 		}
-		#print "Found param for symbol $current_symbol : '$param_name'= '$_'\n";
+
+		# strip trailing whitespaces and blank lines
+		s/\s+\n$/\n/m;
+		s/\n+$/\n/sm;
+		#print "Found param for symbol $current_symbol : '$param_name'= '$_'";
 
 		if ($param_name eq "Deprecated") {
 		    $in_deprecated = 1;
 		    $Deprecated{$current_symbol} = $_;
 		} elsif ($param_name eq "Since") {
 		    $in_since = 1;
+		    chomp;
 		    $Since{$current_symbol} = $_;
 		} elsif ($param_name eq "Stability") {
 		    $in_stability = 1;
@@ -4025,17 +4202,24 @@ sub ReadTemplateFile {
 		    $current_param += 2;
 		}
 	    } else {
-	        if ($in_deprecated) {
-		    $Deprecated{$current_symbol} .= $_;
-		} elsif ($in_since) {
-		    $Since{$current_symbol} .= $_;
-		} elsif ($in_stability) {
-		    $StabilityLevel{$current_symbol} .= $_;
-		} elsif ($current_param >= 0) {
-		    $params[$current_param] .= $_;
-		} else {
-		    $symbol_doc .= $_;
-		}
+		# strip trailing whitespaces and blank lines
+		s/\s+\n$/\n/m;
+		s/\n+$/\n/sm;
+                
+	        if (!m/^\s+$/) {
+                    if ($in_deprecated) {
+                        $Deprecated{$current_symbol} .= $_;
+                    } elsif ($in_since) {
+                        &LogWarning ($template, $., "multi-line since docs found");
+                        #$Since{$current_symbol} .= $_;
+                    } elsif ($in_stability) {
+                        $StabilityLevel{$current_symbol} .= $_;
+                    } elsif ($current_param >= 0) {
+                        $params[$current_param] .= $_;
+                    } else {
+                        $symbol_doc .= $_;
+                    }
+	        }
 	    }
 	}
     }
@@ -4094,14 +4278,21 @@ sub ReadObjectHierarchy {
 	return;
     }
 
+    # FIXME: use $OUTPUT_FORMAT
+    # my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.$OUTPUT_FORMAT";
     my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.sgml";
     my $new_tree_index = "$SGML_OUTPUT_DIR/tree_index.new";
-    my $tree_header = $doctype_header;
-    $tree_header =~ s/<!DOCTYPE \w+/<!DOCTYPE screen/;
 
     open (OUTPUT, ">$new_tree_index")
 	|| die "Can't create $new_tree_index: $!";
-    print (OUTPUT "$tree_header<screen>\n");
+
+    if (lc($OUTPUT_FORMAT) eq "xml") {
+        my $tree_header = $doctype_header;
+
+        $tree_header =~ s/<!DOCTYPE \w+/<!DOCTYPE screen/;
+        print (OUTPUT "$tree_header");
+    }
+    print (OUTPUT "<screen>\n");
 
     # Only emit objects if they are supposed to be documented, or if
     # they have documented children. To implement this, we maintain a

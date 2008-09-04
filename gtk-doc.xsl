@@ -17,11 +17,12 @@
     reference toc
   </xsl:param>
 
-  <xsl:param name="default.encoding" select="'UTF-8'"/>
   <xsl:param name="chunker.output.encoding" select="'UTF-8'"/>
   <xsl:param name="chunker.output.indent" select="'yes'"/>
   <xsl:param name="chunker.output.doctype-public" select="'-//W3C//DTD HTML 4.01 Transitional//EN'"/>
   <xsl:param name="chunk.fast" select="1"/>
+
+  <xsl:param name="default.encoding" select="'UTF-8'"/>
   <xsl:param name="chapter.autolabel" select="0"/>
   <xsl:param name="use.id.as.filename" select="1"/>
   <xsl:param name="html.ext" select="'.html'"/>

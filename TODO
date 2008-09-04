@@ -43,6 +43,7 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
     http://www.gnu.org/software/libtool/manual/automake/DESTDIR.html
 
 = Output =
+* http://sagehill.net/docbookxsl/index.html
 * multipage-html
   * would be good to be able to have page titles as a concatenation of document
     name and page name (gtk+:GtkWIdget)
@@ -50,11 +51,67 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   http://bugzilla.gnome.org/show_bug.cgi?id=531572
   http://bugzilla.gnome.org/show_bug.cgi?id=466535
   we need more configure options in gtk-doc.m4:
-  --(enable|disable)-gtk-doc-(html|pdf|man|html-single)
+  --(enable|disable)-gtk-doc-(html|pdf|man|html-single|rtf)
   - html : enabled by default
   - html-single : is single page html
+* validation
+    xmllint --noout --xinclude --postvalid tester-docs.xml
+    xmllint --noout --postvalid tester-docs.fo --dtdvalid file://$HOME/download/fo.dtd
+    - fo.dtd : http://www.renderx.com/Tests/validator/fo.zip
+* single page
+  xsltproc  --nonet --xinclude -o gtk-docs.html /home/ensonic/projects/gtk-doc/gtk-doc-single.xsl  gtk-docs.sgml
+* pdf
+  * xmlto via passivetex
+    xmlto --skip-validation pdf tester-docs.xml
+  * fop
+    ~/download/fop-0.95beta/fop -xsl /usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl -xml tester-docs.xml -pdf tester-docs.pdf 
+    ~/download/fop-0.94/fop  -xsl /usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl -xml tester-docs.xml -pdf tester-docs.pdf
+  * xsltproc + fop
+    xsltproc  --nonet --xinclude -o tester-docs.fo ../../../gtk-doc-fo.xsl tester-docs.xml
+    ~/download/fop-0.94/fop -fo tester-docs.fo -pdf tester-docs.pdf
+  * xsltproc + passivetex
+    pdflatex "&pdfxmltex" tester-docs.fo
+    xmltex tester-docs.fo
+
+  * bugs/problems/howto
+    * xmlto via passivetex
+      http://bugs.gentoo.org/show_bug.cgi?id=224937
+      http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=310148
+      - info
+        http://www.tug.org/texlive/devsrc/Master/texmf-dist/doc/xmltex/passivetex/
+    * fop
+      - download fop
+        http://mirror.eunet.fi/apache/xmlgraphics/fop/binaries/
+        http://xmlgraphics.apache.org/fop/0.94/running.html
+        export FOP_OPTS="-Dhttp.proxyHost=eswebproxy00.europe.nokia.com -Dhttp.proxyPort=8080"
+      - download offo
+        http://sourceforge.net/project/showfiles.php?group_id=116740&package_id=129569&release_id=267101
+        and copy fop-hyph.jar to fop-0.9*/lib/
+* rtf
+ ~/download/fop-0.94/fop -fo tester-docs.fo -rtf tester-docs.rtf
+ * unrtf
+   unrtf -t ps tester-docs.rtf >tester-docs.ps
+   unrtf -t latex tester-docs.rtf >tester-docs.tex
+   - bad output
+
+= Indexes =
+* http://www.w3.org/TR/2003/WD-xinclude-20031110/#syntax
+<xi:include href="index-symbols.html">
+  <xi:fallback><index /></xi:fallback>
+</xi:include>
+* index terms
+  http://sourceforge.net/tracker/index.php?func=detail&aid=1986587&group_id=21935&atid=373747
+
+* we could add smart navigation for index/glossary pages
+  (like the subsections on the doc-pages)
   
 = Cleanup =
 * can we deprecate title in the sectionfile and request people to have this in
   the SECTION comment?
+
+= Warnings =
+* add some -Wxxx parameters to help qa work
+  - 'deprecated' deprecating 'features'
+  - 'dummy-docs' check if symbol docs are very short and repeat mainly words
+    from the symbol.
 

@@ -49,7 +49,7 @@ else
   path_option='--directory'
 fi
 
-if test "X$searchpath" == "X"; then
+if test "X$searchpath" = "X"; then
     path_arg=
 else
     path_arg="$path_option $searchpath"

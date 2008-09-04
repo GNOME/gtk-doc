@@ -75,8 +75,8 @@ if test -z "$XSLTPROC"; then
 fi
 
 dnl check for DocBook DTD and stylesheets in the local catalog.
-JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.1.2//EN],
-   [DocBook XML DTD V4.1.2])
+JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.3//EN],
+   [DocBook XML DTD V4.3])
 JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl],
    [DocBook XSL Stylesheets])
 

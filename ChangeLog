@@ -1,25 +1,34 @@
 2008-09-04  Stefan Kost  <ensonic@users.sf.net>
 
-	* gtk-doc.make:
-	* gtk-doc.notmpl.make:
-	  Don't install index.sgml twice. Also remove the " || :;" construct
-	  that ssems to be there only to eat the return code. 
-
-2008-06-24  Stefan Kost  <ensonic@users.sf.net>
+	* gtkdoc-mkhtml.in:
+	  Fix comparision.
 
 	* TODO:
+	  ideas.
+
 	* configure.in:
 	* gtk-doc-fo.xsl:
+	* gtk-doc.xsl:
+	* gtkdoc-common.pl.in:
 	* gtkdoc-mkdb.in:
+	* help/manual/C/gtk-doc-manual.xml:
 	* tests/bugs/docs/Makefile.am:
 	* tests/bugs/docs/tester-docs.xml:
 	* tests/gobject/docs-tmpl/Makefile.am:
 	* tests/gobject/docs-tmpl/tester-docs.xml:
 	* tests/gobject/docs/Makefile.am:
 	* tests/gobject/docs/tester-docs.xml:
+	* tests/gobject/src/gobject.h:
 	  Switch to docbook 4.3 dtd. Fixes #487727.
 	  Add --name-space option to gtkdoc-mkdb for nicer indexes. Start with a
 	  fo wrapper for pdf output.
+
+2008-09-04  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	  Don't install index.sgml twice. Also remove the " || :;" construct
+	  that ssems to be there only to eat the return code. 
 
 2008-07-23  Stefan Kost  <ensonic@users.sf.net>
 
