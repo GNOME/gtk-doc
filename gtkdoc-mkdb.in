@@ -2884,10 +2884,27 @@ sub GetArgs {
 	if ($ArgObjects[$i] eq $object) {
 	    #print "Found arg: $ArgNames[$i]\n";
 	    my $name = $ArgNames[$i];
+	    my $flags = $ArgFlags[$i];
+	    my $flags_string = "";
+	    my $kind = "";
+	    my $id_sep = "";
+
+	    if ($flags =~ m/c/) {
+	        $kind = "child property";
+	        $id_sep = "c-";
+	    }
+	    elsif ($flags =~ m/s/) {
+	        $kind = "style property";
+	        $id_sep = "s-";
+	    }
+	    else {
+	        $kind = "property";
+	    }
+
 	    # Remember only one colon so we don't clash with signals.
 	    my $symbol = "${object}:${name}";
-	    # I've used two dashes here for the same reason.
-	    my $id = &CreateValidSGMLID ("$object--$name");
+	    # use two dashes and ev. an extra separator here for the same reason.
+	    my $id = &CreateValidSGMLID ("$object--$id_sep$name");
 
 	    my $type = $ArgTypes[$i];
 	    my $type_output;
@@ -2908,9 +2925,6 @@ sub GetArgs {
 	    } else {
 		$type_output = &MakeXRef ($type);
 	    }
-
-	    my $flags = $ArgFlags[$i];
-	    my $flags_string = "";
 
 	    if ($flags =~ m/r/) {
 		$flags_string = "Read";
@@ -2944,17 +2958,6 @@ sub GetArgs {
 
 	    my $pad1 = " " x (24 - length ($name));
 	    my $pad2 = " " x (20 - length ($type));
-	    my $kind = "";
-
-	    if ($flags =~ m/c/) {
-	        $kind = "child property";
-	    }
-	    elsif ($flags =~ m/s/) {
-	        $kind = "style property";
-	    }
-	    else {
-	        $kind = "property";
-	    }
 
  	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output $pad2 : $flags_string\n";
 	    my $arg_desc = "<refsect2 id=\"$id\"><title>The <literal>&quot;$name&quot;</literal> $kind</title>\n";

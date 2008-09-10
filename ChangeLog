@@ -1,3 +1,15 @@
+2008-09-10  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-mkdb.in:
+	  Generate unique ids for properties, style and child properties.
+  
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	* gtkdoc-scan.in:
+	* gtkdoc-scangobj.in:
+	  If we use libtool, run scanner under libtool to use uninstalled
+	  libraries.
+
 2008-09-04  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkhtml.in:

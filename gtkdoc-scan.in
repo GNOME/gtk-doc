@@ -360,7 +360,7 @@ sub ScanHeader {
 		$symbol = $5;
 		$decl = $';
 		$in_declaration = "user_function";
-		print "DEBUG: user function: $symbol\n";
+		#print "DEBUG: user function: $symbol\n";
 
 
 	    # ENUMS
