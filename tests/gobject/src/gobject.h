@@ -16,6 +16,10 @@
 typedef struct _GtkdocObject GtkdocObject;
 typedef struct _GtkdocObjectClass GtkdocObjectClass;
 
+/* in gtkdoc-scan::ScanHeader() we currently skip the enums, but output a decl
+* to -decl.txt and -decl-list.txt for the struct
+* If the symbol has no docs, we get a warning in -unused.txt
+*/
 typedef struct GtkdocHelperStruct GtkdocHelperStruct;
 typedef enum GtkdocHelperEnum GtkdocHelperEnum;
 
