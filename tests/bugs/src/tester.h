@@ -88,6 +88,8 @@ void bug_445693 (unsigned long pid);
 G_CONST_RETURN gchar* G_CONST_RETURN *
 bug_471014 (void);
 
+const char* const * bug_552602 (void);
+
 /**
  * Bug446648:
  * @BUG_446648_FOO: field

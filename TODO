@@ -41,6 +41,9 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   * the Makefile uses $(DESTDIR)$(TARGET_DIR)
     where TARGET_DIR = $(HTML_DIR)/$(DOC_MODULE)
     http://www.gnu.org/software/libtool/manual/automake/DESTDIR.html
+    
+* $MODULE-unused.txt is produced in gtkdoc-mktmpl.txt only
+  * we won't find unused doc blobs in notmpl build
 
 = Output =
 * http://sagehill.net/docbookxsl/index.html
