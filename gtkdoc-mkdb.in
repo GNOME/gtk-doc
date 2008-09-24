@@ -797,13 +797,17 @@ sub OutputIndex {
         keys %apiindex) {
 
         $symbol = $$hash{original};
-        $short_symbol = $$hash{short};
+        if(defined($$hash{short})) {
+            $short_symbol = $$hash{short};
+        } else {
+            $short_symbol = $symbol;
+        }
 
         my $xref = &MakeXRef ($symbol);
         my $curletter = uc(substr($short_symbol,0,1));
         my $id = $apiindex{$symbol};
         
-        #print "  add symbol $symbol with $id to index\n";
+        #print "  add symbol $symbol with $id to index in section $curletter\n";
 
         if ($curletter ne $lastletter) {
             $lastletter = $curletter;
