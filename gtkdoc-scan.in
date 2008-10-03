@@ -507,6 +507,10 @@ sub ScanHeader {
 
 	    # STRUCTS
 
+	    } elsif (m/^\s*struct\s+_(\w+)\s*\*/) {
+		# Skip 'struct _<struct_name> *', since it could be a
+		# return type on its own line.
+
 	    } elsif (m/^\s*struct\s+_(\w+)/) {
 		# We assume that 'struct _<struct_name>' is really the
 		# declaration of struct <struct_name>.

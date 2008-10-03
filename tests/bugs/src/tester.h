@@ -130,5 +130,17 @@ typedef struct {
  **/
 typedef char const * (*bug_544172) (char const *self);
 
+/** 
+ * bug_554833:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=554833
+ **/
+struct _bug_554833 {
+  int i;
+};
+
+struct _bug_554833 *
+                bug_554833_new (void);
+
 #endif // GTKDOC_TESTER_H
 

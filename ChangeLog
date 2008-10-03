@@ -1,5 +1,14 @@
 2008-10-03  Stefan Kost  <ensonic@users.sf.net>
 
+	patch by: Matthew Barnes <mbarnes@redhat.com>
+
+	* gtkdoc-scan.in:
+	* tests/bugs/docs/tester-sections.txt:
+	* tests/bugs/src/tester.h:
+	  Be more careful with "struct _<struct_name>". Fixes #554833.
+
+2008-10-03  Stefan Kost  <ensonic@users.sf.net>
+
 	patch by: Behdad Esfahbod <behdad@gnome.org>
 
 	* gtk-doc.make:
@@ -128,7 +137,6 @@
 	* tests/gtk-doc.notmpl.make:
 	  Add searchpath to gtkdoc.mkhtml. Fixes #460753
 
->>>>>>> .r595
 2008-06-22  Stefan Kost  <ensonic@users.sf.net>
 
 	* autogen.sh:
