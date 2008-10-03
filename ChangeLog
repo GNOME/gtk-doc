@@ -1,3 +1,13 @@
+2008-10-03  Stefan Kost  <ensonic@users.sf.net>
+
+        patch by: Simon Josefsson <simon@josefsson.org>
+
+	* examples/Makefile.am:
+	* tests/bugs/docs/Makefile.am:
+	* tests/gobject/docs-tmpl/Makefile.am:
+	* tests/gobject/docs/Makefile.am:
+	  Use GTKDOC_CFLAGS instead of INCLUDES in Makefile.am. Fixes #553407.
+
 2008-09-24  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in:
