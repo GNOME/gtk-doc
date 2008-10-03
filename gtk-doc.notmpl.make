@@ -55,6 +55,8 @@ endif
 
 docs: html-build.stamp
 
+$(REPORT_FILES): sgml-build.stamp
+
 #### scan ####
 
 scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)

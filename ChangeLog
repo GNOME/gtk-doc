@@ -1,5 +1,15 @@
 2008-10-03  Stefan Kost  <ensonic@users.sf.net>
 
+	patch by: Behdad Esfahbod <behdad@gnome.org>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	  Add rules to create $(REPORT_FILES). Fixes #552822.
+
+2008-10-03  Stefan Kost  <ensonic@users.sf.net>
+
         patch by: Simon Josefsson <simon@josefsson.org>
 
 	* examples/Makefile.am:
