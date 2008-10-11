@@ -1,10 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = gobject bugs .
+SUBDIRS = gobject bugs annotations .
 
 if BUILD_TESTS
 
-TESTS = gobject.sh bugs.sh
+TESTS = gobject.sh bugs.sh annotations.sh
 TESTS_ENVIRONMENT = PATH=$(srcdir):$(PATH)
 
 endif
