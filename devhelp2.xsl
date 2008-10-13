@@ -55,6 +55,8 @@
       <functions>
         <xsl:apply-templates select="//refsect2"
                              mode="generate.devhelp2.index.mode"/>
+        <xsl:apply-templates select="//refsect2/variablelist[@role='enum']/varlistentry"
+                             mode="generate.devhelp2.index.mode"/>
       </functions>
     </book>
   </xsl:template>
@@ -86,7 +88,7 @@
   </xsl:template>
 
   <xsl:template match="*" mode="generate.devhelp2.index.mode">
-    <xsl:variable name="title" select="title"/>
+    <xsl:variable name="title" select="title|term/literal"/>
     <xsl:variable name="anchor" select="title/anchor"/>
     <xsl:variable name="type" select="@role"/>
     <xsl:variable name="condition" select="@condition"/>

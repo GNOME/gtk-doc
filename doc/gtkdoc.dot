@@ -1,0 +1,78 @@
+/* files and tools in gtk-doc workflow
+ * dot -Tpng gtkdoc.dot -ogtkdoc.png
+ */
+ 
+digraph gtkdoc {
+    /* graph attributes */
+    /*rankdir=BT;*/
+    
+    /* default node attributes */
+    node [ shape=box];
+    
+    /* tools nodes */
+    gtkdoc_scan [label="gtkdoc-scan",shape="ellipse" ];
+    gtkdoc_scangobj [label="gtkdoc-scangobj",shape="ellipse" ];
+    gtkdoc_mkdb [label="gtkdoc-mkdb",shape="ellipse" ];
+    gtkdoc_mkhtml [label="gtkdoc-mkhtml",shape="ellipse" ];
+    gtkdoc_fixxref [label="gtkdoc-fixxref",shape="ellipse" ];
+    gtkdoc_rebase [label="gtkdoc-rebase",shape="ellipse" ];
+    gtkdoc_check [label="gtkdoc-check",shape="ellipse" ];
+
+    /* file nodes */
+    sources [label="source code"];
+    binary [label="compiled binary"];
+    xml [label="docbook xml"];
+    html [label="html"];
+    module_decl_list [label="*-decl-list.txt" ];
+    module_decl [label="*-decl.txt" ];
+    module_types [label="*.types" ];
+    module_sections [label="*-section.txt" ];
+    module_signals [label="*.signals" ];
+    module_hierarchy [label="*.hierarchy" ];
+    module_interfaces [label="*.interfaces" ];
+    module_prerequisites [label="*.prerequisites" ];
+    module_args [label="*.args" ];
+    module_undeclared [label="*-undeclared.txt" ];
+    module_undocumented [label="*-undocumented.txt" ];
+    module_unused [label="*-unused.txt" ];
+ 
+    /* tool invokation */
+    gtkdoc_scan -> gtkdoc_scangobj -> gtkdoc_mkdb -> gtkdoc_mkhtml -> gtkdoc_fixxref -> gtkdoc_rebase -> gtkdoc_check [style="dotted"];
+    
+    /* file usage */
+    sources -> gtkdoc_scan;
+    gtkdoc_scan -> module_sections [label="--rebuild-sections", style="dashed"];
+    gtkdoc_scan -> module_types [label="--rebuild-types", style="dashed"];
+    gtkdoc_scan -> module_decl;
+    gtkdoc_scan -> module_decl_list;
+ 
+    binary -> gtkdoc_scangobj;
+    module_types -> gtkdoc_scangobj;
+    gtkdoc_scangobj -> module_signals;
+    gtkdoc_scangobj -> module_hierarchy;
+    gtkdoc_scangobj -> module_interfaces;
+    gtkdoc_scangobj -> module_prerequisites;
+    gtkdoc_scangobj -> module_args;
+    
+    module_sections -> gtkdoc_mkdb;
+    module_decl -> gtkdoc_mkdb;
+    module_signals -> gtkdoc_mkdb;
+    module_args -> gtkdoc_mkdb;
+    module_hierarchy -> gtkdoc_mkdb;
+    module_interfaces -> gtkdoc_mkdb;
+    module_prerequisites -> gtkdoc_mkdb;
+    gtkdoc_mkdb -> xml;
+    gtkdoc_mkdb -> module_undeclared;
+    gtkdoc_mkdb -> module_undocumented;
+    gtkdoc_mkdb -> module_unused;
+    
+    xml -> gtkdoc_mkhtml -> html;
+    
+    html -> gtkdoc_fixxref -> html;
+    html -> gtkdoc_rebase -> html;
+    
+    module_undeclared -> gtkdoc_check;
+    module_undocumented -> gtkdoc_check;
+    module_unused -> gtkdoc_check;
+}
+

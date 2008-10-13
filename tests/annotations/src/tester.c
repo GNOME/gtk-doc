@@ -14,7 +14,7 @@
  * annotation_array_length:
  * @store: a #GtkListStore
  * @n_columns: number of columns
- * @types: [array,length=n_columns]: list of types
+ * @types: (array length=n_columns): list of types
  *
  * Document parameter relation for array length.
  */
@@ -29,13 +29,17 @@ annotation_array_length (GObject *list,
 /**
  * annotation_nullable:
  * @uri: a uri
- * @label: [allow-none]: an optional string
+ * @label: (null-ok): an optional string
  *
  * Document optional parameters.
+ *
+ * Returns: (caller-owns) (null-ok): Returns stuff which you have to free after use
  */
-void
+gchar *
 annotation_nullable (const gchar *uri,
                      const gchar *label)
 {
+   return NULL;
 }
+
 

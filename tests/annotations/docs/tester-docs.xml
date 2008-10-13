@@ -28,5 +28,32 @@
   <!--index id="api-index-0-9" role="0.9">
     <title>Index of new API in 0.9</title>
   </index-->
+  
+  <glossary>
+    <glossdiv id="glossary-A"><title>A</title>
+      <glossentry>
+        <glossterm><anchor id="glossterm-array"/>array</glossterm>
+        <glossdef>
+          <para>Points to an array of items.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="glossary-C"><title>C</title>
+      <glossentry>
+        <glossterm><anchor id="glossterm-caller-owns"/>caller-owns</glossterm>
+        <glossdef>
+          <para>When the code is done, free-function must be called.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="glossary-N"><title>N</title>
+      <glossentry>
+        <glossterm><anchor id="glossterm-null-ok"/>null-ok</glossterm>
+        <glossdef>
+          <para>NULL is ok, both for passing and for returning.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+  </glossary>
 
 </book>

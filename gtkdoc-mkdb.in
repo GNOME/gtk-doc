@@ -275,6 +275,7 @@ if (! -e $SGML_OUTPUT_DIR) {
 my $RETURN_TYPE_FIELD_WIDTH = 20;
 my $SYMBOL_FIELD_WIDTH = 36;
 my $SIGNAL_FIELD_WIDTH = 16;
+my $PARAM_FIELD_COUNT = 2;
 
 &ReadKnownSymbols ("$ROOT_DIR/$MODULE-sections.txt");
 &ReadSignalsFile ($SIGNALS_FILE);
@@ -1237,7 +1238,7 @@ sub OutputStruct {
 
     my $found = 0;
     if (defined $params) {
-	for (my $i = 1; $i <= $#$params; $i += 2) {
+	for (my $i = 1; $i <= $#$params; $i += $PARAM_FIELD_COUNT) {
 	    if ($params->[$i] =~ /\S/) {
 		$found = 1;
 		last;
@@ -1308,7 +1309,7 @@ sub OutputEnum {
 
     my $found = 0;
     if (defined $params) {
-	for (my $i = 1; $i <= $#$params; $i += 2) {
+	for (my $i = 1; $i <= $#$params; $i += $PARAM_FIELD_COUNT) {
 	    if ($params->[$i] =~ /\S/) {
 		$found = 1;
 		last;
@@ -1644,17 +1645,36 @@ sub OutputParamDescriptions {
 	my $params = $SymbolParams{$symbol};
 	my $params_desc = "";
 	my $j;
-	for ($j = 0; $j <= $#$params; $j += 2) {
+	for ($j = 0; $j <= $#$params; $j += $PARAM_FIELD_COUNT) {
 	    my $param_name = $$params[$j];
-	    my $param = $$params[$j + 1];
+	    my $param_desc = $$params[$j + 1];
+	    my $param_annotations = "";
+
+            if ($param_desc =~ m%\s*\((.*)\):%) {
+                my @annotations;
+                my $annotation;
+                my $annotation_extra = "";
+                $param_desc = $';
+                @annotations = split(/\)\s*\(/,$1);
+                foreach $annotation (@annotations) {
+                    if ($annotation =~ m%(.*)\s+(.*)%) {
+                        $annotation = $1;
+                        $annotation_extra = " $2";
+                    }
+                    $param_annotations .= "<acronym>$annotation</acronym>$annotation_extra. ";
+                }
+                chomp($param_desc);
+                $param_desc =~ m/^(.*)\.*\s*$/;
+                $param_desc = "$1. ";
+            }
+            $param_desc = &ExpandAbbreviations($symbol, $param_desc);
 	    if ($param_name eq "Returns") {
-		$returns = &ExpandAbbreviations($symbol, $param);
+		$returns = "$param_desc$param_annotations";
 	    } else {
 		if ($param_name eq "Varargs") {
 		    $param_name = "...";
 		}
-		$param = &ExpandAbbreviations($symbol, $param);
-		$params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&#160;:</term>\n<listitem><simpara>$param</simpara></listitem></varlistentry>\n";
+		$params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&#160;:</term>\n<listitem><simpara>$param_desc$param_annotations</simpara></listitem></varlistentry>\n";
 	    }
 	}
 
@@ -2724,7 +2744,7 @@ sub GetSignals {
 	    my $pad = ' ' x (46 - length($name));
 	    $synop .= "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad ";
 
-	    $desc .= "<refsect2 id=\"$id\"><title>The <literal>&quot;$name&quot;</literal> signal</title>\n";
+	    $desc .= "<refsect2 id=\"$id\" role=\"signal\"><title>The <literal>&quot;$name&quot;</literal> signal</title>\n";
 	    $desc .= MakeIndexterms($symbol, $id);
 	    $desc .= "<programlisting>";
 
@@ -2755,7 +2775,7 @@ sub GetSignals {
 		        $type = $1;
 		        $pointer = $2;
 		        if (defined($sourceparams)) {
-			    $name = $$sourceparams[2 * $j];
+			    $name = $$sourceparams[$PARAM_FIELD_COUNT * $j];
 		        }
 		        else {
 			    $name = $3;
@@ -2964,7 +2984,7 @@ sub GetArgs {
 	    my $pad2 = " " x (20 - length ($type));
 
  	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output $pad2 : $flags_string\n";
-	    my $arg_desc = "<refsect2 id=\"$id\"><title>The <literal>&quot;$name&quot;</literal> $kind</title>\n";
+	    my $arg_desc = "<refsect2 id=\"$id\" role=\"property\"><title>The <literal>&quot;$name&quot;</literal> $kind</title>\n";
 	    $arg_desc .= MakeIndexterms($symbol, $id);
 	    $arg_desc .= "<programlisting>  &quot;$name&quot;$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
 	    $arg_desc .= $blurb;
@@ -3138,7 +3158,7 @@ sub ScanSourceFile {
                 # Convert special SGML characters
                 $description = &ConvertSGMLChars ($symbol, $description);
                 my $k;
-                for ($k = 1; $k <= $#params; $k += 2) {
+                for ($k = 1; $k <= $#params; $k += $PARAM_FIELD_COUNT) {
 		    $params[$k] = &ConvertSGMLChars ($symbol, $params[$k]);
 		}
 
@@ -3149,7 +3169,7 @@ sub ScanSourceFile {
 
                     #print "SECTION DOCS found in source for : '$real_symbol'\n";
                     $ignore_broken_returns = 1;
-                    for ($k = 0; $k <= $#params; $k += 2) {
+                    for ($k = 0; $k <= $#params; $k += $PARAM_FIELD_COUNT) {
                         #print "   '".$params[$k]."'\n";
                         $params[$k] = "\L$params[$k]";
                         undef $key;
@@ -3437,6 +3457,7 @@ sub ScanSourceFile {
 	# Look for a parameter name.
 	if (m%^\s*@(\S+)\s*:%) {
 	    my $param_name = $1;
+	    my $param_desc = $';
 	    #print "Found parameter: $param_name\n";
 	    # Allow '...' as the Varargs parameter.
 	    if ($param_name eq "...") {
@@ -3447,8 +3468,8 @@ sub ScanSourceFile {
 		$ignore_broken_returns = 1;
 	    }
 	    push (@params, $param_name);
-	    push (@params, $');
-	    $current_param += 2;
+	    push (@params, $param_desc);
+	    $current_param += $PARAM_FIELD_COUNT;
 	    next;
 	}
 
@@ -3717,7 +3738,7 @@ sub MergeSourceDocumentation {
                     my $params = $SourceSymbolParams{$symbol};
                     my $j;
                     #print "Merge needed for $symbol, tmpl_params: ",$#$tmpl_params,", source_params: ",$#$params," \n";
-                    for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
+                    for ($j = 0; $j <= $#$tmpl_params; $j += $PARAM_FIELD_COUNT) {
                         my $tmpl_param_name = $$tmpl_params[$j];
 
                         # Allow '...' as the Varargs parameter.
@@ -3728,7 +3749,7 @@ sub MergeSourceDocumentation {
                         # Try to find the param in the source comment documentation.
                         my $found = 0;
                         my $k;
-                        for ($k = 0; $k <= $#$params; $k += 2) {
+                        for ($k = 0; $k <= $#$params; $k += $PARAM_FIELD_COUNT) {
                             my $param_name = $$params[$k];
                             my $param_desc = $$params[$k + 1];
 
@@ -3756,7 +3777,7 @@ sub MergeSourceDocumentation {
 
                     # Now we output a warning if parameters have been described which
                     # do not exist.
-                    for ($j = 0; $j <= $#$params; $j += 2) {
+                    for ($j = 0; $j <= $#$params; $j += $PARAM_FIELD_COUNT) {
                         my $param_name = $$params[$j];
                         if ($param_name) {
                             # the template builder cannot detect if a macro returns
@@ -3807,7 +3828,7 @@ sub MergeSourceDocumentation {
                 #print "Check param docs for $symbol, tmpl_params: ",$#$tmpl_params,"\n";
 
                 my $j;
-                for ($j = 0; $j <= $#$tmpl_params; $j += 2) {
+                for ($j = 0; $j <= $#$tmpl_params; $j += $PARAM_FIELD_COUNT) {
                     # Output a warning if the parameter is empty and
                     # remember for stats.
                     my $tmpl_param_name = $$tmpl_params[$j];
@@ -4183,6 +4204,7 @@ sub ReadTemplateFile {
 	    # Check if param found. Need to handle "..." and "format...".
 	    if (s/^\@([\w\.]+):\040?//) {
 		my $param_name = $1;
+		my $param_desc = $_;
 		# Allow variations of 'Returns'
 		if ($param_name =~ m/^[Rr]eturns?$/) {
 		    $param_name = "Returns";
@@ -4205,8 +4227,8 @@ sub ReadTemplateFile {
 		    $StabilityLevel{$current_symbol} = $_;
 		} else {
 		    push (@params, $param_name);
-		    push (@params, $_);
-		    $current_param += 2;
+		    push (@params, $param_desc);
+		    $current_param += $PARAM_FIELD_COUNT;
 		}
 	    } else {
 		# strip trailing whitespaces and blank lines

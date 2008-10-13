@@ -118,3 +118,21 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   - 'dummy-docs' check if symbol docs are very short and repeat mainly words
     from the symbol.
 
+= GIR =
+== scanning ==
+* ideas
+  1) replace gtkdoc-scan/gtkdoc-scangobject by gtkdoc-gir and output the classical files
+  2) patch gtkdoc-mkdb to read stuff from gir instead of classical files
+* perl and xml
+  * http://www.xml.com/pub/a/2001/04/18/perlxmlqstart1.html
+== handling the annotations ==
+* figure out how to install default glossary
+== output ==
+* add gtkdoc-mk??? to generate docbook xml templates for binding docs
+* have c-comments there as comments
+* when updating, mark sections that have changed
+== installation ==
+* need to install each book with a prefix
+* would be good to have a language attribute in book tag to allow filter by language
+* look at /usr/share/gtk-doc/html/pygobject/index.html
+

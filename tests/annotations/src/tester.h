@@ -6,7 +6,7 @@
 
 extern void annotation_array_length (GObject *list, gint n_columns, GType *types);
 
-extern void annotation_nullable (const gchar *uri, const gchar *label);
+extern gchar * annotation_nullable (const gchar *uri, const gchar *label);
 
 #endif // GTKDOC_TESTER_H
 
