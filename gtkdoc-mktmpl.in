@@ -38,10 +38,10 @@
 #
 #		Any templates which are no longer used (i.e. they are remove
 #		from $MODULE-sections.txt) are placed in the file
-#		tmpl/$MODULE-unused.txt. If they are included again later
+#		tmpl/$MODULE-unused.sgml. If they are included again later
 #		they are automatically copied back into position.
 #		If you are certain that these templates will never be used
-#		again you can delete them from $MODULE-unused.txt.
+#		again you can delete them from tmpl/$MODULE-unused.sgml.
 #
 #		Any parameters to functions which are no longer used are
 #		separated from the rest of the parameters with the line

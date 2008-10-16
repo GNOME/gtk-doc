@@ -42,8 +42,11 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
     where TARGET_DIR = $(HTML_DIR)/$(DOC_MODULE)
     http://www.gnu.org/software/libtool/manual/automake/DESTDIR.html
     
-* $MODULE-unused.txt is produced in gtkdoc-mktmpl.txt only
+* $MODULE-unused.txt is produced in gtkdoc-mktmpl only
   * we won't find unused doc blobs in notmpl build
+  * we should add mktmpl::CheckAllDeclarationsOutput() to mkdb (call it after
+    OutputSGML), but only call it if there is no tmpl dir or
+    remove writing the unused.txt in mktmpl.txt
 
 = Output =
 * http://sagehill.net/docbookxsl/index.html
@@ -127,10 +130,23 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   * http://www.xml.com/pub/a/2001/04/18/perlxmlqstart1.html
 == handling the annotations ==
 * figure out how to install default glossary
-== output ==
-* add gtkdoc-mk??? to generate docbook xml templates for binding docs
-* have c-comments there as comments
-* when updating, mark sections that have changed
+== binding docs ==
+* simmillar workflow to gettext
+* add gtkdoc-mk??? to generate binding doc templates
+  * have c-comments there as comments
+  * when updating templates, mark sections that have changed as fuzzy
+* add options to gtkdoc-mkdb to build docbook from those templates
+* questions
+  * could we use the tmpl file mechanism?
+  * directory structure?
+    * we need to list the languages like ALL_LINGUAS for translations
+    * we need to create subdirs for binding docs, ideally we use one for 'C' as well
+* devhelp
+  * devhelp files need a language attribute in the book-tag
+    language={C,C++,JavaScript,Perl,Python,...}
+  * devhelp could show a selector for the language
+  * need to get existing python/~mm docs to use it, gtk-doc could output
+    language=C for own docs 
 == installation ==
 * need to install each book with a prefix
 * would be good to have a language attribute in book tag to allow filter by language
