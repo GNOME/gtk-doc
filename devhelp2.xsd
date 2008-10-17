@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+get http://xml.fiforms.org/xs3p/ and generate docs
+xsltproc -o buzztard.xsd.html /home/ensonic/download/xs3p-1.1.3/xs3p.xsl buzztard.xsd
+-->
 <xsd:schema
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="urn:devhelp"
@@ -14,6 +18,19 @@
     </xsd:restriction>
   </xsd:simpleType>
   
+  <xsd:simpleType name="language-type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="c"/>
+      <xsd:enumeration value="c++"/>
+      <xsd:enumeration value="c#"/>
+      <xsd:enumeration value="java"/>
+      <xsd:enumeration value="javascript"/>
+      <xsd:enumeration value="perl"/>
+      <xsd:enumeration value="python"/>
+      <xsd:enumeration value="vala"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
   <xsd:attribute name="title" type="xsd:string"/>
   <xsd:attribute name="link" type="xsd:string"/>
   <xsd:attribute name="author" type="xsd:string"/>
@@ -23,6 +40,8 @@
   <xsd:attribute name="type" type="keyword-type"/>
   <xsd:attribute name="since" type="xsd:float"/>
   <xsd:attribute name="deprecated" type="xsd:boolean"/>
+
+  <xsd:attribute name="language" type="language-type"/>
 
   <xsd:element name="sub">
     <xsd:complexType>
@@ -71,6 +90,7 @@
       <xsd:attribute ref="author" use="required"/>
       <xsd:attribute ref="name" use="required"/>
       <xsd:attribute ref="version" use="required"/>
+      <xsd:attribute ref="language" />
     </xsd:complexType>
   </xsd:element>
 </xsd:schema>
