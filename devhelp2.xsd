@@ -11,10 +11,16 @@ xsltproc -o buzztard.xsd.html /home/ensonic/download/xs3p-1.1.3/xs3p.xsl buzztar
 
   <xsd:simpleType name="keyword-type">
     <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="constant"/>
       <xsd:enumeration value="enum"/>
       <xsd:enumeration value="function"/>
       <xsd:enumeration value="macro"/>
+      <xsd:enumeration value="property"/>
+      <xsd:enumeration value="signal"/>
       <xsd:enumeration value="struct"/>
+      <xsd:enumeration value="typedef"/>
+      <xsd:enumeration value="union"/>
+      <xsd:enumeration value="variable"/>
     </xsd:restriction>
   </xsd:simpleType>
   
@@ -51,6 +57,11 @@ xsltproc -o buzztard.xsd.html /home/ensonic/download/xs3p-1.1.3/xs3p.xsl buzztar
        <xsd:attribute ref="name" use="required"/>
        <xsd:attribute ref="link" use="required"/>
     </xsd:complexType>
+    <xsd:annotation>
+      <xsd:documentation>
+        Sub tags for the hierachy of the chapters and parts.
+      </xsd:documentation>
+    </xsd:annotation>
   </xsd:element>
 
   <xsd:element name="chapters">
@@ -59,6 +70,12 @@ xsltproc -o buzztard.xsd.html /home/ensonic/download/xs3p-1.1.3/xs3p.xsl buzztar
         <xsd:element ref="sub" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
     </xsd:complexType>
+    <xsd:annotation>
+      <xsd:documentation>
+        The chapters tag encloses the structure of the reference manual. Each
+        sub unit is represented by a sub tag.
+      </xsd:documentation>
+    </xsd:annotation>
   </xsd:element>
 
   <xsd:element name="keyword">
@@ -69,6 +86,9 @@ xsltproc -o buzztard.xsd.html /home/ensonic/download/xs3p-1.1.3/xs3p.xsl buzztar
        <xsd:attribute ref="since"/>
        <xsd:attribute ref="deprecated"/>
     </xsd:complexType>
+      <xsd:documentation>
+        The keyword tag points to the documentation of a api symbol.
+      </xsd:documentation>
   </xsd:element>
 
   <xsd:element name="functions">
@@ -77,6 +97,10 @@ xsltproc -o buzztard.xsd.html /home/ensonic/download/xs3p-1.1.3/xs3p.xsl buzztar
         <xsd:element ref="keyword" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
     </xsd:complexType>
+      <xsd:documentation>
+        The functions tag encloses all api symbols of the reference manual. Each
+        sub unit is represented by a keyword tag.
+      </xsd:documentation>
   </xsd:element>
 
   <xsd:element name="book">
@@ -92,6 +116,12 @@ xsltproc -o buzztard.xsd.html /home/ensonic/download/xs3p-1.1.3/xs3p.xsl buzztar
       <xsd:attribute ref="version" use="required"/>
       <xsd:attribute ref="language" />
     </xsd:complexType>
+    <xsd:annotation>
+      <xsd:documentation>
+        Toplevel element of a devhelp book. A devhelp book list the structure of
+        a developer manual together with development related metadata.
+      </xsd:documentation>
+    </xsd:annotation>
   </xsd:element>
 </xsd:schema>
 
