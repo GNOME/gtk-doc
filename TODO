@@ -124,8 +124,12 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
 = GIR =
 == scanning ==
 * ideas
-  1) replace gtkdoc-scan/gtkdoc-scangobject by gtkdoc-gir and output the classical files
-  2) patch gtkdoc-mkdb to read stuff from gir instead of classical files
+  * use gir files
+    1) replace gtkdoc-scan/gtkdoc-scangobject by gtkdoc-gir and output the classical files
+    2) patch gtkdoc-mkdb to read stuff from gir instead of classical files
+  * if gir-files would have the comments too:
+    * we could even drop scanning the sources
+    * IDEs could use the gir-files to show doc-tooltips for symbols  
 * perl and xml
   * http://www.xml.com/pub/a/2001/04/18/perlxmlqstart1.html
 == handling the annotations ==
