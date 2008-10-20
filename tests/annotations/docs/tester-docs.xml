@@ -28,29 +28,110 @@
   <!--index id="api-index-0-9" role="0.9">
     <title>Index of new API in 0.9</title>
   </index-->
-  
+
   <glossary>
-    <glossdiv id="glossary-A"><title>A</title>
+    <title>Glossary</title>
+    <glossdiv id="glossary-X"><title>X</title>
       <glossentry>
-        <glossterm><anchor id="glossterm-array"/>array</glossterm>
+        <glossterm><anchor id="glossterm-XML"/>XML</glossterm>
         <glossdef>
-          <para>Points to an array of items.</para>
+          <para>Extensible Markup Language</para>
+        </glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm><anchor id="glossterm-XSL"/>XSL</glossterm>
+        <glossdef>
+          <para>XML Stylesheet Language</para>
         </glossdef>
       </glossentry>
     </glossdiv>
-    <glossdiv id="glossary-C"><title>C</title>
+  </glossary>
+
+  <glossary id="annotation-glossary">
+    <title>Annotation Glossary</title>
+    <glossdiv id="annotation-glossary-A"><title>A</title>
       <glossentry>
-        <glossterm><anchor id="glossterm-caller-owns"/>caller-owns</glossterm>
+        <glossterm><anchor id="annotation-glossterm-array"/>array</glossterm>
         <glossdef>
-          <para>When the code is done, free-function must be called.</para>
+          <para>Parameter points to an array of items.</para>
         </glossdef>
       </glossentry>
     </glossdiv>
-    <glossdiv id="glossary-N"><title>N</title>
+    <glossdiv id="annotation-glossary-D"><title>D</title>
       <glossentry>
-        <glossterm><anchor id="glossterm-null-ok"/>null-ok</glossterm>
+        <glossterm><anchor id="annotation-glossterm-default"/>default</glossterm>
+        <glossdef>
+          <para>Default parameter value (for in case the <acronym>shadows</acronym>-to function has less parameters).</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="annotation-glossary-E"><title>E</title>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-element-type"/>element-type</glossterm>
+        <glossdef>
+          <para>Generics and defining elements of containers and arrays.</para>
+        </glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-error-domain"/>error-domain</glossterm>
+        <glossdef>
+          <para>Typed errors. Similar to throws in Java.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="annotation-glossary-I"><title>I</title>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-in"/>in</glossterm>
+        <glossdef>
+          <para>Parameter for input. Default is <acronym>transfer-none</acronym>.</para>
+        </glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-inout"/>inout</glossterm>
+        <glossdef>
+          <para>Parameter for input and for returning results. Default is <acronym>transfer-full</acronym>.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="annotation-glossary-N"><title>N</title>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-not-error"/>not-error</glossterm>
+        <glossdef>
+          <para>A GError parameter is not to be handled like a normal GError.</para>
+        </glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-null-ok"/>null-ok</glossterm>
         <glossdef>
           <para>NULL is ok, both for passing and for returning.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="annotation-glossary-O"><title>O</title>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-out"/>out</glossterm>
+        <glossdef>
+          <para>Parameter for returning results. Default is <acronym>transfer-full</acronym>.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="annotation-glossary-T"><title>T</title>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-transfer-container"/>transfer-container</glossterm>
+        <glossdef>
+          <para>Free data container after the code is done.</para>
+        </glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-transfer-full"/>transfer-full</glossterm>
+        <glossdef>
+          <para>Free data after the code is done.</para>
+        </glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm><anchor id="annotation-glossterm-transfer-none"/>transfer-none</glossterm>
+        <glossdef>
+          <para>Don't free data after the code is done.</para>
         </glossdef>
       </glossentry>
     </glossdiv>
