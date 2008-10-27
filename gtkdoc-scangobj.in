@@ -148,7 +148,7 @@ EOT
 print OUTPUT <<EOT;
 
 #ifdef GTK_IS_WIDGET_CLASS
-#include <gtk/gtkversion.h>
+#include <gtk/gtk.h>
 #endif
 GType object_types[$ntypes];
 
