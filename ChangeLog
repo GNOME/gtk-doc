@@ -1,3 +1,14 @@
+2008-11-05  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: Peter Kjellerstedt <pkj@axis.com>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	  Correct check for existance of gtkdoc-rebase (better fix than the
+	  previous one #508897). Fixes #559281.
+
 2008-10-27  Stefan Kost  <ensonic@users.sf.net>
 
 	patch by: Christian Persch <chpe@gnome.org>

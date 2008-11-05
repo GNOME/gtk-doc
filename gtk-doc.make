@@ -137,7 +137,7 @@ maintainer-clean-local: clean
 	cd $(srcdir) && rm -rf xml html
 
 install-data-local:
-	-installfiles=`echo $(srcdir)/html/*`; \
+	installfiles=`echo $(srcdir)/html/*`; \
 	if test "$$installfiles" = '$(srcdir)/html/*'; \
 	then echo '-- Nothing to install' ; \
 	else \
@@ -157,7 +157,7 @@ install-data-local:
 	    mv -f $${installdir}/$(DOC_MODULE).devhelp \
 	      $${installdir}/$(DOC_MODULE)-$(DOC_MODULE_VERSION).devhelp; \
 	  fi; \
-	  which gtkdoc-rebase >/dev/null && \
+	  ! which gtkdoc-rebase >/dev/null 2>&1 || \
 	    gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$${installdir} ; \
 	fi
 
@@ -190,6 +190,7 @@ dist-hook: dist-check-gtkdoc dist-hook-local
 	-cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
 	-cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
 	cd $(distdir) && rm -f $(DISTCLEANFILES)
-	-gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
+	! which gtkdoc-rebase >/dev/null 2>&1 || \
+	  gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
 
 .PHONY : dist-hook-local docs
