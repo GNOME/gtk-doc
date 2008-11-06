@@ -118,25 +118,6 @@ distclean-local:
 maintainer-clean-local: clean
 	cd $(srcdir) && rm -rf html
 
-install-data-local:
-	installfiles=`echo $(srcdir)/html/*`; \
-	if test "$$installfiles" = '$(srcdir)/html/*'; \
-	then echo '-- Nothing to install' ; \
-	else \
-	  $(mkinstalldirs) $(DESTDIR)$(TARGET_DIR); \
-	  for i in $$installfiles; do \
-	    echo '-- Installing '$$i ; \
-	    $(INSTALL_DATA) $$i $(DESTDIR)$(TARGET_DIR); \
-	  done; \
-	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
-	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR) || :; \
-	  ! which gtkdoc-rebase >/dev/null 2>&1 || \
-	    gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$(DESTDIR)$(TARGET_DIR) ; \
-	fi
-
-uninstall-local:
-	rm -f $(DESTDIR)$(TARGET_DIR)/*
-
 #
 # Require gtk-doc when making dist
 #
