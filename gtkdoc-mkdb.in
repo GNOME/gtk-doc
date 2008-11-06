@@ -265,6 +265,24 @@ $PreProcessorDirectives{"unassert"} = 1;
 $PreProcessorDirectives{"undef"} = 1;
 $PreProcessorDirectives{"warning"} = 1;
 
+# remember used annotation (to write minimal glossary)
+my %AnnotationsUsed;
+
+my %AnnotationDefinition = (
+    'array' => "Parameter points to an array of items.",
+    'default' => "Default parameter value (for in case the <acronym>shadows</acronym>-to function has less parameters).",
+    'element-type' => "Generics and defining elements of containers and arrays.",
+    'error-domain' => "Typed errors. Similar to throws in Java.",
+    'in' => "Parameter for input. Default is <acronym>transfer-none</acronym>.",
+    'inout' => "Parameter for input and for returning results. Default is <acronym>transfer-full</acronym>.",
+    'not-error' => "A GError parameter is not to be handled like a normal GError.",
+    'null-ok' => "NULL is ok, both for passing and for returning.",
+    'out' => "Parameter for returning results. Default is <acronym>transfer-full</acronym>.",
+    'transfer-container' => "Free data container after the code is done.",
+    'transfer-full' => "Free data after the code is done.",
+    'transfer-none' => "Don't free data after the code is done."
+);
+
 # Create the root DocBook output directory if it doens't exist.
 if (! -e $SGML_OUTPUT_DIR) {
     mkdir ("$SGML_OUTPUT_DIR", 0777)
@@ -302,6 +320,7 @@ if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
     &OutputIndexFull;
     &OutputDeprecatedIndex;
     &OutputSinceIndexes;
+    &OutputAnnotationGlossary;
 
     open (TIMESTAMP, ">$ROOT_DIR/sgml.stamp")
 	|| die "Can't create $ROOT_DIR/sgml.stamp: $!";
@@ -793,8 +812,8 @@ sub OutputIndex {
     
     # do a case insensitive sort while chopping off the prefix
     foreach my $hash (
-        sort { $$a{kriterium} cmp $$b{kriterium} }
-        map { my $x = uc($_); $x =~ s/^$NAME_SPACE\_?(.*)/$1/i; { kriterium => $x, original => $_, short => $1 } } 
+        sort { $$a{criteria} cmp $$b{criteria} }
+        map { my $x = uc($_); $x =~ s/^$NAME_SPACE\_?(.*)/$1/i; { criteria => $x, original => $_, short => $1 } } 
         keys %apiindex) {
 
         $symbol = $$hash{original};
@@ -876,6 +895,64 @@ sub OutputSinceIndexes {
     }
 }
 
+#############################################################################
+# Function    : OutputSinceIndexes
+# Description : This writes the 'since' api indexlists that can be included into
+#               the main document into an <index> tag.
+#############################################################################
+
+sub OutputAnnotationGlossary {
+    my $old_glossary = "$SGML_OUTPUT_DIR/annotation-glossary.xml";
+    my $new_glossary = "$SGML_OUTPUT_DIR/annotation-glossary.new";
+    my $lastletter = " ";
+    my $divopen = 0;
+
+    # TODO: if there are no annotations used return
+    return if (! keys(%AnnotationsUsed));
+
+    open (OUTPUT, ">$new_glossary")
+	|| die "Can't create $new_glossary";
+
+    my $header = $doctype_header;
+    $header =~ s/<!DOCTYPE \w+/<!DOCTYPE glossary/;
+
+    print (OUTPUT  <<EOF);
+$header
+<glossary id="annotation-glossary">
+  <title>Annotation Glossary</title>
+EOF
+
+    foreach my $annotation (keys(%AnnotationsUsed)) {
+        my $def = $AnnotationDefinition{$annotation};
+        my $curletter = uc(substr($annotation,0,1));
+
+        if ($curletter ne $lastletter) {
+            $lastletter = $curletter;
+      
+            if ($divopen == 1) {
+                print (OUTPUT "</glossdiv>\n");
+            }
+            print (OUTPUT "<glossdiv><title>$curletter</title>\n");
+            $divopen = 1;
+        }
+        print (OUTPUT <<EOF);
+    <glossentry>
+      <glossterm><anchor id="annotation-glossterm-$annotation"/>$annotation</glossterm>
+      <glossdef>
+        <para>$def</para>
+      </glossdef>
+    </glossentry>
+EOF
+    }
+
+    if ($divopen == 1) {
+        print (OUTPUT "</glossdiv>\n");
+    }
+    print (OUTPUT "</glossary>\n");
+    close (OUTPUT);
+
+    &UpdateFileIfChanged ($old_glossary, $new_glossary, 0);
+}
 
 #############################################################################
 # Function    : ReadKnownSymbols
@@ -1662,6 +1739,7 @@ sub OutputParamDescriptions {
                         $annotation_extra = " $2";
                     }
                     $param_annotations .= "<acronym>$annotation</acronym>$annotation_extra. ";
+                    $AnnotationsUsed{$annotation} = 1;
                 }
                 chomp($param_desc);
                 $param_desc =~ m/^(.*)\.*\s*$/;
@@ -1988,9 +2066,7 @@ EOF
       } else {
 	print OUTPUT <<EOF;
 <!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
-EOF
-        print OUTPUT $book_top;
-        print OUTPUT <<EOF;
+$book_top
 ]>
 <book id="index">
 EOF
@@ -2008,11 +2084,25 @@ print OUTPUT <<EOF;
 
   <chapter>
     <title>[Insert title here]</title>
-EOF
-      print OUTPUT $book_bottom;
-
-      print OUTPUT <<EOF;
+    $book_bottom
   </chapter>
+EOF
+  if (-e $OBJECT_TREE_FILE) {
+    print OUTPUT <<EOF;
+  <chapter id="object-tree">
+    <title>Object Hierarchy</title>
+     <xi:include href="xml/tree_index.sgml"/>
+  </chapter>
+EOF
+  }
+
+print OUTPUT <<EOF;
+  <index id="api-index-full">
+    <title>API Index</title>
+    <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
+  </index>
+
+  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
 </book>
 EOF
 
