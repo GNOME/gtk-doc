@@ -13,7 +13,9 @@ http://live.gnome.org/MaintainersCorner/Releasing
 
 ~/projects/gstreamer-0.10/www/bin/bugzilla general 1.9 gtk-doc >RELNOTES.fixes.xml
 ./xml2txt.sh
+# copy to ChangeLog-1.9 and use 
 moap cl contributors
+# moap cl -C ChangeLog-1.9 contributors
 add then to NEWS
 
 make dist
@@ -24,8 +26,6 @@ scp NEWS <user>@master.gnome.org:gtk-doc-1.9.news
 scp ChangeLog-1.9 <user>@master.gnome.org:gtk-doc-1.9.changes
 ssh <user>@master.gnome.org
 install-module gtk-doc-<ver>.tar.gz
-
-(how to install the 'gtk-doc-1.9.news' and 'gtk-doc-1.9.changes')
 
 bump versions in:
   add delimiter to ChangeLog

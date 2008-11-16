@@ -21,7 +21,8 @@ endif
 #
 GPATH = $(srcdir)
 
-TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
+# we don't install anything in tests
+#TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
 EXTRA_DIST = 				\
 	$(content_files)		\
@@ -106,6 +107,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 clean-local:
 	rm -f *~ *.bak
 	rm -rf .libs
+	chmod -R u+w $(srcdir)
 	cd $(srcdir) && \
 	  rm -rf xml $(REPORT_FILES) \
 	         $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt

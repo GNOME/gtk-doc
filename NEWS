@@ -1,3 +1,44 @@
+GTK-Doc 1.11    (Nov 16 2008)
+============
+
+ Changes
+
+ o 531572 : one-page generation option
+ o 448879 : Use a footer when generating HTML documentation
+ o 311857 : xsltproc very slow generating index for gtk-docs.sgml
+ o 335239 : Using gnome-doc-utils for gtk-doc documentation
+ o 460753 : enable vpath build in gtkdoc-mkhtml
+ o 473342 : Warn about repeated symbols in sections
+ o 487727 : DocBook XML DTD version
+ o 523669 : make check: Element publisher content does not follow the...
+ o 530758 : gtk-doc should not expand XML tags and their attributes
+ o 533262 : no-template mode scans different source files
+ o 534627 : gtk-doc uses non-standard HTML element
+ o 542137 : No declaration found for: gsf_output_*
+ o 543855 : Fix for Bug 460753 (enable vpath build in gtkdoc-mkhtml) ...
+ o 544172 : Fails to parse return value of 'char const *'
+ o 552822 : Add rules to create $(REPORT_FILES)
+ o 553407 : Example Makefile.am uses obsolete INCLUDES instead of AM_...
+ o 554718 : gtk-doc needs to allow versioned TARGET_DIR
+ o 554833 : Be more careful with &quot; struct _ &lt; struct_name &gt;  &quot; 
+ o 558082 : evince docs build fails with GTK_DISABLE_SINGLE_INCLUDES
+ o 559281 : Correct check for existance of gtkdoc-rebase
+ 
+ Contributors
+
+ Behdad Esfahbod
+ Christian Persch
+ David Nečas
+ Felix Riemann
+ Jeffrey Stedfast
+ Marc-Andre Lureau
+ Matthew Barnes
+ Peter Kjellerstedt
+ Sebastian Dröge
+ Simon Josefsson
+ Stefan Kost
+
+
 GTK-Doc 1.10    (Mar 20 2008)
 ============
 
@@ -20,7 +61,6 @@ GTK-Doc 1.10    (Mar 20 2008)
  o 512154 : Struct member type attributes are limited to one token
  o 513318 : gtk-doc.el doesn't work fine with emacs22
 
-
  Contributors
 
  Benjamin Otte
@@ -37,6 +77,7 @@ GTK-Doc 1.10    (Mar 20 2008)
  Stefan Kost
  Sven Herzberg
  Yeti
+
 
 GTK-Doc 1.9     (Sep 30 2007)
 ===========

@@ -1,3 +1,15 @@
+2008-11-16  Stefan Kost  <ensonic@users.sf.net>
+
+	* HACKING:
+	* NEWS:
+	  Releasing 1.11.
+
+	* tests/Makefile.am:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	* tests/gtkdoctest.sh:
+	  Fix make distcheck.
+
 2008-11-06  Stefan Kost  <ensonic@users.sf.net>
 
 	* tests/gtk-doc.make:
@@ -500,15 +512,6 @@
 	* tests/gobject/src/gobject.c:
 	  Fix one undocumented symbol and add an exampl of the programlisting
 	  shortcut.
-
-2008-04-23  Stefan Kost  <ensonic@users.sf.net>
-
-	reviewed by: <delete if not using a buddy>
-	patch by: <delete if not someone else's patch>
-
-	* gtkdoc-mkdb.in:
-	* gtkdoc-mkman.in:
-	* gtkdoc-mktmpl.in:
 
 2008-04-22  Stefan Kost  <ensonic@users.sf.net>
 
