@@ -26,6 +26,7 @@ scp NEWS <user>@master.gnome.org:gtk-doc-1.9.news
 scp ChangeLog-1.9 <user>@master.gnome.org:gtk-doc-1.9.changes
 ssh <user>@master.gnome.org
 install-module gtk-doc-<ver>.tar.gz
+exit
 
 bump versions in:
   add delimiter to ChangeLog
