@@ -311,6 +311,13 @@ for my $dir (@SOURCE_DIRS) {
     &ReadSourceDocumentation ($dir);
 }
 
+# FIXME: can we scan for a common prefix?
+# DEBUG
+# check $Declarations{$key} to first '_', we would need to count
+#my %prefixes = map { m/^(.*?)\_.*/;uc($1) => 1 } grep { m/\_/ } keys (%Declarations);
+#foreach (keys %prefixes) { print "$_\n"; }
+# DEBUG
+
 my $changed = &OutputSGML ("$ROOT_DIR/$MODULE-sections.txt");
 
 # If any of the DocBook SGML files have changed, update the timestamp file (so
@@ -823,15 +830,15 @@ sub OutputIndex {
             $short_symbol = $symbol;
         }
 
-        my $xref = &MakeXRef ($symbol);
         my $curletter = uc(substr($short_symbol,0,1));
         my $id = $apiindex{$symbol};
-        
+        my $xref = &MakeXRef ($id, $symbol);
+
         #print "  add symbol $symbol with $id to index in section $curletter\n";
 
         if ($curletter ne $lastletter) {
             $lastletter = $curletter;
-      
+
             if ($divopen == 1) {
                 print (OUTPUT "</indexdiv>\n");
             }
@@ -2122,12 +2129,11 @@ EOF
 sub CreateValidSGMLID {
     my ($id) = $_[0];
 
-    # Append ":CAPS" to all all-caps identifiers
-
     # Special case, '_' would end up as '' so we use 'gettext-macro' instead.
     if ($id eq "_") { return "gettext-macro"; }
 
-    if ($id !~ /[a-z]/) { $id .= ":CAPS" };
+    # Append ":CAPS" to all all-caps identifiers
+    if ($id !~ /[a-z]/ && $id !~ /-CAPS$/) { $id .= ":CAPS" };
 
     $id =~ s/[_ ]/-/g;
     $id =~ s/[,\.]//g;
