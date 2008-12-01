@@ -1,5 +1,14 @@
 2008-12-01  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-mkdb.in:
+	  Add deprecation warnings for signals and properties. Also reuse code
+	  for since and stability levels there. Fixes #562655.
+
+	* tests/gobject/src/gobject.c:
+	  Add testcase for #562655.
+
+2008-12-01  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-scangobj.in:
 	* gtkdoc-scanobj.in:
 	  Reintroduce "sh -c" and comment why its used. Add real libtool support

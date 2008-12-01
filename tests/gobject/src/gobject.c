@@ -28,7 +28,8 @@
 /* property ids */
 
 enum {
-  GTKDOC_OBJECT_TEST=1
+  GTKDOC_OBJECT_TEST=1,
+  GTKDOC_OBJECT_DEP_TEST
 };
 
 /* constructor methods */
@@ -110,6 +111,28 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
                 G_TYPE_NONE, // return type
                 0); // n_params
 
+  /**
+   * GtkdocObject::dep-otest:
+   * @self: myself
+   *
+   * The event has been triggered.
+   *
+   * Deprecated: Use the #GtkdocObject::otest signal instead.
+   */
+  g_signal_new ("dep-otest", G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                G_STRUCT_OFFSET (GtkdocObjectClass,test),
+                NULL, // accumulator
+                NULL, // acc data
+                g_cclosure_marshal_VOID__OBJECT,
+                G_TYPE_NONE, // return type
+                0); // n_params
+
+  /**
+   * GtkdocObject:otest:
+   *
+   * Since: 0.1
+   */
   g_object_class_install_property (gobject_class,GTKDOC_OBJECT_TEST,
                                   g_param_spec_string ("otest",
                                      "otest prop",
@@ -117,6 +140,17 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
                                      "dummy", /* default value */
                                      G_PARAM_READWRITE));
 
+  /**
+   * GtkdocObject:dep-otest:
+   *
+   * Deprecated: use #GtkdocObject:otest property
+   */
+  g_object_class_install_property (gobject_class,GTKDOC_OBJECT_DEP_TEST,
+                                  g_param_spec_string ("dep-otest",
+                                     "dep-otest prop",
+                                     "dummy deprecated property for object",
+                                     "dummy", /* default value */
+                                     G_PARAM_READWRITE));
 }
 
 GType gtkdoc_object_get_type (void) {

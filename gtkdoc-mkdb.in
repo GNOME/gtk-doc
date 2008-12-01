@@ -2947,6 +2947,8 @@ sub GetSignals {
 		$desc  .= "</programlisting>\n";
 	      }
 
+	    $desc .= &MakeDeprecationNote($symbol);
+
 	    my $parameters = &OutputParamDescriptions ("SIGNAL", $symbol);
 	    my $parameters_output = 0;
 
@@ -2969,13 +2971,7 @@ sub GetSignals {
 	    if ($parameters_output == 0) {
 	        $desc .= $parameters;
 	      }
-
-	    if (exists $Since{$symbol}) {
-	      $desc .= "<para>Since $Since{$symbol}</para>";
-	    }
-	    if (exists $StabilityLevel{$symbol}) {
-	      $desc .= "<para>Stability Level: $StabilityLevel{$symbol}</para>";
-	    }
+	    $desc .= OutputSymbolTraits ($symbol);
 	    $desc .= "</refsect2>";
 	}
     }
@@ -3083,6 +3079,7 @@ sub GetArgs {
 	    my $arg_desc = "<refsect2 id=\"$id\" role=\"property\"><title>The <literal>&quot;$name&quot;</literal> $kind</title>\n";
 	    $arg_desc .= MakeIndexterms($symbol, $id);
 	    $arg_desc .= "<programlisting>  &quot;$name&quot;$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
+	    $arg_desc .= &MakeDeprecationNote($symbol);
 	    $arg_desc .= $blurb;
 	    if ($range ne "") {
 	        $arg_desc .= "<para>Allowed values: $range_output</para>\n";
@@ -3090,12 +3087,7 @@ sub GetArgs {
 	    if ($default ne "") {
 	        $arg_desc .= "<para>Default value: $default_output</para>\n";
 	    }
-	    if (exists $Since{$symbol}) {
-	      $arg_desc .= "<para>Since $Since{$symbol}</para>\n";
-	    }
-	    if (exists $StabilityLevel{$symbol}) {
-	      $arg_desc .= "<para>Stability Level $StabilityLevel{$symbol}</para>\n";
-	    }
+	    $arg_desc .= OutputSymbolTraits ($symbol);
 	    $arg_desc .= "</refsect2>\n";
 
 	    if ($flags =~ m/c/) {
