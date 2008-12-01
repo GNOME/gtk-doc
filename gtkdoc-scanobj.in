@@ -803,6 +803,7 @@ $CC = $ENV{CC} ? $ENV{CC} : "gcc";
 $LD = $ENV{LD} ? $ENV{LD} : $CC;
 $CFLAGS = $ENV{CFLAGS} ? $ENV{CFLAGS} : "";
 $LDFLAGS = $ENV{LDFLAGS} ? $ENV{LDFLAGS} : "";
+$RUN = $ENV{RUN} ? $ENV{RUN} : "";
 
 my $o_file;
 if ($CC =~ /libtool/) {
@@ -820,7 +821,8 @@ $command = "$LD -o $MODULE-scan $o_file $LDFLAGS";
 system($command) == 0 or die "Linking of scanner failed: $!\n";
 
 print "gtk-doc: Running scanner $MODULE-scan\n";
-system("sh -c ./$MODULE-scan") == 0 or die "Scan failed: $!\n";
+# use sh -c to avoid terminating the whole run without seeing the error
+system("sh -c \"$RUN ./$MODULE-scan\"") == 0 or die "Scan failed: $!\n";
 
 unlink "./$MODULE-scan.c", "./$MODULE-scan.o", "./$MODULE-scan.lo", "./$MODULE-scan";
 
