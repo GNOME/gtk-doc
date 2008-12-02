@@ -2083,7 +2083,7 @@ print OUTPUT <<EOF;
   <bookinfo>
     <title>$MODULE Reference Manual</title>
     <releaseinfo>
-      for $MODULE [VERSION]
+      for $MODULE [VERSION].
       The latest version of this documentation can be found on-line at
       <ulink role="online-location" url="http://[SERVER]/$MODULE/index.html">http://[SERVER]/$MODULE/</ulink>.
     </releaseinfo>
@@ -2257,7 +2257,7 @@ sub ExpandAbbreviations {
   # keep CDATA unmodified, preserve ulink tags (ideally we preseve all tags
   # as such)
   return &ModifyXMLElements ($text, $symbol,
-			     "<!\\[CDATA\\[|<ulink[^>]*>|<programlisting[^>]*>",
+			     "<!\\[CDATA\\[|<ulink[^>]*>|<programlisting[^>]*>|<!DOCTYPE",
 			     \&ExpandAbbreviationsEndTag,
 			     \&ExpandAbbreviationsCallback);
 }
@@ -2269,6 +2269,8 @@ sub ExpandAbbreviationsEndTag {
 
   if ($start_tag eq "<!\[CDATA\[") {
     return "]]>";
+  } elsif ($start_tag eq "<!\DOCTYPE") {
+    return "]>";
   } elsif ($start_tag =~ m/<(\w+)/) {
     return "</$1>";
   }
