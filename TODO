@@ -78,6 +78,8 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   * xsltproc + passivetex
     pdflatex "&pdfxmltex" tester-docs.fo
     xmltex tester-docs.fo
+  * jade
+    docbook2pdf -e no-valid tester-docs.sgml
 
   * bugs/problems/howto
     * xmlto via passivetex
@@ -156,3 +158,13 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
 * would be good to have a language attribute in book tag to allow filter by language
 * look at /usr/share/gtk-doc/html/pygobject/index.html
 
+= linking to sources =
+- what about a template URL containing a %s for the "path/file". 
+  http://svn.gnome.org/viewvc/gtk-doc/trunk/tests/gobject/src/gobject.c?view=markup
+  http://buzztard.svn.sourceforge.net/viewvc/buzztard/trunk/buzztard/src/lib/core/core.c?view=markup
+  - unfortunately we can't link to symbols
+  - linking to files is difficult as in gtkdoc we have modules
+
+= more bookinfo data =
+http://www.docbook.org/tdg/en/html/bookinfo.html
+e.g. copyright and legalnotice

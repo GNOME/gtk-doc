@@ -11,7 +11,7 @@ GTKDOC_RUN = $(LIBTOOL) --mode=execute
 else
 GTKDOC_CC = $(CC) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 GTKDOC_LD = $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS)
-GTKDOC_RUN = sh -c
+GTKDOC_RUN =
 endif
 
 # We set GPATH here; this gives us semantics for GNU make
