@@ -2269,7 +2269,7 @@ sub ExpandAbbreviationsEndTag {
 
   if ($start_tag eq "<!\[CDATA\[") {
     return "]]>";
-  } elsif ($start_tag eq "<!\DOCTYPE") {
+  } elsif ($start_tag eq "<!DOCTYPE") {
     return "]>";
   } elsif ($start_tag =~ m/<(\w+)/) {
     return "</$1>";
