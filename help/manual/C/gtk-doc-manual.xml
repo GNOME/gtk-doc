@@ -133,7 +133,7 @@
 
             The author fills in the source files with the documentation for each
             function, macro, union etc. (In the past information was entered in
-            generated template files, which is not recommanded anymore).
+            generated template files, which is not recommended anymore).
           </para>
         </listitem>
 
@@ -149,7 +149,7 @@
             The author can rearrange the sections, and the order of the
             declarations within them, to produce the final desired order.
             The second file it generates is <filename>&lt;module&gt;-decl.txt</filename>.
-            This file conatins the full declarations found by the scanner. If for
+            This file contains the full declarations found by the scanner. If for
             some reason one would like some sybols to show up in the docs, where
             the full declaration cannot be found by th scanner or the declaration
             should appear differently, one can place enties similar to the ones in
@@ -328,7 +328,7 @@
     <para>
       The next sections describe what steps to perform to integrate GTK-Doc into
       your project. Theses section assume we work on a project called 'meep'.
-      This project contains alibrary called 'libmeep' and
+      This project contains a library called 'libmeep' and
       an end-user app called 'meeper'.
     </para>
 
