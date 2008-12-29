@@ -134,8 +134,6 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
     * IDEs could use the gir-files to show doc-tooltips for symbols  
 * perl and xml
   * http://www.xml.com/pub/a/2001/04/18/perlxmlqstart1.html
-== handling the annotations ==
-* figure out how to install default glossary
 == binding docs ==
 * simmillar workflow to gettext
 * add gtkdoc-mk??? to generate binding doc templates
@@ -168,3 +166,27 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
 = more bookinfo data =
 http://www.docbook.org/tdg/en/html/bookinfo.html
 e.g. copyright and legalnotice
+
+= styling =
+xsl produces inline style tag for warnings. We could add a red frame and a warning sign /!\.
+
+= documentation best practises #518427 =
+* we'd like offer a more complete skelleton
+  * structure
+  * docbook markup (part/chapter structure)
+* structure
+  * examples
+    * gobject in devhelp
+      * concepts / api / tools / tutorial / related tools
+    * gtk in devhelp
+      * overview / api / migation / tools
+    * qt reference docs in qt assistant
+      * classes / overview / tutorial&examples
+  * recommendation
+    * introduction - what is is about
+    * concepts - explain basic ideas and terminology
+    * development - how to build and run, env-vars
+    * api - classic api docs
+    * tutorial & examples - integrated to keep it up-to-date and cross referenced
+    * migration - how to for api changes, deprecations
+    * (releated) tools - tools part of the package or recommended for development
