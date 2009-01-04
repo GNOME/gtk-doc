@@ -1,3 +1,12 @@
+2009-01-04  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-mkhtml.in:
+	* tests/Makefile.am:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	* tests/gtkdoctest.sh:
+	  Fix running tests, if no gtk-doc is installed yet.
+
 2008-12-29  Stefan Kost  <ensonic@users.sf.net>
 
 	patch by: Bruce van der Kooij  <brucevdkooij@gmail.com>
