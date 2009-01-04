@@ -73,7 +73,7 @@ bug_411739 (void) {
 
 /**
  * bug_419997:
- * @pid: arg
+ * @const_values: arg
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=419997
  */
