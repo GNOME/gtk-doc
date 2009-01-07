@@ -157,8 +157,7 @@ install-data-local:
 	    mv -f $${installdir}/$(DOC_MODULE).devhelp \
 	      $${installdir}/$(DOC_MODULE)-$(DOC_MODULE_VERSION).devhelp; \
 	  fi; \
-	  ! which gtkdoc-rebase >/dev/null 2>&1 || \
-	    gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$${installdir} ; \
+	  $(GTKDOC_REBASE) --relative --dest-dir=$(DESTDIR) --html-dir=$${installdir}; \
 	fi
 
 uninstall-local:
@@ -190,7 +189,6 @@ dist-hook: dist-check-gtkdoc dist-hook-local
 	-cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
 	-cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
 	cd $(distdir) && rm -f $(DISTCLEANFILES)
-	! which gtkdoc-rebase >/dev/null 2>&1 || \
-	  gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
+	$(GTKDOC_REBASE) --online --relative --html-dir=$(distdir)/html
 
 .PHONY : dist-hook-local docs
