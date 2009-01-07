@@ -56,7 +56,7 @@ expand_content_files=
 # CFLAGS and LDFLAGS for compiling gtkdoc-scangobj with your library.
 # Only needed if you are using gtkdoc-scangobj to dynamically query widget
 # signals and properties.
-GTKDOC_CFLAGS = -I$(top_builddir) -I$(top_builddir)/tests/gobject/src $(TEST_DEPS_CFLAGS)
+GTKDOC_CFLAGS = -I$(top_srcdir)/tests/gobject/src $(TEST_DEPS_CFLAGS)
 GTKDOC_LIBS = $(TEST_DEPS_LIBS) $(top_builddir)/tests/gobject/src/libtester.la
 
 # include generic part

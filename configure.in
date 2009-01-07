@@ -9,9 +9,9 @@ AC_INIT([gtk-doc], [gtk_doc_version],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc])
 
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_SRCDIR([gtk-doc.dsl.in])
+AC_CONFIG_SRCDIR([gtkdoc-common.pl.in])
 
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([check-news std-options])
 AM_MAINTAINER_MODE
 
 GNOME_DOC_INIT

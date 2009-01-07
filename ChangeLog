@@ -1,5 +1,27 @@
 2009-01-07  Stefan Kost  <ensonic@users.sf.net>
 
+	* NEWS:
+	  Prepare for 1.12.
+	  
+	* TODO:
+	  More thinking about the documentation structure.
+	  
+	* configure.in:
+	  Add automake support for more distcheck. Use a real sourcefile for the
+	  srcdir (something that we wont remove one day).
+	  
+	* tests/annotations/docs/Makefile.am:
+	* tests/annotations/src/Makefile.am:
+	* tests/bugs/docs/Makefile.am:
+	* tests/bugs/src/Makefile.am:
+	* tests/gobject/docs-tmpl/Makefile.am:
+	* tests/gobject/docs/Makefile.am:
+	* tests/gobject/src/Makefile.am:
+	  Add missing file to fix make distcheck. Use srcdir and not builddir to
+	  locate includes.
+
+2009-01-07  Stefan Kost  <ensonic@users.sf.net>
+
 	* TODO:
 	  Ideas about syntax highlighing.
 

@@ -7,7 +7,7 @@ noinst_LTLIBRARIES = libtester.la
 libtester_la_SOURCES = tester.c tester.h
 #libtester_la_LIBADD = $(TEST_DEPS_LIBS)
 
-INCLUDES = $(TEST_DEPS_CFLAGS)
+AM_CPPFLAGS = $(TEST_DEPS_CFLAGS)
 
 endif
 

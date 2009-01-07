@@ -189,6 +189,11 @@ tools:
   * structure
   * docbook markup (part/chapter structure)
 * structure
+  Sugested structure for api-docs.
+  Idea is to have more content that api reference. It would be good to have a
+  gnome-platform document in devhelp, so that we could xref that instead of
+  explaining 100 times how to use pkg-config.
+
   * examples
     * gobject in devhelp
       * concepts / api / tools / tutorial / related tools
@@ -197,10 +202,19 @@ tools:
     * qt reference docs in qt assistant
       * classes / overview / tutorial&examples
   * recommendation
+    * front-page
+      * table with details
+        Logo, Module Version
+        Links
+        * homepage, mailing lists, irc channel
+        * repository, source releases, bugtracker
+      * TOC
     * introduction - what is is about
     * concepts - explain basic ideas and terminology
-    * development - how to build and run, env-vars
+    * development - how to build and run, env-vars, different platforms
     * api - classic api docs
     * tutorial & examples - integrated to keep it up-to-date and cross referenced
     * migration - how to for api changes, deprecations
     * (releated) tools - tools part of the package or recommended for development
+    * indexes - api-index, depretations, new api since xxx
+
