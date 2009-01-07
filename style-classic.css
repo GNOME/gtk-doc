@@ -1,15 +1,13 @@
 .synopsis, .classsynopsis
 {
-  /* tango:aluminium 1/2 */
-  background: #eeeeec;
-  border: solid 1px #d3d7cf;
+  background: #eeeeee;
+  border: solid 1px #aaaaaa;
   padding: 0.5em;
 }
 .programlisting
 {
-  /* tango:sk blue 0/1 */
-  background: #e6f3ff;
-  border: solid 1px #729fcf;
+  background: #eeeeff;
+  border: solid 1px #aaaaff;
   padding: 0.5em;
 }
 .variablelist
@@ -36,9 +34,8 @@
   }
   table.navigation#top
   {
-    /* tango:scarlet red 0/1 */
-    background: #ffe6e6;
-    border: solid 1px #ef2929;
+    background: #ffeeee;
+    border: solid 1px #ffaaaa;
     margin-top: 0;
     margin-bottom: 0;
     position: fixed;
@@ -47,19 +44,17 @@
     height: 2em;
     z-index: 1;
   }
-  .navigation a, a:visited
+  .navigation a
   {
-    /* tango:scarlet red 3 */
-    color: #a40000;
+    color: #770000;
   }
-  .navigation a:hover
+  .navigation a:visited
   {
-    /* tango:scarlet red 1 */
-    color: #ef2929;
+    color: #550000;
   }
   td.shortcuts
   {
-    color: #cc0000;
+    color: #770000;
     font-size: 80%;
     white-space: nowrap;
   }
@@ -92,9 +87,8 @@
   div.titlepage table.navigation {
     visibility: visible;
     display: table;
-    /* tango:scarlet red 0/1 */
-    background: #ffe6e6;
-    border: solid 1px #ef2929;
+    background: #ffeeee;
+    border: solid 1px #ffaaaa;
     margin-top: 0;
     margin-bottom: 0;
     top: 0;
@@ -107,6 +101,7 @@
 {
   font-size: 200%;
 }
+
 
 div.gallery-float
 {
@@ -121,47 +116,39 @@ div.gallery-spacer
 {
   clear: both;
 }
-
-a, a:visited
+a
 {
   text-decoration: none;
-  /* tango:sky blue 2 */
-  color: #3465a4;
 }
 a:hover
 {
   text-decoration: underline;
-  /* tango:sky blue 1 */
-  color: #729fcf;
+  color: #FF0000;
 }
 
 div.table table
 {
   border-collapse: collapse;
   border-spacing: 0px;
-  /* tango:aluminium 3 */
-  border: solid 1px #babdb6;
+  border: solid 1px #777777;
 }
 
 div.table table td, div.table table th
 {
-  /* tango:aluminium 3 */
-  border: solid 1px #babdb6;
+  border: solid 1px #777777;
   padding: 3px;
   vertical-align: top;
 }
 
 div.table table th
 {
-  /* tango:aluminium 2 */
-  background-color: #d3d7cf;
+  background-color: #eeeeee;
 }
 
 hr
 {
-  /* tango:aluminium 3 */
-  color: #babdb6;
-  background: #babdb6;
+  color: #777777;
+  background: #777777;
   border: none 0px;
   height: 1px;
   clear: both;
@@ -170,17 +157,15 @@ hr
 .footer
 {
   padding-top: 3.5em;
-  /* tango:aluminium 3 */
-  color: #babdb6;
+  color: #777777;
   text-align: center;
   font-size: 80%;
 }
 
 .warning
 {
-  /* tango:orange 0/1 */
-  background: #ffeed9;
-  border: solid 1px #ffb04f;
+  border: solid 1px #cccc33;
+  background: #ffffee;
   padding: 0.5em;
   border-width: 1px;
 }

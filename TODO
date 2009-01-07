@@ -168,7 +168,21 @@ http://www.docbook.org/tdg/en/html/bookinfo.html
 e.g. copyright and legalnotice
 
 = styling =
-xsl produces inline style tag for warnings. We could add a red frame and a warning sign /!\.
+== warnings ==
+xsl produces inline style tag for warnings (e.g. deprecation). We could add a
+colored frame and a warning sign /!\.
+== source code examples==
+http://bugzilla.gnome.org/show_bug.cgi?id=536928
+We could also run a postprocessing script in gtkdoc-mkhtml.
+perl modules:
+  http://search.cpan.org/~palant/Syntax-Highlight-Universal-0.4/Universal.pm
+  http://search.cpan.org/~jamadam/Syntax-Highlight-Engine-Simple-0.08/lib/Syntax/Highlight/Engine/Simple.pm
+  http://search.cpan.org/~hanje/Syntax-Highlight-Engine-Kate-0.04/lib/Syntax/Highlight/Engine/Kate.pod
+    - not packaged for ubuntu
+tools:
+  source-highlight (/usr/bin/source-highlight)
+  source-highlight -i../tests/gobject/examples/gobject.c -o./gobject.html -n -t4 -sc
+  source-highlight -i../tests/gobject/examples/gobject.c -o./gobject.html -n -t4 -sc -cstyle.css --no-doc
 
 = documentation best practises #518427 =
 * we'd like offer a more complete skelleton
