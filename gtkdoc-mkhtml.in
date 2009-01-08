@@ -4,7 +4,7 @@
 usage="\
 Usage: gtkdoc-mkhtml [--path=SEARCH_PATH] MODULE DRIVER_FILE [BACKEND_OPTIONS...]"
 
-#echo "args $0\n";
+echo "args $0\n";
 
 # parse options, ignore unknown options for future extensions
 
@@ -38,6 +38,7 @@ if test "x$0" = "x@prefix@/bin/gtkdoc-mkhtml" ; then
       gtkdocdir=@datadir@/gtk-doc/data
 else
       #echo "uninstalled"
+      # this does not work from buiddir!=srcdir
       gtkdocdir=`dirname $0`
 fi
 

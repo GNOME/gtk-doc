@@ -88,9 +88,8 @@ tmpl-build.stamp: $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections
 tmpl.stamp: tmpl-build.stamp
 	@true
 
-tmpl/*.sgml:
+$(srcdir)/tmpl/*.sgml:
 	@true
-
 
 #### xml ####
 

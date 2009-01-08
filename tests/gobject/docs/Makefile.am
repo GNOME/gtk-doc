@@ -64,7 +64,7 @@ include $(top_srcdir)/tests/gtk-doc.notmpl.make
 
 # Other files to distribute
 # e.g. EXTRA_DIST += version.xml.in
-EXTRA_DIST +=
+EXTRA_DIST += tester.types
 
 DISTCLEANFILES = \
 	gtkdoc-scan.log \
