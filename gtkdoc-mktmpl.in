@@ -86,7 +86,7 @@ if (!$MODULE) {
 
 if ($PRINT_HELP) {
     print <<EOF;
-gtkdoc-mktmpl version @VERSION@
+gtkdoc-mktmpl version @VERSION@ - generate documentation templates
 
 --module=MODULE_NAME Name of the doc module being parsed
 --flag-changes       If specified, changes in templates are flagged

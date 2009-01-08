@@ -44,12 +44,30 @@ my $PRINT_VERSION;
 	   types => \$TYPES_FILE,
 	   nogtkinit => \$NO_GTK_INIT,
 	   'output-dir' => \$OUTPUT_DIR,
-	   'version' => \$PRINT_VERSION);
+	   'version' => \$PRINT_VERSION,
+	   'help' => \$PRINT_HELP);
 	   
-GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "version");
+GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "version", "help");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
+    exit 0;
+}
+
+if (!$MODULE) {
+    $PRINT_HELP = 1;
+}
+
+if ($PRINT_HELP) {
+    print <<EOF;
+gtkdoc-scanobj version @VERSION@ - introspect gtk-objects
+
+--module=MODULE_NAME          Name of the doc module being parsed
+--types=FILE                  The name of the file to store the types in
+--output-dir=DIRNAME          The directory where the results are stored
+--version                     Print the version of this program
+--help                        Print this help
+EOF
     exit 0;
 }
 

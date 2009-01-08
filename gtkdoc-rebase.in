@@ -61,19 +61,22 @@ if ($PRINT_VERSION) {
 }
 
 if ($PRINT_HELP) {
-    print "gtkdoc-rebase version @VERSION@\n";
-    print "\n--html-dir=HTML_DIR     The directory which contains the installed HTML";
-    print "\n--other-dir=OTHER_DIR   Directories to recursively scan for indices (index.sgml)";
-    print "\n                        May be used more than once for multiple directories";
-    print "\n--online                Prefer cross-references to online documents";
-    print "\n--relative              Prefer relative cross-references";
-    print "\n--aggressive            Rebase links to all files that are under a directory";
-    print "\n                        matching a package name.";
-    print "\n--dest-dir=ROOT_DIR     Staging area virtual root, this prefix will be removed";
-    print "\n                        from HTML_DIR fore relative link calculation.";
-    print "\n--verbose               Be verbose";
-    print "\n--version               Print the version of this program";
-    print "\n--help                  Print this help\n";
+    print <<EOF;
+gtkdoc-rebase version @VERSION@ - rewrite the base url of html files
+
+--html-dir=HTML_DIR     The directory which contains the installed HTML
+--other-dir=OTHER_DIR   Directories to recursively scan for indices (index.sgml)
+                        May be used more than once for multiple directories
+--online                Prefer cross-references to online documents
+--relative              Prefer relative cross-references
+--aggressive            Rebase links to all files that are under a directory
+                        matching a package name.
+--dest-dir=ROOT_DIR     Staging area virtual root, this prefix will be removed
+                        from HTML_DIR fore relative link calculation.
+--verbose               Be verbose
+--version               Print the version of this program
+--help                  Print this help
+EOF
     exit 0;
 }
 

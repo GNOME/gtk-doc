@@ -26,6 +26,31 @@
 #		documentations Makefile.am: TESTS = $(GTKDOC_CHECK)
 #############################################################################
 
+use strict;
+use Getopt::Long;
+
+my $PRINT_VERSION;
+my $PRINT_HELP;
+
+my %optctl = ('version' => \$PRINT_VERSION,
+	      'help' => \$PRINT_HELP);
+GetOptions(\%optctl, "version", "help");
+
+if ($PRINT_VERSION) {
+    print "@VERSION@\n";
+    exit 0;
+}
+
+if ($PRINT_HELP) {
+    print <<EOF;
+gtkdoc-check version @VERSION@ - run documentation unit tests
+
+--version               Print the version of this program
+--help                  Print this help
+EOF
+    exit 0;
+}
+
 my $DOC_MODULE;
 my $checks = 3;
 

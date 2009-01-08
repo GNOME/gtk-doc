@@ -84,17 +84,23 @@ if (!$MODULE) {
 }
 
 if ($PRINT_HELP) {
-    print "gtkdoc-scan version @VERSION@\n";
-    print "\n--module=MODULE_NAME       Name of the doc module being parsed";
-    print "\n--source-dir=DIRNAME       Directories containing the source files to scan";
-    print "\n--ignore-headers=FILES     A space-separated list of header files not to scan";
-    print "\n--output-dir=DIRNAME       The directory where the results are stored";
-    print "\n--deprecated-guards=GUARDS A |-separated list of symbols used as deprecation guards";
-    print "\n--ignore-decorators=DECS   A |-separated list of addition decorators in declarations that should be ignored";
-    print "\n--rebuild-sections         Rebuild (overwrite) the MODULE-sections.txt file";
-    print "\n--rebuild-types            Automatically recreate the MODULE.types file using all the *_get_type() functions found";
-    print "\n--version                  Print the version of this program";
-    print "\n--help                     Print this help\n";
+    print <<EOF;
+gtkdoc-scan version @VERSION@ - scan header files for public symbols
+
+--module=MODULE_NAME       Name of the doc module being parsed
+--source-dir=DIRNAME       Directories containing the source files to scan
+--ignore-headers=FILES     A space-separated list of header files not to scan
+--output-dir=DIRNAME       The directory where the results are stored
+--deprecated-guards=GUARDS A |-separated list of symbols used as deprecation
+                           guards
+--ignore-decorators=DECS   A |-separated list of addition decorators in
+                           declarations that should be ignored
+--rebuild-sections         Rebuild (overwrite) the MODULE-sections.txt file
+--rebuild-types            Automatically recreate the MODULE.types file using
+                           all the *_get_type() functions found
+--version                  Print the version of this program
+--help                     Print this help
+EOF
     exit 0;
 }
 

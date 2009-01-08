@@ -57,6 +57,7 @@ GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "type-i
 
 if ($NO_GTK_INIT) {
   # Do nothing. This just avoids a warning.
+  # the option is not used anymore
 }
 
 if ($PRINT_VERSION) {
@@ -69,15 +70,18 @@ if (!$MODULE) {
 }
 
 if ($PRINT_HELP) {
-    print "gtkdoc-scangobj version @VERSION@\n";
-    print "\n--module=MODULE_NAME  Name of the doc module being parsed";
-    print "\n--types=FILE          The name of the file to store the types in";
-    print "\n--type-init-func=FUNC The init function to call instead of g_type_init ()";
-    print "\n--query-child-properties=FUNC A function that returns a list of child";
-    print "\n                      properties for a class";
-    print "\n--output-dir=DIRNAME  The directory where the results are stored";
-    print "\n--version             Print the version of this program";
-    print "\n--help                Print this help\n";
+    print <<EOF;
+gtkdoc-scangobj version @VERSION@ - introspect g-objects
+
+--module=MODULE_NAME          Name of the doc module being parsed
+--types=FILE                  The name of the file to store the types in
+--type-init-func=FUNC         The init function to call instead of g_type_init()
+--query-child-properties=FUNC A function that returns a list of child
+                              properties for a class
+--output-dir=DIRNAME          The directory where the results are stored
+--version                     Print the version of this program
+--help                        Print this help
+EOF
     exit 0;
 }
 

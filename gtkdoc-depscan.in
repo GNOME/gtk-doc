@@ -240,7 +240,7 @@ class Symbol(object):
     since      = property(lambda self: self.__since)
 
 def parse_cmdline():
-    options = OptionParser()
+    options = OptionParser(version="@VERSION@")
 
     options.add_option('-b', '--book', dest='books',
                        help='name of a devhelp book to consider',
@@ -278,6 +278,7 @@ def merge_gnome_path(options):
 
 if '__main__' == __name__:
     options, args = parse_cmdline()
+
     merge_gnome_path(options)
 
     if not options.books:

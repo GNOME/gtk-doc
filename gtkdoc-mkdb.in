@@ -94,7 +94,7 @@ if ($DEFAULT_STABILITY && $DEFAULT_STABILITY ne "Stable"
 
 if ($PRINT_HELP) {
     print <<EOF;
-gtkdoc-mkdb version @VERSION@
+gtkdoc-mkdb version @VERSION@ - generate docbook files
 
 --module=MODULE_NAME       Name of the doc module being parsed
 --source-dir=DIRNAME       Directories which contain inline reference material

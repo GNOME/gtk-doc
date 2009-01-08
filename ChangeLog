@@ -1,3 +1,20 @@
+2009-01-08  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-check.in:
+	* gtkdoc-depscan.in:
+	* gtkdoc-fixxref.in:
+	* gtkdoc-mkdb.in:
+	* gtkdoc-mkhtml.in:
+	* gtkdoc-mkman.in:
+	* gtkdoc-mktmpl.in:
+	* gtkdoc-rebase.in:
+	* gtkdoc-scan.in:
+	* gtkdoc-scangobj.in:
+	* gtkdoc-scanobj.in:
+	* gtkdocize.in:
+	  Add support for --help and --version to remaining tools. Also show a
+	  short info on --help and format more consistently. Fixes #566911
+
 2009-01-07  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtk-doc.m4:
