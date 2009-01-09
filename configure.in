@@ -80,6 +80,25 @@ JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.3//EN],
 JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl],
    [DocBook XSL Stylesheets])
 
+dnl
+dnl Check for syntax highlighters
+dnl
+HIGHLIGHT_OPTIONS=""
+AC_PATH_PROG([HIGHLIGHT], [source-highlight])
+if test -n "$HIGHLIGHT"; then
+  HIGHLIGHT_OPTIONS="-n -t4 -sc -cstyle.css --no-doc -i"
+else
+  AC_PATH_PROG([HIGHLIGHT], [highlight])
+  if test -n "$HIGHLIGHT"; then
+    HIGHLIGHT_OPTIONS="-l -H -f -j2"
+  else
+    dnl test for other highlighters here
+    AC_MSG_ERROR([no syntax highlighter found])
+  fi
+fi
+AC_SUBST([HIGHLIGHT_OPTIONS])
+
+
 #
 # Set PACKAGE_DATA_DIR so we can find the script containing common routines.
 #
@@ -196,6 +215,9 @@ test -n "$JADE" \
 test x$scrollkeeper_config != xno \
     && AC_MSG_NOTICE([** Scrollkeeper support enabled]) \
     || AC_MSG_NOTICE([   Scrollkeeper support disabled])
+test -n "$HIGHLIGHT" \
+    && AC_MSG_NOTICE([** Syntax highlighting of examples enabled, using $HIGHLIGHT]) \
+    || AC_MSG_NOTICE([   Syntax highlighting of examples disabled])
 test x$build_tests != xno \
     && AC_MSG_NOTICE([** Building regression tests]) \
     || AC_MSG_NOTICE([   Skipping regression tests])

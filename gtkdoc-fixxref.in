@@ -291,13 +291,12 @@ sub HighlightSource {
     $source =~ s/[\s\n]+$//gs;
     # write source to a temp file
     my $temp_source_file="$MODULE_DIR/_temp_src.$$";
-    open (NEWFILE, ">$temp_source_file")
-	|| die "Can't open $temp_source_file: $!";
+    open (NEWFILE, ">$temp_source_file") || die "Can't open $temp_source_file: $!";
     print NEWFILE $source;
     close (NEWFILE);
     
     # format source
-    my $highlighted_source=`source-highlight -i$temp_source_file -n -t4 -sc -cstyle.css --no-doc`;
+    my $highlighted_source=`@HIGHLIGHT@ @HIGHLIGHT_OPTIONS@$temp_source_file`;
     $highlighted_source =~ s%^<\!-- .*? -->%%gs;
     $highlighted_source =~ s%<pre><tt>(.*?)</tt></pre>%$1%gs;
     # revert double entity replacement
