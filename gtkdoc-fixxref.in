@@ -81,6 +81,10 @@ if ($HTML_DIR =~ m%(.*?)/share/gtk-doc/html%) {
 #    print "Path prefix: $path_prefix\n";
 }
 
+if (!defined $MODULE_DIR) {
+  $MODULE_DIR="$HTML_DIR/$MODULE";
+}
+
 my $dir;
 
 # We scan the directory containing GLib and any directories in GNOME2_PATH
@@ -89,7 +93,7 @@ $dir = `pkg-config --variable=prefix glib-2.0`;
 $dir =~ s/\s+$//;
 $dir = $dir . "/share/gtk-doc/html";
 if (-d $dir && $dir ne $HTML_DIR) {
-#    print "Scanning GLib directory: $dir\n";
+    #print "Scanning GLib directory: $dir\n";
     if ($dir !~ m%^\Q$path_prefix\E/%) {
         &ScanIndices ($dir, 1);
     } else {
@@ -102,7 +106,7 @@ if (defined ($ENV{"GNOME2_PATH"})) {
     foreach $dir (split (/:/, $ENV{"GNOME2_PATH"})) {
         $dir = $dir . "/share/gtk-doc/html";
 	if (-d $dir && $dir ne $HTML_DIR) {
-#	    print "Scanning GNOME2_PATH directory: $dir\n";
+	    #print "Scanning GNOME2_PATH directory: $dir\n";
 	    if ($dir !~ m%^\Q$path_prefix\E/%) {
                 &ScanIndices ($dir, 1);
             } else {
@@ -118,6 +122,9 @@ if (defined ($ENV{"GNOME2_PATH"})) {
 #print "Scanning HTML_DIR directory: $HTML_DIR\n";
 &ScanIndices ($HTML_DIR, 0);
 push (@VisitedPaths, $HTML_DIR);
+#print "Scanning HTML_DIR directory: $MODULE_DIR\n";
+&ScanIndices ($MODULE_DIR, 0);
+push (@VisitedPaths, $MODULE_DIR);
 
 # check all extra dirs, but skip already scanned dirs or subdirs of those
 foreach my $dir (@EXTRA_DIRS) {
@@ -126,12 +133,12 @@ foreach my $dir (@EXTRA_DIRS) {
 
     foreach $vdir (@VisitedPaths) {
         if ($dir eq $vdir || $dir =~ m%^\Q$vdir\E/%) {
-#            print "Skipping EXTRA_DIR directory: $dir\n";
+            #print "Skipping EXTRA_DIR directory: $dir\n";
             $skip=1;
         }
     }
     next if $skip;
-#    print "Scanning EXTRA_DIR directory: $dir\n";
+    #print "Scanning EXTRA_DIR directory: $dir\n";
     push (@VisitedPaths, $dir);
 
     # If the --extra-dir option is not relative and is not sharing the same
@@ -144,12 +151,12 @@ foreach my $dir (@EXTRA_DIRS) {
     }
 }
 
-&FixCrossReferences (defined $MODULE_DIR ? $MODULE_DIR : "$HTML_DIR/$MODULE");
+&FixCrossReferences ($MODULE_DIR);
 
 sub ScanIndices {
     my ($scan_dir, $use_absolute_links) = @_;
 
-#    print "Scanning source directory: $scan_dir absolute: $use_absolute_links\n";
+    #print "Scanning source directory: $scan_dir absolute: $use_absolute_links\n";
 
     # This array holds any subdirectories found.
     my (@subdirs) = ();
@@ -229,6 +236,11 @@ sub FixHTMLFile {
     undef $/;
     my $entire_file = <HTMLFILE>;
     close (HTMLFILE);
+    
+    $entire_file =~ s%<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>%&HighlightSource($1,$2);%gse;
+    # from the highlighter we get all the functions marked up
+    # now we could turn them into GTKDOCLINK items
+    $entire_file =~ s%<span class=\"function\">(.*?)</span>%&MakeGtkDocLink($1);%gse;
 
     $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($1, $2); %gse;
 
@@ -250,10 +262,70 @@ sub MakeXRef {
     my $href = $Links{$id};
 
     if ($href) {
-        # print "  Fixing link: $id, $href, $text\n";
-        return "<a\nhref=\"$href\"\n>$text</a>";
+        # if it is a link to same module, remove path to make it work
+        # uninstalled
+        if ($href =~ m%^\.\./$MODULE/(.*)$%) {
+            $href=$1;
+        }
+        #print "  Fixing link: $id, $href, $text\n";
+        return "<a href=\"$href\">$text</a>";
     } else {
-        # print "  no link for: $id, $text\n";
+        #print "  no link for: $id, $text\n";
 	return $text;
     }
+}
+
+sub MakeGtkDocLink {
+    my ($symbol) = @_;
+    
+    my $id=CreateValidSGMLID($symbol);
+    
+    return "<span class=\"function\"><GTKDOCLINK HREF=\"$id\">$symbol</GTKDOCLINK></span>";
+}
+
+sub HighlightSource {
+    my ($type, $source) = @_;
+
+    # chop of leading and trailing empty lines
+    $source =~ s/^[\s\n]+//gs;
+    $source =~ s/[\s\n]+$//gs;
+    # write source to a temp file
+    my $temp_source_file="$MODULE_DIR/_temp_src.$$";
+    open (NEWFILE, ">$temp_source_file")
+	|| die "Can't open $temp_source_file: $!";
+    print NEWFILE $source;
+    close (NEWFILE);
+    
+    # format source
+    my $highlighted_source=`source-highlight -i$temp_source_file -n -t4 -sc -cstyle.css --no-doc`;
+    $highlighted_source =~ s%^<\!-- .*? -->%%gs;
+    $highlighted_source =~ s%<pre><tt>(.*?)</tt></pre>%$1%gs;
+    # revert double entity replacement
+    $highlighted_source =~ s/&amp;lt;/&lt;/g;
+    $highlighted_source =~ s/&amp;gt;/&gt;/g;
+    $highlighted_source =~ s/&amp;amp;/&amp;/g;
+    
+    # remove temp file
+    unlink ($temp_source_file)
+	|| die "Can't delete $temp_source_file: $!";
+
+    return "<div class=\"$type\"><pre class=\"programlisting\">$highlighted_source</pre></div>";
+}
+
+sub CreateValidSGMLID {
+    my ($id) = $_[0];
+
+    # Special case, '_' would end up as '' so we use 'gettext-macro' instead.
+    if ($id eq "_") { return "gettext-macro"; }
+
+    $id =~ s/[_ ]/-/g;
+    $id =~ s/[,\.]//g;
+    $id =~ s/^-*//;
+    $id =~ s/::/-/g;
+    $id =~ s/:/--/g;
+
+    # Append ":CAPS" to all all-caps identifiers
+    if ($id !~ /[a-z]/ && $id !~ /-CAPS$/) { $id .= ":CAPS" };
+
+    return $id;
 }

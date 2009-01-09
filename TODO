@@ -181,8 +181,16 @@ perl modules:
     - not packaged for ubuntu
 tools:
   source-highlight (/usr/bin/source-highlight)
-  source-highlight -i../tests/gobject/examples/gobject.c -o./gobject.html -n -t4 -sc
-  source-highlight -i../tests/gobject/examples/gobject.c -o./gobject.html -n -t4 -sc -cstyle.css --no-doc
+  source-highlight -i./tests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc
+  source-highlight -i./tests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc -cstyle.css --no-doc
+  source-highlight -i./tests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -n -t4 -sc -f docbook
+  
+if we highlight to docbook, we just get emphasis (bold)
+if we hightlight to html we get colors, we need to cehck what tags we should process though:
+<pre class="programlisting"> is used for all code boxes.
+<div class="informalexample"><pre class="programlisting"> is used for examples.
+
+links in the same module only work once its installed
 
 = documentation best practises #518427 =
 * we'd like offer a more complete skelleton

@@ -24,10 +24,10 @@
 # Script      : gtkdoc-mkdb
 # Description : This creates the DocBook files from the edited templates.
 #
-#		NOTE: When creating SGML IDS, we append ":CAPS" to all
+#               NOTE: When creating SGML IDS, we append ":CAPS" to all
 #               all-caps identifiers to prevent name clashes. (It basically
 #               never is the case that mixed-case identifiers would collide.)
-#		See the CreateValidSGMLID function.
+#               See the CreateValidSGMLID function.
 #############################################################################
 
 use strict;
@@ -2132,14 +2132,14 @@ sub CreateValidSGMLID {
     # Special case, '_' would end up as '' so we use 'gettext-macro' instead.
     if ($id eq "_") { return "gettext-macro"; }
 
-    # Append ":CAPS" to all all-caps identifiers
-    if ($id !~ /[a-z]/ && $id !~ /-CAPS$/) { $id .= ":CAPS" };
-
     $id =~ s/[_ ]/-/g;
     $id =~ s/[,\.]//g;
     $id =~ s/^-*//;
     $id =~ s/::/-/g;
     $id =~ s/:/--/g;
+
+    # Append ":CAPS" to all all-caps identifiers
+    if ($id !~ /[a-z]/ && $id !~ /-CAPS$/) { $id .= ":CAPS" };
 
     return $id;
 }
