@@ -91,9 +91,6 @@ else
   AC_PATH_PROG([HIGHLIGHT], [highlight])
   if test -n "$HIGHLIGHT"; then
     HIGHLIGHT_OPTIONS="-l -H -f -j2"
-  else
-    dnl test for other highlighters here
-    AC_MSG_ERROR([no syntax highlighter found])
   fi
 fi
 AC_SUBST([HIGHLIGHT_OPTIONS])
