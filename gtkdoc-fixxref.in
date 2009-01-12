@@ -297,8 +297,13 @@ sub HighlightSource {
     
     # format source
     my $highlighted_source=`@HIGHLIGHT@ @HIGHLIGHT_OPTIONS@$temp_source_file`;
-    $highlighted_source =~ s%^<\!-- .*? -->%%gs;
-    $highlighted_source =~ s%<pre><tt>(.*?)</tt></pre>%$1%gs;
+    if ("@HIGHLIGHT@" =~ m%/source-highlight%) {
+        $highlighted_source =~ s%^<\!-- .*? -->%%gs;
+        $highlighted_source =~ s%<pre><tt>(.*?)</tt></pre>%$1%gs;
+    }
+    elsif ("@HIGHLIGHT@" =~ m%/highlight%) {
+        # need to rewrite the stylesheet classes
+    }
     # revert double entity replacement
     $highlighted_source =~ s/&amp;lt;/&lt;/g;
     $highlighted_source =~ s/&amp;gt;/&gt;/g;
