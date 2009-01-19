@@ -316,6 +316,14 @@ sub HighlightSource {
     return "<div class=\"$type\"><pre class=\"programlisting\">$highlighted_source</pre></div>";
 }
 
+#############################################################################
+# Function    : CreateValidSGMLID
+# Description : Creates a valid SGML 'id' from the given string.
+#		NOTE: SGML ids are case-insensitive, so we have a few special
+#		      cases to avoid clashes of ids.
+# Arguments   : $id - the string to be converted into a valid SGML id.
+#############################################################################
+
 sub CreateValidSGMLID {
     my ($id) = $_[0];
 

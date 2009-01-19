@@ -101,6 +101,9 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
    unrtf -t ps tester-docs.rtf >tester-docs.ps
    unrtf -t latex tester-docs.rtf >tester-docs.tex
    - bad output
+* man
+  we shouldn't convert the whole document to man. We should convert e.g. tool
+  sections to man pages.
 
 = Indexes =
 * http://www.w3.org/TR/2003/WD-xinclude-20031110/#syntax
@@ -127,11 +130,12 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
 == scanning ==
 * ideas
   * use gir files
-    1) replace gtkdoc-scan/gtkdoc-scangobject by gtkdoc-gir and output the classical files
+    1) replace gtkdoc-scan/gtkdoc-scangobject by gtkdoc-gir and output the classical files or
+       patch gtkdoc-scan/gtkdoc-scangobject to output gir files
     2) patch gtkdoc-mkdb to read stuff from gir instead of classical files
-  * if gir-files would have the comments too:
+  * if gir-files would have the comments too (they are getting this now):
     * we could even drop scanning the sources
-    * IDEs could use the gir-files to show doc-tooltips for symbols  
+    * IDEs could use the gir-files to show doc-tooltips for symbols
 * perl and xml
   * http://www.xml.com/pub/a/2001/04/18/perlxmlqstart1.html
 == binding docs ==
@@ -163,9 +167,20 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   - unfortunately we can't link to symbols
   - linking to files is difficult as in gtkdoc we have modules
 
-= more bookinfo data =
-http://www.docbook.org/tdg/en/html/bookinfo.html
-e.g. copyright and legalnotice
+= docbook xml =
+Its tedious to write large amounts of docbook. Can we offer integration with
+asciidoc (http://www.methods.co.nz/asciidoc/)? This way the master document
+could be written musch easier. It would be cool if we could use the asciidoc
+markup in source-comments also.
+
+== extract other bits and pieces ==
+=== library api ==
+gtkdoc-scan could be obsoleted and gtkdoc-mkdb would build docbook fragemnts for
+api docs and their indexes
+=== DBUs Interfaces ===
+http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html
+http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus
+=== GConf schemas ===
 
 = styling =
 == warnings ==
@@ -184,15 +199,13 @@ tools:
   source-highlight -i./tests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc
   source-highlight -i./tests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc -cstyle.css --no-doc
   source-highlight -i./tests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -n -t4 -sc -f docbook
-  
+
   highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -l -H -f -j2
-  
+
 if we highlight to docbook, we just get emphasis (bold)
 if we hightlight to html we get colors, we need to cehck what tags we should process though:
 <pre class="programlisting"> is used for all code boxes.
 <div class="informalexample"><pre class="programlisting"> is used for examples.
-  
-links in the same module only work once its installed
 
 = documentation best practises #518427 =
 * we'd like offer a more complete skelleton
@@ -213,8 +226,10 @@ links in the same module only work once its installed
       * classes / overview / tutorial&examples
   * recommendation
     * front-page
-      * table with details
+      * table with details (http://www.docbook.org/tdg/en/html/bookinfo.html)
+        (problem: what enclosing tag)
         Logo, Module Version
+        Copyright and Legalnotice
         Links
         * homepage, mailing lists, irc channel
         * repository, source releases, bugtracker
@@ -227,4 +242,35 @@ links in the same module only work once its installed
     * migration - how to for api changes, deprecations
     * (releated) tools - tools part of the package or recommended for development
     * indexes - api-index, depretations, new api since xxx
+
+proposed structure in docbook xml:
+<book>
+  <bookinfo>
+  </bookinfo>
+  <preface><title>Introduction</title>
+    ...
+  </preface>
+  <part label="I"><title>xxx Overview</title>
+    <xi:include href="building.xml" />
+    ...
+  </part>
+  <reference label="II"><title>xxx Core Reference</title>
+    <xi:include href="xml/gtkmain.xml" />
+    ...
+  </part>
+  <reference label="III"><title>xxx Object Reference</title>
+    <chapter><title>Object Hierarchy</title>
+      <xi:include href="xml/tree_index.sgml" />
+    </chapter>
+    <chapter>...
+  </part>
+  <index>...</index>
+</book>
+
+some things to check:
+* gtk,glib: can we make a <part> for the glosary and index's (according to docbook, yes)
+  should we use <appendix>? its like a chapter.
+* gobject: uses a <preface> for introductions
+* gobject: uses <reference> as a parent for the xi:includeed <refentry> docs
+
 

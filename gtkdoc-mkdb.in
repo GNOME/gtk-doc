@@ -832,7 +832,6 @@ sub OutputIndex {
 
         my $curletter = uc(substr($short_symbol,0,1));
         my $id = $apiindex{$symbol};
-        my $xref = &MakeXRef ($id, $symbol);
 
         #print "  add symbol $symbol with $id to index in section $curletter\n";
 
@@ -847,7 +846,7 @@ sub OutputIndex {
         }
 
         print (OUTPUT <<EOF);
-<indexentry><primaryie linkends="$id">$xref</primaryie></indexentry>
+<indexentry><primaryie linkends="$id"><link linkend="$id">$symbol</link></primaryie></indexentry>
 EOF
     }
 

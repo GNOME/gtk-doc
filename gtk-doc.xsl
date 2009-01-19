@@ -196,7 +196,9 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:param name="next" select="/foo"/>
     <xsl:variable name="home" select="/*[1]"/>
     <xsl:variable name="up" select="parent::*"/>
-    <xsl:variable name="sections" select="./refsect1[@role]"/>
+    <xsl:variable name="refsections" select="./refsect1[@role]"/>
+    <xsl:variable name="glssections" select="./glossdiv/title"/>
+    <xsl:variable name="idxsections" select="./indexdiv/indexdiv/title"/>
     <xsl:variable name="section_id" select="./@id"/>
     <xsl:variable name="sect_object_hierarchy" select="./refsect1[@role='object_hierarchy']"/>
     <xsl:variable name="sect_impl_interfaces" select="./refsect1[@role='impl_interfaces']"/>
@@ -318,107 +320,143 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
           </xsl:choose>
         </tr>
         <!--<xsl:if test="name()='refentry'"-->
-        <xsl:if test="count($sections) > 0">
-          <tr>
-            <td colspan="5" class="shortcuts">
-              <xsl:if test="count($sect_synopsis) > 0">
-                <a href="#{$section_id}.synopsis" class="shortcut">Top</a>
-              </xsl:if>
-              <xsl:if test="count($sect_desc) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.description" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='desc']/title"/>
-                </a>
-              </xsl:if>
-              <xsl:if test="count($sect_object_hierarchy) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.object-hierarchy" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='object_hierarchy']/title"/>
-                </a>
-              </xsl:if>
-              <xsl:if test="count($sect_impl_interfaces) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.implemented-interfaces" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='impl_interfaces']/title"/>
-                </a>
-              </xsl:if>
-              <xsl:if test="count($sect_prerequisites) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.prerequisites" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='prerequisites']/title"/>
-                </a>
-              </xsl:if>
-              <xsl:if test="count($sect_derived_interfaces) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.derived-interfaces" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='derived_interfaces']/title"/>
-                </a>
-              </xsl:if>
-              <xsl:if test="count($sect_implementations) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.implementations" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='implementations']/title"/>
-                </a>
-              </xsl:if>
-              <xsl:if test="count($sect_properties) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.properties" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='properties']/title"/>
-                </a>
-              </xsl:if>
-              <xsl:if test="count($sect_child_properties) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.child-properties" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='child_properties']/title"/>
-                </a>
-              </xsl:if>
-              <xsl:if test="count($sect_style_properties) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.style-properties" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='style_properties']/title"/>
-                </a>
-              </xsl:if>
-              <xsl:if test="count($sect_signal_proto) > 0">
-                &#160;|&#160;
-                <a href="#{$section_id}.signals" class="shortcut">
-                  <xsl:value-of select="./refsect1[@role='signal_proto']/title"/>
-                </a>
-              </xsl:if>
-              <!--
-              <xsl:if test="count($sect_details) > 0">
-                <a href="#details" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='details']/title"/>
-                </a>
-                &#160;|&#160;
-              </xsl:if>
-              <xsl:if test="count($sect_property_details) > 0">
-                <a href="#property_details" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='property_details']/title"/>
-                </a>
-                &#160;|&#160;
-              </xsl:if>
-              <xsl:if test="count($sect_child_property_details) > 0">
-                <a href="#child_property_details" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='property_child_details']/title"/>
-                </a>
-                &#160;|&#160;
-              </xsl:if>
-              <xsl:if test="count($sect_style_property_details) > 0">
-                <a href="#style_property_details" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='style_property_details']/title"/>
-                </a>
-                &#160;|&#160;
-              </xsl:if>
-              <xsl:if test="count($sect_signals) > 0">
-                <a href="#signals" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='signals']/title"/>
-                </a>
-                &#160;|&#160;
-              </xsl:if>
-              -->
-            </td>
-          </tr>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="count($refsections) > 0">
+            <tr>
+              <td colspan="5" class="shortcuts">
+                <xsl:if test="count($sect_synopsis) > 0">
+                  <a href="#{$section_id}.synopsis" class="shortcut">Top</a>
+                </xsl:if>
+                <xsl:if test="count($sect_desc) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.description" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='desc']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_object_hierarchy) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.object-hierarchy" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='object_hierarchy']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_impl_interfaces) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.implemented-interfaces" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='impl_interfaces']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_prerequisites) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.prerequisites" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='prerequisites']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_derived_interfaces) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.derived-interfaces" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='derived_interfaces']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_implementations) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.implementations" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='implementations']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_properties) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.properties" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='properties']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_child_properties) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.child-properties" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='child_properties']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_style_properties) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.style-properties" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='style_properties']/title"/>
+                  </a>
+                </xsl:if>
+                <xsl:if test="count($sect_signal_proto) > 0">
+                  &#160;|&#160;
+                  <a href="#{$section_id}.signals" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='signal_proto']/title"/>
+                  </a>
+                </xsl:if>
+                <!--
+                <xsl:if test="count($sect_details) > 0">
+                  <a href="#details" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='details']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                <xsl:if test="count($sect_property_details) > 0">
+                  <a href="#property_details" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='property_details']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                <xsl:if test="count($sect_child_property_details) > 0">
+                  <a href="#child_property_details" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='property_child_details']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                <xsl:if test="count($sect_style_property_details) > 0">
+                  <a href="#style_property_details" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='style_property_details']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                <xsl:if test="count($sect_signals) > 0">
+                  <a href="#signals" class="shortcut">
+                    <xsl:value-of select="./refsect1[@id='signals']/title"/>
+                  </a>
+                  &#160;|&#160;
+                </xsl:if>
+                -->
+              </td>
+            </tr>
+          </xsl:when>
+          <!-- this is not yet very nice, as it requires all glossdic/indexdiv
+          elements having a anchor element. maybe we can customize the xsl
+          to automaticaly create local anchors
+          -->
+          <xsl:when test="count($glssections) > 0">
+            <tr>
+              <td colspan="5" class="shortcuts">
+                 <xsl:for-each select="./glossdiv">
+                   <xsl:if test="position() > 1">
+                     &#160;|&#160;
+                   </xsl:if>
+                   <a class="shortcut">
+                     <xsl:attribute name="href">#<xsl:value-of select="./anchor/@id"/></xsl:attribute>
+                     <xsl:value-of select="./title"/>
+                   </a>
+                 </xsl:for-each>
+              </td>
+            </tr>
+          </xsl:when>
+          <xsl:when test="count($idxsections) > 0">
+            <tr>
+              <td colspan="5" class="shortcuts">
+                 <xsl:for-each select="./indexdiv/indexdiv">
+                   <xsl:if test="position() > 1">
+                     &#160;|&#160;
+                   </xsl:if>
+                   <a class="shortcut">
+                     <xsl:attribute name="href">#<xsl:value-of select="./anchor/@id"/></xsl:attribute>
+                     <xsl:value-of select="./title"/>
+                   </a>
+                 </xsl:for-each>
+              </td>
+            </tr>
+          </xsl:when>
+        </xsl:choose>
       </table>
     </xsl:if>
   </xsl:template>
@@ -479,29 +517,29 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <div class="{name(.)}">
       <table width="100%">
         <tr><td valign="top">
-         <xsl:call-template name="anchor"/>
-           <xsl:choose>
-             <xsl:when test="$refentry.generate.name != 0">
-               <h2>
+          <xsl:call-template name="anchor"/>
+            <xsl:choose>
+              <xsl:when test="$refentry.generate.name != 0">
+                <h2>
                 <xsl:call-template name="gentext">
-                  <xsl:with-param name="key" select="'RefName'"/>
-                </xsl:call-template>
-              </h2>
-            </xsl:when>
-            <xsl:when test="$refentry.generate.title != 0">
-              <h2>
-                <xsl:choose>
-                  <xsl:when test="../refmeta/refentrytitle">
-                    <xsl:apply-templates select="../refmeta/refentrytitle"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="refname[1]"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </h2>
-            </xsl:when>
-          </xsl:choose>
-          <p>
+                    <xsl:with-param name="key" select="'RefName'"/>
+                  </xsl:call-template>
+                </h2>
+              </xsl:when>
+              <xsl:when test="$refentry.generate.title != 0">
+                <h2>
+                  <xsl:choose>
+                    <xsl:when test="../refmeta/refentrytitle">
+                      <xsl:apply-templates select="../refmeta/refentrytitle"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:apply-templates select="refname[1]"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </h2>
+              </xsl:when>
+            </xsl:choose>
+            <p>
             <xsl:apply-templates/>
           </p>
         </td>

@@ -1,3 +1,21 @@
+2009-01-19  Stefan Kost  <ensonic@users.sf.net>
+
+	* TODO:
+	  More ideas.
+
+	* gtk-doc.xsl:
+	  Experiment with navigation for index and glossaries.
+
+	* gtkdoc-fixxref.in:
+	* gtkdoc-mkdb.in:
+	  Fix index entries and copy doc along with the method.
+
+	* style.css:
+	  also do the extra spacing for the index/glossary environments now.
+
+	* tests/gobject/docs/tester-docs.xml:
+	  Experiment with a more complete doc structure.
+
 2009-01-12  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-fixxref.in:
@@ -126,7 +144,7 @@
 
 	* tests/gtk-doc.make:
 	* tests/gtk-doc.notmpl.make:
-	  Now aall tests pass.
+	  Now all tests pass.
 
 2009-01-04  Stefan Kost  <ensonic@users.sf.net>
 
