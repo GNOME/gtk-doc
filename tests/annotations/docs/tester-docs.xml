@@ -14,38 +14,45 @@
     </releaseinfo>
   </bookinfo>
 
-  <chapter>
-    <title>Tests</title>
-    <xi:include href="xml/tester.xml"/>
-  </chapter>
+  <reference label="II">
+    <title>API Reference</title>
+    <chapter id="main-api">
+      <title>Tests</title>
+      <xi:include href="xml/tester.xml"/>
+    </chapter>
+  </reference>
 
-  <index id="api-index">
-    <title>API Index</title>
-  </index>
-  <index id="deprecated-api-index" role="deprecated">
-    <title>Index of deprecated API</title>
-  </index>
-  <!--index id="api-index-0-9" role="0.9">
-    <title>Index of new API in 0.9</title>
-  </index-->
+  <part label="III">
+    <title>Appendix</title>
 
-  <glossary>
-    <title>Glossary</title>
-    <glossdiv id="glossary-X"><title>X</title>
-      <glossentry>
-        <glossterm><anchor id="glossterm-XML"/>XML</glossterm>
-        <glossdef>
-          <para>Extensible Markup Language</para>
-        </glossdef>
-      </glossentry>
-      <glossentry>
-        <glossterm><anchor id="glossterm-XSL"/>XSL</glossterm>
-        <glossdef>
-          <para>XML Stylesheet Language</para>
-        </glossdef>
-      </glossentry>
-    </glossdiv>
-  </glossary>
+    <index id="api-index">
+      <title>API Index</title>
+    </index>
+    <index id="deprecated-api-index" role="deprecated">
+      <title>Index of deprecated API</title>
+    </index>
+    <!--index id="api-index-0-9" role="0.9">
+      <title>Index of new API in 0.9</title>
+    </index-->
   
-  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+    <glossary>
+      <title>Glossary</title>
+      <glossdiv><title>X</title>
+        <glossentry>
+          <glossterm><anchor id="glossterm-XML"/>XML</glossterm>
+          <glossdef>
+            <para>Extensible Markup Language</para>
+          </glossdef>
+        </glossentry>
+        <glossentry>
+          <glossterm><anchor id="glossterm-XSL"/>XSL</glossterm>
+          <glossdef>
+            <para>XML Stylesheet Language</para>
+          </glossdef>
+        </glossentry>
+      </glossdiv>
+    </glossary>
+    
+    <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+  </part>
 </book>

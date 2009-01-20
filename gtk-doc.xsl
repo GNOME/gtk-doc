@@ -9,6 +9,7 @@
   <xsl:include href="version-greater-or-equal.xsl"/>
 
   <!-- change some parameters -->
+  <!-- http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html -->
   <xsl:param name="toc.section.depth">2</xsl:param>
   <xsl:param name="generate.toc">
     book	toc
@@ -34,6 +35,10 @@
 
   <!-- display variablelists as tables -->
   <xsl:param name="variablelist.as.table" select="1"/>
+  
+  <!-- new things to consider
+  <xsl:param name="glossterm.auto.link" select="0"></xsl:param>
+  -->
 
   <!-- this gets set on the command line ... -->
   <xsl:param name="gtkdoc.version" select="''"/>
@@ -434,7 +439,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                      &#160;|&#160;
                    </xsl:if>
                    <a class="shortcut">
-                     <xsl:attribute name="href">#<xsl:value-of select="./anchor/@id"/></xsl:attribute>
+                     <xsl:attribute name="href">#gls<xsl:value-of select="./title"/></xsl:attribute>
                      <xsl:value-of select="./title"/>
                    </a>
                  </xsl:for-each>
@@ -449,7 +454,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                      &#160;|&#160;
                    </xsl:if>
                    <a class="shortcut">
-                     <xsl:attribute name="href">#<xsl:value-of select="./anchor/@id"/></xsl:attribute>
+                     <xsl:attribute name="href">#idx<xsl:value-of select="./title"/></xsl:attribute>
                      <xsl:value-of select="./title"/>
                    </a>
                  </xsl:for-each>
@@ -554,6 +559,16 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         </td></tr>
        </table>
      </div>
+  </xsl:template>
+
+  <xsl:template match="indexdiv">
+    <a><xsl:attribute name="name">idx<xsl:value-of select="./title"/></xsl:attribute></a>
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="glossdiv">
+    <a><xsl:attribute name="name">gls<xsl:value-of select="./title"/></xsl:attribute></a>
+    <xsl:apply-templates/>
   </xsl:template>
 
   <!-- Exterminate any trace of indexterms in the main flow -->

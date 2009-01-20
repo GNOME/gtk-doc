@@ -20,18 +20,40 @@
   vertical-align: top;
 }
 
-/* this is needed so that the local anchors are displayed below the naviagtion */
 @media screen {
   sup a.footnote
   {
     position: relative;
     top: 0em ! important;
   }
-  div.refnamediv a[name], div.refsect1 a[name]
+  /* this is needed so that the local anchors are displayed below the naviagtion */
+  div.refnamediv a[name], div.refsect1 a[name], div.index a[name], div.glossary a[name]
   {
     position: relative;
     top: -4.5em;
   }
+  /* make space for the fixed navigation bar */
+  div.refentry, div.chapter, div.reference, div.part, div.book, div.glossary, div.index, div.sect1, div.appendix, div.preface
+  {
+    position: relative;
+    top: 3em;
+    z-index: 0;
+  }
+  div.glossary, div.index
+  {
+    position: relative;
+    top: 2em;
+    z-index: 0;
+  }
+  div.refnamediv
+  {
+    margin-top: 2em;
+  }
+  body
+  {
+    padding-bottom: 20em;
+  }
+  /* style and size the navigation bar */
   table.navigation#top
   {
     background: #ffeeee;
@@ -57,26 +79,6 @@
     color: #770000;
     font-size: 80%;
     white-space: nowrap;
-  }
-  div.refentry, div.chapter, div.reference, div.part, div.book, div.glossary, div.sect1, div.appendix, div.preface
-  {
-    position: relative;
-    top: 3em;
-    z-index: 0;
-  }
-  div.glossary, div.index
-  {
-    position: relative;
-    top: 2em;
-    z-index: 0;
-  }
-  div.refnamediv
-  {
-    margin-top: 2em;
-  }
-  body
-  {
-    padding-bottom: 20em;
   }
 }
 @media print {
