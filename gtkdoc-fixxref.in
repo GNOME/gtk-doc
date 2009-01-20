@@ -240,9 +240,11 @@ sub FixHTMLFile {
     $entire_file =~ s%<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>%&HighlightSource($1,$2);%gse;
     # from the highlighter we get all the functions marked up
     # now we could turn them into GTKDOCLINK items
-    $entire_file =~ s%<span class=\"function\">(.*?)</span>%&MakeGtkDocLink($1);%gse;
+    $entire_file =~ s%(<span class=\"function\">)(.*?)(</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
+    # we could also try the first item in stuff marked up as 'normal'
+    #$entire_file =~ s%(<span class=\"normal\">\s*)(.*?)(\s*.*?</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
 
-    $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($1, $2); %gse;
+    $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($1,$2); %gse;
 
     open (NEWFILE, ">$file.new")
 	|| die "Can't open $file: $!";
@@ -276,11 +278,12 @@ sub MakeXRef {
 }
 
 sub MakeGtkDocLink {
-    my ($symbol) = @_;
+    my ($pre,$symbol,$post) = @_;
     
     my $id=CreateValidSGMLID($symbol);
     
-    return "<span class=\"function\"><GTKDOCLINK HREF=\"$id\">$symbol</GTKDOCLINK></span>";
+    #return "<span class=\"$type\"><GTKDOCLINK HREF=\"$id\">$symbol</GTKDOCLINK></span>";
+    return "$pre<GTKDOCLINK HREF=\"$id\">$symbol</GTKDOCLINK>$post";
 }
 
 sub HighlightSource {
@@ -289,6 +292,11 @@ sub HighlightSource {
     # chop of leading and trailing empty lines
     $source =~ s/^[\s\n]+//gs;
     $source =~ s/[\s\n]+$//gs;
+    # avoid double entity replacement
+    $source =~ s/&lt;/</g;
+    $source =~ s/&gt;/>/g;
+    $source =~ s/&amp;/&/g;
+
     # write source to a temp file
     my $temp_source_file="$MODULE_DIR/_temp_src.$$";
     open (NEWFILE, ">$temp_source_file") || die "Can't open $temp_source_file: $!";
@@ -304,10 +312,6 @@ sub HighlightSource {
     elsif ("@HIGHLIGHT@" =~ m%/highlight%) {
         # need to rewrite the stylesheet classes
     }
-    # revert double entity replacement
-    $highlighted_source =~ s/&amp;lt;/&lt;/g;
-    $highlighted_source =~ s/&amp;gt;/&gt;/g;
-    $highlighted_source =~ s/&amp;amp;/&amp;/g;
     
     # remove temp file
     unlink ($temp_source_file)

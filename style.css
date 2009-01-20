@@ -197,13 +197,16 @@ hr
 
 /* code listings */
 
-pre .cbracket { color: #a40000; } /* tango: scarlet Red 3 */
-pre .comment  { color: #a1a39d; } /* tango: aluminium 4 */
-pre .function { color: #000000; font-weight: bold; }
-pre .keyword  { color: #4e9a06; } /* tango: chameleon 3  */
-pre .linenum  { color: #babdb6; } /* tango: aluminium 3 */
-pre .normal  { color: #000000; }
-pre .number   { color: #75507b; } /* tango: plum 2 */
-pre .preproc  { color: #204a87; } /* tango: sky Blue 3  */
-pre .string   { color: #c17d11; } /* tango: chocolate 2 */
-pre .symbol   { color: #ce5c00; } /* tango: orange 3 */
+pre .cbracket   { color: #a40000; } /* tango: scarlet red 3 */
+pre .comment    { color: #a1a39d; } /* tango: aluminium 4 */
+pre .function   { color: #000000; font-weight: bold; }
+pre .function a { color: #11326b; font-weight: bold; } /* tango: sky blue 4 */
+pre .keyword    { color: #4e9a06; } /* tango: chameleon 3  */
+pre .linenum    { color: #babdb6; } /* tango: aluminium 3 */
+pre .normal     { color: #000000; }
+pre .number     { color: #75507b; } /* tango: plum 2 */
+pre .preproc    { color: #204a87; } /* tango: sky blue 3  */
+pre .string     { color: #c17d11; } /* tango: chocolate 2 */
+pre .type       { color: #000000; }
+pre .type a     { color: #11326b; } /* tango: sky blue 4 */
+pre .symbol     { color: #ce5c00; } /* tango: orange 3 */

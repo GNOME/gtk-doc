@@ -190,7 +190,8 @@ xsl produces inline style tag for warnings (e.g. deprecation). We could add a
 colored frame and a warning sign /!\.
 == source code examples==
 http://bugzilla.gnome.org/show_bug.cgi?id=536928
-We could also run a postprocessing script in gtkdoc-mkhtml.
+We could also run a postprocessing script in gtkdoc-mkhtml/gtkdoc-fixxref
+
 perl modules:
   http://search.cpan.org/~palant/Syntax-Highlight-Universal-0.4/Universal.pm
   http://search.cpan.org/~jamadam/Syntax-Highlight-Engine-Simple-0.08/lib/Syntax/Highlight/Engine/Simple.pm
@@ -204,10 +205,20 @@ tools:
 
   highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -l -H -f -j2
 
+some tips about styling code listings in html
+http://www.tjkdesign.com/articles/how_to_style_a_code_listing.asp
+
+=== process docbook ===
 if we highlight to docbook, we just get emphasis (bold)
-if we hightlight to html we get colors, we need to cehck what tags we should process though:
+=== process html ===
+if we hightlight to html we get colors, we need to check what tags we should process though:
 <pre class="programlisting"> is used for all code boxes.
 <div class="informalexample"><pre class="programlisting"> is used for examples.
+problems:
+* in html we don't know the language anymore
+* with source-highlight, constants and types are not markedup.
+  for types we might need to build an own lang file dynamically and include
+  /usr/share/source-highlight/c.lang
 
 = documentation best practises #518427 =
 * we'd like offer a more complete skelleton
