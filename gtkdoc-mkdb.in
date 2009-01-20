@@ -324,6 +324,50 @@ my $changed = &OutputSGML ("$ROOT_DIR/$MODULE-sections.txt");
 # it can be used for Makefile dependencies).
 if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
 
+    # try to detect the common prefix
+    # GtkWidget, GTK_WIDGET, gtk_widget -> gtk
+    if ($NAME_SPACE eq "") {
+        $NAME_SPACE="";
+        my $pos=0;
+        my $ratio=0.0;
+        do {
+            my %prefix;
+            my $letter="";
+            foreach my $symbol (keys(%IndexEntriesFull)) {
+                if(($NAME_SPACE eq "") || $symbol =~ /^$NAME_SPACE/i) {
+                    $letter=substr($symbol,$pos,1);
+                    if ($letter eq "_") {
+                        # stop on "_"
+                        last;
+                    }
+                    $prefix{uc($letter)}++;
+                }
+            }
+            if ($letter ne "_") {
+                my $maxletter="";
+                my $maxsymbols=0;
+                foreach $letter (keys(%prefix)) {
+                    #print "$letter: $prefix{$letter}.\n";
+                    if ($prefix{$letter}>$maxsymbols) {
+                        $maxletter=$letter;
+                        $maxsymbols=$prefix{$letter};
+                    }
+                }
+                $ratio = scalar(keys(%IndexEntriesFull)) / $prefix{$maxletter};
+                #print "most symbols start with $maxletter, that is ". (100 * $ratio) ." %\n";
+                if ($ratio > 0.9) {
+                    # do another round
+                    $NAME_SPACE .= $maxletter;
+                }
+                $pos++;
+            }
+            else {
+                $ratio=0.0;
+            }
+        } while ($ratio > 0.9);
+        #print "most symbols start with $NAME_SPACE\n";
+    }
+
     &OutputIndexFull;
     &OutputDeprecatedIndex;
     &OutputSinceIndexes;
@@ -2465,7 +2509,7 @@ sub MakeIndexterms {
   my $sortas = "";
   
   # make the index useful, by ommiting the namespace when sorting
-  if (defined($NAME_SPACE)) {
+  if ($NAME_SPACE ne "") {
     if ($symbol =~ m/^$NAME_SPACE\_?(.*)/i) {
        $sortas=" sortas=\"$1\"";
     }

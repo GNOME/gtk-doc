@@ -1,5 +1,15 @@
 2009-01-20  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-mkdb.in:
+	* tests/annotations/docs/Makefile.am:
+	* tests/bugs/docs/Makefile.am:
+	* tests/bugs/docs/tester-docs.xml:
+	* tests/gobject/docs-tmpl/Makefile.am:
+	* tests/gobject/docs/Makefile.am:
+	  Detect namespace prefix if not given.
+
+2009-01-20  Stefan Kost  <ensonic@users.sf.net>
+
 	* style-classic.css:
 	* style.css:
 	  Fix gap, caused by double index divs produces by index generated with
