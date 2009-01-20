@@ -216,9 +216,17 @@ if we hightlight to html we get colors, we need to check what tags we should pro
 <div class="informalexample"><pre class="programlisting"> is used for examples.
 problems:
 * in html we don't know the language anymore
+  * add another div
 * with source-highlight, constants and types are not markedup.
   for types we might need to build an own lang file dynamically and include
   /usr/share/source-highlight/c.lang
+=== |[ ... ]| does not allow setting the language ===
+* check for vi/emacs/jedit modelines
+  jedit: http://www.jedit.org/users-guide/buffer-local.html
+  vim: http://vim.wikia.com/wiki/Modeline_magic
+  emacs: http://www.delorie.com/gnu/docs/emacs/emacs_486.html
+* allow <!-- language="C" --> comments after |[
+* we need to catch those when processing the docbook and expanding the |[
 
 = documentation best practises #518427 =
 * we'd like offer a more complete skelleton

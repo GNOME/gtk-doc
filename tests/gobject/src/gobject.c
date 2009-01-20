@@ -6,7 +6,8 @@
  * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
  * signal.
  * A new instance can be created using the gtkdoc_object_new() function. The
- * whole lifecycle usualy looks like shown in this example: |[
+ * whole lifecycle usualy looks like shown in this example:
+ * |[<!-- language="C" -->
  * GObject *myobj;
  * 
  * myobj = gtkdoc_object_new();

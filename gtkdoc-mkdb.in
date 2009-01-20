@@ -2298,6 +2298,8 @@ sub ExpandAbbreviations {
   # Convert "|[" and "]|" into the start and end of program listing examples.
   $text =~ s%\|\[%<informalexample><programlisting>%g;
   $text =~ s%\]\|%</programlisting></informalexample>%g;
+  # TODO: check for a xml comment after |[ and pick the language attribute from
+  # that
 
   # keep CDATA unmodified, preserve ulink tags (ideally we preseve all tags
   # as such)
