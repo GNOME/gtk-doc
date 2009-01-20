@@ -336,11 +336,13 @@ if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
             foreach my $symbol (keys(%IndexEntriesFull)) {
                 if(($NAME_SPACE eq "") || $symbol =~ /^$NAME_SPACE/i) {
                     $letter=substr($symbol,$pos,1);
-                    if ($letter eq "_") {
-                        # stop on "_"
-                        last;
+                    if (defined($letter)) {
+                        if ($letter eq "_") {
+                            # stop on "_"
+                            last;
+                        }
+                        $prefix{uc($letter)}++;
                     }
-                    $prefix{uc($letter)}++;
                 }
             }
             if ($letter ne "_") {

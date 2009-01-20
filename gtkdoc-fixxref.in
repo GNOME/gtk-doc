@@ -78,7 +78,7 @@ my @VisitedPaths;
 my $path_prefix="";
 if ($HTML_DIR =~ m%(.*?)/share/gtk-doc/html%) {
     $path_prefix=$1;
-#    print "Path prefix: $path_prefix\n";
+    #print "Path prefix: $path_prefix\n";
 }
 
 if (!defined $MODULE_DIR) {
