@@ -242,7 +242,7 @@ sub FixHTMLFile {
     # now we could turn them into GTKDOCLINK items
     $entire_file =~ s%(<span class=\"function\">)(.*?)(</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
     # we could also try the first item in stuff marked up as 'normal'
-    #$entire_file =~ s%(<span class=\"normal\">\s*)(.*?)(\s*.*?</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
+    $entire_file =~ s%(<span class=\"normal\">\s*)(.+?)((\s+.+?)?\s*</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
 
     $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($1,$2); %gse;
 
@@ -277,6 +277,7 @@ sub MakeXRef {
     }
 }
 
+
 sub MakeGtkDocLink {
     my ($pre,$symbol,$post) = @_;
     
@@ -285,6 +286,7 @@ sub MakeGtkDocLink {
     #return "<span class=\"$type\"><GTKDOCLINK HREF=\"$id\">$symbol</GTKDOCLINK></span>";
     return "$pre<GTKDOCLINK HREF=\"$id\">$symbol</GTKDOCLINK>$post";
 }
+
 
 sub HighlightSource {
     my ($type, $source) = @_;
@@ -319,6 +321,7 @@ sub HighlightSource {
 
     return "<div class=\"$type\"><pre class=\"programlisting\">$highlighted_source</pre></div>";
 }
+
 
 #############################################################################
 # Function    : CreateValidSGMLID
