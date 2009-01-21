@@ -192,18 +192,13 @@ colored frame and a warning sign /!\.
 http://bugzilla.gnome.org/show_bug.cgi?id=536928
 We could also run a postprocessing script in gtkdoc-mkhtml/gtkdoc-fixxref
 
-perl modules:
-  http://search.cpan.org/~palant/Syntax-Highlight-Universal-0.4/Universal.pm
-  http://search.cpan.org/~jamadam/Syntax-Highlight-Engine-Simple-0.08/lib/Syntax/Highlight/Engine/Simple.pm
-  http://search.cpan.org/~hanje/Syntax-Highlight-Engine-Kate-0.04/lib/Syntax/Highlight/Engine/Kate.pod
-    - not packaged for ubuntu
 tools:
   source-highlight (/usr/bin/source-highlight)
-  source-highlight -i./tests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc
-  source-highlight -i./tests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc -cstyle.css --no-doc
-  source-highlight -i./tests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -n -t4 -sc -f docbook
+  source-highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc
+  source-highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc -cstyle.css --no-doc
+  source-highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -n -t4 -sc -f docbook
 
-  highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -l -H -f -j2
+  highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -l -X -f -j2
 
 some tips about styling code listings in html
 http://www.tjkdesign.com/articles/how_to_style_a_code_listing.asp

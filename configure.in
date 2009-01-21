@@ -86,11 +86,11 @@ dnl
 HIGHLIGHT_OPTIONS=""
 AC_PATH_PROG([HIGHLIGHT], [source-highlight])
 if test -n "$HIGHLIGHT"; then
-  HIGHLIGHT_OPTIONS="-n -t4 -sc -cstyle.css --no-doc -i"
+  HIGHLIGHT_OPTIONS="-t4 -sc -cstyle.css --no-doc -i"
 else
   AC_PATH_PROG([HIGHLIGHT], [highlight])
   if test -n "$HIGHLIGHT"; then
-    HIGHLIGHT_OPTIONS="-l -H -f -j2"
+    HIGHLIGHT_OPTIONS="-X -f"
   fi
 fi
 AC_SUBST([HIGHLIGHT_OPTIONS])

@@ -313,13 +313,27 @@ sub HighlightSource {
     }
     elsif ("@HIGHLIGHT@" =~ m%/highlight%) {
         # need to rewrite the stylesheet classes
+        $highlighted_source =~ s%<span class="com">%<span class="comment">%gs;
+        $highlighted_source =~ s%<span class="dir">%<span class="preproc">%gs;
+        $highlighted_source =~ s%<span class="kwd">%<span class="function">%gs;
+        $highlighted_source =~ s%<span class="kwa">%<span class="keyword">%gs;
+        $highlighted_source =~ s%<span class="line">%<span class="linenum">%gs;
+        $highlighted_source =~ s%<span class="num">%<span class="number">%gs;
+        $highlighted_source =~ s%<span class="str">%<span class="string">%gs;
+        $highlighted_source =~ s%<span class="sym">%<span class="symbol">%gs;
     }
+    # chop of leading and trailing empty lines
+    $highlighted_source =~ s/^[\s\n]+//gs;
+    $highlighted_source =~ s/[\s\n]+$//gs;
+    # we should do own line-numbering
+    $highlighted_source =~ s%^(.*)$%<li>$1</li>%gm;
+    $highlighted_source =~ s%<li></li>%<li>&nbsp;</li>%gm;
     
     # remove temp file
     unlink ($temp_source_file)
 	|| die "Can't delete $temp_source_file: $!";
 
-    return "<div class=\"$type\"><pre class=\"programlisting\">$highlighted_source</pre></div>";
+    return "<div class=\"$type\"><ol class=\"code\">$highlighted_source</ol></div>";
 }
 
 
