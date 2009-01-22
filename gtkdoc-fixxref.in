@@ -237,12 +237,14 @@ sub FixHTMLFile {
     my $entire_file = <HTMLFILE>;
     close (HTMLFILE);
     
-    $entire_file =~ s%<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>%&HighlightSource($1,$2);%gse;
-    # from the highlighter we get all the functions marked up
-    # now we could turn them into GTKDOCLINK items
-    $entire_file =~ s%(<span class=\"function\">)(.*?)(</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
-    # we could also try the first item in stuff marked up as 'normal'
-    $entire_file =~ s%(<span class=\"normal\">\s*)(.+?)((\s+.+?)?\s*</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
+    if ("@HIGHLIGHT@" ne "") {
+        $entire_file =~ s%<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>%&HighlightSource($1,$2);%gse;
+        # from the highlighter we get all the functions marked up
+        # now we could turn them into GTKDOCLINK items
+        $entire_file =~ s%(<span class=\"function\">)(.*?)(</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
+        # we could also try the first item in stuff marked up as 'normal'
+        $entire_file =~ s%(<span class=\"normal\">\s*)(.+?)((\s+.+?)?\s*</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
+    }
 
     $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($1,$2); %gse;
 
@@ -321,6 +323,8 @@ sub HighlightSource {
         $highlighted_source =~ s%<span class="num">%<span class="number">%gs;
         $highlighted_source =~ s%<span class="str">%<span class="string">%gs;
         $highlighted_source =~ s%<span class="sym">%<span class="symbol">%gs;
+        # maybe also do
+        # $highlighted_source =~ s%</span>(.+)<span%</span><span class="normal">$1</span><span%gs;
     }
     # chop of leading and trailing empty lines
     $highlighted_source =~ s/^[\s\n]+//gs;

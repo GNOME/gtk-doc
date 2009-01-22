@@ -1,5 +1,10 @@
 2009-01-22  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-fixxref.in:
+	  Only run the syntax highligher if we have one. Fixes #568714.
+
+2009-01-22  Stefan Kost  <ensonic@users.sf.net>
+
 	* README:
 	  Point to the right docs.
 
