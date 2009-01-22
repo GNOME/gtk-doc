@@ -167,11 +167,28 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   - unfortunately we can't link to symbols
   - linking to files is difficult as in gtkdoc we have modules
 
+
 = docbook xml =
-Its tedious to write large amounts of docbook. Can we offer integration with
-asciidoc (http://www.methods.co.nz/asciidoc/)? This way the master document
-could be written musch easier. It would be cool if we could use the asciidoc
-markup in source-comments also.
+Its tedious to write large amounts of docbook.
+
+== more macros ==
+We need parametric, user definable macros.
+|[ ... ]| - programlistings
+|macro(arg1,arg2,...)[ ... ]| - call macro, pass args as parameters, content
+  of [] on stdin or as a file, get output on stdout or file and replace the macro
+  with it
+=== example macros ===
+|highlight(c)[...]| - highlight source code
+|dot(abc.svg)[...]| - format dot graph and include result as mediaobject
+
+=== where to define macros ===
+* system wide and with the package, <prefix>/share/gtk-doc/macros, $(srcdir)
+* prefix for custom macros?
+
+== ascii doc as a frontend ==
+Can we offer integration with asciidoc (http://www.methods.co.nz/asciidoc/)?
+This way the master document could be written much easier. It would be cool if
+we could use the asciidoc markup in source-comments also.
 
 == extract other bits and pieces ==
 === library api ==
@@ -183,6 +200,8 @@ http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus
 === GConf schemas ===
 
 === Wiki imports ===
+
+
 
 = styling =
 == warnings ==
@@ -222,6 +241,8 @@ problems:
   emacs: http://www.delorie.com/gnu/docs/emacs/emacs_486.html
 * allow <!-- language="C" --> comments after |[
 * we need to catch those when processing the docbook and expanding the |[
+
+
 
 = documentation best practises #518427 =
 * we'd like offer a more complete skelleton
