@@ -639,6 +639,8 @@ sub ScanHeader {
     foreach $object (@objects) {
 	$list =~ s/^$object\n//m;
 	$list =~ s/^${object}Class\n//m;
+	$list =~ s/^${object}Iface\n//m;
+	$list =~ s/^${object}Interface\n//m;
     }
 
 

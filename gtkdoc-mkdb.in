@@ -514,6 +514,8 @@ sub OutputSGML {
 	    # We don't want warnings if object & class structs aren't used.
 	    $DeclarationOutput{$title} = 1;
 	    $DeclarationOutput{"${title}Class"} = 1;
+	    $DeclarationOutput{"${title}Iface"} = 1;
+	    $DeclarationOutput{"${title}Interface"} = 1;
 
 	} elsif (m/^<FILE>(.*)<\/FILE>/) {
 	    $filename = $1;
