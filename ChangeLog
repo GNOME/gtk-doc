@@ -2,6 +2,15 @@
 
 	patch by: David Nečas <yeti@physics.muni.cz>
 
+	* gtkdoc-scan.in:
+	  Don't scan files twice. The patch was slightly changed to name the
+	  hash lowercase (uppercase is used for configureation options) and
+	  add a comment. Fixes #568708.
+
+2009-01-23  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: David Nečas <yeti@physics.muni.cz>
+
 	* gtkdoc-mkdb.in:
 	  Don't add empty <para></para> tags to the docs to avoid breaking the
 	  detection of undocumented things. Fixes #568732.
