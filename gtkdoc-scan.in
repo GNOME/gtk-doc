@@ -599,7 +599,7 @@ sub ScanHeader {
 		    $symbol = $1;
 		}
 
-		if ($symbol =~ m/^(\S+)Class/) {
+		if ($symbol =~ m/^(\S+)(Class|Iface|Interface)\b/) {
 		    #print "Found object: $1\n";
 		    $list .= "<TITLE>$1</TITLE>\n$1\n";
 		    push (@objects, $1);
