@@ -78,7 +78,7 @@ my $unused = &CheckEmpty("$DOC_MODULE-unused.txt",
 
 my $failed = ($total > 0) + ($undeclared != 0) + ($unused != 0);
 my $rate = 100.0*($checks - $failed)/$checks;
-printf '%.1f%%: Checks %d, Failures: %d%s', $rate, $checks, $failed, "\n";
+printf "%.1f%%: Checks %d, Failures: %d\n", $rate, $checks, $failed;
 exit ($failed != 0);
 
 sub Grep() {

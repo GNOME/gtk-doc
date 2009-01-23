@@ -1,5 +1,28 @@
 2009-01-23  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-check.in:
+	  No need to format a '\n' into a fromatstring.
+
+	* gtkdoc-mkdb.in:
+	  Add FIXMEs for Bug 568711.
+
+	* gtkdoc-mkhtml.in:
+	  Add a comment.
+
+	* configure.in:
+	* tests/Makefile.am:
+	* tests/fail.sh:
+	* tests/fail/Makefile.am:
+	* tests/fail/docs/Makefile.am:
+	* tests/fail/docs/tester-docs.xml:
+	* tests/fail/docs/tester-sections.txt:
+	* tests/fail/src/Makefile.am:
+	* tests/fail/src/tester.c:
+	* tests/fail/src/tester.h:
+	  Add a test suite for failure checks.
+
+2009-01-23  Stefan Kost  <ensonic@users.sf.net>
+
 	patch by: David Nečas <yeti@physics.muni.cz>
 
 	* gtkdoc-scan.in:

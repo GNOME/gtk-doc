@@ -1,10 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = gobject bugs annotations .
+SUBDIRS = gobject bugs annotations fail .
 
 if BUILD_TESTS
 
-TESTS = gobject.sh bugs.sh annotations.sh
+TESTS = gobject.sh bugs.sh annotations.sh fail.sh
 TESTS_ENVIRONMENT = \
 	PATH=$(abs_top_builddir):$(srcdir):$(PATH) \
 	PERL5LIB=$(abs_top_builddir):$(PERL5LIB)
@@ -12,5 +12,5 @@ TESTS_ENVIRONMENT = \
 endif
 
 EXTRA_DIST = gtkdoctest.sh \
-	gobject.sh bugs.sh annotations.sh
+	gobject.sh bugs.sh annotations.sh fail.sh
 

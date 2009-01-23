@@ -33,6 +33,8 @@ shift
 
 if test $uninstalled = yes; then
       # this does not work from buiddir!=srcdir
+      # we could try this
+      # MAKE_SCRDIR=$(abs_srcdir) MAKE_BUILDDIR=$(abs_builddir) gtkdoc-mkhtml ...
       gtkdocdir=`dirname $0`
       #echo "uninstalled, gtkdocdir=$gtkdocdir"
 else
