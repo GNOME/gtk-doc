@@ -2,10 +2,17 @@
 
 	patch by: David Nečas <yeti@physics.muni.cz>
 
+	* gtkdoc-mkdb.in:
+	  Don't add empty <para></para> tags to the docs to avoid breaking the
+	  detection of undocumented things. Fixes #568732.
+
+2009-01-23  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: David Nečas <yeti@physics.muni.cz>
+
 	* gtk-doc.m4:
 	  Change nonsense error message to tell that gtk-doc is needed to build
 	  a given package and not gtk-doc. Fixes #568734.
-	  
 
 2009-01-23  Stefan Kost  <ensonic@users.sf.net>
 

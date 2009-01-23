@@ -3848,15 +3848,17 @@ sub MergeSourceDocumentation {
 
 	    # If there is a blank line, finish the paragraph and start another.
 	    $src_doc = &ConvertBlankLines ($src_doc, $symbol);
+	    # Do not add <para> to nothing, it breaks missing docs checks.
+	    my $src_doc_para = $src_doc ? "<para>\n$src_doc</para>\n" : "";
 
             if ($symbol =~ m/$TMPL_DIR\/.+:Long_Description/) {
-                $SymbolDocs{$symbol} = "<para>\n$src_doc</para>\n$tmpl_doc";
+                $SymbolDocs{$symbol} = "$src_doc_para$tmpl_doc";
             } elsif ($symbol =~ m/$TMPL_DIR\/.+:.+/) {
                 # For the title/summary/see also section docs we don't want to
 	        # add any <para> tags.
                 $SymbolDocs{$symbol} = "$src_doc"
             } else {
-                $SymbolDocs{$symbol} = "<para>\n$src_doc</para>\n$tmpl_doc";
+                $SymbolDocs{$symbol} = "$src_doc_para$tmpl_doc";
             }
 
             # merge parameters
