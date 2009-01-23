@@ -199,7 +199,7 @@ AC_CONFIG_FILES([gtkdoc-scan],     [chmod +x gtkdoc-scan])
 AC_CONFIG_FILES([gtkdoc-scangobj], [chmod +x gtkdoc-scangobj])
 AC_CONFIG_FILES([gtkdoc-scanobj],  [chmod +x gtkdoc-scanobj])
 AC_CONFIG_FILES([gtkdocize],       [chmod +x gtkdocize])
-
+AC_CONFIG_FILES([tests/tools.sh],  [chmod +x tests/tools.sh])
 AC_OUTPUT
 
 AC_MSG_NOTICE([

@@ -20,4 +20,4 @@ tested=$(($tested + 1))
 echo "tested : $tested, failed : $failed"
 rate=$((100*($tested - $failed)/$tested));
 echo "$rate %: Checks $tested, Failures: $failed"
-exit `test $failed != 0`;
+exit `test $failed = 0`;

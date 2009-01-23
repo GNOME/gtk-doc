@@ -1,0 +1,46 @@
+#!/bin/sh
+
+failed=0
+tested=0
+
+echo "Running suite(s): gtk-doc-tools";
+
+# tests
+
+@PERL@ -cwT `which gtkdoc-check`
+if test $? = 1 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+@PERL@ -cwT `which gtkdoc-fixxref`
+if test $? = 1 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+@PERL@ -cwT `which gtkdoc-mkdb`
+if test $? = 1 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+@PERL@ -cwT `which gtkdoc-mktmpl`
+if test $? = 1 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+@PERL@ -cwT `which gtkdoc-rebase`
+if test $? = 1 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+@PERL@ -cwT `which gtkdoc-scan`
+if test $? = 1 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+@PERL@ -cwT `which gtkdoc-scangobj`
+if test $? = 1 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+@PERL@ -cwT `which gtkdoc-scanobj`
+if test $? = 1 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+# summary
+echo "tested : $tested, failed : $failed"
+rate=$((100*($tested - $failed)/$tested));
+echo "$rate %: Checks $tested, Failures: $failed"
+exit `test $failed = 0`;

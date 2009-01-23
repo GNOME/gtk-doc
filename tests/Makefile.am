@@ -4,13 +4,13 @@ SUBDIRS = gobject bugs annotations fail .
 
 if BUILD_TESTS
 
-TESTS = gobject.sh bugs.sh annotations.sh fail.sh
+TESTS = tools.sh gobject.sh bugs.sh annotations.sh fail.sh
 TESTS_ENVIRONMENT = \
 	PATH=$(abs_top_builddir):$(srcdir):$(PATH) \
 	PERL5LIB=$(abs_top_builddir):$(PERL5LIB)
 
 endif
 
-EXTRA_DIST = gtkdoctest.sh \
+EXTRA_DIST = gtkdoctest.sh tools.sh \
 	gobject.sh bugs.sh annotations.sh fail.sh
 

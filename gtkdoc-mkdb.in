@@ -3971,7 +3971,7 @@ sub MergeSourceDocumentation {
                     $type="SIGNAL";
                 }
 
-                print "Check param docs for $symbol, tmpl_params: ",$#$tmpl_params," entries, type=$type\n";
+                #print "Check param docs for $symbol, tmpl_params: ",$#$tmpl_params," entries, type=$type\n";
 
                 if ($#$tmpl_params > 0) {
                     my $j;

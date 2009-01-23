@@ -1,5 +1,17 @@
 2009-01-23  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-mkdb.in:
+	  Recomment out debug log the accidentialy went in.
+
+	* configure.in:
+	* tests/Makefile.am:
+	* tests/fail.sh:
+	* tests/tools.sh.in:
+	* tests/tools.sh.in (added):
+	  Add a check that tests that all scripts are runnable.
+
+2009-01-23  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-check.in:
 	  No need to format a '\n' into a fromatstring.
 
