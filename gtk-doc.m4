@@ -27,7 +27,7 @@ AC_DEFUN([GTK_DOC_CHECK],
       [PKG_CHECK_EXISTS([gtk-doc],,
                         AC_MSG_ERROR([gtk-doc not installed and --enable-gtk-doc requested]))],
       [PKG_CHECK_EXISTS([gtk-doc >= $1],,
-                        AC_MSG_ERROR([You need to have gtk-doc >= $1 installed to build gtk-doc]))])
+                        AC_MSG_ERROR([You need to have gtk-doc >= $1 installed to build $PACKAGE_NAME]))])
   fi
 
   AC_MSG_CHECKING([whether to build gtk-doc documentation])
