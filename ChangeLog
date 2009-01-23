@@ -1,3 +1,16 @@
+2009-01-23  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: David Nečas <yeti@physics.muni.cz>
+
+	* gtkdoc-mkhtml.in:
+	* gtkdoc-mkman.in:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	  Less quirky way of knowing that we run uninstalled, which is only
+	  needed for the tests anyway. In addition to the patch, make same
+	  changes in mkman, add a shift to arg parsing to not loop and change
+	  the makefiles for the tests. Fixes #568702.
+
 2009-01-22  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-fixxref.in:

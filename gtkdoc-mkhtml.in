@@ -9,10 +9,12 @@ Usage: gtkdoc-mkhtml [--path=SEARCH_PATH] MODULE DRIVER_FILE [BACKEND_OPTIONS...
 # parse options, ignore unknown options for future extensions
 
 searchpath=
+uninstalled=no
 while true; do
     case "X$1" in
         X--version) echo "@VERSION@"; exit 0;;
         X--help) echo "$usage"; exit 0;;
+        X--uninstalled) uninstalled=yes; shift;;
         X--path=*) searchpath=`echo $1 | sed s/.*=//`; shift;;
         X--*) shift;;
         X*) break;;
@@ -29,17 +31,15 @@ shift
 document=$1
 shift
 
-# FIXME: this is a hack to detect uninstalled
-if test "x$0" = "x@prefix@/bin/gtkdoc-mkhtml" ; then
-      #echo "installed"
+if test $uninstalled = yes; then
+      # this does not work from buiddir!=srcdir
+      gtkdocdir=`dirname $0`
+      #echo "uninstalled, gtkdocdir=$gtkdocdir"
+else
       # the first two are needed to resolve datadir
       prefix=@prefix@
       datarootdir=@datarootdir@
       gtkdocdir=@datadir@/gtk-doc/data
-else
-      #echo "uninstalled"
-      # this does not work from buiddir!=srcdir
-      gtkdocdir=`dirname $0`
 fi
 
 if head -n 1 $document | grep "<?xml" > /dev/null; then

@@ -7,10 +7,12 @@ Usage: gtkdoc-mkman [--path=SEARCH_PATH] MODULE DRIVER_FILE"
 # parse options, ignore unknown options for future extensions
 
 searchpath=
+uninstalled=no
 while true; do
     case "X$1" in
         X--version) echo "@VERSION@"; exit 0;;
         X--help) echo "$usage"; exit 0;;
+        X--uninstalled) uninstalled=yes; shift;;
         X--path=*) searchpath=`echo $1 | sed s/.*=//`; shift;;
         X--*) shift;;
         X*) break;;
@@ -27,32 +29,42 @@ shift
 document=$1
 shift
 
-# FIXME: this is a hack to run uninstalled
-if test "x$0" = "x@prefix@/bin/gtkdoc-mkhtml" ; then
-      #echo "installed"
+if test $uninstalled = yes; then
+      # this does not work from buiddir!=srcdir
+      gtkdocdir=`dirname $0`
+      #echo "uninstalled, gtkdocdir=$gtkdocdir"
+else
       # the first two are needed to resolve datadir
       prefix=@prefix@
       datarootdir=@datarootdir@
       gtkdocdir=@datadir@/gtk-doc/data
-else
-      #echo "uninstalled"
-      gtkdocdir=`dirname $0`
 fi
 
 if head -n 1 $document | grep "<?xml" > /dev/null; then
   is_xml=true
+  path_option='--path'
 else
   is_xml=false
+  path_option='--directory'
 fi
 
-# see http://bugzilla.gnome.org/show_bug.cgi?id=467488
-# 
-#@XSLTPROC@ --nonet --xinclude \
-#  --stringparam gtkdoc.bookname $module
-#  --stringparam gtkdoc.version"@VERSION@" \
-#  manpages/docbook.xsl $document || exit $?
+# we could do "$path_option $PWD "
+# to avoid needing rewriting entities that are copied from the header
+# into docs under xml
+if test "X$searchpath" = "X"; then
+    path_arg=
+else
+    path_arg="$path_option $searchpath"
+fi
 
+# would it make sens to create man pages only for certain refentries
+# e.g. for tools
 if $is_xml; then
+  # see http://bugzilla.gnome.org/show_bug.cgi?id=467488
+  @XSLTPROC@ $path_arg --nonet --xinclude \
+      --stringparam gtkdoc.bookname $module
+      --stringparam gtkdoc.version"@VERSION@" \
+      manpages/docbook.xsl $document || exit $?
 else
   for i in `cd sgml;ls *.sgml` do
     j=`echo $i | sed 's/.sgml/.man/'`
