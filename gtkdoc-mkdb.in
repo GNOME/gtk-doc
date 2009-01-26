@@ -3987,13 +3987,13 @@ sub MergeSourceDocumentation {
                                 $AllIncompleteSymbols{$symbol}=$tmpl_param_name;
                             }
                             &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
-                                "$item description for $symbol::$tmpl_param_name is missing in source code comment block.");
+                                "$item description for $symbol"."::"."$tmpl_param_name is missing in source code comment block.");
                         }
                     }
                 }
                 else {
                     if ($#$tmpl_params == 0) {
-                        $AllIncompleteSymbols{$symbol}="???";
+                        $AllIncompleteSymbols{$symbol}="<items>";
                         &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                             "$item descriptions for $symbol are missing in source code comment block.");
                     }

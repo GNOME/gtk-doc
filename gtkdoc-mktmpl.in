@@ -428,7 +428,8 @@ EOF
 					 "");
 
 	    } else {
-		print "###Can't parse args for function $symbol: $declaration\n";
+		&LogWarning ($SymbolSourceFile{$symbol},$SymbolSourceLine{$symbol}, 
+                    "Can't parse args for function $symbol: $declaration");
 		last;
 	    }
 	    $param_num++;
@@ -441,7 +442,7 @@ EOF
 	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Stability", $template_exists, 0, "");
-        $output .= &OutputOldParams ($symbol);
+	$output .= &OutputOldParams ($symbol);
 	$output .= "\n";
     }
 
