@@ -120,6 +120,36 @@ typedef struct {
  */
 #define BUG_530758 "dummy"
 
+
+/**
+ * bug_532395a:
+ * @number: a number
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=532395
+ *
+ * Returns: number
+ */
+/**
+ * bug_532395b:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=532395
+ */
+G_INLINE_FUNC guint
+bug_532395a (gulong number)
+{
+#if defined(__GNUC__) && (__GNUC__ >= 4) && defined(__OPTIMIZE__)
+  return G_LIKELY (number) ?
+	   ((GLIB_SIZEOF_LONG * 8 - 1) ^ __builtin_clzl(number)) + 1 : 1;
+#else
+  return 0;
+#endif
+}
+G_INLINE_FUNC void
+bug_532395b (void)
+{
+}
+
+
 /** 
  * bug_544172:
  * @self: object pointer.
@@ -141,6 +171,7 @@ struct _bug_554833 {
 
 struct _bug_554833 *
                 bug_554833_new (void);
+
 
 #endif // GTKDOC_TESTER_H
 

@@ -1,5 +1,13 @@
 2009-01-26  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-scan.in:
+	* tests/bugs/docs/tester-sections.txt:
+	* tests/bugs/src/tester.c:
+	* tests/bugs/src/tester.h:
+	  Handle inline functions in headers. Fixes #532395.
+
+2009-01-26  Stefan Kost  <ensonic@users.sf.net>
+
 	* HACKING:
 	  Mention onine site for regexp testing.
 

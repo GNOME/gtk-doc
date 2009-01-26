@@ -109,9 +109,9 @@ G_CONST_RETURN gchar* G_CONST_RETURN * bug_471014 (void) {
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=446648
  **/
- 
- 
- /**
+
+
+/**
  * bug_552602:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=552602
@@ -121,4 +121,5 @@ G_CONST_RETURN gchar* G_CONST_RETURN * bug_471014 (void) {
 const char* const * bug_552602 (void) {
   return NULL;
 }
+
 

@@ -237,6 +237,7 @@ sub ScanHeader {
     my ($in_comment) = 0;		  # True if we are in a comment.
     my ($in_declaration) = "";	  # The type of declaration we are in, e.g.
 				  #   'function' or 'macro'.
+    my ($skip_block) = 0;		  # True if we should skip a block.
     my ($symbol);		  # The current symbol being declared.
     my ($decl);			  # Holds the declaration of the current symbol.
     my ($ret_type);		  # For functions and function typedefs this
@@ -300,6 +301,18 @@ sub ScanHeader {
 	    #print "Comment: $_";
 	    if (m%\*/%) {
 		$in_comment = 0;
+	    }
+	    next;
+	}
+	# Skip complete blocks, needed fo inline macros
+	if ($skip_block==1) {
+	    if (m%{%) {
+	        $skip_block=2;
+	    }
+	    next;
+	} elsif ($skip_block==2) {
+	    if (m%}%) {
+	        $skip_block=0;
 	    }
 	    next;
 	}
@@ -485,14 +498,32 @@ sub ScanHeader {
 		$symbol = $1;
 		$decl = $';
 
-		if ($previous_line !~ m/^\s*G_INLINE_FUNC/
-		    && $previous_line !~ m/^\s*static\s+/) {
-		    if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)?\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
-			$ret_type = $1;
-			if (defined ($2)) { $ret_type .= " $2"; }
-			#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
-			$in_declaration = "function";
-		    }
+		if ($previous_line !~ m/^\s*G_INLINE_FUNC/) {
+		    if ($previous_line !~ m/^\s*static\s+/) {
+                        #                                                                       $1                                                                $2
+                        if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)?\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
+                            $ret_type = $1;
+                            if (defined ($2)) { $ret_type .= " $2"; }
+                            #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+                            $in_declaration = "function";
+                        }
+                    }
+                }
+                else {
+		    if ($previous_line !~ m/^\s*static\s+/) {
+                        #print "DEBUG: skip block after inline function\n";
+                        # now we we need to skip a whole { } block
+                        $skip_block = 1;
+                        #                                                                       $1                                                                $2
+                        if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)?\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
+                            $ret_type = $1;
+                            if (defined ($2)) { $ret_type .= " $2"; }
+                            #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+                            $in_declaration = "function";
+                            # this is a hack to detect the end of declaration
+                            $decl.=";"
+                        }
+                    }
 		}
 
 	    # Try to catch function declarations with the return type and name
@@ -507,14 +538,14 @@ sub ScanHeader {
 
 		} elsif ($previous_line =~ m/^\s*\w+\s*$/
 			 && $pre_previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$/o) {
-			$ret_type = $1;
-			$ret_type =~ s/\s*\n//;
-			$in_declaration = "function";
-
-                        $symbol = $previous_line;
-                        $symbol =~ s/^\s+//;
-                        $symbol =~ s/\s*\n//;
-                        #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+                    $ret_type = $1;
+                    $ret_type =~ s/\s*\n//;
+                    $in_declaration = "function";
+                    
+                    $symbol = $previous_line;
+                    $symbol =~ s/^\s+//;
+                    $symbol =~ s/\s*\n//;
+                    #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
 		}
 
 	    #} elsif (m/^extern\s+/) {
