@@ -1,5 +1,17 @@
 2009-01-26  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-mkdb.in:
+	* tests/bugs/src/tester.h:
+	* tests/fail.sh:
+	* tests/fail/docs/tester-docs.xml:
+	* tests/fail/docs/tester-sections.txt:
+	* tests/fail/src/tester.c:
+	  Add public symbols from section file when doing the -undocumented.txt
+	  report. Also add the special symbols for the section docs when reading
+	  the section-file. Extend test suite to check for it. Fixes #568732
+
+2009-01-26  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-scan.in:
 	* tests/bugs/docs/tester-sections.txt:
 	* tests/bugs/src/tester.c:

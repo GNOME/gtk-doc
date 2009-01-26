@@ -1043,6 +1043,8 @@ sub ReadKnownSymbols {
             next;
 
 	} elsif (m/^<FILE>(.*)<\/FILE>/) {
+            $KnownSymbols{"$TMPL_DIR/$1:Long_Description"} = 1;
+            $KnownSymbols{"$TMPL_DIR/$1:Short_Description"} = 1;
             next;
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
@@ -3631,76 +3633,88 @@ sub ScanSourceFile {
 #############################################################################
 
 sub OutputMissingDocumentation {
-     my $n_documented = 0;
-     my $n_incomplete = 0;
-     my $total = 0;
-     my $symbol;
-     my $percent;
-     my $msg;
-     my $buffer = "";
-     my $buffer_deprecated = "";
-     my $buffer_descriptions = "";
-
-     open (UNDOCUMENTED, ">$ROOT_DIR/$MODULE-undocumented.txt")
-          || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt: $!";
-
-     foreach $symbol (sort (keys (%AllSymbols))) {
-          if ($symbol !~ /:(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include)/) {
-	      $total++;
-              if (exists ($AllDocumentedSymbols{$symbol})) {
-		  $n_documented++;
-                  if (exists ($AllIncompleteSymbols{$symbol})) {
-                      $n_incomplete++;
-                      $buffer .= $symbol . " (" . $AllIncompleteSymbols{$symbol} . ")\n";
-                  }
-	      } elsif (exists $Deprecated{$symbol}) {
-                  if (exists ($AllIncompleteSymbols{$symbol})) {
-                      $n_incomplete++;
-                      $buffer_deprecated .= $symbol . " (" . $AllIncompleteSymbols{$symbol} . ")\n";
-                  } else {
-                      $buffer_deprecated .= $symbol . "\n";
-                  }
-	      } else {
-                  if (exists ($AllIncompleteSymbols{$symbol})) {
-                      $n_incomplete++;
-                      $buffer .= $symbol . " (" . $AllIncompleteSymbols{$symbol} . ")\n";
-                  } else {
-                      $buffer .= $symbol . "\n";
-                  }
-	      }
-          } elsif ($symbol =~ /:(Long_Description|Short_Description)/) {
-              $total++;
-              #my $len1=(exists($SymbolDocs{$symbol}))?length($SymbolDocs{$symbol}):-1;
-              #my $len2=(exists($AllDocumentedSymbols{$symbol}))?length($AllDocumentedSymbols{$symbol}):-1;
-              #print "%%%% $symbol : $len1,$len2\n";
-              if (((exists ($SymbolDocs{$symbol})) && (length ($SymbolDocs{$symbol}) > 0))
-              || ((exists ($AllDocumentedSymbols{$symbol})) && (length ($AllDocumentedSymbols{$symbol}) > 0))) {
-                  $n_documented++;
-              } else {
-                  $symbol =~ m/^.*\/(.*)$/;
-                  $buffer_descriptions .= $1 . "\n";
-              }
-          }
-     }
-
-     $buffer .= "\n" . $buffer_deprecated . "\n" . $buffer_descriptions;
-
-     if ($total == 0) {
-	  $percent = 100;
-     } else {
-          $percent = ($n_documented / $total) * 100.0;
-     }
-
-     printf UNDOCUMENTED "%.0f%% symbol docs coverage.\n", $percent;
-     print UNDOCUMENTED "$n_documented symbols documented.\n";
-     print UNDOCUMENTED "$n_incomplete symbols incomplete.\n";
-     print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
-
-     print UNDOCUMENTED $buffer;
-
-     close (UNDOCUMENTED);
-
-     printf (("%.0f%% symbol docs coverage ($n_documented symbols documented, $n_incomplete symbols incomplete, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
+    my $n_documented = 0;
+    my $n_incomplete = 0;
+    my $total = 0;
+    my $symbol;
+    my $percent;
+    my $msg;
+    my $buffer = "";
+    my $buffer_deprecated = "";
+    my $buffer_descriptions = "";
+    
+    open (UNDOCUMENTED, ">$ROOT_DIR/$MODULE-undocumented.txt")
+      || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt: $!";
+    
+    foreach $symbol (sort (keys (%AllSymbols))) {
+        # FIXME: should we print LogWarnings for undocumented stuff?
+        # DEBUG
+        #my $ssfile = &GetSymbolSourceFile($symbol);
+        #my $ssline = &GetSymbolSourceLine($symbol);
+        #my $location = "defined at " . (defined($ssfile)?$ssfile:"?") . ":" . (defined($ssline)?$ssline:"0") . "\n";
+        # DEBUG
+        if ($symbol !~ /:(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include|Section_Id)/) {
+            $total++;
+            if (exists ($AllDocumentedSymbols{$symbol})) {
+                $n_documented++;
+                if (exists ($AllIncompleteSymbols{$symbol})) {
+                    $n_incomplete++;
+                    $buffer .= $symbol . " (" . $AllIncompleteSymbols{$symbol} . ")\n";
+                    #$buffer .= "\t0: ".$location;
+                }
+            } elsif (exists $Deprecated{$symbol}) {
+                if (exists ($AllIncompleteSymbols{$symbol})) {
+                    $n_incomplete++;
+                    $buffer_deprecated .= $symbol . " (" . $AllIncompleteSymbols{$symbol} . ")\n";
+                    #$buffer .= "\t1a: ".$location;
+                } else {
+                    $buffer_deprecated .= $symbol . "\n";
+                    #$buffer .= "\t1b: ".$location;
+                }
+            } else {
+                if (exists ($AllIncompleteSymbols{$symbol})) {
+                    $n_incomplete++;
+                    $buffer .= $symbol . " (" . $AllIncompleteSymbols{$symbol} . ")\n";
+                    #$buffer .= "\t2a: ".$location;
+                } else {
+                    $buffer .= $symbol . "\n";
+                    #$buffer .= "\t2b: ".$location;
+                }
+            }
+        } elsif ($symbol =~ /:(Long_Description|Short_Description)/) {
+            $total++;
+            #my $len1=(exists($SymbolDocs{$symbol}))?length($SymbolDocs{$symbol}):-1;
+            #my $len2=(exists($AllDocumentedSymbols{$symbol}))?length($AllDocumentedSymbols{$symbol}):-1;
+            #print "%%%% $symbol : $len1,$len2\n";
+            if (((exists ($SymbolDocs{$symbol})) && (length ($SymbolDocs{$symbol}) > 0))
+            || ((exists ($AllDocumentedSymbols{$symbol})) && (length ($AllDocumentedSymbols{$symbol}) > 0))) {
+              $n_documented++;
+            } else {
+              # cut off the leading namespace ($TMPL_DIR)
+              $symbol =~ m/^.*\/(.*)$/;
+              $buffer_descriptions .= $1 . "\n";
+            }
+        }
+    }
+    
+    $buffer .= "\n" . $buffer_deprecated . "\n" . $buffer_descriptions;
+    
+    if ($total == 0) {
+      $percent = 100;
+    } else {
+      $percent = ($n_documented / $total) * 100.0;
+    }
+    
+    printf UNDOCUMENTED "%.0f%% symbol docs coverage.\n", $percent;
+    print UNDOCUMENTED "$n_documented symbols documented.\n";
+    print UNDOCUMENTED "$n_incomplete symbols incomplete.\n";
+    print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
+    
+    print UNDOCUMENTED $buffer;
+    
+    close (UNDOCUMENTED);
+    
+    printf (("%.0f%% symbol docs coverage ($n_documented symbols documented, $n_incomplete symbols incomplete, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
 }
 
 
@@ -3774,7 +3788,13 @@ sub MergeSourceDocumentation {
         # filter scanned declarations, with what we suppress from -sections.txt
         my %tmp = ();
         foreach $symbol (keys (%Declarations)) {
-            if ($KnownSymbols{$symbol}) {
+            if (defined($KnownSymbols{$symbol}) && $KnownSymbols{$symbol} == 1) {
+                $tmp{$symbol}=1;
+            }
+        }
+        # , add the rest from -sections.txt
+        foreach $symbol (keys (%KnownSymbols)) {
+            if ($KnownSymbols{$symbol} == 1) {
                 $tmp{$symbol}=1;
             }
         }
