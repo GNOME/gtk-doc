@@ -12,6 +12,7 @@ echo "Running suite(s): gtk-doc-$suite";
 
 # tests
 # check missing section description
+# we can't just check for a missing "tester_nodocs" entry
 grep >/dev/null "tester_nodocs:Long_Description" $DOC_MODULE-undocumented.txt
 if test $? = 1 ; then failed=$(($failed + 1)); fi
 tested=$(($tested + 1))

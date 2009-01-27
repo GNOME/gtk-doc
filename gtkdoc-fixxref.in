@@ -294,8 +294,11 @@ sub HighlightSource {
     my ($type, $source) = @_;
 
     # chop of leading and trailing empty lines
-    $source =~ s/^[\s\n]+//gs;
+    $source =~ s/^\s*\n+//gs;
     $source =~ s/[\s\n]+$//gs;
+    # cut common indent
+    $source =~ m/^(\s*)/;
+    $source =~ s/^$1//gms;
     # avoid double entity replacement
     $source =~ s/&lt;/</g;
     $source =~ s/&gt;/>/g;
@@ -329,15 +332,30 @@ sub HighlightSource {
     # chop of leading and trailing empty lines
     $highlighted_source =~ s/^[\s\n]+//gs;
     $highlighted_source =~ s/[\s\n]+$//gs;
-    # we should do own line-numbering
-    $highlighted_source =~ s%^(.*)$%<li>$1</li>%gm;
-    $highlighted_source =~ s%<li></li>%<li>&nbsp;</li>%gm;
+    # we do own line-numbering
+    my $source_lines="";
+    my $line_count = () = $highlighted_source =~ /\n/gs;
+    my $i;
+    for($i=1;$i<($line_count+2);$i++) {
+        $source_lines.="$i\n";
+    }
     
     # remove temp file
     unlink ($temp_source_file)
 	|| die "Can't delete $temp_source_file: $!";
 
-    return "<div class=\"$type\"><ol class=\"code\">$highlighted_source</ol></div>";
+    return <<END_OF_HTML
+<div class="$type">
+  <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td class="listing_lines" align="right"><pre>$source_lines</pre></td>
+        <td class="listing_code"><pre class="programlisting">$highlighted_source</pre></td>
+      </tr>
+    </tbody>
+  <table>
+</div>
+END_OF_HTML
 }
 
 
