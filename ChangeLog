@@ -1,5 +1,14 @@
 2009-01-28  Stefan Kost  <ensonic@users.sf.net>
 
+	patch by: David Nečas <yeti@physics.muni.cz>
+
+	* gtkdoc-mkdb.in:
+	* tests/gobject/src/giface.c:
+	* tests/gobject/src/gobject.c:
+	  Abbreviation where not expanded at the start of text. Fixes #569339.
+
+2009-01-28  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-fixxref.in:
 	* tests/gobject/examples/gobject.c:
 	  Expand urls in comments of examples.

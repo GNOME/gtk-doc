@@ -1,6 +1,7 @@
 /**
  * SECTION:iface
  * @short_description: interface for gtk-doc unit test
+ * @see_also: #GtkdocObject
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
  * We can link to the #GtkdocIface:itest property and the #GtkdocIface::itest
