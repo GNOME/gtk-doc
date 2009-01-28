@@ -70,6 +70,11 @@ void gtkdoc_object_set_otest (GObject *self, const gchar *value) {
  * @n: number of iterations
  *
  * Frobnicate the content of @self @n times.
+ * <footnote>
+ *  <para>
+ *    Negative frobnication can lead to unexpected behaviour.
+ *  </para>
+ * </footnote>
  *
  * Since: 0.5
  */
