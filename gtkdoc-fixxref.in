@@ -332,6 +332,10 @@ sub HighlightSource {
     # chop of leading and trailing empty lines
     $highlighted_source =~ s/^[\s\n]+//gs;
     $highlighted_source =~ s/[\s\n]+$//gs;
+    
+    # turn common urls in comments into links
+    $highlighted_source =~ s%<span class="url">(.*?)</span>%<span class="url"><a href="$1">$1</a></span>%gs;
+
     # we do own line-numbering
     my $source_lines="";
     my $line_count = () = $highlighted_source =~ /\n/gs;

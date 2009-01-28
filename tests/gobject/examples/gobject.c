@@ -1,4 +1,9 @@
-/* example for gobject usage */
+/* example for gobject usage
+ * checkout the article at http://en.wikipedia.org/wiki/GObject
+ *
+ * This example is part of the release, that can be downloaded
+ * from ftp://ftp.gnome.org/pub/gnome/sources/gtk-doc/ or any mirror.
+ */
 
 #include <glib.h>
 #include <glib-object.h>
