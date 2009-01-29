@@ -2359,6 +2359,10 @@ sub ExpandAbbreviationsCallback {
     #$text =~ s/#([\w\-:]+)/&MakeHashXRef($1, "type");/eg;
     $text =~ s/(\A|[^\\])#([\w\-:]+)/$1.&MakeHashXRef($2, "type");/eg;
     $text =~ s/\\#/#/g;
+    
+    # Expand urls
+    # FIXME: should we skip urls that are already tagged? (e.g. <literal>http://...</literal>)
+    $text =~ s%(http|https|ftp)://(.*?)((?:\s|,|\)|\]|\<|\.\s))%<ulink url="$1://$2">$2</ulink>$3%g;
   }
 
   return $text;

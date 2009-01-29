@@ -69,7 +69,8 @@ void gtkdoc_object_set_otest (GObject *self, const gchar *value) {
  * @self: the object
  * @n: number of iterations
  *
- * Frobnicate the content of @self @n times.
+ * Frobnicate the content of @self @n times. This implements a
+ * complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
  * <footnote>
  *  <para>
  *    Negative frobnication can lead to unexpected behaviour.

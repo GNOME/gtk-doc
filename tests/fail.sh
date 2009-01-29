@@ -28,7 +28,6 @@ if test $? = 1 ; then failed=$(($failed + 1)); fi
 tested=$(($tested + 1))
 
 # summary
-echo "tested : $tested, failed : $failed"
 rate=$((100*($tested - $failed)/$tested));
 echo "$rate %: Checks $tested, Failures: $failed"
 
