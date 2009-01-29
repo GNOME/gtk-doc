@@ -2362,7 +2362,9 @@ sub ExpandAbbreviationsCallback {
     
     # Expand urls
     # FIXME: should we skip urls that are already tagged? (e.g. <literal>http://...</literal>)
-    $text =~ s%(http|https|ftp)://(.*?)((?:\s|,|\)|\]|\<|\.\s))%<ulink url="$1://$2">$2</ulink>$3%g;
+    # this is apparently also called for markup and not just for plain text
+    # disable for now.
+    #$text =~ s%(http|https|ftp)://(.*?)((?:\s|,|\)|\]|\<|\.\s))%<ulink url="$1://$2">$2</ulink>$3%g;
   }
 
   return $text;
