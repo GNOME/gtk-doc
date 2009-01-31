@@ -6,6 +6,10 @@
  * This file contains non-sense code for the sole purpose of testing the docs.
  * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
  * signal.
+ *
+ * When subclassing it is useful to override the #GtkdocObjectClass.test()
+ * method.
+ *
  * A new instance can be created using the gtkdoc_object_new() function. The
  * whole lifecycle usualy looks like shown in this example:
  * |[<!-- language="C" -->
