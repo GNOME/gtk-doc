@@ -2206,6 +2206,8 @@ sub CreateValidSGML {
     $text =~ s/&/&amp;/g;	# Do this first, or the others get messed up.
     $text =~ s/</&lt;/g;
     $text =~ s/>/&gt;/g;
+    # browers render single tabs inconsistently
+    $text =~ s/([^\s])\t([^\s])/$1&nbsp;$2/g;
     return $text;
 }
 
@@ -3292,6 +3294,7 @@ sub ScanSourceFile {
 	# We're in a comment block. Check if we've found the end of it.
 	if (m%^\s*\*+/%) {
 	    if (!$symbol) {
+		# maybe its not even meant to be a gtk-doc comment?
 		&LogWarning ($file, $., "Symbol name not found at the start of the comment block.");
 	    } else {
 		# Add the return value description onto the end of the params.
@@ -3405,7 +3408,7 @@ sub ScanSourceFile {
 		$symbol = $1;
 		#print "SECTION DOCS found in source for : '$symbol'\n";
 		$ignore_broken_returns = 1;
-	    } elsif (m%^\s*([\w:-]*\w)\s*:?%) {
+	    } elsif (m%^\s*([\w:-]*\w)\s*:?\s*%) {
 		$symbol = $1;
 		#print "SYMBOL DOCS found in source for : '$symbol'\n";
 	    }

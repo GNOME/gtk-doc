@@ -66,6 +66,9 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
     - fo.dtd : http://www.renderx.com/Tests/validator/fo.zip
 * single page
   xsltproc  --nonet --xinclude -o gtk-docs.html /home/ensonic/projects/gtk-doc/gtk-doc-single.xsl  gtk-docs.sgml
+  * need to check if we can pass the style-sheet class as a parameter (--stringparam gtkdoc.stylesheet=(chunk|docbook))
+  * we might also need to reflow some things, as gtk-doc.xsl also runs the devhelp/devhelp2 generation
+    - but then the urls in the devhelp file, refer to the chunked html anyway
 * pdf
   * xmlto via passivetex
     xmlto --skip-validation pdf tester-docs.xml
