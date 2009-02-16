@@ -176,15 +176,26 @@ hr
 {
   /* tango:orange 0/1 */
   background: #ffeed9;
-  border: solid 1px #ffb04f;
+  border-color: #ffb04f;
+}
+.note
+{
+  /* FIXME: use a different color */
+  /* tango:orange 0/1 r<->g */
+  background: #eeffd9;
+  border-color: #b0ff4f;
+}
+.note, .warning
+{
   padding: 0.5em;
   border-width: 1px;
+  border-style: solid;
 }
-.warning h3
+.note h3, .warning h3
 {
   margin-top: 0.0em
 }
-.warning p
+.note p, .warning p
 {
   margin-bottom: 0.0em
 }

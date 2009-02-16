@@ -44,7 +44,9 @@ enum {
  * gtkdoc_object_new:
  *
  * Create a new instance
- *
+ * <note><para>
+ *   This will only work if you have called g_type_init() before.
+ * </para></note>
  * Returns: the instance or %NULL in case of an error
  *
  * Since: 0.1
