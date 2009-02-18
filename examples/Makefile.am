@@ -90,5 +90,6 @@ EXTRA_DIST +=
 #DISTCLEANFILES +=
 
 # Comment this out if you want your docs-status tested during 'make check'
+#TESTS_ENVIRONMENT = cd $(srcsrc)
 #TESTS = $(GTKDOC_CHECK)
 
