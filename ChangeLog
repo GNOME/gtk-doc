@@ -1,3 +1,13 @@
+2009-02-20  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: Damien Lespiau <damien.lespiau@gmail.com>
+
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	  Add --tag=CC to libtool invocations. Fixes #572396.
+
 2009-02-18  Stefan Kost  <ensonic@users.sf.net>
 
 	* examples/Makefile.am:
