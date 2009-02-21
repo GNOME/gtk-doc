@@ -1362,7 +1362,7 @@ sub OutputStruct {
     my @fields = ParseStructDeclaration($declaration, !$default_to_public,
 					0, \&MakeXRef,
 					sub {
-					    "<structfield>$_[0]</structfield>";
+					    "<structfield id=\"$id.$_[0]\">$_[0]</structfield>";
 					});
     my $params = $SymbolParams{$symbol};
 
@@ -2170,6 +2170,12 @@ EOF
 #############################################################################
 # Function    : CreateValidSGMLID
 # Description : Creates a valid SGML 'id' from the given string.
+#               According to http://www.w3.org/TR/html4/types.html#type-id
+#                 "ID and NAME tokens must begin with a letter ([A-Za-z]) and
+#                  may be followed by any number of letters, digits ([0-9]),
+#                  hyphens ("-"), underscores ("_"), colons (":"), and
+#                  periods (".")."
+#
 #		NOTE: SGML ids are case-insensitive, so we have a few special
 #		      cases to avoid clashes of ids.
 # Arguments   : $id - the string to be converted into a valid SGML id.
@@ -2182,7 +2188,7 @@ sub CreateValidSGMLID {
     if ($id eq "_") { return "gettext-macro"; }
 
     $id =~ s/[_ ]/-/g;
-    $id =~ s/[,\.]//g;
+    $id =~ s/[,;]//g;
     $id =~ s/^-*//;
     $id =~ s/::/-/g;
     $id =~ s/:/--/g;
@@ -2347,19 +2353,16 @@ sub ExpandAbbreviationsCallback {
     $text =~ s/(\w+)\s*\(\)/&MakeXRef($1, &tagify($1 . "()", "function"));/eg;
 
     # Convert '@param', but not '\@param'.
-    #$text =~ s/\@(\w+((\.|->)\w+)*)/<parameter>$1<\/parameter>/g;
     $text =~ s/(\A|[^\\])\@(\w+((\.|->)\w+)*)/$1<parameter>$2<\/parameter>/g;
     $text =~ s/\\\@/\@/g;
 
     # Convert '%constant', but not '\%constant'.
     # Also allow negative numbers, e.g. %-1.
-    #$text =~ s/\%(-?\w+)/&MakeXRef($1, &tagify($1, "literal"));/eg;
     $text =~ s/(\A|[^\\])\%(-?\w+)/$1.&MakeXRef($2, &tagify($2, "literal"));/eg;
     $text =~ s/\\\%/\%/g;
 
     # Convert '#symbol', but not '\#symbol'.
-    #$text =~ s/#([\w\-:]+)/&MakeHashXRef($1, "type");/eg;
-    $text =~ s/(\A|[^\\])#([\w\-:]+)/$1.&MakeHashXRef($2, "type");/eg;
+    $text =~ s/(\A|[^\\])#([\w\-:\.]+)/$1.&MakeHashXRef($2, "type");/eg;
     $text =~ s/\\#/#/g;
     
     # Expand urls
@@ -2414,7 +2417,7 @@ sub MakeHashXRef {
     if ($tag ne "") {
       $text = tagify ($text, $tag);
     }
-
+    
     return &MakeXRef($symbol, $text);
 }
 

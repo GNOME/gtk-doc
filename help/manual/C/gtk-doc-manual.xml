@@ -46,7 +46,7 @@
       <address><email>gtk-doc-list@gnome.org</email></address>
     </publisher>
     <copyright>
-      <year>2000, 2005, 2007-2008</year>
+      <year>2000, 2005, 2007-2009</year>
       <holder>Dan Mueth and Chris Lyttle and Stefan Kost</holder>
     </copyright>
 
@@ -597,10 +597,11 @@ make
         The 'documentation' block is also different for each symbol type. Symbol
         types that get parameters such as functions or macros have the parameter
         description first followed by a blank line (just a '*').
-        Afterwards follows the detailed description. All lines just containing a
-        ' * ' (blank-asterisk-blank) are converted to paragraph breaks.
-        If you don't want a break (e.g. in preformatted example listings) add
-        another space at the end of line.
+        Afterwards follows the detailed description. All lines (outside program-
+        listings and CDATA sections) just containing a ' *' (blank-asterisk) are
+        converted to paragraph breaks.
+        If you don't want a paragraph break, change that into ' *  '
+        (blank-asterisk-blank-blank).
       </para>
 
       <para>
@@ -640,6 +641,11 @@ make
               Use #Object:property to refer to a GObject property
             </para>
           </listitem>
+          <listitem>
+            <para>
+              Use #Struct.field to refer to a field inside a structure.
+            </para>
+          </listitem>
         </itemizedlist>
       </para>
 
@@ -649,7 +655,7 @@ make
 	  in your documentation without gtk-doc changing them you can use the
 	  XML entities
 	  "&amp;lpar;", "&amp;rpar;", "&amp;commat;", "&amp;percnt;" and
-	  "&amp;num;" respectively.
+	  "&amp;num;" respectively or escape them with a backslash '\'.
 	</para>
       </tip>
 

@@ -7,7 +7,7 @@
  * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
  * signal.
  *
- * When subclassing it is useful to override the #GtkdocObjectClass.test()
+ * When subclassing it is useful to override the #GtkdocObjectClass.test
  * method.
  *
  * A new instance can be created using the gtkdoc_object_new() function. The
