@@ -3408,7 +3408,7 @@ sub ScanSourceFile {
 		$symbol = $1;
 		#print "SECTION DOCS found in source for : '$symbol'\n";
 		$ignore_broken_returns = 1;
-	    } elsif (m%^\s*([\w:-]*\w)\s*:?\s*%) {
+	    } elsif (m%^\s*([\w:-]*\w)\s*:?\s*$%) {
 		$symbol = $1;
 		#print "SYMBOL DOCS found in source for : '$symbol'\n";
 	    }
