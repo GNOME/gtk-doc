@@ -305,27 +305,30 @@ sub HighlightSource {
     $source =~ s/&amp;/&/g;
 
     # write source to a temp file
-    my $temp_source_file="$MODULE_DIR/_temp_src.$$";
+    # FIXME: use .c for now to hint the language to the highlighter
+    my $temp_source_file="$MODULE_DIR/_temp_src.$$.c";
     open (NEWFILE, ">$temp_source_file") || die "Can't open $temp_source_file: $!";
     print NEWFILE $source;
     close (NEWFILE);
     
+    #print" running @HIGHLIGHT@ @HIGHLIGHT_OPTIONS@$temp_source_file \n";
+    
     # format source
     my $highlighted_source=`@HIGHLIGHT@ @HIGHLIGHT_OPTIONS@$temp_source_file`;
-    if ("@HIGHLIGHT@" =~ m%/source-highlight%) {
+    if ("@HIGHLIGHT@" =~ m%/source-highlight$%) {
         $highlighted_source =~ s%^<\!-- .*? -->%%gs;
         $highlighted_source =~ s%<pre><tt>(.*?)</tt></pre>%$1%gs;
     }
-    elsif ("@HIGHLIGHT@" =~ m%/highlight%) {
+    elsif ("@HIGHLIGHT@" =~ m%/highlight$%) {
         # need to rewrite the stylesheet classes
-        $highlighted_source =~ s%<span class="com">%<span class="comment">%gs;
-        $highlighted_source =~ s%<span class="dir">%<span class="preproc">%gs;
-        $highlighted_source =~ s%<span class="kwd">%<span class="function">%gs;
-        $highlighted_source =~ s%<span class="kwa">%<span class="keyword">%gs;
-        $highlighted_source =~ s%<span class="line">%<span class="linenum">%gs;
-        $highlighted_source =~ s%<span class="num">%<span class="number">%gs;
-        $highlighted_source =~ s%<span class="str">%<span class="string">%gs;
-        $highlighted_source =~ s%<span class="sym">%<span class="symbol">%gs;
+        $highlighted_source =~ s%<span class="gtkdoc com">%<span class="comment">%gs;
+        $highlighted_source =~ s%<span class="gtkdoc dir">%<span class="preproc">%gs;
+        $highlighted_source =~ s%<span class="gtkdoc kwd">%<span class="function">%gs;
+        $highlighted_source =~ s%<span class="gtkdoc kwa">%<span class="keyword">%gs;
+        $highlighted_source =~ s%<span class="gtkdoc line">%<span class="linenum">%gs;
+        $highlighted_source =~ s%<span class="gtkdoc num">%<span class="number">%gs;
+        $highlighted_source =~ s%<span class="gtkdoc str">%<span class="string">%gs;
+        $highlighted_source =~ s%<span class="gtkdoc sym">%<span class="symbol">%gs;
         # maybe also do
         # $highlighted_source =~ s%</span>(.+)<span%</span><span class="normal">$1</span><span%gs;
     }
