@@ -29,11 +29,11 @@ annotation_array_length (GObject *list,
 /**
  * annotation_nullable:
  * @uri: a uri
- * @label: (null-ok): an optional string
+ * @label: (allow-none): an optional string
  *
  * Document optional parameters.
  *
- * Returns: (transfer-full) (null-ok): Returns stuff which you have to free after use
+ * Returns: (transfer full) (allow-none): Returns stuff which you have to free after use
  */
 gchar *
 annotation_nullable (const gchar *uri,
@@ -42,4 +42,17 @@ annotation_nullable (const gchar *uri,
    return NULL;
 }
 
+/**
+ * annotation_elementtype:
+ * @list: (element-type GObject): list of #GObject instances to search
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_elementtype (const GList *list)
+{
+   return TRUE;
+}
 

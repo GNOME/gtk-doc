@@ -207,9 +207,6 @@ http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus
 
 
 = styling =
-== warnings ==
-xsl produces inline style tag for warnings (e.g. deprecation). We could add a
-colored frame and a warning sign /!\.
 == source code examples==
 http://bugzilla.gnome.org/show_bug.cgi?id=536928
 We could also run a postprocessing script in gtkdoc-mkhtml/gtkdoc-fixxref
@@ -245,6 +242,14 @@ problems:
 * allow <!-- language="C" --> comments after |[
 * we need to catch those when processing the docbook and expanding the |[
 
+
+
+= syntax =
+== wildcards in symbol names ==
+Somtimes one defines a set of function and macros with very simillar purpose, e.g.
+READ_INT8, READ_INT16, READ_INT32. It would be great to allow documenting a symbol
+READ_INT* instead of 3 docs which are copy'n'pasted anyway. In the output we will have
+all matching declarations in one source listing. Multiple wildcards are okay.
 
 
 = documentation best practises #518427 =

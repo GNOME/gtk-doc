@@ -269,18 +269,19 @@ $PreProcessorDirectives{"warning"} = 1;
 my %AnnotationsUsed;
 
 my %AnnotationDefinition = (
+    'allow-none' => "NULL is ok, both for passing and for returning.",
     'array' => "Parameter points to an array of items.",
     'default' => "Default parameter value (for in case the <acronym>shadows</acronym>-to function has less parameters).",
     'element-type' => "Generics and defining elements of containers and arrays.",
-    'error-domain' => "Typed errors. Similar to throws in Java.",
-    'in' => "Parameter for input. Default is <acronym>transfer-none</acronym>.",
-    'inout' => "Parameter for input and for returning results. Default is <acronym>transfer-full</acronym>.",
+    'error-domains' => "Typed errors. Similar to throws in Java.",
+    'in' => "Parameter for input. Default is <acronym>transfer none</acronym>.",
+    'inout' => "Parameter for input and for returning results. Default is <acronym>transfer full</acronym>.",
+    'in-out' => "Parameter for input and for returning results. Default is <acronym>transfer full</acronym>.",
     'not-error' => "A GError parameter is not to be handled like a normal GError.",
-    'null-ok' => "NULL is ok, both for passing and for returning.",
-    'out' => "Parameter for returning results. Default is <acronym>transfer-full</acronym>.",
-    'transfer-container' => "Free data container after the code is done.",
-    'transfer-full' => "Free data after the code is done.",
-    'transfer-none' => "Don't free data after the code is done."
+    'out' => "Parameter for returning results. Default is <acronym>transfer full</acronym>.",
+    'transfer container' => "Free data container after the code is done.",
+    'transfer full' => "Free data after the code is done.",
+    'transfer none' => "Don't free data after the code is done."
 );
 
 # Create the root DocBook output directory if it doens't exist.
@@ -1795,7 +1796,26 @@ sub OutputParamDescriptions {
                         $annotation_extra = " $2";
                     }
                     $param_annotations .= "<acronym>$annotation</acronym>$annotation_extra. ";
-                    $AnnotationsUsed{$annotation} = 1;
+
+                    # need to search for the longest key-match in %AnnotationDefinition
+                    my $match_length=0;
+                    my $match_annotation="";
+                    my $annotationdef;
+                    foreach $annotationdef (keys %AnnotationDefinition) {
+                        if ($annotationdef =~ m/^$annotation/) {
+                            if (length($annotationdef)>$match_length) {
+                                $match_length=length($annotationdef);
+                                $match_annotation=$annotationdef;
+                            }
+                        }
+                    }
+                    if ($match_annotation ne "") {
+                      $AnnotationsUsed{$match_annotation} = 1;
+                    }
+                    else {
+                      &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                          "unknown annotation \"$annotation\" in documentation for $symbol.");
+                    }
                 }
                 chomp($param_desc);
                 $param_desc =~ m/^(.*)\.*\s*$/;
