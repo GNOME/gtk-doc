@@ -56,6 +56,7 @@ EXTRA_DIST = \
   gtk-doc.spec    \
   gtk-doc.dcl     \
   gtk-doc.xsl     \
+  gtk-doc-fo.xsl     \
   version-greater-or-equal.xsl \
   devhelp.xsl     \
   devhelp2.xsl     \

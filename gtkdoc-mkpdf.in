@@ -67,7 +67,7 @@ if $is_xml; then
       --stringparam gtkdoc.version "@VERSION@" \
       "$@" -o module.fo $gtkdocdir/gtk-doc-fo.xsl $document || exit $?
   # fop dies too easily :(
-  @FOP@ module.fo $module.pdf || /bin/true
+  @FOP@ module.fo $module.pdf
   #rm module.fo
 else
   # not very good output
@@ -75,10 +75,5 @@ else
   docbook2pdf -e no-valid $document
 fi
 
-# copy navigation images and stylesheets to html directory ...
-cp -f $gtkdocdir/*.png .
-cp -f $gtkdocdir/*.css .
-
-
-echo "timestamp" > ../html.stamp
+echo "timestamp" > pdf.stamp
 

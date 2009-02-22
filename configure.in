@@ -220,7 +220,10 @@ test -n "$PYTHON" \
     || AC_MSG_NOTICE([   Python based tools disabled])
 test -n "$JADE" \
     && AC_MSG_NOTICE([** SGML support enabled, using $JADE]) \
-    || AC_MSG_NOTICE([   SGML support disabled])
+    || AC_MSG_NOTICE([   SGML support disabled, no jade processor available])
+test -n "$FOP" \
+    && AC_MSG_NOTICE([** XML PDF support enabled, using $FOP]) \
+    || AC_MSG_NOTICE([   XML PDF support disabled, no fop available])
 test x$scrollkeeper_config != xno \
     && AC_MSG_NOTICE([** Scrollkeeper support enabled]) \
     || AC_MSG_NOTICE([   Scrollkeeper support disabled])
