@@ -325,9 +325,13 @@ some things to check:
 * gobject: uses <reference> as a parent for the xi:includeed <refentry> docs
 
 = extra link for symbols =
+need options for configure:
+--enable-gtk-doc-codesearch-links
+--enable-gtk-doc-liveedit-links
 == viewvc,cgit,... ==
 - link to some online service for the code
 - problem: most don't have local anchors for the symbols
+- where to set the uri (in the document, like for online url)?
 == codesearch ==
 - google (code) link : http://www.google.com/codesearch?q=g_object_unref
 == live editing ==

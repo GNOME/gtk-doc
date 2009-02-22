@@ -1160,6 +1160,14 @@ sub OutputMacro {
     my $title = $symbol . ($args ? "()" : "");
     $desc = "<refsect2 id=\"$id\" role=\"macro\"$condition>\n<title>$title</title>\n";
     $desc .= MakeIndexterms($symbol, $id);
+    $desc .= "\n";
+    
+    # NEW FEATURE
+    #my $qstr=$symbol;
+    #$qstr =~ s/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg;
+    #$desc .= "<ulink role=\"extralinks\" url=\"http://www.google.com/codesearch?q=$qstr\">code search</ulink>";
+    #$desc .= "\n";
+    # NEW FEATURE
 
     # Don't output the macro definition if is is a conditional macro or it
     # looks like a function, i.e. starts with "g_" or "_?gnome_", or it is
