@@ -1,3 +1,20 @@
+2009-02-22  Stefan Kost  <ensonic@users.sf.net>
+
+	* TODO:
+	  Planning.
+
+	* configure.in:
+	* gtk-doc.m4:
+	* gtk-doc.make:
+	* gtk-doc.notmpl.make:
+	* gtkdoc-mkpdf.in:
+	* tests/gtk-doc.make:
+	* tests/gtk-doc.notmpl.make:
+	* gtkdoc-mkpdf.in (added):
+	  Clean up Makefile rules (be less verbose). Added options to configure to
+	  allow selecting the desired output formats. Added initial pdf support (very
+	  imature yet, due to several shortcommings of fop - bugs files).
+
 2009-02-21  Stefan Kost  <ensonic@users.sf.net>
 
 	* TODO:

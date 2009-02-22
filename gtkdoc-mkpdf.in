@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+
+usage="\
+Usage: gtkdoc-mkpdf [--path=SEARCH_PATH] MODULE DRIVER_FILE [BACKEND_OPTIONS...]"
+
+#echo "args $0\n";
+
+# parse options, ignore unknown options for future extensions
+
+searchpath=
+uninstalled=no
+while true; do
+    case "X$1" in
+        X--version) echo "@VERSION@"; exit 0;;
+        X--help) echo "$usage"; exit 0;;
+        X--uninstalled) uninstalled=yes; shift;;
+        X--path=*) searchpath=`echo $1 | sed s/.*=//`; shift;;
+        X--*) shift;;
+        X*) break;;
+    esac
+done
+ 
+if test $# -lt 2; then
+      echo "${usage}" 1>&2
+      exit 1
+fi
+
+module=$1
+shift
+document=$1
+shift
+
+if test $uninstalled = yes; then
+      # this does not work from buiddir!=srcdir
+      # we could try this
+      # MAKE_SCRDIR=$(abs_srcdir) MAKE_BUILDDIR=$(abs_builddir) gtkdoc-mkpdf ...
+      gtkdocdir=`dirname $0`
+      #echo "uninstalled, gtkdocdir=$gtkdocdir"
+else
+      # the first two are needed to resolve datadir
+      prefix=@prefix@
+      datarootdir=@datarootdir@
+      gtkdocdir=@datadir@/gtk-doc/data
+fi
+
+if head -n 1 $document | grep "<?xml" > /dev/null; then
+  is_xml=true
+  path_option='--path'
+else
+  is_xml=false
+  path_option='--directory'
+fi
+
+# we could do "$path_option $PWD "
+# to avoid needing rewriting entities that are copied from the header
+# into docs under xml
+if test "X$searchpath" = "X"; then
+    path_arg=
+else
+    path_arg="$path_option $searchpath"
+fi
+
+if $is_xml; then
+  @XSLTPROC@ $path_arg --nonet --xinclude \
+      --stringparam gtkdoc.bookname $module \
+      --stringparam gtkdoc.version "@VERSION@" \
+      "$@" -o module.fo $gtkdocdir/gtk-doc-fo.xsl $document || exit $?
+  # fop dies too easily :(
+  @FOP@ module.fo $module.pdf || /bin/true
+  #rm module.fo
+else
+  # not very good output
+  # also for xxx-docs.sgml it will produce xxx-docs.pdf
+  docbook2pdf -e no-valid $document
+fi
+
+# copy navigation images and stylesheets to html directory ...
+cp -f $gtkdocdir/*.png .
+cp -f $gtkdocdir/*.css .
+
+
+echo "timestamp" > ../html.stamp
+

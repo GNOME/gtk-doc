@@ -16,7 +16,8 @@ and join discussion about future features.
 
 Developers can also add items here :)
 
-= Tracing =
+= CLeanups =
+== Tracing ==
 * there is a bunch of #print statements for tracing
   => add a sub Trace() to gtkdoc-common.pl
   => use @TRACE@ "..." and depending on configure flag
@@ -24,9 +25,12 @@ Developers can also add items here :)
        [print __FILE__ . ":" . __LINE__ . ":" . ] or [#]
      should be a function and the function should support loglevels and an
        envar to enable/disable conditionally;
-
+== Makefiles ==
+sgml-build.stamp -> db-build.stamp
+sgml.stamp -> db.stamp
+       
 = More abbreviations =
-* expand urls
+* expand urls (needds more work, see gtkdoc-mkdb : ExpandAbbreviations)
 
 = Testing =
 cd test/gobject
@@ -54,8 +58,9 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   * would be good to be able to have page titles as a concatenation of document
     name and page name (gtk+:GtkWIdget)
 * formats
-  http://bugzilla.gnome.org/show_bug.cgi?id=531572
-  http://bugzilla.gnome.org/show_bug.cgi?id=466535
+  http://bugzilla.gnome.org/show_bug.cgi?id=531572 : html-single
+  http://bugzilla.gnome.org/show_bug.cgi?id=466535 : pdf
+  http://bugzilla.gnome.org/show_bug.cgi?id=467488 : man
   we need more configure options in gtk-doc.m4:
   --(enable|disable)-gtk-doc-(html|pdf|man|html-single|rtf)
   - html : enabled by default
@@ -91,10 +96,11 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
       - info
         http://www.tug.org/texlive/devsrc/Master/texmf-dist/doc/xmltex/passivetex/
     * fop
+      https://issues.apache.org/bugzilla/show_bug.cgi?id=46386
       - download fop
         http://mirror.eunet.fi/apache/xmlgraphics/fop/binaries/
         http://xmlgraphics.apache.org/fop/0.94/running.html
-        export FOP_OPTS="-Dhttp.proxyHost=eswebproxy00.europe.nokia.com -Dhttp.proxyPort=8080"
+        export FOP_OPTS="-Dhttp.proxyHost=xxx -Dhttp.proxyPort=8080"
       - download offo
         http://sourceforge.net/project/showfiles.php?group_id=116740&package_id=129569&release_id=267101
         and copy fop-hyph.jar to fop-0.9*/lib/
@@ -318,4 +324,21 @@ some things to check:
 * gobject: uses a <preface> for introductions
 * gobject: uses <reference> as a parent for the xi:includeed <refentry> docs
 
+= extra link for symbols =
+== viewvc,cgit,... ==
+- link to some online service for the code
+- problem: most don't have local anchors for the symbols
+== codesearch ==
+- google (code) link : http://www.google.com/codesearch?q=g_object_unref
+== live editing ==
+The idea is to have an 'edit' link in an online version of the docs (build from
+head development version) per doc-entry (symbols and section).
+The link goes to a cgi and that gets following parameters: docmodule,symbol.
+E.g. http://library.gnome.org/devel/references/edit?docmodule=glib&symbol=g_new
+The cgi would need a hashmap to get from docmodule to the way to check it out
+(ideally it has a recent checkout and only updates it).
+problems:
+- signal that this has been edited already?
+- support for xi:included examples
+- updating the checkout could be slow
 

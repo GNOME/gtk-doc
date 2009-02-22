@@ -74,6 +74,14 @@ if test -z "$XSLTPROC"; then
   AC_MSG_ERROR([xsltproc not found])
 fi
 
+dnl
+dnl Check for fop (for pdf output)
+dnl
+AC_PATH_PROG([FOP], [fop])
+if test -z "$FOP"; then
+  AC_MSG_WARN([fop not found, so no pdf output from xml])
+fi
+
 dnl check for DocBook DTD and stylesheets in the local catalog.
 JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.3//EN],
    [DocBook XML DTD V4.3])
@@ -193,6 +201,7 @@ AC_CONFIG_FILES([gtkdoc-fixxref],  [chmod +x gtkdoc-fixxref])
 AC_CONFIG_FILES([gtkdoc-mkdb],     [chmod +x gtkdoc-mkdb])
 AC_CONFIG_FILES([gtkdoc-mkhtml],   [chmod +x gtkdoc-mkhtml])
 AC_CONFIG_FILES([gtkdoc-mkman],    [chmod +x gtkdoc-mkman])
+AC_CONFIG_FILES([gtkdoc-mkpdf],    [chmod +x gtkdoc-mkpdf])
 AC_CONFIG_FILES([gtkdoc-mktmpl],   [chmod +x gtkdoc-mktmpl])
 AC_CONFIG_FILES([gtkdoc-rebase],   [chmod +x gtkdoc-rebase])
 AC_CONFIG_FILES([gtkdoc-scan],     [chmod +x gtkdoc-scan])
