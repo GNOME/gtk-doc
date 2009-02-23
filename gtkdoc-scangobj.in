@@ -169,6 +169,10 @@ for (@types) {
 print OUTPUT <<EOT;
     object_types[i] = 0;
 
+    /* reference the GObjectClass to initialize the param spec pool
+     * potentially needed by interfaces. See http://bugs.gnome.org/571820 */
+    gpointer g_object_class = g_type_class_ref (G_TYPE_OBJECT);
+
     /* Need to make sure all the types are loaded in and initialize
      * their signals and properties.
      */
@@ -179,6 +183,8 @@ print OUTPUT <<EOT;
         if (G_TYPE_IS_INTERFACE (object_types[i]))
           g_type_default_interface_ref (object_types[i]);
       }
+
+    g_type_class_unref (g_object_class);
 
     return object_types;
 }

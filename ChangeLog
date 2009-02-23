@@ -1,3 +1,12 @@
+2009-02-23  Sven Herzberg  <herzi@gnome-de.org>
+
+	Fixes 571820 - gobject.c: pspec_pool not initialized for interfaces
+
+	Initialize GObjectClass before referencing interfaces.
+
+	* gtkdoc-scangobj.in: keep a reference on the GObjectClass while
+	peeking in interfaces' properties
+
 2009-02-23  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in:
