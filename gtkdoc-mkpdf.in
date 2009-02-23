@@ -65,10 +65,10 @@ if $is_xml; then
   @XSLTPROC@ $path_arg --nonet --xinclude \
       --stringparam gtkdoc.bookname $module \
       --stringparam gtkdoc.version "@VERSION@" \
-      "$@" -o module.fo $gtkdocdir/gtk-doc-fo.xsl $document || exit $?
+      "$@" -o $module.fo $gtkdocdir/gtk-doc-fo.xsl $document || exit $?
   # fop dies too easily :(
-  @FOP@ module.fo $module.pdf
-  #rm module.fo
+  @FOP@ $module.fo $module.pdf
+  #rm $module.fo
 else
   # not very good output
   # also for xxx-docs.sgml it will produce xxx-docs.pdf

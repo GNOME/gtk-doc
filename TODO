@@ -97,7 +97,7 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
         http://www.tug.org/texlive/devsrc/Master/texmf-dist/doc/xmltex/passivetex/
     * fop
       https://issues.apache.org/bugzilla/show_bug.cgi?id=46386
-      - download fop
+      - download fop (don't use 0.95, 0.94 seems to work)
         http://mirror.eunet.fi/apache/xmlgraphics/fop/binaries/
         http://xmlgraphics.apache.org/fop/0.94/running.html
         export FOP_OPTS="-Dhttp.proxyHost=xxx -Dhttp.proxyPort=8080"
