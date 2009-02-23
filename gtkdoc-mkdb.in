@@ -2241,7 +2241,7 @@ sub CreateValidSGML {
     $text =~ s/</&lt;/g;
     $text =~ s/>/&gt;/g;
     # browers render single tabs inconsistently
-    $text =~ s/([^\s])\t([^\s])/$1&nbsp;$2/g;
+    $text =~ s/([^\s])\t([^\s])/$1&#160;$2/g;
     return $text;
 }
 
