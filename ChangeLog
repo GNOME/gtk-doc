@@ -1,3 +1,11 @@
+2009-02-24  Stefan Kost  <ensonic@users.sf.net>
+
+	patch by: Paolo Borelli <pborelli@katamail.com>
+
+	* gtkdoc-scangobj.in:
+	* gtkdoc-scanobj.in:
+	  Use g_strerror. Fixes #572967.
+
 2009-02-23  Sven Herzberg  <herzi@gnome-de.org>
 
 	Fixes 571820 - gobject.c: pspec_pool not initialized for interfaces

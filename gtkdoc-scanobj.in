@@ -197,7 +197,7 @@ output_signals (void)
   fp = fopen (signals_filename, "w");
   if (fp == NULL)
     {
-      g_warning ("Couldn't open output file: %s : %s", signals_filename, strerror(errno));
+      g_warning ("Couldn't open output file: %s : %s", signals_filename, g_strerror(errno));
       return;
     }
 
@@ -714,7 +714,7 @@ output_widget_hierarchy (void)
   fp = fopen (hierarchy_filename, "w");
   if (fp == NULL)
     {
-      g_warning ("Couldn't open output file: %s : %s", hierarchy_filename, strerror(errno));
+      g_warning ("Couldn't open output file: %s : %s", hierarchy_filename, g_strerror(errno));
       return;
     }
   output_hierarchy (fp, GTK_TYPE_OBJECT, 0);
@@ -758,7 +758,7 @@ output_args (void)
   fp = fopen (args_filename, "w");
   if (fp == NULL)
     {
-      g_warning ("Couldn't open output file: %s : %s", args_filename, strerror(errno));
+      g_warning ("Couldn't open output file: %s : %s", args_filename, g_strerror(errno));
       return;
     }
 
