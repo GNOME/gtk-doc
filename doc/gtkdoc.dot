@@ -19,7 +19,8 @@ digraph gtkdoc {
     gtkdoc_check [label="gtkdoc-check",shape="ellipse" ];
 
     /* file nodes */
-    sources [label="source code"];
+    headers [label="headers\nall headers under DOC_SOURCE_DIR\n+EXTRA_HFILES\n-IGNORE_HFILES"];
+    sources [label="source code\nall files under DOC_SOURCE_DIR\nmatching SUFFIXES or *.{c,h}"];
     binary [label="compiled binary"];
     xml [label="docbook xml"];
     html [label="html"];
@@ -38,9 +39,9 @@ digraph gtkdoc {
  
     /* tool invokation */
     gtkdoc_scan -> gtkdoc_scangobj -> gtkdoc_mkdb -> gtkdoc_mkhtml -> gtkdoc_fixxref -> gtkdoc_rebase -> gtkdoc_check [style="dotted"];
-    
+
     /* file usage */
-    sources -> gtkdoc_scan;
+    headers -> gtkdoc_scan;
     gtkdoc_scan -> module_sections [label="--rebuild-sections", style="dashed"];
     gtkdoc_scan -> module_types [label="--rebuild-types", style="dashed"];
     gtkdoc_scan -> module_decl;
@@ -53,7 +54,8 @@ digraph gtkdoc {
     gtkdoc_scangobj -> module_interfaces;
     gtkdoc_scangobj -> module_prerequisites;
     gtkdoc_scangobj -> module_args;
-    
+
+    sources -> gtkdoc_mkdb;
     module_sections -> gtkdoc_mkdb;
     module_decl -> gtkdoc_mkdb;
     module_signals -> gtkdoc_mkdb;
