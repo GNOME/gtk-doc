@@ -180,10 +180,9 @@ hr
 }
 .note
 {
-  /* FIXME: use a different color */
-  /* tango:orange 0/1 r<->g */
-  background: #eeffd9;
-  border-color: #b0ff4f;
+  /* tango:chameleon 0/0.5 */
+  background: #d8ffb2;
+  border-color: #abf562;
 }
 .note, .warning
 {
@@ -198,6 +197,16 @@ hr
 .note p, .warning p
 {
   margin-bottom: 0.0em
+}
+
+/* blob links */
+h2 .extralinks, h3 .extralinks
+{
+  float: right;
+  /* tango:aluminium 3 */
+  color: #babdb6;
+  font-size: 80%;
+  font-weight: normal;
 }
 
 /* code listings */

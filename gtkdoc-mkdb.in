@@ -1123,6 +1123,59 @@ sub OutputSymbolTraits {
     return $desc;
 }
 
+#############################################################################
+# Function    : Outpu{Symbol,Section}ExtraLinks
+# Description : Returns extralinks for the symbol (if enabled).
+# Arguments   : $symbol - the name of the function/macro begin described.
+#############################################################################
+
+sub uri_escape {
+    my $text = $_[0];
+    return undef unless defined $text;
+
+    # Build a char to hex map
+    my %escapes = ();
+    for (0..255) {
+            $escapes{chr($_)} = sprintf("%%%02X", $_);
+    }
+
+    # Default unsafe characters.  RFC 2732 ^(uric - reserved)
+    $text =~ s/([^A-Za-z0-9\-_.!~*'()])/$escapes{$1}/g;
+
+    return $text;
+}
+
+sub OutputSymbolExtraLinks {
+    my ($symbol) = @_;
+    my $desc = "";
+
+    if (0) { # NEW FEATURE: needs configurability
+    my $sstr = &uri_escape($symbol);
+    my $mstr = &uri_escape($MODULE);
+    $desc .= <<EOF;
+<ulink role="extralinks" url="http://www.google.com/codesearch?q=$sstr">code search</ulink>
+<ulink role="extralinks" url="http://library.gnome.org/edit?module=$mstr&amp;symbol=$sstr">edit documentation</ulink>
+EOF
+    }
+    return $desc;
+}
+
+sub OutputSectionExtraLinks {
+    my ($symbol,$docsymbol) = @_;
+    my $desc = "";
+
+    if (0) { # NEW FEATURE: needs configurability
+    my $sstr = &uri_escape($symbol);
+    my $mstr = &uri_escape($MODULE);
+    my $dsstr = &uri_escape($docsymbol);
+    $desc .= <<EOF;
+<ulink role="extralinks" url="http://www.google.com/codesearch?q=$sstr">code search</ulink>
+<ulink role="extralinks" url="http://library.gnome.org/edit?module=$mstr&amp;symbol=$dsstr">edit documentation</ulink>
+EOF
+    }
+    return $desc;
+}
+
 
 #############################################################################
 # Function    : OutputMacro
@@ -1161,13 +1214,7 @@ sub OutputMacro {
     $desc = "<refsect2 id=\"$id\" role=\"macro\"$condition>\n<title>$title</title>\n";
     $desc .= MakeIndexterms($symbol, $id);
     $desc .= "\n";
-    
-    # NEW FEATURE
-    #my $qstr=$symbol;
-    #$qstr =~ s/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg;
-    #$desc .= "<ulink role=\"extralinks\" url=\"http://www.google.com/codesearch?q=$qstr\">code search</ulink>";
-    #$desc .= "\n";
-    # NEW FEATURE
+    $desc .= OutputSymbolExtraLinks($symbol);
 
     # Don't output the macro definition if is is a conditional macro or it
     # looks like a function, i.e. starts with "g_" or "_?gnome_", or it is
@@ -1228,6 +1275,8 @@ sub OutputTypedef {
     my $desc = "<refsect2 id=\"$id\" role=\"typedef\"$condition>\n<title>$symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
+    $desc .= "\n";
+    $desc .= OutputSymbolExtraLinks($symbol);
 
     if (!defined ($DeclarationConditional{$symbol})) {
 	$declaration = &CreateValidSGML ($declaration);
@@ -1295,6 +1344,8 @@ sub OutputStruct {
     }
 
     $desc .= MakeIndexterms($symbol, $id);
+    $desc .= "\n";
+    $desc .= OutputSymbolExtraLinks($symbol);
 
     # Form a pretty-printed, private-data-removed form of the declaration
 
@@ -1431,6 +1482,8 @@ sub OutputEnum {
     my $desc = "<refsect2 id=\"$id\" role=\"enum\"$condition>\n<title>enum $symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
+    $desc .= "\n";
+    $desc .= OutputSymbolExtraLinks($symbol);
 
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
@@ -1503,6 +1556,8 @@ sub OutputUnion {
     my $desc = "<refsect2 id=\"$id\" role=\"union\"$condition>\n<title>union $symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
+    $desc .= "\n";
+    $desc .= OutputSymbolExtraLinks($symbol);
 
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
@@ -1544,6 +1599,8 @@ sub OutputVariable {
     my $desc = "<refsect2 id=\"$id\" role=\"variable\"$condition>\n<title>$symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
+    $desc .= "\n";
+    $desc .= OutputSymbolExtraLinks($symbol);
 
     $declaration = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$declaration</programlisting>\n";
@@ -1630,6 +1687,8 @@ sub OutputFunction {
     my $desc = "<refsect2 id=\"$id\" role=\"function\"$condition>\n<title>${symbol} ()</title>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
+    $desc .= "\n";
+    $desc .= OutputSymbolExtraLinks($symbol);
 
     $desc  .= "<programlisting>${ret_type_output}$symbol_desc_output(";
 
@@ -1799,18 +1858,12 @@ sub OutputParamDescriptions {
                 $param_desc = $';
                 @annotations = split(/\)\s*\(/,$1);
                 foreach $annotation (@annotations) {
-                    if ($annotation =~ m%(.*)\s+(.*)%) {
-                        $annotation = $1;
-                        $annotation_extra = " $2";
-                    }
-                    $param_annotations .= "<acronym>$annotation</acronym>$annotation_extra. ";
-
                     # need to search for the longest key-match in %AnnotationDefinition
                     my $match_length=0;
                     my $match_annotation="";
                     my $annotationdef;
                     foreach $annotationdef (keys %AnnotationDefinition) {
-                        if ($annotationdef =~ m/^$annotation/) {
+                        if ($annotation =~ m/^$annotationdef/) {
                             if (length($annotationdef)>$match_length) {
                                 $match_length=length($annotationdef);
                                 $match_annotation=$annotationdef;
@@ -1818,11 +1871,16 @@ sub OutputParamDescriptions {
                         }
                     }
                     if ($match_annotation ne "") {
-                      $AnnotationsUsed{$match_annotation} = 1;
+                        if ($annotation =~ m%$match_annotation\s+(.*)%) {
+                            $annotation_extra = " $1";
+                        }
+                        $AnnotationsUsed{$match_annotation} = 1;
+                        $param_annotations .= "<acronym>$match_annotation</acronym>$annotation_extra. ";
                     }
                     else {
-                      &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
-                          "unknown annotation \"$annotation\" in documentation for $symbol.");
+                        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                            "unknown annotation \"$annotation\" in documentation for $symbol.");
+                        $param_annotations=$annotation;
                     }
                 }
                 chomp($param_desc);
@@ -1991,6 +2049,8 @@ sub OutputSGMLFile {
     if ($include_output ne '') {
         $include_output = "\n$include_output\n";
     }
+    
+    my $extralinks = OutputSectionExtraLinks($title,"Section:$file");
 
     my $old_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT";
     my $new_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT.new";
@@ -2044,6 +2104,7 @@ $$signals_synop
 
 <refsect1 id="$section_id.description" role="desc">
 <title role="desc.title">Description</title>
+$extralinks
 $long_desc
 </refsect1>
 
@@ -2934,6 +2995,9 @@ sub GetSignals {
 
 	    $desc .= "<refsect2 id=\"$id\" role=\"signal\"><title>The <literal>&quot;$name&quot;</literal> signal</title>\n";
 	    $desc .= MakeIndexterms($symbol, $id);
+	    $desc .= "\n";
+	    $desc .= OutputSymbolExtraLinks($symbol);
+
 	    $desc .= "<programlisting>";
 
 	    $SignalReturns[$i] =~ m/\s*(const\s+)?(\w+)\s*(\**)/;
@@ -3170,6 +3234,9 @@ sub GetArgs {
  	    my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output $pad2 : $flags_string\n";
 	    my $arg_desc = "<refsect2 id=\"$id\" role=\"property\"><title>The <literal>&quot;$name&quot;</literal> $kind</title>\n";
 	    $arg_desc .= MakeIndexterms($symbol, $id);
+	    $arg_desc .= "\n";
+	    $arg_desc .= OutputSymbolExtraLinks($symbol);
+
 	    $arg_desc .= "<programlisting>  &quot;$name&quot;$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
 	    $arg_desc .= &MakeDeprecationNote($symbol);
 	    $arg_desc .= $blurb;

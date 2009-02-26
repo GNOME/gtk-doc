@@ -138,35 +138,34 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
 
   <xsl:template name="user.head.content">
     <xsl:if test="$gtkdoc.version">
-      <meta name="generator"
-            content="GTK-Doc V{$gtkdoc.version} (XML mode)"/>
+      <meta name="generator" content="GTK-Doc V{$gtkdoc.version} (XML mode)"/>
     </xsl:if>
     <link rel="stylesheet" href="style.css" type="text/css"/>
 
-      <!-- copied from the html.head template in the docbook stylesheets
-           we don't want links for all refentrys, thats just too much
-        -->
-      <xsl:variable name="this" select="."/>
-      <xsl:for-each select="//part
-                            |//reference
-                            |//preface
-                            |//chapter
-                            |//article
-                            |//appendix[not(parent::article)]|appendix
-                            |//glossary[not(parent::article)]|glossary
-                            |//index[not(parent::article)]|index">
-        <link rel="{local-name(.)}">
-          <xsl:attribute name="href">
-            <xsl:call-template name="href.target">
-              <xsl:with-param name="context" select="$this"/>
-              <xsl:with-param name="object" select="."/>
-            </xsl:call-template>
-          </xsl:attribute>
-          <xsl:attribute name="title">
-            <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
-          </xsl:attribute>
-        </link>
-      </xsl:for-each>
+    <!-- copied from the html.head template in the docbook stylesheets
+         we don't want links for all refentrys, thats just too much
+      -->
+    <xsl:variable name="this" select="."/>
+    <xsl:for-each select="//part
+                          |//reference
+                          |//preface
+                          |//chapter
+                          |//article
+                          |//appendix[not(parent::article)]|appendix
+                          |//glossary[not(parent::article)]|glossary
+                          |//index[not(parent::article)]|index">
+      <link rel="{local-name(.)}">
+        <xsl:attribute name="href">
+          <xsl:call-template name="href.target">
+            <xsl:with-param name="context" select="$this"/>
+            <xsl:with-param name="object" select="."/>
+          </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
+        </xsl:attribute>
+      </link>
+    </xsl:for-each>
   </xsl:template>
   
   <xsl:template name="user.footer.content">
@@ -561,11 +560,13 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
      </div>
   </xsl:template>
 
+  <!-- add anchors for index sections -->
   <xsl:template match="indexdiv">
     <a><xsl:attribute name="name">idx<xsl:value-of select="./title"/></xsl:attribute></a>
     <xsl:apply-templates/>
   </xsl:template>
 
+  <!-- add anchors for glossary sections -->
   <xsl:template match="glossdiv">
     <a><xsl:attribute name="name">gls<xsl:value-of select="./title"/></xsl:attribute></a>
     <xsl:apply-templates/>
@@ -574,7 +575,37 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
   <!-- Exterminate any trace of indexterms in the main flow -->
   <xsl:template match="indexterm">
   </xsl:template>
+
+  <!-- Extra link on the right side of doc-blobs -->
+  <xsl:template name="user.format.extralinks">
+    <xsl:if test="../ulink[@role='extralinks']">
+      <span class="extralinks">
+        <xsl:for-each select="../ulink[@role='extralinks']">
+          <xsl:if test="position() = 1">[&#160;</xsl:if>
+          <xsl:if test="position() > 1">&#160;|&#160;</xsl:if>
+          <a>
+            <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
+            <xsl:copy-of select="text()" />
+          </a>
+          <xsl:if test="position() = last()">&#160;]</xsl:if>
+        </xsl:for-each>
+      </span>
+    </xsl:if>
+    <!--xsl:copy-of select="text()" /-->
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="//refsect2/ulink[@role='extralinks']"/>
+  <xsl:template match="//refsect1/ulink[@role='extralinks']"/>
+
+  <xsl:template match="//refsect2/title">
+    <h3><xsl:call-template name="user.format.extralinks"/></h3>
+  </xsl:template>
   
+  <xsl:template match="//refsect1/title">
+    <h2><xsl:call-template name="user.format.extralinks"/></h2>
+  </xsl:template>
+
   <!-- ==================================================================== -->
 
   <xsl:template match="acronym">
