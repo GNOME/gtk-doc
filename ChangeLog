@@ -1,5 +1,12 @@
 2009-02-26  Stefan Kost  <ensonic@users.sf.net>
 
+	* gtkdoc-scangobj.in:
+	* gtkdoc-scanobj.in:
+	  There is some gtk specific stuff there, which we probably want to kick
+	  out. No one else gets such a treatment.
+
+2009-02-26  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtk-doc.xsl:
 	* style.css:
 	* gtkdoc-mkdb.in:

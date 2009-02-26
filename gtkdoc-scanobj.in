@@ -27,6 +27,8 @@
 # NOTE: the lookup_signal_arg_names() function contains the argument names of
 #       standard GTK signal handlers. This may need to be updated for new
 #       GTK signals or Gnome widget signals.
+#       FIXME: this is only needed for undocumented signals, we should remove
+#       the list as its totally undermaintained anyway
 
 use Getopt::Long;
 
