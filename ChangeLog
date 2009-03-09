@@ -1,3 +1,8 @@
+2009-03-09  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-scangobj.in:
+	  Don't confuse -1 with G_MAXULONG on 64bit. Fixes #572612.
+
 2009-02-26  Stefan Kost  <ensonic@users.sf.net>
 
 	* doc/gtkdoc.dot:

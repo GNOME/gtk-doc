@@ -1018,50 +1018,84 @@ describe_double_constant (gdouble value)
 }
 
 static gchar*
-describe_signed_constant (gint64 value)
+describe_signed_constant (gsize size, gint64 value)
 {
-  gchar *desc;
+  gchar *desc = NULL;
 
-  if (value == G_MAXINT)
-    desc = g_strdup ("G_MAXINT");
-  else if (value == G_MININT)
-    desc = g_strdup ("G_MININT");
-  else if (value == G_MAXUINT)
-    desc = g_strdup ("G_MAXUINT");
-  else if (value == G_MAXLONG)
-    desc = g_strdup ("G_MAXLONG");
-  else if (value == G_MINLONG)
-    desc = g_strdup ("G_MINLONG");
-  else if (value == G_MAXULONG)
-    desc = g_strdup ("G_MAXULONG");
-  else if (value == G_MAXINT64)
-    desc = g_strdup ("G_MAXINT64");
-  else if (value == G_MININT64)
-    desc = g_strdup ("G_MININT64");
-  else
+  switch (size) {
+    case 2:
+      if (sizeof (int) == 2) {
+        if (value == G_MAXINT)
+          desc = g_strdup ("G_MAXINT");
+        else if (value == G_MININT)
+          desc = g_strdup ("G_MININT");
+        else if (value == G_MAXUINT)
+          desc = g_strdup ("G_MAXUINT");
+      }
+      break;
+    case 4:
+      if (sizeof (int) == 4) {
+        if (value == G_MAXINT)
+          desc = g_strdup ("G_MAXINT");
+        else if (value == G_MININT)
+          desc = g_strdup ("G_MININT");
+        else if (value == G_MAXUINT)
+          desc = g_strdup ("G_MAXUINT");
+      }
+      if (value == G_MAXLONG)
+        desc = g_strdup ("G_MAXLONG");
+      else if (value == G_MINLONG)
+        desc = g_strdup ("G_MINLONG");
+      else if (value == G_MAXULONG)
+        desc = g_strdup ("G_MAXULONG");
+      break;
+    case 8:
+      if (value == G_MAXINT64)
+        desc = g_strdup ("G_MAXINT64");
+      else if (value == G_MININT64)
+        desc = g_strdup ("G_MININT64");
+      break;
+  }
+  if (!desc)
     desc = g_strdup_printf ("%" G_GINT64_FORMAT, value);
 
   return desc;
 }
 
 static gchar*
-describe_unsigned_constant (guint64 value)
+describe_unsigned_constant (gsize size, guint64 value)
 {
-  gchar *desc;
+  gchar *desc = NULL;
 
-  if (value == G_MAXINT)
-    desc = g_strdup ("G_MAXINT");
-  else if (value == G_MAXUINT)
-    desc = g_strdup ("G_MAXUINT");
-  else if (value == G_MAXLONG)
-    desc = g_strdup ("G_MAXLONG");
-  else if (value == G_MAXULONG)
-    desc = g_strdup ("G_MAXULONG");
-  else if (value == G_MAXINT64)
-    desc = g_strdup ("G_MAXINT64");
-  else if (value == G_MAXUINT64)
-    desc = g_strdup ("G_MAXUINT64");
-  else
+  switch (size) {
+    case 2:
+      if (sizeof (int) == 2) {
+        if (value == G_MAXINT)
+          desc = g_strdup ("G_MAXINT");
+        else if (value == G_MAXUINT)
+          desc = g_strdup ("G_MAXUINT");
+      }
+      break;
+    case 4:
+      if (sizeof (int) == 4) {
+        if (value == G_MAXINT)
+          desc = g_strdup ("G_MAXINT");
+        else if (value == G_MAXUINT)
+          desc = g_strdup ("G_MAXUINT");
+      }
+      if (value == G_MAXLONG)
+        desc = g_strdup ("G_MAXLONG");
+      else if (value == G_MAXULONG)
+        desc = g_strdup ("G_MAXULONG");
+      break;
+    case 8:
+      if (value == G_MAXINT64)
+        desc = g_strdup ("G_MAXINT64");
+      else if (value == G_MAXUINT64)
+        desc = g_strdup ("G_MAXUINT64");
+      break;
+  }
+  if (!desc)
     desc = g_strdup_printf ("%" G_GUINT64_FORMAT, value);
 
   return desc;
@@ -1078,8 +1112,8 @@ describe_type (GParamSpec *spec)
     {
       GParamSpecChar *pspec = G_PARAM_SPEC_CHAR (spec);
 
-      lower = describe_signed_constant (pspec->minimum);
-      upper = describe_signed_constant (pspec->maximum);
+      lower = describe_signed_constant (sizeof(gchar), pspec->minimum);
+      upper = describe_signed_constant (sizeof(gchar), pspec->maximum);
       if (pspec->minimum == G_MININT8 && pspec->maximum == G_MAXINT8)
 	desc = g_strdup ("");
       else if (pspec->minimum == G_MININT8)
@@ -1095,8 +1129,8 @@ describe_type (GParamSpec *spec)
     {
       GParamSpecUChar *pspec = G_PARAM_SPEC_UCHAR (spec);
 
-      lower = describe_unsigned_constant (pspec->minimum);
-      upper = describe_unsigned_constant (pspec->maximum);
+      lower = describe_unsigned_constant (sizeof(guchar), pspec->minimum);
+      upper = describe_unsigned_constant (sizeof(guchar), pspec->maximum);
       if (pspec->minimum == 0 && pspec->maximum == G_MAXUINT8)
 	desc = g_strdup ("");
       else if (pspec->minimum == 0)
@@ -1112,8 +1146,8 @@ describe_type (GParamSpec *spec)
     {
       GParamSpecInt *pspec = G_PARAM_SPEC_INT (spec);
 
-      lower = describe_signed_constant (pspec->minimum);
-      upper = describe_signed_constant (pspec->maximum);
+      lower = describe_signed_constant (sizeof(gint), pspec->minimum);
+      upper = describe_signed_constant (sizeof(gint), pspec->maximum);
       if (pspec->minimum == G_MININT && pspec->maximum == G_MAXINT)
 	desc = g_strdup ("");
       else if (pspec->minimum == G_MININT)
@@ -1129,8 +1163,8 @@ describe_type (GParamSpec *spec)
     {
       GParamSpecUInt *pspec = G_PARAM_SPEC_UINT (spec);
 
-      lower = describe_unsigned_constant (pspec->minimum);
-      upper = describe_unsigned_constant (pspec->maximum);
+      lower = describe_unsigned_constant (sizeof(guint), pspec->minimum);
+      upper = describe_unsigned_constant (sizeof(guint), pspec->maximum);
       if (pspec->minimum == 0 && pspec->maximum == G_MAXUINT)
 	desc = g_strdup ("");
       else if (pspec->minimum == 0)
@@ -1146,8 +1180,8 @@ describe_type (GParamSpec *spec)
     {
       GParamSpecLong *pspec = G_PARAM_SPEC_LONG (spec);
 
-      lower = describe_signed_constant (pspec->minimum);
-      upper = describe_signed_constant (pspec->maximum);
+      lower = describe_signed_constant (sizeof(glong), pspec->minimum);
+      upper = describe_signed_constant (sizeof(glong), pspec->maximum);
       if (pspec->minimum == G_MINLONG && pspec->maximum == G_MAXLONG)
 	desc = g_strdup ("");
       else if (pspec->minimum == G_MINLONG)
@@ -1163,8 +1197,8 @@ describe_type (GParamSpec *spec)
     {
       GParamSpecULong *pspec = G_PARAM_SPEC_ULONG (spec);
 
-      lower = describe_unsigned_constant (pspec->minimum);
-      upper = describe_unsigned_constant (pspec->maximum);
+      lower = describe_unsigned_constant (sizeof(gulong), pspec->minimum);
+      upper = describe_unsigned_constant (sizeof(gulong), pspec->maximum);
       if (pspec->minimum == 0 && pspec->maximum == G_MAXULONG)
 	desc = g_strdup ("");
       else if (pspec->minimum == 0)
@@ -1180,8 +1214,8 @@ describe_type (GParamSpec *spec)
     {
       GParamSpecInt64 *pspec = G_PARAM_SPEC_INT64 (spec);
 
-      lower = describe_signed_constant (pspec->minimum);
-      upper = describe_signed_constant (pspec->maximum);
+      lower = describe_signed_constant (sizeof(gint64), pspec->minimum);
+      upper = describe_signed_constant (sizeof(gint64), pspec->maximum);
       if (pspec->minimum == G_MININT64 && pspec->maximum == G_MAXINT64)
 	desc = g_strdup ("");
       else if (pspec->minimum == G_MININT64)
@@ -1197,8 +1231,8 @@ describe_type (GParamSpec *spec)
     {
       GParamSpecUInt64 *pspec = G_PARAM_SPEC_UINT64 (spec);
 
-      lower = describe_unsigned_constant (pspec->minimum);
-      upper = describe_unsigned_constant (pspec->maximum);
+      lower = describe_unsigned_constant (sizeof(guint64), pspec->minimum);
+      upper = describe_unsigned_constant (sizeof(guint64), pspec->maximum);
       if (pspec->minimum == 0 && pspec->maximum == G_MAXUINT64)
 	desc = g_strdup ("");
       else if (pspec->minimum == 0)
