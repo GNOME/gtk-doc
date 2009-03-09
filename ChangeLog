@@ -1,5 +1,11 @@
 2009-03-09  Stefan Kost  <ensonic@users.sf.net>
 
+	* ChangeLog:
+	  Fix ChangeLog format so that we pick up the bug number for release
+	  notes.
+
+2009-03-09  Stefan Kost  <ensonic@users.sf.net>
+
 	patch by: David Nečas <yeti@physics.muni.cz>
 
 	* configure.in:
@@ -38,15 +44,6 @@
 
 2009-02-24  Stefan Kost  <ensonic@users.sf.net>
 
-	reviewed by: <delete if not using a buddy>
-	patch by: <delete if not someone else's patch>
-
-	* gtkdoc-mkpdf.in:
-	* gtkdoc-scangobj.in:
-	* gtkdoc-scanobj.in:
-
-2009-02-24  Stefan Kost  <ensonic@users.sf.net>
-
 	patch by: Paolo Borelli <pborelli@katamail.com>
 
 	* gtkdoc-scangobj.in:
@@ -55,12 +52,8 @@
 
 2009-02-23  Sven Herzberg  <herzi@gnome-de.org>
 
-	Fixes 571820 - gobject.c: pspec_pool not initialized for interfaces
-
-	Initialize GObjectClass before referencing interfaces.
-
 	* gtkdoc-scangobj.in: keep a reference on the GObjectClass while
-	peeking in interfaces' properties
+	peeking in interfaces' properties. Fixes #571820
 
 2009-02-23  Stefan Kost  <ensonic@users.sf.net>
 
