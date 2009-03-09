@@ -1,5 +1,14 @@
 2009-03-09  Stefan Kost  <ensonic@users.sf.net>
 
+	patch by: David Nečas <yeti@physics.muni.cz>
+
+	* configure.in:
+	* gtkdoc-fixxref.in:
+	  Add vim support for syntax highlighting. Lets close the ticket.
+	  Fixes #536928.
+
+2009-03-09  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-scangobj.in:
 	  Don't confuse -1 with G_MAXULONG on 64bit. Fixes #572612.
 

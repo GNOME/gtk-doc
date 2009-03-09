@@ -99,6 +99,18 @@ else
   AC_PATH_PROG([HIGHLIGHT], [highlight])
   if test -n "$HIGHLIGHT"; then
     HIGHLIGHT_OPTIONS="-X -f -Ggtkdoc "
+  else
+    AC_PATH_PROG([HIGHLIGHT], [vim])
+    if test -n "$HIGHLIGHT"; then
+      dnl vim is useless if it does not support syntax highlighting
+      AC_MSG_CHECKING([whether vim has +syntax feature])
+      if $HIGHLIGHT --version | grep '+syntax' >/dev/null; then
+        AC_MSG_RESULT([yes])
+      else
+        AC_MSG_RESULT([no])
+        HIGHLIGHT=
+      fi
+    fi
   fi
 fi
 AC_SUBST([HIGHLIGHT_OPTIONS])

@@ -238,7 +238,12 @@ sub FixHTMLFile {
     close (HTMLFILE);
     
     if ("@HIGHLIGHT@" ne "") {
-        $entire_file =~ s%<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>%&HighlightSource($1,$2);%gse;
+        if ("@HIGHLIGHT@" =~ m%/vim$%) {
+            $entire_file =~ s%<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>%&HighlightSourceVim($1,$2);%gse;
+        }
+        else {
+            $entire_file =~ s%<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>%&HighlightSource($1,$2);%gse;
+        }
         # from the highlighter we get all the functions marked up
         # now we could turn them into GTKDOCLINK items
         $entire_file =~ s%(<span class=\"function\">)(.*?)(</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
@@ -332,24 +337,79 @@ sub HighlightSource {
         # maybe also do
         # $highlighted_source =~ s%</span>(.+)<span%</span><span class="normal">$1</span><span%gs;
     }
+    # remove temp file
+    unlink ($temp_source_file)
+	|| die "Can't delete $temp_source_file: $!";
+
+    return &HighlightSourcePostprocess($type, $highlighted_source);
+}
+
+sub HighlightSourceVim {
+    my ($type, $source) = @_;
+
+    # chop of leading and trailing empty lines
+    $source =~ s/^[\s\n]+//gs;
+    $source =~ s/[\s\n]+$//gs;
+    # avoid double entity replacement
+    $source =~ s/&lt;/</g;
+    $source =~ s/&gt;/>/g;
+    $source =~ s/&amp;/&/g;
+
+    # write source to a temp file
+    my $temp_source_file="$MODULE_DIR/_temp_src.$$.h";
+    open (NEWFILE, ">$temp_source_file") || die "Can't open $temp_source_file: $!";
+    print NEWFILE $source;
+    close (NEWFILE);
+
+    # format source
+    system "echo 'let html_number_lines=0|let html_use_css=1|let use_xhtml=1|syn on|e $temp_source_file|run! syntax/2html.vim|wa!|qa!' | @HIGHLIGHT@ -n -e -u /dev/null -T xterm >/dev/null";
+
+    my $highlighted_source;
+    {
+        local $/;
+        open (NEWFILE, "<$temp_source_file.html");
+        $highlighted_source = <NEWFILE>;
+        close (NEWFILE);
+    }
+    $highlighted_source =~ s#.*<pre>\n##s;
+    $highlighted_source =~ s#</pre>.*##s;
+
+    # need to rewrite the stylesheet classes
+    # FIXME: Vim has somewhat different syntax groups
+    $highlighted_source =~ s%<span class="Comment">%<span class="comment">%gs;
+    $highlighted_source =~ s%<span class="PreProc">%<span class="preproc">%gs;
+    $highlighted_source =~ s%<span class="Statement">%<span class="keyword">%gs;
+    $highlighted_source =~ s%<span class="Identifier">%<span class="function">%gs;
+    $highlighted_source =~ s%<span class="Constant">%<span class="number">%gs;
+    $highlighted_source =~ s%<span class="Special">%<span class="symbol">%gs;
+    $highlighted_source =~ s%<span class="Type">%<span class="type">%gs;
+
+    # remove temp files
+    unlink ($temp_source_file)
+	|| die "Can't delete $temp_source_file: $!";
+    unlink ("$temp_source_file.html")
+	|| die "Can't delete $temp_source_file.html: $!";
+
+    return &HighlightSourcePostprocess($type, $highlighted_source);
+}
+
+sub HighlightSourcePostprocess {
+    my ($type, $highlighted_source) = @_;
+
     # chop of leading and trailing empty lines
     $highlighted_source =~ s/^[\s\n]+//gs;
     $highlighted_source =~ s/[\s\n]+$//gs;
-    
+
     # turn common urls in comments into links
     $highlighted_source =~ s%<span class="url">(.*?)</span>%<span class="url"><a href="$1">$1</a></span>%gs;
 
     # we do own line-numbering
     my $source_lines="";
     my $line_count = () = $highlighted_source =~ /\n/gs;
-    my $i;
-    for($i=1;$i<($line_count+2);$i++) {
+    for (my $i=1; $i < ($line_count+2); $i++) {
         $source_lines.="$i\n";
     }
-    
-    # remove temp file
-    unlink ($temp_source_file)
-	|| die "Can't delete $temp_source_file: $!";
+    $source_lines =~ s/\n\Z//;
 
     return <<END_OF_HTML
 <div class="$type">
