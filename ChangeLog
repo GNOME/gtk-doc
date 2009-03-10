@@ -1,5 +1,14 @@
 2009-03-10  Stefan Kost  <ensonic@users.sf.net>
 
+	patch by: Nicola Fontana <ntd@entidi.it>
+
+	* gtkdoc-scan.in:
+	* tests/bugs/docs/Makefile.am:
+	* tests/bugs/src/tester.h:
+	  Improve the test and fix handling trailing decorators. Fixes #574654
+
+2009-03-10  Stefan Kost  <ensonic@users.sf.net>
+
 	* tests/bugs/docs/Makefile.am:
 	* tests/bugs/docs/tester-sections.txt:
 	* tests/bugs/src/tester.c:

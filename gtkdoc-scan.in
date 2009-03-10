@@ -592,7 +592,7 @@ sub ScanHeader {
 	# Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);' or
 	# ') __attribute__ (...);'.
 	if ($in_declaration eq 'function') {
-	    if ($decl =~ s/\)\s*(G_GNUC_.*|__attribute__\s*\(.*\)\s*)?;.*$//) {
+	    if ($decl =~ s/\)\s*(G_GNUC_.*|${IGNORE_DECORATORS}\s*|__attribute__\s*\(.*\)\s*)?;.*$//) {
 		$decl =~ s%/\*.*?\*/%%gs;	# remove comments.
 		#$decl =~ s/^\s+//;		# remove leading whitespace.
 		#$decl =~ s/\s+$//;		# remove trailing whitespace.
