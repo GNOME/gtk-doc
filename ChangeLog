@@ -1,5 +1,13 @@
 2009-03-10  Stefan Kost  <ensonic@users.sf.net>
 
+	* tests/bugs/docs/Makefile.am:
+	* tests/bugs/docs/tester-sections.txt:
+	* tests/bugs/src/tester.c:
+	* tests/bugs/src/tester.h:
+	  Adding a test for #574654.
+
+2009-03-10  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-fixxref.in:
 	  Don't expect $MODULE to be defined (e.g. if someone does not update
 	  gtkdoc.make).

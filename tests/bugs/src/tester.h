@@ -160,6 +160,7 @@ bug_532395b (void)
  */
 typedef char const * (*bug_544172) (char const *self);
 
+
 /** 
  * bug_554833:
  *
@@ -168,6 +169,7 @@ typedef char const * (*bug_544172) (char const *self);
 struct _bug_554833 {
   int i;
 };
+
 
 /** 
  * bug_554833_new:
@@ -178,6 +180,10 @@ struct _bug_554833 {
  */
 struct _bug_554833 *
                 bug_554833_new (void);
+
+
+int bug_574654a(void) G_GNUC_CONST;
+void bug_574654b(double offset);
 
 
 #endif // GTKDOC_TESTER_H
