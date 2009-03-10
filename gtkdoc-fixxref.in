@@ -273,7 +273,7 @@ sub MakeXRef {
     if ($href) {
         # if it is a link to same module, remove path to make it work
         # uninstalled
-        if ($href =~ m%^\.\./$MODULE/(.*)$%) {
+        if (defined($MODULE) && $href =~ m%^\.\./$MODULE/(.*)$%) {
             $href=$1;
         }
         #print "  Fixing link: $id, $href, $text\n";

@@ -1,3 +1,9 @@
+2009-03-10  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-fixxref.in:
+	  Don't expect $MODULE to be defined (e.g. if someone does not update
+	  gtkdoc.make).
+
 2009-03-09  Stefan Kost  <ensonic@users.sf.net>
 
 	* ChangeLog:
