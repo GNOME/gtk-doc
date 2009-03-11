@@ -1222,8 +1222,8 @@ sub OutputMacro {
     # g_assert.
     if (!defined ($DeclarationConditional{$symbol}) && ($symbol !~ m/^g_/)
 	&& ($symbol !~ m/^_?gnome_/) && (($declaration =~ tr/\n//) < 2)) {
-	$declaration = &CreateValidSGML ($declaration);
-	$desc .= "<programlisting>$declaration</programlisting>\n";
+	my $decl_out = &CreateValidSGML ($declaration);
+	$desc .= "<programlisting>$decl_out</programlisting>\n";
     } else {
 	$desc .= "<programlisting>" . &MakeReturnField("#define") . "$symbol";
 	# Align each line so that if should all line up OK.
@@ -1279,8 +1279,8 @@ sub OutputTypedef {
     $desc .= OutputSymbolExtraLinks($symbol);
 
     if (!defined ($DeclarationConditional{$symbol})) {
-	$declaration = &CreateValidSGML ($declaration);
-	$desc .= "<programlisting>$declaration</programlisting>\n";
+	my $decl_out = &CreateValidSGML ($declaration);
+	$desc .= "<programlisting>$decl_out</programlisting>\n";
     }
 
     $desc .= &MakeDeprecationNote($symbol);
@@ -1485,8 +1485,8 @@ sub OutputEnum {
     $desc .= "\n";
     $desc .= OutputSymbolExtraLinks($symbol);
 
-    $declaration = &CreateValidSGML ($declaration);
-    $desc .= "<programlisting>$declaration</programlisting>\n";
+    my $decl_out = &CreateValidSGML ($declaration);
+    $desc .= "<programlisting>$decl_out</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);
 
@@ -1559,8 +1559,8 @@ sub OutputUnion {
     $desc .= "\n";
     $desc .= OutputSymbolExtraLinks($symbol);
 
-    $declaration = &CreateValidSGML ($declaration);
-    $desc .= "<programlisting>$declaration</programlisting>\n";
+    my $decl_out = &CreateValidSGML ($declaration);
+    $desc .= "<programlisting>$decl_out</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);
 
@@ -1602,8 +1602,8 @@ sub OutputVariable {
     $desc .= "\n";
     $desc .= OutputSymbolExtraLinks($symbol);
 
-    $declaration = &CreateValidSGML ($declaration);
-    $desc .= "<programlisting>$declaration</programlisting>\n";
+    my $decl_out = &CreateValidSGML ($declaration);
+    $desc .= "<programlisting>$decl_out</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);
 
@@ -3181,9 +3181,9 @@ sub GetArgs {
 	    my $type = $ArgTypes[$i];
 	    my $type_output;
 	    my $range = $ArgRanges[$i];
-	    my $range_output = CreateValidSGML($range);
+	    my $range_output = CreateValidSGML ($range);
 	    my $default = $ArgDefaults[$i];
-	    my $default_output = CreateValidSGML($default);
+	    my $default_output = CreateValidSGML ($default);
 
 	    if ($type eq "GtkString") {
 		$type = "char*";

@@ -1,3 +1,9 @@
+2009-03-12  Stefan Kost  <ensonic@users.sf.net>
+
+	* gtkdoc-mkdb.in:
+	  Do not overwrite declaration variable with sgml-ified variant to not confuse
+	  further parsing.
+
 2009-03-10  Stefan Kost  <ensonic@users.sf.net>
 
 	patch by: Nicola Fontana <ntd@entidi.it>
