@@ -4,4 +4,4 @@ DOC_MODULE = gtk-doc-manual
 DOC_ENTITIES = fdl-appendix.xml
 DOC_INCLUDES =
 DOC_FIGURES =
-DOC_LINGUAS =
+DOC_LINGUAS = es
