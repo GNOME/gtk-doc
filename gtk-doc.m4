@@ -9,6 +9,11 @@ AC_DEFUN([GTK_DOC_CHECK],
   AC_BEFORE([AC_PROG_LIBTOOL],[$0])dnl setup libtool first
   AC_BEFORE([AM_PROG_LIBTOOL],[$0])dnl setup libtool first
 
+  dnl check for tools we added during development
+  AC_PATH_PROG([GTKDOC_CHECK],[gtkdoc-check])
+  AC_PATH_PROGS([GTKDOC_REBASE],[gtkdoc-rebase],[true])
+  AC_PATH_PROG([GTKDOC_MKPDF],[gtkdoc-mkpdf])
+
   dnl for overriding the documentation installation directory
   AC_ARG_WITH([html-dir],
     AS_HELP_STRING([--with-html-dir=PATH], [path to installed docs]),,
@@ -38,14 +43,15 @@ AC_DEFUN([GTK_DOC_CHECK],
     AS_HELP_STRING([--enable-gtk-doc-html],
                    [build documentation in html format [[default=yes]]]),,
     [enable_gtk_doc_html=yes])
-  AC_ARG_ENABLE([gtk-doc-pdf],
-    AS_HELP_STRING([--enable-gtk-doc-pdf],
-                   [build documentation in pdf format [[default=no]]]),,
-    [enable_gtk_doc_pdf=no])
+    AC_ARG_ENABLE([gtk-doc-pdf],
+      AS_HELP_STRING([--enable-gtk-doc-pdf],
+                     [build documentation in pdf format [[default=no]]]),,
+      [enable_gtk_doc_pdf=no])
 
-  dnl check for tools we added during development
-  AC_PATH_PROG([GTKDOC_CHECK],[gtkdoc-check])
-  AC_PATH_PROGS([GTKDOC_REBASE],[gtkdoc-rebase],[true])
+  if test -n "$GTKDOC_MKPDF"; then
+    enable_gtk_doc_pdf=no
+  fi
+
 
   AM_CONDITIONAL([ENABLE_GTK_DOC], [test x$enable_gtk_doc = xyes])
   AM_CONDITIONAL([GTK_DOC_BUILD_HTML], [test x$enable_gtk_doc_html = xyes])
