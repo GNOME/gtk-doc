@@ -67,7 +67,7 @@ if $is_xml; then
       --stringparam gtkdoc.version "@VERSION@" \
       "$@" -o $module.fo $gtkdocdir/gtk-doc-fo.xsl $document || exit $?
   # fop dies too easily :(
-  @FOP@ $module.fo $module.pdf
+  # @FOP@ $module.fo $module.pdf
   #rm $module.fo
 else
   # not very good output

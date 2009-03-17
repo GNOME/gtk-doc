@@ -182,7 +182,6 @@ struct _bug_554833 *
                 bug_554833_new (void);
 
 #define GTKDOC_GNUC_CONST
-
 int bug_574654a(void) GTKDOC_GNUC_CONST;
 void bug_574654b(double offset);
 
