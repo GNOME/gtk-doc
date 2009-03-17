@@ -1,5 +1,23 @@
 2009-03-17  Stefan Kost  <ensonic@users.sf.net>
 
+	patch by: Tobias Mueller <gnome-bugs@auftrags-killer.org>
+
+	* COPYING-DOCS:
+	* gtkdoc-check.in:
+	* gtkdoc-common.pl.in:
+	* gtkdoc-fixxref.in:
+	* gtkdoc-mkdb.in:
+	* gtkdoc-mktmpl.in:
+	* gtkdoc-rebase.in:
+	* gtkdoc-scan.in:
+	* gtkdoc-scangobj.in:
+	* gtkdoc-scanobj.in:
+	* help/manual/C/fdl-appendix.xml:
+	* tools/gtk-doc.el:
+	  Update FSF address. Fixes #575623.
+
+2009-03-17  Stefan Kost  <ensonic@users.sf.net>
+
 	* gtkdoc-mkpdf.in:
 	  Don't run fop for now, its way to broken.
 
