@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.HEAD\n"
-"POT-Creation-Date: 2009-03-14 21:17+0000\n"
-"PO-Revision-Date: 2009-03-15 21:19+0100\n"
+"POT-Creation-Date: 2009-03-15 20:20+0000\n"
+"PO-Revision-Date: 2009-03-17 09:44+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -364,32 +364,37 @@ msgid ""
 "gtk-doc using the option: <command> --with-dsssl-dir=&lt;"
 "PATH_TO_TOPLEVEL_STYLESHEETS_DIR&gt; </command>"
 msgstr ""
+"Si tiene las hojas de estilo instaladas en algún otro sitio, deberá "
+"configurar gtk-doc usando la opción: <command> --with-dsssl-dir=&lt;"
+"RUTA_AL_DIRECTORIO_DE_NIVEL_SUPERIOR_DE_LAS_HOJAS_DE_ESTILO&gt; </command>"
 
 #: C/gtk-doc-manual.xml:297(title)
 msgid "About GTK-Doc"
-msgstr ""
+msgstr "Acerca de GTK-Doc"
 
 #: C/gtk-doc-manual.xml:299(para) C/gtk-doc-manual.xml:313(para)
 msgid "(FIXME)"
-msgstr ""
+msgstr "(ARRÉGLAME)"
 
 #: C/gtk-doc-manual.xml:303(para)
 msgid ""
 "(History, authors, web pages, license, future plans, comparison with other "
 "similar systems.)"
 msgstr ""
+"(Historia, autores, páginas web, licencias, planes futuros, comparación con "
+"otros sistemas similares.)"
 
 #: C/gtk-doc-manual.xml:311(title)
 msgid "About this Manual"
-msgstr ""
+msgstr "Acerca de este manual"
 
 #: C/gtk-doc-manual.xml:317(para)
 msgid "(who it is meant for, where you can get it, license)"
-msgstr ""
+msgstr "(a quién está dirigido, dónde puede obtenerse, licencia)"
 
 #: C/gtk-doc-manual.xml:326(title)
 msgid "Setting up your project"
-msgstr ""
+msgstr "Configurando su proyecto"
 
 #: C/gtk-doc-manual.xml:328(para)
 msgid ""
@@ -398,10 +403,14 @@ msgid ""
 "project contains a library called 'libmeep' and an end-user app called "
 "'meeper'."
 msgstr ""
+"Las siguientes secciones describen los pasos que realizar para integrar GTK-"
+"Doc en su proyecto. Estas secciones asumen que se trabaja en un proyecto "
+"llamado «meep». Este proyecto contiene una biblioteca llamada «libmeep» y una "
+"aplicación final de usuario llamada «meeper»."
 
 #: C/gtk-doc-manual.xml:336(title)
 msgid "Setting up a skeleton documentation"
-msgstr ""
+msgstr "Configurar el esquema de la documentación"
 
 #: C/gtk-doc-manual.xml:338(para)
 msgid ""
@@ -410,38 +419,45 @@ msgid ""
 "recommended to create another subdirectory with the name of the doc-package. "
 "For packages with just one library this step is not necessary."
 msgstr ""
+"Bajo su directorio de nivel superior cree carpetas llamadas docs/reference "
+"(de esta forma también puede tener docs/help para la documentación final de "
+"usuario). Se recomienda crear otro subdirectorio con el nombre doc-package. "
+"Para paquetes con una sola biblioteca este paso no es necesario."
 
 #: C/gtk-doc-manual.xml:347(title)
 msgid "Example directory structure"
-msgstr ""
+msgstr "Ejemplo de estructura de directorios"
 
 #: C/gtk-doc-manual.xml:345(para)
 msgid "This can then look as show below: <placeholder-1/>"
-msgstr ""
+msgstr "Esto después aparecerá como se muestra debajo: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:365(title) C/gtk-doc-manual.xml:372(title)
 msgid "Integration with autoconf"
-msgstr ""
+msgstr "Integración con autoconf"
 
 #: C/gtk-doc-manual.xml:367(para)
 msgid ""
 "Very easy! Just add one line to your <filename>configure.ac</filename> "
 "script."
 msgstr ""
+"Muy fácil, simplemente añada una línea a su script <filename>configure.ac</"
+"filename>."
 
 #: C/gtk-doc-manual.xml:382(para)
 msgid ""
 "Besides checking for the required Gtk-Doc version, this adds two configure "
 "switches:"
 msgstr ""
+"Además de comprobar la versión de GTK-Doc necesaria, esto añade dos claves:"
 
 #: C/gtk-doc-manual.xml:387(para)
 msgid "--with-html-dir=PATH : path to installed docs"
-msgstr ""
+msgstr "--with-html-dir=RUTA: ruta a los documentos instalados"
 
 #: C/gtk-doc-manual.xml:388(para)
 msgid "--enable-gtk-doc : use gtk-doc to build documentation"
-msgstr ""
+msgstr "--enable-gtk-doc: usar gtk-doc para construir la documentación"
 
 #: C/gtk-doc-manual.xml:392(para)
 msgid ""
@@ -1135,7 +1151,7 @@ msgstr "Pregunta"
 
 #: C/gtk-doc-manual.xml:1319(segtitle)
 msgid "Answer"
-msgstr ""
+msgstr "Respuesta"
 
 #: C/gtk-doc-manual.xml:1321(seg)
 msgid "No class hierarchy."
@@ -1157,7 +1173,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1326(ulink)
 msgid "explanation"
-msgstr ""
+msgstr "explicación"
 
 #: C/gtk-doc-manual.xml:1326(seg)
 msgid "Wrong naming in section file (see <placeholder-1/>)"
@@ -1231,7 +1247,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:12(releaseinfo)
 msgid "Version 1.1, March 2000"
-msgstr ""
+msgstr "Versión 1.1, marzo de 2000"
 
 #: C/gtk-doc-manual.xml:16(year)
 msgid "2000"
