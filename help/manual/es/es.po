@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.HEAD\n"
 "POT-Creation-Date: 2009-03-15 20:20+0000\n"
-"PO-Revision-Date: 2009-03-17 09:44+0100\n"
+"PO-Revision-Date: 2009-03-22 23:03+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -466,6 +466,11 @@ msgid ""
 "Otherwise pregenerated documentation is installed (which makes sense for "
 "users but not for developers)."
 msgstr ""
+"GTK-Doc está desactivado de forma predeterminada. Recuerde pasar la opción "
+"<option>«--enable-gtk-doc»</option> en la siguiente ejecución de "
+"<filename>configure</filename>. De otra forma, la documentación pregenerada "
+"se instala (lo que tiene sentido para usuarios, pero no para "
+"desarrolladores)."
 
 #: C/gtk-doc-manual.xml:400(para)
 msgid ""
@@ -474,14 +479,18 @@ msgid ""
 "filename> to automatically copy the macro definition for "
 "<function>GTK_DOC_CHECK</function> to your project."
 msgstr ""
+"Aún más, se recomienda que tenga la siguiente línea en su script "
+"<filename>configure.ac</filename>. Esto permite que <filename>gtkdocize</"
+"filename> copie automáticamente la definición del macro para "
+"<function>GTK_DOC_CHECK</function> a su proyecto."
 
 #: C/gtk-doc-manual.xml:408(title)
 msgid "Preparation for gtkdocize"
-msgstr ""
+msgstr "Preparación para gtkdocize"
 
 #: C/gtk-doc-manual.xml:419(title)
 msgid "Integration with automake"
-msgstr ""
+msgstr "Integración con automake"
 
 #: C/gtk-doc-manual.xml:421(para)
 msgid ""
@@ -490,6 +499,11 @@ msgid ""
 "directory ( <filename class=\"directory\">./docs/reference/&lt;package&gt;</"
 "filename>). If you have multiple doc-packages repeat this for each one."
 msgstr ""
+"Primero copie el archivo <filename>Makefile.am</filename> del subdirectorio "
+"de ejemplos de gtkdoc-sources al directorio de documentación de la API de su "
+"proyecto (<filename class=\"directory\">./docs/reference/&lt;paquete&gt;</"
+"filename>). Si tiene varios paquetes de documentación, repítalo para cada "
+"uno de ellos."
 
 #: C/gtk-doc-manual.xml:428(para)
 msgid ""
@@ -500,6 +514,12 @@ msgid ""
 "All the tools support <option>--help</option> to list the supported "
 "parameters."
 msgstr ""
+"El siguiente paso es editar la configuración dentro de <filename>Makefile."
+"am</filename>. Todos los ajustes tienen un comentario encima que describe su "
+"propósito. Muchos ajustes son opciones adicionales pasadas a las respectivas "
+"herramientas. Cada herramienta tiene una variable de la forma <option>&lt;"
+"NOMBRE_DE_LA_HERRAMIENTA&gt;_OPCIONES</option>. Todas las herramientas "
+"soportan <option>--help</option> para listar los parámetros que soportan."
 
 #. FIXME: explain options ?
 #: C/gtk-doc-manual.xml:439(para)
@@ -511,11 +531,11 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:446(title)
 msgid "Enable gtk-doc during make distcheck"
-msgstr ""
+msgstr "Activar gtk-doc durante make distcheck"
 
 #: C/gtk-doc-manual.xml:458(title)
 msgid "Integration with autogen"
-msgstr ""
+msgstr "Integración con autogen"
 
 #: C/gtk-doc-manual.xml:460(para)
 msgid ""
@@ -528,7 +548,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:469(title)
 msgid "Running gtkdocize from autogen.sh"
-msgstr ""
+msgstr "Ejecutar gtkdocize desde autogen.sh"
 
 #: C/gtk-doc-manual.xml:478(para)
 msgid ""
@@ -551,7 +571,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:497(title) C/gtk-doc-manual.xml:514(title)
 msgid "Running the doc build"
-msgstr ""
+msgstr "Ejecutar la construcción de la documentación"
 
 #: C/gtk-doc-manual.xml:499(para)
 msgid ""
@@ -578,7 +598,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:531(title)
 msgid "Integration with version control systems"
-msgstr ""
+msgstr "Integración con los sistemas de control de versiones"
 
 #: C/gtk-doc-manual.xml:533(para)
 msgid ""
@@ -591,7 +611,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:546(title)
 msgid "Documenting the code"
-msgstr ""
+msgstr "Documentar el código"
 
 #: C/gtk-doc-manual.xml:548(para)
 msgid ""
@@ -603,7 +623,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:556(title)
 msgid "Documentation placement"
-msgstr ""
+msgstr "Ubicación de la documentación"
 
 #: C/gtk-doc-manual.xml:557(para)
 msgid ""
@@ -622,11 +642,11 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:573(title)
 msgid "Documentation comments"
-msgstr ""
+msgstr "Comentarios de la documentación"
 
 #: C/gtk-doc-manual.xml:578(title)
 msgid "Gtk-Doc comment block"
-msgstr ""
+msgstr "Bloque de comentario de GTK-Doc"
 
 #: C/gtk-doc-manual.xml:575(para)
 msgid ""
