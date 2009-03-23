@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.HEAD\n"
-"POT-Creation-Date: 2009-03-15 20:20+0000\n"
-"PO-Revision-Date: 2009-03-22 23:03+0100\n"
+"POT-Creation-Date: 2009-03-22 22:06+0000\n"
+"PO-Revision-Date: 2009-03-23 16:28+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -528,6 +528,9 @@ msgid ""
 "then one-liner show in the next example to you top-level <filename>Makefile."
 "am</filename>:"
 msgstr ""
+"Puede que también quiera activar GTK-Doc para el objetivo distcheckmate. "
+"Simplemente añada la línea mostrada en el siguiente ejemplo a su nivel "
+"superior de <filename>Makefile.am</filename>:"
 
 #: C/gtk-doc-manual.xml:446(title)
 msgid "Enable gtk-doc during make distcheck"
@@ -545,6 +548,12 @@ msgid ""
 "which can be used in such a script. It should be run before autoheader, "
 "automake or autoconf."
 msgstr ""
+"La mayoría de los proyectos tienen un script <filename>autogen.sh</filename> "
+"para configurar la infraestructura de construcción después de hacer un "
+"«checkout» desde los sistemas de control de versiones (tales como cvs). GTK-"
+"Doc tiene una herramienta llamada <filename>gtkdocize</filename> que se "
+"puede usar en tal script. Se debería ejecutar antes que autoheader, automake "
+"o autoconf."
 
 #: C/gtk-doc-manual.xml:469(title)
 msgid "Running gtkdocize from autogen.sh"
@@ -557,6 +566,10 @@ msgid ""
 "docdir option). If also check you configure script for the "
 "<function>GTK_DOC_CHECK</function> invocation."
 msgstr ""
+"Al ejecutar <filename>gtkdocize</filename> se copia <filename>gtk-doc.make</"
+"filename> a la raíz de su proyecto (o cualquier directorio especificado por "
+"la opción --docdir). También comprueba su script de configuración para la "
+"invocación de <function>GTK_DOC_CHECK</function>."
 
 #: C/gtk-doc-manual.xml:485(para)
 msgid ""
@@ -568,6 +581,15 @@ msgid ""
 "tmpl option that chooses a makefile that skips tmpl usage totally. If you "
 "have never changed file in tmpl by hand, please remove the dir once."
 msgstr ""
+"Históricamente GTK-Doc generaba plantillas de archivos donde los "
+"desarrolladores introducían los documentos. Al final esto resulto no ser muy "
+"bueno. Desde las primeras versiones GTK-Doc también podría obtener toda la "
+"documentación desde los comentarios del código. Desde GTK-Doc 1.9 se pueden "
+"omitir las plantillas. Se anima a los desarrolladores a mantener su "
+"documentación en el código. <application>gtkdocize</application> ahora "
+"soporta una opción «--flavour=no-tmpl» que elije un makefile que omite "
+"completamente el uso de plantillas. Si nunca ha cambiado un archivo tmpl "
+"(plantilla) a mano, elimine el directorio una vez."
 
 #: C/gtk-doc-manual.xml:497(title) C/gtk-doc-manual.xml:514(title)
 msgid "Running the doc build"
@@ -595,6 +617,10 @@ msgid ""
 "index.html</filename>. Yes, it's a bit disappointing still. But hang-on, "
 "during the next chapter we tell you how to fill the pages with life."
 msgstr ""
+"Ahora puede apuntar su navegador a <filename>docs/reference/&lt;paquete&gt;/"
+"index.html</filename>. Sí, aún es un poco decepcionante. Pero espere, "
+"durante el siguiente capítulo aprenderá a rellenar las páginas con "
+"información."
 
 #: C/gtk-doc-manual.xml:531(title)
 msgid "Integration with version control systems"
@@ -694,15 +720,15 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:635(para)
 msgid "Use #Object::signal to refer to a GObject signal"
-msgstr ""
+msgstr "Use #Object::signal para referirse a una señal de GObject"
 
 #: C/gtk-doc-manual.xml:640(para)
 msgid "Use #Object:property to refer to a GObject property"
-msgstr ""
+msgstr "Use #Object:property para referirse a una propiedad de GObject"
 
 #: C/gtk-doc-manual.xml:645(para)
 msgid "Use #Struct.field to refer to a field inside a structure."
-msgstr ""
+msgstr "Use #Struct.field para referirse a un campo dentro de una estructura"
 
 #: C/gtk-doc-manual.xml:607(para)
 msgid ""
@@ -741,7 +767,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:684(title)
 msgid "Documenting sections"
-msgstr ""
+msgstr "Documentar secciones"
 
 #: C/gtk-doc-manual.xml:686(para)
 msgid ""
@@ -752,7 +778,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:693(title)
 msgid "Section comment block"
-msgstr ""
+msgstr "Bloque de comentarios en una sección"
 
 #: C/gtk-doc-manual.xml:712(term)
 msgid "@short_description"
@@ -770,7 +796,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:723(para)
 msgid "A list of symbols that are related to this section.."
-msgstr ""
+msgstr "Una lista de símbolos relacionados con esta sección."
 
 #: C/gtk-doc-manual.xml:729(term)
 msgid "@stability"
@@ -838,10 +864,13 @@ msgid ""
 "To avoid unnecessary recompilation after doc-changes put the section docs "
 "into the c-source where possible."
 msgstr ""
+"Para evitar recompilaciones innecesarias después de cambios en la "
+"documentación ponga los documentos de sección en el código fuente C cuando "
+"sea posible."
 
 #: C/gtk-doc-manual.xml:809(title)
 msgid "Documenting symbols"
-msgstr ""
+msgstr "Documentar símbolos"
 
 #: C/gtk-doc-manual.xml:811(para)
 msgid ""
@@ -854,11 +883,11 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:820(title)
 msgid "Function comment block"
-msgstr ""
+msgstr "Bloque de comentario de función"
 
 #: C/gtk-doc-manual.xml:843(term)
 msgid "Returns:"
-msgstr ""
+msgstr "Devuelve:"
 
 #: C/gtk-doc-manual.xml:845(para)
 msgid "Paragraph describing the returned result."
@@ -866,7 +895,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:851(term)
 msgid "Deprecated:"
-msgstr ""
+msgstr "Obsoleto:"
 
 #: C/gtk-doc-manual.xml:853(para)
 msgid ""
@@ -876,7 +905,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:860(term)
 msgid "Since:"
-msgstr ""
+msgstr "Desde:"
 
 #: C/gtk-doc-manual.xml:862(para)
 msgid "Description since which version of the code the API is available."
@@ -887,26 +916,28 @@ msgid ""
 "Gtk-doc assumes all symbols (macros, functions) starting with '_' are "
 "private. They are treated like static functions."
 msgstr ""
+"GTK-Doc asume que todos los símbolos (macros, funciones) que empiezan por «_» "
+"son privados. Se tratan como funciones estáticas."
 
 #: C/gtk-doc-manual.xml:874(para)
 msgid "(FIXME) (stability) (glib-enums, ...)"
-msgstr ""
+msgstr "(ARREGLAR) (estabilidad) (glib-enums, ...)"
 
 #: C/gtk-doc-manual.xml:880(title)
 msgid "Property comment block"
-msgstr ""
+msgstr "Bloque de comentario de propiedad"
 
 #: C/gtk-doc-manual.xml:892(title)
 msgid "Signal comment block"
-msgstr ""
+msgstr "Bloque de comentario de señal"
 
 #: C/gtk-doc-manual.xml:909(title)
 msgid "Struct comment block"
-msgstr ""
+msgstr "Bloque de comentario de estructura"
 
 #: C/gtk-doc-manual.xml:928(title)
 msgid "Useful DocBook tags"
-msgstr ""
+msgstr "Etiquetas DocBook útiles"
 
 #: C/gtk-doc-manual.xml:930(para)
 msgid ""
@@ -941,7 +972,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:996(para)
 msgid "To include bulleted lists: <placeholder-1/>"
-msgstr ""
+msgstr "Para incluir listas de topos: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1018(para)
 msgid "To include a note which stands out from the text: <placeholder-1/>"
@@ -949,7 +980,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1033(para)
 msgid "To refer to a type: <placeholder-1/>"
-msgstr ""
+msgstr "Para referirse a un tipo: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1044(para)
 msgid ""
@@ -959,7 +990,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1055(para)
 msgid "To refer to a field of a structure: <placeholder-1/>"
-msgstr ""
+msgstr "Para referirse a un campo o a una estructura: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1066(para)
 msgid ""
@@ -971,15 +1002,15 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1079(para)
 msgid "To emphasize text: <placeholder-1/>"
-msgstr ""
+msgstr "Para enfatizar un texto: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1090(para)
 msgid "For filenames use: <placeholder-1/>"
-msgstr ""
+msgstr "Para uso de nombres de archivo: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1105(title)
 msgid "Filling the extra files"
-msgstr ""
+msgstr "Rellenar campos adicionales"
 
 #: C/gtk-doc-manual.xml:1107(para)
 msgid ""
@@ -1016,7 +1047,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1150(title)
 msgid "Editing the master document"
-msgstr ""
+msgstr "Editar la sección maestra del documento"
 
 #: C/gtk-doc-manual.xml:1152(para)
 msgid ""
@@ -1197,11 +1228,11 @@ msgstr "explicación"
 
 #: C/gtk-doc-manual.xml:1326(seg)
 msgid "Wrong naming in section file (see <placeholder-1/>)"
-msgstr ""
+msgstr "Nombres erróneos en el archivo de sección (consultar <placeholder-1/>)"
 
 #: C/gtk-doc-manual.xml:1329(seg)
 msgid "Damn, I have still no class hierarchy."
-msgstr ""
+msgstr "Maldición, aún no hay una jerarquía de clases."
 
 #: C/gtk-doc-manual.xml:1330(seg)
 msgid ""
@@ -1257,7 +1288,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1357(seg)
 msgid "Symbol XYZ appears twice in -section.txt file."
-msgstr ""
+msgstr "El símbolo XYZ aparece dos veces en el archivo -section.txt"
 
 #: C/gtk-doc-manual.xml:1360(seg)
 msgid ""
@@ -1275,12 +1306,12 @@ msgstr "2000"
 
 #: C/gtk-doc-manual.xml:16(holder)
 msgid "Free Software Foundation, Inc."
-msgstr ""
+msgstr "Free Software Foundation, Inc."
 
 #: C/gtk-doc-manual.xml:19(para)
 msgid ""
-"<address>Free Software Foundation, Inc. <street>59 Temple Place, Suite 330</"
-"street>, <city>Boston</city>, <state>MA</state><postcode>02111-1307</"
+"<address>Free Software Foundation, Inc. <street>51 Franklin Street, Suite "
+"330</street>, <city>Boston</city>, <state>MA</state><postcode>02110-1301</"
 "postcode><country>USA</country></address> Everyone is permitted to copy and "
 "distribute verbatim copies of this license document, but changing it is not "
 "allowed."
@@ -1868,7 +1899,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:629(para)
 msgid "Copyright YEAR YOUR NAME."
-msgstr ""
+msgstr "Copyright AÑO SU NOMBRE."
 
 #: C/gtk-doc-manual.xml:632(para)
 msgid ""
