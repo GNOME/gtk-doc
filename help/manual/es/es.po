@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.HEAD\n"
-"POT-Creation-Date: 2009-03-22 22:06+0000\n"
-"PO-Revision-Date: 2009-03-23 16:28+0100\n"
+"POT-Creation-Date: 2009-03-23 17:30+0000\n"
+"PO-Revision-Date: 2009-03-24 11:04+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -602,6 +602,11 @@ msgid ""
 "give it the <option>--enable-gtk-doc</option> option. Otherwise manually run "
 "<filename>configure</filename> with this option afterwards."
 msgstr ""
+"Después de los pasos anteriores es hora de ejecutar el constructor. Primero "
+"se debe volver a ejecutar <filename>autogen.sh</filename>. Si este script "
+"ejecuta configure automáticamente, entonces debe pasar la opción <option>--"
+"enable-gtk-doc</option>. De otra forma, ejecute posteriormente "
+"<filename>configure</filename> con esta opción."
 
 #: C/gtk-doc-manual.xml:506(para)
 msgid ""
@@ -610,6 +615,10 @@ msgid ""
 "<filename>&lt;package&gt;-docs.sgml</filename>, <filename>&lt;package&gt;-"
 "sections.txt</filename>."
 msgstr ""
+"El primer make genera diversas líneas adicionales en los directorios de "
+"documentación. Las importantes son: <filename>&lt;paquete&gt;.types</"
+"filename>, <filename>&lt;paquete&gt;-docs.sgml</filename>, <filename>&lt;"
+"paquete&gt;-sections.txt</filename>."
 
 #: C/gtk-doc-manual.xml:523(para)
 msgid ""
@@ -646,6 +655,10 @@ msgid ""
 "from other sources. During the next section you find all information about "
 "the syntax of the comments."
 msgstr ""
+"GTK-Doc usa código fuente comentado con una sintaxis especial para "
+"documentar el código. Además obtiene información acerca de la estructura de "
+"su proyecto de otras fuentes. En la siguiente sección encontrará información "
+"acerca de la sintaxis de los comentarios."
 
 #: C/gtk-doc-manual.xml:556(title)
 msgid "Documentation placement"
@@ -658,6 +671,11 @@ msgid ""
 "information is often not updated and also that the file tend to cause "
 "conflicts with version control systems."
 msgstr ""
+"En el pasado la mayoría de la documentación se debía rellenar en campos "
+"dentro del directorio <filename>tmpl</filename>. Esto tiene las desventajas "
+"de que la información. Esto tiene las desventajas de que la información no "
+"se actualiza muy a menudo y que el archivo tiene tendencia a causar "
+"conflictos con los sistemas de control de versiones."
 
 #: C/gtk-doc-manual.xml:563(para)
 msgid ""
@@ -665,6 +683,9 @@ msgid ""
 "inside the sources. This manual will only describe this way of documenting "
 "code."
 msgstr ""
+"Para evitar los problemas anteriormente mencionados, se sugiere dejar la "
+"documentación dentro de los fuentes. Este manual sólo describe esta forma de "
+"documentar el código."
 
 #: C/gtk-doc-manual.xml:573(title)
 msgid "Documentation comments"
@@ -679,6 +700,8 @@ msgid ""
 "A multiline comment that starts with an additional '*' marks a documentation "
 "block that will be processed by the Gtk-Doc tools. <placeholder-1/>"
 msgstr ""
+"Un comentario de varias líneas que comienza con un «*» adicional marca un "
+"bloque de documentación que GTK-Doc tools procesarán. <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:590(para)
 msgid ""
@@ -891,7 +914,7 @@ msgstr "Devuelve:"
 
 #: C/gtk-doc-manual.xml:845(para)
 msgid "Paragraph describing the returned result."
-msgstr ""
+msgstr "Párrafo que describe el resultado devuelto."
 
 #: C/gtk-doc-manual.xml:851(term)
 msgid "Deprecated:"
@@ -902,6 +925,8 @@ msgid ""
 "Paragraph denoting that this function should no be used anymore. The "
 "description should point the reader to the new API."
 msgstr ""
+"Párrafo que denota que esta función no se debería usar más. La descripción "
+"debería informar al lector de la nueva API."
 
 #: C/gtk-doc-manual.xml:860(term)
 msgid "Since:"
@@ -909,7 +934,7 @@ msgstr "Desde:"
 
 #: C/gtk-doc-manual.xml:862(para)
 msgid "Description since which version of the code the API is available."
-msgstr ""
+msgstr "Descripción desde qué versión del código está disponible la API."
 
 #: C/gtk-doc-manual.xml:869(para)
 msgid ""
@@ -943,6 +968,7 @@ msgstr "Etiquetas DocBook útiles"
 msgid ""
 "Here are some DocBook tags which are most useful when documenting the code."
 msgstr ""
+"Aquí están varias etiquetas de DocBook muy útiles al documentar código."
 
 #: C/gtk-doc-manual.xml:935(para)
 msgid ""
