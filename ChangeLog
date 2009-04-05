@@ -1,3 +1,8 @@
+2009-04-05  Stefan Kost  <ensonic@users.sf.net>
+
+	* examples/Makefile.am:
+	  Only run the tests if gtk-doc is enabled. Fixes #577774.
+
 2009-03-18  Stefan Kost  <ensonic@users.sf.net>
 
 	patch by: David Nečas <yeti@physics.muni.cz>
