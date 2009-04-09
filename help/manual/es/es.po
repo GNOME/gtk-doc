@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.HEAD\n"
 "POT-Creation-Date: 2009-03-23 17:30+0000\n"
-"PO-Revision-Date: 2009-03-24 11:04+0100\n"
+"PO-Revision-Date: 2009-04-08 18:38+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -311,6 +311,13 @@ msgid ""
 "indices in the generated HTML. <ulink url=\"http://nwalsh.com/docbook/dsssl"
 "\" type=\"http\">http://nwalsh.com/docbook/dsssl</ulink>"
 msgstr ""
+"<guilabel>Hojas de estilo DocBook modulares:</guilabel> Éste es el código "
+"DSSSL para convertir DocBook a HTML (y otros cuantos formatos). Se usa junto "
+"con jade. El código DSSSL está algo personalizado, en GTK-Doc dsl, para "
+"colorear el código de listas/declaraciones del programa y soportar índices "
+"de referencias cruzadas globales en el HTML generado. <ulink url=\"http://"
+"nwalsh.com/docbook/dsssl\" type=\"http\">http://nwalsh.com/docbook/dsssl</"
+"ulink>."
 
 #: C/gtk-doc-manual.xml:247(para)
 msgid ""
@@ -321,6 +328,12 @@ msgid ""
 "\"http://www.ora.com/davenport\" type=\"http\">http://www.ora.com/davenport</"
 "ulink> NOTE: This does not work yet."
 msgstr ""
+"<guilabel>docbook-to-man</guilabel>: Si quiere crear páginas man desde el "
+"DocBook. «translation spec» se ha personalizado un poco para capitalizar la "
+"sección de cabeceras y añadir un título de «Biblioteca GTK» en la parte "
+"superior de las páginas y la fecha de revisión al final. Existe un enlace "
+"acerca de esto en <ulink url=\"http://www.ora.com/davenport\" type=\"http"
+"\">http://www.ora.com/davenport</ulink>. NOTA: Esto aún no funciona."
 
 #: C/gtk-doc-manual.xml:258(title)
 msgid "Installation"
@@ -643,6 +656,11 @@ msgid ""
 "filename><filename>&lt;package&gt;-sections.txt</filename><filename>Makefile."
 "am</filename>"
 msgstr ""
+"Como regla principal, son los archivos que edita, los que deberían estar "
+"bajo el control de versiones. Para proyectos típicos son los archivos: "
+"<filename>&lt;paquete&gt;.types</filename>, <filename>&lt;paquete&gt;-docs."
+"sgml</filename>, <filename>&lt;paquete&gt;-sections.txt</filename> y "
+"<filename>Makefile.am</filename>."
 
 #: C/gtk-doc-manual.xml:546(title)
 msgid "Documenting the code"
@@ -709,6 +727,9 @@ msgid ""
 "related to. The syntax differs a little depending on the item. (TODO add "
 "table showing identifiers)"
 msgstr ""
+"El «identificador» es una línea con el nombre del elemento relacionado con el "
+"comentario. La sintaxis difiere un poco dependiendo del elemento. (Por "
+"hacer: añadir una tabla mostrando los identificadores)"
 
 #: C/gtk-doc-manual.xml:596(para)
 msgid ""
@@ -724,22 +745,27 @@ msgstr ""
 #: C/gtk-doc-manual.xml:613(para)
 msgid "Use function() to refer to functions or macros which take arguments."
 msgstr ""
+"Use función() para referirse a funciones o macros que toman argumentos."
 
 #: C/gtk-doc-manual.xml:618(para)
 msgid ""
 "Use @param to refer to parameters. Also use this when referring to "
 "parameters of other functions, related to the one being described."
 msgstr ""
+"Use @parámetro para referirse a parámetros. Úselo también al referirse a "
+"parámetros de otras funciones, relacionados al que se describe."
 
 #: C/gtk-doc-manual.xml:624(para)
 msgid "Use %constant to refer to a constant, e.g. %G_TRAVERSE_LEAFS."
-msgstr ""
+msgstr "Use %constant para referirse a una constante, ej: %G_TRAVERSE_LEAFS."
 
 #: C/gtk-doc-manual.xml:629(para)
 msgid ""
 "Use #symbol to refer to other types of symbol, e.g. structs and enums and "
 "macros which don't take arguments."
 msgstr ""
+"Use #símbolo para referirse a otro tipo de símbolos, como por ejemplo "
+"estructuras, enumeraciones y macros que no toman argumentos."
 
 #: C/gtk-doc-manual.xml:635(para)
 msgid "Use #Object::signal to refer to a GObject signal"
@@ -760,6 +786,10 @@ msgid ""
 "Gtk-Doc comes to help by providing several useful abbreviations. "
 "<placeholder-1/>"
 msgstr ""
+"Una ventaja del hipertexto sobre el texto plano es la capacidad de tener "
+"enlaces en el documento. Escribir las marcas adecuadas para un enlace puede "
+"ser tedioso aunque GTK-Doc le ayuda proporcionando abreviaturas útiles. "
+"<placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:653(para)
 msgid ""
@@ -776,6 +806,10 @@ msgid ""
 "to have <option>--sgml-mode</option> in the variable <symbol>MKDB_OPTIONS</"
 "symbol> inside <filename>Makefile.am</filename>."
 msgstr ""
+"DocBook puede hacer más que insertar enlaces. Puede tener listas, tablas y "
+"ejemplos. Para activar el uso de etiquetas SGML/XML dentro de comentarios en "
+"la documentación debe tener <option>--sgml-mode</option> en la variable "
+"<symbol>MKDB_OPTIONS</symbol> dentro de <filename>Makefile.am</filename>."
 
 #: C/gtk-doc-manual.xml:670(para)
 msgid ""
