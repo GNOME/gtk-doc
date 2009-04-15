@@ -142,15 +142,6 @@ if test "x$GCC" = "xyes"; then
   fi
 fi
 
-# Check for scrollkeeper
-AC_PATH_PROG(scrollkeeper_config, scrollkeeper-config, no)
-if test x$scrollkeeper_config = xno; then
-  AC_MSG_WARN([Couldn't find scrollkeeper-config, please install the scrollkeeper package])
-#  if test x$xsltproc = xno; then
-#    AC_MSG_WARN([Couldn't find xsltproc, please install the libxml/libxslt package])
-#  fi
-fi
-
 # if glib is available we can enable the tests
 PKG_CHECK_MODULES(TEST_DEPS, [glib-2.0 >= 2.6.0 gobject-2.0 >= 2.6.0], [
     glib_prefix="`$PKG_CONFIG --variable=prefix glib-2.0`"
@@ -236,13 +227,13 @@ test -n "$JADE" \
 test -n "$FOP" \
     && AC_MSG_NOTICE([** XML PDF support enabled, using $FOP]) \
     || AC_MSG_NOTICE([   XML PDF support disabled, no fop available])
-test x$scrollkeeper_config != xno \
+test "x$enable_scrollkeeper" = "xyes" \
     && AC_MSG_NOTICE([** Scrollkeeper support enabled]) \
     || AC_MSG_NOTICE([   Scrollkeeper support disabled])
 test -n "$HIGHLIGHT" \
     && AC_MSG_NOTICE([** Syntax highlighting of examples enabled, using $HIGHLIGHT]) \
     || AC_MSG_NOTICE([   Syntax highlighting of examples disabled])
-test x$build_tests != xno \
+test "x$build_tests" != "xno" \
     && AC_MSG_NOTICE([** Building regression tests]) \
     || AC_MSG_NOTICE([   Skipping regression tests])
 

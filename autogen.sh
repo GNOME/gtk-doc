@@ -4,6 +4,7 @@
 PROJECT=gtk-doc
 TEST_TYPE=-f
 FILE=gtk-doc.dsl.in
+CONFIGURE_FLAGS=
 
 # a silly hack that generates autoregen.sh but it's handy
 echo "#!/bin/sh" > autoregen.sh
@@ -18,11 +19,6 @@ test -z "$srcdir" && srcdir=.
 THEDIR="`pwd`"
 
 cd "$srcdir"
-
-which >/dev/null gnome-doc-prepare || {
-	echo "You need to install gnome-doc-utils to build this package"
-	DIE=1
-}
 
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
 	echo
@@ -69,8 +65,12 @@ if test "$#" = 0; then
         echo "to pass any to it, please specify them on the $0 command line."
 fi
 
-echo "* Running gnome-doc-prepare"
-gnome-doc-prepare --force --automake
+if gnome-doc-prepare --version < /dev/null > /dev/null 2>&1; then
+  echo "* Running gnome-doc-prepare"
+  gnome-doc-prepare --force --automake
+else
+  CONFIGURE_FLAGS="$CONFIGURE_FLAGS --disable-scrollkeeper"
+fi
 
 # to support timj aclocal setup we are shipping gnome-doc-utils.m4
 # and making sure automake picks it up ;)
@@ -91,7 +91,7 @@ $AUTOMAKE --add-missing -Wno-portability $am_opt || exit $?
 
 cd "$THEDIR"
 
-$srcdir/configure --enable-maintainer-mode "$@" || exit $?
+$srcdir/configure --enable-maintainer-mode "$@" $CONFIGURE_FLAGS || exit $?
 
 echo
 echo "Now type 'make install' to install $PROJECT."
