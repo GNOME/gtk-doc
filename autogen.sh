@@ -67,9 +67,10 @@ fi
 
 if gnome-doc-prepare --version < /dev/null > /dev/null 2>&1; then
   echo "* Running gnome-doc-prepare"
-  gnome-doc-prepare --force --automake
+  gnome-doc-prepare --copy --force --automake
 else
   CONFIGURE_FLAGS="$CONFIGURE_FLAGS --disable-scrollkeeper"
+  touch gnome-doc-utils.make
 fi
 
 # to support timj aclocal setup we are shipping gnome-doc-utils.m4
