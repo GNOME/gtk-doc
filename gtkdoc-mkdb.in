@@ -2081,7 +2081,6 @@ sub OutputSGMLFile {
 <manvolnum>3</manvolnum>
 <refmiscinfo>\U$MODULE\E Library</refmiscinfo>
 </refmeta>
-
 <refnamediv>
 <refname>$title</refname>
 <refpurpose>$short_desc</refpurpose>
@@ -2090,32 +2089,18 @@ $stability
 <refsynopsisdiv id="$section_id.synopsis" role="synopsis">
 <title role="synopsis.title">Synopsis</title>
 $object_anchors
-<synopsis>
-$include_output$${synopsis}</synopsis>
+<synopsis>$include_output$${synopsis}</synopsis>
 </refsynopsisdiv>
-
-$$hierarchy
-$$prerequisites
-$$derived
-$$interfaces
-$$implementations
-$$args_synop
-$$signals_synop
-
+$$hierarchy$$prerequisites$$derived$$interfaces$$implementations$$args_synop$$signals_synop
 <refsect1 id="$section_id.description" role="desc">
 <title role="desc.title">Description</title>
-$extralinks
-$long_desc
+$extralinks$long_desc
 </refsect1>
-
 <refsect1 id="$section_id.details" role="details">
 <title role="details.title">Details</title>
 $$details
 </refsect1>
-$$args_desc
-$$signals_desc
-
-$see_also
+$$args_desc$$signals_desc$see_also
 </refentry>
 EOF
     close (OUTPUT);
