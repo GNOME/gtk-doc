@@ -161,6 +161,7 @@ GType object_types[$ntypes];
 static GType *
 get_object_types (void)
 {
+    gpointer g_object_class;
     gint i = 0;
 EOT
 
@@ -173,7 +174,7 @@ print OUTPUT <<EOT;
 
     /* reference the GObjectClass to initialize the param spec pool
      * potentially needed by interfaces. See http://bugs.gnome.org/571820 */
-    gpointer g_object_class = g_type_class_ref (G_TYPE_OBJECT);
+    g_object_class = g_type_class_ref (G_TYPE_OBJECT);
 
     /* Need to make sure all the types are loaded in and initialize
      * their signals and properties.
@@ -235,9 +236,6 @@ static void output_object_args (FILE *fp, GType object_type);
 int
 main (int argc, char *argv[])
 {
-  /* Silence the compiler: */
-  if (argv != argv) argc = argc;
-
   $TYPE_INIT_FUNC;
 
   get_object_types ();
@@ -1055,6 +1053,8 @@ describe_signed_constant (gsize size, gint64 value)
       else if (value == G_MININT64)
         desc = g_strdup ("G_MININT64");
       break;
+    default:
+      break;
   }
   if (!desc)
     desc = g_strdup_printf ("%" G_GINT64_FORMAT, value);
@@ -1093,6 +1093,8 @@ describe_unsigned_constant (gsize size, guint64 value)
         desc = g_strdup ("G_MAXINT64");
       else if (value == G_MAXUINT64)
         desc = g_strdup ("G_MAXUINT64");
+      break;
+    default:
       break;
   }
   if (!desc)
