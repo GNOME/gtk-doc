@@ -248,13 +248,12 @@ output_widget_signal (FILE *fp,
   GtkSignalQuery *query_info;
   gchar *ret_type, *pos, *type_name, *arg_name, *object_arg, *object_arg_start;
   gboolean is_pointer;
-  gchar ret_type_buffer[1024], buffer[1024];
+  gchar buffer[1024];
   guint i, param;
   gchar **arg_names;
   gint param_num, widget_num, event_num, callback_num;
   gint *arg_num;
   gchar signal_name[128];
-
 
   /*  g_print ("Object: %s Type: %i Signal: %u\\n", object_name, object_type,
       signal_id);*/
@@ -268,10 +267,6 @@ output_widget_signal (FILE *fp,
       g_warning ("Couldn't query signal");
       return;
     }
-
-  /* Output the return type and function name. */
-  ret_type = get_type_name (query_info->return_val, &is_pointer);
-  sprintf (ret_type_buffer, "%s%s", ret_type, is_pointer ? "*" : "");
 
   /* Output the signal object type and the argument name. We assume the
      type is a pointer - I think that is OK. We remove "Gtk" or "Gnome" and
@@ -295,7 +290,8 @@ output_widget_signal (FILE *fp,
     widget_num++;
   
   /* Convert signal name to use underscores rather than dashes '-'. */
-  strcpy (signal_name, query_info->signal_name);
+  strncpy (signal_name, query_info->signal_name, 127);
+  signal_name[127] = '\0';
   for (i = 0; signal_name[i]; i++)
     {
       if (signal_name[i] == '-')
@@ -357,10 +353,13 @@ output_widget_signal (FILE *fp,
 		*arg_num += 1;
 	}
     }
-  
+
+  /* Output the return type and function name. */
+  ret_type = get_type_name (query_info->return_val, &is_pointer);
+
   fprintf (fp,
-	   "<SIGNAL>\\n<NAME>%s::%s</NAME>\\n<RETURNS>%s</RETURNS>\\n%s</SIGNAL>\\n\\n",
-	   object_name, query_info->signal_name, ret_type_buffer, buffer);
+	   "<SIGNAL>\\n<NAME>%s::%s</NAME>\\n<RETURNS>%s%s</RETURNS>\\n%s</SIGNAL>\\n\\n",
+	   object_name, query_info->signal_name, ret_type, is_pointer ? "*" : "", buffer);
   g_free (query_info);
 }
 
