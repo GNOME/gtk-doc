@@ -180,10 +180,8 @@ endif
 
 dist-hook: dist-check-gtkdoc dist-hook-local
 	mkdir $(distdir)/tmpl
-	mkdir $(distdir)/xml
 	mkdir $(distdir)/html
 	-cp $(srcdir)/tmpl/*.sgml $(distdir)/tmpl
-	-cp $(srcdir)/xml/*.xml $(distdir)/xml
 	cp $(srcdir)/html/* $(distdir)/html
 	-cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
 	-cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
