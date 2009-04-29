@@ -336,6 +336,17 @@ output_object_signal (FILE *fp,
   sprintf (pos, "%s ", object_name);
   pos += strlen (pos);
 
+  /* Try to come up with a sensible variable name for the first arg
+   * I chops off 2 know prefixes :/ and makes the name lowercase
+   * It should replace lowercase -> uppercase with '_'
+   * GFileMonitor -> file_monitor
+   * GIOExtensionPoint -> extension_point
+   * GtkTreeView -> tree_view
+   * if 2nd char is upper case too
+   *   search for first lower case and go back one char
+   * else
+   *   search for next upper case
+   */
   if (!strncmp (object_name, "Gtk", 3))
       object_arg = object_name + 3;
   else if (!strncmp (object_name, "Gnome", 5))

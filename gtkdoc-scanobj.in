@@ -275,6 +275,11 @@ output_widget_signal (FILE *fp,
   sprintf (pos, "%s ", object_name);
   pos += strlen (pos);
 
+  /* Try to come up with a sensible variable name for the first arg
+   * I chops off 2 know prefixes :/ and makes the name lowercase
+   * It should replace lowercase -> uppercase with '_'
+   * see gtkdoc-scangobject.in for better algorithm
+   */
   if (!strncmp (object_name, "Gtk", 3))
       object_arg = object_name + 3;
   else if (!strncmp (object_name, "Gnome", 5))
