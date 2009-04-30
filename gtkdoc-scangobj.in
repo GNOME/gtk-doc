@@ -363,7 +363,7 @@ output_object_signal (FILE *fp,
 
   /* Convert signal name to use underscores rather than dashes '-'. */
   strncpy (signal_name, query_info.signal_name, 127);
-  signal_name[127] = '\0';
+  signal_name[127] = '\\0';
   for (i = 0; signal_name[i]; i++)
     {
       if (signal_name[i] == '-')
