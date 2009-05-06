@@ -1379,14 +1379,42 @@ describe_default (GParamSpec *spec)
   else if (GTK_IS_PARAM_SPEC_SIZE (spec))
     {
       GParamSpecInt *pspec = G_PARAM_SPEC_INT (spec);
+      char *str;
 
-      desc = gtk_size_to_string (pspec->default_value);
+      str = gtk_size_to_string (pspec->default_value);
+
+      if (gtk_size_get_unit (pspec->default_value) == GTK_SIZE_UNIT_EM &&
+          gtk_size_get_em (pspec->default_value) != 0.)
+        {
+          desc = g_strdup_printf ("%s (%i px @ 96dpi)",
+                str,
+                (int) (12 * gtk_size_get_em (pspec->default_value) + 0.5));
+          g_free (str);
+        }
+      else
+        {
+          desc = str;
+        }
     }
   else if (GTK_IS_PARAM_SPEC_USIZE (spec))
     {
       GParamSpecUInt *pspec = G_PARAM_SPEC_UINT (spec);
+      char *str;
 
-      desc = gtk_size_to_string (pspec->default_value);
+      str = gtk_size_to_string (pspec->default_value);
+
+      if (gtk_size_get_unit (pspec->default_value) == GTK_SIZE_UNIT_EM &&
+          gtk_size_get_em (pspec->default_value) != 0.)
+        {
+          desc = g_strdup_printf ("%s (%i px @ 96dpi)",
+                str,
+                (int) (12 * gtk_size_get_em (pspec->default_value) + 0.5));
+          g_free (str);
+        }
+      else
+        {
+          desc = str;
+        }
     }
 #endif /* GTK_IS_PARAM_SPEC_SIZE */
   else if (G_IS_PARAM_SPEC_INT (spec))
