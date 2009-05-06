@@ -236,6 +236,11 @@ static void output_object_args (FILE *fp, GType object_type);
 int
 main (int argc, char *argv[])
 {
+#ifdef GTK_IS_PARAM_SPEC_SIZE
+  /* turn on resolution independence features */
+  gtk_enable_resolution_independence ();
+#endif
+
   $TYPE_INIT_FUNC;
 
   get_object_types ();
@@ -1366,6 +1371,22 @@ describe_default (GParamSpec *spec)
 
       desc = g_strdup_printf ("%s", pspec->default_value ? "TRUE" : "FALSE");
     }
+#ifdef GTK_IS_PARAM_SPEC_SIZE
+  /* GtkParamSpecSize and GtkParamSpecUSize have to be ahead of
+   * GParamSpecInt and GParamSpecUInt, otherwise those entries match instead */
+  else if (GTK_IS_PARAM_SPEC_SIZE (spec))
+    {
+      GParamSpecInt *pspec = G_PARAM_SPEC_INT (spec);
+
+      desc = gtk_size_to_string (pspec->default_value);
+    }
+  else if (GTK_IS_PARAM_SPEC_USIZE (spec))
+    {
+      GParamSpecUInt *pspec = G_PARAM_SPEC_UINT (spec);
+
+      desc = gtk_size_to_string (pspec->default_value);
+    }
+#endif /* GTK_IS_PARAM_SPEC_SIZE */
   else if (G_IS_PARAM_SPEC_INT (spec))
     {
       GParamSpecInt *pspec = G_PARAM_SPEC_INT (spec);
