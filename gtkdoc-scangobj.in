@@ -1155,6 +1155,44 @@ describe_type (GParamSpec *spec)
       g_free (lower);
       g_free (upper);
     }
+#ifdef GTK_IS_PARAM_SPEC_SIZE
+  /* GtkParamSpecSize and GtkParamSpecUSize have to be ahead of
+   * GParamSpecInt and GParamSpecUInt, otherwise those entries match instead */
+  else if (GTK_IS_PARAM_SPEC_SIZE (spec))
+    {
+      GParamSpecInt *pspec = G_PARAM_SPEC_INT (spec);
+
+      lower = gtk_size_to_string (pspec->minimum);
+      upper = gtk_size_to_string (pspec->maximum);
+      if (pspec->minimum == GTK_SIZE_MINPIXEL && pspec->maximum == GTK_SIZE_MAXPIXEL)
+        desc = g_strdup ("");
+      else if (pspec->minimum == GTK_SIZE_MINPIXEL)
+        desc = g_strdup_printf ("<= %s", upper);
+      else if (pspec->maximum == GTK_SIZE_MAXPIXEL)
+        desc = g_strdup_printf (">= %s", lower);
+      else
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
+      g_free (lower);
+      g_free (upper);
+    }
+  else if (GTK_IS_PARAM_SPEC_USIZE (spec))
+    {
+      GParamSpecUInt *pspec = G_PARAM_SPEC_UINT (spec);
+
+      lower = gtk_size_to_string (pspec->minimum);
+      upper = gtk_size_to_string (pspec->maximum);
+      if (pspec->minimum == 0 && pspec->maximum == GTK_SIZE_MAXPIXEL)
+        desc = g_strdup ("");
+      else if (pspec->minimum == 0)
+        desc = g_strdup_printf ("<= %s", upper);
+      else if (pspec->maximum == GTK_SIZE_MAXPIXEL)
+        desc = g_strdup_printf (">= %s", lower);
+      else
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
+      g_free (lower);
+      g_free (upper);
+    }
+#endif /* GTK_IS_PARAM_SPEC_SIZE */
   else if (G_IS_PARAM_SPEC_INT (spec))
     {
       GParamSpecInt *pspec = G_PARAM_SPEC_INT (spec);
