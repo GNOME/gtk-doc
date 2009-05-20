@@ -1,10 +1,11 @@
-# translation of gtk-doc-help.HEAD.po to Español
+# translation of gtk-doc-help.master.po to Español
 # Jorge González <jorgegonz@svn.gnome.org>, 2009.
+# Francisco Javier Fernandez Serrador <fserrador@gmail.com>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk-doc-help.HEAD\n"
-"POT-Creation-Date: 2009-03-23 17:30+0000\n"
-"PO-Revision-Date: 2009-04-08 18:38+0200\n"
+"Project-Id-Version: gtk-doc-help.master\n"
+"POT-Creation-Date: 2009-04-09 15:03+0000\n"
+"PO-Revision-Date: 2009-05-20 20:38+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,8 +24,7 @@ msgstr "1.12"
 
 #: C/gtk-doc-manual.xml:14(para)
 msgid "User manual for developers with instructions of GTK-Doc usage."
-msgstr ""
-"Manual del usuario para desarrolladores con instrucciones del uso de GTK-Doc."
+msgstr "Manual del usuario para desarrolladores con instrucciones del uso de GTK-Doc."
 
 #: C/gtk-doc-manual.xml:17(firstname)
 msgid "Chris"
@@ -362,14 +362,12 @@ msgstr ""
 "RedHat)"
 
 #: C/gtk-doc-manual.xml:268(para)
-msgid ""
-"<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (used by Debian)"
-msgstr ""
-"<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (usado por Debian)"
+msgid "<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (used by Debian)"
+msgstr "<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (usado por Debian)"
 
 #: C/gtk-doc-manual.xml:271(para)
 msgid "<filename> /usr/share/sgml/docbkdsl </filename> (used by SuSE)"
-msgstr "<filename> /usr/share/sgml/docbkdsl </filename> (used por SuSE)"
+msgstr "<filename> /usr/share/sgml/docbkdsl </filename> (usado por SuSE)"
 
 #: C/gtk-doc-manual.xml:274(para)
 msgid ""
@@ -461,8 +459,7 @@ msgstr ""
 msgid ""
 "Besides checking for the required Gtk-Doc version, this adds two configure "
 "switches:"
-msgstr ""
-"Además de comprobar la versión de GTK-Doc necesaria, esto añade dos claves:"
+msgstr "Además de comprobar la versión de GTK-Doc necesaria, esto añade dos claves:"
 
 #: C/gtk-doc-manual.xml:387(para)
 msgid "--with-html-dir=PATH : path to installed docs"
@@ -741,11 +738,17 @@ msgid ""
 "breaks. If you don't want a paragraph break, change that into ' * ' (blank-"
 "asterisk-blank-blank)."
 msgstr ""
+"El bloque de «Documentación» también es diferente para cada tipo de símbolo. "
+"Los tipos de símbolos que obtienen parámetros tales como funciones o macros, "
+"tienen primero las descripciones seguidas por una línea blanca (exactamente "
+"un «*»). Después siguen las descripciones detalladas. Todas las líneas (fuera "
+"de los programas; listaso y CDATA de la secciones) que solo contengan un « "
+"*» (asterisco con espacio) son convertidos en párrafos. Si no quiere un "
+"espaciado de párrafo, cámbielo a un « * » (espacio-asterisco-espacio)."
 
 #: C/gtk-doc-manual.xml:613(para)
 msgid "Use function() to refer to functions or macros which take arguments."
-msgstr ""
-"Use función() para referirse a funciones o macros que toman argumentos."
+msgstr "Use función() para referirse a funciones o macros que toman argumentos."
 
 #: C/gtk-doc-manual.xml:618(para)
 msgid ""
@@ -798,6 +801,10 @@ msgid ""
 "\"&amp;lpar;\", \"&amp;rpar;\", \"&amp;commat;\", \"&amp;percnt;\" and "
 "\"&amp;num;\" respectively or escape them with a backslash '\\'."
 msgstr ""
+"Si necesita usar los caracteres especiales «()», «@», «%», o «#» en su "
+"documentación sin que GTK-Doc los cambie, puede usar las entidades XML \"amp;"
+"lpar;\" \"amp;rpar;\" \"amp;commat;\" \"&amp;percnt;\" y \"&amp;num;\" "
+"respectivamente o escaparlas con una contrabarra doble «\\»."
 
 #: C/gtk-doc-manual.xml:662(para)
 msgid ""
@@ -832,6 +839,9 @@ msgid ""
 "module. To introduce the component one can write a section block. The short "
 "description is also used inside the table of contents."
 msgstr ""
+"Cada sección del documento contiene información acerca de una clase o un "
+"módulo. Para introducir el componente puede escribir un bloque de sección. "
+"La descripción corta además se usa dentro de la tabla de contenidos."
 
 #: C/gtk-doc-manual.xml:693(title)
 msgid "Section comment block"
@@ -839,17 +849,19 @@ msgstr "Bloque de comentarios en una sección"
 
 #: C/gtk-doc-manual.xml:712(term)
 msgid "@short_description"
-msgstr ""
+msgstr "@short_description"
 
 #: C/gtk-doc-manual.xml:714(para)
 msgid ""
 "A one line description of the section, that later will appear after the "
 "links in the TOC and at the top of the section page."
 msgstr ""
+"Una línea descrita en la sección, que después aparece tras los enlaces en el "
+"TOC y en la página de la sección."
 
 #: C/gtk-doc-manual.xml:721(term)
 msgid "@see_also"
-msgstr ""
+msgstr "@see_also"
 
 #: C/gtk-doc-manual.xml:723(para)
 msgid "A list of symbols that are related to this section.."
@@ -857,7 +869,7 @@ msgstr "Una lista de símbolos relacionados con esta sección."
 
 #: C/gtk-doc-manual.xml:729(term)
 msgid "@stability"
-msgstr ""
+msgstr "@stability"
 
 #: C/gtk-doc-manual.xml:736(para)
 msgid ""
@@ -897,10 +909,12 @@ msgid ""
 "A informal description of the stability level this API has. We recommend the "
 "use of one of these terms: <placeholder-1/>"
 msgstr ""
+"Esta API tiene una descripción informal del nivel de estabilidad. Se "
+"recomienda el uso de uno de estos términos: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:781(term)
 msgid "@include"
-msgstr ""
+msgstr "@include"
 
 #: C/gtk-doc-manual.xml:783(para)
 msgid ""
@@ -999,10 +1013,8 @@ msgid "Useful DocBook tags"
 msgstr "Etiquetas DocBook útiles"
 
 #: C/gtk-doc-manual.xml:930(para)
-msgid ""
-"Here are some DocBook tags which are most useful when documenting the code."
-msgstr ""
-"Aquí están varias etiquetas de DocBook muy útiles al documentar código."
+msgid "Here are some DocBook tags which are most useful when documenting the code."
+msgstr "Aquí están varias etiquetas de DocBook muy útiles al documentar código."
 
 #: C/gtk-doc-manual.xml:935(para)
 msgid ""
@@ -1029,6 +1041,13 @@ msgid ""
 "]|\n"
 "]]>"
 msgstr ""
+"Para incluir un código de ejemplo: <placeholder-1/> o posiblemente este, "
+"para fragmentos de código muy cortos que no necesitan título: <placeholder-2/"
+">. Para el último, GTK-Doc también soporta abreviación: <![CDATA[\n"
+"|[\n"
+"  ...\n"
+"]|\n"
+"]]>"
 
 #: C/gtk-doc-manual.xml:996(para)
 msgid "To include bulleted lists: <placeholder-1/>"
@@ -1047,6 +1066,8 @@ msgid ""
 "To refer to an external structure (not one described in the GTK docs): "
 "<placeholder-1/>"
 msgstr ""
+"Para referirse a una estructura externa (no una descrita en la documentación "
+"de GTK): <placeholder-1>"
 
 #: C/gtk-doc-manual.xml:1055(para)
 msgid "To refer to a field of a structure: <placeholder-1/>"
@@ -1059,6 +1080,10 @@ msgid ""
 "GtkWidget page - see <link linkend=\"documenting_syntax\">the abbreviations</"
 "link>)."
 msgstr ""
+"Para referirse a un nombre de clase, se podría usar: <placeholder-1> pero "
+"probablemente estará usando #GtkWidget en su lugar (para crear automaticamente"
+"un enlace a la página GtkWidget; consulte <link linkend=\"documenting_systax\">"
+"abreviaciones</link>)."
 
 #: C/gtk-doc-manual.xml:1079(para)
 msgid "To emphasize text: <placeholder-1/>"
@@ -1082,7 +1107,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1116(title)
 msgid "Editing the types file"
-msgstr ""
+msgstr "Editar los tipos de archivo"
 
 #: C/gtk-doc-manual.xml:1118(para)
 msgid ""
@@ -1210,7 +1235,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1269(title)
 msgid "Controlling the result"
-msgstr ""
+msgstr "Controlar el resultado"
 
 #: C/gtk-doc-manual.xml:1271(para)
 msgid ""
@@ -1254,7 +1279,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1314(title)
 msgid "Frequently asked question"
-msgstr ""
+msgstr "Preguntas más frecuentes"
 
 #: C/gtk-doc-manual.xml:1318(segtitle)
 msgid "Question"
@@ -1270,7 +1295,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1322(filename)
 msgid ".types"
-msgstr ""
+msgstr ".types"
 
 #: C/gtk-doc-manual.xml:1322(seg)
 msgid ""
@@ -1280,7 +1305,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1325(seg)
 msgid "Still no class hierarchy."
-msgstr ""
+msgstr "Aún sin jerarquía de clases."
 
 #: C/gtk-doc-manual.xml:1326(ulink)
 msgid "explanation"
@@ -1302,7 +1327,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1333(seg)
 msgid "No symbol index."
-msgstr ""
+msgstr "Sin índice de símbolos."
 
 #: C/gtk-doc-manual.xml:1334(seg)
 msgid "FIXME (&lt;index&gt; tag in main sgml file)"
@@ -1310,7 +1335,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1337(seg)
 msgid "Symbols are not linked to their doc-section."
-msgstr ""
+msgstr "Los símbolos no se enlazan con su sección en el documento."
 
 #: C/gtk-doc-manual.xml:1338(seg)
 msgid "FIXME (added #,% or () ?)"
@@ -1318,7 +1343,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1341(seg)
 msgid "A new class does not appear in the docs."
-msgstr ""
+msgstr "Una clase nueva no aparece en la documentación."
 
 #: C/gtk-doc-manual.xml:1342(seg)
 msgid "FIXME (section file, types file, main-sgml file)"
@@ -1326,7 +1351,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1345(seg)
 msgid "A new symbol does not appear in the docs."
-msgstr ""
+msgstr "Un símbolo nuevo no aparece en la documentación."
 
 #: C/gtk-doc-manual.xml:1346(seg)
 msgid "FIXME (section file, proper doc comment)"
@@ -1379,7 +1404,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:28(title)
 msgid "GNU Free Documentation License"
-msgstr ""
+msgstr "GNU Free Documentation License"
 
 #: C/gtk-doc-manual.xml:31(title)
 msgid "0. PREAMBLE"
@@ -1394,6 +1419,13 @@ msgid ""
 "for the author and publisher a way to get credit for their work, while not "
 "being considered responsible for modifications made by others."
 msgstr ""
+"El propósito de esta Licencia es permitir que un manual, libro de texto, u "
+"otro documento escrito sea <quote>libre</quote> en el sentido de libertad: "
+"asegurar a todo el mundo la libertad efectiva de copiarlo y redistribuirlo, "
+"con o sin modificaciones, de manera comercial o no. En segundo término, esta "
+"Licencia proporciona al autor y al editor una manera de obtener "
+"reconocimiento por su trabajo, sin que se le considere responsable de las "
+"modificaciones realizadas por otros."
 
 #: C/gtk-doc-manual.xml:43(para)
 msgid ""
@@ -1402,6 +1434,10 @@ msgid ""
 "It complements the GNU General Public License, which is a copyleft license "
 "designed for free software."
 msgstr ""
+" Esta Licencia es de tipo <quote>copyleft</quote>, lo que significa que los "
+"trabajos derivados del documento deben a su vez ser libres en el mismo "
+"sentido. Complementa la Licencia Pública General de GNU, que es una licencia "
+"tipo copyleft diseñada para el software libre."
 
 #: C/gtk-doc-manual.xml:50(para)
 msgid ""
@@ -1413,6 +1449,13 @@ msgid ""
 "printed book. We recommend this License principally for works whose purpose "
 "is instruction or reference."
 msgstr ""
+"Hemos diseñado esta Licencia para usarla en manuales de software libre, ya "
+"que el software libre necesita documentación libre: Un programa libre debe "
+"venir con los manuales que ofrezcan la mismas libertades que da el software. "
+"Pero esta licencia no se limita a manuales de software; puede ser usada para "
+"cualquier trabajo textual, sin tener en cuenta su temática o si se publica "
+"como libro impreso. Recomendamos esta licencia principalmente para trabajos "
+"cuyo fin sea instructivo o de referencia."
 
 #: C/gtk-doc-manual.xml:62(title)
 msgid "1. APPLICABILITY AND DEFINITIONS"
@@ -1426,6 +1469,11 @@ msgid ""
 "manual or work. Any member of the public is a licensee, and is addressed as "
 "<quote>you</quote>."
 msgstr ""
+"Esta Licencia se aplica a cualquier manual u otro trabajo que contenga un "
+"aviso colocado por el poseedor del copyright diciendo que puede distribuirse "
+"bajo los términos de esta Licencia. El <quote>Documento</quote>, abajo, se "
+"refiere a cualquier manual o trabajo. Cualquier miembro del público es un "
+"licenciatario,y será referido como <quote>Usted</quote>."
 
 #: C/gtk-doc-manual.xml:72(para)
 msgid ""
@@ -1433,6 +1481,9 @@ msgid ""
 "the Document or a portion of it, either copied verbatim, or with "
 "modifications and/or translated into another language."
 msgstr ""
+"Una <quote>Versión Modificada</quote> del Documento significa cualquier "
+"trabajo que contenga el Documento o una porción del mismo, ya sea una copia "
+"literal o con modificaciones y/o traducciones a otro idioma."
 
 #: C/gtk-doc-manual.xml:79(para)
 msgid ""
@@ -1447,6 +1498,17 @@ msgid ""
 "legal, commercial, philosophical, ethical or political position regarding "
 "them."
 msgstr ""
+"Una <quote>Sección Secundaria</quote> es un apéndice con título o una "
+"sección preliminar del Documento que trata exclusivamente de la relación "
+"entre los autores o editores y el tema general del<link linkend=\"fdl-"
+"document\">Documento</link> que trata exclusivamente con la relación entre "
+"los editores o autores del Documento con el asunto general del Documento (o "
+"asuntos relacionados) y no contiene nada que pueda considerarse dentro del "
+"tema principal. (Por ejemplo, si el Documento es en parte un libro de texto "
+"de matemáticas, una Sección Secundaria no explicará nada de matemáticas.) La "
+"relación puede ser una conexión histórica con el asunto o temas "
+"relacionados, o una opinión legal, comercial, filosófica, ética o política "
+"acerca de ellos."
 
 #: C/gtk-doc-manual.xml:94(para)
 msgid ""
@@ -1455,6 +1517,10 @@ msgid ""
 "those of Invariant Sections, in the notice that says that the <link linkend="
 "\"fdl-document\">Document</link> is released under this License."
 msgstr ""
+"Las <quote>Secciones Invariantes</quote> son ciertas <link linkend=\"fdl-"
+"secondary\">Secciones Secundarias</link> cuyos títulos son designados como "
+"Secciones Invariantes en la nota que indica que el <link linkend=\"fdl-"
+"document\">Documento</link> se publica bajo esta Licencia."
 
 #: C/gtk-doc-manual.xml:103(para)
 msgid ""
@@ -1463,6 +1529,10 @@ msgid ""
 "that the <link linkend=\"fdl-document\">Document</link> is released under "
 "this License."
 msgstr ""
+" Los <quote>Textos de Cubierta</quote> son ciertos pasajes cortos de texto "
+"que se listan como Textos de Cubierta Delantera o Textos de Cubierta Trasera "
+"en la nota que indica que el <link linkend=\"fdl-document\">Documento</link> "
+"se publica bajo esta Licencia."
 
 #: C/gtk-doc-manual.xml:111(para)
 msgid ""
@@ -1478,6 +1548,19 @@ msgid ""
 "modification by readers is not Transparent. A copy that is not "
 "<quote>Transparent</quote> is called <quote>Opaque</quote>."
 msgstr ""
+" Una copia <quote>Transparente</quote> del <link linkend=\"fdl-document"
+"\">Documento</link>, significa una copia para lectura en máquina, "
+"representada en un formato cuya especificación está disponible al público en "
+"general, cuyo contenido puede ser visto y editados directamente con editores "
+"de texto genéricos o (para imágenes compuestas por píxeles) con programas "
+"genéricos de manipulación de imágenes o (para dibujos) con algún editor de "
+"dibujos ampliamente disponible, y que sea adecuado como entrada para "
+"formateadores de texto o para su traducción automática a formatos adecuados "
+"para formateadores de texto. Una copia hecha en un formato definido como "
+"Transparente, pero cuyo marcaje o ausencia de él haya sido diseñado para "
+"impedir o dificultar modificaciones posteriores por parte de los lectores no "
+"es Transparente. Una copia que no es <quote>Transparente</quote> se denomina "
+"<quote>Opaca</quote>."
 
 #: C/gtk-doc-manual.xml:128(para)
 msgid ""
@@ -1490,6 +1573,15 @@ msgid ""
 "available, and the machine-generated HTML produced by some word processors "
 "for output purposes only."
 msgstr ""
+"Como ejemplos de formatos adecuados para copias Transparentes están ASCII "
+"puro sin marcaje, formato de entrada de Texinfo, formato de entrada de "
+"LaTeX, SGML o XML usando una DTD disponible públicamente, y HTML, PostScript "
+"o PDF simples, que sigan los estándares y diseños para que los modifiquen "
+"personas.Los formatos Opacos incluyen formatos propietarios que pueden ser "
+"leídos y editados únicamente en procesadores de textos propietarios, SGML o "
+"XML para los cuáles las DTD y/o herramientas de procesamiento no estén "
+"ampliamente disponibles, y HTML, PostScript o PDF generados por algunos "
+"procesadores de textos sólo como salida."
 
 #: C/gtk-doc-manual.xml:141(para)
 msgid ""
@@ -1500,6 +1592,13 @@ msgid ""
 "means the text near the most prominent appearance of the work's title, "
 "preceding the beginning of the body of the text."
 msgstr ""
+" La <quote>Portada</quote> significa, en un libro impreso, la página de "
+"título, más las páginas siguientes que sean necesarias para mantener "
+"legiblemente el material que esta Licencia requiere en la portada. Para "
+"trabajos en formatos que no tienen página de portada como tal, "
+"<quote>Portada</quote>significa el texto cercano a la aparición más "
+"prominente del título del trabajo,precediendo el comienzo del cuerpo del "
+"texto."
 
 #: C/gtk-doc-manual.xml:153(title)
 msgid "2. VERBATIM COPYING"
@@ -1518,12 +1617,24 @@ msgid ""
 "must also follow the conditions in <link linkend=\"fdl-section3\">section 3</"
 "link>."
 msgstr ""
+"Usted puede copiar y distribuir el <link linkend=\"fdl-document\">Documento</"
+"link> en cualquier medio, sea en forma comercial o no, siempre y cuando "
+"proporcione esta Licencia, las notas de copyright y la nota que indica que "
+"esta Licencia se aplica al Documento reproduciéndola en todas las copias y "
+"que usted no añada ninguna otra condición a las expuestas en esta Licencia. "
+"Usted no puede usar medidas técnicas para obstruir o controlar la lectura o "
+"copia posterior de las copias que usted haga o distribuya. Sin embargo, "
+"usted puede aceptar compensación a cambio de las copias. Si distribuye un "
+"número suficientemente grande de copias también deberá seguir las "
+"condiciones de la <link linkend=\"fdl-section3\">sección 3</link>."
 
 #: C/gtk-doc-manual.xml:169(para)
 msgid ""
 "You may also lend copies, under the same conditions stated above, and you "
 "may publicly display copies."
 msgstr ""
+" Usted también puede prestar copias, bajo las mismas condiciones "
+"establecidas anteriormente, y puede exhibir copias públicamente."
 
 #: C/gtk-doc-manual.xml:176(title)
 msgid "3. COPYING IN QUANTITY"
@@ -1544,6 +1655,19 @@ msgid ""
 "document\">Document</link> and satisfy these conditions, can be treated as "
 "verbatim copying in other respects."
 msgstr ""
+" Si publica copias impresas del <link linkend=\"fdl-document\">Documento</"
+"link> que sobrepasen las 100, y la nota de licencia del Documento exige "
+"<link linkend=\"fdl-cover-texts\">Textos de Cubierta</link>, debe incluirlas "
+"copias con cubiertas que lleven en forma clara y legible todos esos Textos "
+"de Cubierta: Textos de Cubierta Delantera en la cubierta delantera y Textos "
+"de Cubierta Trasera en la cubierta trasera. Ambas cubiertas deben "
+"identificarlo a Usted clara y legiblemente como editor de tales copias. La "
+"cubierta debe mostrar el título completo con todas las palabras igualmente "
+"prominentes y visibles. Además puede añadir otro material en las cubiertas. "
+"Las copias con cambios limitados a las cubiertas, siempre que conserven el "
+"título del <link linkend=\"fdl-document\">Documento</link> y satisfagan "
+"estas condiciones, pueden considerarse como copias literales en todos los "
+"aspectos."
 
 #: C/gtk-doc-manual.xml:195(para)
 msgid ""
@@ -1551,6 +1675,9 @@ msgid ""
 "you should put the first ones listed (as many as fit reasonably) on the "
 "actual cover, and continue the rest onto adjacent pages."
 msgstr ""
+" Si los textos requeridos para la cubierta son muy voluminosos para que "
+"ajusten legiblemente, debe colocar los primeros (tantos como sea razonable "
+"colocar) en la verdadera cubierta y situar el resto en páginas adyacentes."
 
 #: C/gtk-doc-manual.xml:202(para)
 msgid ""
@@ -1568,6 +1695,19 @@ msgid ""
 "year after the last time you distribute an Opaque copy (directly or through "
 "your agents or retailers) of that edition to the public."
 msgstr ""
+" Si Usted publica o distribuye copias <link linkend=\"fdl-transparent"
+"\">Opacas</link> del <link linkend=\"fdl-document\">Documento</link> cuya "
+"cantidad exceda las 100, debe incluir una copia <link linkend=\"fdl-"
+"transparent\">Transparente</link>, que pueda ser leída por una máquina, con "
+"cada copia Opaca, o bien mostrar, en cada copia Opaca, una dirección de red "
+"donde cualquier usuario de la misma tenga acceso por medio de protocolos "
+"públicos y estandarizados a una copia Transparente del Documento completa, "
+"sin material adicional. Si usted hace uso de la última opción, deberá tomar "
+"las medidas necesarias, cuando comience la distribución de las copias Opacas "
+"en cantidad, para asegurar que esta copia Transparente permanecerá accesible "
+"en el sitio establecido por lo menos un año después de la última vez que "
+"distribuya una copia Opaca de esa edición al público (directamente o a "
+"través de sus agentes o distribuidores)."
 
 #: C/gtk-doc-manual.xml:222(para)
 msgid ""
@@ -1576,10 +1716,14 @@ msgid ""
 "large number of copies, to give them a chance to provide you with an updated "
 "version of the Document."
 msgstr ""
+"Se solicita, aunque no es requisito, que se ponga en contacto con los "
+"autores del <link linkend=\"fdl-document\">Documento</link> antes de "
+"redistribuir gran número de copias, para darles la oportunidad de que le "
+"proporcionen una versión actualizada del Documento."
 
 #: C/gtk-doc-manual.xml:231(title)
 msgid "4. MODIFICATIONS"
-msgstr "4. Modificaciones"
+msgstr "4. MODIFICACIONES"
 
 #: C/gtk-doc-manual.xml:232(para)
 msgid ""
@@ -1592,6 +1736,14 @@ msgid ""
 "modification of the Modified Version to whoever possesses a copy of it. In "
 "addition, you must do these things in the Modified Version:"
 msgstr ""
+"Puede copiar y distribuir una <link linkend=\"fdl-modified\">Versión "
+"Modificada</link> del <link linkend=\"fdl-document\">Documento</link> bajo "
+"las condiciones de las secciones <link linkend=\"fdl-section2\">2</link> y "
+"<link linkend=\"fdl-section3\">3</link> anteriores, siempre que Usted libere "
+"la Versión Modificada bajo esta misma Licencia, con la Versión Modificada "
+"haciendo el rol del Documento, por lo tanto dando Licencia de distribución y "
+"modificación de la Versión Modificada a quienquiera posea una copia de la "
+"misma. Además, debe hacer lo siguiente en la Versión Modificada:"
 
 #: C/gtk-doc-manual.xml:248(title)
 msgid "A"
@@ -1606,6 +1758,12 @@ msgid ""
 "Document). You may use the same title as a previous version if the original "
 "publisher of that version gives permission."
 msgstr ""
+"Usar en la <link linkend=\"fdl-title-page\">Portada</link> (y en las "
+"cubiertas, si hay alguna) un título distinto al del <link linkend=\"fdl-"
+"document\">Documento</link> y de sus versiones anteriores (que deberían, si "
+"hay alguna, estar listadas en la sección de Historia del Documento). Puede "
+"usar el mismo título de versiones anteriores al original siempre y cuando "
+"quien las publicó originalmente otorgue permiso."
 
 #: C/gtk-doc-manual.xml:264(title)
 msgid "B"
@@ -1620,6 +1778,12 @@ msgid ""
 "\"fdl-document\">Document</link> (all of its principal authors, if it has "
 "less than five)."
 msgstr ""
+"Listar en la <link linkend=\"fdl-title-page\">Portada</link>, como autores, "
+"una o más personas o entidades responsables de la autoría de las "
+"modificaciones de la <link linkend=\"fdl-modified\">Versión Modificada</"
+"link>, junto con por lo menos cinco de los autores principales del <link "
+"linkend=\"fdl-document\">Documento</link> (todos sus autores principales, si "
+"hay menos de cinco), a menos que le eximan de tal requisito."
 
 #: C/gtk-doc-manual.xml:279(title)
 msgid "C"
@@ -1631,6 +1795,9 @@ msgid ""
 "the publisher of the <link linkend=\"fdl-modified\">Modified Version</link>, "
 "as the publisher."
 msgstr ""
+"Mostrar en la <link linkend=\"fdl-title-page\">Portada</link>  como editor "
+"el nombre del editor de la <link linkend=\"fdl-modified\">Versión "
+"Modificada</link>"
 
 #: C/gtk-doc-manual.xml:291(title)
 msgid "D"
@@ -1641,6 +1808,8 @@ msgid ""
 "Preserve all the copyright notices of the <link linkend=\"fdl-document"
 "\">Document</link>."
 msgstr ""
+"Conservar todas las notas de copyright del <link linkend=\"fdl-document"
+"\">Documento</link>."
 
 #: C/gtk-doc-manual.xml:301(title)
 msgid "E"
@@ -1651,6 +1820,8 @@ msgid ""
 "Add an appropriate copyright notice for your modifications adjacent to the "
 "other copyright notices."
 msgstr ""
+"Añadir una nota de copyright apropiada a sus modificaciones, adyacente a las "
+"otras notas de copyright."
 
 #: C/gtk-doc-manual.xml:311(title)
 msgid "F"
@@ -1663,6 +1834,10 @@ msgid ""
 "Version</link> under the terms of this License, in the form shown in the "
 "Addendum below."
 msgstr ""
+"Incluir, inmediatamente después de los avisos de copyright, una nota de "
+"licencia dando el permiso público para usar la <link linkend=\"fdl-modified"
+"\">Versión Modificada</link> bajo los términos de esta Licencia, de la forma "
+"mostrada en el Adenda de más abajo."
 
 #: C/gtk-doc-manual.xml:324(title)
 msgid "G"
@@ -1675,6 +1850,11 @@ msgid ""
 "cover-texts\">Cover Texts</link> given in the <link linkend=\"fdl-document"
 "\">Document's</link> license notice."
 msgstr ""
+"Incluir, inmediatamente después de ese aviso de licencia, la lista completa "
+"de <link linkend=\"fdl-invariant\">Secciones invariantes</link> y de los "
+"<link linkend=\"fdl-cover-texts\">Textos de Cubierta</link> que sean "
+"requeridos en el aviso de Licencia del <link linkend=\"fdl-document"
+"\">Documento</link> original."
 
 #: C/gtk-doc-manual.xml:337(title)
 msgid "H"
@@ -1682,7 +1862,7 @@ msgstr "H"
 
 #: C/gtk-doc-manual.xml:338(para)
 msgid "Include an unaltered copy of this License."
-msgstr ""
+msgstr "Incluir una copia sin modificación de esta Licencia."
 
 #: C/gtk-doc-manual.xml:346(title)
 msgid "I"
@@ -1699,6 +1879,15 @@ msgid ""
 "publisher of the Document as given on its Title Page, then add an item "
 "describing the Modified Version as stated in the previous sentence."
 msgstr ""
+"Conservar la sección titulada <quote>Historia</quote>, conservar su Título y "
+"añadirle un elemento que declare al menos el título, el año, los nuevos "
+"autores y el editor de la <link linkend=\"fdl-modified\">Versión Modificada</"
+"link>, tal como figuran en la <link linkend=\"fdl-title-page\">Portada</"
+"link>. Si no hay una sección titulada <quote>Historia</quote> en el <link "
+"linkend=\"fdl-document\">Documento</link>, crear una estableciendo el "
+"título, el año, los autores y el editor del Documento, tal como figuran en "
+"su Portada, añadiendo además un elemento describiendo la Versión Modificada, "
+"como se estableció en la sentencia anterior."
 
 #: C/gtk-doc-manual.xml:365(title)
 msgid "J"
@@ -1715,6 +1904,14 @@ msgid ""
 "the Document itself, or if the original publisher of the version it refers "
 "to gives permission."
 msgstr ""
+"Conservar la dirección en red, si la hay, dada en el <link linkend=\"fdl-"
+"document\">Documento</link> para el acceso público a una copia <link linkend="
+"\"fdl-transparent\">Transparente</link> del mismo, así como las otras "
+"direcciones de red dadas en el Documento para versiones anteriores en las "
+"que estuviese basado. Pueden ubicarse en la sección <quote>Historia</quote>. "
+"Se puede omitir la ubicación en red de un trabajo que haya sido publicado "
+"por lo menos cuatro años antes que el Documento mismo, o si el editor "
+"original de dicha versión da permiso."
 
 #: C/gtk-doc-manual.xml:383(title)
 msgid "K"
@@ -1727,6 +1924,10 @@ msgid ""
 "the section all the substance and tone of each of the contributor "
 "acknowledgements and/or dedications given therein."
 msgstr ""
+"En cualquier sección titulada <quote>Agradecimientos</quote> o "
+"<quote>Dedicatorias</quote>, conservar el título de la sección y conservar "
+"en ella toda la sustancia y el tono de los agradecimientos y/o dedicatorias "
+"incluidas por cada contribuyente."
 
 #: C/gtk-doc-manual.xml:396(title)
 msgid "L"
@@ -1739,6 +1940,10 @@ msgid ""
 "text and in their titles. Section numbers or the equivalent are not "
 "considered part of the section titles."
 msgstr ""
+"Conservar todas las <link linkend=\"fdl-invariant\">Secciones Invariantes</"
+"link> del <link linkend=\"fdl-document\">Documento</link>, sin alterar su "
+"texto ni sus títulos. Los números de sección o equivalentes no se consideran "
+"parte de los títulos de la sección."
 
 #: C/gtk-doc-manual.xml:409(title)
 msgid "M"
@@ -1750,6 +1955,9 @@ msgid ""
 "not be included in the <link linkend=\"fdl-modified\">Modified Version</"
 "link>."
 msgstr ""
+"Borrar cualquier sección titulada <quote>Aprobaciones</quote>. Tales "
+"secciones no pueden estar incluidas en las <link linkend=\"fdl-modified"
+"\">Versiones Modificadas</link>."
 
 #: C/gtk-doc-manual.xml:421(title)
 msgid "N"
@@ -1761,6 +1969,9 @@ msgid ""
 "conflict in title with any <link linkend=\"fdl-invariant\">Invariant "
 "Section</link>."
 msgstr ""
+"No cambiar el título de ninguna sección existente a <quote>Aprobaciones</"
+"quote> ni a uno que entre en conflicto con el de alguna <link linkend=\"fdl-"
+"invariant\">Sección Invariante</link>."
 
 #: C/gtk-doc-manual.xml:432(para)
 msgid ""
@@ -1772,6 +1983,14 @@ msgid ""
 "\"fdl-invariant\">Invariant Sections</link> in the Modified Version's "
 "license notice. These titles must be distinct from any other section titles."
 msgstr ""
+" Si la <link linkend=\"fdl-modified\">Versión Modificada</link> incluye "
+"secciones o apéndices nuevos que cualifiquen como <link linkend=\"fdl-"
+"secondary\">Secciones Secundarias</link> y no contienen ningún material "
+"copiado del Documento, puede opcionalmente designar algunas o todas esas "
+"secciones como invariantes. Para hacerlo, añada sus títulos a la lista de "
+"<link linkend=\"fdl-invariant\">Secciones Invariantes</link> en el aviso de "
+"licencia de la Versión Modificada. Tales títulos deben ser distintos de "
+"cualquier otro título de sección."
 
 #: C/gtk-doc-manual.xml:444(para)
 msgid ""
@@ -1781,6 +2000,11 @@ msgid ""
 "peer review or that the text has been approved by an organization as the "
 "authoritative definition of a standard."
 msgstr ""
+"Puede añadir una sección titulada <quote>Aprobaciones</quote>, siempre que "
+"contenga únicamente aprobaciones de su <link linkend=\"fdl-modified"
+"\">Versión Modificada</link> por otras fuentes --por ejemplo, observaciones "
+"de compañeros o que el texto ha sido aprobado por una organización como "
+"definición oficial de un estándar."
 
 #: C/gtk-doc-manual.xml:453(para)
 msgid ""
@@ -1796,6 +2020,17 @@ msgid ""
 "you may not add another; but you may replace the old one, on explicit "
 "permission from the previous publisher that added the old one."
 msgstr ""
+"Puede añadir un pasaje de hasta cinco palabras como <link linkend=\"fdl-"
+"cover-texts\">Texto de Cubierta Delantera</link> y un pasaje de hasta 25 "
+"palabras como <link linkend=\"fdl-cover-texts\">Texto de Cubierta Trasera</"
+"link> al final de la lista de <link linkend=\"fdl-cover-texts\">Texto de "
+"Cubierta</link> en la <link linkend=\"fdl-modified\">Versión Modificada</"
+"link>. Una entidad sólo puede añadir (o hacer que se añada) un pasaje al "
+"Texto de Cubierta Delantera y uno al de Cubierta Trasera. Si el <link "
+"linkend=\"fdl-document\">Documento</link> ya incluye un textos de cubiertas "
+"añadidos previamente por usted o por acuerdo previo con la entidad que usted "
+"representa, usted no puede añadir otro; pero puede reemplazar el anterior, "
+"con permiso explícito del editor anterior que agregó el texto anterior."
 
 #: C/gtk-doc-manual.xml:470(para)
 msgid ""
@@ -1804,6 +2039,10 @@ msgid ""
 "for publicity for or to assert or imply endorsement of any <link linkend="
 "\"fdl-modified\">Modified Version </link>."
 msgstr ""
+"Con esta Licencia ni los autores ni los editores del <link linkend=\"fdl-"
+"document\">Documento</link> dan permiso para usar sus nombres para "
+"publicidad ni para asegurar o implicar aprobación de cualquier <link linkend="
+"\"fdl-modified\">Versión Modificada</link>."
 
 #: C/gtk-doc-manual.xml:480(title)
 msgid "5. COMBINING DOCUMENTS"
@@ -1819,6 +2058,13 @@ msgid ""
 "unmodified, and list them all as Invariant Sections of your combined work in "
 "its license notice."
 msgstr ""
+"Usted puede combinar el <link linkend=\"fdl-document\">Documento</link> con "
+"otros documentos liberados bajo esta Licencia, bajo los términos definidos "
+"en la sección <link linkend=\"fdl-section4\">section 4</link> más arriba "
+"para versiones modificadas, siempre que incluya en la combinación todas las "
+"<link linkend=\"fdl-invariant\">Secciones Invariantes</link> de todos los "
+"documentos originales, sin modificaciones, y las liste todas como Secciones "
+"Invariantes de su trabajo combinado en su aviso de licencia."
 
 #: C/gtk-doc-manual.xml:492(para)
 msgid ""
@@ -1831,6 +2077,15 @@ msgid ""
 "the same adjustment to the section titles in the list of Invariant Sections "
 "in the license notice of the combined work."
 msgstr ""
+"El trabajo combinado necesita contener solamente una copia de esta Licencia, "
+"y múltiples <link linkend=\"fdl-invariant\">Secciones Invariantes</link> "
+"idénticas pueden reemplazarse por una sola copia. Si hay múltiples Secciones "
+"Invariantes con el mismo nombre pero con contenidos diferentes, haga el "
+"título de cada una de estas secciones único añadiéndolo al final de este, "
+"entre paréntesis, el nombre del autor o de quien editó originalmente esa "
+"sección, si es conocido, o si no, un número único. Haga el mismo ajuste a "
+"los títulos de sección en la lista de Secciones Invariantes en la nota de "
+"licencia del trabajo combinado."
 
 #: C/gtk-doc-manual.xml:505(para)
 msgid ""
@@ -1841,6 +2096,12 @@ msgid ""
 "<quote>Dedications</quote>. You must delete all sections entitled "
 "<quote>Endorsements.</quote>"
 msgstr ""
+"En la combinación, debe combinar cualquier sección titulada <quote>Historia</"
+"quote> de los distintos documentos originales, formando una sección titulada "
+"<quote>Historia</quote>; de la misma forma, combine cualquier sección "
+"titulada <quote>Reconocimientos</quote> y cualquier sección titulada "
+"<quote>Dedicatorias</quote>. Debe borrar todas las secciones tituladas "
+"<quote>Aprobaciones</quote>."
 
 #: C/gtk-doc-manual.xml:516(title)
 msgid "6. COLLECTIONS OF DOCUMENTS"
@@ -1855,6 +2116,12 @@ msgid ""
 "the rules of this License for verbatim copying of each of the documents in "
 "all other respects."
 msgstr ""
+" Puede hacer una colección que conste del <link linkend=\"fdl-document"
+"\">Documento</link> y de otros documentos publicados bajo esta Licencia, y "
+"reemplazar las copias individuales de esta Licencia en todos los documentos "
+"por una sola copia que esté incluida en la colección, siempre que siga las "
+"reglas de esta Licencia para cada copia literal de cada uno de los "
+"documentos en cualquiera de los demás aspectos."
 
 #: C/gtk-doc-manual.xml:527(para)
 msgid ""
@@ -1863,6 +2130,10 @@ msgid ""
 "into the extracted document, and follow this License in all other respects "
 "regarding verbatim copying of that document."
 msgstr ""
+" Puede extraer un solo documento de una de tales colecciones y distribuirlo "
+"individualmente bajo esta Licencia, siempre que inserte una copia de esta "
+"Licencia en el documento extraído, y siga esta Licencia en todos los demás "
+"aspectos relativos a la copia literal de dicho documento."
 
 #: C/gtk-doc-manual.xml:537(title)
 msgid "7. AGGREGATION WITH INDEPENDENT WORKS"
@@ -1885,10 +2156,25 @@ msgid ""
 "placed on covers that surround only the Document within the aggregate. "
 "Otherwise they must appear on covers around the whole aggregate."
 msgstr ""
+"Una recopilación que conste del <link linkend=\"fdl-document\">Documento</"
+"link> o sus derivados y de otros documentos o trabajos separados e "
+"independientes, en cualquier soporte de almacenamiento o distribución, no "
+"cuenta como un todo como una <link linkend=\"fdl-modified\">Versión "
+"Modificada</link> del Documento, siempre que no se reclame ningún derecho de "
+"copyright por la compilación. Dicha compilación se denomina un "
+"<quote>agregado</quote>, y esta Licencia no se aplica a otros trabajos  "
+"autocontenidos incluidos con el Documento. teniendo en cuenta que son "
+"compilados, si no son los mismos trabajos derivados del Documento. Si el "
+"requisito de <link linkend=\"fdl-cover-texts\">Texto de Cubierta</link> de "
+"la <link linkend=\"fdl-section3\">sección 3</link> es aplicable a estas "
+"copias del Documento, entonces si el Documento es menor que un cuarto del "
+"agregado completo, los Textos de Cubierta del Documento pueden colocarse en "
+"cubiertas que enmarquen solamente el Documento dentro del agregado. En caso "
+"contrario deben aparecer en cubiertas impresas enmarcando todo el agregado."
 
 #: C/gtk-doc-manual.xml:561(title)
 msgid "8. TRANSLATION"
-msgstr ""
+msgstr "8. TRADUCCIÓN"
 
 #: C/gtk-doc-manual.xml:562(para)
 msgid ""
@@ -1904,10 +2190,20 @@ msgid ""
 "original English version of this License, the original English version will "
 "prevail."
 msgstr ""
+"La traducción se considera un tipo de modificación, así que puede "
+"distribuir traducciones del <link linkend=\"fdl-document\">Documento</link> "
+"bajo los términos de la <link linkend=\"fdl-section4\">sección 4</link>. "
+"Reemplazar las <link linkend=\"fdl-invariant\">Secciones invariantes</link> "
+"con traducciones requiere permiso especial de los mantenedores de la "
+"propietarios del copyright, pero puede incluir traducciones de algunos o todas "
+"las Secciones invariantes. Puede incluir una traducción de esta licencia "
+"proporcionada que además incluya la versión original de esta Sección invariante "
+"en adición de esta licencia. En caso de desacuerdo prevalecerá la versión original "
+"en inglés."
 
 #: C/gtk-doc-manual.xml:580(title)
 msgid "9. TERMINATION"
-msgstr ""
+msgstr "9. TERMINACIÓN"
 
 #: C/gtk-doc-manual.xml:581(para)
 msgid ""
@@ -1919,10 +2215,18 @@ msgid ""
 "under this License will not have their licenses terminated so long as such "
 "parties remain in full compliance."
 msgstr ""
+" Usted no puede copiar, modificar, sublicenciar o distribuir el <link "
+"linkend=\"fdl-document\">Documento</link> salvo por lo permitido "
+"expresamente por esta Licencia. Cualquier otro intento de copia, "
+"modificación, sublicenciamiento o distribución del Documento es nulo, y dará "
+"por terminados automáticamente sus derechos bajo esa Licencia. Sin embargo, "
+"los terceros que hayan recibido copias, o derechos, de usted bajo esta "
+"Licencia no verán terminadas sus licencias, siempre que permanezcan en total "
+"conformidad con ella."
 
 #: C/gtk-doc-manual.xml:594(title)
 msgid "10. FUTURE REVISIONS OF THIS LICENSE"
-msgstr ""
+msgstr "10. REVISIONES FUTURAS DE ESTA LICENCIA"
 
 #: C/gtk-doc-manual.xml:595(para)
 msgid ""
@@ -1933,6 +2237,13 @@ msgid ""
 "address new problems or concerns. See <ulink type=\"http\" url=\"http://www."
 "gnu.org/copyleft\">http://www.gnu.org/copyleft/</ulink>."
 msgstr ""
+"La <ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf.html\">Free "
+"Software Foundation</ulink> puede publicar versiones nuevas y revisadas de "
+"la Licencia de Documentación Libre GNU de vez en cuando. Dichas versiones "
+"nuevas serán similares en espíritu a la presente versión, pero pueden "
+"diferir en detalles para solucionar nuevos problemas o preocupaciones. Vea "
+"<ulink type=\"http\" url=\"http://www.gnu.org/copyleft\">http://www.gnu.org/"
+"copyleft/</ulink>."
 
 #: C/gtk-doc-manual.xml:606(para)
 msgid ""
@@ -1945,10 +2256,18 @@ msgid ""
 "specify a version number of this License, you may choose any version ever "
 "published (not as a draft) by the Free Software Foundation."
 msgstr ""
+"Cada versión de la licencia tiene un número de versión. Si la <link linkend="
+"\"fdl-document\">Documentación</link> especifica que el número particular de "
+"versión de esta Licencia <quote>o cualquier posterior versión</quote> "
+"aplicado sobre él, tiene la opción de seguir los términos y condiciones "
+"de cualquiera de esas versiones especificadas o de cualquiera de las versiones "
+"publicadas (no como borrador) por la Free Software Foundation. Si el Documento no "
+"especifica un número de versión de la licencia, puede elegir cualquier versión "
+"publicada (no como borrador) por la Free Software Foundation."
 
 #: C/gtk-doc-manual.xml:621(title)
 msgid "Addendum"
-msgstr ""
+msgstr "Addendum"
 
 #: C/gtk-doc-manual.xml:622(para)
 msgid ""
@@ -1956,6 +2275,9 @@ msgid ""
 "License in the document and put the following copyright and license notices "
 "just after the title page:"
 msgstr ""
+"Para usar esta licencia en un documento que ha escrito, incluya una copia de "
+"la Licencia en el documento y ponga el siguiente copyright y las notas justo "
+"después del título de la página."
 
 #: C/gtk-doc-manual.xml:629(para)
 msgid "Copyright YEAR YOUR NAME."
@@ -1972,6 +2294,15 @@ msgid ""
 "LIST. A copy of the license is included in the section entitled <quote>GNU "
 "Free Documentation License</quote>."
 msgstr ""
+"Se otorga permiso para copiar, distribuir y/o modificar este documento bajo "
+"los términos de la Licencia de Documentación Libre de GNU, Versión 1.1 o "
+"cualquier otra versión posterior publicada por la Free Software Foundation; "
+"con las <link linkend=\"fdl-invariant\">Secciones Invariantes</link> siendo "
+"su LISTE SUS TÍTULOS, con <link linkend=\"fdl-cover-texts\">Textos de "
+"Cubierta Delantera</link> siendo LISTA, y con los <link linkend=\"fdl-cover-"
+"texts\">Textos de Cubierta Trasera</link> siendo LISTA. Una copia de la "
+"licencia está incluida en la sección titulada <quote>GNU Free Documentation "
+"License</quote>."
 
 #: C/gtk-doc-manual.xml:647(para)
 msgid ""
@@ -1982,6 +2313,12 @@ msgid ""
 "<quote>Front-Cover Texts being LIST</quote>; likewise for <link linkend="
 "\"fdl-cover-texts\">Back-Cover Texts</link>."
 msgstr ""
+"Si no tiene <link linkend=\"fdl-invariant\">Secciones Invariantes</link>, "
+"escriba <quote>sin Secciones Invariantes</quote> en vez de decir cuáles son "
+"invariantes. Si no tiene <link linkend=\"fdl-cover-texts\">Textos de "
+"Cubierta Frontal</link>, escriba <quote>sin Textos de Cubierta Frontal</"
+"quote>; de la misma manera para <link linkend=\"fdl-cover-texts\">Textos de "
+"Cubierta Trasera</link>."
 
 #: C/gtk-doc-manual.xml:657(para)
 msgid ""
@@ -1991,8 +2328,16 @@ msgid ""
 "gpl.html\"> GNU General Public License</ulink>, to permit their use in free "
 "software."
 msgstr ""
+"Si su documento contiene ejemplos de código de programa no triviales, "
+"recomendamos liberar estos ejemplos en paralelo bajo la licencia de software "
+"libre que usted elija, como la <ulink type=\"http\" url=\"http://www.gnu.org/"
+"copyleft/gpl.html\">Licencia Pública General de GNU (GNU General Public "
+"License)</ulink>, para permitir su uso en software libre."
 
 #. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2.
 #: C/gtk-doc-manual.xml:0(None)
 msgid "translator-credits"
-msgstr "Jorge González <jorgegonz@svn.gnome.org>, 2009"
+msgstr ""
+"Francisco Javier F. Serrador <serrrador@svn.gnome.org>, 2009\n"
+"Jorge González <jorgegonz@svn.gnome.org>, 2009"
+
