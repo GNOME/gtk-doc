@@ -2436,7 +2436,7 @@ sub ExpandAbbreviationsCallback {
     $text =~ s/\\\%/\%/g;
 
     # Convert '#symbol', but not '\#symbol'.
-    $text =~ s/(\A|[^\\])#([\w\-:\.]+)/$1.&MakeHashXRef($2, "type");/eg;
+    $text =~ s/(\A|[^\\])#([\w\-:\.]+[\w]+)/$1.&MakeHashXRef($2, "type");/eg;
     $text =~ s/\\#/#/g;
     
     # Expand urls
