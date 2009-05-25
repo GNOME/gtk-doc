@@ -98,7 +98,7 @@ if test -n "$HIGHLIGHT"; then
 else
   AC_PATH_PROG([HIGHLIGHT], [highlight])
   if test -n "$HIGHLIGHT"; then
-    HIGHLIGHT_OPTIONS="-X -f -Ggtkdoc "
+    HIGHLIGHT_OPTIONS="-X -f --class-name=gtkdoc "
   else
     AC_PATH_PROG([HIGHLIGHT], [vim])
     if test -n "$HIGHLIGHT"; then
