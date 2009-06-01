@@ -56,3 +56,17 @@ annotation_elementtype (const GList *list)
    return TRUE;
 }
 
+/**
+ * annotation_outparams:
+ * @list: (out) (transfer none): a pointer to take a list
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_outparams (GList **list)
+{
+   return TRUE;
+}
+
