@@ -72,6 +72,8 @@ void gtkdoc_object_frobnicate (GObject *self, gint n);
  * @parameter_2: second arg
  *
  * This macro does nothing.
+ *
+ * Since: 0.1
  */
 #define GTKDOC_OBJECT_MACRO_DUMMY(parameter_1,parameter_2) /* do nothing */
 
