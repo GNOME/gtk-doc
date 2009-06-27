@@ -53,7 +53,7 @@ gboolean gtkdoc_iface_configure (gchar *config);
  *
  * This macro adds its args.
  *
- * Return: the sum of @parameter_1 and @parameter_2
+ * Returns: the sum of @parameter_1 and @parameter_2
  */
 #define GTKDOC_IFACE_MACRO_SUM(parameter_1,parameter_2) \
   ((parameter_1) + (parameter_2))
