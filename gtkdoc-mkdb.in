@@ -1905,12 +1905,9 @@ sub OutputParamDescriptions {
 
 	# Start a table if we need one.
 	if ($params_desc || $returns) {
-	    $output .= <<EOF;
-<variablelist role="params">
-EOF
-
+	    $output .= "<variablelist role=\"params\">\n";
 	    if ($params_desc ne "") {
-#	        $output .= "<varlistentry><term>Parameters:</term><listitem></listitem></varlistentry>\n";
+	        #$output .= "<varlistentry><term>Parameters:</term><listitem></listitem></varlistentry>\n";
 	        $output .= $params_desc;
 	    }
 
