@@ -4115,6 +4115,12 @@ sub MergeSourceDocumentation {
    #print "num doc entries: ".(scalar %SymbolDocs)."\n";
 }
 
+#############################################################################
+# Function    : IsEmptyDoc
+# Description : Check if a doc-string is empty. Its also regarded as empty if
+#               it only consist of whitespace or e.g. FIXME.
+# Arguments   : the doc-string
+#############################################################################
 sub IsEmptyDoc {
     my ($doc) = @_;
 
