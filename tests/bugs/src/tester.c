@@ -139,6 +139,14 @@ int bug_574654a(void) {
   return 0;
 }
 
-void bug_574654b(double offset) {
-}
+void bug_574654b(double offset) { }
+
+
+void bug_580300a_get_type(void) { }
+
+void bug_580300b_get_type(gint a) { }
+
+void bug_580300c_get_type() { }
+
+int bug_580300d_get_type() { }
 

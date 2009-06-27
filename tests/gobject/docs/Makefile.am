@@ -18,7 +18,9 @@ DOC_SOURCE_DIR=$(top_srcdir)/tests/gobject/src
 SCANGOBJ_OPTIONS=2>&1 | tee gtkdoc-scangobj.log
 
 # Extra options to supply to gtkdoc-scan.
-SCAN_OPTIONS=--deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED" 2>&1 | tee gtkdoc-scan.log
+SCAN_OPTIONS=--deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED" \
+  --rebuild-types \
+  2>&1 | tee gtkdoc-scan.log
 
 # Extra options to supply to gtkdoc-mkdb.
 MKDB_OPTIONS=--sgml-mode 2>&1 | tee gtkdoc-mkdb.log

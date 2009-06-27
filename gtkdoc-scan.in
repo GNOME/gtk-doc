@@ -141,6 +141,9 @@ my $main_list = "";
 my $object_list = "";
 my $file;
 
+my @get_types = ();
+
+
 # do not read files twice; checking it here permits to give both srcdir and
 # builddir as --source-dir without fear of duplicities
 my %seen_headers;
@@ -157,7 +160,14 @@ for my $dir (@SOURCE_DIRS) {
 print DECLLIST $object_list, $main_list;
 close (DECLLIST);
 close (DECL);
-close (TYPES) if ($REBUILD_TYPES);
+if ($REBUILD_TYPES) {
+    my $func;
+
+    foreach $func (sort(@get_types)) {
+       print TYPES "$func\n"; 
+    }
+    close (TYPES);
+}
 
 &UpdateFileIfChanged ($old_decl_list, $new_decl_list, 1);
 &UpdateFileIfChanged ($old_decl, $new_decl, 1);
@@ -601,6 +611,13 @@ sub ScanHeader {
 		$ret_type =~ s%/\*.*?\*/%%g;	# remove comments in ret type.
 		&AddSymbolToList (\$list, $symbol);
 		print DECL "<FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl\n</FUNCTION>\n";
+                if ($REBUILD_TYPES) {
+                    # check if this looks like a get_type function and if so remember
+                    if (($symbol =~ m/_get_type$/) && ($ret_type =~ m/GType/) && ($decl =~ m/(void|)/)) {
+                        #print "Adding get-type: [$ret_type] [$symbol] [$decl]\tfrom $input_file\n";
+                        push (@get_types, $symbol);
+                    }
+                }
 		$in_declaration = "";
 	    }
 	}
@@ -693,13 +710,6 @@ sub ScanHeader {
 	$class = $1;
     } elsif ($list =~ m/^\S+_IS_(\S*)/m) {
 	$class = $1;
-    }
-
-    if ($REBUILD_TYPES) {
-      while ($list =~ m/^\S+_.*_get_type\n/mg) {
-#        print "Adding get-type: $&\tfrom $input_file\n";
-	print TYPES $&;
-      }
     }
 
     if ($class ne "") {

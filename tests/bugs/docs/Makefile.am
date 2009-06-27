@@ -20,6 +20,7 @@ SCANGOBJ_OPTIONS=2>&1 | tee gtkdoc-scangobj.log
 # Extra options to supply to gtkdoc-scan.
 SCAN_OPTIONS=--deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED" \
   --ignore-decorators="GLIB_VAR|GTKDOC_GNUC_CONST" \
+  --rebuild-types \
   2>&1 | tee gtkdoc-scan.log
 
 # Extra options to supply to gtkdoc-mkdb.
