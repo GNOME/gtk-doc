@@ -14,7 +14,9 @@ AC_CONFIG_SRCDIR([gtkdoc-common.pl.in])
 AM_INIT_AUTOMAKE([check-news std-options])
 AM_MAINTAINER_MODE
 
-GNOME_DOC_INIT
+dnl Forcing a non-null ACTION-IF-NOT-FOUND disables scrollkeeper if
+dnl gnome-doc-utils is not found but does not invalidate the build.
+GNOME_DOC_INIT([],[],enable_scrollkeeper=no)
 
 # make sure $ACLOCAL_FLAGS are used during a rebuild.
 AC_SUBST([ACLOCAL_AMFLAGS], ["\${ACLOCAL_FLAGS}"])
@@ -227,6 +229,9 @@ test -n "$JADE" \
 test -n "$FOP" \
     && AC_MSG_NOTICE([** XML PDF support enabled, using $FOP]) \
     || AC_MSG_NOTICE([   XML PDF support disabled, no fop available])
+test "x$gdu_cv_have_gdu" = "xyes" \
+    && AC_MSG_NOTICE([** Gnome-doc-utils support enabled]) \
+    || AC_MSG_NOTICE([   Gnome-doc-utils support disabled])
 test "x$enable_scrollkeeper" = "xyes" \
     && AC_MSG_NOTICE([** Scrollkeeper support enabled]) \
     || AC_MSG_NOTICE([   Scrollkeeper support disabled])

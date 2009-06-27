@@ -4,7 +4,6 @@
 PROJECT=gtk-doc
 TEST_TYPE=-f
 FILE=gtk-doc.dsl.in
-CONFIGURE_FLAGS=
 
 # a silly hack that generates autoregen.sh but it's handy
 echo "#!/bin/sh" > autoregen.sh
@@ -69,7 +68,6 @@ if gnome-doc-prepare --version < /dev/null > /dev/null 2>&1; then
   echo "* Running gnome-doc-prepare"
   gnome-doc-prepare --copy --force --automake
 else
-  CONFIGURE_FLAGS="$CONFIGURE_FLAGS --disable-scrollkeeper"
   touch gnome-doc-utils.make
 fi
 
@@ -92,7 +90,7 @@ $AUTOMAKE --add-missing -Wno-portability $am_opt || exit $?
 
 cd "$THEDIR"
 
-$srcdir/configure --enable-maintainer-mode "$@" $CONFIGURE_FLAGS || exit $?
+$srcdir/configure --enable-maintainer-mode "$@" || exit $?
 
 echo
 echo "Now type 'make install' to install $PROJECT."
