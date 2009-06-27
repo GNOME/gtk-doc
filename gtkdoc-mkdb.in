@@ -3201,12 +3201,16 @@ sub GetArgs {
 	    if (defined($SymbolDocs{$symbol}) &&
 		!IsEmptyDoc($SymbolDocs{$symbol})) {
 		$blurb = &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+                #print ".. [$SymbolDocs{$symbol}][$blurb]\n";
 		$AllDocumentedSymbols{$symbol} = 1;
 	    }
 	    else {
 		if (!($ArgBlurbs[$i] eq "")) {
 		    $AllDocumentedSymbols{$symbol} = 1;
-		}
+		} else {
+                    # FIXME: print a warning?
+                    #print ".. no description\n";
+                }
 		$blurb = "<para>" . &CreateValidSGML ($ArgBlurbs[$i]) . "</para>";
 	    }
 
@@ -4136,12 +4140,16 @@ sub MergeSourceDocumentation {
 #############################################################################
 sub IsEmptyDoc {
     my ($doc) = @_;
+    
+    if ($doc =~ /^\s*$/) {
+        return 1;
+    }
 
     if ($doc =~ /^\s*<para>\s*(FIXME)?\s*<\/para>\s*$/) {
 	return 1;
-    } else {
-	return 0;
     }
+
+    return 0;
 }
 
 
