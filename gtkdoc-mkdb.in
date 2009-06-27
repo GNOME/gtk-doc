@@ -4004,12 +4004,14 @@ sub MergeSourceDocumentation {
                         # Try to find the param in the source comment documentation.
                         my $found = 0;
                         my $k;
+                        print "  try merge param $tmpl_param_name\n";
                         for ($k = 0; $k <= $#$params; $k += $PARAM_FIELD_COUNT) {
                             my $param_name = $$params[$k];
                             my $param_desc = $$params[$k + 1];
 
-                            # We accept changes in case, since the Gnome source docs
-                            # contain a lot of these.
+                            #print "    test param  $param_name\n";
+                            # We accept changes in case, since the Gnome source
+                            # docs contain a lot of these.
                             if ("\L$param_name" eq "\L$tmpl_param_name") {
                                 $found = 1;
 
@@ -4038,6 +4040,11 @@ sub MergeSourceDocumentation {
                             # the template builder cannot detect if a macro returns
                             # a result or not
                             if(($type eq "MACRO") && ($param_name eq "Returns")) {
+                                # FIXME: do we need to add it then to tmpl_params[] ?
+                                my $num=$#$tmpl_params;
+                                #print "  adding Returns to macro docs.\n";
+                                $$tmpl_params[$num+1]="Returns";
+                                $$tmpl_params[$num+2]=$$params[$j+1];
                                 next;
                             }
                             &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
