@@ -3910,7 +3910,9 @@ sub MergeSourceDocumentation {
 	if ($check_tmpl_doc ne "") {
 	    $have_tmpl_docs = 1;
             #print "## [$check_tmpl_doc]\n";
-	}
+	} else {
+            $tmpl_doc = "";
+        }
 
 	if (exists ($SourceSymbolDocs{$symbol})) {
 	    my $type = $DeclarationTypes {$symbol};
@@ -3958,7 +3960,11 @@ sub MergeSourceDocumentation {
 	    # If there is a blank line, finish the paragraph and start another.
 	    $src_doc = &ConvertBlankLines ($src_doc, $symbol);
 	    # Do not add <para> to nothing, it breaks missing docs checks.
-	    my $src_doc_para = $src_doc ? "<para>\n$src_doc</para>\n" : "";
+	    my $src_doc_para = "";
+            if ($src_doc) {
+                $src_doc_para = "<para>\n$src_doc</para>\n";
+                #print "$symbol : [$src_doc][$src_doc_para]\n";
+            }
 
             if ($symbol =~ m/$TMPL_DIR\/.+:Long_Description/) {
                 $SymbolDocs{$symbol} = "$src_doc_para$tmpl_doc";
@@ -4004,7 +4010,7 @@ sub MergeSourceDocumentation {
                         # Try to find the param in the source comment documentation.
                         my $found = 0;
                         my $k;
-                        print "  try merge param $tmpl_param_name\n";
+                        #print "  try merge param $tmpl_param_name\n";
                         for ($k = 0; $k <= $#$params; $k += $PARAM_FIELD_COUNT) {
                             my $param_name = $$params[$k];
                             my $param_desc = $$params[$k + 1];
