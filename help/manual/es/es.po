@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2009-06-06 10:57+0000\n"
-"PO-Revision-Date: 2009-06-19 17:37+0200\n"
+"POT-Creation-Date: 2009-06-26 18:14+0000\n"
+"PO-Revision-Date: 2009-06-28 15:36+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1114,12 +1114,20 @@ msgid ""
 "title (\"Hash Tables\"). For widgets it is just the class name. Spaces and "
 "underscores are converted to '-' to conform to SGML."
 msgstr ""
+"Para enlazar otra sección en GTK docs: <placeholder-1/>. El enlace es el id "
+"SGML en el elemento superior de la página a la que quiere enlazar. Para la "
+"mayoría de las páginas esta es la parte («gtk», «gdk», «glib») y después el "
+"título de página («Tablas hash»). Para los widgets es simplemente el nombre "
+"de la clase. Los espacios y guiones bajos se convierten a «-» para ajustarse "
+"a SGML."
 
 #: C/gtk-doc-manual.xml:951(para)
 msgid ""
 "To refer to an external function, e.g. a standard C function: <placeholder-1/"
 ">"
 msgstr ""
+"Para referirse a una función externa, ej. una función de C estándar: "
+"<placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:962(para)
 msgid ""
@@ -1145,7 +1153,7 @@ msgstr "Para incluir listas de topos: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1018(para)
 msgid "To include a note which stands out from the text: <placeholder-1/>"
-msgstr ""
+msgstr "Para incluir una nota que sobresale del texto: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1033(para)
 msgid "To refer to a type: <placeholder-1/>"
@@ -1194,6 +1202,10 @@ msgid ""
 "<filename>&lt;package&gt;-docs.sgml</filename>, <filename>&lt;package&gt;-"
 "sections.txt</filename>."
 msgstr ""
+"Existen tres archivos adicionales que deben mantenerse junto con los "
+"comentarios en línea del código fuente: <filename>&lt;paquete&gt;.types</"
+"filename>, <filename>&lt;paquete&gt;-docs.sgml</filename>, <filename>&lt;"
+"paquete&gt;-sections.txt</filename>."
 
 #: C/gtk-doc-manual.xml:1116(title)
 msgid "Editing the types file"
@@ -1207,6 +1219,11 @@ msgid ""
 "<function>xxx_get_type</function> functions together with their include "
 "inside the <filename>&lt;package&gt;.types</filename> file."
 msgstr ""
+"Si su biblioteca o aplicación incluye GtkObjects/GObjects puede querer que "
+"sus señales, argumentos y/o parámetros y posición en la jerarquía se muestre "
+"en la documentación. Todo lo que debe hacer es listar las funciones "
+"<function>xxx_get_type</function> junto con sus «include» en el archivo "
+"<filename>&lt;paquete&gt;.types</filename>."
 
 #: C/gtk-doc-manual.xml:1127(title)
 msgid "Example types file snippet"
