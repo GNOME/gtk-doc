@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2009-04-29 15:06+0000\n"
-"PO-Revision-Date: 2009-05-09 16:46+0200\n"
+"POT-Creation-Date: 2009-06-30 14:56+0000\n"
+"PO-Revision-Date: 2009-06-30 18:01+0200\n"
 "Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
@@ -308,7 +308,7 @@ msgid ""
 "links. When installing distributed (pregenerated) docs the same application "
 "will try to turn links back to local links (where those docs are installed)."
 msgstr ""
-"<guilabel>Διόρθωση παραπομπών μεταξύ εγγράφων<application> Μετά την "
+"<guilabel>Διόρθωση παραπομπών μεταξύ εγγράφων</guilabel> Μετά την "
 "εγκατάσταση των αρχείων HTML, μπορείτε να εκτελέσετε το <application>gtkdoc-"
 "fixxref</application> για να διορθώσετε τυχόν παραπομπές σε διαφορετικά "
 "έγγραφα. Για παράδειγμα, η τεκμηρίωση του GTK+ περιέχει πολλές παραπομπές σε "
@@ -330,7 +330,8 @@ msgstr "Απαιτήσεις"
 
 #: C/gtk-doc-manual.xml:227(para)
 msgid "<guilabel>Perl v5</guilabel> - the main scripts are in Perl."
-msgstr "<guilabel>Perl v5</guilabel> - τα βασικά σενάρια είναι γραμμένα σε Perl."
+msgstr ""
+"<guilabel>Perl v5</guilabel> - τα βασικά σενάρια είναι γραμμένα σε Perl."
 
 #: C/gtk-doc-manual.xml:230(para)
 msgid ""
@@ -413,14 +414,16 @@ msgstr ""
 "(χρησιμοποιείται από το RedHat)"
 
 #: C/gtk-doc-manual.xml:268(para)
-msgid "<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (used by Debian)"
+msgid ""
+"<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (used by Debian)"
 msgstr ""
 "<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (χρησιμοποιείται "
 "από το Debian)"
 
 #: C/gtk-doc-manual.xml:271(para)
 msgid "<filename> /usr/share/sgml/docbkdsl </filename> (used by SuSE)"
-msgstr "<filename> /usr/share/sgml/docbkdsl </filename> (χρησιμοποιείται από το SuSE)"
+msgstr ""
+"<filename> /usr/share/sgml/docbkdsl </filename> (χρησιμοποιείται από το SuSE)"
 
 #: C/gtk-doc-manual.xml:274(para)
 msgid ""
@@ -1127,7 +1130,8 @@ msgid "Useful DocBook tags"
 msgstr "Χρήσιμες ετικέτες DocBook"
 
 #: C/gtk-doc-manual.xml:930(para)
-msgid "Here are some DocBook tags which are most useful when documenting the code."
+msgid ""
+"Here are some DocBook tags which are most useful when documenting the code."
 msgstr ""
 "Ακολουθούν ορισμένες ετικέτες DocBook, ιδιαίτερα χρήσιμες για την τεκμηρίωση "
 "του κώδικα."
@@ -1224,8 +1228,13 @@ msgid "Filling the extra files"
 msgstr "Συμπλήρωση επιπλέον αρχείων"
 
 #: C/gtk-doc-manual.xml:1107(para)
+#| msgid ""
+#| "There are a couple of extra file, that need to be maintained along with "
+#| "the inline source code comments: <filename>&lt;package&gt;.types</"
+#| "filename>, <filename>&lt;package&gt;-docs.sgml</filename>, <filename>&lt;"
+#| "package&gt;-sections.txt</filename>."
 msgid ""
-"There are a couple of extra file, that need to be maintained along with the "
+"There are a couple of extra files, that need to be maintained along with the "
 "inline source code comments: <filename>&lt;package&gt;.types</filename>, "
 "<filename>&lt;package&gt;-docs.sgml</filename>, <filename>&lt;package&gt;-"
 "sections.txt</filename>."
@@ -1589,7 +1598,8 @@ msgstr "ΠΡΟΣ ΔΙΟΡΘΩΣΗ (αρχείο ενοτήτων, ορθά σχ�
 
 #: C/gtk-doc-manual.xml:1351(seg)
 msgid "Parameter described in source code comment block but does not exist"
-msgstr "Μια παράμετρος περιγράφεται σε σχόλιο του πηγαίου κώδικα, αλλά δεν υπάρχει"
+msgstr ""
+"Μια παράμετρος περιγράφεται σε σχόλιο του πηγαίου κώδικα, αλλά δεν υπάρχει"
 
 #: C/gtk-doc-manual.xml:1352(seg)
 msgid ""
@@ -1636,7 +1646,12 @@ msgid ""
 "postcode><country>USA</country></address> Everyone is permitted to copy and "
 "distribute verbatim copies of this license document, but changing it is not "
 "allowed."
-msgstr "<address>Free Software Foundation, Inc. <street>51 Franklin Street, Fifth Floor</street>, <city>Boston</city>, <state>MA</state><postcode>02110-1301</postcode><country>USA</country></address>. Επιτρέπεται σε όλους η αντιγραφή και διανομή ακριβούς αντιγράφου του κειμένου αυτής της άδειας αλλά απαγορεύεται η αλλοίωση του περιεχομένου του."
+msgstr ""
+"<address>Free Software Foundation, Inc. <street>51 Franklin Street, Fifth "
+"Floor</street>, <city>Boston</city>, <state>MA</state><postcode>02110-1301</"
+"postcode><country>USA</country></address>. Επιτρέπεται σε όλους η αντιγραφή "
+"και διανομή ακριβούς αντιγράφου του κειμένου αυτής της άδειας αλλά "
+"απαγορεύεται η αλλοίωση του περιεχομένου του."
 
 #: C/gtk-doc-manual.xml:28(title)
 msgid "GNU Free Documentation License"
@@ -1654,7 +1669,14 @@ msgid ""
 "either commercially or noncommercially. Secondarily, this License preserves "
 "for the author and publisher a way to get credit for their work, while not "
 "being considered responsible for modifications made by others."
-msgstr "Σκοπός της παρούσας Άδειας είναι η δημιουργία εγχειριδίων, συγγραμμάτων ή άλλων εγγράφων που είναι <quote>ελεύθερα</quote> υπό την έννοια ότι παρέχουν σε όλους πραγματική ελευθερία αντιγραφής και αναδιανομής τους, με ή χωρίς τροποποιήσεις, για εμπορικούς ή μη εμπορικούς σκοπούς. Δευτερευόντως, η παρούσα Άδεια παρέχει έναν τρόπο για να αναγνωρίζεται το έργο του συγγραφέα και του εκδότη ενός έργου, χωρίς να μπορούν να θεωρηθούν υπεύθυνοι για τροποποιήσεις που έγιναν από τρίτους."
+msgstr ""
+"Σκοπός της παρούσας Άδειας είναι η δημιουργία εγχειριδίων, συγγραμμάτων ή "
+"άλλων εγγράφων που είναι <quote>ελεύθερα</quote> υπό την έννοια ότι παρέχουν "
+"σε όλους πραγματική ελευθερία αντιγραφής και αναδιανομής τους, με ή χωρίς "
+"τροποποιήσεις, για εμπορικούς ή μη εμπορικούς σκοπούς. Δευτερευόντως, η "
+"παρούσα Άδεια παρέχει έναν τρόπο για να αναγνωρίζεται το έργο του συγγραφέα "
+"και του εκδότη ενός έργου, χωρίς να μπορούν να θεωρηθούν υπεύθυνοι για "
+"τροποποιήσεις που έγιναν από τρίτους."
 
 #: C/gtk-doc-manual.xml:43(para)
 msgid ""
@@ -2600,4 +2622,3 @@ msgstr ""
 "Τζένη Πετούμενου <epetoumenou@gmail.com>\n"
 "\n"
 "Για περισσότερες πληροφορίες, επισκεφθείτε την σελίδα http://www.gnome.gr/"
-
