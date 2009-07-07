@@ -125,13 +125,11 @@ clean-local:
 	rm -f *~ *.bak
 	rm -rf .libs
 	chmod -R u+w $(srcdir)
-	cd $(srcdir) && \
-	  rm -rf xml $(REPORT_FILES) \
-	         $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
+	$(MAKE) distclean-local
 
 distclean-local:
 	cd $(srcdir) && \
-	  rm -rf xml $(REPORT_FILES) \
+	  rm -rf xml $(REPORT_FILES) $(DOC_MODULE).pdf \
 	         $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
 
 maintainer-clean-local: clean
