@@ -77,11 +77,14 @@ if test -z "$XSLTPROC"; then
 fi
 
 dnl
-dnl Check for fop (for pdf output)
+dnl Check for dblatex/fop (for pdf output)
 dnl
-AC_PATH_PROG([FOP], [fop])
-if test -z "$FOP"; then
-  AC_MSG_WARN([fop not found, so no pdf output from xml])
+AC_PATH_PROG([DBLATEX], [dblatex])
+if test -z "$DBLATEX"; then
+  AC_PATH_PROG([FOP], [fop])
+  if test -z "$FOP"; then
+    AC_MSG_WARN([neither dblatex nor fop found, so no pdf output from xml])
+  fi
 fi
 
 dnl check for DocBook DTD and stylesheets in the local catalog.
@@ -226,8 +229,8 @@ test -n "$PYTHON" \
 test -n "$JADE" \
     && AC_MSG_NOTICE([** SGML support enabled, using $JADE]) \
     || AC_MSG_NOTICE([   SGML support disabled, no jade processor available])
-test -n "$FOP" \
-    && AC_MSG_NOTICE([** XML PDF support enabled, using $FOP]) \
+test -n "$DBLATEX$FOP" \
+    && AC_MSG_NOTICE([** XML PDF support enabled, using $DBLATEX$FOP]) \
     || AC_MSG_NOTICE([   XML PDF support disabled, no fop available])
 test "x$gdu_cv_have_gdu" = "xyes" \
     && AC_MSG_NOTICE([** Gnome-doc-utils support enabled]) \
