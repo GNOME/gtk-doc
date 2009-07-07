@@ -32,7 +32,8 @@ EXTRA_DIST = 				\
 	$(DOC_MODULE)-overrides.txt
 
 DOC_STAMPS=scan-build.stamp sgml-build.stamp html-build.stamp pdf-build.stamp \
-	   $(srcdir)/sgml.stamp $(srcdir)/html.stamp
+	$(srcdir)/sgml.stamp $(srcdir)/html.stamp  \
+	$(srcdir)/pdf.stamp
 
 SCANOBJ_FILES = 		 \
 	$(DOC_MODULE).args 	 \

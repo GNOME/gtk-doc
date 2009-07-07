@@ -84,6 +84,22 @@ EXTRA_DIST = \
   gnome-doc-utils.make \
   m4
 
+MAINTAINERCLEANFILES = \
+	$(srcdir)/INSTALL \
+	$(srcdir)/aclocal.m4 \
+	$(srcdir)/compile \
+	$(srcdir)/config.guess \
+	$(srcdir)/config.h.in \
+	$(srcdir)/config.sub \
+	$(srcdir)/configure.scan \
+	$(srcdir)/depcomp \
+	$(srcdir)/install-sh \
+	$(srcdir)/ltmain.sh \
+	$(srcdir)/missing \
+	$(srcdir)/mkinstalldirs \
+	$(srcdir)/gtk-doc-utils.make \
+	$(srcdir)/ChangeLog
+
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
 DISTCLEANFILES = gnome-doc-utils.make
 -include $(top_srcdir)/git.mk
