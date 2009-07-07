@@ -86,7 +86,9 @@ EXTRA_DIST = \
 
 MAINTAINERCLEANFILES = \
 	$(srcdir)/INSTALL \
+	$(srcdir)/COPYING \
 	$(srcdir)/aclocal.m4 \
+	$(srcdir)/autoregen.sh \
 	$(srcdir)/compile \
 	$(srcdir)/config.guess \
 	$(srcdir)/config.h.in \
@@ -95,6 +97,7 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/depcomp \
 	$(srcdir)/install-sh \
 	$(srcdir)/ltmain.sh \
+	$(srcdir)/m4 \
 	$(srcdir)/missing \
 	$(srcdir)/mkinstalldirs \
 	$(srcdir)/gtk-doc-utils.make \
