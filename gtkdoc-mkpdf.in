@@ -6,6 +6,11 @@ Usage: gtkdoc-mkpdf [--path=SEARCH_PATH] MODULE DRIVER_FILE [BACKEND_OPTIONS...]
 
 #echo "args $0\n";
 
+cleanexit() {
+  rm $module.fo
+  exit $1
+}
+
 # parse options, ignore unknown options for future extensions
 
 searchpath=
@@ -65,10 +70,9 @@ if $is_xml; then
   @XSLTPROC@ $path_arg --nonet --xinclude \
       --stringparam gtkdoc.bookname $module \
       --stringparam gtkdoc.version "@VERSION@" \
-      "$@" -o $module.fo $gtkdocdir/gtk-doc-fo.xsl $document || exit $?
+      "$@" -o $module.fo $gtkdocdir/gtk-doc-fo.xsl $document || cleanexit $?
   # fop dies too easily :(
   # @FOP@ $module.fo $module.pdf
-  #rm $module.fo
 else
   # not very good output
   # also for xxx-docs.sgml it will produce xxx-docs.pdf
@@ -76,4 +80,5 @@ else
 fi
 
 echo "timestamp" > pdf.stamp
+cleanexit 0
 

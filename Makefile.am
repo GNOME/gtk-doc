@@ -8,6 +8,7 @@ bin_SCRIPTS = \
 	gtkdoc-mkdb     \
 	gtkdoc-mkhtml   \
 	gtkdoc-mkman    \
+	gtkdoc-mkpdf   \
 	gtkdoc-mktmpl   \
 	gtkdoc-rebase   \
 	gtkdoc-scan     \
