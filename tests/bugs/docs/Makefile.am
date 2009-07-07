@@ -77,3 +77,5 @@ DISTCLEANFILES = \
 	gtkdoc-mkhtml.log \
 	gtkdoc-fixxref.log
 
+
+-include $(top_srcdir)/git.mk

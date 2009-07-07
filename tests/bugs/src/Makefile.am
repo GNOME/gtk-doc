@@ -11,3 +11,5 @@ AM_CPPFLAGS = $(TEST_DEPS_CFLAGS)
 
 endif
 
+
+-include $(top_srcdir)/git.mk

@@ -14,3 +14,5 @@ endif
 EXTRA_DIST = gtkdoctest.sh tools.sh \
 	gobject.sh bugs.sh annotations.sh fail.sh
 
+
+-include $(top_srcdir)/git.mk

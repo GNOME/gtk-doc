@@ -4,3 +4,5 @@ if HAVE_GNOME_DOC_UTILS
 SUBDIRS = manual
 endif
 
+
+-include $(top_srcdir)/git.mk

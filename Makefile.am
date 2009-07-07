@@ -86,3 +86,4 @@ EXTRA_DIST = \
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
 DISTCLEANFILES = gnome-doc-utils.make
+-include $(top_srcdir)/git.mk

@@ -12,3 +12,5 @@ DOC_ENTITIES = fdl-appendix.xml
 DOC_INCLUDES =
 DOC_FIGURES =
 DOC_LINGUAS = de el en_GB es
+
+-include $(top_srcdir)/git.mk
