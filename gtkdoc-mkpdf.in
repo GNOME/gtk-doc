@@ -68,7 +68,13 @@ fi
 
 if $is_xml; then
   if test -n "@DBLATEX@"; then
-    dblatex $document -o$module.pdf
+    # extra options to consider
+    # -I FIG_PATH
+    # -V is useful for debugging
+    # -T db2latex : different style
+    # xsltproc is already called with --xinclude
+    # does not work: --xslt-opts "$path_arg --nonet $@"
+    @DBLATEX@ -o $module.pdf $document
   else
     if test -n "@FOP@"; then
       @XSLTPROC@ $path_arg --nonet --xinclude \
