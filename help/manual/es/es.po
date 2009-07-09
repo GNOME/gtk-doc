@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2009-06-30 16:53+0000\n"
-"PO-Revision-Date: 2009-06-30 20:26+0200\n"
+"POT-Creation-Date: 2009-06-30 18:36+0000\n"
+"PO-Revision-Date: 2009-07-09 21:17+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1196,11 +1196,6 @@ msgid "Filling the extra files"
 msgstr "Rellenar campos adicionales"
 
 #: C/gtk-doc-manual.xml:1107(para)
-#| msgid ""
-#| "There are a couple of extra file, that need to be maintained along with "
-#| "the inline source code comments: <filename>&lt;package&gt;.types</"
-#| "filename>, <filename>&lt;package&gt;-docs.sgml</filename>, <filename>&lt;"
-#| "package&gt;-sections.txt</filename>."
 msgid ""
 "There are a couple of extra files, that need to be maintained along with the "
 "inline source code comments: <filename>&lt;package&gt;.types</filename>, "
@@ -1283,6 +1278,9 @@ msgid ""
 "only a little. There are some placeholders (text in square brackets) there "
 "which you should take care of."
 msgstr ""
+"¿Así que qué es lo que hay que cambiar en el documento maestro? Para empezar "
+"es muy poco. Existen algunos «placeholders» (texto entre corchetes) de los "
+"que habría que encargarse."
 
 #: C/gtk-doc-manual.xml:1185(title)
 msgid "Master document header"
@@ -1290,7 +1288,7 @@ msgstr "Cabecera del documento maestro"
 
 #: C/gtk-doc-manual.xml:1207(title)
 msgid "Editing the section file"
-msgstr "Editar la sección del archivo"
+msgstr "Editar el archivo de sección"
 
 #: C/gtk-doc-manual.xml:1209(para)
 msgid ""
@@ -1298,6 +1296,9 @@ msgid ""
 "Here one specifies which symbol belongs to which module or class and control "
 "the visibility (public or private)."
 msgstr ""
+"El archivo de sección se usa para organizar la salida de la documentación "
+"por GTK-Doc. Aquí se especifica qué símbolos pertenecen a qué módulo o clase "
+"y el control de la visibilidad (pública o privada)."
 
 #: C/gtk-doc-manual.xml:1215(para)
 msgid ""
@@ -1305,6 +1306,9 @@ msgid ""
 "Blank lines are ignored and lines starting with a '#' are treated as comment "
 "lines."
 msgstr ""
+"El archivo de sección es un archivo de texto plano con sintaxis parecida a "
+"XML (usando etiquetas). Se ignoran las líneas vacías y las líneas que "
+"comiencen con «#» se tratan como comentarios."
 
 #: C/gtk-doc-manual.xml:1221(para)
 msgid ""
@@ -1440,6 +1444,8 @@ msgid ""
 "Is the object name (name of the instance struct) part of the normal section "
 "(don't put this into Standard or Private)."
 msgstr ""
+"Es el nombre del objeto (nombre de la estructura de la instancia) parte de "
+"la sección normal (no ponga esto en Estándar o Privado)."
 
 #: C/gtk-doc-manual.xml:1333(seg)
 msgid "No symbol index."
@@ -1476,6 +1482,8 @@ msgstr ""
 #: C/gtk-doc-manual.xml:1351(seg)
 msgid "Parameter described in source code comment block but does not exist"
 msgstr ""
+"Parámetro descrito en el bloque de comentarios del código fuente pero no "
+"existe"
 
 #: C/gtk-doc-manual.xml:1352(seg)
 msgid ""
