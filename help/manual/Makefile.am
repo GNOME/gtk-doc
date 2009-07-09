@@ -11,6 +11,6 @@ DOC_MODULE = gtk-doc-manual
 DOC_ENTITIES = fdl-appendix.xml
 DOC_INCLUDES =
 DOC_FIGURES =
-DOC_LINGUAS = de el en_GB es
+DOC_LINGUAS = de el en_GB es sv
 
 -include $(top_srcdir)/git.mk
