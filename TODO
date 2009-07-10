@@ -16,7 +16,7 @@ and join discussion about future features.
 
 Developers can also add items here :)
 
-= CLeanups =
+= Cleanups =
 == Tracing ==
 * there is a bunch of #print statements for tracing
   => add a sub Trace() to gtkdoc-common.pl
@@ -345,4 +345,18 @@ problems:
 - signal that this has been edited already?
 - support for xi:included examples
 - updating the checkout could be slow
+
+= fix missing since docs =
+cd gstreamer/gstreamer/docs/gst
+gtkdoc-mkdb --module=gstreamer --source-dir=../../gst --outputsymbolswithoutsince
+cd gstreamer/gstreamer/src
+git bisect start
+git bisect good
+git bisect bad RELEASE-0_10_0
+git bisect run script.sh
+
+script:
+#!/bin/sh
+make ctags
+grep "gst_caps_is_always_compatible" tags
 

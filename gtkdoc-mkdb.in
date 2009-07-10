@@ -47,7 +47,6 @@ my $SOURCE_SUFFIXES = "";
 my $IGNORE_FILES = "";
 my $PRINT_VERSION;
 my $PRINT_HELP;
-my $OUTPUT_ALL_SYMBOLS;
 my $MAIN_SGML_FILE;
 my $EXPAND_CONTENT_FILES = "";
 my $SGML_MODE;
@@ -55,6 +54,8 @@ my $DEFAULT_STABILITY;
 my $DEFAULT_INCLUDES;
 my $OUTPUT_FORMAT;
 my $NAME_SPACE = "";
+my $OUTPUT_ALL_SYMBOLS;
+my $OUTPUT_SYMBOLS_WITHOUT_SINCE;
 
 my %optctl = ('module' => \$MODULE,
 	      'source-dir' => \@SOURCE_DIRS,
@@ -66,17 +67,20 @@ my %optctl = ('module' => \$MODULE,
 	      'help' => \$PRINT_HELP,
 	      'main-sgml-file' => \$MAIN_SGML_FILE,
 	      'expand-content-files' => \$EXPAND_CONTENT_FILES,
-	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
 	      'sgml-mode' => \$SGML_MODE,
 	      'default-stability' => \$DEFAULT_STABILITY,
 	      'default-includes' => \$DEFAULT_INCLUDES,
 	      'output-format' => \$OUTPUT_FORMAT,
-	      'name-space' => \$NAME_SPACE);
+	      'name-space' => \$NAME_SPACE,
+	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
+	      'outputsymbolswithoutsince' => \$OUTPUT_SYMBOLS_WITHOUT_SINCE
+              );
 GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s", 
     "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols",
-     "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help",
-     "sgml-mode", "default-stability:s", "default-includes:s", "output-format:s",
-     "name-space:s");
+    "outputsymbolswithoutsince",
+    "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help",
+    "sgml-mode", "default-stability:s", "default-includes:s", "output-format:s",
+    "name-space:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -826,6 +830,9 @@ EOF
 
     if ($OUTPUT_ALL_SYMBOLS) {
 	&OutputAllSymbols;
+    }
+    if ($OUTPUT_SYMBOLS_WITHOUT_SINCE) {
+	&OutputSymbolsWithoutSince;
     }
 
     for $filename (split (' ', $EXPAND_CONTENT_FILES)) {
@@ -3849,7 +3856,33 @@ sub OutputAllSymbols {
           || die "Can't create $ROOT_DIR/$MODULE-symbols.txt: $!";
 
      foreach $symbol (sort (keys (%AllSymbols))) {
-          print SYMBOLS $symbol . "\n"
+          print SYMBOLS $symbol . "\n";
+     }
+
+     close (SYMBOLS);
+}
+
+#############################################################################
+# Function    : OutputSymbolsWithoutSince
+# Description : Outputs list of all symbols without a since tag to a file
+#
+# Arguments   : none
+#############################################################################
+
+sub OutputSymbolsWithoutSince {
+     my $n_documented = 0;
+     my $total = 0;
+     my $symbol;
+     my $percent;
+     my $msg;
+
+     open (SYMBOLS, ">$ROOT_DIR/$MODULE-nosince.txt")
+          || die "Can't create $ROOT_DIR/$MODULE-nosince.txt: $!";
+
+     foreach $symbol (sort (keys (%SourceSymbolDocs))) {
+         if (!defined $Since{$symbol}) {
+             print SYMBOLS $symbol . "\n";
+         }
      }
 
      close (SYMBOLS);
