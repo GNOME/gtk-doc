@@ -4,21 +4,32 @@
 # Script      : migratetmpl.pl
 # Description : Read template files and reformate them as source code
 #               comments.
+#               Run from doc dir.
+# Example     : cd glib/docs/reference/glib
+#               migratetmpl.pl --module=glib --source-dir=../../../glib
+#               cd glib/docs/reference/gmodule
+#               migratetmpl.pl --module=glib --source-dir=../../../glib
+#               ...
+# Todo        : - remove docs from tmpl files if there are comments in the src
+#               - allow running for only 1 tmpl file (= one section)
 #############################################################################
 
 use strict;
 use Getopt::Long;
+use Parse::ExuberantCTags;
 
 # Options
 
 # name of documentation module
 my $MODULE;
 my $TMPL_DIR;
+my $EXTRA_SRC_DIR;
 my $SRC_DIR;
 my $PRINT_HELP;
 
 my %optctl = ('module' => \$MODULE,
 	      'tmpl-dir' => \$TMPL_DIR,
+	      'extra-source-dir' => \$EXTRA_SRC_DIR,
 	      'source-dir' => \$SRC_DIR,
 	      'help' => \$PRINT_HELP);
 GetOptions(\%optctl, "module=s", "tmpl-dir:s", "source-dir:s", "help");
@@ -31,20 +42,24 @@ if ($PRINT_HELP) {
     print <<EOF;
 migratetmpl.pl
 
---module=MODULE_NAME Name of the doc module being parsed
---tmpl-dir=DIRNAME   Directory in which template files may be found
---source-dir=DIRNAME Directory where to put the generated sources
---help               Print this help
+--module=MODULE_NAME       Name of the doc module being parsed
+--tmpl-dir=DIRNAME         Directory in which template files may be found
+--extra-source-dir=DIRNAME Directory where to put the generated sources
+--source-dir=DIRNAME       Directory of existing sources
+--help                     Print this help
 EOF
     exit 0;
 }
 
 
 my $ROOT_DIR = ".";
+if (! -e "$ROOT_DIR/$MODULE-sections.txt") {
+    die "No $ROOT_DIR/$MODULE-sections.txt file found, please run this from doc-dir";
+}
 
 # All the files are read from subdirectories beneath here.
 $TMPL_DIR = $TMPL_DIR ? $TMPL_DIR : "$ROOT_DIR/tmpl";
-$SRC_DIR = $SRC_DIR ? $SRC_DIR : "$ROOT_DIR/src";
+$EXTRA_SRC_DIR = $EXTRA_SRC_DIR ? $EXTRA_SRC_DIR : "$ROOT_DIR/src";
 
 # These global hashes store the existing documentation.
 my %SymbolDocs;
@@ -55,11 +70,17 @@ my %Deprecated;
 my %Since;
 my %StabilityLevel;
 
+# build and read tags
+my $tags;
+if (-e $SRC_DIR) {
+    `cd $SRC_DIR; make ctags`;
+    $tags = Parse::ExuberantCTags->new("$SRC_DIR/tags");
+}
 
 # Create the src output directory if it doens't exist.
-if (! -e $SRC_DIR) {
-    mkdir ("$SRC_DIR", 0777)
-	|| die "Can't create directory: $SRC_DIR";
+if (! -e $EXTRA_SRC_DIR) {
+    mkdir ("$EXTRA_SRC_DIR", 0777)
+	|| die "Can't create directory: $EXTRA_SRC_DIR";
 }
 
 # now process the files
@@ -87,7 +108,7 @@ sub Convert {
 	} elsif (m/^<FILE>(.*)<\/FILE>/) {
             $filename = $1;
             if (&ReadTemplateFile ("$TMPL_DIR/$filename")) {
-               &OutputSourceFile ("$SRC_DIR/$filename",$filename);
+               &OutputSourceFile ("$EXTRA_SRC_DIR/$filename",$filename);
             }
         }
     }
@@ -332,8 +353,86 @@ EOF
 
     # output symbol docs
     my $symbol;
+    my $docblob;
+    my $merged;
     foreach $symbol (keys (%SymbolDocs)) {
-        print (OUTPUT &GetSymbolDoc ($symbol));
+        $docblob=&GetSymbolDoc ($symbol);
+        next if (!defined $docblob);
+
+        $merged=0;
+        # if we have tags, check if we find the symbol location
+        if (defined $tags) {
+            my $tag = $tags->findTag($symbol, ignore_case => 0, partial => 0);
+            if (defined $tag) {
+                my $srcline;
+                my $srcfile=$tag->{file};
+
+                if (defined $tag->{addressLineNumber}) {
+                    $srcline=$tag->{addressLineNumber}
+                }
+                if (-e "$SRC_DIR/$srcfile") {
+                    my @lines;
+                    my $line;
+
+                    my $source = "$SRC_DIR/$srcfile";
+
+                    open (SRC, "$source");
+                    @lines = <SRC>;
+                    close (SRC);
+
+                    if (!defined $srcline) {
+                        my $re  = $tag->{addressPattern};
+                        $re =~ m#^/(.*)/$#;
+                        $re = $1;
+                        $re =~ s/([*()])/\\$1/g;
+                        #$re = qr/$re/xo;
+
+                        for (0..$#lines) {
+                            if ($lines[$_] =~ $re) {
+                                $srcline=$_+1;
+                                last;
+                            }
+                        }
+                        if (!defined $srcline) {
+                            print "no line found for : $symbol in $srcfile using regexp: ", $re, "\n";
+                        }
+                    }
+
+                    if (defined $srcline) {
+                        my $offset = $srcline-1;
+                        
+                        if ($SymbolTypes{$symbol} eq "FUNCTION") {
+                            # go one up to skip return type
+                            # FIXME: check if the $symbol starts at the begin of the line
+                            # if ($lines[$srcline] =~ m/^$symbol/)
+                            $offset -= 1;
+                        }
+                        
+                        splice @lines,$offset,$#lines-$offset,($docblob,@lines[$offset..($#lines+-1)]);
+
+                        # patch file and overwrite
+                        open (SRC, ">$source");
+                        print SRC @lines;
+                        close (SRC);
+                        $merged=1;
+                        # rebuild and reread ctags
+                        `cd $SRC_DIR; make ctags`;
+                        $tags = Parse::ExuberantCTags->new("$SRC_DIR/tags");
+                    }
+
+                }
+                else {
+                    print "no source found for : $symbol\n";
+                }
+            }
+            else {
+                print "no tag found for : $symbol\n";
+            }
+        }
+        if ($merged == 0) {
+          print (OUTPUT $docblob."\n\n");
+        }
+        undef $docblob;
     }
 
     close (OUTPUT);
@@ -349,6 +448,7 @@ sub GetSymbolDoc {
     
     my $str;
     my ($params, $long_desc, $stability, $deprecated, $since, $returns);
+    my $is_empty =1;
 
     if (defined ($SymbolParams{$symbol})) {
         $params = $SymbolParams{$symbol}
@@ -366,7 +466,7 @@ sub GetSymbolDoc {
     $long_desc = $SymbolDocs{$symbol};
     $long_desc = &ConvertMarkup ($long_desc);
     $long_desc = &ConvertComments ($long_desc);
-    
+
     $str=<<EOF;
 /**
  * $symbol:
@@ -378,7 +478,11 @@ EOF
             my $param_desc = $$params[$j+1];
             my $line;
             $param_desc = &FormatMultiline ($param_desc);
-            
+
+            if ($param_desc ne "\n") {
+                $is_empty = 0;
+            }
+
             if ($param_name eq "Varargs") {
                 $param_name="...";
             }
@@ -397,28 +501,35 @@ EOF
         for $line (split (/\n/, $long_desc)) {
             $str = $str." * $line\n";
         }
+        $is_empty = 0;
     }
     my $spacer=" * \n";
     if (defined($stability) && ($stability ne "")) {
         $str = $str.$spacer." * Stability: $stability\n";
         $spacer="";
+        $is_empty = 0;
     }
     if (defined($deprecated) && ($deprecated ne "")) {
         $str = $str.$spacer." * Deprecated: $deprecated";
         $spacer="";
+        $is_empty = 0;
     }
     if (defined($since) && ($since ne "")) {
         $str = $str.$spacer." * Since: $since\n";
         $spacer="";
+        $is_empty = 0;
     }
     if (defined($returns) && ($returns ne "")) {
         $str = $str.$spacer." * Returns: $returns\n";
+        $is_empty = 0;
     }
     $str = $str. <<EOF;
  */
-
-
 EOF
+    if($is_empty == 1) {
+        #print "empty docs for $symbol\n";
+        return;
+    }
     return $str;
 }
 
