@@ -65,7 +65,7 @@ else
 all-local:
 endif
 
-docs: html-build.stamp
+docs: $(HTML_BUILD_STAMP) $(PDF_BUILD_STAMP)
 
 $(REPORT_FILES): sgml-build.stamp
 

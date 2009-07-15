@@ -51,7 +51,7 @@ CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
 
 check-local: html-build.stamp pdf-build.stamp
 
-docs: html-build.stamp
+docs: html-build.stamp pdf-build.stamp
 
 $(REPORT_FILES): sgml-build.stamp
 

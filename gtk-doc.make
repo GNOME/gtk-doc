@@ -50,12 +50,23 @@ REPORT_FILES = \
 CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
 
 if ENABLE_GTK_DOC
-all-local: html-build.stamp
+if GTK_DOC_BUILD_HTML
+HTML_BUILD_STAMP=html-build.stamp
+else
+HTML_BUILD_STAMP=
+endif
+if GTK_DOC_BUILD_PDF
+PDF_BUILD_STAMP=pdf-build.stamp
+else
+PDF_BUILD_STAMP=
+endif
+
+all-local: $(HTML_BUILD_STAMP) $(PDF_BUILD_STAMP)
 else
 all-local:
 endif
 
-docs: html-build.stamp
+docs: $(HTML_BUILD_STAMP) $(PDF_BUILD_STAMP)
 
 $(REPORT_FILES): sgml-build.stamp
 
@@ -122,6 +133,15 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo 'gtk-doc: Fixing cross-references'
 	@cd $(srcdir) && gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	@touch html-build.stamp
+
+#### pdf ####
+
+pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
+	@echo 'gtk-doc: Building PDF'
+	@-chmod -R u+w $(srcdir)
+	@rm -rf $(srcdir)/$(DOC_MODULE).pdf
+	@cd $(srcdir) && gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $(DOC_MODULE) $(DOC_MAIN_SGML_FILE)  $(MKPDF_OPTIONS)
+	@touch pdf-build.stamp
 
 ##############
 

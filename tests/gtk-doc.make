@@ -50,9 +50,9 @@ REPORT_FILES = \
 
 CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
 
-check-local: html-build.stamp
+check-local: html-build.stamp pdf-build.stamp
 
-docs: html-build.stamp
+docs: html-build.stamp pdf-build.stamp
 
 $(REPORT_FILES): sgml-build.stamp
 
@@ -117,6 +117,16 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	@touch html-build.stamp
+
+#### pdf ####
+
+pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
+	@echo 'gtk-doc: Building PDF'
+	@-chmod -R u+w $(srcdir)
+	@rm -rf $(srcdir)/$(DOC_MODULE).pdf
+	@cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $(DOC_MODULE) $(DOC_MAIN_SGML_FILE)  $(MKPDF_OPTIONS)
+	@touch pdf-build.stamp
 
 ##############
 
