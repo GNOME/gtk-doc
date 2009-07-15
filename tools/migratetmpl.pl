@@ -544,9 +544,11 @@ sub ConvertMarkup {
     
     $ostr="";
     for $line (split (/\n/, $istr)) {
-        if ($line =~ m/\s*<para>\s*$/) {
+        if ($line =~ m/^\s*<para>\s*$/) {
+            # new paragraph
             next;
-        } elsif ($line =~ m/\s*<\/para>\s*$/) {
+        } elsif ($line =~ m/^\s*<\/para>\s*$/) {
+            # end of paragraph
             $ostr.="\n";
         } else {
             # convert character entities back.
@@ -563,7 +565,7 @@ sub ConvertMarkup {
 
 #############################################################################
 # Function    : ConvertComments
-# Description : Convert signle line c comments to c++ comments
+# Description : Convert single line c comments to c++ comments
 # Arguments   : $istr -  string to convert
 #############################################################################
 sub ConvertComments {
