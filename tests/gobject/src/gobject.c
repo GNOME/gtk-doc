@@ -24,6 +24,16 @@
  * <informalexample>
  * <programlisting language="c"><xi:include xmlns:xi="http://www.w3.org/2003/XInclude" parse="text" href="../../examples/gobject.c" /></programlisting>
  * </informalexample>
+ *
+ * This example serves two main purposes:
+ * <itemizedlist>
+ * <listitem><para>
+ * testing conversion
+ * </para></listitem>
+ * <listitem><para>
+ * catching bugs
+ * </para></listitem>
+ * </itemizedlist>
  */
 
 #include <glib.h>
