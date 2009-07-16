@@ -44,7 +44,7 @@ CFILE_GLOB=$(top_srcdir)/tests/gobject/src/*.c
 IGNORE_HFILES=config.h
 
 # Images to copy into HTML directory.
-HTML_IMAGES =
+HTML_IMAGES = $(top_srcdir)/home.png
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE).
 # e.g. content_files=running.sgml building.sgml changes-2.0.sgml

@@ -7,6 +7,12 @@
  * We can link to the #GtkdocIface:itest property and the #GtkdocIface::itest
  * signal.
  * An instance can be configured using the gtkdoc_iface_configure() function.
+ *
+ * I can haz pictures too!
+ * <mediaobject>
+ *   <imageobject><imagedata fileref="home.png" format="PNG"/></imageobject>
+ *   <caption><para>Home sweet home.</para></caption>
+ * </mediaobject>
  */
 
 #include <glib.h>
