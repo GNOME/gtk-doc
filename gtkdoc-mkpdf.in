@@ -2,7 +2,7 @@
 #
 
 usage="\
-Usage: gtkdoc-mkpdf [--path=SEARCH_PATH] MODULE DRIVER_FILE [BACKEND_OPTIONS...]"
+Usage: gtkdoc-mkpdf [--path=SEARCH_PATH] [--imgdir=DIR] MODULE DRIVER_FILE [BACKEND_OPTIONS...]"
 
 #echo "args $0\n";
 
@@ -15,12 +15,14 @@ cleanexit() {
 
 searchpath=
 uninstalled=no
+imgdirs=
 while true; do
     case "X$1" in
         X--version) echo "@VERSION@"; exit 0;;
         X--help) echo "$usage"; exit 0;;
         X--uninstalled) uninstalled=yes; shift;;
         X--path=*) searchpath=`echo $1 | sed s/.*=//`; shift;;
+        X--imgdir=*) imgdirs="$imgdirs -I `echo $1 | sed s/.*=//`"; shift;;
         X--*) shift;;
         X*) break;;
     esac
@@ -74,7 +76,8 @@ if $is_xml; then
     # -T db2latex : different style
     # xsltproc is already called with --xinclude
     # does not work: --xslt-opts "$path_arg --nonet $@"
-    @DBLATEX@ -o $module.pdf $document
+    #echo "calling: @DBLATEX@ -o $module.pdf $imgdirs $document"
+    @DBLATEX@ -o $module.pdf $imgdirs $document
   else
     if test -n "@FOP@"; then
       @XSLTPROC@ $path_arg --nonet --xinclude \

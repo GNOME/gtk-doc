@@ -113,7 +113,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	if test "$(?)" = "0"; then \
 	  mkhtml_options=--path="$(srcdir)"; \
 	fi; \
-	cd $(srcdir)/html && gtkdoc-mkhtml $(mkhtml_options) $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
+	cd $(srcdir)/html && gtkdoc-mkhtml $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
 	@test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
 	@echo 'gtk-doc: Fixing cross-references'
 	@cd $(srcdir) && gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
@@ -125,7 +125,9 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo 'gtk-doc: Building PDF'
 	@-chmod -R u+w $(srcdir)
 	@rm -rf $(srcdir)/$(DOC_MODULE).pdf
-	@cd $(srcdir) && gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $(DOC_MODULE) $(DOC_MAIN_SGML_FILE)  $(MKPDF_OPTIONS)
+	@mkpdf_imgdirs=""; \
+	if test "x$(HTML_IMAGES)" != "x"; then for img in "$(HTML_IMAGES)"; do mkpdf_imgdirs="$$mkpdf_imgdirs --imgdir=`dirname $$img`"; done; fi; \
+	cd $(srcdir) && gtkdoc-mkpdf --path="$(abs_srcdir)" $$mkpdf_imgdirs $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS)
 	@touch pdf-build.stamp
 
 ##############

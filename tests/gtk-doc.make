@@ -124,8 +124,10 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo 'gtk-doc: Building PDF'
 	@-chmod -R u+w $(srcdir)
 	@rm -rf $(srcdir)/$(DOC_MODULE).pdf
-	@cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
-	gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $(DOC_MODULE) $(DOC_MAIN_SGML_FILE)  $(MKPDF_OPTIONS)
+	@mkpdf_imgdirs=""; \
+	if test "x$(HTML_IMAGES)" != "x"; then for img in "$(HTML_IMAGES)"; do mkpdf_imgdirs="$$mkpdf_imgdirs --imgdir=`dirname $$img`"; done; fi; \
+	cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $$mkpdf_imgdirs $(DOC_MODULE) $(DOC_MAIN_SGML_FILE)  $(MKPDF_OPTIONS)
 	@touch pdf-build.stamp
 
 ##############
