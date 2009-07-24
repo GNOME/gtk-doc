@@ -47,8 +47,8 @@ fi
 dnl
 dnl Check for Python.
 dnl
-AM_PATH_PYTHON([2.3],,)
-AM_CONDITIONAL([HAVE_PYTHON], [test -n "$PYTHON"])
+AM_PATH_PYTHON([2.3],,[:])
+AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != :])
 
 dnl
 dnl Check for jade or openjade.
@@ -223,7 +223,7 @@ AC_MSG_NOTICE([
 gtk-doc was configured with the following options:
 ==================================================])
 
-test -n "$PYTHON" \
+test "$PYTHON" != : \
     && AC_MSG_NOTICE([** Python based tools enabled, using $PYTHON]) \
     || AC_MSG_NOTICE([   Python based tools disabled])
 test -n "$JADE" \
