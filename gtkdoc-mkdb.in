@@ -4085,7 +4085,7 @@ sub MergeSourceDocumentation {
                             if(($type eq "MACRO") && ($param_name eq "Returns")) {
                                 # FIXME: do we need to add it then to tmpl_params[] ?
                                 my $num=$#$tmpl_params;
-                                #print "  adding Returns to macro docs.\n";
+                                #print "  adding Returns: to macro docs for $symbol.\n";
                                 $$tmpl_params[$num+1]="Returns";
                                 $$tmpl_params[$num+2]=$$params[$j+1];
                                 next;
