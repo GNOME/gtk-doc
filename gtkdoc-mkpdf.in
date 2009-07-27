@@ -74,6 +74,7 @@ if $is_xml; then
     # -I FIG_PATH
     # -V is useful for debugging
     # -T db2latex : different style
+    # -d : keep transient files (for debugging)
     # xsltproc is already called with --xinclude
     # does not work: --xslt-opts "$path_arg --nonet $@"
     #echo "calling: @DBLATEX@ -o $module.pdf $imgdirs $document"

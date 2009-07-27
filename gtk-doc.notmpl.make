@@ -126,7 +126,15 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@-chmod -R u+w $(srcdir)
 	@rm -rf $(srcdir)/$(DOC_MODULE).pdf
 	@mkpdf_imgdirs=""; \
-	if test "x$(HTML_IMAGES)" != "x"; then for img in "$(HTML_IMAGES)"; do mkpdf_imgdirs="$$mkpdf_imgdirs --imgdir=`dirname $$img`"; done; fi; \
+	if test "x$(HTML_IMAGES)" != "x"; then \
+	  for img in $(HTML_IMAGES); do \
+	    part=`dirname $$img`; \
+	    echo $$mkpdf_imgdirs | grep >/dev/null "\-\-imgdir=$$part "; \
+	    if test $$? != 0; then \
+	      mkpdf_imgdirs="$$mkpdf_imgdirs --imgdir=$$part"; \
+	    fi; \
+	  done; \
+	fi; \
 	cd $(srcdir) && gtkdoc-mkpdf --path="$(abs_srcdir)" $$mkpdf_imgdirs $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS)
 	@touch pdf-build.stamp
 
