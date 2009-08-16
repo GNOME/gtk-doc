@@ -563,7 +563,8 @@ sub OutputSGML {
 
 	    my $section_id = $SourceSymbolDocs{"$TMPL_DIR/$filename:Section_Id"};
 	    if (defined ($section_id) && $section_id !~ m/^\s*$/) {
-	        # Do nothing. Use section_id as it is.
+		# Remove trailing blanks and use as is
+		$section_id =~ s/\s+$//;
 	    } elsif (&CheckIsObject ($title)) {
 		# GtkObjects use their class name as the ID.
 		$section_id = &CreateValidSGMLID ($title);
