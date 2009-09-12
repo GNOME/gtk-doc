@@ -1456,10 +1456,13 @@ EOF
 	    my $field_name = shift @fields;
 	    my $text = shift @fields;
 	    my $field_descr = $field_descrs{$field_name};
+            my $param_annotations = "";
 
-	    $desc .= "<varlistentry>\n<term>$text</term>\n";
+	    $desc .= "<varlistentry><term>$text</term>\n";
 	    if (defined $field_descr) {
-		$desc .= "<listitem><simpara>".&ExpandAbbreviations($symbol, $field_descr)."</simpara></listitem>\n";
+                ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
+                $field_descr = &ExpandAbbreviations($symbol, $field_descr);
+		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
 	    } else {
 		$desc .= "<listitem><simpara /></listitem>\n";
 	    }
@@ -1527,12 +1530,15 @@ sub OutputEnum {
 EOF
 	for my $member_name (@members) {
 	    my $member_descr = $member_descrs{$member_name};
+            my $param_annotations = "";
 
 	    $id = &CreateValidSGMLID ($member_name);
 	    $condition = &MakeConditionDescription ($member_name);
 	    $desc .= "<varlistentry id=\"$id\" role=\"constant\"$condition>\n<term><literal>$member_name</literal></term>\n";
 	    if (defined $member_descr) {
-		$desc .= "<listitem><simpara>".&ExpandAbbreviations($symbol, $member_descr)."</simpara></listitem>\n";
+                ($member_descr,$param_annotations) = &ExpandAnnotation($symbol, $member_descr);
+                $member_descr = &ExpandAbbreviations($symbol, $member_descr);
+		$desc .= "<listitem><simpara>$member_descr$param_annotations</simpara></listitem>\n";
 	    } else {
 		$desc .= "<listitem></listitem>\n";
 	    }
@@ -1858,42 +1864,7 @@ sub OutputParamDescriptions {
 	    my $param_desc = $$params[$j + 1];
 	    my $param_annotations = "";
 
-            if ($param_desc =~ m%\s*\((.*)\):%) {
-                my @annotations;
-                my $annotation;
-                my $annotation_extra = "";
-                $param_desc = $';
-                @annotations = split(/\)\s*\(/,$1);
-                foreach $annotation (@annotations) {
-                    # need to search for the longest key-match in %AnnotationDefinition
-                    my $match_length=0;
-                    my $match_annotation="";
-                    my $annotationdef;
-                    foreach $annotationdef (keys %AnnotationDefinition) {
-                        if ($annotation =~ m/^$annotationdef/) {
-                            if (length($annotationdef)>$match_length) {
-                                $match_length=length($annotationdef);
-                                $match_annotation=$annotationdef;
-                            }
-                        }
-                    }
-                    if ($match_annotation ne "") {
-                        if ($annotation =~ m%$match_annotation\s+(.*)%) {
-                            $annotation_extra = " $1";
-                        }
-                        $AnnotationsUsed{$match_annotation} = 1;
-                        $param_annotations .= "<acronym>$match_annotation</acronym>$annotation_extra. ";
-                    }
-                    else {
-                        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
-                            "unknown annotation \"$annotation\" in documentation for $symbol.");
-                        $param_annotations=$annotation;
-                    }
-                }
-                chomp($param_desc);
-                $param_desc =~ m/^(.*)\.*\s*$/;
-                $param_desc = "$1. ";
-            }
+            ($param_desc,$param_annotations) = & ExpandAnnotation($symbol, $param_desc);
             $param_desc = &ExpandAbbreviations($symbol, $param_desc);
 	    if ($param_name eq "Returns") {
 		$returns = "$param_desc$param_annotations";
@@ -2372,6 +2343,55 @@ sub ConvertSGMLCharsCallback2 {
   return $text;
 }
 
+#############################################################################
+# Function    : ExpandAnnotation
+# Description : This turns annotations into acrony tags.
+# Arguments   : $symbol - the symbol being documented, for error messages.
+#		$text - the text to expand.
+#############################################################################
+sub ExpandAnnotation {
+    my ($symbol, $param_desc) = @_;
+    my $param_annotations = "";
+    
+    if ($param_desc =~ m%\s*\((.*)\):%) {
+        my @annotations;
+        my $annotation;
+        my $annotation_extra = "";
+        $param_desc = $';
+    
+        @annotations = split(/\)\s*\(/,$1);
+        foreach $annotation (@annotations) {
+            # need to search for the longest key-match in %AnnotationDefinition
+            my $match_length=0;
+            my $match_annotation="";
+            my $annotationdef;
+            foreach $annotationdef (keys %AnnotationDefinition) {
+                if ($annotation =~ m/^$annotationdef/) {
+                    if (length($annotationdef)>$match_length) {
+                        $match_length=length($annotationdef);
+                        $match_annotation=$annotationdef;
+                    }
+                }
+            }
+            if ($match_annotation ne "") {
+                if ($annotation =~ m%$match_annotation\s+(.*)%) {
+                    $annotation_extra = " $1";
+                }
+                $AnnotationsUsed{$match_annotation} = 1;
+                $param_annotations .= "<acronym>$match_annotation</acronym>$annotation_extra. ";
+            }
+            else {
+                &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                    "unknown annotation \"$annotation\" in documentation for $symbol.");
+                $param_annotations=$annotation;
+            }
+        }
+        chomp($param_desc);
+        $param_desc =~ m/^(.*)\.*\s*$/;
+        $param_desc = "$1. ";
+    }    
+    return ($param_desc, $param_annotations);
+}
 
 #############################################################################
 # Function    : ExpandAbbreviations
