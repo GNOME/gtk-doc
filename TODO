@@ -135,6 +135,13 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   - 'dummy-docs' check if symbol docs are very short and repeat mainly words
     from the symbol.
 
+= Markup =
+* protected scope
+  * we can have /* < protected > */ in classes
+  * we can have <SUBSECTION Protected> in -section.txt
+  * ideally we have Scope: {Public, Protected, Private} supported in doc comments
+  * there is a bg for gir, https://bugzilla.gnome.org/show_bug.cgi?id=594125
+
 = GIR =
 == scanning ==
 * ideas

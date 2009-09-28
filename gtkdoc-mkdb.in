@@ -958,9 +958,10 @@ sub OutputSinceIndexes {
 }
 
 #############################################################################
-# Function    : OutputSinceIndexes
-# Description : This writes the 'since' api indexlists that can be included into
-#               the main document into an <index> tag.
+# Function    : OutputAnnotationGlossary
+# Description : This writes a glossary of the used annotation terms into a
+#               separate glossary file that can be included into the main
+#               document.
 #############################################################################
 
 sub OutputAnnotationGlossary {
