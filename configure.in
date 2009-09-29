@@ -158,7 +158,7 @@ PKG_CHECK_MODULES(TEST_DEPS, [glib-2.0 >= 2.6.0 gobject-2.0 >= 2.6.0], [
   ]
 )
 AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, test -n "$LIBTOOL" -a x$gtk_doc_use_libtool = xyes )
-dnl this enable the rule in test/Makefile.am
+dnl this enables the rule in test/Makefile.am
 AM_CONDITIONAL(BUILD_TESTS, test x$build_tests = xyes)
 AC_SUBST(glib_prefix)
 
