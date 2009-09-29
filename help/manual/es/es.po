@@ -1,12 +1,13 @@
 # translation of gtk-doc-help.master.po to Español
 # Jorge González <jorgegonz@svn.gnome.org>, 2009.
 # Francisco Javier Fernandez Serrador <fserrador@gmail.com>, 2009.
+# Jorge Gonzalez <jorgegonz@svn.gnome.org>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2009-07-18 11:49+0000\n"
-"PO-Revision-Date: 2009-07-21 23:26+0200\n"
-"Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
+"POT-Creation-Date: 2009-09-28 23:22+0000\n"
+"PO-Revision-Date: 2009-09-29 13:45+0200\n"
+"Last-Translator: Jorge Gonzalez <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,8 +25,7 @@ msgstr "1.12"
 
 #: C/gtk-doc-manual.xml:14(para)
 msgid "User manual for developers with instructions of GTK-Doc usage."
-msgstr ""
-"Manual del usuario para desarrolladores con instrucciones del uso de GTK-Doc."
+msgstr "Manual del usuario para desarrolladores con instrucciones del uso de GTK-Doc."
 
 #: C/gtk-doc-manual.xml:17(firstname)
 msgid "Chris"
@@ -407,10 +407,8 @@ msgstr ""
 "RedHat)"
 
 #: C/gtk-doc-manual.xml:268(para)
-msgid ""
-"<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (used by Debian)"
-msgstr ""
-"<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (usado por Debian)"
+msgid "<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (used by Debian)"
+msgstr "<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (usado por Debian)"
 
 #: C/gtk-doc-manual.xml:271(para)
 msgid "<filename> /usr/share/sgml/docbkdsl </filename> (used by SuSE)"
@@ -506,8 +504,7 @@ msgstr ""
 msgid ""
 "Besides checking for the required Gtk-Doc version, this adds two configure "
 "switches:"
-msgstr ""
-"Además de comprobar la versión de GTK-Doc necesaria, esto añade dos claves:"
+msgstr "Además de comprobar la versión de GTK-Doc necesaria, esto añade dos claves:"
 
 #: C/gtk-doc-manual.xml:387(para)
 msgid "--with-html-dir=PATH : path to installed docs"
@@ -796,8 +793,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:613(para)
 msgid "Use function() to refer to functions or macros which take arguments."
-msgstr ""
-"Use función() para referirse a funciones o macros que toman argumentos."
+msgstr "Use función() para referirse a funciones o macros que toman argumentos."
 
 #: C/gtk-doc-manual.xml:618(para)
 msgid ""
@@ -1101,10 +1097,8 @@ msgid "Useful DocBook tags"
 msgstr "Etiquetas DocBook útiles"
 
 #: C/gtk-doc-manual.xml:930(para)
-msgid ""
-"Here are some DocBook tags which are most useful when documenting the code."
-msgstr ""
-"Aquí están varias etiquetas de DocBook muy útiles al documentar código."
+msgid "Here are some DocBook tags which are most useful when documenting the code."
+msgstr "Aquí están varias etiquetas de DocBook muy útiles al documentar código."
 
 #: C/gtk-doc-manual.xml:935(para)
 msgid ""
@@ -1454,8 +1448,12 @@ msgstr ""
 "todavía al archivo <filename>&lt;package&gt;-section.txt</filename>."
 
 #: C/gtk-doc-manual.xml:1304(para)
+#| msgid ""
+#| "Enable or add the <option>TESTS=($GTKDOC_CHECK)</option> line in Makefile."
+#| "am. If at least gtk-doc 1.9 is installed, this will run sanity checks "
+#| "during make check run."
 msgid ""
-"Enable or add the <option>TESTS=($GTKDOC_CHECK)</option> line in Makefile."
+"Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
 "am. If at least gtk-doc 1.9 is installed, this will run sanity checks during "
 "make check run."
 msgstr ""
@@ -1537,8 +1535,7 @@ msgstr "Una clase nueva no aparece en la documentación."
 
 #: C/gtk-doc-manual.xml:1342(seg)
 msgid "FIXME (section file, types file, main-sgml file)"
-msgstr ""
-"ARREGLAR (archivo de sección, archivo de tipos, archivo sgml principal)"
+msgstr "ARREGLAR (archivo de sección, archivo de tipos, archivo sgml principal)"
 
 #: C/gtk-doc-manual.xml:1345(seg)
 msgid "A new symbol does not appear in the docs."
@@ -2537,10 +2534,11 @@ msgstr ""
 "copyleft/gpl.html\">Licencia Pública General de GNU (GNU General Public "
 "License)</ulink>, para permitir su uso en software libre."
 
-#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2.
+#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
 #: C/gtk-doc-manual.xml:0(None)
 msgid "translator-credits"
 msgstr ""
 "Francisco Javier F. Serrador <serrrador@svn.gnome.org>, 2009\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2009\n"
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2009"
+
