@@ -76,5 +76,10 @@ DISTCLEANFILES = \
 	gtkdoc-mkhtml.log \
 	gtkdoc-fixxref.log
 
+if BUILD_TESTS
+TESTS_ENVIRONMENT = \
+	PATH=$(abs_top_builddir):$(srcdir):$(PATH) \
+	PERL5LIB=$(abs_top_builddir):$(PERL5LIB)
+endif
 
 -include $(top_srcdir)/git.mk
