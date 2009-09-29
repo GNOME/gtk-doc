@@ -3429,6 +3429,12 @@ sub ScanSourceFile {
                     my $real_symbol=$1;
                     my $key;
 
+                    if (scalar %KnownSymbols) {
+                        if ((! defined($KnownSymbols{"$TMPL_DIR/$real_symbol:Long_Description"})) || $KnownSymbols{"$TMPL_DIR/$real_symbol:Long_Description"} != 1) {
+                            &LogWarning ($file, $., "Section $real_symbol is not defined in the $MODULE-section.txt file.");
+                        }
+                    }
+
                     #print "SECTION DOCS found in source for : '$real_symbol'\n";
                     $ignore_broken_returns = 1;
                     for ($k = 0; $k <= $#params; $k += $PARAM_FIELD_COUNT) {
