@@ -709,6 +709,17 @@ make
 
       <variablelist>
         <varlistentry>
+          <term>SECTION:&lt;name&gt;</term>
+          <listitem>
+            <para>
+              The name links the section documentation to the respective part in
+              the <filename>&lt;package&gt;-sections.txt</filename> file. The
+              name give here should match the &lt;FILE&gt; tag in the 
+              <filename>&lt;package&gt;-sections.txt</filename> file.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
           <term>@short_description</term>
           <listitem>
             <para>
@@ -1288,7 +1299,7 @@ gtk_arrow_get_type
 
     <para>
       The <filename>&lt;package&gt;-undeclared.txt</filename> file lists symbols
-      given in the <filename>&lt;package&gt;-section.txt</filename> but not
+      given in the <filename>&lt;package&gt;-sections.txt</filename> but not
       found in the sources. Check if they have been removed or if they are
       misspelled.
     </para>
@@ -1297,7 +1308,7 @@ gtk_arrow_get_type
       The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol
       names, where the Gtk-Doc scanner has found documentation, but does not
       know where to put it. This means that the symbol has not yet been added to
-      the <filename>&lt;package&gt;-section.txt</filename> file.
+      the <filename>&lt;package&gt;-sections.txt</filename> file.
     </para>
 
     <tip>
@@ -1354,7 +1365,7 @@ gtk_arrow_get_type
       <!-- docbook warnings: -->
       <seglistitem>
 	<seg>multiple "IDs" for constraint linkend: XYZ</seg>
-	<seg>Symbol XYZ appears twice in -section.txt file.</seg>
+	<seg>Symbol XYZ appears twice in -sections.txt file.</seg>
       </seglistitem>
       <seglistitem>
 	<seg>Element typename in namespace '' encountered in para, but no template matches.</seg>
