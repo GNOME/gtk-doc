@@ -1038,7 +1038,7 @@ describe_signed_constant (gsize size, gint64 value)
           desc = g_strdup ("G_MAXINT");
         else if (value == G_MININT)
           desc = g_strdup ("G_MININT");
-        else if (value == G_MAXUINT)
+        else if (value == (gint64)G_MAXUINT)
           desc = g_strdup ("G_MAXUINT");
       }
       break;
@@ -1048,14 +1048,14 @@ describe_signed_constant (gsize size, gint64 value)
           desc = g_strdup ("G_MAXINT");
         else if (value == G_MININT)
           desc = g_strdup ("G_MININT");
-        else if (value == G_MAXUINT)
+        else if (value == (gint64)G_MAXUINT)
           desc = g_strdup ("G_MAXUINT");
       }
       if (value == G_MAXLONG)
         desc = g_strdup ("G_MAXLONG");
       else if (value == G_MINLONG)
         desc = g_strdup ("G_MINLONG");
-      else if (value == G_MAXULONG)
+      else if (value == (gint64)G_MAXULONG)
         desc = g_strdup ("G_MAXULONG");
       break;
     case 8:
@@ -1081,7 +1081,7 @@ describe_unsigned_constant (gsize size, guint64 value)
   switch (size) {
     case 2:
       if (sizeof (int) == 2) {
-        if (value == G_MAXINT)
+        if (value == (guint64)G_MAXINT)
           desc = g_strdup ("G_MAXINT");
         else if (value == G_MAXUINT)
           desc = g_strdup ("G_MAXUINT");
@@ -1089,12 +1089,12 @@ describe_unsigned_constant (gsize size, guint64 value)
       break;
     case 4:
       if (sizeof (int) == 4) {
-        if (value == G_MAXINT)
+        if (value == (guint64)G_MAXINT)
           desc = g_strdup ("G_MAXINT");
         else if (value == G_MAXUINT)
           desc = g_strdup ("G_MAXUINT");
       }
-      if (value == G_MAXLONG)
+      if (value == (guint64)G_MAXLONG)
         desc = g_strdup ("G_MAXLONG");
       else if (value == G_MAXULONG)
         desc = g_strdup ("G_MAXULONG");
