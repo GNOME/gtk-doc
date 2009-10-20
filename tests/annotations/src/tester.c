@@ -57,6 +57,19 @@ annotation_elementtype (const GList *list)
 }
 
 /**
+ * annotation_elementtype_returns:
+ *
+ * Document optional parameters.
+ *
+ * Returns: (element-type GObject): A list of #GObject instances.
+ */
+GList *
+annotation_elementtype_returns (void)
+{
+   return NULL;
+}
+
+/**
  * annotation_outparams:
  * @list: (out) (transfer none): a pointer to take a list
  *
