@@ -735,6 +735,7 @@ make
  * @see_also: #MeepSettings
  * @stability: Stable
  * @include: meep/app.h
+ * @Image: application.png
  *
  * The application class handles ...
  */
@@ -851,6 +852,17 @@ make
               synopsis (a comma separated list), overriding the global
               value from the <link linkend="metafiles_sections">section
               file</link> or command line.  This item is optional.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>@image</term>
+          <listitem>
+            <para>
+              The image to display at the top of the reference page for this
+              section.  This will often be some sort of a diagram to illustrate
+              the visual appearance of a class or a diagram of its relationship
+              to other classes.  This item is optional.
             </para>
           </listitem>
         </varlistentry>

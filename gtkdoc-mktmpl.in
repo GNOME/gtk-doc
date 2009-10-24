@@ -556,7 +556,7 @@ sub OutputOldParams {
 sub OutputTemplateFile {
     my ($file, $title, $output) = @_;
 
-    my ($short_desc, $long_desc, $see_also, $stability);
+    my ($short_desc, $long_desc, $see_also, $stability, $image);
 
     if (defined ($SymbolDocs{"$TMPL_DIR/$file:Title"})) {
 	$title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
@@ -586,6 +586,12 @@ sub OutputTemplateFile {
     } else {
 	$stability = "";
     }
+    if (defined ($SymbolDocs{"$TMPL_DIR/$file:Image"})) {
+	$image = $SymbolDocs{"$TMPL_DIR/$file:Image"};
+	delete $SymbolDocs{"$TMPL_DIR/$file:Image"};
+    } else {
+	$image = "";
+    }
 
 
     my $old_tmpl_file = "$TMPL_DIR/$file";
@@ -609,6 +615,9 @@ $see_also
 
 <!-- ##### SECTION Stability_Level ##### -->
 $stability
+
+<!-- ##### SECTION Image #### -->
+$image
 
 EOF
 
@@ -1017,7 +1026,8 @@ sub ReadTemplateFile {
 		|| $symbol eq "Short_Description"
 		|| $symbol eq "Long_Description"
 		|| $symbol eq "See_Also"
-		|| $symbol eq "Stability_Level") {
+		|| $symbol eq "Stability_Level"
+		|| $symbol eq "Image") {
 		$symbol = $docsfile . ":" . $symbol;
 	    }
 

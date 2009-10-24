@@ -655,13 +655,20 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
           </p>
         </td>
         <td valign="top" align="right">
-           <!-- find the gallery image to use here
-                - determine the id of the enclosing refentry
-                - look for an inlinegraphic inside a link with linkend == refentryid inside a para with role == gallery
-                - use it here
-             -->
-           <xsl:variable name="refentryid" select="../@id"/>
-           <xsl:apply-templates select="//para[@role = 'gallery']/link[@linkend = $refentryid]/inlinegraphic"/>
+          <xsl:choose>
+            <xsl:when test="../refmeta/refmiscinfo/inlinegraphic">
+              <xsl:apply-templates select="../refmeta/refmiscinfo/inlinegraphic"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- find the gallery image to use here
+                   - determine the id of the enclosing refentry
+                   - look for an inlinegraphic inside a link with linkend == refentryid inside a para with role == gallery
+                   - use it here
+                -->
+              <xsl:variable name="refentryid" select="../@id"/>
+              <xsl:apply-templates select="//para[@role = 'gallery']/link[@linkend = $refentryid]/inlinegraphic"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </td></tr>
        </table>
      </div>

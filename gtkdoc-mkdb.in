@@ -2252,6 +2252,28 @@ sub OutputSGMLFile {
 	$stability = "<refsect1 id=\"$section_id.stability-level\">\n<title>Stability Level</title>\n$DEFAULT_STABILITY, unless otherwise indicated\n</refsect1>\n";
     }
 
+    my $image = $SymbolDocs{"$TMPL_DIR/$file:Image"};
+    if (!defined ($image)) {
+      $image = "";
+    } else {
+      $image =~ s/^\s*//;
+      $image =~ s/\s*$//;
+
+      my $format;
+
+      if ($image =~ /jpe?g$/i) {
+        $format = "format='JPEG'";
+      } elsif ($image =~ /png$/i) {
+        $format = "format='PNG'";
+      } elsif ($image =~ /svg$/i) {
+        $format = "format='SVG'";
+      } else {
+        $format = "";
+      }
+
+      $image = "  <inlinegraphic fileref='$image' $format/>\n"
+    }
+
     my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) =
 	gmtime (time);
     my $month = (qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec))[$mon];
@@ -2301,7 +2323,9 @@ sub OutputSGMLFile {
 <refmeta>
 <refentrytitle role="top_of_page" id="$section_id.top_of_page">$title</refentrytitle>
 <manvolnum>3</manvolnum>
-<refmiscinfo>\U$MODULE\E Library</refmiscinfo>
+<refmiscinfo>
+  \U$MODULE\E Library
+$image</refmiscinfo>
 </refmeta>
 <refnamediv>
 <refname>$title</refname>
@@ -3681,6 +3705,8 @@ sub ScanSourceFile {
                             $key = "$TMPL_DIR/$real_symbol:Section_Id";
                         } elsif ($params[$k] eq "include") {
                             $key = "$TMPL_DIR/$real_symbol:Include";
+                        } elsif ($params[$k] eq "image") {
+                            $key = "$TMPL_DIR/$real_symbol:Image";
                         }
                         if (defined($key)) {
                             $SourceSymbolDocs{$key}=$params[$k+1];
@@ -4012,7 +4038,7 @@ sub OutputMissingDocumentation {
         #my $ssline = &GetSymbolSourceLine($symbol);
         #my $location = "defined at " . (defined($ssfile)?$ssfile:"?") . ":" . (defined($ssline)?$ssline:"0") . "\n";
         # DEBUG
-        if ($symbol !~ /:(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include|Section_Id)/) {
+        if ($symbol !~ /:(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include|Section_Id|Image)/) {
             $total++;
             if (exists ($AllDocumentedSymbols{$symbol})) {
                 $n_documented++;
@@ -4780,7 +4806,8 @@ sub ReadTemplateFile {
 		|| $symbol eq "Long_Description"
 		|| $symbol eq "See_Also"
 		|| $symbol eq "Stability_Level"
-		|| $symbol eq "Include") {
+		|| $symbol eq "Include"
+		|| $symbol eq "Image") {
 
 		$symbol = $docsfile . ":" . $symbol;
 	    }
