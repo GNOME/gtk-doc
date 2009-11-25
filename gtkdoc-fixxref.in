@@ -267,7 +267,11 @@ sub FixHTMLFile {
         $entire_file =~ s%(<span class=\"normal\">\s*)(.+?)((\s+.+?)?\s*</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
     }
 
-    $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($file, $1,$2); %gse;
+    my @lines = split(/\n/, $entire_file);
+    for (my $i=0; $i<$#lines; $i++) {
+        $lines[$i] =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($file,$i,$1,$2); %ge;
+    }
+    $entire_file = join("\n",@lines);
 
     open (NEWFILE, ">$file.new")
 	|| die "Can't open $file: $!";
@@ -281,9 +285,16 @@ sub FixHTMLFile {
 }
 
 sub MakeXRef {
-    my ($file, $id, $text) = @_;
+    my ($file, $line, $id, $text) = @_;
 
     my $href = $Links{$id};
+    
+    # this is a workaround for some inconsitency we have with CreateValidSGMLID
+    if (!$href) {
+        my $tid = $id;
+        $tid =~ s/:/--/g;
+        $href = $Links{$tid};
+    }
 
     if ($href) {
         # if it is a link to same module, remove path to make it work
@@ -296,7 +307,7 @@ sub MakeXRef {
     } else {
         #print "  no link for: $id, $text\n";
         if (!exists($NoLinks{$id})) {
-          &LogWarning ($file, 1, "no link for: '$id' -> ($text).");
+          &LogWarning ($file, $line, "no link for: '$id' -> ($text).");
           $NoLinks{$id} = 1;
         }
 	return $text;
