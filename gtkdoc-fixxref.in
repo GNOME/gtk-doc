@@ -269,7 +269,7 @@ sub FixHTMLFile {
 
     my @lines = split(/\n/, $entire_file);
     for (my $i=0; $i<$#lines; $i++) {
-        $lines[$i] =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($file,$i,$1,$2); %ge;
+        $lines[$i] =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($file,$i+1,$1,$2); %ge;
     }
     $entire_file = join("\n",@lines);
 
@@ -317,9 +317,13 @@ sub MakeXRef {
 
 sub MakeGtkDocLink {
     my ($pre,$symbol,$post) = @_;
-    
+
     my $id=CreateValidSGMLID($symbol);
-    
+
+    # these are implicitely created links in highlighed sources
+    # we don't want warnings for those if the links cannot be resolved.
+    $NoLinks{$id} = 1;
+
     #return "<span class=\"$type\"><GTKDOCLINK HREF=\"$id\">$symbol</GTKDOCLINK></span>";
     return "$pre<GTKDOCLINK HREF=\"$id\">$symbol</GTKDOCLINK>$post";
 }
