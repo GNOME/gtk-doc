@@ -191,5 +191,10 @@ void bug_580300b_get_type(gint a);
 void bug_580300c_get_type();
 extern int bug_580300d_get_type();
 
+
+long int bug_602518a(void);
+unsigned long int bug_602518b(void);
+unsigned int bug_602518c(void);
+
 #endif // GTKDOC_TESTER_H
 

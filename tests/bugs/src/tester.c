@@ -150,3 +150,35 @@ void bug_580300c_get_type() { }
 
 int bug_580300d_get_type() { }
 
+/**
+ * bug_602518a:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=602518
+ *
+ * Returns: result
+ */
+long int bug_602518a(void) {
+  return (long int)0;
+}
+
+/**
+ * bug_602518b:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=602518
+ *
+ * Returns: result
+ */
+unsigned long int bug_602518b(void) {
+  return (unsigned long int)0;
+}
+
+/**
+ * bug_602518c:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=602518
+ *
+ * Returns: result
+ */
+unsigned int bug_602518c(void) {
+  return (unsigned int)0;
+}
