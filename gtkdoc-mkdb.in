@@ -2218,39 +2218,6 @@ EOF
 
 
 #############################################################################
-# Function    : CreateValidSGMLID
-# Description : Creates a valid SGML 'id' from the given string.
-#               According to http://www.w3.org/TR/html4/types.html#type-id
-#                 "ID and NAME tokens must begin with a letter ([A-Za-z]) and
-#                  may be followed by any number of letters, digits ([0-9]),
-#                  hyphens ("-"), underscores ("_"), colons (":"), and
-#                  periods (".")."
-#
-#		NOTE: SGML ids are case-insensitive, so we have a few special
-#		      cases to avoid clashes of ids.
-# Arguments   : $id - the string to be converted into a valid SGML id.
-#############################################################################
-
-sub CreateValidSGMLID {
-    my ($id) = $_[0];
-
-    # Special case, '_' would end up as '' so we use 'gettext-macro' instead.
-    if ($id eq "_") { return "gettext-macro"; }
-
-    $id =~ s/[_ ]/-/g;
-    $id =~ s/[,;]//g;
-    $id =~ s/^-*//;
-    $id =~ s/::/-/g;
-    $id =~ s/:/--/g;
-
-    # Append ":CAPS" to all all-caps identifiers
-    if ($id !~ /[a-z]/ && $id !~ /-CAPS$/) { $id .= ":CAPS" };
-
-    return $id;
-}
-
-
-#############################################################################
 # Function    : CreateValidSGML
 # Description : This turns any chars which are used in SGML into entities,
 #		e.g. '<' into '&lt;'
