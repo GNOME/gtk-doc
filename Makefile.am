@@ -83,8 +83,7 @@ EXTRA_DIST = \
 	tools/gtk-doc.el \
 	style.css \
 	COPYING-DOCS \
-	gnome-doc-utils.make \
-	m4
+	gnome-doc-utils.make
 
 MAINTAINERCLEANFILES = \
 	$(srcdir)/INSTALL \
