@@ -608,7 +608,7 @@ sub ScanHeader {
 		$decl =~ s%/\*.*?\*/%%gs;	# remove comments.
 		#$decl =~ s/^\s+//;		# remove leading whitespace.
 		#$decl =~ s/\s+$//;		# remove trailing whitespace.
-		$decl =~ s/\s*\n\s*//g;		# remove whitespace at start
+		$decl =~ s/\s*\n\s*/ /gs;		# consolidate whitespace at start
 						# and end of lines.
 		$ret_type =~ s%/\*.*?\*/%%g;	# remove comments in ret type.
 		&AddSymbolToList (\$list, $symbol);
