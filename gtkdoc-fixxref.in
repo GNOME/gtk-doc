@@ -77,6 +77,19 @@ my %Links;
 # This hold the path entries we already scanned
 my @VisitedPaths;
 
+# failing link targets we don't warn about even once
+my %NoLinks = (
+    'char'  => 1,
+    'double'  => 1,
+    'float'  => 1,
+    'int'  => 1,
+    'long'  => 1,
+    'main'  => 1,
+    'signed'  => 1,
+    'unsigned'  => 1,
+    'void'  => 1,
+    'GInterface' => 1
+    );
 
 my $path_prefix="";
 if ($HTML_DIR =~ m%(.*?)/share/gtk-doc/html%) {
@@ -254,7 +267,7 @@ sub FixHTMLFile {
         $entire_file =~ s%(<span class=\"normal\">\s*)(.+?)((\s+.+?)?\s*</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
     }
 
-    $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($1,$2); %gse;
+    $entire_file =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($file, $1,$2); %gse;
 
     open (NEWFILE, ">$file.new")
 	|| die "Can't open $file: $!";
@@ -267,9 +280,8 @@ sub FixHTMLFile {
 	|| die "Can't rename $file.new: $!";
 }
 
-
 sub MakeXRef {
-    my ($id, $text) = @_;
+    my ($file, $id, $text) = @_;
 
     my $href = $Links{$id};
 
@@ -283,6 +295,10 @@ sub MakeXRef {
         return "<a href=\"$href\">$text</a>";
     } else {
         #print "  no link for: $id, $text\n";
+        if (!exists($NoLinks{$id})) {
+          &LogWarning ($file, 1, "no link for: '$id' -> ($text).");
+          $NoLinks{$id} = 1;
+        }
 	return $text;
     }
 }

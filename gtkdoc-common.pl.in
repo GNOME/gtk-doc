@@ -359,6 +359,8 @@ sub CreateValidSGMLID {
     $id =~ s/:/--/g;
 
     # Append ":CAPS" to all all-caps identifiers
+    # FIXME: there are some inconsistencies here, we have sgml.index files
+    # containing e.g. TRUE--CAPS
     if ($id !~ /[a-z]/ && $id !~ /-CAPS$/) { $id .= ":CAPS" };
 
     return $id;

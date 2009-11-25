@@ -2568,11 +2568,19 @@ sub tagify {
 
 sub MakeXRef {
     my ($symbol, $text) = ($_[0], $_[1]);
+
+    $symbol =~ s/^\s+//;
+    $symbol =~ s/\s+$//;
+
     if (!defined($text)) {
 	$text = $symbol;
 
 	# Get rid of special '-struct' suffix.
 	$text =~ s/-struct$//;
+    }
+
+    if ($symbol =~ m/ /) {
+        return "$text";
     }
 
     #print "Getting type link for $symbol -> $text\n";
@@ -3022,7 +3030,7 @@ sub GetSignals {
                         }
                         else {
 		            $xref = &MakeXRef ($type);
-                            $pad = ' ' x ($type_len - length($type) - length($pointer));
+		            $pad = ' ' x ($type_len - length($type) - length($pointer));
 		            $desc .= "$xref$pad $pointer$name,\n";
 		            $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
 			}
