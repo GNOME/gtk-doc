@@ -87,6 +87,7 @@ my %NoLinks = (
     'main'  => 1,
     'signed'  => 1,
     'unsigned'  => 1,
+    'va-list' => 1,
     'void'  => 1,
     'GInterface' => 1
     );
@@ -166,6 +167,37 @@ foreach my $dir (@EXTRA_DIRS) {
         &ScanIndices ($dir, 0);
     }
 }
+
+open (INPUT, "$MODULE-sections.txt")
+	|| die "Can't open $MODULE-sections.txt: $!";
+my $subsection = "";
+while (<INPUT>) {
+    if (m/^#/) {
+        next;
+
+    } elsif (m/^<SECTION>/) {
+        $subsection = "";
+    } elsif (m/^<SUBSECTION\s*(.*)>/i) {
+        $subsection = $1;
+    } elsif (m/^<SUBSECTION>/) {
+        next;
+    } elsif (m/^<TITLE>(.*)<\/TITLE>/) {
+        next;
+    } elsif (m/^<FILE>(.*)<\/FILE>/) {
+        next;
+    } elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
+        next;
+    } elsif (m/^<\/SECTION>/) {
+        next;
+    } elsif (m/^(\S+)/) {
+        my $symbol=CreateValidSGMLID($1);
+
+        if ($subsection eq "Standard" || $subsection eq "Private") {
+            $NoLinks{$symbol} = 1;
+        }
+    }
+}
+close (INPUT);
 
 &FixCrossReferences ($MODULE_DIR);
 
