@@ -150,6 +150,7 @@ void bug_580300c_get_type() { }
 
 int bug_580300d_get_type() { }
 
+
 /**
  * bug_602518a:
  *

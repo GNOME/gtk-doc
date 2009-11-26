@@ -111,6 +111,35 @@ typedef struct {
   unsigned long index;
 } Bug512154;
 
+
+/*
+ * bug_512155a_function_pointer_t:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=512155
+ */
+typedef int
+(*bug_512155a_function_pointer_t) (unsigned int arg1, unsigned int arg2,
+                                  unsigned int arg3);
+
+/**
+ * bug_512155b_function_pointer_t:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=512155
+ */
+typedef
+int (*bug_512155b_function_pointer_t) (unsigned int arg1, unsigned int arg2,
+                                       unsigned int arg3);
+
+/**
+ * bug_512155c_function_pointer_t:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=512155
+ */
+typedef int (*bug_512155c_function_pointer_t) (unsigned int arg1,
+                                               unsigned int arg2,
+                                               unsigned int arg3);
+
+
 /**
  * BUG_530758:
  *
