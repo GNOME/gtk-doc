@@ -2416,7 +2416,11 @@ sub ExpandAbbreviationsCallback {
     # any gtk-doc abbreviations.
 
     # Convert 'function()' or 'macro()'.
-    $text =~ s/(\w+)\s*\(\)/&MakeXRef($1, &tagify($1 . "()", "function"));/eg;
+    # if there is abc_*_def() we don't want to make a link to _def()
+    # FIXME: also handle abc(....) : but that would need to be done recursively :/
+    $text =~ s/([^\*.\w])(\w+)\s*\(\)/$1.&MakeXRef($2, &tagify($2 . "()", "function"));/eg;
+    # handle #Object.func()
+    $text =~ s/(\A|[^\\])#([\w\-:\.]+[\w]+)\s*\(\)/$1.&MakeXRef($2, &tagify($2 . "()", "function"));/eg;
 
     # Convert '@param', but not '\@param'.
     $text =~ s/(\A|[^\\])\@(\w+((\.|->)\w+)*)/$1<parameter>$2<\/parameter>/g;
