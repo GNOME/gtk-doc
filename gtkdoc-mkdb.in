@@ -970,8 +970,19 @@ sub OutputAnnotationGlossary {
     my $lastletter = " ";
     my $divopen = 0;
 
-    # TODO: if there are no annotations used return
+    # if there are no annotations used return
     return if (! keys(%AnnotationsUsed));
+
+    # add acronyms that are referenced from acronym text
+rerun:
+    foreach my $annotation (keys(%AnnotationsUsed)) {
+        if($AnnotationDefinition{$annotation} =~ m/<acronym>([\w ]+)<\/acronym>/) {
+            if (!exists($AnnotationsUsed{$1})) {
+                $AnnotationsUsed{$1} = 1;
+                goto rerun;
+            }
+        }
+    }
 
     open (OUTPUT, ">$new_glossary")
 	|| die "Can't create $new_glossary";
