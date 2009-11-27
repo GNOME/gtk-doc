@@ -76,7 +76,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         <xsl:apply-templates select="//releaseinfo/ulink"
                              mode="generate.index.mode"/>
         <!-- check all anchor and refentry elements -->
-        <xsl:apply-templates select="//anchor|//refentry|//refsect1|//refsect2|//refsynopsisdiv"
+        <xsl:apply-templates select="//anchor|//refentry|//refsect1|//refsect2|//refsynopsisdiv|//varlistentry"
                              mode="generate.index.mode"/>
       </xsl:with-param>
       <xsl:with-param name="default.encoding" select="'UTF-8'"/>
