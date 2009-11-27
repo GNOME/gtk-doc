@@ -343,8 +343,22 @@ sub MakeXRef {
         #print "  Fixing link: $id, $href, $text\n";
         return "<a href=\"$href\">$text</a>";
     } else {
+        my $warn = 1;
         #print "  no link for: $id, $text\n";
-        if (!exists($NoLinks{$id})) {
+
+        # don't warn multiple times and also skip blacklisted (ctypes)
+        $warn = 0 if exists $NoLinks{$id};
+        # if its a function, don't warn if it does not contain a "_"
+        # - gnome coding style would use '_'
+        # - will avoid wrong warnings for ansi c functions
+        $warn = 0 if ($text =~ m/ class=\"function\"/ && $id !~ m/_/);
+        # if its a 'return value', don't warn (implizitely created link)
+        $warn = 0 if ($text =~ m/ class=\"returnvalue\"/);
+        # if its a 'type', don't warn if it starts with lowercase
+        # - gnome coding style would use CamelCase
+        $warn = 0 if ($text =~ m/ class=\"type\"/ && ($id =~ m/^[a-z]/));
+
+        if ($warn == 1) {
           &LogWarning ($file, $line, "no link for: '$id' -> ($text).");
           $NoLinks{$id} = 1;
         }

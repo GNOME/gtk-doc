@@ -1648,7 +1648,7 @@ sub OutputFunction {
     my $type = $3;
     my $pointer = $4;
     #print "$symbol pointer is $pointer\n";
-    my $xref = &MakeXRef ($type);
+    my $xref = &MakeXRef ($type, &tagify($type, "returnvalue"));
     my $start = "";
     #if ($symbol_type eq 'USER_FUNCTION') {
     #    $start = "typedef ";
@@ -1755,7 +1755,7 @@ sub OutputFunction {
                 $pre = "";
             }
 
-	    my $xref = &MakeXRef ($type);
+	    my $xref = &MakeXRef ($type, &tagify($type, "returnvalue"));
 	    my $label	= "$pre$xref $ptr$name$array";
 
 	    #print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
@@ -1791,7 +1791,7 @@ sub OutputFunction {
 
 	    if ($ptr1 && $ptr1 !~ m/\*$/) { $ptr1 .= " "; }
 	    $func_ptr  =~ s/\s+//g;
-	    my $xref = &MakeXRef ($type);
+	    my $xref = &MakeXRef ($type, &tagify($type, "returnvalue"));
 	    my $label = "$mod1$xref$ptr1$mod2 ($func_ptr$name) ($func_params)";
 
 	    #print "Type: [$mod1][$xref][$ptr1][$mod2] ([$func_ptr][$name]) ($func_params)\n";
@@ -2993,7 +2993,7 @@ sub GetSignals {
 	    my $type_modifier = defined($1) ? $1 : "";
 	    my $type = $2;
 	    my $pointer = $3;
-	    my $xref = &MakeXRef ($type);
+	    my $xref = &MakeXRef ($type, &tagify($type, "returnvalue"));
 
 	    my $ret_type_len = length ($type_modifier) + length ($pointer)
 		+ length ($type);
@@ -3033,7 +3033,7 @@ sub GetSignals {
 			    }
                         }
                         else {
-		            $xref = &MakeXRef ($type);
+		            $xref = &MakeXRef ($type, &tagify($type, "type"));
 		            $pad = ' ' x ($type_len - length($type) - length($pointer));
 		            $desc .= "$xref$pad $pointer$name,\n";
 		            $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
@@ -3044,7 +3044,7 @@ sub GetSignals {
 		    }
 		}
 	    }
-	    $xref = &MakeXRef ("gpointer");
+	    $xref = &MakeXRef ("gpointer", &tagify("gpointer", "type"));
 	    $pad = ' ' x ($type_len - length("gpointer"));
 	    $desc  .= "$xref$pad user_data)";
 
@@ -3182,9 +3182,9 @@ sub GetArgs {
 		$type_output = &MakeXRef ("GtkSignalFunc") . ", "
 		    . &MakeXRef ("gpointer");
 	    } elsif ($type =~ m/^(\w+)\*$/) {
-		$type_output = &MakeXRef ($1) . "*";
+		$type_output = &MakeXRef ($1, &tagify($1, "type")) . "*";
 	    } else {
-		$type_output = &MakeXRef ($type);
+		$type_output = &MakeXRef ($type, &tagify($type, "type"));
 	    }
 
 	    if ($flags =~ m/r/) {

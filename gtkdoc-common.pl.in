@@ -167,7 +167,7 @@ sub ParseStructDeclaration {
 	    my $mod3 = defined($7) ? $7 : "";
 	    my $name = $8;
 	    my $func_params = $9;
-	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
+	    my $ptype = defined $typefunc ? $typefunc->($type, "<type>$type</type>") : $type;
 	    my $pname = defined $namefunc ? $namefunc->($name) : $name;
 
 	    push @result, $name;
@@ -190,7 +190,7 @@ sub ParseStructDeclaration {
 	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
-	    my $ptype = defined $typefunc ? $typefunc->($type) : $type;
+	    my $ptype = defined $typefunc ? $typefunc->($type, "<type>$type</type>") : $type;
 	    my $mod2 = defined($4) ? " " . $4 : "";
 	    my $list = $5;
 
