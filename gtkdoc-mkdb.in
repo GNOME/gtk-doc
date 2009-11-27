@@ -1441,7 +1441,7 @@ sub OutputStruct {
     my @fields = ParseStructDeclaration($declaration, !$default_to_public,
 					0, \&MakeXRef,
 					sub {
-					    "<structfield id=\"$id.$_[0]\">$_[0]</structfield>";
+					    "<structfield id=\"".&CreateValidSGMLID("$id.$_[0]")."\">$_[0]</structfield>";
 					});
     my $params = $SymbolParams{$symbol};
 
