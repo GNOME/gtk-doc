@@ -292,6 +292,10 @@ sub FixHTMLFile {
         else {
             $entire_file =~ s%<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>%&HighlightSource($1,$2);%gse;
         }
+        # this just broke existing GTKDOCLINK tags
+        # &lt;GTKDOCLINK HREF=&quot;GST-PAD-SINK:CAPS&quot;&gt;GST_PAD_SINK&lt;/GTKDOCLINK&gt;
+        $entire_file =~ s%\&lt;GTKDOCLINK\s+HREF=\&quot;(.*?)\&quot;\&gt;(.*?)\&lt;/GTKDOCLINK\&gt;%\<GTKDOCLINK\ HREF=\"$1\"\>$2\</GTKDOCLINK\>%gs;
+        
         # from the highlighter we get all the functions marked up
         # now we could turn them into GTKDOCLINK items
         $entire_file =~ s%(<span class=\"function\">)(.*?)(</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
@@ -302,6 +306,9 @@ sub FixHTMLFile {
     my @lines = split(/\n/, $entire_file);
     for (my $i=0; $i<$#lines; $i++) {
         $lines[$i] =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($file,$i+1,$1,$2); %ge;
+        #if ($lines[$i] =~ m/GTKDOCLINK/) {
+        #    print "make xref failed for line: ",$lines[$i], "\n";
+        #}
     }
     $entire_file = join("\n",@lines);
 
