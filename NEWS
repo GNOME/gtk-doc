@@ -1,5 +1,71 @@
-GTK-Doc 1.12    (Xxx XX 2009)
+GTK-Doc 1.12    (Dec 18 2009)
 ============
+
+ Changes
+
+ o 591450 : Build related fixes
+ o 466535 : generate documentation as pdf
+ o 502191 : acronym support
+ o 532395 : inline function parsing problems (e.g. in glib api docs)
+ o 536928 : have syntax highlghted and xrefs source code samples
+ o 562064 : index generation trouble
+ o 562310 : glib 2.18.3: /bin/sh: line 1: gtkdoc-rebase: command not found
+ o 562655 : doesn't produce deprecation note for signals
+ o 565126 : linking to struct members
+ o 565835 : Three spelling errors in gtk-doc-manual
+ o 566911 : add support for --help and --version to remaining tools
+ o 567132 : Take FOO_GET_INTERFACE as standard
+ o 568702 : gtkdoc-mkhtml no longer works when symlinked
+ o 568706 : gtkdoc-scan: use CamelCase id for interfaces
+ o 568708 : gtkdoc-scan should try not to scan files twice
+ o 568714 : Perl errors when syntax highlighting is not available
+ o 568732 : missing long descriptions undetected
+ o 568734 : configure check for gtk-doc prints that gtk-doc cannot be built
+ o 569339 : abbreviation are not expanded at the start of text
+ o 572396 : Fix to use shave + gtk-doc + libtool 1.x
+ o 572612 : Mistakenly substitute -1 with G_MAXULONG in x86_64
+ o 572967 : use g_strerror
+ o 574654 : --ignore-decorators does not ignore trailing stuff
+ o 575574 : Be more friendly for files with a space in their name
+ o 575623 : Update FSF address
+ o 575711 :  &lt; table &gt; element mismatch in highlighted code
+ o 576313 : implicit declarations in testsuite ?
+ o 577059 : Gnome-doc support can't be disabled
+ o 577774 : Test suite run even when built with --disable-gtk-doc
+ o 580206 : gcc warnings in &lt; module &gt; -scan.c
+ o 580300 : gtkdoc-scan picks up _get_type functions it should not
+ o 580622 : xml dir is both part of distclean and dist rules
+ o 581237 : gtk-doc uses wrong gtkdoc-check in &quot; make check &quot; phase
+ o 584952 :  &quot; uninitialized value in concatenation &quot; gtkdoc-mkdb line 938
+ o 587103 : return values of function-like macros
+ o 587196 : Typo in a string
+ o 589426 : Python is a required dependency
+ o 591789 : master FTBFS with automake 1.11
+ o 594224 : Please fix manual about inlined SECTION comments (and show warnings when invalid)
+ o 596730 : Signed vs. unsigned comparison in gtkdoc-scangobj.in causing compile errors
+ o 596731 : autogen.sh doesn't recognize automake-1.11
+ o 602026 : Warn if non-existing function gets referenced
+ o 602518 : Doesn't support &quot; long int &quot; return type
+ o 604798 : tests/fail.sh and tests/tools.sh.in use bashisms
+
+ Contributors
+
+ Claude Paroz
+ Dan Williams
+ Daniel Mustieles
+ Daniel Nylander
+ H. Habighorst
+ Jannis Pohlmann
+ Javier Jardón
+ Jennie Petoumenou
+ Jorge González
+ Mario Blättermann
+ Nicola Fontana
+ Philip Chimento
+ Philip Withnall
+ Simos Xenitellis
+ Stefan Kost
+ Sven Herzberg
 
 
 GTK-Doc 1.11    (Nov 16 2008)
