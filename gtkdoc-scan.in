@@ -40,7 +40,7 @@ use strict;
 use Getopt::Long;
 use Cwd qw(realpath);
 
-unshift @INC, '@PACKAGE_DATA_DIR@';
+push @INC, '@PACKAGE_DATA_DIR@';
 require "gtkdoc-common.pl";
 
 # Options

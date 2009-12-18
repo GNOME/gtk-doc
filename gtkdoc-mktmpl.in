@@ -54,7 +54,7 @@
 use strict;
 use Getopt::Long;
 
-unshift @INC, '@PACKAGE_DATA_DIR@';
+push @INC, '@PACKAGE_DATA_DIR@';
 require "gtkdoc-common.pl";
 
 # Options
