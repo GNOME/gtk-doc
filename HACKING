@@ -15,23 +15,24 @@ http://live.gnome.org/MaintainersCorner/Releasing
   help/manual/C/gtk-doc-manual.xml
 
 - update NEWS
-  ./bugzilla.py general 1.9 gtk-doc >RELNOTES.txt
-  git log --summary --format=short GTK_DOC_1_11.. | grep "Author:" | sed 's/Author:\(.*\)\ <.*>/\1/' | sort | uniq >>RELNOTES.txt
+  ./bugzilla.py general 1.12 gtk-doc >RELNOTES.txt
+  git log --summary --format=short GTK_DOC_1_11.. >ChangeLog-1.12
+  grep ChangeLog-1.12 "Author:" | sed 's/Author:\(.*\)\ <.*>/\1/' | sort | uniq >>RELNOTES.txt
   add then copy to NEWS
 
 - dist
   make dist
 
 - tag
-  git tag -a GTK_DOC_1_9
-  git push origin GTK_DOC_1_9
+  git tag -a GTK_DOC_1_12
+  git push origin GTK_DOC_1_12
 
 - release
-  scp gtk-doc-1.9.tar.gz <user>@master.gnome.org:
-  scp NEWS <user>@master.gnome.org:gtk-doc-1.9.news
-  scp ChangeLog-1.9 <user>@master.gnome.org:gtk-doc-1.9.changes
+  scp gtk-doc-1.12.tar.gz <user>@master.gnome.org:
+  scp NEWS <user>@master.gnome.org:gtk-doc-1.12.news
+  scp ChangeLog-1.12 <user>@master.gnome.org:gtk-doc-1.12.changes
   ssh <user>@master.gnome.org
-  install-module gtk-doc-<ver>.tar.gz
+  install-module gtk-doc-1.12.tar.gz
   exit
 
 - bump versions in:
