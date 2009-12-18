@@ -11,31 +11,36 @@ Releasing
 
 http://live.gnome.org/MaintainersCorner/Releasing
 
-~/projects/gstreamer-0.10/www/bin/bugzilla general 1.9 gtk-doc >RELNOTES.fixes.xml
-./xml2txt.sh
-# copy to ChangeLog-1.9 and use 
-moap cl contributors
-# moap cl -C ChangeLog-1.9 contributors
-add then to NEWS
+- bump release date in:
+  help/manual/C/gtk-doc-manual.xml
 
-make dist
-svn cp svn+ssh://<user>@svn.gnome.org/svn/gtk-doc/trunk svn+ssh://<user>@svn.gnome.org/svn/gtk-doc/tags/GTK_DOC_1_9/
+- update NEWS
+  ./bugzilla.py general 1.9 gtk-doc >RELNOTES.txt
+  git log --summary --format=short GTK_DOC_1_11.. | grep "Author:" | sed 's/Author:\(.*\)\ <.*>/\1/' | sort | uniq >>RELNOTES.txt
+  add then copy to NEWS
 
-scp gtk-doc-1.9.tar.gz <user>@master.gnome.org:
-scp NEWS <user>@master.gnome.org:gtk-doc-1.9.news
-scp ChangeLog-1.9 <user>@master.gnome.org:gtk-doc-1.9.changes
-ssh <user>@master.gnome.org
-install-module gtk-doc-<ver>.tar.gz
-exit
+- dist
+  make dist
 
-bump versions in:
-  add delimiter to ChangeLog
+- tag
+  git tag -a GTK_DOC_1_9
+  git push origin GTK_DOC_1_9
+
+- release
+  scp gtk-doc-1.9.tar.gz <user>@master.gnome.org:
+  scp NEWS <user>@master.gnome.org:gtk-doc-1.9.news
+  scp ChangeLog-1.9 <user>@master.gnome.org:gtk-doc-1.9.changes
+  ssh <user>@master.gnome.org
+  install-module gtk-doc-<ver>.tar.gz
+  exit
+
+- bump versions in:
   configure.in
   help/manual/C/gtk-doc-manual.xml
 
-update web-pages (gtk-web/gtk-doc)
+- update web-pages (gtk-web/gtk-doc)
 
-if we want a icon on the newsfeed, we should copy a icon like on
+- if we want a icon on the newsfeed, we should copy a icon like on
   http://ftp.acc.umu.se/pub/GNOME/sources/rhythmbox/rhythmbox.png
   e.g. /usr/share/icons/hicolor/48x48/apps/devhelp.png
   
