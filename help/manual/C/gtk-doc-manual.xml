@@ -193,7 +193,8 @@
             <para>
               Since gtk-doc 1.9 the templates can be avoided. We encourage people to keep
               documentation in the code. <application>gtkdocize</application> supports now
-              a <command>--flavour no-tmpl</command> option that chooses a makefile that skips tmpl usage totally.
+              a <option>--flavour no-tmpl</option> option that chooses a makefile that
+              skips tmpl usage totally.
               If you have never changed file in tmpl by hand, please remove the dir once.
             </para>
           </note>
@@ -506,7 +507,8 @@ gtkdocize || exit 1
         the information from source comments.
         Since gtk-doc 1.9 the templates can be avoided. We encourage people to keep
         documentation in the code. <application>gtkdocize</application> supports now
-        a --flavour=no-tmpl option that chooses a makefile that skips tmpl usage totally.
+        a <option>--flavour no-tmpl</option> option that chooses a makefile that skips
+        tmpl usage totally.
         If you have never changed file in tmpl by hand, please remove the dir once.
       </para>
     </sect1>
