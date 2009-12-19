@@ -1279,8 +1279,9 @@ gtk_arrow_get_type
 
       <para>
         The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of
-        the section. It is only useful before the templates are initially
-        created, since the title set in the template file overrides this.
+        the section. It is only useful before the templates (if used) are
+        initially created, since the title set in the template file overrides
+        this. Also if one uses SECTION comment in the sources, this is obsolete.
       </para>
 
       <para>
