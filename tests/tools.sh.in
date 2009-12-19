@@ -5,7 +5,8 @@ tested=0
 
 echo "Running suite(s): gtk-doc-tools";
 
-# tests
+
+# test perl scripts
 
 @PERL@ -cwT `which gtkdoc-check`
 if test $? = 1 ; then failed=$(($failed + 1)); fi
@@ -39,7 +40,44 @@ tested=$(($tested + 1))
 if test $? = 1 ; then failed=$(($failed + 1)); fi
 tested=$(($tested + 1))
 
+
+# test shell scripts
+
+sh -n `which gtkdoc-mkhtml`
+if test $? != 0 ; then
+  failed=$(($failed + 1));
+else
+  echo `which gtkdoc-mkhtml` "syntax OK";
+fi
+tested=$(($tested + 1))
+
+sh -n `which gtkdoc-mkman`
+if test $? != 0 ; then
+  failed=$(($failed + 1));
+else
+  echo `which gtkdoc-mkman` "syntax OK";
+fi
+tested=$(($tested + 1))
+
+sh -n `which gtkdoc-mkpdf`
+if test $? != 0 ; then
+  failed=$(($failed + 1));
+else
+  echo `which gtkdoc-mkpdf` "syntax OK";
+fi
+tested=$(($tested + 1))
+
+sh -n `which gtkdocize`
+if test $? != 0 ; then
+  failed=$(($failed + 1));
+else
+  echo `which gtkdocize` "syntax OK";
+fi
+tested=$(($tested + 1))
+
+
 # summary
+
 rate=$((100*($tested - $failed)/$tested));
 echo "$rate %: Checks $tested, Failures: $failed"
 exit `test $failed = 0`;
