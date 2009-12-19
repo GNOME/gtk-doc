@@ -881,10 +881,40 @@ sub OutputIndex {
         keys %apiindex) {
 
         $symbol = $$hash{original};
-        if(defined($$hash{short})) {
+        if (defined($$hash{short})) {
             $short_symbol = $$hash{short};
         } else {
             $short_symbol = $symbol;
+        }
+
+        # generate a short symbol description
+        my $symbol_desc = "";
+        my $symbol_type = lc($DeclarationTypes{$symbol});
+        if ($symbol_type eq "") {
+            if ($symbol =~ m/(.*?)::(.*)/) {
+                my $object = $1;
+                my $osym = $2;
+                my $i;
+                for ($i = 0; $i <= $#ArgNames; $i++) {
+                    if ($ArgNames[$i] eq $osym) {
+                        $symbol_type = "object property";
+                        last;
+                    }
+                }
+            } elsif ($symbol =~ m/(.*?):(.*)/) {
+                my $object = $1;
+                my $osym = $2;
+                my $i;
+                for ($i = 0; $i <= $#SignalNames; $i++) {
+                    if ($SignalNames[$i] eq $osym) {
+                        $symbol_type = "object signal";
+                        last;
+                    }
+                }
+            }
+        }
+        if ($symbol_type ne "") {
+           $symbol_desc=", $symbol_type";
         }
 
         my $curletter = uc(substr($short_symbol,0,1));
@@ -903,7 +933,7 @@ sub OutputIndex {
         }
 
         print (OUTPUT <<EOF);
-<indexentry><primaryie linkends="$id"><link linkend="$id">$symbol</link></primaryie></indexentry>
+<indexentry><primaryie linkends="$id"><link linkend="$id">$symbol</link>$symbol_desc</primaryie></indexentry>
 EOF
     }
 
@@ -1113,7 +1143,6 @@ sub OutputDeclaration {
 	return &OutputUnion ($symbol, $declaration);
     } elsif ($type eq 'VARIABLE') {
 	return &OutputVariable ($symbol, $declaration);
-
     } elsif ($type eq 'FUNCTION') {
 	return &OutputFunction ($symbol, $declaration, $type);
     } elsif ($type eq 'USER_FUNCTION') {
