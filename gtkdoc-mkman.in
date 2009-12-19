@@ -66,7 +66,7 @@ if $is_xml; then
       --stringparam gtkdoc.version"@VERSION@" \
       manpages/docbook.xsl $document || exit $?
 else
-  for i in `cd sgml;ls *.sgml` do
+  for i in `cd sgml;ls *.sgml`; do
     j=`echo $i | sed 's/.sgml/.man/'`
     echo ": converting " $i $j
     docbook-to-man sgml/$i > man/$j 2> man/$j.log
