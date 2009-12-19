@@ -707,6 +707,7 @@ make
         Each section of the documentation contains information about one class
         or module. To introduce the component one can write a section block.
         The short description is also used inside the table of contents.
+        All the @fields are optional.
       </para>
 
       <para>
@@ -716,6 +717,8 @@ make
 /**
  * SECTION:meepapp
  * @short_description: the application class
+ * @title: Meep application
+ * @section_id:
  * @see_also: #MeepSettings
  * @stability: Stable
  * @include: meep/app.h
@@ -745,6 +748,25 @@ make
             <para>
               A one line description of the section, that later will appear after
               the links in the TOC and at the top of the section page.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>@title</term>
+          <listitem>
+            <para>
+              The section title defaults to &lt;name&gt; from the SECTION
+              declaration. It can be overridden with the @title field.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>@section_id</term>
+          <listitem>
+            <para>
+              Overrides the use of title as a section identifier. For GObjects
+              the &lt;title&gt; is used as a section_id and for other section it
+              is &lt;MODULE&gt;-&lt;title&gt;.
             </para>
           </listitem>
         </varlistentry>
@@ -820,12 +842,6 @@ make
           </listitem>
         </varlistentry>
       </variablelist>
-
-      <para>
-        FIXME
-        having @title here, would put this title into a newly generated section
-        file, but later would be obsolete (right?)
-      </para>
 
       <tip>
         <para>
