@@ -190,16 +190,23 @@ Its tedious to write large amounts of docbook.
 == more macros ==
 We need parametric, user definable macros.
 |[ ... ]| - programlistings
-|macro(arg1,arg2,...)[ ... ]| - call macro, pass args as parameters, content
-  of [] on stdin or as a file, get output on stdout or file and replace the macro
-  with it
+|macro(arg1,arg2,...)[ ... ]| - call macro
+  - pass args as parameters (on the commandline)
+  - pass some gtk-doc vars in environment
+    (gtk-doc version, module, srcdir, buildir)
+  - content of [] on stdin or as a file
+  - get output on stdout or file
+  - and replace the macro with it
 === example macros ===
-|highlight(c)[...]| - highlight source code
+|highlight(c)[...]| - highlight source code for a specific language
 |dot(abc.svg)[...]| - format dot graph and include result as mediaobject
+|ditta(abc.svg)[...]| - parse ascii art and include result as mediaobject
 
 === where to define macros ===
 * system wide and with the package, <prefix>/share/gtk-doc/macros, $(srcdir)
 * prefix for custom macros?
+* we could require stdin for input and stdout for output, the wrapper for the
+  actual tool can ensure the convention
 
 == ascii doc as a frontend ==
 Can we offer integration with asciidoc (http://www.methods.co.nz/asciidoc/)?
