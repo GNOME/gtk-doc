@@ -14,6 +14,8 @@
   <xsl:param name="generate.toc">
     book	toc
     chapter toc
+    glossary toc
+    index toc
     part	toc
     reference toc
   </xsl:param>
