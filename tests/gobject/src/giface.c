@@ -1,5 +1,6 @@
 /**
  * SECTION:iface
+ * @title: GtkdocIface
  * @short_description: interface for gtk-doc unit test
  * @see_also: #GtkdocObject
  *
