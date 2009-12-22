@@ -15,12 +15,24 @@ clashes e.g. between GtkWidget as a section and as a struct. Normal symbols
 should only be mangled to be a valid xml-id. Document structure ids should 
 contain a prefix.
 
-These are the rules according to http://www.w3.org/TR/html4/types.html#type-id:
+These are the rules regarding id-attributes:
+
+http://www.w3.org/TR/html4/types.html#type-id:
 "ID and NAME tokens must begin with a letter ([A-Za-z]) and may be followed by
  any number of letters, digits ([0-9]), hyphens ("-"), underscores ("_"), colons
  (":"), and periods (".")."
+
+http://www.w3.org/TR/xml-id/#id-avn
+"Attributes of type ID are subject to additional normalization rules: removing
+ leading and trailing space characters and replacing sequences of spaces with a
+ single space."
+ 
+http://www.w3.org/TR/xml11/#NT-Name
+http://www.w3.org/TR/REC-xml/#NT-Name
  
 So we could easily use "DOC:" as a prefix for document structure ids.
+In 1.x we add :CAPS as a suffix to avoid clashes between lower and uppercase
+constructs. XML-IDs are not case insensitive, so we don't need that.
 
 === srcdir != builddir builds ===
 
