@@ -886,9 +886,8 @@ sub OutputIndex {
         my $symbol_desc = "";
         my $symbol_type = lc($DeclarationTypes{$symbol});
         if ($symbol_type eq "") {
-            if ($symbol =~ m/(.*?)::(.*)/) {
-                my $object = $1;
-                my $osym = $2;
+            if ($symbol =~ m/.*?::(.*)/) {
+                my $osym = $1;
                 my $i;
                 for ($i = 0; $i <= $#ArgNames; $i++) {
                     if ($ArgNames[$i] eq $osym) {
@@ -896,9 +895,8 @@ sub OutputIndex {
                         last;
                     }
                 }
-            } elsif ($symbol =~ m/(.*?):(.*)/) {
-                my $object = $1;
-                my $osym = $2;
+            } elsif ($symbol =~ m/.*?:(.*)/) {
+                my $osym = $1;
                 my $i;
                 for ($i = 0; $i <= $#SignalNames; $i++) {
                     if ($SignalNames[$i] eq $osym) {
