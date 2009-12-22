@@ -50,19 +50,22 @@ REPORT_FILES = \
 CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
 
 check-local: html-build.stamp pdf-build.stamp
+	@echo "gtk-doc: `date +%H:%M:%S.%N`: All done"
 
 docs: html-build.stamp pdf-build.stamp
+	@echo "gtk-doc: `date +%H:%M:%S.%N`: All done"
 
 $(REPORT_FILES): sgml-build.stamp
 
 #### scan ####
 
 scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
-	@echo 'gtk-doc: Scanning header files'
+	@echo "gtk-doc: `date +%H:%M:%S.%N`: Scanning header files"
 	@-chmod -R u+w $(srcdir)
 	@cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	  gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(SCAN_OPTIONS) $(EXTRA_HFILES)
 	@if grep -l '^..*$$' $(srcdir)/$(DOC_MODULE).types > /dev/null 2>&1 ; then \
+		echo "gtk-doc: `date +%H:%M:%S.%N`: Introspecting gobjects"; \
 	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) gtkdoc-scangobj --module=$(DOC_MODULE) --output-dir=$(srcdir) $(SCANGOBJ_OPTIONS); \
 	else \
 	    cd $(srcdir) ; \
@@ -78,7 +81,7 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 #### templates ####
 
 tmpl-build.stamp: $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
-	@echo 'gtk-doc: Rebuilding template files'
+	@echo "gtk-doc: `date +%H:%M:%S.%N`: Rebuilding template files"
 	@-chmod -R u+w $(srcdir)
 	@cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
@@ -93,7 +96,7 @@ $(srcdir)/tmpl/*.sgml:
 #### xml ####
 
 sgml-build.stamp: tmpl.stamp $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(expand_content_files)
-	@echo 'gtk-doc: Building XML'
+	@echo "gtk-doc: `date +%H:%M:%S.%N`: Building XML"
 	@-chmod -R u+w $(srcdir)
 	@cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $(MKDB_OPTIONS)
@@ -105,14 +108,14 @@ sgml.stamp: sgml-build.stamp
 #### html ####
 
 html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
-	@echo 'gtk-doc: Building HTML'
+	@echo "gtk-doc: `date +%H:%M:%S.%N`: Building HTML"
 	@-chmod -R u+w $(srcdir)
 	@rm -rf $(srcdir)/html
 	@mkdir $(srcdir)/html
 	@cd $(srcdir)/html && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)  $(MKHTML_OPTIONS)
 	@test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
-	@echo 'gtk-doc: Fixing cross-references'
+	@echo "gtk-doc: `date +%H:%M:%S.%N`: Fixing cross-references"
 	@cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	@touch html-build.stamp
@@ -120,7 +123,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 #### pdf ####
 
 pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
-	@echo 'gtk-doc: Building PDF'
+	@echo "gtk-doc: `date +%H:%M:%S.%N`: Building PDF"
 	@-chmod -R u+w $(srcdir)
 	@rm -rf $(srcdir)/$(DOC_MODULE).pdf
 	@mkpdf_imgdirs=""; \
@@ -141,17 +144,17 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 
 # we need to enforce a rebuild for the tests
 clean-local:
-	rm -f *~ *.bak
-	rm -rf .libs
-	chmod -R u+w $(srcdir)
+	@rm -f *~ *.bak
+	@rm -rf .libs
+	@chmod -R u+w $(srcdir)
 	$(MAKE) distclean-local
 
 distclean-local:
-	cd $(srcdir) && \
+	@cd $(srcdir) && \
 	  rm -rf xml $(REPORT_FILES) $(DOC_MODULE).pdf \
 	         $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
 
 maintainer-clean-local: clean
-	cd $(srcdir) && rm -rf xml html
+	@cd $(srcdir) && rm -rf xml html
 
 .PHONY : dist-hook-local docs
