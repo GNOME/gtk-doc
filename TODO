@@ -197,6 +197,7 @@ We need parametric, user definable macros.
   - content of [] on stdin or as a file
   - get output on stdout or file
   - and replace the macro with it
+The changes could be made in gtkdoc-mkdb::ExpandAbbreviations()
 === example macros ===
 |highlight(c)[...]| - highlight source code for a specific language
 |dot(abc.svg)[...]| - format dot graph and include result as mediaobject
@@ -373,4 +374,64 @@ script:
 #!/bin/sh
 make ctags
 grep "gst_caps_is_always_compatible" tags
+
+
+= performance =
+- timestamp each step
+  make check >make.log
+- try CFLAGS=-O0 for compiling the scanner, no need to optimize it
+  CFLAGS="-O0" make check >make.log
+  safes max 0.5 sec.
+- xslt
+  http://docbook2x.sourceforge.net/latest/doc/performance.html
+  - play with xsltproc --profile --verbose --timing
+    cd tests/gobject/docs
+    time /usr/bin/xsltproc 2>xslt.log --profile --verbose --timing --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --xinclude --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ../tester-docs.xml
+    - l10n.language is slow
+      bug: https://sourceforge.net/tracker/index.php?func=detail&aid=2918673&group_id=21935&atid=373750
+      see: http://www.mail-archive.com/docbook-apps@lists.oasis-open.org/msg05412.html
+      - overide l10n.language
+        glib/gobject
+        real        user        sys
+        2m15.221s   1m58.740s   0m1.456s
+        >
+        1m55.480s   1m44.296s   0m2.125s
+
+      
+  - try plain docbook xslt to see if maybe we have bad xslt templates in the 
+    customisation layer (gtk-doc.xsl)
+
+  - we could do the xinlcude processing once and use it for both html and pdf
+    time /usr/bin/xsltproc 2>../xslt4.log --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --xinclude --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ../tester-docs.xml
+    real        user       sys
+    0m4.846s    0m4.434s   0m0.147s
+    0m4.842s    0m4.386s   0m0.145s
+    
+    
+    time xmllint --nonet --xinclude ../tester-docs.xml >./tester-docs-all.xml
+    real        user       sys
+    0m0.596s    0m0.546s   0m0.023s
+    
+    time /usr/bin/xsltproc 2>../xslt5.log --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ./tester-docs-all.xml
+    real        user       sys
+    0m4.167s    0m3.834s   0m0.106s
+    0m4.248s    0m3.851s   0m0.114s
+    
+    
+    time xmllint --nonet --c14n --xinclude ../tester-docs.xml >./tester-docs-all2.xml
+    
+    real        user       sys
+    0m0.700s    0m0.636s   0m0.034s
+    
+    time /usr/bin/xsltproc 2>../xslt6.log --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ./tester-docs-all2.xml
+    
+    real        user       sys
+    0m3.344s    0m3.026s   0m0.109s
+    0m3.372s    0m3.037s   0m0.115s
+    
+    
+    l ../tester-docs.xml ./tester-docs-all*.xml
+    
+  - we could also try to compact the installed xslt
+    xmllint --nonet --c14n --xinclude gtk-doc.xsl | sed -ne '/<!--/ { :c; /-->/! { N; b c; }; /-->/s/<!--.*-->//g }; /^  *$/!p;' | sed '/^$/d' >gtk-doc.pre.xsl
 

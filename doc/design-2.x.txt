@@ -1,0 +1,28 @@
+= gtk-doc-2.X =
+This documents purpose is to collect what needs to be changed for a potential
+gtk-doc-2.X.
+
+== remove and deprecate =
+- get rid of anything related to tmpl (gtkdoc-mktmpl, the makefile rules, ..)
+- get rid of sgml, we will only use docbook xml
+- rename generated index.sgml to something like index.idx - it is not wellformed
+  sgml
+
+== design fixes ==
+=== proper xml-id namesspaces ===
+We need proper xml-id namesspaces for document structure and symbols to avoid
+clashes e.g. between GtkWidget as a section and as a struct. Normal symbols
+should only be mangled to be a valid xml-id. Document structure ids should 
+contain a prefix.
+
+These are the rules according to http://www.w3.org/TR/html4/types.html#type-id:
+"ID and NAME tokens must begin with a letter ([A-Za-z]) and may be followed by
+ any number of letters, digits ([0-9]), hyphens ("-"), underscores ("_"), colons
+ (":"), and periods (".")."
+ 
+So we could easily use "DOC:" as a prefix for document structure ids.
+
+=== srcdir != builddir builds ===
+
+=== build dependencies ===
+

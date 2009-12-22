@@ -341,8 +341,10 @@ sub LogWarning {
 #                  hyphens ("-"), underscores ("_"), colons (":"), and
 #                  periods (".")."
 #
-#		NOTE: SGML ids are case-insensitive, so we have a few special
-#		      cases to avoid clashes of ids.
+#		NOTE: When creating SGML IDS, we append ":CAPS" to all
+#                     all-caps identifiers to prevent name clashes (SGML ids are
+#                     case-insensitive). (It basically never is the case that
+#                     mixed-case identifiers would collide.)
 # Arguments   : $id - the string to be converted into a valid SGML id.
 #############################################################################
 

@@ -1,0 +1,9 @@
+= gtk-doc-1.X =
+This docuemnt attempts to reverse engenier some design decissions in 
+gtk-doc-1.X.
+
+== sgml-ids ==
+When creating SGML IDS, we append ":CAPS" to all
+all-caps identifiers to prevent name clashes (SGML ids are case-insensitive).
+(It basically never is the case that mixed-case identifiers would collide.)
+
