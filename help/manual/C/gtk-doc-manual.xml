@@ -972,6 +972,26 @@ typedef struct _FooWidget {
 } FooWidget;
 ]]></programlisting>
       </example>
+
+      <example><title>Enum comment block</title>
+        <programlisting>
+<![CDATA[
+/**
+ * Something:
+ * @SOMETHING_FOO: something foo
+ * @SOMETHING_BAR: something bar
+ *
+ * Enum values used for the thing, to specify the thing.
+ *
+ **/
+typedef enum {
+  SOMETHING_FOO,
+  SOMETHING_BAR,
+} Something;
+]]>
+        </programlisting>
+      </example>
+
     </sect1>
 
     <sect1 id="documenting_docbook">
