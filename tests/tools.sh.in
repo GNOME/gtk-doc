@@ -5,76 +5,41 @@ tested=0
 
 echo "Running suite(s): gtk-doc-tools";
 
+# we can use which here as we override the path in TEST_ENVIRONMENT
 
 # test perl scripts
 
-@PERL@ -cwT `which gtkdoc-check`
-if test $? = 1 ; then failed=$(($failed + 1)); fi
-tested=$(($tested + 1))
-
-@PERL@ -cwT `which gtkdoc-fixxref`
-if test $? = 1 ; then failed=$(($failed + 1)); fi
-tested=$(($tested + 1))
-
-@PERL@ -cwT `which gtkdoc-mkdb`
-if test $? = 1 ; then failed=$(($failed + 1)); fi
-tested=$(($tested + 1))
-
-@PERL@ -cwT `which gtkdoc-mktmpl`
-if test $? = 1 ; then failed=$(($failed + 1)); fi
-tested=$(($tested + 1))
-
-@PERL@ -cwT `which gtkdoc-rebase`
-if test $? = 1 ; then failed=$(($failed + 1)); fi
-tested=$(($tested + 1))
-
-@PERL@ -cwT `which gtkdoc-scan`
-if test $? = 1 ; then failed=$(($failed + 1)); fi
-tested=$(($tested + 1))
-
-@PERL@ -cwT `which gtkdoc-scangobj`
-if test $? = 1 ; then failed=$(($failed + 1)); fi
-tested=$(($tested + 1))
-
-@PERL@ -cwT `which gtkdoc-scanobj`
-if test $? = 1 ; then failed=$(($failed + 1)); fi
-tested=$(($tested + 1))
+for file in gtkdoc-check gtkdoc-fixxref gtkdoc-mkdb gtkdoc-mktmpl gtkdoc-rebase gtkdoc-scan gtkdoc-scangobj gtkdoc-scanobj ; do
+  @PERL@ -cwT `which $file`
+  if test $? = 1 ; then failed=$(($failed + 1)); fi
+  tested=$(($tested + 1))
+done
 
 
 # test shell scripts
 
-sh -n `which gtkdoc-mkhtml`
-if test $? != 0 ; then
-  failed=$(($failed + 1));
-else
-  echo `which gtkdoc-mkhtml` "syntax OK";
-fi
-tested=$(($tested + 1))
+for file in gtkdoc-mkhtml gtkdoc-mkman gtkdoc-mkpdf gtkdocize; do
+  sh -n `which $file`
+  if test $? != 0 ; then
+    failed=$(($failed + 1));
+  else
+    echo `which $file`" syntax OK";
+  fi
+  tested=$(($tested + 1))
+done
 
-sh -n `which gtkdoc-mkman`
-if test $? != 0 ; then
-  failed=$(($failed + 1));
-else
-  echo `which gtkdoc-mkman` "syntax OK";
-fi
-tested=$(($tested + 1))
 
-sh -n `which gtkdoc-mkpdf`
-if test $? != 0 ; then
-  failed=$(($failed + 1));
-else
-  echo `which gtkdoc-mkpdf` "syntax OK";
-fi
-tested=$(($tested + 1))
+# test xsl files
 
-sh -n `which gtkdocize`
-if test $? != 0 ; then
-  failed=$(($failed + 1));
-else
-  echo `which gtkdocize` "syntax OK";
-fi
-tested=$(($tested + 1))
-
+for file in $ABS_TOP_BUILDDIR/*.xsl; do
+  xmllint --noout --noent $file
+  if test $? != 0 ; then
+    failed=$(($failed + 1));
+  else
+    echo "$file syntax OK";
+  fi
+  tested=$(($tested + 1))
+done
 
 # summary
 
