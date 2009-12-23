@@ -238,8 +238,10 @@ my @ObjectLevels;
 my %Interfaces;
 my %Prerequisites;
 
-# holds the symbols which are mentioned in $MODULE-sections.txt
+# holds the symbols which are mentioned in $MODULE-sections.txt and in which
+# section they are defined
 my %KnownSymbols;
+my %SymbolSection;
 
 # collects index entries
 my %IndexEntriesFull;
@@ -484,7 +486,7 @@ sub OutputSGML {
     my $derived = "";
     my @file_objects = ();
     my %templates = ();
-    my %symbols = ();
+    my %symbol_def_line = ();
 
     # merge the source docs, in case there are no templates
     &MergeSourceDocumentation;
@@ -499,7 +501,7 @@ sub OutputSGML {
 	    $num_symbols = 0;
 	    $in_section = 1;
 	    @file_objects = ();
-	    %symbols = ();
+	    %symbol_def_line = ();
 
 	} elsif (m/^<SUBSECTION\s*(.*)>/i) {
 	    $synopsis .= "\n";
@@ -528,6 +530,11 @@ sub OutputSGML {
                 &LogWarning ($file, $., "Double <FILE>$filename</FILE> entry. ".
                     "Previous occurrence on line ".$templates{$filename}.".");
             }
+            if (($title eq "") and (defined $SourceSymbolDocs{"$TMPL_DIR/$filename:Title"})) {
+                $title = $SourceSymbolDocs{"$TMPL_DIR/$filename:Title"};
+ 		# Remove trailing blanks
+		$title =~ s/\s+$//;
+           }
 
 	} elsif (m/^<INCLUDE>(.*)<\/INCLUDE>/) {
 	    if ($in_section) {
@@ -767,8 +774,8 @@ EOF
 	    my $symbol = $1;
 	    #print "  Symbol: $symbol\n";
 
-            # FIXME: check for duplicate entries
-	    if (! defined $symbols{$symbol}) {
+            # check for duplicate entries
+	    if (! defined $symbol_def_line{$symbol}) {
                 my $declaration = $Declarations{$symbol};
                 if (defined ($declaration)) {
                     # We don't want standard macros/functions of GtkObjects,
@@ -811,11 +818,13 @@ EOF
                     &LogWarning ($file, $., "No declaration found for $symbol.");
                 }
                 $num_symbols++;
-                $symbols{$symbol}=$.;
+                $symbol_def_line{$symbol}=$.;
+
+                $SymbolSection{$symbol}=$title;
             }
             else {
                 &LogWarning ($file, $., "Double symbol entry for $symbol. ".
-                    "Previous occurrence on line ".$symbols{$symbol}.".");
+                    "Previous occurrence on line ".$symbol_def_line{$symbol}.".");
             }
 	}
     }
@@ -884,30 +893,50 @@ sub OutputIndex {
 
         # generate a short symbol description
         my $symbol_desc = "";
+        my $symbol_section = "";
         my $symbol_type = lc($DeclarationTypes{$symbol});
         if ($symbol_type eq "") {
-            if ($symbol =~ m/.*?::(.*)/) {
-                my $osym = $1;
+            #print "trying symbol $symbol\n";
+            if ($symbol =~ m/(.*)::(.*)/) {
+                my $oname = $1;
+                my $osym = $2;
                 my $i;
-                for ($i = 0; $i <= $#ArgNames; $i++) {
-                    if ($ArgNames[$i] eq $osym) {
-                        $symbol_type = "object property";
-                        last;
-                    }
-                }
-            } elsif ($symbol =~ m/.*?:(.*)/) {
-                my $osym = $1;
-                my $i;
+                #print "  trying object signal ${oname}:$osym in ".$#SignalNames." signals\n";
                 for ($i = 0; $i <= $#SignalNames; $i++) {
                     if ($SignalNames[$i] eq $osym) {
                         $symbol_type = "object signal";
+                        if (defined($SymbolSection{$oname})) {
+                           $symbol_section = $SymbolSection{$oname};
+                        }
+                        last;
+                    }
+                }
+            } elsif ($symbol =~ m/(.*):(.*)/) {
+                my $oname = $1;
+                my $osym = $2;
+                my $i;
+                #print "  trying object property ${oname}::$osym in ".$#ArgNames." properties\n";
+                for ($i = 0; $i <= $#ArgNames; $i++) {
+                    #print "    ".$ArgNames[$i]."\n";
+                    if ($ArgNames[$i] eq $osym) {
+                        $symbol_type = "object property";
+                        if (defined($SymbolSection{$oname})) {
+                           $symbol_section = $SymbolSection{$oname};
+                        }
                         last;
                     }
                 }
             }
+        } else {
+           if (defined($SymbolSection{$symbol})) {
+               $symbol_section = $SymbolSection{$symbol};
+           }
         }
         if ($symbol_type ne "") {
            $symbol_desc=", $symbol_type";
+           if ($symbol_section ne "") {
+               $symbol_desc.=" in ". &ExpandAbbreviations($symbol, "#$symbol_section");
+           }
         }
 
         my $curletter = uc(substr($short_symbol,0,1));
@@ -3736,9 +3765,10 @@ sub ScanSourceFile {
 	}
 
 	# Look for a parameter name.
-	if (m%^\s*@(\S+)\s*:%) {
+	if (m%^\s*@(\S+)\s*:\s*%) {
 	    my $param_name = $1;
 	    my $param_desc = $';
+
 	    #print "Found parameter: $param_name\n";
 	    # Allow '...' as the Varargs parameter.
 	    if ($param_name eq "...") {
