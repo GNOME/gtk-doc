@@ -993,7 +993,7 @@ typedef struct _FooWidget {
           </programlisting>
         </informalexample>
         The linkend is the SGML id on the top item of the page you want to link to.
-        For most pages this is currently the part ("gtk", "gdk", glib") and then
+        For most pages this is currently the part ("gtk", "gdk", "glib") and then
         the page title ("Hash Tables"). For widgets it is just the class name.
         Spaces and underscores are converted to '-' to conform to SGML.
       </para>
@@ -1143,6 +1143,17 @@ typedef struct _FooWidget {
           <programlisting>
 <![CDATA[
 <filename>/home/user/documents</filename>
+]]>
+          </programlisting>
+        </informalexample>
+      </para>
+
+      <para>
+        To refer to keys use:
+        <informalexample>
+          <programlisting>
+<![CDATA[
+<keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>
 ]]>
           </programlisting>
         </informalexample>
