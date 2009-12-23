@@ -385,7 +385,7 @@ grep "gst_caps_is_always_compatible" tags
 - xslt
   http://docbook2x.sourceforge.net/latest/doc/performance.html
   - play with xsltproc --profile --verbose --timing
-    cd tests/gobject/docs
+    cd tests/gobject/docs/html
     time /usr/bin/xsltproc 2>xslt.log --profile --verbose --timing --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --xinclude --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ../tester-docs.xml
     - l10n.language is slow
       bug: https://sourceforge.net/tracker/index.php?func=detail&aid=2918673&group_id=21935&atid=373750
@@ -396,6 +396,7 @@ grep "gst_caps_is_always_compatible" tags
         2m15.221s   1m58.740s   0m1.456s
         >
         1m55.480s   1m44.296s   0m2.125s
+      - removing the gentext calls for nav-bar alt tags does not help
 
       
   - try plain docbook xslt to see if maybe we have bad xslt templates in the 
@@ -434,4 +435,7 @@ grep "gst_caps_is_always_compatible" tags
     
   - we could also try to compact the installed xslt
     xmllint --nonet --c14n --xinclude gtk-doc.xsl | sed -ne '/<!--/ { :c; /-->/! { N; b c; }; /-->/s/<!--.*-->//g }; /^  *$/!p;' | sed '/^$/d' >gtk-doc.pre.xsl
+    - unfortunately there is no way to ask xsltproc to pre-transform an xslt, that could
+      - strip comments
+      - process xsl:import and xsl:include
 

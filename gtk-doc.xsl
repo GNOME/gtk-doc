@@ -31,7 +31,7 @@
   <xsl:param name="html.ext" select="'.html'"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
-
+  
   <!-- use index filtering (if available) -->
   <xsl:param name="index.on.role" select="1"/>
 
@@ -46,6 +46,12 @@
   <xsl:param name="gtkdoc.version" select="''"/>
   <xsl:param name="gtkdoc.bookname" select="''"/>
 
+  <!-- ========================================================= -->
+  
+  <!-- l10n is slow, we don't ue it, so we'd like to turn it off
+       this atleast avoid the re-evaluation -->
+  <xsl:template name="l10n.language">en</xsl:template>
+  
   <!-- ========================================================= -->
   <!-- template to create the index.sgml anchor index -->
 
@@ -75,7 +81,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:call-template name="write.text.chunk">
       <xsl:with-param name="filename" select="'index.sgml'"/>
       <xsl:with-param name="content">
-        <xsl:apply-templates select="//releaseinfo/ulink"
+        <xsl:apply-templates select="/book/bookinforeleaseinfo/ulink"
                              mode="generate.index.mode"/>
         <!-- check all anchor and refentry elements -->
         <xsl:apply-templates select="//anchor|//refentry|//refsect1|//refsect2|//refsynopsisdiv|//varlistentry"
@@ -100,7 +106,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="//releaseinfo/ulink" mode="generate.index.mode">
+  <xsl:template match="/book/bookinfo/releaseinfo/ulink" mode="generate.index.mode">
     <xsl:if test="@role='online-location'">
       <xsl:text>&lt;ONLINE href=&quot;</xsl:text>
         <xsl:value-of select="@url"/>
@@ -503,7 +509,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
          <div class="container">
            <div class="gallery-spacer"> </div>
            <xsl:apply-templates mode="gallery.mode"/>
-         <div class="gallery-spacer"> </div>
+           <div class="gallery-spacer"> </div>
          </div>
       </xsl:when>
       <xsl:otherwise>
@@ -511,7 +517,17 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  <!-- FIXME: try if that works too -->
+  <!--xsl:template match="para[@role='gallery']">
+    <div class="container">
+      <div class="gallery-spacer"> </div>
+      <xsl:apply-templates mode="gallery.mode"/>
+      <div class="gallery-spacer"> </div>
+    </div>
+  </xsl:template-->
 
+  
+  
   <xsl:template match="link" mode="gallery.mode">
     <div class="gallery-float">
        <xsl:apply-templates select="."/>
@@ -597,6 +613,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:apply-templates/>
   </xsl:template>
 
+  <!-- this is not in use yet (see gtkdoc-mkdb
   <xsl:template match="//refsect2/ulink[@role='extralinks']"/>
   <xsl:template match="//refsect1/ulink[@role='extralinks']"/>
 
@@ -607,6 +624,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
   <xsl:template match="//refsect1/title">
     <h2><xsl:call-template name="user.format.extralinks"/></h2>
   </xsl:template>
+  -->
 
   <!-- ==================================================================== -->
 
