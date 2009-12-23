@@ -1,8 +1,8 @@
 <?xml version="1.0" standalone="no"?>
 <?xml-stylesheet type="text/xml" href="params.xsl"?>
 <!-- vim: set ai tw=80 ts=3 sw=3: -->
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "
-              http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "
+              http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 
 <!ENTITY FDL SYSTEM "fdl-appendix.xml">
 <!ENTITY FDLlink "<link linkend='fdl'>included</link>">
@@ -956,7 +956,7 @@ foo_signals[FOOBARIZE] =
 ]]></programlisting>
       </example>
 
-         <example><title>Struct comment block</title>
+      <example><title>Struct comment block</title>
         <programlisting>
 <![CDATA[
 /**
@@ -966,11 +966,19 @@ foo_signals[FOOBARIZE] =
  * This is the best widget, ever.
  */
 typedef struct _FooWidget {
+  /*< private >*/
   GtkWidget parent;
+
   /*< public >*/
   gboolean bar;
 } FooWidget;
-]]></programlisting>
+]]>
+        </programlisting>
+        <para>
+          Use <code>/*&lt; private &gt;*/</code> before the private struct fields you
+          you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse
+          behavirour.
+        </para>
       </example>
 
       <example><title>Enum comment block</title>
