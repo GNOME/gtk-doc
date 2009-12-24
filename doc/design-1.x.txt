@@ -7,3 +7,22 @@ When creating SGML IDS, we append ":CAPS" to all
 all-caps identifiers to prevent name clashes (SGML ids are case-insensitive).
 (It basically never is the case that mixed-case identifiers would collide.)
 
+Unfortunately we create ambigous ids. The document structure ids are e.g.
+GtkWidget.{top_of_page,synopsis,object-hierarchy,...}
+and that is ambigous with eventual structure memeber of the same name.
+
+cd tests
+find . -name "*.xml" -exec grep -o "id=\"[a-zA-Z_:.\-]*\"" {} \; | sort | uniq
+
+== section-ids ==
+gtk-doc differenciates between plain-sections and gobject-sections:
++---------+----------------+
+| type    | section-id     |
++---------+----------------+
+| plain   | $module-$title |
+| gobject | $title         |
++---------+----------------+
+
+- links to #GtkWidget would go to $title
+- linking to the struct would need #GtkWidget-struct
+

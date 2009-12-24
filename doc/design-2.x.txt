@@ -2,6 +2,10 @@
 This documents purpose is to collect what needs to be changed for a potential
 gtk-doc-2.X.
 
+== name ==
+Its not about Gtk. Its about C APIs with GObject support.
+g-doc, gapi-doc, gnome-api-doc, ...
+
 == remove and deprecate =
 - get rid of anything related to tmpl (gtkdoc-mktmpl, the makefile rules, ..)
 - get rid of sgml, we will only use docbook xml
@@ -33,6 +37,17 @@ http://www.w3.org/TR/REC-xml/#NT-Name
 So we could easily use "DOC:" as a prefix for document structure ids.
 In 1.x we add :CAPS as a suffix to avoid clashes between lower and uppercase
 constructs. XML-IDs are not case insensitive, so we don't need that.
+
+If the ID contain a ':' xml processors belive it is using a namespace.
+
+=== less files to maintain ===
+- one needs to maintain $module-docs.xml
+- in most cases $module-sections.txt need manual maintenance
+  - we could have a "Section:" tag for non-section comments to add them to a non
+    default section
+  - we would need to comment to mark things as private
+- the $module.types file need manual maintenance if one need special includes
+  - can we make the scanner smarter?
 
 === srcdir != builddir builds ===
 
