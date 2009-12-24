@@ -202,7 +202,7 @@
 
         <listitem>
           <para>
-            <guilabel>Generating the SGML/XML and HTML.</guilabel>
+            <guilabel>Generating the SGML/XML and HTML/PDF.</guilabel>
 
             <application>gtkdoc-mkdb</application> turns the template files into
             SGML or XML files in the <filename class='directory'>sgml/</filename>
@@ -210,10 +210,14 @@
             If the source code contains documentation on functions, using the
             special comment blocks, it gets merged in here. If there are no tmpl files used
             it only reads takes docs from sources and introspection data.
-
-            <application>gtkdoc-mkhtml</application> turns the SGML files into HTML
-            files in the <filename class='directory'>html/</filename>  subdirectory.
-
+          </para>
+          <para>
+            <application>gtkdoc-mkhtml</application> turns the SGML/XML files into HTML
+            files in the <filename class='directory'>html/</filename> subdirectory.
+            Likewise <application>gtkdoc-mkpdf</application> turns the SGML/XML files into a PDF
+            docuemnt called <filename>&lt;package&gt;.pdf</filename>.
+          </para>
+          <para>
             Files in <filename class='directory'>sgml/</filename> or
             <filename class='directory'>xml/</filename> and <filename class='directory'>html/</filename>
             directories are always overwritten. One should never edit them directly.
@@ -1020,10 +1024,10 @@ typedef enum {
 ]]>
           </programlisting>
         </informalexample>
-        The linkend is the SGML id on the top item of the page you want to link to.
+        The linkend is the SGML/XML id on the top item of the page you want to link to.
         For most pages this is currently the part ("gtk", "gdk", "glib") and then
         the page title ("Hash Tables"). For widgets it is just the class name.
-        Spaces and underscores are converted to '-' to conform to SGML.
+        Spaces and underscores are converted to '-' to conform to SGML/XML.
       </para>
 
       <para>
@@ -1312,7 +1316,7 @@ gtk_arrow_get_type
         without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/FILE&gt;'
         will result in the section declarations being output in the template
         file <filename>tmpl/gnome-config.sgml</filename>, which will be
-        converted into the DocBook SGML file <filename>sgml/gnome-config.sgml</filename>
+        converted into the DocBook SGML/XML file <filename>sgml/gnome-config.sgml</filename>
         or .DocBook XML file <filename>xml/gnome-config.xml</filename>.
         (The name of the html file is based on the module name and the section
         title, or for gobjects it is based on the gobjects class name converted
