@@ -848,7 +848,9 @@ print "gtk-doc: Running scanner $MODULE-scan\n";
 # use sh -c to avoid terminating the whole run without seeing the error
 system("sh -c \"$RUN ./$MODULE-scan\"") == 0 or die "Scan failed: $!\n";
 
-unlink "./$MODULE-scan.c", "./$MODULE-scan.o", "./$MODULE-scan.lo", "./$MODULE-scan";
+if (!defined($ENV{"GTK_DOC_KEEP_INTERMEDIATE"})) {
+  unlink "./$MODULE-scan.c", "./$MODULE-scan.o", "./$MODULE-scan.lo", "./$MODULE-scan";
+}
 
 &UpdateFileIfChanged ($old_signals_filename, $new_signals_filename, 0);
 &UpdateFileIfChanged ($old_hierarchy_filename, $new_hierarchy_filename, 0);
