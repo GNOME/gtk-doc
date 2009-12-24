@@ -179,7 +179,7 @@ bug_532395b (void)
 }
 
 
-/** 
+/**
  * bug_544172:
  * @self: object pointer.
  *
@@ -190,7 +190,7 @@ bug_532395b (void)
 typedef char const * (*bug_544172) (char const *self);
 
 
-/** 
+/**
  * bug_554833:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=554833
@@ -200,7 +200,7 @@ struct _bug_554833 {
 };
 
 
-/** 
+/**
  * bug_554833_new:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=554833
@@ -224,6 +224,32 @@ extern int bug_580300d_get_type();
 long int bug_602518a(void);
 unsigned long int bug_602518b(void);
 unsigned int bug_602518c(void);
+
+/**
+ * Bug165425a:
+ * @i: data as int
+ * @f: data as float
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=165425
+ */
+union _Bug165425a {
+  int i;
+  float f; 
+};
+typedef union _Bug165425a Bug165425a;
+
+/**
+ * Bug165425b:
+ * @i: data as int
+ * @f: data as float
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=165425
+ */
+typedef union _Bug165425b {
+  int i;
+  float f;
+} Bug165425b;
+
 
 #endif // GTKDOC_TESTER_H
 
