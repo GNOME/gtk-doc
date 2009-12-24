@@ -1352,10 +1352,31 @@ gtk_arrow_get_type
       <para>
         Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile.am.
         If at least gtk-doc 1.9 is installed, this will run sanity checks during
-        make check run.
+        <command>make check</command> run.
       </para>
     </tip>
+    
+    <para>
+      One can also look at the files produced by the source code scanner:
+      <filename>&lt;package&gt;-decl-list.txt</filename> and
+      <filename>&lt;package&gt;-decl.txt</filename>. The first and can be
+      compared with the section file if that is manualy maintained. The second
+      lists all declarations fromt he headers If a symbol is missing one could
+      check if this file contains it.
+    </para>
 
+    <para>
+      If the project is GObject based, one can also look into the files produced
+      by the object scanner:
+      <filename>&lt;package&gt;.args.txt</filename>,
+      <filename>&lt;package&gt;.hierarchy.txt</filename>,
+      <filename>&lt;package&gt;.interfaces.txt</filename>,
+      <filename>&lt;package&gt;.prerequisites.txt</filename> and
+      <filename>&lt;package&gt;.signals.txt</filename>. If there are missing
+      symbols in any of those, one can ask gtkdoc to keep the intermedia scanner
+      file for further analysis, but running it as 
+      <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>.
+    </para>
   </chapter>
 
   <chapter id="faq">
@@ -1366,51 +1387,93 @@ gtk_arrow_get_type
       <segtitle>Question</segtitle>
       <segtitle>Answer</segtitle>
       <seglistitem>
-	<seg>No class hierarchy.</seg>
-	<seg>The objects _get_type() function has not been entered into the <filename>.types</filename> file.</seg>
+        <seg>No class hierarchy.</seg>
+        <seg>
+          The objects <function>xxx_get_type()</function> function has not been
+          entered into the <filename>&lt;package&gt;.types</filename> file.
+        </seg>
       </seglistitem>
       <seglistitem>
-	<seg>Still no class hierarchy.</seg>
-	<seg>Wrong naming in section file (see <ulink url="http://mail.gnome.org/archives/gtk-doc-list/2003-October/msg00006.html">explanation</ulink>)</seg>
+        <seg>Still no class hierarchy.</seg>
+        <seg>
+          Missing or wrong naming in <filename>&lt;package&gt;-sections.txt</filename>
+          file (see <ulink url="http://mail.gnome.org/archives/gtk-doc-list/2003-October/msg00006.html">explanation</ulink>).
+        </seg>
       </seglistitem>
       <seglistitem>
-	<seg>Damn, I have still no class hierarchy.</seg>
-	<seg>Is the object name (name of the instance struct) part of the normal section (don't put this into Standard or Private).</seg>
+        <seg>Damn, I have still no class hierarchy.</seg>
+        <seg>
+          Is the object name (name of the instance struct, e.g. <type>GtkWidget</type>)
+          part of the normal section (don't put this into Standard or Private
+          subsections).
+        </seg>
       </seglistitem>
       <seglistitem>
-	<seg>No symbol index.</seg>
-	<seg>FIXME (&lt;index&gt; tag in main sgml file)</seg>
+        <seg>No symbol index.</seg>
+        <seg>
+          Does the <filename>&lt;package&gt;-docs.{xml,sgml}</filename> contain a
+          index that xi:includes the generated index?
+        </seg>
       </seglistitem>
       <seglistitem>
-	<seg>Symbols are not linked to their doc-section.</seg>
-	<seg>FIXME (added #,% or () ?)</seg>
+        <seg>Symbols are not linked to their doc-section.</seg>
+        <seg>
+          Is the doc-comment using the correct markup (added #,% or ())?
+          Check if the gtkdoc-fixxref warns about unresolvable xrefs.
+        </seg>
       </seglistitem>
       <seglistitem>
-	<seg>A new class does not appear in the docs.</seg>
-	<seg>FIXME (section file, types file, main-sgml file)</seg>
+        <seg>A new class does not appear in the docs.</seg>
+        <seg>
+          Is the new page xi:included from 
+          <filename>&lt;package&gt;-docs.{xml,sgml}</filename>.
+        </seg>
       </seglistitem>
       <seglistitem>
-	<seg>A new symbol does not appear in the docs.</seg>
-	<seg>FIXME (section file, proper doc comment)</seg>
+        <seg>A new symbol does not appear in the docs.</seg>
+        <seg>
+          Is the doc-comment properly formatted. Check for spelling mistakes in
+          the begin of the comment. Check if the gtkdoc-fixxref warns about
+          unresolvable xrefs. Check if the symbol is correctly listed in the
+          <filename>&lt;package&gt;-sections.txt</filename> in a public subsection.
+        </seg>
+      </seglistitem>
+      <seglistitem>
+        <seg>A type is missing from the class hierarchy.</seg>
+        <seg>
+          If the type is listed in <filename>&lt;package&gt;.hierarchy</filename>
+          but not in <filename>xml/tree_index.sgml</filename> then double check
+          that the type is correctly placed in the <filename>&lt;package&gt;-sections.txt</filename>.
+          If the type instance (e.g. <type>GtkWidget</type>) is not listed or
+          incidentialy makred private it will not be shown.
+        </seg>
+      </seglistitem>
+      <seglistitem>
+        <seg>I get foldoc links for all gobject annotations.</seg>
+        <seg>
+          Check that <filename>xml/annotation-glossary.xml</filename> is
+          xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>.
+        </seg>
       </seglistitem>
 
       <!-- gtk-doc warnings: -->
       <seglistitem>
-	<seg>Parameter described in source code comment block but does not exist</seg>
-	<seg>Check if the prototype in the header has different parameter names as in the source.</seg>
+        <seg>Parameter described in source code comment block but does not exist</seg>
+        <seg>Check if the prototype in the header has different parameter names as in the source.</seg>
       </seglistitem>
+
       <!-- docbook warnings: -->
       <seglistitem>
-	<seg>multiple "IDs" for constraint linkend: XYZ</seg>
-	<seg>Symbol XYZ appears twice in -sections.txt file.</seg>
+        <seg>multiple "IDs" for constraint linkend: XYZ</seg>
+        <seg>Symbol XYZ appears twice in <filename>&lt;package&gt;-sections.txt</filename> file.</seg>
       </seglistitem>
       <seglistitem>
-	<seg>Element typename in namespace '' encountered in para, but no template matches.</seg>
+        <seg>Element typename in namespace '' encountered in para, but no template matches.</seg>
         <seg />
       </seglistitem>
     </segmentedlist>
   </chapter>
-
+    
   <!-- ======== Appendix: FDL ================================== -->
   &FDL;
 
