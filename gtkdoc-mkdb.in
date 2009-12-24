@@ -1629,13 +1629,29 @@ sub OutputUnion {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
-    my $synop = &MakeReturnField("union") . "<link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2 id=\"$id\" role=\"union\"$condition>\n<title>union $symbol</title>\n";
+
+    # Determine if it is a simple struct or it also has a typedef.
+    my $has_typedef = 0;
+    if ($StructHasTypedef{$symbol} || $declaration =~ m/^\s*typedef\s+/) {
+      $has_typedef = 1;
+    }
+
+    my $synop;
+    my $desc;
+    if ($has_typedef) {
+        # For unions with typedefs we just output the union name.
+        $synop = &MakeReturnField("") . "<link linkend=\"$id\">$symbol</link>;\n";
+        $desc = "<refsect2 id=\"$id\" role=\"union\"$condition>\n<title>$symbol</title>\n";
+    } else {
+        $synop = &MakeReturnField("union") . "<link linkend=\"$id\">$symbol</link>;\n";
+        $desc = "<refsect2 id=\"$id\" role=\"union\"$condition>\n<title>union $symbol</title>\n";
+    }
 
     $desc .= MakeIndexterms($symbol, $id);
     $desc .= "\n";
     $desc .= OutputSymbolExtraLinks($symbol);
 
+    # FIXME: we do more for structs
     my $decl_out = &CreateValidSGML ($declaration);
     $desc .= "<programlisting>$decl_out</programlisting>\n";
 
@@ -1643,6 +1659,57 @@ sub OutputUnion {
 
     if (defined ($SymbolDocs{$symbol})) {
 	$desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+    }
+
+    # Create a table of fields and descriptions
+
+    # FIXME: Inserting &#160's into the produced type declarations here would
+    #        improve the output in most situations ... except for function
+    #        members of structs!
+    my @fields = ParseStructDeclaration($declaration, 0,
+					0, \&MakeXRef,
+					sub {
+					    "<structfield id=\"".&CreateValidSGMLID("$id.$_[0]")."\">$_[0]</structfield>";
+					});
+    my $params = $SymbolParams{$symbol};
+
+    # If no parameters are filled in, we don't generate the description
+    # table, for backwards compatibility
+
+    my $found = 0;
+    if (defined $params) {
+	for (my $i = 1; $i <= $#$params; $i += $PARAM_FIELD_COUNT) {
+	    if ($params->[$i] =~ /\S/) {
+		$found = 1;
+		last;
+	    }
+	}
+    }
+
+    if ($found) {
+	my %field_descrs = @$params;
+
+	    $desc .= <<EOF;
+<variablelist role="struct">
+EOF
+	while (@fields) {
+	    my $field_name = shift @fields;
+	    my $text = shift @fields;
+	    my $field_descr = $field_descrs{$field_name};
+            my $param_annotations = "";
+
+	    $desc .= "<varlistentry><term>$text</term>\n";
+	    if (defined $field_descr) {
+                ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
+                $field_descr = &ExpandAbbreviations($symbol, $field_descr);
+		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
+	    } else {
+		$desc .= "<listitem><simpara /></listitem>\n";
+	    }
+            $desc .= "</varlistentry>\n";
+	}
+
+	$desc .= "</variablelist>";
     }
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";

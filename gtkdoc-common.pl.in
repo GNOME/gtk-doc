@@ -97,7 +97,7 @@ sub ParseStructDeclaration {
     my ($declaration, $is_object, $output_function_params, $typefunc, $namefunc) = @_;
 
     # For forward struct declarations just return an empty array.
-    if ($declaration =~ m/struct\s+\S+\s*;/msg) {
+    if ($declaration =~ m/(?:struct|union)\s+\S+\s*;/msg) {
       return ();
     }
 
@@ -105,7 +105,7 @@ sub ParseStructDeclaration {
 
     # For objects, assume private
     if ($is_object) {
-	$declaration =~ s!(struct\s+\w*\s*\{)
+	$declaration =~ s!((?:struct|union)\s+\w*\s*\{)
 	                  .*?
 			  (?:/\*\s*<\s*public\s*>\s*\*/|(?=\}))!$1!msgx;
     }
@@ -125,7 +125,7 @@ sub ParseStructDeclaration {
     }
 
     # Prime match after "struct {" declaration
-    if (!scalar($declaration =~ m/struct\s+\w*\s*\{/msg)) {
+    if (!scalar($declaration =~ m/(?:struct|union)\s+\w*\s*\{/msg)) {
 	die "Structure declaration '$declaration' does not begin with struct [NAME] {\n";
     }
 
