@@ -4750,6 +4750,9 @@ sub ReadObjectHierarchy {
 	            push (@ObjectLevels, $level);
                 }
             }
+            #else {
+            #    LogWarning ($OBJECT_TREE_FILE, $., "unknown type $object");
+            #}
 	}
     }
     print (OUTPUT "</screen>\n");
