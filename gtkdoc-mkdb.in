@@ -242,6 +242,7 @@ my %Prerequisites;
 # section they are defined
 my %KnownSymbols;
 my %SymbolSection;
+my %SymbolSectionId;
 
 # collects index entries
 my %IndexEntriesFull;
@@ -466,6 +467,7 @@ sub OutputSGML {
     my $section_includes = "";
     my $in_section = 0;
     my $title = "";
+    my $section_id = "";
     my $subsection = "";
     my $synopsis;
     my $details;
@@ -549,31 +551,7 @@ sub OutputSGML {
 	    }
 
 	} elsif (m/^<\/SECTION>/) {
-	    if($title eq "" && $filename eq "") {
-                &LogWarning ($file, $., "Section has no title and no file.");
-	    }
-	    # FIXME: one of those would be enough
-	    if ($title eq "") {
-		$title = $filename;
-	    }
-	    if ($filename eq "") {
-		$filename = $title;
-	    }
-	    #print "End of section: $title\n";
-
-	    $filename =~ s/\s/_/g;
-
-	    my $section_id = $SourceSymbolDocs{"$TMPL_DIR/$filename:Section_Id"};
-	    if (defined ($section_id) && $section_id !~ m/^\s*$/) {
-		# Remove trailing blanks and use as is
-		$section_id =~ s/\s+$//;
-	    } elsif (&CheckIsObject ($title)) {
-		# GtkObjects use their class name as the ID.
-		$section_id = &CreateValidSGMLID ($title);
-	    } else {
-		$section_id = &CreateValidSGMLID ("$MODULE-$title");
-	    }
-
+            #print "End of section: $title\n";
 	    if ($num_symbols > 0) {
 		# collect documents
 		if (lc($OUTPUT_FORMAT) eq "xml") {
@@ -753,6 +731,7 @@ EOF
 		}
 	    }
 	    $title = "";
+	    $section_id = "";
 	    $subsection = "";
 	    $in_section = 0;
 	    $section_includes = "";
@@ -820,7 +799,32 @@ EOF
                 $num_symbols++;
                 $symbol_def_line{$symbol}=$.;
 
+                if ($section_id eq "") {
+                    if($title eq "" && $filename eq "") {
+                        &LogWarning ($file, $., "Section has no title and no file.");
+                    }
+                    # FIXME: one of those would be enough
+                    # filename should be an internal detail for gtk-doc
+                    if ($title eq "") {
+                        $title = $filename;
+                    } elsif ($filename eq "") {
+                        $filename = $title;
+                    }
+                    $filename =~ s/\s/_/g;
+        
+                    $section_id = $SourceSymbolDocs{"$TMPL_DIR/$filename:Section_Id"};
+                    if (defined ($section_id) && $section_id !~ m/^\s*$/) {
+                        # Remove trailing blanks and use as is
+                        $section_id =~ s/\s+$//;
+                    } elsif (&CheckIsObject ($title)) {
+                        # GtkObjects use their class name as the ID.
+                        $section_id = &CreateValidSGMLID ($title);
+                    } else {
+                        $section_id = &CreateValidSGMLID ("$MODULE-$title");
+                    }
+                }
                 $SymbolSection{$symbol}=$title;
+                $SymbolSectionId{$symbol}=$section_id;
             }
             else {
                 &LogWarning ($file, $., "Double symbol entry for $symbol. ".
@@ -894,6 +898,7 @@ sub OutputIndex {
         # generate a short symbol description
         my $symbol_desc = "";
         my $symbol_section = "";
+        my $symbol_section_id = "";
         my $symbol_type = lc($DeclarationTypes{$symbol});
         if ($symbol_type eq "") {
             #print "trying symbol $symbol\n";
@@ -907,6 +912,7 @@ sub OutputIndex {
                         $symbol_type = "object signal";
                         if (defined($SymbolSection{$oname})) {
                            $symbol_section = $SymbolSection{$oname};
+                           $symbol_section_id = $SymbolSectionId{$oname};
                         }
                         last;
                     }
@@ -922,6 +928,7 @@ sub OutputIndex {
                         $symbol_type = "object property";
                         if (defined($SymbolSection{$oname})) {
                            $symbol_section = $SymbolSection{$oname};
+                           $symbol_section_id = $SymbolSectionId{$oname};
                         }
                         last;
                     }
@@ -930,12 +937,14 @@ sub OutputIndex {
         } else {
            if (defined($SymbolSection{$symbol})) {
                $symbol_section = $SymbolSection{$symbol};
+               $symbol_section_id = $SymbolSectionId{$symbol};
            }
         }
         if ($symbol_type ne "") {
            $symbol_desc=", $symbol_type";
            if ($symbol_section ne "") {
-               $symbol_desc.=" in ". &ExpandAbbreviations($symbol, "#$symbol_section");
+               $symbol_desc.=" in <link linkend=\"$symbol_section_id\">$symbol_section</link>";
+               #$symbol_desc.=" in ". &ExpandAbbreviations($symbol, "#$symbol_section");
            }
         }
 
@@ -2508,6 +2517,9 @@ sub ExpandAbbreviations {
   $text =~ s%\]\|%</programlisting></informalexample>%g;
   # TODO: check for a xml comment after |[ and pick the language attribute from
   # that
+
+  # TODO: optionally check all words from $text against internal symbols and
+  # warn if those could be xreffed, but miss a %,# or ()
 
   # keep CDATA unmodified, preserve ulink tags (ideally we preseve all tags
   # as such)
