@@ -757,7 +757,7 @@ EOF
 	    if (! defined $symbol_def_line{$symbol}) {
                 my $declaration = $Declarations{$symbol};
                 if (defined ($declaration)) {
-                    # We don't want standard macros/functions of GtkObjects,
+                    # We don't want standard macros/functions of GObjects,
                     # or private declarations.
                     if ($subsection ne "Standard" && $subsection ne "Private") {
                         if (&CheckIsObject ($symbol)) {
@@ -817,7 +817,7 @@ EOF
                         # Remove trailing blanks and use as is
                         $section_id =~ s/\s+$//;
                     } elsif (&CheckIsObject ($title)) {
-                        # GtkObjects use their class name as the ID.
+                        # GObjects use their class name as the ID.
                         $section_id = &CreateValidSGMLID ($title);
                     } else {
                         $section_id = &CreateValidSGMLID ("$MODULE-$title");
@@ -5016,10 +5016,10 @@ sub ReadArgsFile {
 
 #############################################################################
 # Function    : CheckIsObject
-# Description : Returns 1 if the given name is a GtkObject or a subclass.
+# Description : Returns 1 if the given name is a GObject or a subclass.
 #		It uses the global @Objects array.
 #		Note that the @Objects array only contains classes in the
-#		current module and their ancestors - not all GTK classes.
+#		current module and their ancestors - not all GObject classes.
 # Arguments   : $name - the name to check.
 #############################################################################
 
