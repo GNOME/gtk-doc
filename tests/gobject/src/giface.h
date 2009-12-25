@@ -4,12 +4,14 @@
 #include <glib.h>
 #include <glib-object.h>
 
+/* type macros */
+
 #define GTKDOC_TYPE_IFACE               (gtkdoc_iface_get_type ())
 #define GTKDOC_IFACE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTKDOC_TYPE_IFACE, GtkdocIface))
 #define GTKDOC_IS_IFACE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTKDOC_TYPE_IFACE))
 #define GTKDOC_IFACE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTKDOC_TYPE_IFACE, GtkdocIfaceInterface))
 
-/* type macros */
+/* type structs */
 
 /**
  * GtkdocIface:

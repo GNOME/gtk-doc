@@ -4,6 +4,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+/* type macros */
+
 #define GTKDOC_TYPE_OBJECT            (gtkdoc_object_get_type ())
 #define GTKDOC_OBJECT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTKDOC_TYPE_OBJECT, GtkdocObject))
 #define GTKDOC_OBJECT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTKDOCTYPE_OBJECT, GtkdocObjectClass))
@@ -11,7 +13,7 @@
 #define GTKDOC_IS_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTKDOC_TYPE_OBJECT))
 #define GTKDOC_OBJECT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTKDOC_TYPE_OBJECT, GtkdocObjectClass))
 
-/* type macros */
+/* type structs */
 
 typedef struct _GtkdocObject GtkdocObject;
 typedef struct _GtkdocObjectClass GtkdocObjectClass;

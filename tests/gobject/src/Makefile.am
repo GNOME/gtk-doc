@@ -4,7 +4,11 @@ if BUILD_TESTS
 
 noinst_LTLIBRARIES = libtester.la
 
-libtester_la_SOURCES = gobject.c gobject.h giface.c giface.h tester.h
+libtester_la_SOURCES = \
+	gobject.c gobject.h \
+	giface.c giface.h \
+	gtypes.c gtypes.h \
+	tester.h
 #libtester_la_LIBADD = $(TEST_DEPS_LIBS)
 
 AM_CPPFLAGS = $(TEST_DEPS_CFLAGS)
