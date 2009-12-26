@@ -45,7 +45,8 @@ If the ID contain a ':' xml processors belive it is using a namespace.
 - in most cases $module-sections.txt need manual maintenance
   - we could have a "Section:" tag for non-section comments to add them to a non
     default section
-  - we would need to comment to mark things as private
+  - we could have a "Private_Symbols:" tag in section to list symbols that
+    should be in private subsection 
 - the $module.types file need manual maintenance if one need special includes
   - can we make the scanner smarter?
 
