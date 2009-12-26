@@ -665,9 +665,11 @@ sub ScanHeader {
 		}
 
 		if ($symbol =~ m/^(\S+)(Class|Iface|Interface)\b/) {
+		    my $objectname = $1;
 		    #print "Found object: $1\n";
-		    $list .= "<TITLE>$1</TITLE>\n$1\n";
-		    push (@objects, $1);
+		    $list = "<TITLE>$objectname</TITLE>\n$list";
+		    $list .= "$objectname\n";
+		    push (@objects, $objectname);
 		}
 		#print "Store struct: $symbol\n";
 		&AddSymbolToList (\$list, $symbol);
