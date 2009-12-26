@@ -731,9 +731,13 @@ sub ScanHeader {
 	    $list .= "<SUBSECTION Standard>\n$standard_decl";
 	}
 
-	$$object_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
+	if ($list ne "") {
+	    $$object_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
+	}
     } else {
-	$$main_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
+        if ($list ne "") {
+            $$main_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
+        }
     }
 }
 
