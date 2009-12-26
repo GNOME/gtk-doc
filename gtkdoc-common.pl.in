@@ -111,9 +111,7 @@ sub ParseStructDeclaration {
     }
 
     # Assume end of declaration if line begins with '}'
-    $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/
-	              .*?
-		      (?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
+    $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/.*?(?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
 
     # Remove all other comments;
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
@@ -124,10 +122,12 @@ sub ParseStructDeclaration {
 	return @result;
     }
 
-    # Prime match after "struct {" declaration
+    # Prime match after "struct/union {" declaration
     if (!scalar($declaration =~ m/(?:struct|union)\s+\w*\s*\{/msg)) {
-	die "Structure declaration '$declaration' does not begin with struct [NAME] {\n";
+	die "Declaration '$declaration' does not begin with struct/union [NAME] {\n";
     }
+    
+    #print "DEBUG: public fields in struct/union: $declaration\n";
 
     # Treat lines in sequence, allowing singly nested anonymous structs
     # and unions.
@@ -141,7 +141,7 @@ sub ParseStructDeclaration {
         
         # ignore preprocessor directives
         while ($line =~ /^#.*?\n\s*(.*)/msg) {
-            $line=$1;          
+            $line=$1;
         }
 
         last if $line =~ /^\s*\}\s*\w*\s*$/;
@@ -228,7 +228,7 @@ sub ParseStructDeclaration {
 	    }
 
 	} else {
-	    warn "Cannot parse structure field \"$line\"";
+	    print "WARNING: Cannot parse structure field: \"$line\"\n";
 	}
     }
 

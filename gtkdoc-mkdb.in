@@ -1011,7 +1011,7 @@ sub OutputSinceIndexes {
 
     foreach my $version (@sinces) {
         #print "Since : [$version]\n";
-        # todo make filtered hash
+        # TODO make filtered hash
         #my %index = grep { $Since{$_} eq $version } %IndexEntriesSince;
         my %index = map { $_ => $IndexEntriesSince{$_} } grep { $Since{$_} eq $version } keys %IndexEntriesSince;
 
@@ -1521,8 +1521,9 @@ sub OutputStruct {
 
     if ($found) {
 	my %field_descrs = @$params;
+	my $missing_parameters = "";
 
-	    $desc .= <<EOF;
+        $desc .= <<EOF;
 <variablelist role="struct">
 EOF
 	while (@fields) {
@@ -1537,88 +1538,32 @@ EOF
                 $field_descr = &ExpandAbbreviations($symbol, $field_descr);
 		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
 	    } else {
-		$desc .= "<listitem><simpara /></listitem>\n";
+	        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                    "Field description for $symbol"."::"."$field_name is missing in source code comment block.");
+	        if ($missing_parameters ne "") {
+                  $missing_parameters .= ", ".$field_name;
+                } else {
+                    $missing_parameters = $field_name;
+                }
+		$desc .= "<listitem />\n";
 	    }
             $desc .= "</varlistentry>\n";
 	}
-
 	$desc .= "</variablelist>";
+
+	# remember missing parameters (needed in tmpl-free build)
+        if (($missing_parameters ne "") and (! exists ($AllIncompleteSymbols{$symbol}))) {
+            $AllIncompleteSymbols{$symbol}=$missing_parameters;
+        }
     }
-    $desc .= OutputSymbolTraits ($symbol);
-    $desc .= "</refsect2>\n";
-    return ($synop, $desc);
-}
-
-
-#############################################################################
-# Function    : OutputEnum
-# Description : Returns the synopsis and detailed description of a enum.
-# Arguments   : $symbol - the enum.
-#		$declaration - the declaration of the enum.
-#############################################################################
-
-sub OutputEnum {
-    my ($symbol, $declaration) = @_;
-    my $id = &CreateValidSGMLID ($symbol);
-    my $condition = &MakeConditionDescription ($symbol);
-    my $synop = &MakeReturnField("enum") . "<link linkend=\"$id\">$symbol</link>;\n";
-    my $desc = "<refsect2 id=\"$id\" role=\"enum\"$condition>\n<title>enum $symbol</title>\n";
-
-    $desc .= MakeIndexterms($symbol, $id);
-    $desc .= "\n";
-    $desc .= OutputSymbolExtraLinks($symbol);
-
-    my $decl_out = &CreateValidSGML ($declaration);
-    $desc .= "<programlisting>$decl_out</programlisting>\n";
-
-    $desc .= &MakeDeprecationNote($symbol);
-
-    if (defined ($SymbolDocs{$symbol})) {
-	$desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
-    }
-
-    # Create a table of fields and descriptions
-
-    my @members = ParseEnumDeclaration($declaration);
-    my $params = $SymbolParams{$symbol};
-
-    # If no parameters are filled in, we don't generate the description
-    # table, for backwards compatibility
-
-    my $found = 0;
-    if (defined $params) {
-	for (my $i = 1; $i <= $#$params; $i += $PARAM_FIELD_COUNT) {
-	    if ($params->[$i] =~ /\S/) {
-		$found = 1;
-		last;
-	    }
-	}
-    }
-
-    if ($found) {
-	my %member_descrs = @$params;
-
-	    $desc .= <<EOF;
-<variablelist role="enum">
-EOF
-	for my $member_name (@members) {
-	    my $member_descr = $member_descrs{$member_name};
-            my $param_annotations = "";
-
-	    $id = &CreateValidSGMLID ($member_name);
-	    $condition = &MakeConditionDescription ($member_name);
-	    $desc .= "<varlistentry id=\"$id\" role=\"constant\"$condition>\n<term><literal>$member_name</literal></term>\n";
-	    if (defined $member_descr) {
-                ($member_descr,$param_annotations) = &ExpandAnnotation($symbol, $member_descr);
-                $member_descr = &ExpandAbbreviations($symbol, $member_descr);
-		$desc .= "<listitem><simpara>$member_descr$param_annotations</simpara></listitem>\n";
-	    } else {
-		$desc .= "<listitem></listitem>\n";
-	    }
-            $desc .= "</varlistentry>\n";
-	}
-
-	$desc .= "</variablelist>";
+    else {
+        if (scalar(@fields) > 0) {
+            if (! exists ($AllIncompleteSymbols{$symbol})) {
+                $AllIncompleteSymbols{$symbol}="<items>";
+                &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                    "Field descriptions for $symbol are missing in source code comment block.");
+            }
+        }
     }
 
     $desc .= OutputSymbolTraits ($symbol);
@@ -1697,9 +1642,10 @@ sub OutputUnion {
 
     if ($found) {
 	my %field_descrs = @$params;
+	my $missing_parameters = "";
 
-	    $desc .= <<EOF;
-<variablelist role="struct">
+        $desc .= <<EOF;
+<variablelist role="union">
 EOF
 	while (@fields) {
 	    my $field_name = shift @fields;
@@ -1713,13 +1659,132 @@ EOF
                 $field_descr = &ExpandAbbreviations($symbol, $field_descr);
 		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
 	    } else {
-		$desc .= "<listitem><simpara /></listitem>\n";
+	        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                    "Field description for $symbol"."::"."$field_name is missing in source code comment block.");
+                if ($missing_parameters ne "") {
+                    $missing_parameters .= ", ".$field_name;
+                } else {
+                    $missing_parameters = $field_name;
+                }
+		$desc .= "<listitem />\n";
 	    }
             $desc .= "</varlistentry>\n";
 	}
-
 	$desc .= "</variablelist>";
+
+	# remember missing parameters (needed in tmpl-free build)
+        if (($missing_parameters ne "") and (! exists ($AllIncompleteSymbols{$symbol}))) {
+            $AllIncompleteSymbols{$symbol}=$missing_parameters;
+        }
     }
+    else {
+        if (scalar(@fields) > 0) {
+            if (! exists ($AllIncompleteSymbols{$symbol})) {
+                $AllIncompleteSymbols{$symbol}="<items>";
+                &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                    "Field descriptions for $symbol are missing in source code comment block.");
+            }
+        }
+    }
+
+    $desc .= OutputSymbolTraits ($symbol);
+    $desc .= "</refsect2>\n";
+    return ($synop, $desc);
+}
+
+
+#############################################################################
+# Function    : OutputEnum
+# Description : Returns the synopsis and detailed description of a enum.
+# Arguments   : $symbol - the enum.
+#		$declaration - the declaration of the enum.
+#############################################################################
+
+sub OutputEnum {
+    my ($symbol, $declaration) = @_;
+    my $id = &CreateValidSGMLID ($symbol);
+    my $condition = &MakeConditionDescription ($symbol);
+    my $synop = &MakeReturnField("enum") . "<link linkend=\"$id\">$symbol</link>;\n";
+    my $desc = "<refsect2 id=\"$id\" role=\"enum\"$condition>\n<title>enum $symbol</title>\n";
+
+    $desc .= MakeIndexterms($symbol, $id);
+    $desc .= "\n";
+    $desc .= OutputSymbolExtraLinks($symbol);
+
+    my $decl_out = &CreateValidSGML ($declaration);
+    $desc .= "<programlisting>$decl_out</programlisting>\n";
+
+    $desc .= &MakeDeprecationNote($symbol);
+
+    if (defined ($SymbolDocs{$symbol})) {
+	$desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+    }
+
+    # Create a table of fields and descriptions
+
+    my @fields = ParseEnumDeclaration($declaration);
+    my $params = $SymbolParams{$symbol};
+
+    # If no parameters are filled in, we don't generate the description
+    # table, for backwards compatibility
+
+    my $found = 0;
+    if (defined $params) {
+	for (my $i = 1; $i <= $#$params; $i += $PARAM_FIELD_COUNT) {
+	    if ($params->[$i] =~ /\S/) {
+		$found = 1;
+		last;
+	    }
+	}
+    }
+
+    if ($found) {
+	my %field_descrs = @$params;
+	my $missing_parameters = "";
+
+        $desc .= <<EOF;
+<variablelist role="enum">
+EOF
+	for my $field_name (@fields) {
+	    my $field_descr = $field_descrs{$field_name};
+            my $param_annotations = "";
+
+	    $id = &CreateValidSGMLID ($field_name);
+	    $condition = &MakeConditionDescription ($field_name);
+	    $desc .= "<varlistentry id=\"$id\" role=\"constant\"$condition>\n<term><literal>$field_name</literal></term>\n";
+	    if (defined $field_descr) {
+                ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
+                $field_descr = &ExpandAbbreviations($symbol, $field_descr);
+		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
+	    } else {
+	        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                    "Value description for $symbol"."::"."$field_name is missing in source code comment block.");
+	        if ($missing_parameters ne "") {
+                  $missing_parameters .= ", ".$field_name;
+                } else {
+                    $missing_parameters = $field_name;
+                }
+		$desc .= "<listitem />\n";
+	    }
+            $desc .= "</varlistentry>\n";
+	}
+	$desc .= "</variablelist>";
+
+	# remember missing parameters (needed in tmpl-free build)
+        if (($missing_parameters ne "") and (! exists ($AllIncompleteSymbols{$symbol}))) {
+            $AllIncompleteSymbols{$symbol}=$missing_parameters;
+        }
+    }
+    else {
+        if (scalar(@fields) > 0) {
+            if (! exists ($AllIncompleteSymbols{$symbol})) {
+                $AllIncompleteSymbols{$symbol}="<items>";
+                &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                    "Value descriptions for $symbol are missing in source code comment block.");
+            }
+        }
+    }
+
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
@@ -2518,9 +2583,6 @@ sub ExpandAbbreviations {
   # TODO: check for a xml comment after |[ and pick the language attribute from
   # that
 
-  # TODO: optionally check all words from $text against internal symbols and
-  # warn if those could be xreffed, but miss a %,# or ()
-
   # keep CDATA unmodified, preserve ulink tags (ideally we preseve all tags
   # as such)
   return &ModifyXMLElements ($text, $symbol,
@@ -2582,6 +2644,9 @@ sub ExpandAbbreviationsCallback {
     # this is apparently also called for markup and not just for plain text
     # disable for now.
     #$text =~ s%(http|https|ftp)://(.*?)((?:\s|,|\)|\]|\<|\.\s))%<ulink url="$1://$2">$2</ulink>$3%g;
+
+    # TODO: optionally check all words from $text against internal symbols and
+    # warn if those could be xreffed, but miss a %,# or ()
   }
 
   return $text;
