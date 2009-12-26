@@ -4,7 +4,7 @@
 #include <glib.h>
 
 /**
- * bug_324535:
+ * Bug324535:
  * @BUG_324535_A: enum 1
  * @BUG_324535_B: enum 2
  * @BUG_324535_C: enum 3
@@ -16,18 +16,21 @@ typedef enum {
 #ifdef GTK_DISABLE_DEPRECATED
   BUG_324535_B,
 #endif
-  BUG_324535_C,
-} bug_324535;
+  BUG_324535_C
+} Bug324535;
 
 
 /**
  * bug_501038:
+ * @a: value
+ * @b: deprecated value
+ * @_b: scrambled deprecated value
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=501038
  */
 struct _bug_501038 {
   gint a;
-#ifdef GTK_DISABLE_DEPRECATED
+#ifndef GTK_DISABLE_DEPRECATED
   gint b;
 #else
   gint _b;
@@ -53,7 +56,6 @@ struct _bug_460127 {
     } ABI;
     gpointer _reserved[_PADDDING + 0];
   } abidata;
-
 };
 
 
@@ -192,6 +194,7 @@ typedef char const * (*bug_544172) (char const *self);
 
 /**
  * bug_554833:
+ * @i: value;
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=554833
  */
