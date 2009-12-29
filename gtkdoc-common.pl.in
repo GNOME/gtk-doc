@@ -89,6 +89,8 @@ sub UpdateFileIfChanged {
 #               breaks it into individual type declarations.
 # Arguments   : $declaration - the declaration to parse
 #               $is_object - true if this is an object structure
+#               $output_function_params - true if full type is wanted for
+#                                         function pointer members
 #               $typefunc - function reference to apply to type
 #               $namefunc - function reference to apply to name
 #############################################################################
@@ -284,7 +286,7 @@ sub ParseEnumDeclaration {
 
         # ignore preprocessor directives
         while ($line =~ /^#.*?\n\s*(.*)/msg) {
-            $line=$1;          
+            $line=$1;
         }
         
 	if ($line =~ m/^(\w+)\s*(=.*)?$/msg) {
