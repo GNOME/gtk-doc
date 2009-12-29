@@ -1377,9 +1377,9 @@ sub OutputTypedef {
 #############################################################################
 # Function    : OutputStruct
 # Description : Returns the synopsis and detailed description of a struct.
-#		We check if it is a widget struct, and if so we only output
+#		We check if it is a object struct, and if so we only output
 #		parts of it that are noted as public fields.
-#		We also use a different SGML ID for widget structs, since the
+#		We also use a different SGML ID for object structs, since the
 #		original ID is used for the entire RefEntry.
 # Arguments   : $symbol - the struct.
 #		$declaration - the declaration of the struct.
@@ -1388,17 +1388,17 @@ sub OutputTypedef {
 sub OutputStruct {
     my ($symbol, $declaration) = @_;
 
-    my $is_widget_struct = 0;
+    my $is_object_struct = 0;
     my $default_to_public = 1;
     if (&CheckIsObject ($symbol)) {
-    #print "Found widget struct: $symbol\n";
-    $is_widget_struct = 1;
+        #print "Found object struct: $symbol\n";
+        $is_object_struct = 1;
 	$default_to_public = 0;
     }
 
     my $id;
     my $condition;
-    if ($is_widget_struct) {
+    if ($is_object_struct) {
 	$id = &CreateValidSGMLID ($symbol . "_struct");
         $condition = &MakeConditionDescription ($symbol . "_struct");
     } else {
@@ -2975,7 +2975,7 @@ sub GetHierarchy {
     $level = 0;
     for ($i = $#ancestors; $i >= 0; $i--) {
 	my $link_text;
-	# Don't add a link to the current widget, i.e. when i == 0.
+	# Don't add a link to the current object, i.e. when i == 0.
 	if ($i > 0) {
 	    my $ancestor_id = &CreateValidSGMLID ($ancestors[$i]);
 	    $link_text = "<link linkend=\"$ancestor_id\">$ancestors[$i]</link>";
@@ -4825,7 +4825,7 @@ sub ReadTemplateFile {
 #		the GtkObject subclasses described in this module (and their
 #		ancestors).
 #		It places them in the @Objects array, and places their level
-#		in the widget hierarchy in the @ObjectLevels array, at the
+#		in the object hierarchy in the @ObjectLevels array, at the
 #		same index. GtkObject, the root object, has a level of 1.
 #
 #               FIXME: the version in gtkdoc-mkdb also generates tree_index.sgml
