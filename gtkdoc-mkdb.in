@@ -1523,9 +1523,7 @@ sub OutputStruct {
 	my %field_descrs = @$params;
 	my $missing_parameters = "";
 
-        $desc .= <<EOF;
-<variablelist role="struct">
-EOF
+        $desc .= "<variablelist role=\"struct\">\n";
 	while (@fields) {
 	    my $field_name = shift @fields;
 	    my $text = shift @fields;
@@ -1644,9 +1642,7 @@ sub OutputUnion {
 	my %field_descrs = @$params;
 	my $missing_parameters = "";
 
-        $desc .= <<EOF;
-<variablelist role="union">
-EOF
+        $desc .= "<variablelist role=\"union\">\n";
 	while (@fields) {
 	    my $field_name = shift @fields;
 	    my $text = shift @fields;
@@ -1742,9 +1738,7 @@ sub OutputEnum {
 	my %field_descrs = @$params;
 	my $missing_parameters = "";
 
-        $desc .= <<EOF;
-<variablelist role="enum">
-EOF
+        $desc .= "<variablelist role=\"enum\">\n";
 	for my $field_name (@fields) {
 	    my $field_descr = $field_descrs{$field_name};
             my $param_annotations = "";
@@ -1872,8 +1866,7 @@ sub OutputFunction {
 	    . (' ' x ($RETURN_TYPE_FIELD_WIDTH - $ret_type_len));
 	$symbol_len = 0;
     } else {
-#	$ret_type_output = "$start$type_modifier$xref$pointer\n"
-#	    . (' ' x $RETURN_TYPE_FIELD_WIDTH);
+        #$ret_type_output = "$start$type_modifier$xref$pointer\n" . (' ' x $RETURN_TYPE_FIELD_WIDTH);
 
 	$ret_type_output = "$start$type_modifier$xref$pointer ";
 	$symbol_len = $ret_type_len + 1 - $RETURN_TYPE_FIELD_WIDTH;
