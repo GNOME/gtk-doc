@@ -27,8 +27,8 @@ grep >/dev/null "tester_noshortdesc:Short_Description" $DOC_MODULE-undocumented.
 if test $? = 1 ; then failed=$(($failed + 1)); fi
 tested=$(($tested + 1))
 
-# check incomplete enum
-grep >/dev/null "Bug568711 (<items>)" $DOC_MODULE-undocumented.txt
+# check enums
+grep >/dev/null "EnumNoItemDocs (<items>)" $DOC_MODULE-undocumented.txt
 if test $? = 1 ; then failed=$(($failed + 1)); fi
 tested=$(($tested + 1))
 

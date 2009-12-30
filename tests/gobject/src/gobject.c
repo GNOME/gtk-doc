@@ -66,6 +66,8 @@ GtkdocObject *gtkdoc_object_new (void) {
   return(NULL);
 }
 
+/* methods */
+
 /**
  * gtkdoc_object_set_otest:
  * @self: the object
@@ -99,7 +101,19 @@ void gtkdoc_object_set_otest (GObject *self, const gchar *value) {
 void gtkdoc_object_frobnicate (GObject *self, gint n) {
   
 }
-/* methods */
+
+/**
+ * gtkdoc_object_fooify:
+ * @self: the object
+ * @...: a NULL terminated list of arguments
+ *
+ * Fooify the content of @self.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean gtkdoc_object_fooify (GObject *self, ...) {
+  return TRUE;
+}
 
 /* class internals */
 

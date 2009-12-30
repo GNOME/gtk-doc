@@ -1,22 +1,29 @@
 <SECTION>
 <FILE>tester_nodocs</FILE>
-<TITLE>GtkdocTesterNodocs</TITLE>
-Bug568711
-<SUBSECTION Standard>
-<SUBSECTION Private>
 </SECTION>
 
 <SECTION>
 <FILE>tester_nolongdesc</FILE>
-<TITLE>GtkdocTesterNoLongDesc</TITLE>
-<SUBSECTION Standard>
-<SUBSECTION Private>
 </SECTION>
 
 <SECTION>
 <FILE>tester_noshortdesc</FILE>
-<TITLE>GtkdocTesterNoShortDesc</TITLE>
-<SUBSECTION Standard>
-<SUBSECTION Private>
+</SECTION>
+
+<SECTION>
+<FILE>tester_brokendocs</FILE>
+MACRO_NO_ITEM_DOCS
+MACRO_INCOMPLETE_DOCS
+MACRO_UNUSED_DOCS
+EnumNoItemDocs
+EnumIncompleteDocs
+EnumUnusedDocs
+StructNoItemDocs
+StructIncompleteDocs
+StructUnusedDocs
+func_no_docs
+func_no_item_docs
+func_incomplete_docs
+func_unused_docs
 </SECTION>
 

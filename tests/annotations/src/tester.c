@@ -12,7 +12,7 @@
 
 /**
  * annotation_array_length:
- * @store: a #GtkListStore
+ * @list: a #GtkListStore
  * @n_columns: number of columns
  * @types: (array length=n_columns): list of types
  *

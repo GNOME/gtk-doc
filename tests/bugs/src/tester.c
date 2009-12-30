@@ -142,12 +142,35 @@ int bug_574654a(void) {
 void bug_574654b(double offset) { }
 
 
+/**
+ * bug_580300a_get_type:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=580300
+ */
 void bug_580300a_get_type(void) { }
 
+/**
+ * bug_580300b_get_type:
+ * @a: value
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=580300
+ */
 void bug_580300b_get_type(gint a) { }
 
+/**
+ * bug_580300c_get_type:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=580300
+ */
 void bug_580300c_get_type() { }
 
+/**
+ * bug_580300d_get_type:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=580300
+ *
+ * Returns: result
+ */
 int bug_580300d_get_type() { }
 
 

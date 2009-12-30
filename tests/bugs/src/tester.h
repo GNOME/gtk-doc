@@ -125,6 +125,9 @@ typedef int
 
 /**
  * bug_512155b_function_pointer_t:
+ * @arg1: param 1
+ * @arg2: param 1
+ * @arg3: param 1
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512155
  */
@@ -134,6 +137,9 @@ int (*bug_512155b_function_pointer_t) (unsigned int arg1, unsigned int arg2,
 
 /**
  * bug_512155c_function_pointer_t:
+ * @arg1: param 1
+ * @arg2: param 1
+ * @arg3: param 1
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512155
  */
@@ -213,8 +219,8 @@ struct _bug_554833 {
 struct _bug_554833 *
                 bug_554833_new (void);
 
-#define GTKDOC_GNUC_CONST
-int bug_574654a(void) GTKDOC_GNUC_CONST;
+#define _GTKDOC_GNUC_CONST
+int bug_574654a(void) _GTKDOC_GNUC_CONST;
 void bug_574654b(double offset);
 
 
