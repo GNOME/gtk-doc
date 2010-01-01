@@ -114,8 +114,11 @@ typedef struct {
 } Bug512154;
 
 
-/*
+/**
  * bug_512155a_function_pointer_t:
+ * @arg1: param 1
+ * @arg2: param 1
+ * @arg3: param 1
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512155
  */
@@ -219,8 +222,9 @@ struct _bug_554833 {
 struct _bug_554833 *
                 bug_554833_new (void);
 
-#define _GTKDOC_GNUC_CONST
-int bug_574654a(void) _GTKDOC_GNUC_CONST;
+
+#define GTKDOC_GNUC_CONST
+int bug_574654a(void) GTKDOC_GNUC_CONST;
 void bug_574654b(double offset);
 
 
@@ -258,6 +262,23 @@ typedef union _Bug165425b {
   int i;
   float f;
 } Bug165425b;
+
+
+/*
+ * BugXXX1b:
+ * @a: field
+ *
+ * No bug report
+ *
+typedef struct _BugXXX1b BugXXX1b;
+struct _BugXXX1b {
+  *//*< protected >*//*
+  gint a;
+
+  *//*< private >*//*
+  gint b;
+};
+*/
 
 
 #endif // GTKDOC_TESTER_H

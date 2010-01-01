@@ -122,14 +122,14 @@ const char* const * bug_552602 (void) {
   return NULL;
 }
 
-/** 
+/**
  * bug_574654a:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=574654
  *
  * Returns: result
  */
-/** 
+/**
  * bug_574654b:
  * @offset: skip this many items
  *
