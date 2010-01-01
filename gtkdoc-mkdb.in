@@ -3940,6 +3940,9 @@ sub ScanSourceFile {
 #############################################################################
 
 sub OutputMissingDocumentation {
+    my $old_undocumented_file = "$ROOT_DIR/$MODULE-undocumented.txt";
+    my $new_undocumented_file = "$ROOT_DIR/$MODULE-undocumented.new";
+
     my $n_documented = 0;
     my $n_incomplete = 0;
     my $total = 0;
@@ -3950,8 +3953,8 @@ sub OutputMissingDocumentation {
     my $buffer_deprecated = "";
     my $buffer_descriptions = "";
     
-    open (UNDOCUMENTED, ">$ROOT_DIR/$MODULE-undocumented.txt")
-      || die "Can't create $ROOT_DIR/$MODULE-undocumented.txt: $!";
+    open(UNDOCUMENTED, ">$new_undocumented_file")
+      || die "Can't create $new_undocumented_file";
     
     foreach $symbol (sort (keys (%AllSymbols))) {
         # FIXME: should we print LogWarnings for undocumented stuff?
@@ -4018,10 +4021,13 @@ sub OutputMissingDocumentation {
     print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
     
     print UNDOCUMENTED $buffer;
-    
     close (UNDOCUMENTED);
     
-    printf (("%.0f%% symbol docs coverage ($n_documented symbols documented, $n_incomplete symbols incomplete, " . ($total - $n_documented) . " not documented)\nSee $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"), $percent);
+    return &UpdateFileIfChanged ($old_undocumented_file, $new_undocumented_file, 0);
+    
+    printf "%.0f%% symbol docs coverage", $percent;
+    print "($n_documented symbols documented, $n_incomplete symbols incomplete, " . ($total - $n_documented) . " not documented)\n";
+    print "See $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n";
 }
 
 
