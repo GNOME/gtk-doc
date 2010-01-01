@@ -4033,14 +4033,18 @@ sub OutputMissingDocumentation {
 
 #############################################################################
 # Function    : OutputUndeclaredSymbols
-# Description : Outputs symbols that are undeclared yet documented to a file
+# Description : Outputs symbols that are listed in the section file, but not
+#               declaration is found in the sources
 #
 # Arguments   : none
 #############################################################################
 
 sub OutputUndeclaredSymbols {
-    open(UNDECLARED, ">$ROOT_DIR/$MODULE-undeclared.txt")
-	|| die "Can't create $ROOT_DIR/$MODULE-undeclared.txt";
+    my $old_undeclared_file = "$ROOT_DIR/$MODULE-undeclared.txt";
+    my $new_undeclared_file = "$ROOT_DIR/$MODULE-undeclared.new";
+
+    open(UNDECLARED, ">$new_undeclared_file")
+	|| die "Can't create $new_undeclared_file";
 
     if (%UndeclaredSymbols) {
 	print UNDECLARED (join("\n", sort keys %UndeclaredSymbols));
@@ -4048,6 +4052,8 @@ sub OutputUndeclaredSymbols {
 	print "See $MODULE-undeclared.txt for the list of undeclared symbols.\n"
     }
     close(UNDECLARED);
+
+    return &UpdateFileIfChanged ($old_undeclared_file, $new_undeclared_file, 0);
 }
 
 
