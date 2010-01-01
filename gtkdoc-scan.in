@@ -400,9 +400,40 @@ sub ScanHeader {
 		$symbol = $5;
 		$decl = $';
 		$in_declaration = "user_function";
-		#print "DEBUG: user function: $symbol\n";
+		#print "DEBUG: user function (1): $symbol, Returns: $ret_type\n";
 
+            #              $1                                $3            $4             $5
+	    } elsif (($previous_line =~ m/^\s*typedef\s*/) && m/^\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
+		my $p3 = defined($3) ? $3 : "";
+		$ret_type = "$1$p3 $4";
+		$symbol = $5;
+		$decl = $';
+		$in_declaration = "user_function";
+		#print "DEBUG: user function (2): $symbol, Returns: $ret_type\n";
 
+            #              $1            $2
+	    } elsif (($previous_line =~ m/^\s*typedef\s*/) && m/^\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
+		$ret_type = $4;
+		$symbol = $2;
+		$decl = $';
+		#                                     $1                                $3
+		if ($previous_line =~ m/^\s*typedef\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*/) {
+		    my $p3 = defined($3) ? $3 : "";
+		    $ret_type = "$1$p3 ".$ret_type;
+                    $in_declaration = "user_function";
+                    #print "DEBUG: user function (3): $symbol, Returns: $ret_type\n";
+
+                }
+            # FUNCTION POINTER VARIABLES
+            #                                                                       $1                                $3            $4             $5
+            } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/o) {
+		my $p3 = defined($3) ? $3 : "";
+		$ret_type = "$1$p3 $4";
+		$symbol = $5;
+                $decl = $';
+                $in_declaration = "user_function";
+                #print "DEBUG: function pointer variable: $symbol, Returns: $ret_type\n";
+            
 	    # ENUMS
 
 	    } elsif (s/^\s*enum\s+_(\w+)\s+\{/enum $1 {/) {
@@ -488,20 +519,20 @@ sub ScanHeader {
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-	    #                                                                        $1                                                                                                                                                           $2
-	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*\(\s*\*+\s*([A-Za-z]\w*)\s*\)\s*\(/o) {
+	    #                                                                       $1                                                                                                                                                             $2
+	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*_\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*\(\s*\*+\s*([A-Za-z]\w*)\s*\)\s*\(/o) {
 		$ret_type = $1;
 		$symbol = $2;
 		$decl = $';
 		#print "DEBUG: internal Function: $symbol, Returns: $ret_type\n";
 		$in_declaration = "function";
 
-	    #                                                                        $1                                                                                                                                                $2
+	    #                                                                       $1                                                                                                                                                 $2
 	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*([A-Za-z]\w*)\s*\(/o) {
 		$ret_type = $1;
 		$symbol = $2;
 		$decl = $';
-		#print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+		#print "DEBUG: Function (1): $symbol, Returns: $ret_type\n";
 		$in_declaration = "function";
 
 	    # Try to catch function declarations which have the return type on
@@ -518,7 +549,7 @@ sub ScanHeader {
                         if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|union\s+|enum\s+)?\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
                             $ret_type = $1;
                             if (defined ($2)) { $ret_type .= " $2"; }
-                            #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+                            #print "DEBUG: Function  (2): $symbol, Returns: $ret_type\n";
                             $in_declaration = "function";
                         }
                     }
@@ -532,7 +563,7 @@ sub ScanHeader {
                         if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|struct\s+|union\s+|enum\s+)?\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
                             $ret_type = $1;
                             if (defined ($2)) { $ret_type .= " $2"; }
-                            #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+                            #print "DEBUG: Function (3): $symbol, Returns: $ret_type\n";
                             $in_declaration = "function";
                             # this is a hack to detect the end of declaration
                             $decl.=";"
@@ -547,7 +578,7 @@ sub ScanHeader {
 		if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/o) {
 		    $ret_type = "$1 $2";
 		    $symbol = $3;
-		    #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+		    #print "DEBUG: Function (4): $symbol, Returns: $ret_type\n";
 		    $in_declaration = "function";
 
 		} elsif ($previous_line =~ m/^\s*\w+\s*$/
@@ -559,7 +590,7 @@ sub ScanHeader {
                     $symbol = $previous_line;
                     $symbol =~ s/^\s+//;
                     $symbol =~ s/\s*\n//;
-                    #print "DEBUG: Function: $symbol, Returns: $ret_type\n";
+                    #print "DEBUG: Function (5): $symbol, Returns: $ret_type\n";
 		}
 
 	    #} elsif (m/^extern\s+/) {
