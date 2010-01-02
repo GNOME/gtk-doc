@@ -438,4 +438,6 @@ grep "gst_caps_is_always_compatible" tags
     - unfortunately there is no way to ask xsltproc to pre-transform an xslt, that could
       - strip comments
       - process xsl:import and xsl:include
-
+- perl regexps
+  not really an issue, but we can improve by compiling the regexps
+  http://stackoverflow.com/questions/550258/does-the-o-modifier-for-perl-regular-expressions-still-provide-any-benefit
