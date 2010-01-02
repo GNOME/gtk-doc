@@ -20,7 +20,36 @@ flavour=legacy
 usage="\
 usage: $progname [ --copy ] [ --docdir DIR ] [ --flavour {legacy|no-tmpl} ]"
 
+# detect configure script
+no_configure_found=0
+if test -f configure.ac; then
+  configure=configure.ac
+elif test -f configure.in; then
+  configure=configure.in
+else
+  no_configure_found=1
+fi
+
+# check configure script for GTK_DOC_CHECK macro
+no_gtk_doc_check_found=0
+if test $no_configure_found -eq 0; then
+  macro=`grep '^GTK_DOC_CHECK' $configure 2>/dev/null`
+  if test $? -eq 0; then
+    # GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+    extra_options=`echo $macro | sed -e 's/^GTK_DOC_CHECK(\ *\(.*\))/\1/' | sed -e 's/^.*\,\ *\[\{0,1\}\([^]]*\)\]\{0,1\}\ *$/\1/'`
+    if test $? -eq 0; then
+      #echo >&2 "DEBUG: adding extra options [$extra_options] to [$*]"
+      set - $* $GTKDOCIZE_FLAGS $extra_options
+    else
+      set - $* $GTKDOCIZE_FLAGS
+    fi
+  else
+    no_gtk_doc_check_found=1;
+  fi
+fi
+
 while test $# -gt 0; do
+  #echo >&2 "DEBUG: parsing args [$1]";
   case "$1" in
   --help)
     echo "$usage"
@@ -68,18 +97,11 @@ case "$flavour" in
     exit 1 ;;
 esac
 
-if test -f configure.ac; then
-  configure=configure.ac
-elif test -f configure.in; then
-  configure=configure.in
-else
+if test $no_configure_found -eq 1; then
   echo "$progname: neither configure.ac nor configure.in exist" 1>&2
   exit 1
 fi
-
-if grep '^GTK_DOC_CHECK' $configure >/dev/null 2>&1; then
-  :
-else
+if test $no_gtk_doc_check_found -eq 1; then
   echo "$progname: GTK_DOC_CHECK not called in $configure" 1>&2
   exit 1
 fi
