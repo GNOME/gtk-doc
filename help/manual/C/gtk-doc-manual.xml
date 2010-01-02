@@ -191,11 +191,12 @@
           </para>
           <note>
             <para>
-              Since gtk-doc 1.9 the templates can be avoided. We encourage people to keep
+              Since GTK-Doc 1.9 the templates can be avoided. We encourage people to keep
               documentation in the code. <application>gtkdocize</application> supports now
               a <option>--flavour no-tmpl</option> option that chooses a makefile that
               skips tmpl usage totally.
-              If you have never changed file in tmpl by hand, please remove the dir once.
+              If you have never changed file in tmpl by hand, please remove the dir
+              (e.g. from version control system).
             </para>
           </note>
         </listitem>
@@ -283,7 +284,7 @@
           There is no standard place where the DocBook Modular Stylesheets are installed.
         </para>
         <para>
-          gtk-doc's configure script searches these 3 directories automatically:
+          GTK-Doc's configure script searches these 3 directories automatically:
         </para>
         <para>
           <filename> /usr/lib/sgml/stylesheets/nwalsh-modular   </filename>     (used by RedHat)
@@ -296,7 +297,7 @@
         </para>
         <para>
           If you have the stylesheets installed somewhere else, you need to configure
-          gtk-doc using the option:
+          GTK-Doc using the option:
           <command> --with-dsssl-dir=&lt;PATH_TO_TOPLEVEL_STYLESHEETS_DIR&gt; </command>
         </para>
       </sect2>
@@ -310,6 +311,7 @@
       <para>
         (What things GTK-Doc should, and shouldn't, be used for.)
         (- ???)
+        (- non C-based projects)
         (+ Tutorials)
       </para>
 
@@ -396,24 +398,27 @@ meep/
           <programlisting>
 <![CDATA[
 # check for gtk-doc
-GTK_DOC_CHECK(1.9)
+GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
 ]]>
           </programlisting>
         </example>
       </para>
-
+      
       <para>
-        Besides checking for the required Gtk-Doc version, this adds two configure
-        switches:
+        The first argument is used to check for the gtkdocversion at configure time.
+        The 2nd, optional argument is used by <application>gtkdocize</application>.
+        The <symbol>GTK_DOC_CHECK</symbol> macro also adds several configure switches:
       </para>
       <orderedlist>
         <listitem><para>--with-html-dir=PATH : path to installed docs</para></listitem>
-        <listitem><para>--enable-gtk-doc : use gtk-doc to build documentation</para></listitem>
+        <listitem><para>--enable-gtk-doc : use gtk-doc to build documentation [default=no]</para></listitem>
+        <listitem><para>--enable-gtk-doc-html : build documentation in html format [default=yes]</para></listitem>
+        <listitem><para>--enable-gtk-doc-pdf : build documentation in pdf format [default=no]</para></listitem>
       </orderedlist>
 
       <important>
       	<para>
-          Gtk-Doc is disabled by default! Remember to pass the option
+          GTK-Doc is disabled by default! Remember to pass the option
           <option>'--enable-gtk-doc'</option> to the next
           <filename>configure</filename> run. Otherwise pregenerated documentation is installed
           (which makes sense for users but not for developers).
@@ -423,7 +428,7 @@ GTK_DOC_CHECK(1.9)
       <para>
         Furthermore it is recommended that you have the following line inside
         you <filename>configure.ac</filename> script.
-        This allows <filename>gtkdocize</filename> to automatically copy the
+        This allows <application>gtkdocize</application> to automatically copy the
         macro definition for <function>GTK_DOC_CHECK</function> to your project.
       </para>
 
@@ -460,13 +465,13 @@ AC_CONFIG_MACRO_DIR(m4)
       <!-- FIXME: explain options ? -->
 
       <para>
-        You may also want to enable gtk-doc for the distcheckmake target. Just
+        You may also want to enable GTK-Doc for the distcheckmake target. Just
         add then one-liner show in the next example to you top-level
         <filename>Makefile.am</filename>:
       </para>
 
       <para>
-        <example><title>Enable gtk-doc during make distcheck</title>
+        <example><title>Enable GTK-Doc during make distcheck</title>
           <programlisting>
 <![CDATA[
 DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc
@@ -483,8 +488,8 @@ DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc
       <para>
         Most projects will have an <filename>autogen.sh</filename> script to
         setup the build infrastructure after a checkout from version control
-        system (such as cvs). Gtk-Doc comes with a tool called
-        <filename>gtkdocize</filename> which can be used in such a script.
+        system (such as cvs/svn/git). GTK-Doc comes with a tool called
+        <application>gtkdocize</application> which can be used in such a script.
         It should be run before autoheader, automake or autoconf.
       </para>
 
@@ -499,21 +504,25 @@ gtkdocize || exit 1
       </para>
 
       <para>
-        When running <filename>gtkdocize</filename> it copies
+        When running <application>gtkdocize</application> it copies
         <filename>gtk-doc.make</filename> to you project root (or any directory
-        specified by the --docdir option). If also check you configure script
-        for the <function>GTK_DOC_CHECK</function> invocation.
+        specified by the <option>--docdir</option> option).
+        If also check you configure script for the <function>GTK_DOC_CHECK</function>
+        invocation.
       </para>
 
       <para>
-        Historically gtk-doc was gerating template files where developers entered the docs.
-        this turned out to be not so good. Since a few version gtk-doc could also get all
+        Historically GTK-Doc was gerating template files where developers entered the docs.
+        this turned out to be not so good. Since a few version GTK-Doc could also get all
         the information from source comments.
-        Since gtk-doc 1.9 the templates can be avoided. We encourage people to keep
+        Since GTK-Doc 1.9 the templates can be avoided. We encourage people to keep
         documentation in the code. <application>gtkdocize</application> supports now
         a <option>--flavour no-tmpl</option> option that chooses a makefile that skips
-        tmpl usage totally.
-        If you have never changed file in tmpl by hand, please remove the dir once.
+        tmpl usage totally. Besides adding the option directly to the command
+        invocation, they can be added also to a environment variable called <symbol>GTKDOCIZE_FLAGS</symbol>
+        or set as a 2nd parameter in <symbol>GTK_DOC_CHECK</symbol> macro in the configure script.
+        If you have never changed file in tmpl by hand and migrating from older gtkdoc versions,
+        please remove the dir (e.g. from version control system).
       </para>
     </sect1>
 
@@ -598,8 +607,8 @@ make
 
       <para>
         A multiline comment that starts with an additional '*' marks a
-        documentation block that will be processed by the Gtk-Doc tools.
-        <example><title>Gtk-Doc comment block</title>
+        documentation block that will be processed by the GTK-Doc tools.
+        <example><title>GTK-Doc comment block</title>
           <programlisting>
 <![CDATA[
 /**
@@ -631,7 +640,7 @@ make
       <para>
         One advantage of hyper-text over plain-text is the ability to have links
         in the document. Writing the correct markup for a link can be tedious
-        though. Gtk-Doc comes to help by providing several useful abbreviations.
+        though. GTK-Doc comes to help by providing several useful abbreviations.
         <itemizedlist>
           <listitem>
             <para>
@@ -676,7 +685,7 @@ make
       <tip>
 	<para>
           If you need to use the special characters '&lt;', '&gt;', '()', '@',
-          '%', or '#' in your documentation without gtk-doc changing them you
+          '%', or '#' in your documentation without GTK-Doc changing them you
           can use the XML entities "&amp;lt;", "&amp;gt;", "&amp;lpar;",
           "&amp;rpar;", "&amp;commat;", "&amp;percnt;" and "&amp;num;"
           respectively or escape them with a backslash '\'.
@@ -692,7 +701,7 @@ make
 
       <tip>
 	<para>
-	  As already mentioned earlier Gtk-Doc is for documenting public API. Thus
+	  As already mentioned earlier GTK-Doc is for documenting public API. Thus
 	  one cannot write documentation for static symbols. Nevertheless it is good
 	  to comment those symbols too. This helps other to understand you code.
 	  Therefore we recommend to comment these using normal comments (without the
@@ -921,7 +930,7 @@ make
       </variablelist>
 
       <para>
-        Gtk-doc assumes all symbols (macros, functions) starting with '_' are
+        GTK-Doc assumes all symbols (macros, functions) starting with '_' are
         private. They are treated like static functions.
       </para>
 
@@ -1067,7 +1076,7 @@ typedef enum {
 ]]>
           </programlisting>
         </informalexample>
-        For the latter gtk-doc also supports an abbreviation:
+        For the latter GTK-Doc also supports an abbreviation:
 <![CDATA[
 |[
   ...
@@ -1232,7 +1241,7 @@ gtk_arrow_get_type
       </para>
 
       <para>
-        Since gtk-doc 1.8 <application>gtkdoc-scan</application> can generate this list for you.
+        Since GTK-Doc 1.8 <application>gtkdoc-scan</application> can generate this list for you.
         Just add "--rebuild-types" to SCAN_OPTIONS in <filename>Makefile.am</filename>. If you
         use this approach you should not dist the types file nor have it under version control.
       </para>
@@ -1243,17 +1252,17 @@ gtk_arrow_get_type
       <title>Editing the master document</title>
 
       <para>
-        Gtk-Doc produces documentation in DocBook SGML/XML. When processing the
-        inline source comments, the Gtk-Doc tools generate one documentation
+        GTK-Doc produces documentation in DocBook SGML/XML. When processing the
+        inline source comments, the GTK-Doc tools generate one documentation
         page per class or module as a separate file. The master document
         includes them and place them in a order.
       </para>
 
       <para>
-        While Gtk-Doc creates a template master document for you, later run will
+        While GTK-Doc creates a template master document for you, later run will
         not touch it again. This means that one can freely structure the
         documentation. That includes grouping pages and adding extra pages.
-        Gtk-doc has now a test suite, where also the master-document is recreated from scratch.
+        GTK-Doc has now a test suite, where also the master-document is recreated from scratch.
         Its a good idea to look at this from time to time to see if there are some new goodies
         introduced there.
       </para>
@@ -1301,7 +1310,7 @@ gtk_arrow_get_type
 
       <para>
         The section file is used to organise the documentation output by
-        Gtk-Doc. Here one specifies which symbol belongs to which module or
+        GTK-Doc. Here one specifies which symbol belongs to which module or
         class and control the visibility (public or private).
       </para>
 
@@ -1363,7 +1372,7 @@ gtk_arrow_get_type
     <title>Controlling the result</title>
 
     <para>
-      A Gtk-Doc run generates report files inside the documentation directory.
+      A GTK-Doc run generates report files inside the documentation directory.
       The generated files are named:
       <filename>&lt;package&gt;-undocumented.txt</filename>,
       <filename>&lt;package&gt;-undeclared.txt</filename> and
@@ -1389,7 +1398,7 @@ gtk_arrow_get_type
 
     <para>
       The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol
-      names, where the Gtk-Doc scanner has found documentation, but does not
+      names, where the GTK-Doc scanner has found documentation, but does not
       know where to put it. This means that the symbol has not yet been added to
       the <filename>&lt;package&gt;-sections.txt</filename> file.
     </para>
@@ -1397,7 +1406,7 @@ gtk_arrow_get_type
     <tip>
       <para>
         Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile.am.
-        If at least gtk-doc 1.9 is installed, this will run sanity checks during
+        If at least GTK-Doc 1.9 is installed, this will run sanity checks during
         <command>make check</command> run.
       </para>
     </tip>
