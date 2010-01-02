@@ -34,7 +34,8 @@
 #		if the file has changed it moves the new version into the old
 #		versions place. This is used so we only change files if
 #		needed, so we can do proper dependency tracking and we don't
-#		needlessly check files into CVS that haven't changed.
+#		needlessly check files into version control systems that haven't
+#               changed.
 #		It returns 0 if the file hasn't changed, and 1 if it has.
 # Arguments   : $old_file - the pathname of the old file.
 #		$new_file - the pathname of the new version of the file.
@@ -45,7 +46,7 @@
 sub UpdateFileIfChanged {
     my ($old_file, $new_file, $make_backup) = @_;
 
-#    print "Comparing $old_file with $new_file...\n";
+    #print "Comparing $old_file with $new_file...\n";
 
     # If the old file doesn't exist we want this to default to 1.
     my $exit_code = 1;
@@ -53,7 +54,7 @@ sub UpdateFileIfChanged {
     if (-e $old_file) {
 	`cmp -s "$old_file" "$new_file"`;
 	$exit_code = $? >> 8;
-#	print "   cmp exit code: $exit_code ($?)\n";
+	#print "   cmp exit code: $exit_code ($?)\n";
     }
 
     if ($exit_code > 1) {
@@ -61,20 +62,17 @@ sub UpdateFileIfChanged {
     }
 
     if ($exit_code == 1) {
-#	print "   files changed - replacing old version with new version.\n";
-
+        #print "   files changed - replacing old version with new version.\n";
 	if ($make_backup && -e $old_file) {
 	    rename ($old_file, "$old_file.bak")
 		|| die "Can't move $old_file to $old_file.bak: $!";
 	}
-
 	rename ($new_file, $old_file)
 	    || die "Can't move $new_file to $old_file: $!";
 
 	return 1;
     } else {
-#	print "   files the same - deleting new version.\n";
-
+        #print "   files the same - deleting new version.\n";
 	unlink ("$new_file")
 	    || die "Can't delete file: $new_file: $!";
 
@@ -310,6 +308,153 @@ sub ParseEnumDeclaration {
 	}
 
 	last if $terminator eq '}';
+    }
+
+    return @result;
+}
+
+
+#############################################################################
+# Function    : ParseFunctionDeclaration
+# Description : This function takes a function declaration and
+#               breaks it into individual parameter declarations.
+# Arguments   : $declaration - the declaration to parse
+#               $typefunc - function reference to apply to type
+#               $namefunc - function reference to apply to name
+#############################################################################
+
+sub ParseFunctionDeclaration {
+    my ($declaration, $typefunc, $namefunc) = @_;
+    
+    my @result = ();
+    
+    my ($param_num) = 0;
+    while ($declaration ne "") {
+        #print "$declaration";
+
+        if ($declaration =~ s/^[\s,]+//) {
+            # skip whitespace and commas
+            next;
+
+        } elsif ($declaration =~ s/^void\s*[,\n]//) {
+            if ($param_num != 0) {
+                # FIXME: whats the problem here?
+                &LogWarning ($SymbolSourceFile{$symbol},$SymbolSourceLine{$symbol}, "void used as parameter in function $symbol");
+            }
+            push @result, "void";
+            my $xref = "<type>void</type>";
+            my $label = defined $namefunc ? $namefunc->($xref) : $xref;
+            push @result, $label;
+
+        } elsif ($declaration =~ s/^...\s*[,\n]//) {
+            push @result, "Varargs";
+            my $label = defined $namefunc ? $namefunc->("...") : "...";
+            push @result, $label;
+
+        # allow alphanumerics, '_', '[' & ']' in param names
+        # Try to match a standard parameter
+        #                                $1                                                                                                                                    $2                             $3                                                           $4       $5
+        } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const\b|restrict\b)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+	    my $pre	= defined($1) ? $1 : "";
+	    my $type	= $2;
+	    my $ptr	= defined($3) ? $3 : "";
+	    my $name	= defined($4) ? $4 : "";
+	    my $array	= defined($5) ? $5 : "";
+
+	    $pre  =~ s/\s+/ /g;
+	    $type =~ s/\s+/ /g;
+	    $ptr  =~ s/\s+/ /g;
+	    $ptr  =~ s/\s+$//;
+	    if ($ptr && $ptr !~ m/\*$/) { $ptr .= " "; }
+
+            #print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
+
+            if (($name eq "") && $pre =~ m/^((un)?signed .*)\s?/ ) {
+                $name = $type;
+                $type = "$1";
+                $pre = "";
+            }
+
+            if ($name eq "") {
+                $name = "Param" . ($param_num + 1);
+            }
+
+            #print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
+
+            push @result, $name;
+            my $xref = defined $typefunc ? $typefunc->($type, "<type>$type</type>") : $type;
+            my $label	= "$pre$xref $ptr$name$array";
+            if (defined $namefunc) {
+                $label = $namefunc->($label)
+            }
+            push @result, $label;
+
+        # Try to match parameters which are functions
+        #                              $1                                       $2          $3      $4                      $5                    $7             $8
+	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict\b)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+ 	    my $mod1 = defined($1) ? $1 : "";
+	    if (defined($2)) { $mod1 .= $2; }
+	    my $type = $3;
+	    my $ptr1 = $4;
+	    my $mod2 = defined($5) ? $5 : "";
+	    my $func_ptr = $6;
+	    my $name = $7;
+	    my $func_params = defined($8) ? $8 : "";
+            
+            #if (!defined($type)) { print "## no type\n"; };
+            #if (!defined($ptr1)) { print "## no ptr1\n"; };
+            #if (!defined($func_ptr)) { print "## no func_ptr\n"; };
+            #if (!defined($name)) { print "## no name\n"; };
+
+	    if ($ptr1 && $ptr1 !~ m/\*$/) { $ptr1 .= " "; }
+	    $func_ptr  =~ s/\s+//g;
+
+	    #print "Type: [$mod1][$xref][$ptr1][$mod2] ([$func_ptr][$name]) ($func_params)\n";
+
+	    push @result, $name;
+            my $xref = defined $typefunc ? $typefunc->($type, "<type>$type</type>") : $type;
+            my $label = "$mod1$xref$ptr1$mod2 ($func_ptr$name) ($func_params)";
+            if (defined $namefunc) {
+                $label = $namefunc->($label)
+            }
+            push @result, $label;
+        } else {
+            &LogWarning ($SymbolSourceFile{$symbol},$SymbolSourceLine{$symbol}, 
+                "Can't parse args for function $symbol: $declaration");
+            last;
+        }
+        $param_num++;
+    }
+
+    return @result;
+}
+
+
+#############################################################################
+# Function    : ParseMacroDeclaration
+# Description : This function takes a macro declaration and
+#               breaks it into individual parameter declarations.
+# Arguments   : $declaration - the declaration to parse
+#               $namefunc - function reference to apply to name
+#############################################################################
+
+sub ParseMacroDeclaration {
+    my ($declaration, $namefunc) = @_;
+    
+    my @result = ();
+
+    if ($declaration =~ m/^\s*#\s*define\s+\w+\(([^\)]*)\)/) {
+	my $params = $1;
+	
+	$params =~ s/\\\n//g;
+	foreach $param (split (/,/, $params)) {
+            $param =~ s/^\s+//;
+            $param =~ s/\s*$//;
+            if ($param =~ m/\S/) {
+                push @result, $param;
+                push @result, defined $namefunc ? $namefunc->($param) : $param;
+            }
+	}
     }
 
     return @result;

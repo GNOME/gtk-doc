@@ -377,68 +377,18 @@ EOF
 	my $ret_type_modifier = defined($1) ? $1 : "";
 	my $ret_type = $3;
 	my $ret_type_pointer = $4;
+	
+	my @fields = ParseFunctionDeclaration($declaration);
 
-	my ($param_num) = 0;
-	while ($declaration ne "") {
-	    if ($declaration =~ s/^[\s,]+//) {
-		# skip whitespace and commas
-		next;
-
-	    } elsif ($declaration =~ s/^void\s*[,\n]//) {
-		if ($param_num != 0) {
-		    &LogWarning ($SymbolSourceFile{$symbol},$SymbolSourceLine{$symbol}, "void used as parameter in function $symbol");
-		}
-
-	    } elsif ($declaration =~ s/^...\s*[,\n]//) {
-		$output .= &OutputParam ($symbol, "Varargs",
-					 $template_exists, 1, "");
-
-	    # Try to match a standard parameter (keep in sync with gtkdoc-mkdb)
-	    #                                $1                                                                                                                                    $2                             $3                                                           $4       $5
-	    } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const\b|restrict\b)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
- 		my $pre		= defined($1) ? $1 : "";
- 		my $vtype	= $2;
- 		my $ptr		= defined($3) ? $3 : "";
- 		my $name	= defined($4) ? $4 : "";
-
- 		$pre   =~ s/\s+/ /g;
- 		$vtype =~ s/\s+/ /g;
- 		$ptr   =~ s/\s+/ /g;
- 		$ptr   =~ s/\s+$//;
- 		if ($ptr && $ptr !~ m/\*$/) { $ptr .= " "; }
-
- 		if (($name eq "") && $pre =~ m/^((un)?signed .*)\s?/ ) {
- 		    $name  = $vtype;
- 		    $vtype = "$1";
- 		    $pre   = "";
- 		}
-
- 		#print "$symbol: '$pre' '$vtype' '$ptr' '$name' \n";
-
- 		if ($name eq "") {
-		    $name = "Param" . ($param_num + 1);
-		}
-		$output .= &OutputParam ($symbol, $name, $template_exists, 1, "");
-
-	    # Try to match parameters which are functions (keep in sync with gtkdoc-mkdb)
-	    #                              $1                                       $2          $3      $4                      $5                    $7             $8
-	    } elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict\b)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
-		my $name = $6;
-		$output .= &OutputParam ($symbol, $name, $template_exists, 1,
-					 "");
-
-	    } else {
-		&LogWarning ($SymbolSourceFile{$symbol},$SymbolSourceLine{$symbol}, 
-                    "Can't parse args for function $symbol: $declaration");
-		last;
-	    }
-	    $param_num++;
+	for (my $i = 0; $i <= $#fields; $i += 2) {
+	    my $field_name = $fields[$i];
+	    $output .= &OutputParam ($symbol, $field_name, $template_exists, 1, "");
 	}
 
 	if ($ret_type ne "void" || $ret_type_modifier || $ret_type_pointer) {
-	    $output .= &OutputParam ($symbol, "Returns", $template_exists, 1,
-				     "");
+	    $output .= &OutputParam ($symbol, "Returns", $template_exists, 1, "");
 	}
+
 	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Stability", $template_exists, 0, "");
@@ -447,20 +397,14 @@ EOF
     }
 
     if ($type eq "MACRO") {
-	if ($declaration =~ m/^\s*#\s*define\s+\w+\(([^\)]*)\)/) {
-            my ($params) = $1;
-	    my ($param);
-
-            $params =~ s/\\\n//g;
-	    foreach $param (split (/,/, $params)) {
-		$param =~ s/^\s+//;
-		$param =~ s/\s*$//;
-		if ($param =~ m/\S/) {
-		    $output .= &OutputParam ($symbol, $param, $template_exists,
-					     1, "");
-		}
-	    }
-	}
+        my @fields = ParseMacroDeclaration($declaration);
+    
+        for (my $i = 0; $i <= $#fields; $i +=2) {
+            my $field_name = $fields[$i];
+            
+            $output .= &OutputParam ($symbol, $field_name, $template_exists,
+                                     1, "");
+        }
 	$output .= &OutputParam ($symbol, "Returns", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Deprecated", $template_exists, 0, "");
 	$output .= &OutputParam ($symbol, "Since", $template_exists, 0, "");

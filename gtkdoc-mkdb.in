@@ -226,6 +226,7 @@ my %SourceSymbolSourceLine;
 # all documentation goes in here, so we can do coverage analysis
 my %AllSymbols;
 my %AllIncompleteSymbols;
+my %AllUnusedSymbols;
 my %AllDocumentedSymbols;
 
 # Undeclared yet documented symbols
@@ -836,6 +837,7 @@ EOF
 
     &OutputMissingDocumentation;
     &OutputUndeclaredSymbols;
+    &OutputUnusedSymbols;
 
     if ($OUTPUT_ALL_SYMBOLS) {
 	&OutputAllSymbols;
@@ -1270,31 +1272,35 @@ sub OutputMacro {
     my $condition = &MakeConditionDescription ($symbol);
     my $synop = &MakeReturnField("#define") . "<link linkend=\"$id\">$symbol</link>";
     my $desc;
-    my $padding = "";
-    my $args = "";
-    my $pad;
 
-    if ($declaration =~ m/^\s*#\s*define(\s+)\w+(\([^\)]*\))/) {
-	$padding = $1;
-	$args = $2;
+    my @fields = ParseMacroDeclaration($declaration, \&CreateValidSGML);
+    my $title = $symbol . (@fields ? "()" : "");
 
-	if (length ($symbol) < $SYMBOL_FIELD_WIDTH) {
-	    $synop .= (' ' x ($SYMBOL_FIELD_WIDTH - length ($symbol)));
-	}
-
-	# Try to align all the lines of args correctly.
-	$pad = ' ' x ($RETURN_TYPE_FIELD_WIDTH + $SYMBOL_FIELD_WIDTH + 1);
-	my $args_padded = $args;
-	$args_padded =~ s/ *\\\n */\n$pad/gm;
-	$synop .= &CreateValidSGML ($args_padded);
-    }
-    $synop .= "\n";
-
-    my $title = $symbol . ($args ? "()" : "");
     $desc = "<refsect2 id=\"$id\" role=\"macro\"$condition>\n<title>$title</title>\n";
     $desc .= MakeIndexterms($symbol, $id);
     $desc .= "\n";
     $desc .= OutputSymbolExtraLinks($symbol);
+
+    if (@fields) {
+        if (length ($symbol) < $SYMBOL_FIELD_WIDTH) {
+            $synop .= (' ' x ($SYMBOL_FIELD_WIDTH - length ($symbol)));
+        }
+    
+        $synop .= "(";
+        for (my $i = 1; $i <= $#fields; $i += 2) {
+            my $field_name = $fields[$i];
+
+            if ($i == 1) {
+                $synop .= "$field_name";
+            } else {
+                $synop .= ",\n"
+                    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
+                    . " $field_name";
+            }
+        }
+        $synop .= ")";
+    }
+    $synop .= "\n";
 
     # Don't output the macro definition if is is a conditional macro or it
     # looks like a function, i.e. starts with "g_" or "_?gnome_", or it is
@@ -1307,7 +1313,9 @@ sub OutputMacro {
     } else {
 	$desc .= "<programlisting>" . &MakeReturnField("#define") . "$symbol";
 	# Align each line so that if should all line up OK.
-	$pad = ' ' x ($RETURN_TYPE_FIELD_WIDTH - length ("#define "));
+	my $pad = ' ' x ($RETURN_TYPE_FIELD_WIDTH - length ("#define "));
+	$declaration =~ m/^\s*#\s*define\s+\w+(\([^\)]*\))/;
+	my $args = $1;
 	$args =~ s/\n/\n$pad/gm;
 	$desc .= &CreateValidSGML ($args);
 	$desc .= "</programlisting>\n";
@@ -1315,7 +1323,7 @@ sub OutputMacro {
 
     $desc .= &MakeDeprecationNote($symbol);
 
-    my $parameters = &OutputParamDescriptions ("MACRO", $symbol);
+    my $parameters = &OutputParamDescriptions ("MACRO", $symbol, @fields);
     my $parameters_output = 0;
 
     if (defined ($SymbolDocs{$symbol})) {
@@ -1522,6 +1530,7 @@ sub OutputStruct {
     if ($found) {
 	my %field_descrs = @$params;
 	my $missing_parameters = "";
+	my $unused_parameters = "";
 
         $desc .= "<variablelist role=\"struct\">\n";
 	while (@fields) {
@@ -1535,6 +1544,7 @@ sub OutputStruct {
                 ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
                 $field_descr = &ExpandAbbreviations($symbol, $field_descr);
 		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
+		delete $field_descrs{$field_name};
 	    } else {
 	        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                     "Field description for $symbol"."::"."$field_name is missing in source code comment block.");
@@ -1548,10 +1558,22 @@ sub OutputStruct {
             $desc .= "</varlistentry>\n";
 	}
 	$desc .= "</variablelist>";
+        foreach my $field_name (keys %field_descrs) {
+            &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                "Field description for $symbol"."::"."$field_name is not used from source code comment block.");
+            if ($unused_parameters ne "") {
+              $unused_parameters .= ", ".$field_name;
+            } else {
+               $unused_parameters = $field_name;
+            }
+        }
 
-	# remember missing parameters (needed in tmpl-free build)
+	# remember missing/unused parameters (needed in tmpl-free build)
         if (($missing_parameters ne "") and (! exists ($AllIncompleteSymbols{$symbol}))) {
             $AllIncompleteSymbols{$symbol}=$missing_parameters;
+        }
+        if (($unused_parameters ne "") and (! exists ($AllUnusedSymbols{$symbol}))) {
+            $AllUnusedSymbols{$symbol}=$unused_parameters;
         }
     }
     else {
@@ -1641,6 +1663,7 @@ sub OutputUnion {
     if ($found) {
 	my %field_descrs = @$params;
 	my $missing_parameters = "";
+	my $unused_parameters = "";
 
         $desc .= "<variablelist role=\"union\">\n";
 	while (@fields) {
@@ -1654,6 +1677,7 @@ sub OutputUnion {
                 ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
                 $field_descr = &ExpandAbbreviations($symbol, $field_descr);
 		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
+		delete $field_descrs{$field_name};
 	    } else {
 	        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                     "Field description for $symbol"."::"."$field_name is missing in source code comment block.");
@@ -1667,10 +1691,22 @@ sub OutputUnion {
             $desc .= "</varlistentry>\n";
 	}
 	$desc .= "</variablelist>";
+        foreach my $field_name (keys %field_descrs) {
+            &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                "Field description for $symbol"."::"."$field_name is not used from source code comment block.");
+            if ($unused_parameters ne "") {
+              $unused_parameters .= ", ".$field_name;
+            } else {
+               $unused_parameters = $field_name;
+            }
+        }
 
-	# remember missing parameters (needed in tmpl-free build)
+	# remember missing/unused parameters (needed in tmpl-free build)
         if (($missing_parameters ne "") and (! exists ($AllIncompleteSymbols{$symbol}))) {
             $AllIncompleteSymbols{$symbol}=$missing_parameters;
+        }
+        if (($unused_parameters ne "") and (! exists ($AllUnusedSymbols{$symbol}))) {
+            $AllUnusedSymbols{$symbol}=$unused_parameters;
         }
     }
     else {
@@ -1737,6 +1773,7 @@ sub OutputEnum {
     if ($found) {
 	my %field_descrs = @$params;
 	my $missing_parameters = "";
+	my $unused_parameters = "";
 
         $desc .= "<variablelist role=\"enum\">\n";
 	for my $field_name (@fields) {
@@ -1750,6 +1787,7 @@ sub OutputEnum {
                 ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
                 $field_descr = &ExpandAbbreviations($symbol, $field_descr);
 		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
+		delete $field_descrs{$field_name};
 	    } else {
 	        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                     "Value description for $symbol"."::"."$field_name is missing in source code comment block.");
@@ -1763,10 +1801,22 @@ sub OutputEnum {
             $desc .= "</varlistentry>\n";
 	}
 	$desc .= "</variablelist>";
+        foreach my $field_name (keys %field_descrs) {
+            &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                "Value description for $symbol"."::"."$field_name is not used from source code comment block.");
+            if ($unused_parameters ne "") {
+              $unused_parameters .= ", ".$field_name;
+            } else {
+               $unused_parameters = $field_name;
+            }
+        }
 
-	# remember missing parameters (needed in tmpl-free build)
+	# remember missing/unused parameters (needed in tmpl-free build)
         if (($missing_parameters ne "") and (! exists ($AllIncompleteSymbols{$symbol}))) {
             $AllIncompleteSymbols{$symbol}=$missing_parameters;
+        }
+        if (($unused_parameters ne "") and (! exists ($AllUnusedSymbols{$symbol}))) {
+            $AllUnusedSymbols{$symbol}=$unused_parameters;
         }
     }
     else {
@@ -1902,121 +1952,39 @@ sub OutputFunction {
     $desc .= OutputSymbolExtraLinks($symbol);
 
     $desc  .= "<programlisting>${ret_type_output}$symbol_desc_output(";
+    
+    my @fields = ParseFunctionDeclaration($declaration, \&MakeXRef,
+					sub {
+					    &tagify($_[0],"parameter");
+					});
+    
+    for (my $i = 1; $i <= $#fields; $i += 2) {
+        my $field_name = $fields[$i];
+        
+        if ($field_name eq "Varargs") {
+            $field_name = "...";
+        }
 
-    my $param_num = 0;
-    while ($declaration ne "") {
-        #print "$declaration";
-
-	if ($declaration =~ s/^[\s,]+//) {
-	    # skip whitespace and commas
-	    next;
-
-	} elsif ($declaration =~ s/^void\s*[,\n]//) {
-	    $synop .= "void";
-	    $desc  .= "void";
-
-	} elsif ($declaration =~ s/^...\s*[,\n]//) {
-	    if ($param_num == 0) {
-		$synop .= "...";
-		$desc  .= "...";
-	    } else {
-		$synop .= ",\n"
-		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " ...";
-		$desc  .= ",\n"
-		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " ...";
-	    }
-
-	# allow alphanumerics, '_', '[' & ']' in param names
-	# Try to match a standard parameter (keep in sync with gtkdoc-mktmpl)
-	#                                $1                                                                                                                                    $2                             $3                                                           $4       $5
-	} elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const\b|restrict\b)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
-	    my $pre	= defined($1) ? $1 : "";
-	    my $type	= $2;
-	    my $ptr	= defined($3) ? $3 : "";
-	    my $name	= defined($4) ? $4 : "";
-	    my $array	= defined($5) ? $5 : "";
-
-	    $pre  =~ s/\s+/ /g;
-	    $type =~ s/\s+/ /g;
-	    $ptr  =~ s/\s+/ /g;
-	    $ptr  =~ s/\s+$//;
-	    if ($ptr && $ptr !~ m/\*$/) { $ptr .= " "; }
-
-            #print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
-
-            if (($name eq "") && $pre =~ m/^((un)?signed .*)\s?/ ) {
-                $name = $type;
-                $type = "$1";
-                $pre = "";
-            }
-
-	    my $xref = &MakeXRef ($type, &tagify($type, "returnvalue"));
-	    my $label	= "$pre$xref $ptr$name$array";
-
-	    #print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
-
-	    if ($param_num == 0) {
-		$synop .= "$label";
-		$desc  .= "$label";
-	    } else {
-		$synop .= ",\n"
-		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " $label";
-		$desc  .= ",\n"
-		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " $label";
-	    }
-
-	# Try to match parameters which are functions (keep in sync with gtkdoc-mktmpl)
-	#                              $1                                       $2          $3      $4                        $5                    $7             $8
-	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict\b)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
- 	    my $mod1 = defined($1) ? $1 : "";
-	    if (defined($2)) { $mod1 .= $2; }
-	    my $type = $3;
-	    my $ptr1 = $4;
-	    my $mod2 = defined($5) ? $5 : "";
-	    my $func_ptr = $6;
-	    my $name = $7;
-	    my $func_params = defined($8) ? $8 : "";
-            
-            #if (!defined($type)) { print "## no type\n"; };
-            #if (!defined($ptr1)) { print "## no ptr1\n"; };
-            #if (!defined($func_ptr)) { print "## no func_ptr\n"; };
-            #if (!defined($name)) { print "## no name\n"; };
-
-	    if ($ptr1 && $ptr1 !~ m/\*$/) { $ptr1 .= " "; }
-	    $func_ptr  =~ s/\s+//g;
-	    my $xref = &MakeXRef ($type, &tagify($type, "returnvalue"));
-	    my $label = "$mod1$xref$ptr1$mod2 ($func_ptr$name) ($func_params)";
-
-	    #print "Type: [$mod1][$xref][$ptr1][$mod2] ([$func_ptr][$name]) ($func_params)\n";
-	    if ($param_num == 0) {
-		$synop .= "$label";
-		$desc  .= "$label";
-	    } else {
-		$synop .= ",\n"
-		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " $label";
-		$desc  .= ",\n"
-		    . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-		    . " $label";
-	    }
-
-	} else {
-	    &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
-                "Can't parse args for function $symbol: $declaration");
-	    last;
-	}
-	$param_num++;
+        if ($i == 1) {
+            $synop .= "$field_name";
+            $desc  .= "$field_name";
+        } else {
+            $synop .= ",\n"
+                . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
+                . " $field_name";
+            $desc  .= ",\n"
+                . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
+                . " $field_name";
+        }
+        
     }
+
     $synop .= ");\n";
     $desc  .= ");</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);
 
-    my $parameters = &OutputParamDescriptions ("FUNCTION", $symbol);
+    my $parameters = &OutputParamDescriptions ("FUNCTION", $symbol, @fields);
     my $parameters_output = 0;
 
     if (defined ($SymbolDocs{$symbol})) {
@@ -2024,6 +1992,8 @@ sub OutputFunction {
 
 	# Try to insert the parameter table at the author's desired position.
 	# Otherwise we need to tag it onto the end.
+	# FIXME: document that in the user manual and make it useable for other
+	# types too
 	if ($symbol_docs =~ s/<!--PARAMETERS-->/$parameters/) {
 	  $parameters_output = 1;
 	}
@@ -2047,32 +2017,74 @@ sub OutputFunction {
 # Arguments   : $symbol_type - 'FUNCTION', 'MACRO' or 'SIGNAL'. Signal
 #		  handlers have an implicit user_data parameter last.
 #		$symbol - the name of the function/macro being described.
+#               @fields - parsed fields from the declaration, used to determine
+#                  undocumented/unused entries
 #############################################################################
 
 sub OutputParamDescriptions {
-    my ($symbol_type, $symbol) = @_;
+    my ($symbol_type, $symbol, @fields) = @_;
     my $output = "";
-    if (defined ($SymbolParams{$symbol})) {
+    my $params = $SymbolParams{$symbol};
+    my $num_params = 0;
+    my %field_descrs = ();
+
+    if (@fields) {
+        %field_descrs = @fields;
+        delete $field_descrs{"void"};
+        delete $field_descrs{"Returns"};
+    }
+
+    if (defined $params) {
 	my $returns = "";
-	my $params = $SymbolParams{$symbol};
 	my $params_desc = "";
+	my $missing_parameters = "";
+	my $unused_parameters = "";
 	my $j;
+
 	for ($j = 0; $j <= $#$params; $j += $PARAM_FIELD_COUNT) {
 	    my $param_name = $$params[$j];
 	    my $param_desc = $$params[$j + 1];
 	    my $param_annotations = "";
-
+	    
             ($param_desc,$param_annotations) = & ExpandAnnotation($symbol, $param_desc);
             $param_desc = &ExpandAbbreviations($symbol, $param_desc);
+            $param_desc .= $param_annotations;
 	    if ($param_name eq "Returns") {
-		$returns = "$param_desc$param_annotations";
+		$returns = "$param_desc";
+	    } elsif ($param_name eq "void") {
+	        #print "!!!! void in params for $symbol?\n";
 	    } else {
+		if (@fields) {
+                    if (!defined $field_descrs{$param_name}) {
+                        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                            "Parameter description for $symbol"."::"."$param_name is not used from source code comment block.");
+                        if ($unused_parameters ne "") {
+                          $unused_parameters .= ", ".$param_name;
+                        } else {
+                           $unused_parameters = $param_name;
+                        }
+                    } else {
+                        delete $field_descrs{$param_name};
+                    }
+                }
 		if ($param_name eq "Varargs") {
 		    $param_name = "...";
 		}
-		$params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&#160;:</term>\n<listitem><simpara>$param_desc$param_annotations</simpara></listitem></varlistentry>\n";
-	    }
+		if($param_desc ne "") {
+		    $params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&#160;:</term>\n<listitem><simpara>$param_desc</simpara></listitem></varlistentry>\n";
+		    $num_params++;
+		}
+            }
 	}
+        foreach my $param_name (keys %field_descrs) {
+            &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                "Parameter description for $symbol"."::"."$param_name is missing in source code comment block.");
+            if ($missing_parameters ne "") {
+              $missing_parameters .= ", ".$param_name;
+            } else {
+               $missing_parameters = $param_name;
+            }
+        }
 
 	# Signals have an implicit user_data parameter which we describe.
 	if ($symbol_type eq "SIGNAL") {
@@ -2095,7 +2107,21 @@ sub OutputParamDescriptions {
 	    # Finish the table.
 	    $output .= "</variablelist>";
 	}
+
+	# remember missing/unused parameters (needed in tmpl-free build)
+        if (($missing_parameters ne "") and (! exists ($AllIncompleteSymbols{$symbol}))) {
+            $AllIncompleteSymbols{$symbol}=$missing_parameters;
+        }
+        if (($unused_parameters ne "") and (! exists ($AllUnusedSymbols{$symbol}))) {
+            $AllUnusedSymbols{$symbol}=$unused_parameters;
+        }
     }
+    if (($num_params == 0) && @fields && (scalar(keys(%field_descrs)) > 0)) {
+        if (! exists ($AllIncompleteSymbols{$symbol})) {
+            $AllIncompleteSymbols{$symbol}="<parameters>";
+        }
+    }
+    
     return $output;
 }
 
@@ -4056,6 +4082,41 @@ sub OutputUndeclaredSymbols {
     return &UpdateFileIfChanged ($old_undeclared_file, $new_undeclared_file, 0);
 }
 
+#############################################################################
+# Function    : OutputUnusedSymbols
+# Description : Outputs symbols that are documented in comments, but not
+#               declared in the sources
+#
+# Arguments   : none
+#############################################################################
+
+sub OutputUnusedSymbols {
+    my $num_unused = 0;
+    my $old_unused_file = "$ROOT_DIR/$MODULE-unused.txt";
+    my $new_unused_file = "$ROOT_DIR/$MODULE-unused.new";
+
+    open (UNUSED, ">$new_unused_file")
+	|| die "Can't open $new_unused_file";
+    my ($symbol);
+    foreach $symbol (sort keys (%Declarations)) {
+	if (!defined ($DeclarationOutput{$symbol})) {
+	    print (UNUSED "$symbol\n");
+	    $num_unused++;
+	}
+    }
+    foreach $symbol (sort (keys (%AllUnusedSymbols))) {
+        print (UNUSED "$symbol(" . $AllUnusedSymbols{$symbol} . ")\n");
+        $num_unused++;
+    }
+    close (UNUSED);
+    if ($num_unused != 0) {
+        &LogWarning ($old_unused_file, 1, "$num_unused unused declarations.".
+            "They should be added to $MODULE-sections.txt in the appropriate place.");
+    }
+    
+    return &UpdateFileIfChanged ($old_unused_file, $new_unused_file, 0); 
+}
+
 
 #############################################################################
 # Function    : OutputAllSymbols
@@ -4358,7 +4419,7 @@ sub MergeSourceDocumentation {
                         # remember for stats.
                         my $tmpl_param_name = $$tmpl_params[$j];
                         my $tmpl_param_desc = $$tmpl_params[$j + 1];
-                        if ($tmpl_param_desc !~ m/\S/) {
+                        if ($tmpl_param_name ne "void" && $tmpl_param_desc !~ m/\S/) {
                             if (exists ($AllIncompleteSymbols{$symbol})) {
                                 $AllIncompleteSymbols{$symbol}.=", ".$tmpl_param_name;
                             } else {
