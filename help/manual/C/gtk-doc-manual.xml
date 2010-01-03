@@ -876,7 +876,94 @@ make
         and enum in the header file.
       </para>
 
-      <para>
+      <sect2><title>General tags</title>
+
+        <para>
+          You can add versioning information to all documentation elements to tell
+          when an api was introduced, or when it was deprecated.
+        </para>
+
+        <variablelist><title>Versioning Tags</title>
+          <varlistentry><term>Since:</term>
+            <listitem>
+              <para>
+                Description since which version of the code the API is available.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry><term>Deprecated:</term>
+            <listitem>
+              <para>
+                Paragraph denoting that this function should no be used anymore.
+                The description should point the reader to the new API.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+          <para>
+            (FIXME : Stability information)
+          </para>
+
+        <example><title>General tags</title>
+          <programlisting>
+<![CDATA[
+/**
+ * foo_get_bar:
+ * @foo: some foo
+ *
+ * Retrieves @foo's bar.
+ *
+ * Returns: @foo's bar
+ *
+ * Since: 2.6
+ * Deprecated: 2.12: Use foo_baz_get_bar() instead.
+ **/
+Bar *
+foo_get_bar(Foo *foo)
+{
+...
+]]>
+          </programlisting>
+        </example>
+      </sect2>
+
+      <sect2><title>Function comment block</title>
+
+        <para>
+          Please remember to:
+          <itemizedlist>
+            <listitem>
+              <para>
+                Document whether returned objects, lists, strings, etc, should be
+                freed/unrefed/released.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Document whether parameters can be NULL, and what happens if they are.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Mention interesting pre-conditions and post-conditions where appropriate.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+
+        <para>
+          Gtk-doc assumes all symbols (macros, functions) starting with '_' are
+          private. They are treated like static functions.
+        </para>
+
+        <para>
+          <!-- FIXME: we should ideally link/describe the gobject introspection
+          annotation tag -->
+          Also, take a look at gobject introspection annotation tags:
+          http://live.gnome.org/GObjectIntrospection/Annotations
+        </para>
+
         <example><title>Function comment block</title>
           <programlisting>
 <![CDATA[
@@ -885,6 +972,7 @@ make
  * @par1:  description of parameter 1. These can extend over more than
  * one line.
  * @par2:  description of parameter 2
+ * @...: a %NULL-terminated list of bars
  *
  * The function description goes here. You can use @par1 to refer to parameters
  * so that they are highlighted in the output. You can also use %constant
@@ -899,49 +987,31 @@ make
 ]]>
           </programlisting>
         </example>
-      </para>
 
-      <variablelist>
-        <varlistentry>
-          <term>Returns:</term>
-          <listitem>
-            <para>
-              Paragraph describing the returned result.
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term>Deprecated:</term>
-          <listitem>
-            <para>
-              Paragraph denoting that this function should no be used anymore.
-              The description should point the reader to the new API.
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term>Since:</term>
-          <listitem>
-            <para>
-              Description since which version of the code the API is available.
-            </para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
+        <variablelist><title>Function tags</title>
+          <varlistentry><term>Returns:</term>
+            <listitem>
+              <para>
+                Paragraph describing the returned result.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry><term>@...:</term>
+            <listitem>
+              <para>
+                In case the function has variadic arguments, you should use this
+                tag (@Varargs: does also work for historic reasons).
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
 
-      <para>
-        GTK-Doc assumes all symbols (macros, functions) starting with '_' are
-        private. They are treated like static functions.
-      </para>
+      </sect2>
 
-      <para>
-        (FIXME)
-        (stability)
-        (glib-enums, ...)
-      </para>
+      <sect2><title>Property comment block</title>
 
-      <example><title>Property comment block</title>
-        <programlisting>
+        <example><title>Property comment block</title>
+          <programlisting>
 <![CDATA[
 /**
  * SomeWidget:some-property:
@@ -949,11 +1019,33 @@ make
  * Here you can document a property.
  */
 g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);
-]]></programlisting>
-      </example>
+]]>
+          </programlisting>
+        </example>
 
-      <example><title>Signal comment block</title>
-        <programlisting>
+      </sect2>
+
+      <sect2><title>Signal comment block</title>
+
+        <para>
+          Please remember to:
+          <itemizedlist>
+            <listitem>
+              <para>
+                Document when the signal is emitted and whether it is emitted before
+                or after other signals.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Document what an application might do in the signal handler.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+
+        <example><title>Signal comment block</title>
+          <programlisting>
 <![CDATA[
 /**
  * FooWidget::foobarized:
@@ -966,11 +1058,15 @@ g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);
 foo_signals[FOOBARIZE] =
   g_signal_new ("foobarize",
                 ...
-]]></programlisting>
-      </example>
+]]>
+          </programlisting>
+        </example>
 
-      <example><title>Struct comment block</title>
-        <programlisting>
+      </sect2>
+
+      <sect2><title>Struct comment block</title>
+        <example><title>Struct comment block</title>
+          <programlisting>
 <![CDATA[
 /**
  * FooWidget:
@@ -986,16 +1082,20 @@ typedef struct _FooWidget {
   gboolean bar;
 } FooWidget;
 ]]>
-        </programlisting>
+          </programlisting>
+        </example>
+
         <para>
           Use <code>/*&lt; private &gt;*/</code> before the private struct fields
           you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse
           behavirour.
         </para>
-      </example>
 
-      <example><title>Enum comment block</title>
-        <programlisting>
+      </sect2>
+
+      <sect2><title>Enum comment block</title>
+        <example><title>Enum comment block</title>
+          <programlisting>
 <![CDATA[
 /**
  * Something:
@@ -1012,14 +1112,16 @@ typedef enum {
   SOMETHING_COUNT
 } Something;
 ]]>
-        </programlisting>
-      </example>
+          </programlisting>
+        </example>
+
         <para>
           Use <code>/*&lt; private &gt;*/</code> before the private enum values
           you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse
           behavirour.
         </para>
 
+      </sect2>
     </sect1>
 
     <sect1 id="documenting_docbook">
