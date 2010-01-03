@@ -5,6 +5,7 @@ SUBDIRS = . src docs
 if BUILD_TESTS
 
 check-local: clean
+	@rm -f docs/tester-docs.xml
 
 endif
 
