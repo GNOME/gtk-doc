@@ -110,11 +110,13 @@ sub ParseStructDeclaration {
 			  (?:/\*\s*<\s*public\s*>\s*\*/|(?=\}))!$1!msgx;
     }
 
+    # Remove private symbols
     # Assume end of declaration if line begins with '}'
     $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/.*?(?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
 
     # Remove all other comments;
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
+    $declaration =~ s@//.*$@@g;
 
     my @result = ();
 
@@ -251,8 +253,9 @@ sub ParseEnumDeclaration {
 	return ();
     }
 
-    # Remove comments;
+    # Remove comments
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
+    $declaration =~ s@//.*$@@g;
 
     my @result = ();
 
