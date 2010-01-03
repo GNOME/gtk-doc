@@ -1,10 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = gobject bugs annotations fail .
+SUBDIRS = gobject bugs annotations fail empty .
 
 if BUILD_TESTS
 
-TESTS = tools.sh gobject.sh bugs.sh annotations.sh fail.sh
+TESTS = tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh
 TESTS_ENVIRONMENT = \
 	ABS_TOP_BUILDDIR=$(abs_top_builddir) \
 	PATH=$(abs_top_builddir):$(srcdir):$(PATH) \
