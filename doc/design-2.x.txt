@@ -11,6 +11,9 @@ g-doc, gapi-doc, gnome-api-doc, ...
 - get rid of sgml, we will only use docbook xml
 - rename generated index.sgml to something like index.idx - it is not wellformed
   sgml
+- in the makefiles
+  sgml-build.stamp -> db-build.stamp
+  sgml.stamp -> db.stamp
 
 == design fixes ==
 === proper xml-id namesspaces ===
