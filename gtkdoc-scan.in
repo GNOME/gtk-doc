@@ -699,7 +699,6 @@ sub ScanHeader {
 		    my $objectname = $1;
 		    #print "Found object: $1\n";
 		    $list = "<TITLE>$objectname</TITLE>\n$list";
-		    $list .= "$objectname\n";
 		    push (@objects, $objectname);
 		}
 		#print "Store struct: $symbol\n";
@@ -723,16 +722,6 @@ sub ScanHeader {
     close(INPUT);
     
     #print "DEBUG: Scanning $input_file done\n\n\n";
-
-    # Take out any object structs from the list of declarations as we don't
-    # want them included.
-    my ($object);
-    foreach $object (@objects) {
-	$list =~ s/^$object\n//m;
-	$list =~ s/^${object}Class\n//m;
-	$list =~ s/^${object}Iface\n//m;
-	$list =~ s/^${object}Interface\n//m;
-    }
 
 
     # Try to separate the standard macros and functions, placing them at the
