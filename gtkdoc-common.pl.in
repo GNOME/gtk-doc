@@ -252,6 +252,10 @@ sub ParseEnumDeclaration {
     if ($declaration =~ m/enum\s+\S+\s*;/msg) {
 	return ();
     }
+    
+    # Remove private symbols
+    # Assume end of declaration if line begins with '}'
+    $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/.*?(?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
 
     # Remove comments
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;

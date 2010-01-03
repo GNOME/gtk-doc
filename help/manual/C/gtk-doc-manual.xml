@@ -988,7 +988,7 @@ typedef struct _FooWidget {
 ]]>
         </programlisting>
         <para>
-          Use <code>/*&lt; private &gt;*/</code> before the private struct fields you
+          Use <code>/*&lt; private &gt;*/</code> before the private struct fields
           you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse
           behavirour.
         </para>
@@ -1008,10 +1008,17 @@ typedef struct _FooWidget {
 typedef enum {
   SOMETHING_FOO,
   SOMETHING_BAR,
+  /*< private >*/
+  SOMETHING_COUNT
 } Something;
 ]]>
         </programlisting>
       </example>
+        <para>
+          Use <code>/*&lt; private &gt;*/</code> before the private enum values
+          you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse
+          behavirour.
+        </para>
 
     </sect1>
 
