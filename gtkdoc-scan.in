@@ -402,7 +402,7 @@ sub ScanHeader {
 		$in_declaration = "user_function";
 		#print "DEBUG: user function (1): $symbol, Returns: $ret_type\n";
 
-            #              $1                                $3            $4             $5
+            #                                                       $1                                $3            $4             $5
 	    } elsif (($previous_line =~ m/^\s*typedef\s*/) && m/^\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
 		my $p3 = defined($3) ? $3 : "";
 		$ret_type = "$1$p3 $4";
@@ -411,9 +411,9 @@ sub ScanHeader {
 		$in_declaration = "user_function";
 		#print "DEBUG: user function (2): $symbol, Returns: $ret_type\n";
 
-            #              $1            $2
+            #                                                       $1            $2
 	    } elsif (($previous_line =~ m/^\s*typedef\s*/) && m/^\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
-		$ret_type = $4;
+		$ret_type = $1;
 		$symbol = $2;
 		$decl = $';
 		#                                     $1                                $3
