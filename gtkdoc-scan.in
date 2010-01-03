@@ -167,11 +167,16 @@ if ($REBUILD_TYPES) {
        print TYPES "$func\n"; 
     }
     close (TYPES);
+    &UpdateFileIfChanged ($old_types, $new_types, 1);
+    
+    # remove the file if empty
+    if (scalar (@get_types) == 0) {
+        unlink ("$new_types");
+    }
 }
 
 &UpdateFileIfChanged ($old_decl_list, $new_decl_list, 1);
 &UpdateFileIfChanged ($old_decl, $new_decl, 1);
-&UpdateFileIfChanged ($old_types, $new_types, 1) if ($REBUILD_TYPES);
 
 # If there is no MODULE-sections.txt file yet or we are asked to rebuild it,
 # we copy the MODULE-decl-list.txt file into its place. The user can tweak it
