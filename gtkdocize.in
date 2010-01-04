@@ -36,8 +36,9 @@ if test $no_configure_found -eq 0; then
   macro=`grep '^GTK_DOC_CHECK' $configure 2>/dev/null`
   if test $? -eq 0; then
     # GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
-    extra_options=`echo $macro | sed -e 's/^GTK_DOC_CHECK(\ *\(.*\))/\1/' | sed -e 's/^.*\,\ *\[\{0,1\}\([^]]*\)\]\{0,1\}\ *$/\1/'`
-    if test $? -eq 0; then
+    params=`echo $macro | sed -e 's/^GTK_DOC_CHECK(\ *\(.*\))/\1/'`
+    if `echo $params | grep '^.*\,\ *\[\{0,1\}'`; then
+      extra_options=`echo $params | sed -e 's/^.*\,\ *\[\{0,1\}\([^]]*\)\]\{0,1\}\ *$/\1/'`
       #echo >&2 "DEBUG: adding extra options [$extra_options] to [$*]"
       set - $* $GTKDOCIZE_FLAGS $extra_options
     else
