@@ -1,5 +1,7 @@
 <?xml version='1.0'?> <!--*- mode: xml -*-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
+                exclude-result-prefixes="l"
                 version="1.0">
 
   <!-- import the chunked XSL stylesheet -->
@@ -47,11 +49,93 @@
   <xsl:param name="gtkdoc.bookname" select="''"/>
 
   <!-- ========================================================= -->
-  
+
   <!-- l10n is slow, we don't ue it, so we'd like to turn it off
        this atleast avoid the re-evaluation -->
   <xsl:template name="l10n.language">en</xsl:template>
-  
+
+  <xsl:param name="gtkdoc.l10n.xml" select="document('http://docbook.sourceforge.net/release/xsl/current/common/en.xml')"/>
+
+  <xsl:template name="gentext">
+    <xsl:param name="key" select="local-name(.)"/>
+
+    <xsl:variable name="l10n.gentext"
+                  select="($gtkdoc.l10n.xml/l:l10n/l:gentext[@key=$key])[1]"/>
+
+    <xsl:choose>
+      <xsl:when test="$l10n.gentext">
+        <xsl:value-of select="$l10n.gentext/@text"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>
+          <xsl:text>No "en" localization of "</xsl:text>
+          <xsl:value-of select="$key"/>
+          <xsl:text>" exists.</xsl:text>
+        </xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="gentext.dingbat">
+    <xsl:param name="dingbat">bullet</xsl:param>
+
+    <xsl:variable name="l10n.dingbat"
+                  select="($gtkdoc.l10n.xml/l:l10n/l:dingbat[@key=$dingbat])[1]"/>
+
+    <xsl:choose>
+      <xsl:when test="$l10n.dingbat">
+        <xsl:value-of select="$l10n.dingbat/@text"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>
+          <xsl:text>No "en" localization of dingbat </xsl:text>
+          <xsl:value-of select="$dingbat"/>
+          <xsl:text> exists; using "en".</xsl:text>
+        </xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+
+  <xsl:template name="gentext.template">
+    <xsl:param name="context" select="'default'"/>
+    <xsl:param name="name" select="'default'"/>
+    <xsl:param name="origname" select="$name"/>
+    <xsl:param name="verbose" select="1"/>
+
+    <!-- this is called with context="title|title-numbered|title-unnumbered
+    <xsl:message>
+      <xsl:text>context:</xsl:text><xsl:value-of select="$context"/>
+    </xsl:message
+    -->
+
+    <xsl:variable name="context.node"
+                  select="$gtkdoc.l10n.xml/l:l10n/l:context[@name=$context]"/>
+
+    <xsl:variable name="template.node"
+                  select="($context.node/l:template[@name=$name])[1]"/>
+
+    <xsl:choose>
+      <xsl:when test="$template.node/@text">
+        <xsl:value-of select="$template.node/@text"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="contains($name, '/')">
+            <xsl:call-template name="gentext.template">
+              <xsl:with-param name="context" select="$context"/>
+              <xsl:with-param name="name" select="substring-after($name, '/')"/>
+              <xsl:with-param name="origname" select="$origname"/>
+              <xsl:with-param name="verbose" select="$verbose"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="$verbose = 0">
+          </xsl:when>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <!-- ========================================================= -->
   <!-- template to create the index.sgml anchor index -->
 
