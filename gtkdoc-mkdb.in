@@ -1334,12 +1334,13 @@ sub OutputMacro {
 	$desc .= "<programlisting>$decl_out</programlisting>\n";
     } else {
 	$desc .= "<programlisting>" . &MakeReturnField("#define") . "$symbol";
-	# Align each line so that if should all line up OK.
-	my $pad = ' ' x ($RETURN_TYPE_FIELD_WIDTH - length ("#define "));
-	$declaration =~ m/^\s*#\s*define\s+\w+(\([^\)]*\))/;
-	my $args = $1;
-	$args =~ s/\n/\n$pad/gm;
-	$desc .= &CreateValidSGML ($args);
+	if ($declaration =~ m/^\s*#\s*define\s+\w+(\([^\)]*\))/) {
+            my $args = $1;
+            my $pad = ' ' x ($RETURN_TYPE_FIELD_WIDTH - length ("#define "));
+            # Align each line so that if should all line up OK.
+            $args =~ s/\n/\n$pad/gm;
+            $desc .= &CreateValidSGML ($args);
+        }
 	$desc .= "</programlisting>\n";
     }
 
