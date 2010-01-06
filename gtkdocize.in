@@ -37,7 +37,7 @@ if test $no_configure_found -eq 0; then
   if test $? -eq 0; then
     # GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
     params=`echo $macro | sed -e 's/^GTK_DOC_CHECK(\ *\(.*\))/\1/'`
-    if `echo $params | grep '^.*\,\ *\[\{0,1\}'`; then
+    if echo $params | grep -q '^.*\,\ *\[\{0,1\}'; then
       extra_options=`echo $params | sed -e 's/^.*\,\ *\[\{0,1\}\([^]]*\)\]\{0,1\}\ *$/\1/'`
       #echo >&2 "DEBUG: adding extra options [$extra_options] to [$*]"
       set - $* $GTKDOCIZE_FLAGS $extra_options
