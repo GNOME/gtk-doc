@@ -139,6 +139,8 @@
   <!-- ========================================================= -->
   <!-- template to create the index.sgml anchor index -->
 
+  <xsl:param name="gtkdoc.refsect2" select="//refsect2" />
+
   <xsl:template match="book|article">
     <xsl:variable name="tooldver">
       <xsl:call-template name="version-greater-or-equal">
@@ -157,6 +159,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
 
     <!-- generate the index.sgml href index -->
     <xsl:call-template name="generate.index"/>
+    <!-- generate $book.devhelp{2} -->
     <xsl:call-template name="generate.devhelp"/>
     <xsl:call-template name="generate.devhelp2"/>
   </xsl:template>
@@ -168,7 +171,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         <xsl:apply-templates select="/book/bookinforeleaseinfo/ulink"
                              mode="generate.index.mode"/>
         <!-- check all anchor and refentry elements -->
-        <xsl:apply-templates select="//anchor|//refentry|//refsect1|//refsect2|//refsynopsisdiv|//varlistentry"
+        <xsl:apply-templates select="//anchor|//refentry|//refsect1|$gtkdoc.refsect2|//refsynopsisdiv|//varlistentry"
                              mode="generate.index.mode"/>
       </xsl:with-param>
       <xsl:with-param name="default.encoding" select="'UTF-8'"/>
@@ -228,6 +231,15 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:apply-imports/>
   </xsl:template>
 
+  <xsl:param name="gtkdoc.linknodes" select="//part
+                          |//reference
+                          |//preface
+                          |//chapter
+                          |//article
+                          |//appendix[not(parent::article)]|appendix
+                          |//glossary[not(parent::article)]|glossary
+                          |//index[not(parent::article)]|index"/>
+
   <xsl:template name="user.head.content">
     <xsl:if test="$gtkdoc.version">
       <meta name="generator" content="GTK-Doc V{$gtkdoc.version} (XML mode)"/>
@@ -238,14 +250,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
          we don't want links for all refentrys, thats just too much
       -->
     <xsl:variable name="this" select="."/>
-    <xsl:for-each select="//part
-                          |//reference
-                          |//preface
-                          |//chapter
-                          |//article
-                          |//appendix[not(parent::article)]|appendix
-                          |//glossary[not(parent::article)]|glossary
-                          |//index[not(parent::article)]|index">
+    <xsl:for-each select="$gtkdoc.linknodes">
       <link rel="{local-name(.)}">
         <xsl:attribute name="href">
           <xsl:call-template name="href.target">

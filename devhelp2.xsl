@@ -53,9 +53,9 @@
         </chapters>
       </xsl:if>
       <functions>
-        <xsl:apply-templates select="//refsect2"
+        <xsl:apply-templates select="$gtkdoc.refsect2"
                              mode="generate.devhelp2.index.mode"/>
-        <xsl:apply-templates select="//refsect2/variablelist[@role='enum']/varlistentry"
+        <xsl:apply-templates select="$gtkdoc.refsect2/variablelist[@role='enum']/varlistentry"
                              mode="generate.devhelp2.index.mode"/>
       </functions>
     </book>

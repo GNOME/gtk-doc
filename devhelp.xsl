@@ -52,7 +52,7 @@
         </chapters>
       </xsl:if>
       <functions>
-        <xsl:apply-templates select="//refsect2"
+        <xsl:apply-templates select="$gtkdoc.refsect2"
                              mode="generate.devhelp.index.mode"/>
       </functions>
     </book>
