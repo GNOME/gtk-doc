@@ -346,7 +346,7 @@ sub ParseFunctionDeclaration {
         } elsif ($declaration =~ s/^void\s*[,\n]//) {
             if ($param_num != 0) {
                 # FIXME: whats the problem here?
-                &LogWarning ($SymbolSourceFile{$symbol},$SymbolSourceLine{$symbol}, "void used as parameter in function $symbol");
+                warn "void used as parameter in function $declaration";
             }
             push @result, "void";
             my $xref = "<type>void</type>";
@@ -360,8 +360,8 @@ sub ParseFunctionDeclaration {
 
         # allow alphanumerics, '_', '[' & ']' in param names
         # Try to match a standard parameter
-        #                                $1                                                                                                                                    $2                             $3                                                           $4       $5
-        } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_UNUSED|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const\b|restrict\b)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+        #                                $1                                                                                                                                       $2                             $3                                                              $4       $5
+        } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_[A-Z_]+\s+|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const\b|restrict\b)?\s*\*?\s*(?:const\b|restrict\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 	    my $pre	= defined($1) ? $1 : "";
 	    my $type	= $2;
 	    my $ptr	= defined($3) ? $3 : "";
@@ -397,8 +397,8 @@ sub ParseFunctionDeclaration {
             push @result, $label;
 
         # Try to match parameters which are functions
-        #                              $1                                       $2          $3      $4                      $5                    $7             $8
-	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict\b)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+        #                              $1                                                      $2          $3      $4                      $5                    $7             $8
+	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|G_GNUC_[A-Z_]+\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict\b)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
  	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
@@ -426,8 +426,7 @@ sub ParseFunctionDeclaration {
             }
             push @result, $label;
         } else {
-            &LogWarning ($SymbolSourceFile{$symbol},$SymbolSourceLine{$symbol}, 
-                "Can't parse args for function $symbol: $declaration");
+            warn "Can't parse args for function in \"$declaration\"";
             last;
         }
         $param_num++;
