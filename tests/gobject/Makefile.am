@@ -8,5 +8,6 @@ check-local: clean
 
 endif
 
+EXTRA_DIST = examples/gobject.c
 
 -include $(top_srcdir)/git.mk
