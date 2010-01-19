@@ -741,7 +741,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         </xsl:message>
         <a>
           <xsl:attribute name="href">
-            <xsl:text>http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?query=</xsl:text>
+            <xsl:text>http://foldoc.org/</xsl:text>
 	        <xsl:value-of select="$acronym"/>
           </xsl:attribute>
           <xsl:call-template name="inline.charseq"/>
