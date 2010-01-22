@@ -1598,15 +1598,14 @@ if ($CC =~ /libtool/) {
 
 print "gtk-doc: Compiling scanner\n";
 $command = "$CC $CFLAGS -c -o $o_file $MODULE-scan.c";
-system($command) == 0 or die "Compilation of scanner failed: $!\n";
+system("($command)") == 0 or die "Compilation of scanner failed: $!\n";
 
 print "gtk-doc: Linking scanner\n";
 $command = "$LD -o $MODULE-scan $o_file $LDFLAGS";
-system($command) == 0 or die "Linking of scanner failed: $!\n";
+system("($command)") == 0 or die "Linking of scanner failed: $!\n";
 
 print "gtk-doc: Running scanner $MODULE-scan\n";
-# use sh -c to avoid terminating the whole run without seeing the error
-system("sh -c \"$RUN ./$MODULE-scan\"") == 0 or die "Scan failed: $!\n";
+system("(./$MODULE-scan)") == 0 or die "Scan failed: $!\n";
 
 if (!defined($ENV{"GTK_DOC_KEEP_INTERMEDIATE"})) {
   unlink "./$MODULE-scan.c", "./$MODULE-scan.o", "./$MODULE-scan.lo", "./$MODULE-scan";
