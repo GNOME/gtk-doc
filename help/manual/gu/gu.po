@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
 "POT-Creation-Date: 2010-01-25 08:26+0000\n"
-"PO-Revision-Date: 2010-01-27 14:16+0530\n"
+"PO-Revision-Date: 2010-01-28 14:57+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -180,6 +180,18 @@ msgstr ""
 #: C/gtk-doc-manual.xml:159(para)
 msgid "<guilabel>Gathering information about the code.</guilabel><application>gtkdoc-scan</application> scans the header files of the code looking for declarations of functions, macros, enums, structs, and unions. It creates the file <filename>&lt;module&gt;-decl-list.txt</filename> containg a list of the declarations, placing them into sections according to which header file they are in. On the first run this file is copied to <filename>&lt;module&gt;-sections.txt</filename> The author can rearrange the sections, and the order of the declarations within them, to produce the final desired order. The second file it generates is <filename>&lt;module&gt;-decl.txt</filename>. This file contains the full declarations found by the scanner. If for some reason one would like some sybols to show up in the docs, where the full declaration cannot be found by th scanner or the declaration should appear differently, one can place enties similar to the ones in <filename>&lt;module&gt;-decl.txt</filename> into <filename>&lt;module&gt;-overrides.txt</filename>. <application>gtkdoc-scanobj</application> can also be used to dynamically query a library about any GtkObject subclasses it exports. It saves information about each object's position in the class hierarchy and about any GTK Args and Signals it provides."
 msgstr ""
+"<guilabel>કોડ વિશે જાણકારીને ભેગી કરી રહ્યા છે.</guilabel><application>gtkdoc-scan</application> "
+"functions, macros, enums, structs, અને unions ની જાહેરાતો માટે જોઇ રહ્યા હોય તે કોડ ની હેડર ફાઇલોને સ્કેન કરે છે. "
+"તે જાહેરાતોની યાદીને સમાવતી ફાઇલ <filename>&lt;module&gt;-decl-list.txt</filename> ને બનાવે છે, "
+"કઇ હેડર ફાઇલમાં તેઓ અંદર છે તેને અનુસાર વિભાગો માં તેઓને સ્થિત કરી રહ્યા છે. આ ફાઇલને પહેલું ચલાવવા પર "
+"<filename>&lt;module&gt;-sections.txt</filename> માં નકલ થયેલ છે લેખક એ વિભાગોને પુન:ગોઠવી શકે છે, "
+"અને છેલ્લુ ઇચ્છિત ક્રમને ઉત્પન્ન કરવા માટે તેઓમાં જાહેરાતોનો ક્રમ. બીજી ફાઇલ તે <filename>&lt;module&gt;-decl.txt</filename> "
+"ને ઉત્પન્ન કરે છે. આ ફાઇલ સ્કેનર દ્દારા શોધેલ સંપૂર્ણ જાહેરાતોને સમાવે છે. જો અમુક કારણ માટે દસ્તાવેજોમાં દેખાવા માટે અમુક સંકેતોને પસંદ કરે છે, "
+"જ્યાં સંપૂર્ણ જાહેરાત સ્કેનર દ્દારા શોધી શકાતી નથી અથવા જાહેરાત એ અલગ રીતે દેખાવી જોઇએ, "
+"<filename>&lt;module&gt;-overrides.txt</filename> ની અંદર <filename>&lt;module&gt;-decl.txt</filename> માં "
+"એકનાં જેવી જ સ્થિત કરી શકે છે. <application>gtkdoc-scanobj</application> એ કોઇપણ GtkObject ઉપવર્ગો કે જે નિકાસ કરે છે "
+"તે વિશે ગતિશીલ રીતે લાઇબ્રેરી ક્વેરી માટે પણ વાપરી શકાય છે. તે વર્ગ શ્રેણીમાં દરેક ઑબ્જેક્ટનાં સ્થાન વિશે જાણકારીનો સંગ્રહ કરે છે અને "
+"કોઇપણ GTK દલીલો વિશે પણ અને તે પૂરુ પાડે છે તેનો સંકેત કરે છે."
 
 #: C/gtk-doc-manual.xml:184(para)
 msgid "<guilabel>Generating the \"template\" files.</guilabel><application>gtkdoc-mktmpl</application> creates a number of files in the <filename class=\"directory\">tmpl/</filename> subdirectory, using the information gathered in the first step. (Note that this can be run repeatedly. It will try to ensure that no documentation is ever lost.)"
@@ -192,14 +204,25 @@ msgstr ""
 #: C/gtk-doc-manual.xml:193(para)
 msgid "Since GTK-Doc 1.9 the templates can be avoided. We encourage people to keep documentation in the code. <application>gtkdocize</application> supports now a <option>--flavour no-tmpl</option> option that chooses a makefile that skips tmpl usage totally. If you have never changed file in tmpl by hand, please remove the dir (e.g. from version control system)."
 msgstr ""
+"જ્યાં સુધી GTK-Doc 1.9 નાં ટેમ્પલેટને અવગણી શકાય છે ત્યાં સુધી. આપણે કોડમાં દસ્તાવેજીકરણ ને રાખવા માટે લોકોને "
+"પ્રોત્સાહિત કરો. <application>gtkdocize</application> એ હવે <option>--flavour no-tmpl</option> "
+"વિકલ્પને આધાર આપે છે કે જે makefile ને પસંદ કરે છે કે જે સંપૂર્ણપણે tmpl વપરાશને છોડી દે છે. જો તમે પોતાની જાતે "
+"tmpl માં ફાઇલને કદી બદલો નહિં તો, મહેરબાની કરીને dir ને દૂર કરો (દા.ત. આવૃત્તિ નિયંત્રણ સિસ્ટમ માંથી)."
 
 #: C/gtk-doc-manual.xml:205(para)
 msgid "<guilabel>Generating the SGML/XML and HTML/PDF.</guilabel><application>gtkdoc-mkdb</application> turns the template files into SGML or XML files in the <filename class=\"directory\">sgml/</filename> or <filename class=\"directory\">xml/</filename> subdirectory. If the source code contains documentation on functions, using the special comment blocks, it gets merged in here. If there are no tmpl files used it only reads takes docs from sources and introspection data."
 msgstr ""
+"<guilabel>SGML/XML અને HTML/PDF ઉત્પન્ન કરી રહ્યા છે.</guilabel><application>gtkdoc-mkdb</application> એ "
+"<filename class=\"directory\">sgml/</filename> અથવા <filename class=\"directory\">xml/</filename> "
+"ઉપડિરેક્ટરી માં SGML અથવા XML ફાઇલોમાં ટેમ્પલેટ ફાઇલોને ફેરવે છે. જો સ્ત્રોત કોડ એ વિશિષ્ટ ટિપ્પણી બ્લોકોની મદદથી વિધેયો પર દસ્તાવેજીકરણ "
+"ને સમાવે છે, તે અહિંયા ભેગી થઇ જાય છે. જો તેને વાપરેલ tmpl ફાઇલો ન હોય તો ફક્ત સ્ત્રોતો અને આત્મનિરીક્ષણ માહિતી માંથી દસ્તાવેજોને લઇને વાંચે છે."
 
 #: C/gtk-doc-manual.xml:215(para)
 msgid "<application>gtkdoc-mkhtml</application> turns the SGML/XML files into HTML files in the <filename class=\"directory\">html/</filename> subdirectory. Likewise <application>gtkdoc-mkpdf</application> turns the SGML/XML files into a PDF docuemnt called <filename>&lt;package&gt;.pdf</filename>."
 msgstr ""
+"<application>gtkdoc-mkhtml</application> એ <filename class=\"directory\">html/</filename> "
+"ઉપડિરેક્ટરીમાં HTML ફાઇલોની અંદર SGML/XML ફાઇલોને ફેરવે છે. જેવી રીતે <application>gtkdoc-mkpdf</application> "
+"કહેવાતા <filename>&lt;package&gt;.pdf</filename> PDF દસ્તાવેજમાં SGML/XML ફાઇલોને ફેરવે છે."
 
 #: C/gtk-doc-manual.xml:221(para)
 msgid "Files in <filename class=\"directory\">sgml/</filename> or <filename class=\"directory\">xml/</filename> and <filename class=\"directory\">html/</filename> directories are always overwritten. One should never edit them directly."
@@ -235,6 +258,10 @@ msgstr "<guilabel>Jade v1.1</guilabel> - આ વિવિધ માળખાઓ�
 #: C/gtk-doc-manual.xml:262(para)
 msgid "<guilabel>Modular DocBook Stylesheets</guilabel> This is the DSSSL code to convert DocBook to HTML (and a few other formats). It's used together with jade. I've customized the DSSSL code slightly, in gtk-doc.dsl, to colour the program code listings/declarations, and to support global cross-reference indices in the generated HTML. <ulink url=\"http://nwalsh.com/docbook/dsssl\" type=\"http\">http://nwalsh.com/docbook/dsssl</ulink>"
 msgstr ""
+"<guilabel>Modular DocBook Stylesheets</guilabel> આ DocBook ને HTML માં રૂપાંતરિત કરવા માટે "
+"DSSSL કોડ છે (અને થોડા બીજા બંધારણો). તે jade સાથે ભેગા વાપરેલ છે. મેં DSSSL કોડને કાર્યક્રમ કોડની યાદીઓ/ "
+"જાહેરાતોને રંગ આપવા માટે, અને ઉત્પન્ન થયેલ HTML માં વૈશ્ર્વિક પ્રતિનિર્દેશ સૂચિને આધાર આપવા માટે "
+"gtk-doc.dsl માં જરાક DSSSL કોડને વૈવિધ્યપૂર્ણ બનાવેલ છે. <ulink url=\"http://nwalsh.com/docbook/dsssl\" type=\"http\">http://nwalsh.com/docbook/dsssl</ulink>"
 
 #: C/gtk-doc-manual.xml:271(para)
 msgid "<guilabel>docbook-to-man</guilabel> - if you want to create man pages from the DocBook. I've customized the 'translation spec' slightly, to capitalise section headings and add the 'GTK Library' title at the top of the pages and the revision date at the bottom. There is a link to this on <ulink url=\"http://www.ora.com/davenport\" type=\"http\">http://www.ora.com/davenport</ulink> NOTE: This does not work yet."
@@ -317,7 +344,7 @@ msgstr "ઉદાહરણ ડિરેક્ટરી બંધારણ"
 
 #: C/gtk-doc-manual.xml:370(para)
 msgid "This can then look as show below: <placeholder-1/>"
-msgstr ""
+msgstr "નીચે બતાવ્યા પ્રમાણે પછી આ જોઇ શકો છો: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:390(title) C/gtk-doc-manual.xml:397(title)
 msgid "Integration with autoconf"
@@ -360,6 +387,9 @@ msgstr ""
 #: C/gtk-doc-manual.xml:428(para)
 msgid "Furthermore it is recommended that you have the following line inside you <filename>configure.ac</filename> script. This allows <application>gtkdocize</application> to automatically copy the macro definition for <function>GTK_DOC_CHECK</function> to your project."
 msgstr ""
+"આગળ વધારે તે અગ્રહણીય થયેલ છે કે જે તમારી પાસે તમારી <filename>configure.ac</filename> સ્ક્રિપ્ટની અંદર "
+"નીચેનું વાક્ય છે. આ તમારા પ્રોજેક્ટમાં <function>GTK_DOC_CHECK</function> માટે મેક્રો વ્યાખ્યાને આપમેળે નકલ કરવા "
+"માટે પરવાનગી આપે છે."
 
 #: C/gtk-doc-manual.xml:436(title)
 msgid "Preparation for gtkdocize"
@@ -372,15 +402,24 @@ msgstr "automake સાથે એકત્રિકરણ"
 #: C/gtk-doc-manual.xml:449(para)
 msgid "First copy the <filename>Makefile.am</filename> from the examples subdirectory of the gtkdoc-sources to your project's API documentation directory ( <filename class=\"directory\">./docs/reference/&lt;package&gt;</filename>). If you have multiple doc-packages repeat this for each one."
 msgstr ""
+"તમારા પ્રોજેક્ટની API દસ્તાવેજીકરણ ડિરેક્ટરી ( <filename class=\"directory\">./docs/reference/&lt;package&gt;</filename>) "
+"માં gtkdoc-સ્ત્રોતોની ઉપડિરેક્ટરીઓનાં ઉદાહરણો માંથી <filename>Makefile.am</filename> ની પહેલી નકલ કરો. જો તમારી પાસે "
+"દરેક એક માટે ઘણાબધા ફરી આવતા દસ્તાવેજ-પેકેજો છે."
 
 #: C/gtk-doc-manual.xml:456(para)
 msgid "The next step is to edit the setting inside the <filename>Makefile.am</filename>. All the settings have a comment above that describes their purpose. Most settings are extra flags passed to the respective tools. Every tool has a variable of the form <option>&lt;TOOLNAME&gt;_OPTIONS</option>. All the tools support <option>--help</option> to list the supported parameters."
 msgstr ""
+"આગળનું પગલુ એ <filename>Makefile.am</filename> ની અંગર સુયોજનોને સુધારવા માટે છે. બધા "
+"સુયોજનો પાસે ટિપ્પણીઓ છે કે જે તેનાં હેતુને વર્ણવે છે. મોટાભાગનાં સુયોજનો સાધનોને સંબંધી પસાર થયેલ વધારાનાં "
+"ફ્લેગો છે. દરેક સાધન પાસે ફાર્મ <option>&lt;TOOLNAME&gt;_OPTIONS</option> નો ચલ છે. બધા "
+"સાધનો આધારભૂત પરિમાણોની યાદી માટે <option>--help</option> ને આધાર આપે છે."
 
 #. FIXME: explain options ?
 #: C/gtk-doc-manual.xml:467(para)
 msgid "You may also want to enable GTK-Doc for the distcheckmake target. Just add then one-liner show in the next example to you top-level <filename>Makefile.am</filename>:"
 msgstr ""
+"તમે distcheckmake લક્ષ્ય માટે GTK-Doc ને સક્રિય કરવા માટે પણ ઇચ્છા રાખી શકો છો. ફક્ત ઉમેરો પછી એક-લાઇનર "
+"એ તમને ટોચનાં સ્તર <filename>Makefile.am</filename> માટે આગળનાં ઉદાહરણમાં બતાવે છે:"
 
 #: C/gtk-doc-manual.xml:474(title)
 msgid "Enable GTK-Doc during make distcheck"
@@ -393,6 +432,10 @@ msgstr "autogen સાથે એકત્રિકરણ"
 #: C/gtk-doc-manual.xml:488(para)
 msgid "Most projects will have an <filename>autogen.sh</filename> script to setup the build infrastructure after a checkout from version control system (such as cvs/svn/git). GTK-Doc comes with a tool called <application>gtkdocize</application> which can be used in such a script. It should be run before autoheader, automake or autoconf."
 msgstr ""
+"મોટાભાગનાં પ્રોજેક્ટો પાસે આવૃત્તિ નિયંત્રણ સિસ્ટમ (જેવી કે cvs/svn/git) માંથી ચેકઆઉટ પછી ઇન્ફ્રાસ્ટ્રક્ચરને બિલ્ડ કરવાનું સુયોજિત "
+"કરવા માટે <filename>autogen.sh</filename> સ્ક્રિપ્ટ હશે. GTK-Doc એ સાધન <application>gtkdocize</application> "
+"તરીકે કહેવાતા સાધન સાથે આવે છે કે જે આવી સ્ક્રિપ્ટમાં વાપરી શકાય છે. તે autoheader, automake અથવા autoconf પહેલાં "
+"ચાલવુ જોઇએ."
 
 #: C/gtk-doc-manual.xml:497(title)
 msgid "Running gtkdocize from autogen.sh"
@@ -401,6 +444,10 @@ msgstr "autogen.sh માંથી gtkdocize ને ચલાવી રહ્ય
 #: C/gtk-doc-manual.xml:506(para)
 msgid "When running <application>gtkdocize</application> it copies <filename>gtk-doc.make</filename> to you project root (or any directory specified by the <option>--docdir</option> option). If also check you configure script for the <function>GTK_DOC_CHECK</function> invocation."
 msgstr ""
+"જ્યારે <application>gtkdocize</application> ચલાવી રહ્યા હોય ત્યારે તે તમારા પ્રોજેક્ટ રુટ માટે "
+"<filename>gtk-doc.make</filename> ની નકલ કરે છે (અથવા <option>--docdir</option> વિકલ્પ "
+"દ્દારા સ્પષ્ટ થયેલ કોઇપણ ડિરેક્ટરી). જો <function>GTK_DOC_CHECK</function> વિનંતી માટે "
+"તમે સ્ક્રિપ્ટને રૂપરેખાંકિત કરવાનું પણ ચકાસો."
 
 #: C/gtk-doc-manual.xml:514(para)
 msgid "Historically GTK-Doc was gerating template files where developers entered the docs. this turned out to be not so good. Since a few version GTK-Doc could also get all the information from source comments. Since GTK-Doc 1.9 the templates can be avoided. We encourage people to keep documentation in the code. <application>gtkdocize</application> supports now a <option>--flavour no-tmpl</option> option that chooses a makefile that skips tmpl usage totally. Besides adding the option directly to the command invocation, they can be added also to a environment variable called <symbol>GTKDOCIZE_FLAGS</symbol> or set as a 2nd parameter in <symbol>GTK_DOC_CHECK</symbol> macro in the configure script. If you have never changed file in tmpl by hand and migrating from older gtkdoc versions, please remove the dir (e.g. from version control system)."
@@ -413,10 +460,13 @@ msgstr "દસ્તાવેજ બિલ્ડને ચલાવી રહ્
 #: C/gtk-doc-manual.xml:532(para)
 msgid "After the previous steps it's time to run the build. First we need to rerun <filename>autogen.sh</filename>. If this script runs configure for you, then give it the <option>--enable-gtk-doc</option> option. Otherwise manually run <filename>configure</filename> with this option afterwards."
 msgstr ""
+"પહેલાનાં પગલાઓ પછી બિલ્ડ ને ચલાવવા માટે સમય થઇ ગયો છે. પહેલાં આપણે <filename>autogen.sh</filename> "
+"પુન:ચલાવવાની જરૂર છે. નહિં તો પછીથી આ વિકલ્પ સાથે <filename>configure</filename> ને જાતે જ "
+"ચલાવો."
 
 #: C/gtk-doc-manual.xml:539(para)
 msgid "The first make run generates several additional files in the doc-dirs. The important ones are: <filename>&lt;package&gt;.types</filename>, <filename>&lt;package&gt;-docs.sgml</filename>, <filename>&lt;package&gt;-sections.txt</filename>."
-msgstr ""
+msgstr "પહેલું ચલાવવાનું બનાવવા doc-dirs માં ઘણીબધી વધારાની ફાઇલોને ઉત્પન્ન કરે છે. મહત્વનાં છે: <filename>&lt;package&gt;.types</filename>, <filename>&lt;package&gt;-docs.sgml</filename>, <filename>&lt;package&gt;-sections.txt</filename>."
 
 #: C/gtk-doc-manual.xml:556(para)
 msgid "Now you can point your browser to <filename>docs/reference/&lt;package&gt;/index.html</filename>. Yes, it's a bit disappointing still. But hang-on, during the next chapter we tell you how to fill the pages with life."
@@ -493,11 +543,11 @@ msgstr "સંકેતનાં બીજા પ્રકારોનો સં
 
 #: C/gtk-doc-manual.xml:668(para)
 msgid "Use #Object::signal to refer to a GObject signal"
-msgstr ""
+msgstr "#Object ને વાપરો::GObject સંકેતનો સંદર્ભ લેવા માટે સંકેત"
 
 #: C/gtk-doc-manual.xml:673(para)
 msgid "Use #Object:property to refer to a GObject property"
-msgstr ""
+msgstr "#Object ને વાપરો:GObject ગુણધર્મનો સંદર્ભ લેવા માટે ગુણધર્મ"
 
 #: C/gtk-doc-manual.xml:678(para)
 msgid "Use #Struct.field to refer to a field inside a structure."
@@ -658,7 +708,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:916(para)
 msgid "(FIXME : Stability information)"
-msgstr ""
+msgstr "(FIXME : સ્થિરતા જાણકારી)"
 
 #: C/gtk-doc-manual.xml:943(title) C/gtk-doc-manual.xml:979(title)
 msgid "Function comment block"
@@ -774,7 +824,7 @@ msgstr "પ્રકારનો સંદર્ભ લેવા માટે: <
 
 #: C/gtk-doc-manual.xml:1256(para)
 msgid "To refer to an external structure (not one described in the GTK docs): <placeholder-1/>"
-msgstr ""
+msgstr "બહારનાં બંધારણનો સંદર્ભ લેવા માટે (GTK દસ્તાવેજોમાં વર્ણવેલ નથી): <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1267(para)
 msgid "To refer to a field of a structure: <placeholder-1/>"
