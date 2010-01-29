@@ -2253,7 +2253,7 @@ sub OutputSGMLFile {
     }
 
     my $image = $SymbolDocs{"$TMPL_DIR/$file:Image"};
-    if (!defined ($image)) {
+    if (!defined ($image) || $image =~ m/^\s*$/) {
       $image = "";
     } else {
       $image =~ s/^\s*//;
