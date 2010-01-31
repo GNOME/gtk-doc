@@ -33,7 +33,11 @@
   <xsl:param name="html.ext" select="'.html'"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
-  
+  <!-- don't generate all those link tags (very slow and hardly used)
+       it does not show much effect as we have a user.head.content template
+  <xsl:param name="html.extra.head.links" select="0" />
+   -->
+    
   <!-- use index filtering (if available) -->
   <xsl:param name="index.on.role" select="1"/>
 
@@ -231,38 +235,11 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:apply-imports/>
   </xsl:template>
 
-  <xsl:param name="gtkdoc.linknodes" select="//part
-                          |//reference
-                          |//preface
-                          |//chapter
-                          |//article
-                          |//appendix[not(parent::article)]|appendix
-                          |//glossary[not(parent::article)]|glossary
-                          |//index[not(parent::article)]|index"/>
-
   <xsl:template name="user.head.content">
     <xsl:if test="$gtkdoc.version">
       <meta name="generator" content="GTK-Doc V{$gtkdoc.version} (XML mode)"/>
     </xsl:if>
     <link rel="stylesheet" href="style.css" type="text/css"/>
-
-    <!-- copied from the html.head template in the docbook stylesheets
-         we don't want links for all refentrys, thats just too much
-      -->
-    <xsl:variable name="this" select="."/>
-    <xsl:for-each select="$gtkdoc.linknodes">
-      <link rel="{local-name(.)}">
-        <xsl:attribute name="href">
-          <xsl:call-template name="href.target">
-            <xsl:with-param name="context" select="$this"/>
-            <xsl:with-param name="object" select="."/>
-          </xsl:call-template>
-        </xsl:attribute>
-        <xsl:attribute name="title">
-          <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
-        </xsl:attribute>
-      </link>
-    </xsl:for-each>
   </xsl:template>
   
   <xsl:template name="user.footer.content">
