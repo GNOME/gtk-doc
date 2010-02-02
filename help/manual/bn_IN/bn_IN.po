@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bn_IN\n"
 "POT-Creation-Date: 2010-01-27 10:26+0000\n"
-"PO-Revision-Date: 2010-01-27 18:06+0530\n"
+"PO-Revision-Date: 2010-02-02 15:40+0530\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali INDIA <anubad@lists.ankur.org.in>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr "১.১২"
 
 #: C/gtk-doc-manual.xml:14(para)
 msgid "User manual for developers with instructions of GTK-Doc usage."
-msgstr ""
+msgstr "GTK-Doc ব্যবহারের নির্দেশাবলী সহ, ডিভেলপরদের উদ্দেশ্যে নির্মিত সহায়িকা।"
 
 #: C/gtk-doc-manual.xml:17(firstname)
 msgid "Chris"
@@ -139,7 +139,7 @@ msgstr "ভূমিকা"
 
 #: C/gtk-doc-manual.xml:112(para)
 msgid "This chapter introduces GTK-Doc and gives an overview of what it is and how it is used."
-msgstr ""
+msgstr "এই অধ্যায়ে GTK-Doc সম্বন্ধে প্রারম্ভিক তথ্য ও এটির ব্যবহার ও মূল বিষয়বস্তু সম্পর্কে তথ্য উপস্থিত করা হয়েছে।"
 
 #: C/gtk-doc-manual.xml:118(title)
 msgid "What is GTK-Doc?"
@@ -147,7 +147,7 @@ msgstr "GTK-Doc কী?"
 
 #: C/gtk-doc-manual.xml:120(para)
 msgid "GTK-Doc is used to document C code. It is typically used to document the public API of libraries, such as the GTK+ and GNOME libraries. But it can also be used to document application code."
-msgstr ""
+msgstr "GTK-Doc-র সাহায্যে C কোডের জন্য নথি তৈরি করা হয়। বিভিন্ন লাইব্রেরি যেমন GTK+ ও GNOME লাইব্রেরির পাবলিক API সম্বন্ধীয় নথি তৈরি করার জন্য এটি ব্যবহৃত হয়। অ্যাপ্লিকেশনের কোড সম্পর্কিত তথ্য লেখার জন্যও এটি ব্যবহার করা হয়।"
 
 #: C/gtk-doc-manual.xml:128(title)
 msgid "How Does GTK-Doc Work?"
@@ -159,7 +159,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:137(para)
 msgid "GTK-Doc consists of a number of perl scripts, each performing a different step in the process."
-msgstr ""
+msgstr "GTK-Doc-র মধ্যে অনেকগুলি perl স্ক্রিপ্ট উপস্থিত রয়েছে ও প্রতিটি স্ক্রিপ্ট দ্বারা সম্পর্ণ প্রক্রিয়ার একটি ভিন্ন ধাপের কর্ম সঞ্চালন করা হয়।"
 
 #: C/gtk-doc-manual.xml:142(para)
 msgid "There are 5 main steps in the process:"
@@ -175,7 +175,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:184(para)
 msgid "<guilabel>Generating the \"template\" files.</guilabel><application>gtkdoc-mktmpl</application> creates a number of files in the <filename class=\"directory\">tmpl/</filename> subdirectory, using the information gathered in the first step. (Note that this can be run repeatedly. It will try to ensure that no documentation is ever lost.)"
-msgstr ""
+msgstr "<guilabel>\"template\" ফাইল নির্মাণ।</guilabel> প্রথম ধাপে সংগ্রহ করা তথ্যের ভিত্তিতে <application>gtkdoc-mktmpl</application> দ্বারা <filename class=\"directory\">tmpl/</filename> সাব-ডিরেক্টরির মধ্যে বেশ কয়েকটি ফাইল নির্মাণ করা হয়। (উল্লেখ্য, কোনো নথিপত্র হারিয়ে না ফেলার লক্ষ্যে, এই কাজটি পুনরাবৃত্তি করা হতে পারে।)"
 
 #: C/gtk-doc-manual.xml:193(para)
 msgid "Since GTK-Doc 1.9 the templates can be avoided. We encourage people to keep documentation in the code. <application>gtkdocize</application> supports now a <option>--flavour no-tmpl</option> option that chooses a makefile that skips tmpl usage totally. If you have never changed file in tmpl by hand, please remove the dir (e.g. from version control system)."
@@ -183,15 +183,15 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:205(para)
 msgid "<guilabel>Generating the SGML/XML and HTML/PDF.</guilabel><application>gtkdoc-mkdb</application> turns the template files into SGML or XML files in the <filename class=\"directory\">sgml/</filename> or <filename class=\"directory\">xml/</filename> subdirectory. If the source code contains documentation on functions, using the special comment blocks, it gets merged in here. If there are no tmpl files used it only reads takes docs from sources and introspection data."
-msgstr ""
+msgstr "<guilabel>SGML/XML ও HTML/PDF নির্মাণের প্রণালী।</guilabel> <filename class=\"directory\">sgml/</filename> অথবা <filename class=\"directory\">xml/</filename> সাব-ডিরেক্টরির মধ্যে উপস্থিত SGML অথবা XML ফাইলগুলিকে <application>gtkdoc-mkdb</application> দ্বারা টেমপ্লেট ফাইল রূপে পরিবর্তন করা হয়। সোর্স কোডের মধ্যে ফাংশান সংক্রান্ত নতিপত্র উপস্থিত থাকলে, বিশেষ কমেন্ট ব্লক প্রয়োগ করে সংশ্লিষ্ট অংশগুলি এইখানে অন্তর্ভুক্ত করা হয়। কোনো tmpl ফাইল ব্যবহার না করা হলে, শুধুমাত্র সোর্স থেকে নথি ও বিশ্লেষণের তথ্য সংগ্রহ করা হয়।"
 
 #: C/gtk-doc-manual.xml:215(para)
 msgid "<application>gtkdoc-mkhtml</application> turns the SGML/XML files into HTML files in the <filename class=\"directory\">html/</filename> subdirectory. Likewise <application>gtkdoc-mkpdf</application> turns the SGML/XML files into a PDF docuemnt called <filename>&lt;package&gt;.pdf</filename>."
-msgstr ""
+msgstr "<application>gtkdoc-mkhtml</application> দ্বারা SGML/XML ফাইলগুলিকে HTML <filename class=\"directory\">html/</filename> সাব-ডিরেক্টরির মধ্যে HTML ফাইল রূপে পরিবর্তন করা হয়। একই পদ্ধতিতে  <application>gtkdoc-mkpdf</application> দ্বারা SGML/XML ফাইলগুলিকে PDF <filename>&lt;package&gt;.pdf</filename> নামক একটি PDF নথিতে রূপান্তর করা হয়।"
 
 #: C/gtk-doc-manual.xml:221(para)
 msgid "Files in <filename class=\"directory\">sgml/</filename> or <filename class=\"directory\">xml/</filename> and <filename class=\"directory\">html/</filename> directories are always overwritten. One should never edit them directly."
-msgstr ""
+msgstr "<filename class=\"directory\">sgml/</filename> অথবা <filename class=\"directory\">xml/</filename> ও <filename class=\"directory\">html/</filename> ডিরেক্টরির মধ্যে উপস্থিত ফাইলগুলি সর্বদা নতুন করে লেখা হবে। এই ফাইলগুলি সরাসরি পরিবর্তন করা উচিত নয়।"
 
 #: C/gtk-doc-manual.xml:229(para)
 msgid "<guilabel>Fixing up cross-references between documents.</guilabel> After installing the HTML files, <application>gtkdoc-fixxref</application> can be run to fix up any cross-references between separate documents. For example, the GTK+ documentation contains many cross-references to types documented in the GLib manual. When creating the source tarball for distribution, <application>gtkdoc-rebase</application> turns all external links into web-links. When installing distributed (pregenerated) docs the same application will try to turn links back to local links (where those docs are installed)."
@@ -215,7 +215,7 @@ msgstr "<guilabel>DocBook DTD v3.0</guilabel> - এটি DocBook SGML DTD। <u
 
 #: C/gtk-doc-manual.xml:258(para)
 msgid "<guilabel>Jade v1.1</guilabel> - This is a DSSSL processor for converting SGML to various formats. <ulink url=\"http://www.jclark.com/jade\" type=\"http\">http://www.jclark.com/jade</ulink>"
-msgstr ""
+msgstr "<guilabel>Jade v1.1</guilabel> - SGML-কে বিভিন্ন বিন্যাসে পরিবর্তনের জন্য ব্যবহৃত এটি একটি DSSSL প্রসেসর। <ulink url=\"http://www.jclark.com/jade\" type=\"http\">http://www.jclark.com/jade</ulink>"
 
 #: C/gtk-doc-manual.xml:262(para)
 msgid "<guilabel>Modular DocBook Stylesheets</guilabel> This is the DSSSL code to convert DocBook to HTML (and a few other formats). It's used together with jade. I've customized the DSSSL code slightly, in gtk-doc.dsl, to colour the program code listings/declarations, and to support global cross-reference indices in the generated HTML. <ulink url=\"http://nwalsh.com/docbook/dsssl\" type=\"http\">http://nwalsh.com/docbook/dsssl</ulink>"
@@ -231,11 +231,11 @@ msgstr "ইনস্টলেশনের প্রণালী"
 
 #: C/gtk-doc-manual.xml:283(para)
 msgid "There is no standard place where the DocBook Modular Stylesheets are installed."
-msgstr ""
+msgstr "DocBook মডিউলার স্টাইল-শিট ইনস্টল করার কোনো প্রমিত স্থান উপস্থিত নেই।"
 
 #: C/gtk-doc-manual.xml:286(para)
 msgid "GTK-Doc's configure script searches these 3 directories automatically:"
-msgstr ""
+msgstr "GTK-Doc-র কনফিগার স্ক্রিপ্ট দ্বারা স্বয়ংক্রিয়ভাবে নিম্নলিখিত তিনটি ডিরেক্টরির মধ্যে অনুসন্ধান করা হয়:"
 
 #: C/gtk-doc-manual.xml:289(para)
 msgid "<filename> /usr/lib/sgml/stylesheets/nwalsh-modular </filename> (used by RedHat)"
@@ -251,7 +251,7 @@ msgstr "<filename> /usr/share/sgml/docbkdsl </filename> (SuSE দ্বারা
 
 #: C/gtk-doc-manual.xml:298(para)
 msgid "If you have the stylesheets installed somewhere else, you need to configure GTK-Doc using the option: <command> --with-dsssl-dir=&lt;PATH_TO_TOPLEVEL_STYLESHEETS_DIR&gt; </command>"
-msgstr ""
+msgstr "স্টাইল-শিটগুলি অন্য কোনো স্থানে ইনস্টল করা হয়ে থাকলে, নিম্নলিখিত বিকল্প সহয়োগে GTK-Doc কনফিগার করতে হবে: <command> --with-dsssl-dir=&lt;PATH_TO_TOPLEVEL_STYLESHEETS_DIR&gt; </command>"
 
 #: C/gtk-doc-manual.xml:322(title)
 msgid "About GTK-Doc"
@@ -263,7 +263,7 @@ msgstr "(FIXME)"
 
 #: C/gtk-doc-manual.xml:328(para)
 msgid "(History, authors, web pages, license, future plans, comparison with other similar systems.)"
-msgstr ""
+msgstr "(পূর্ববর্তী তথ্য, লেখক, ওয়েব-পেজ, লাইসেন্স, ভবিষ্যতের প্রকল্প, অন্যান্য সমতূল্য সিস্টেমের সাথে তূলনা।)"
 
 #: C/gtk-doc-manual.xml:336(title)
 msgid "About this Manual"
@@ -271,7 +271,7 @@ msgstr "এই সহায়িকার পরিচিতি"
 
 #: C/gtk-doc-manual.xml:342(para)
 msgid "(who it is meant for, where you can get it, license)"
-msgstr ""
+msgstr "(উদ্দিষ্ট পাঠকবৃন্দ, প্রাপ্তির স্থান, লাইসেন্স)"
 
 #: C/gtk-doc-manual.xml:351(title)
 msgid "Setting up your project"
@@ -291,7 +291,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:372(title)
 msgid "Example directory structure"
-msgstr ""
+msgstr "ডিরেক্টরির বিন্যাসের উদাহরণ"
 
 #: C/gtk-doc-manual.xml:370(para)
 msgid "This can then look as show below: <placeholder-1/>"
@@ -315,15 +315,15 @@ msgstr "--with-html-dir=PATH : ইনস্টল করা ডকুমেন�
 
 #: C/gtk-doc-manual.xml:414(para)
 msgid "--enable-gtk-doc : use gtk-doc to build documentation [default=no]"
-msgstr ""
+msgstr "--enable-gtk-doc : use gtk-doc to build documentation [default=no]"
 
 #: C/gtk-doc-manual.xml:415(para)
 msgid "--enable-gtk-doc-html : build documentation in html format [default=yes]"
-msgstr ""
+msgstr "--enable-gtk-doc-html : build documentation in html format [default=yes]"
 
 #: C/gtk-doc-manual.xml:416(para)
 msgid "--enable-gtk-doc-pdf : build documentation in pdf format [default=no]"
-msgstr ""
+msgstr "--enable-gtk-doc-pdf : build documentation in pdf format [default=no]"
 
 #: C/gtk-doc-manual.xml:420(para)
 msgid "GTK-Doc is disabled by default! Remember to pass the option <option>'--enable-gtk-doc'</option> to the next <filename>configure</filename> run. Otherwise pregenerated documentation is installed (which makes sense for users but not for developers)."
@@ -460,23 +460,23 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:668(para)
 msgid "Use #Object::signal to refer to a GObject signal"
-msgstr ""
+msgstr "GObject signal-র জন্য #Object::signal ব্যবহার করুন"
 
 #: C/gtk-doc-manual.xml:673(para)
 msgid "Use #Object:property to refer to a GObject property"
-msgstr ""
+msgstr "GObject property-র জন্য #Object:property ব্যবহার করুন"
 
 #: C/gtk-doc-manual.xml:678(para)
 msgid "Use #Struct.field to refer to a field inside a structure."
-msgstr ""
+msgstr "স্ট্রাকচারের মধ্যে কোনো ফিল্ড চিহ্নিত করার জন্য #Struct.field প্রয়োগ করুন।"
 
 #: C/gtk-doc-manual.xml:640(para)
 msgid "One advantage of hyper-text over plain-text is the ability to have links in the document. Writing the correct markup for a link can be tedious though. GTK-Doc comes to help by providing several useful abbreviations. <placeholder-1/>"
-msgstr ""
+msgstr "প্লেইন-টেক্সটের পরিবর্তে হাইপার-লিংক ব্যবহার করা হলে ডকুমেন্টের মধ্যে লিংক অন্তর্ভুক্ত করা সম্ভব হবে। কিন্তু লিংকের ক্ষেত্রে সঠিক markup লেখা পরিশ্রমের কাজ হতে পারে। GTK-Doc দ্বারা উপলব্ধ কয়েকটি সংক্ষিপ্ত শব্দের সাহায্যে এই কাজ হ্রাস করা যাবে। <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:686(para)
 msgid "If you need to use the special characters '&lt;', '&gt;', '()', '@', '%', or '#' in your documentation without GTK-Doc changing them you can use the XML entities \"&amp;lt;\", \"&amp;gt;\", \"&amp;lpar;\", \"&amp;rpar;\", \"&amp;commat;\", \"&amp;percnt;\" and \"&amp;num;\" respectively or escape them with a backslash '\\'."
-msgstr ""
+msgstr "নথির মধ্যে কিছু বিশেষ অক্ষর যেমন '&lt;', '&gt;', '()', '@', '%', অথবা '#' প্রভৃতি ব্যবহার করতে ইচ্ছুক হলে GTK-Doc দ্বারা এইগুলিকে পরিবর্তন করতে প্রতিরোধ করার জন্য যথাক্রমে \"&amp;lt;\", \"&amp;gt;\", \"&amp;lpar;\", \"&amp;rpar;\", \"&amp;commat;\", \"&amp;percnt;\" and \"&amp;num;\" XML এনটিটিগুলি ব্যবহার করুন অথবা ব্যাক-স্ল্যাশ চিহ্ন '\\' সহযোগে এস্কেপ করানো আবশ্যক।"
 
 #: C/gtk-doc-manual.xml:695(para)
 msgid "DocBook can do more that just links. One can also have lists, tables and examples. To enable the usage of SGML/XML tags inside doc-comments you need to have <option>--sgml-mode</option> in the variable <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</filename>."
@@ -488,7 +488,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:717(title)
 msgid "Documenting sections"
-msgstr ""
+msgstr "নথিপত্রের বিভাগ"
 
 #: C/gtk-doc-manual.xml:719(para)
 msgid "Each section of the documentation contains information about one class or module. To introduce the component one can write a section block. The short description is also used inside the table of contents. All the @fields are optional."
@@ -496,7 +496,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:727(title)
 msgid "Section comment block"
-msgstr ""
+msgstr "বিভাগ কমেন্ট ব্লক"
 
 #: C/gtk-doc-manual.xml:749(term)
 msgid "SECTION:&lt;name&gt;"
@@ -512,7 +512,7 @@ msgstr "@short_description"
 
 #: C/gtk-doc-manual.xml:762(para)
 msgid "A one line description of the section, that later will appear after the links in the TOC and at the top of the section page."
-msgstr ""
+msgstr "এক পংক্তি দ্বারা উল্লিখিত বিভাগের বিবরণ, সূচিপত্রের লিংকের পরে ও বিভাগের পৃষ্ঠার উপরে এই বিবরণ পরে প্রদর্শন করা হবে।"
 
 #: C/gtk-doc-manual.xml:769(term)
 msgid "@title"
@@ -560,7 +560,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:798(para)
 msgid "A informal description of the stability level this API has. We recommend the use of one of these terms: <placeholder-1/>"
-msgstr ""
+msgstr "চিহ্নিত API-র স্থায়ীত্বের পরিমানের আনুমানিক বিবরণ। চিহ্নিত কোনো অভিব্যক্তির ব্যবহার বাঞ্ছনীয়: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:848(term)
 msgid "@include"
@@ -584,7 +584,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:881(title)
 msgid "Documenting symbols"
-msgstr ""
+msgstr "নথিপত্রের সংকেত"
 
 #: C/gtk-doc-manual.xml:883(para)
 msgid "Each symbol (function, macro, struct, enum, signal and property) is documented in a separate block. The block is best placed close to the definition of the symbols so that it is easy to keep them in sync. Thus function are usually documented in the c-source and macros, struct and enum in the header file."
@@ -604,11 +604,11 @@ msgstr "সংস্করণ সংক্রান্ত ট্যাগ"
 
 #: C/gtk-doc-manual.xml:899(term)
 msgid "Since:"
-msgstr ""
+msgstr "প্রারম্ভ:"
 
 #: C/gtk-doc-manual.xml:901(para)
 msgid "Description since which version of the code the API is available."
-msgstr ""
+msgstr "API-টি কোডের কোন সংস্করণ থেকে উপলব্ধ রয়েছে সেটির বিবরণ।"
 
 #: C/gtk-doc-manual.xml:906(term)
 msgid "Deprecated:"
@@ -616,7 +616,7 @@ msgstr "অবচিত:"
 
 #: C/gtk-doc-manual.xml:908(para)
 msgid "Paragraph denoting that this function should no be used anymore. The description should point the reader to the new API."
-msgstr ""
+msgstr "উল্লিখিত ফাংশান ব্যবহার না করার চিহ্নকারী অনুচ্ছেদ। এই বিবরণের সাহায্যে পাঠাকদেরকে নতুন API নির্দেশ করা হবে।"
 
 #: C/gtk-doc-manual.xml:916(para)
 msgid "(FIXME : Stability information)"
@@ -624,7 +624,7 @@ msgstr "(FIXME : স্থায়ীত্ব সংক্রান্ত তথ�
 
 #: C/gtk-doc-manual.xml:943(title) C/gtk-doc-manual.xml:979(title)
 msgid "Function comment block"
-msgstr ""
+msgstr "ফাংশান কমেন্টের ব্লক"
 
 #: C/gtk-doc-manual.xml:949(para)
 msgid "Document whether returned objects, lists, strings, etc, should be freed/unrefed/released."
@@ -640,7 +640,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:945(para) C/gtk-doc-manual.xml:1042(para)
 msgid "Please remember to: <placeholder-1/>"
-msgstr ""
+msgstr "অনুগ্রহ করে খেয়াল রাখবেন: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:967(para)
 msgid "Gtk-doc assumes all symbols (macros, functions) starting with '_' are private. They are treated like static functions."
@@ -648,7 +648,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:972(para)
 msgid "Also, take a look at gobject introspection annotation tags: http://live.gnome.org/GObjectIntrospection/Annotations"
-msgstr ""
+msgstr "উপরন্তু, gobject introspection annotation ট্যাগ দেখুন: http://live.gnome.org/GObjectIntrospection/Annotations"
 
 #: C/gtk-doc-manual.xml:1003(title)
 msgid "Function tags"
@@ -656,7 +656,7 @@ msgstr "ফাংশান সংক্রান্ত ট্যাগ"
 
 #: C/gtk-doc-manual.xml:1004(term)
 msgid "Returns:"
-msgstr ""
+msgstr "প্রাপ্ত মান:"
 
 #: C/gtk-doc-manual.xml:1006(para)
 msgid "Paragraph describing the returned result."
@@ -672,11 +672,11 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1023(title) C/gtk-doc-manual.xml:1025(title)
 msgid "Property comment block"
-msgstr ""
+msgstr "Property কমেন্টের ব্লক"
 
 #: C/gtk-doc-manual.xml:1040(title) C/gtk-doc-manual.xml:1059(title)
 msgid "Signal comment block"
-msgstr ""
+msgstr "Signal কমেন্টের ব্লক"
 
 #: C/gtk-doc-manual.xml:1046(para)
 msgid "Document when the signal is emitted and whether it is emitted before or after other signals."
@@ -688,7 +688,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1079(title) C/gtk-doc-manual.xml:1080(title)
 msgid "Struct comment block"
-msgstr ""
+msgstr "Struct কমেন্টের ব্লক"
 
 #: C/gtk-doc-manual.xml:1100(para)
 msgid "Use <code>/*&lt; private &gt;*/</code> before the private struct fields you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse behavirour."
@@ -696,7 +696,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1108(title) C/gtk-doc-manual.xml:1109(title)
 msgid "Enum comment block"
-msgstr ""
+msgstr "Enum কমেন্টের ব্লক"
 
 #: C/gtk-doc-manual.xml:1130(para)
 msgid "Use <code>/*&lt; private &gt;*/</code> before the private enum values you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse behavirour."
@@ -708,7 +708,7 @@ msgstr "সুবিধাজনক DocBook ট্যাগ"
 
 #: C/gtk-doc-manual.xml:1142(para)
 msgid "Here are some DocBook tags which are most useful when documenting the code."
-msgstr ""
+msgstr "কোড নথিভুক্ত করার সময় সহায়ক কিছু DocBook ট্যাগ এইখানে উল্লেখ করা হল।"
 
 #: C/gtk-doc-manual.xml:1147(para)
 msgid "To link to another section in the GTK docs: <placeholder-1/> The linkend is the SGML/XML id on the top item of the page you want to link to. For most pages this is currently the part (\"gtk\", \"gdk\", \"glib\") and then the page title (\"Hash Tables\"). For widgets it is just the class name. Spaces and underscores are converted to '-' to conform to SGML/XML."
@@ -732,7 +732,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1245(para)
 msgid "To refer to a type: <placeholder-1/>"
-msgstr ""
+msgstr "কোনো টাইপ উল্লেখ করা জন্য: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1256(para)
 msgid "To refer to an external structure (not one described in the GTK docs): <placeholder-1/>"
@@ -740,7 +740,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1267(para)
 msgid "To refer to a field of a structure: <placeholder-1/>"
-msgstr ""
+msgstr "কোনো স্ট্রাকচারের ফিল্ড উল্লেখ করার জন্য: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1278(para)
 msgid "To refer to a class name, we could possibly use: <placeholder-1/> but you'll probably be using #GtkWidget instead (to automatically create a link to the GtkWidget page - see <link linkend=\"documenting_syntax\">the abbreviations</link>)."
@@ -748,7 +748,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1291(para)
 msgid "To emphasize text: <placeholder-1/>"
-msgstr ""
+msgstr "টেক্সট বিশেষভাবে উল্লেখ করার জন্য: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:1302(para)
 msgid "For filenames use: <placeholder-1/>"
@@ -808,7 +808,7 @@ msgstr "প্রধা নথির হেডার"
 
 #: C/gtk-doc-manual.xml:1430(title)
 msgid "Editing the section file"
-msgstr ""
+msgstr "বিভাগের ফাইল সম্পাদনা"
 
 #: C/gtk-doc-manual.xml:1432(para)
 msgid "The section file is used to organise the documentation output by GTK-Doc. Here one specifies which symbol belongs to which module or class and control the visibility (public or private)."
@@ -880,7 +880,7 @@ msgstr "উত্তর"
 
 #: C/gtk-doc-manual.xml:1566(seg)
 msgid "No class hierarchy."
-msgstr ""
+msgstr "কোনো ক্লাস অনুক্রম নেই।"
 
 #: C/gtk-doc-manual.xml:1568(function)
 msgid "xxx_get_type()"
@@ -896,7 +896,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1573(seg)
 msgid "Still no class hierarchy."
-msgstr ""
+msgstr "তথাপি ক্লাসের কোনো অনুক্রম নেই।"
 
 #: C/gtk-doc-manual.xml:1575(filename) C/gtk-doc-manual.xml:1614(filename) C/gtk-doc-manual.xml:1622(filename) C/gtk-doc-manual.xml:1644(filename)
 msgid "&lt;package&gt;-sections.txt"
@@ -908,11 +908,11 @@ msgstr "বর্ণনা"
 
 #: C/gtk-doc-manual.xml:1574(seg)
 msgid "Missing or wrong naming in <placeholder-1/> file (see <placeholder-2/>)."
-msgstr ""
+msgstr "<placeholder-1/> ফাইলের মধ্যে নাম অনুপস্থিত অথবা ভুল (<placeholder-2/> দেখুন)।"
 
 #: C/gtk-doc-manual.xml:1580(seg)
 msgid "Damn, I have still no class hierarchy."
-msgstr ""
+msgstr "এখনো কোনো ক্লাস অনুক্রম নেই।"
 
 #: C/gtk-doc-manual.xml:1582(type) C/gtk-doc-manual.xml:1623(type)
 msgid "GtkWidget"
@@ -936,7 +936,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1595(seg)
 msgid "Symbols are not linked to their doc-section."
-msgstr ""
+msgstr "সিম্বলগুলি doc-section-র সাথে যুক্ত নয়।"
 
 #: C/gtk-doc-manual.xml:1596(seg)
 msgid "Is the doc-comment using the correct markup (added #,% or ())? Check if the gtkdoc-fixxref warns about unresolvable xrefs."
@@ -944,15 +944,15 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1602(seg)
 msgid "A new class does not appear in the docs."
-msgstr ""
+msgstr "নথির মধ্যে নতুন শ্রেণী উপস্থিত নেই।"
 
 #: C/gtk-doc-manual.xml:1603(seg)
 msgid "Is the new page xi:included from <placeholder-1/>."
-msgstr ""
+msgstr "নতুন পৃষ্ঠাটি <placeholder-1/> থেকে xi:include করে নির্মিত হয়েছে কি।"
 
 #: C/gtk-doc-manual.xml:1609(seg)
 msgid "A new symbol does not appear in the docs."
-msgstr ""
+msgstr "নথির মধ্যে নতুন সিম্বল অন্তর্ভুক্ত নয়।"
 
 #: C/gtk-doc-manual.xml:1610(seg)
 msgid "Is the doc-comment properly formatted. Check for spelling mistakes in the begin of the comment. Check if the gtkdoc-fixxref warns about unresolvable xrefs. Check if the symbol is correctly listed in the <placeholder-1/> in a public subsection."
@@ -960,7 +960,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1618(seg)
 msgid "A type is missing from the class hierarchy."
-msgstr ""
+msgstr "ক্লাস অনুক্রম থেকে টাইপ অনুপস্থিত।"
 
 #: C/gtk-doc-manual.xml:1620(filename)
 msgid "&lt;package&gt;.hierarchy"
@@ -976,7 +976,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1628(seg)
 msgid "I get foldoc links for all gobject annotations."
-msgstr ""
+msgstr "সকল gobject অ্যানোটেশনের জন্য foldoc লিংক পাওয়া গিয়েছে।"
 
 #: C/gtk-doc-manual.xml:1630(filename)
 msgid "xml/annotation-glossary.xml"
@@ -984,7 +984,7 @@ msgstr "xml/annotation-glossary.xml"
 
 #: C/gtk-doc-manual.xml:1629(seg)
 msgid "Check that <placeholder-1/> is xi:included from <placeholder-2/>."
-msgstr ""
+msgstr "<placeholder-1/>-কে <placeholder-2/> থেকে xi:included করা হয়েছে কি না পরীক্ষা করুন।"
 
 #: C/gtk-doc-manual.xml:1637(seg)
 msgid "Parameter described in source code comment block but does not exist"
