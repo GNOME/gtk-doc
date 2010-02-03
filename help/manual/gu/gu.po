@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
 "POT-Creation-Date: 2010-01-25 08:26+0000\n"
-"PO-Revision-Date: 2010-01-28 14:57+0530\n"
+"PO-Revision-Date: 2010-02-03 11:20+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -282,7 +282,7 @@ msgstr "ત્યાં મૂળભૂત સ્થાન નથી કે જ�
 
 #: C/gtk-doc-manual.xml:286(para)
 msgid "GTK-Doc's configure script searches these 3 directories automatically:"
-msgstr ""
+msgstr "GTK-Doc ની રૂપરેખાંકિત સ્ક્રિપ્ટ એ આ 3 ડિરેક્ટરીઓને આપમેળે શોધે છે:"
 
 #: C/gtk-doc-manual.xml:289(para)
 msgid "<filename> /usr/lib/sgml/stylesheets/nwalsh-modular </filename> (used by RedHat)"
@@ -329,6 +329,8 @@ msgstr "તમારા પ્રોજેક્ટને સુયોજિત 
 #: C/gtk-doc-manual.xml:353(para)
 msgid "The next sections describe what steps to perform to integrate GTK-Doc into your project. Theses section assume we work on a project called 'meep'. This project contains a library called 'libmeep' and an end-user app called 'meeper'."
 msgstr ""
+"આગળનાં વિભાગો એ તમારાં પ્રોજેક્ટમાં GTK-Doc ને એકત્રિત કરવા ક્યાં પગલાઓ ચલાવવાનાં છે તેનું વર્ણન કરે છે. આ વિભાગ ધારે છે કે આપણ 'meep' તરીકે "
+"કહેવાતા પ્રોજેક્ટ પર કામ કરે છે. આ પ્રોજેક્ટ એ 'libmeep' તરીકે કહેવાતી લાઇબ્રેરી અને 'meeper' તરીકે કહેવાતી અંતિમ વપરાશકર્તાનાં કાર્યક્રમને સમાવે છે."
 
 #: C/gtk-doc-manual.xml:361(title)
 msgid "Setting up a skeleton documentation"
@@ -471,6 +473,9 @@ msgstr "પહેલું ચલાવવાનું બનાવવા doc-di
 #: C/gtk-doc-manual.xml:556(para)
 msgid "Now you can point your browser to <filename>docs/reference/&lt;package&gt;/index.html</filename>. Yes, it's a bit disappointing still. But hang-on, during the next chapter we tell you how to fill the pages with life."
 msgstr ""
+"હવે તમે <filename>docs/reference/&lt;package&gt;/index.html</filename> માટે તમારા બ્રાઉઝર પર આંગળી ચીંધી શકો છો. "
+"હાં, તે થોડુ હજુ નિરાશ કરે તેવુ છે. પરંતુ આગળનામ વિષય માટે આપણે તને કહીએ છે કે જીદંગી સાથે પાનાંઓને કેવી રીતે ભરવા તે દરમ્યાન "
+"થોડા સમય માટે અટકી જાય છે"
 
 #: C/gtk-doc-manual.xml:564(title)
 msgid "Integration with version control systems"
@@ -478,7 +483,7 @@ msgstr "આવૃત્તિ નિયંત્રણ સિસ્ટમો સ
 
 #: C/gtk-doc-manual.xml:566(para)
 msgid "As a rule of the thumb, it's those files you edit, that should go under version control. For typical projects it's these files: <filename>&lt;package&gt;.types</filename><filename>&lt;package&gt;-docs.sgml</filename><filename>&lt;package&gt;-sections.txt</filename><filename>Makefile.am</filename>"
-msgstr ""
+msgstr "અંગૂઠાનાં નિયમ પ્રમાણે, તે તે ફાઇલો છે જે તમારે સુધારવાની છે, કે જે આવૃત્તિ નિયંત્રણ હેઠળ જવી જોઇએ. વિશિષ્ટ પ્રોજેક્ટો માટે તે આ ફાઇલો છે: <filename>&lt;package&gt;.types</filename><filename>&lt;package&gt;-docs.sgml</filename><filename>&lt;package&gt;-sections.txt</filenam"
 
 #: C/gtk-doc-manual.xml:579(title)
 msgid "Documenting the code"
@@ -532,6 +537,8 @@ msgstr "વિધેયો અથવા મેક્રોનો સંદર્
 #: C/gtk-doc-manual.xml:651(para)
 msgid "Use @param to refer to parameters. Also use this when referring to parameters of other functions, related to the one being described."
 msgstr ""
+"પરિમાણોનો સંદર્ભ લેવા માટે @param ને વાપરો. બીજા વિધેયોનાં પરિમાણો માટે જ્યારે સંદર્ભ કરી રહ્યા હોય ત્યારે આને પણ વાપરો, વર્ણવવા માટે એકને "
+"સંબંધિત છે."
 
 #: C/gtk-doc-manual.xml:657(para)
 msgid "Use %constant to refer to a constant, e.g. %G_TRAVERSE_LEAFS."
@@ -560,6 +567,9 @@ msgstr ""
 #: C/gtk-doc-manual.xml:686(para)
 msgid "If you need to use the special characters '&lt;', '&gt;', '()', '@', '%', or '#' in your documentation without GTK-Doc changing them you can use the XML entities \"&amp;lt;\", \"&amp;gt;\", \"&amp;lpar;\", \"&amp;rpar;\", \"&amp;commat;\", \"&amp;percnt;\" and \"&amp;num;\" respectively or escape them with a backslash '\\'."
 msgstr ""
+"જો તમારે તેઓને બદલ્યા વગર GTK-Doc વગર તમારાં દસ્તાવેજીકરણમાં વિશિષ્ટ અક્ષરો '&lt;', '&gt;', '()', '@', '%', or '#' ને વાપરવાનું ઇચ્છતા હોય તો "
+"તમે XML વસ્તુઓ \"&amp;lt;\", \"&amp;gt;\", \"&amp;lpar;\", \"&amp;rpar;\", \"&amp;commat;\", \"&amp;percnt;\" અને \"&amp;num;\" "
+"ને વાપરી શકો છો અથવા બેકસ્લેશ '\\' સાથે તેઓમાંથી બહાર નીકળી જાઓ."
 
 #: C/gtk-doc-manual.xml:695(para)
 msgid "DocBook can do more that just links. One can also have lists, tables and examples. To enable the usage of SGML/XML tags inside doc-comments you need to have <option>--sgml-mode</option> in the variable <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</filename>."
@@ -571,6 +581,10 @@ msgstr ""
 #: C/gtk-doc-manual.xml:703(para)
 msgid "As already mentioned earlier GTK-Doc is for documenting public API. Thus one cannot write documentation for static symbols. Nevertheless it is good to comment those symbols too. This helps other to understand you code. Therefore we recommend to comment these using normal comments (without the 2nd '*' in the first line). If later the function needs to be made public, all one needs to do is to add another '*' in the comment block and insert the symbol name at the right place inside the sections file."
 msgstr ""
+"પહેલાનાં GTK-Doc માં પહેલેથી જણાવેલ પ્રમાણે સાર્વજનિક API દસ્તાવેજીકરણ માટે છે. છતાં એક એ સ્થિર સંકેતો માટે દસ્તાવેજીકરણ ને લખી "
+"શકતુ નથી. તેમ છતાં તે પેલાં સંકેતો પર ટિપ્પણી કરવા માટે સારુ છે. આ તમારાં કોડને સમજવા માટે બીજાને મદદ કરે છે. માટે આપણે સામાન્ય ટિપ્પણીઓની મદદથી "
+"આ ટિપ્પણી એ અગ્રહણીય કરેલ છે (પહેલાં વાક્યમાં બીજા '*' વગર). જો પછી વિધેયને સાર્વજનિક બનાવવાની જરૂર છે, ટિપ્પણી બ્લોકમાં બીજા '*' ઉમેરવા માટે બધાને "
+"કરવાની જરૂર છે અને ફાઇલ વિભાગોની અંદર જમણી જગ્યા પર સંકેત નામને દાખલ કરો."
 
 #: C/gtk-doc-manual.xml:717(title)
 msgid "Documenting sections"
@@ -608,7 +622,7 @@ msgstr "@title"
 
 #: C/gtk-doc-manual.xml:771(para)
 msgid "The section title defaults to &lt;name&gt; from the SECTION declaration. It can be overridden with the @title field."
-msgstr ""
+msgstr "વિભાગનું શીર્ષક એ SECTION રજૂઆતમાંથી &lt;name&gt; માટે મૂળભૂત કરેલ છે. તે @title ક્ષેત્ર સાથે અવગણી શકાય છે."
 
 #: C/gtk-doc-manual.xml:778(term)
 msgid "@section_id"
@@ -640,11 +654,11 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:827(para)
 msgid "Private - An interface that can be used within the GNOME stack itself, but that is not documented for end-users. Such functions should only be used in specified and documented ways."
-msgstr ""
+msgstr "ખાનગી - ઇન્ટપફેસ કે જે GNOME સ્ટેક પોતામાં વાપરી શકાય છે, પરંતુ અંતિમ વપરાશકર્તાઓ માટે દસ્તાવેજ થયેલ નથી. જેવા કે વિધેયો એ સ્પષ્ટ થયેલ અને દસ્તાવેજ પ્રમાણે પમ વાપરવુ જોઇએ."
 
 #: C/gtk-doc-manual.xml:836(para)
 msgid "Internal - An interface that is internal to a module and does not require end-user documentation. Functions that are undocumented are assumed to be Internal."
-msgstr ""
+msgstr "આંતરિક - ઇન્ટરફેસ કે જે મોડ્યુલ માટે આંતરિક છે અને અંતિમ-વપરાશકર્તાનાં દસ્તાવેજીકરણની જરૂર નથી. વિધેયો કે જે દસ્તાવેજ થયેલ નથી તે આંતરિક કરવા માટે ધારેલ છે."
 
 #: C/gtk-doc-manual.xml:798(para)
 msgid "A informal description of the stability level this API has. We recommend the use of one of these terms: <placeholder-1/>"
@@ -680,7 +694,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:891(title) C/gtk-doc-manual.xml:920(title)
 msgid "General tags"
-msgstr "સામાન્ય ટૅગ"
+msgstr "સામાન્ય ટેગ"
 
 #: C/gtk-doc-manual.xml:893(para)
 msgid "You can add versioning information to all documentation elements to tell when an api was introduced, or when it was deprecated."
@@ -704,7 +718,7 @@ msgstr "અપ્રચલિત થયેલ:"
 
 #: C/gtk-doc-manual.xml:908(para)
 msgid "Paragraph denoting that this function should no be used anymore. The description should point the reader to the new API."
-msgstr ""
+msgstr "ફકરાને સૂચિત કરી રહ્યા છે કે જે આ વિધેયને વધારે વાપરવુ જોઇએ નહિં. વર્ણનએ નવા API માટે વાંચનારને ધ્યાન લેવુ જોઇએ."
 
 #: C/gtk-doc-manual.xml:916(para)
 msgid "(FIXME : Stability information)"
@@ -720,7 +734,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:955(para)
 msgid "Document whether parameters can be NULL, and what happens if they are."
-msgstr ""
+msgstr "દસ્તાવેજ ક્યાંતો પરિમાણો એ NULL હોઇ શકે છે, અને શું થશે જો તેઓ છે તો."
 
 #: C/gtk-doc-manual.xml:960(para)
 msgid "Mention interesting pre-conditions and post-conditions where appropriate."
@@ -732,7 +746,7 @@ msgstr "મહેરબાની કરીને યાદ રાખો: <placeh
 
 #: C/gtk-doc-manual.xml:967(para)
 msgid "Gtk-doc assumes all symbols (macros, functions) starting with '_' are private. They are treated like static functions."
-msgstr ""
+msgstr "Gtk-doc એ '_' સાથે શરૂ થતા બધા સંકેતો (મેક્રો, વિધેયો) ને ખાનગી ધારે છે. તેઓ સ્થિર વિધેયો જેવું વર્ણતૂક કરે છે."
 
 #: C/gtk-doc-manual.xml:972(para)
 msgid "Also, take a look at gobject introspection annotation tags: http://live.gnome.org/GObjectIntrospection/Annotations"
@@ -1061,7 +1075,7 @@ msgstr "નવો વર્ગ એ દસ્તાવેજોમાં દે�
 
 #: C/gtk-doc-manual.xml:1603(seg)
 msgid "Is the new page xi:included from <placeholder-1/>."
-msgstr ""
+msgstr "શું તે નવુ પાનું xi છે: <placeholder-1/> માંથી સમાવેલ છે."
 
 #: C/gtk-doc-manual.xml:1609(seg)
 msgid "A new symbol does not appear in the docs."
@@ -1089,7 +1103,7 @@ msgstr ""
 
 #: C/gtk-doc-manual.xml:1628(seg)
 msgid "I get foldoc links for all gobject annotations."
-msgstr ""
+msgstr "બધા gobject ઍનોટેશન માટે foldoc કડીઓ મને મળે છે."
 
 #: C/gtk-doc-manual.xml:1630(filename)
 msgid "xml/annotation-glossary.xml"
@@ -1097,7 +1111,7 @@ msgstr "xml/annotation-glossary.xml"
 
 #: C/gtk-doc-manual.xml:1629(seg)
 msgid "Check that <placeholder-1/> is xi:included from <placeholder-2/>."
-msgstr ""
+msgstr "ચકાસો કે જે <placeholder-1/> એ xi છે: <placeholder-2/> માંથી સમાવેલ છે."
 
 #: C/gtk-doc-manual.xml:1637(seg)
 msgid "Parameter described in source code comment block but does not exist"
