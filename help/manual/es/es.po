@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
 "POT-Creation-Date: 2010-01-03 11:35+0000\n"
-"PO-Revision-Date: 2010-02-05 20:05+0100\n"
+"PO-Revision-Date: 2010-02-06 12:06+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -288,7 +288,6 @@ msgstr ""
 "separada. Intentará asegurarse de que la documentación nunca se pierde.)"
 
 #: C/gtk-doc-manual.xml:193(para)
-#, fuzzy
 #| msgid ""
 #| "Since gtk-doc 1.9 the templates can be avoided. We encourage people to "
 #| "keep documentation in the code. <application>gtkdocize</application> "
@@ -302,7 +301,7 @@ msgid ""
 "skips tmpl usage totally. If you have never changed file in tmpl by hand, "
 "please remove the dir (e.g. from version control system)."
 msgstr ""
-"Ya que las plantillas de gtk-doc 1.9 se pueden evitar. Animamos a la gente a "
+"Ya que las plantillas de GTK-Doc 1.9 se pueden evitar. Animamos a la gente a "
 "que mantenga la documentación en el código. <application>gtkdocize</"
 "application> ahora soporta una opción <command>--flavour no-tmpl</command> "
 "que elige un archivo makefile que omite completamente el uso de tmpl. Si "
@@ -361,6 +360,10 @@ msgid ""
 "filename> directories are always overwritten. One should never edit them "
 "directly."
 msgstr ""
+"Los archivos en los directorios <filename class=\"directory\">sgml/</"
+"filename> o <filename class=\"directory\">xml/</filename> y <filename class="
+"\"directory\">html/</filename> siempre se sobreescriben. Nunca se deben "
+"editar directamente."
 
 #: C/gtk-doc-manual.xml:229(para)
 msgid ""
@@ -462,12 +465,11 @@ msgstr ""
 "modulares de DocBook."
 
 #: C/gtk-doc-manual.xml:286(para)
-#, fuzzy
 #| msgid ""
 #| "gtk-doc's configure script searches these 3 directories automatically:"
 msgid "GTK-Doc's configure script searches these 3 directories automatically:"
 msgstr ""
-"El script de configuración de gtk-doc busca estos tres directorios "
+"El script de configuración de GTK-Doc busca estos tres directorios "
 "automáticamente:"
 
 #: C/gtk-doc-manual.xml:289(para)
@@ -489,7 +491,6 @@ msgid "<filename> /usr/share/sgml/docbkdsl </filename> (used by SuSE)"
 msgstr "<filename> /usr/share/sgml/docbkdsl </filename> (usado por SuSE)"
 
 #: C/gtk-doc-manual.xml:298(para)
-#, fuzzy
 #| msgid ""
 #| "If you have the stylesheets installed somewhere else, you need to "
 #| "configure gtk-doc using the option: <command> --with-dsssl-dir=&lt;"
@@ -500,7 +501,7 @@ msgid ""
 "PATH_TO_TOPLEVEL_STYLESHEETS_DIR&gt; </command>"
 msgstr ""
 "Si tiene las hojas de estilo instaladas en algún otro sitio, deberá "
-"configurar gtk-doc usando la opción: <command> --with-dsssl-dir=&lt;"
+"configurar GTK-Doc usando la opción: <command> --with-dsssl-dir=&lt;"
 "RUTA_AL_DIRECTORIO_DE_NIVEL_SUPERIOR_DE_LAS_HOJAS_DE_ESTILO&gt; </command>"
 
 #: C/gtk-doc-manual.xml:322(title)
@@ -592,26 +593,28 @@ msgid "--with-html-dir=PATH : path to installed docs"
 msgstr "--with-html-dir=RUTA: ruta a los documentos instalados"
 
 #: C/gtk-doc-manual.xml:414(para)
-#, fuzzy
 #| msgid "--enable-gtk-doc : use gtk-doc to build documentation"
 msgid "--enable-gtk-doc : use gtk-doc to build documentation [default=no]"
-msgstr "--enable-gtk-doc: usar gtk-doc para construir la documentación"
+msgstr ""
+"--enable-gtk-doc: usar gtk-doc para construir la documentación "
+"[predeterminado=no]"
 
 #: C/gtk-doc-manual.xml:415(para)
-#, fuzzy
 #| msgid "--enable-gtk-doc : use gtk-doc to build documentation"
 msgid ""
 "--enable-gtk-doc-html : build documentation in html format [default=yes]"
-msgstr "--enable-gtk-doc: usar gtk-doc para construir la documentación"
+msgstr ""
+"--enable-gtk-doc: usar gtk-doc para construir la documentación "
+"[predeterminado=sí]"
 
 #: C/gtk-doc-manual.xml:416(para)
-#, fuzzy
 #| msgid "--enable-gtk-doc : use gtk-doc to build documentation"
 msgid "--enable-gtk-doc-pdf : build documentation in pdf format [default=no]"
-msgstr "--enable-gtk-doc: usar gtk-doc para construir la documentación"
+msgstr ""
+"--enable-gtk-doc: usar gtk-doc para construir la documentación "
+"[predeterminado=no]"
 
 #: C/gtk-doc-manual.xml:420(para)
-#, fuzzy
 #| msgid ""
 #| "Gtk-Doc is disabled by default! Remember to pass the option <option>'--"
 #| "enable-gtk-doc'</option> to the next <filename>configure</filename> run. "
@@ -630,7 +633,6 @@ msgstr ""
 "desarrolladores)."
 
 #: C/gtk-doc-manual.xml:428(para)
-#, fuzzy
 #| msgid ""
 #| "Furthermore it is recommended that you have the following line inside you "
 #| "<filename>configure.ac</filename> script. This allows "
@@ -686,7 +688,6 @@ msgstr ""
 
 #. FIXME: explain options ?
 #: C/gtk-doc-manual.xml:467(para)
-#, fuzzy
 #| msgid ""
 #| "You may also want to enable gtk-doc for the distcheckmake target. Just "
 #| "add then one-liner show in the next example to you top-level "
@@ -701,10 +702,9 @@ msgstr ""
 "superior de <filename>Makefile.am</filename>:"
 
 #: C/gtk-doc-manual.xml:474(title)
-#, fuzzy
 #| msgid "Enable gtk-doc during make distcheck"
 msgid "Enable GTK-Doc during make distcheck"
-msgstr "Activar gtk-doc durante make distcheck"
+msgstr "Activar GTK-Doc durante make distcheck"
 
 #: C/gtk-doc-manual.xml:486(title)
 msgid "Integration with autogen"
