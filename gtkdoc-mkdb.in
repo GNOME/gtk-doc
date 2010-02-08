@@ -3125,6 +3125,7 @@ sub GetImplementations {
 	}
     }
     if ($#impls >= 0) {
+	@impls = sort @impls;
 	$text = <<EOF;
 <para>
 $object is implemented by
@@ -3207,6 +3208,7 @@ sub GetDerived {
 	}
     }
     if ($#derived >= 0) {
+	@derived = sort @derived;
 	$text = <<EOF;
 <para>
 $iface is required by
