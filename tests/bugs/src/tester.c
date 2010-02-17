@@ -209,11 +209,13 @@ unsigned int bug_602518c(void) {
 
 /**
  * bug_610257:
+ * @der: parameter
+ * @len: parameter
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=610257
  */
 signed long
-bug_610257 (const unsigned char *der, int der_len, int *len)
+bug_610257 (const unsigned char *der, int *len)
 {
   return 1L;
 }
