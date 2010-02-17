@@ -22,9 +22,10 @@ typedef struct _GtkdocObjectClass GtkdocObjectClass;
 * to -decl.txt and -decl-list.txt for the struct
 * If the symbol has no docs, we get a warning in -unused.txt for the struct, but
 * not the enum
-*/
+*
 typedef struct GtkdocHelperStruct GtkdocHelperStruct;
 typedef enum GtkdocHelperEnum GtkdocHelperEnum;
+*/
 
 /**
  * GtkdocObject:
