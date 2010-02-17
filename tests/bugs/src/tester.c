@@ -206,3 +206,15 @@ unsigned long int bug_602518b(void) {
 unsigned int bug_602518c(void) {
   return (unsigned int)0;
 }
+
+/**
+ * bug_610257:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=610257
+ */
+signed long
+bug_610257 (const unsigned char *der, int der_len, int *len)
+{
+  return 1L;
+}
+
