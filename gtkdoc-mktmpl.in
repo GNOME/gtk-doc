@@ -373,10 +373,19 @@ EOF
     # For functions and function typedefs we also output the return value.
     if ($type eq "FUNCTION" || $type eq "USER_FUNCTION") {
 	# Take out the return type
-        $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|enum\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*(restrict)?\s*)<\/RETURNS>\n//;
-	my $ret_type_modifier = defined($1) ? $1 : "";
-	my $ret_type = $3;
-	my $ret_type_pointer = $4;
+	$declaration =~ s/<RETURNS>\s*(.*?)<\/RETURNS>\n//;
+	my $ret_type_decl = $1;
+	my $ret_type_modifier;
+	my $ret_type;
+	my $ret_type_pointer;
+
+        if ($ret_type_decl =~ m/((const\s+|G_CONST_RETURN\s+|unsigned\s+|signed\s+|long\s+|short\s+|struct\s+|enum\s+)*)(\w+)\s*(\**\s*(const|G_CONST_RETURN)?\s*\**\s*(restrict)?\s*)/) {
+	    $ret_type_modifier = defined($1) ? $1 : "";
+	    $ret_type = $3;
+	    $ret_type_pointer = $4;
+	} else {
+	    $ret_type = "void";
+	}
 	
 	my @fields = ParseFunctionDeclaration($declaration);
 
