@@ -5,6 +5,8 @@
                 version="1.0">
 
   <!-- import the chunked XSL stylesheet -->
+  <!-- http://www.sagehill.net/docbookxsl/Chunking.html says we should use
+       "chunkfast.xsl", but I can see a difference -->
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
   <xsl:include href="devhelp.xsl"/>
   <xsl:include href="devhelp2.xsl"/>
