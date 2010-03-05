@@ -6,6 +6,12 @@
  *
  * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
  * returns nothing.
+ *
+ * <refsect2 id="dummy-id">
+ * <para>
+ * Second paragraph inside subsection.
+ * </para>
+ * </refsect2>
  */
 
 #include <glib.h>

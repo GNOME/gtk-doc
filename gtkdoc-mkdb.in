@@ -4325,12 +4325,15 @@ sub MergeSourceDocumentation {
 	    # a </para> followed by <!--PARAMETERS--> followed by <para>.
 	    $src_doc =~ s%\n+\s*<!--PARAMETERS-->\s*\n+%\n</para>\n<!--PARAMETERS-->\n<para>\n%g;
 
-	    # If there is a blank line, finish the paragraph and start another.
-	    $src_doc = &ConvertBlankLines ($src_doc, $symbol);
 	    # Do not add <para> to nothing, it breaks missing docs checks.
 	    my $src_doc_para = "";
-            if ($src_doc) {
-                $src_doc_para = "<para>\n$src_doc</para>\n";
+            if ($src_doc ne "") {
+                # If there is a blank line, finish the paragraph and start another.
+                $src_doc = &ConvertBlankLines ($src_doc, $symbol);
+                $src_doc_para = "<para>\n$src_doc\n</para>";
+                # fixup xml markup
+                $src_doc_para =~ s%<para>\n<refsect2%<refsect2%gms;
+                $src_doc_para =~ s%</refsect2>\n</para>%</refsect2>%gms;
                 #print "$symbol : [$src_doc][$src_doc_para]\n";
             }
 
