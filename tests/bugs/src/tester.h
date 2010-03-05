@@ -280,6 +280,9 @@ struct _BugXXX1b {
 };
 */
 
+long double bug_607445(long double **a, int n);
+
+
 signed long bug_610257(const unsigned char *der, int *len);
 
 

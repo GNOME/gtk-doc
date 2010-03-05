@@ -208,6 +208,17 @@ unsigned int bug_602518c(void) {
 }
 
 /**
+ * bug_607445:
+ * @a: parameter
+ * @n: parameter
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=607445
+ */
+long double bug_607445(long double **a, int n) {
+  return 2.0*n;
+}
+
+/**
  * bug_610257:
  * @der: parameter
  * @len: parameter
