@@ -101,47 +101,179 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
-
+  
   <xsl:template name="gentext.template">
     <xsl:param name="context" select="'default'"/>
     <xsl:param name="name" select="'default'"/>
     <xsl:param name="origname" select="$name"/>
-    <xsl:param name="verbose" select="1"/>
+    
+    <!-- cut leading / if any to avoid one recursion -->
+    <xsl:variable name="rname">
+      <xsl:choose>
+        <xsl:when test="starts-with($name, '/')">
+          <xsl:value-of select="substring-after($name, '/')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
-    <!-- this is called with context="title|title-numbered|title-unnumbered
+    <!-- this is called with context="title|title-numbered|title-unnumbered>
     <xsl:message>
       <xsl:text>context:</xsl:text><xsl:value-of select="$context"/>
-    </xsl:message
+      <xsl:text>;name:</xsl:text><xsl:value-of select="$rname"/>
+      <xsl:text>;origname:</xsl:text><xsl:value-of select="$origname"/>
+    </xsl:message>
+   
+    see html/html.xsl:<xsl:template match="*" mode="html.title.attribute">
     -->
 
     <xsl:variable name="context.node"
                   select="$gtkdoc.l10n.xml/l:l10n/l:context[@name=$context]"/>
 
     <xsl:variable name="template.node"
-                  select="($context.node/l:template[@name=$name])[1]"/>
+                  select="($context.node/l:template[@name=$rname])[1]"/>
 
     <xsl:choose>
       <xsl:when test="$template.node/@text">
         <xsl:value-of select="$template.node/@text"/>
+        <!-- debug
+        <xsl:message>
+          <xsl:text>=</xsl:text><xsl:value-of select="$template.node/@text"/>
+        </xsl:message>
+        -->
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
-          <xsl:when test="contains($name, '/')">
+          <xsl:when test="contains($rname, '/')">
             <xsl:call-template name="gentext.template">
               <xsl:with-param name="context" select="$context"/>
-              <xsl:with-param name="name" select="substring-after($name, '/')"/>
+              <xsl:with-param name="name" select="substring-after($rname, '/')"/>
               <xsl:with-param name="origname" select="$origname"/>
-              <xsl:with-param name="verbose" select="$verbose"/>
             </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="$verbose = 0">
           </xsl:when>
         </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
+  <!-- silently test if a gentext template exists -->
+  <xsl:template name="gentext.template.exists">
+    <xsl:param name="context" select="'default'"/>
+    <xsl:param name="name" select="'default'"/>
+    <xsl:param name="origname" select="$name"/>
+  
+    <xsl:variable name="template">
+      <xsl:call-template name="gentext.template">
+        <xsl:with-param name="context" select="$context"/>
+        <xsl:with-param name="name" select="$name"/>
+        <xsl:with-param name="origname" select="$origname"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <xsl:choose>
+      <xsl:when test="string-length($template) != 0">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- shortcut version -->
+  <xsl:template name="generate.html.title">
+    <xsl:variable name="has.title.markup">
+      <xsl:apply-templates select="." mode="title.markup">
+        <xsl:with-param name="verbose" select="0"/>
+      </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="$has.title.markup != '???TITLE???'">
+      <xsl:variable name="gentext.title">
+        <xsl:apply-templates select="."  mode="object.title.markup.textonly"/>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="string-length($gentext.title) != 0">
+          <xsl:attribute name="title">
+            <xsl:value-of select="$gentext.title"/>
+          </xsl:attribute>
+        </xsl:when>
+        <!-- Fall back to alt if available -->
+        <xsl:when test="alt">
+          <xsl:attribute name="title">
+            <xsl:value-of select="normalize-space(alt)"/>
+          </xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- Generate a title attribute for the context node -->
+  <xsl:template match="*" mode="html.title.attribute">
+    <xsl:variable name="has.title.markup">
+      <xsl:apply-templates select="." mode="title.markup">
+        <xsl:with-param name="verbose" select="0"/>
+      </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="$has.title.markup != '???TITLE???'">
+      <xsl:variable name="is.title">
+        <xsl:call-template name="gentext.template.exists">
+          <xsl:with-param name="context" select="'title'"/>
+          <xsl:with-param name="name" select="local-name(.)"/>
+          <xsl:with-param name="lang">
+            <xsl:call-template name="l10n.language"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:variable>
+    
+      <xsl:variable name="is.title-numbered">
+        <xsl:if test="$is.title = 0">
+          <xsl:call-template name="gentext.template.exists">
+            <xsl:with-param name="context" select="'title-numbered'"/>
+            <xsl:with-param name="name" select="local-name(.)"/>
+            <xsl:with-param name="lang">
+              <xsl:call-template name="l10n.language"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:variable>
+        
+    
+      <xsl:variable name="is.title-unnumbered">
+        <xsl:if test="$is.title = 0 and $is.title-numbered = 0">
+          <xsl:call-template name="gentext.template.exists">
+            <xsl:with-param name="context" select="'title-unnumbered'"/>
+            <xsl:with-param name="name" select="local-name(.)"/>
+            <xsl:with-param name="lang">
+              <xsl:call-template name="l10n.language"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:variable>
+    
+      <xsl:variable name="gentext.title">
+        <xsl:if test="$is.title != 0 or
+                      $is.title-numbered != 0 or
+                      $is.title-unnumbered != 0">
+          <xsl:apply-templates select="."
+                               mode="object.title.markup.textonly"/>
+        </xsl:if>
+      </xsl:variable>
+  
+      <xsl:choose>
+        <xsl:when test="string-length($gentext.title) != 0">
+          <xsl:attribute name="title">
+            <xsl:value-of select="$gentext.title"/>
+          </xsl:attribute>
+        </xsl:when>
+        <!-- Fall back to alt if available -->
+        <xsl:when test="alt">
+          <xsl:attribute name="title">
+            <xsl:value-of select="normalize-space(alt)"/>
+          </xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
+
+  
   <!-- ========================================================= -->
   <!-- template to create the index.sgml anchor index -->
 
