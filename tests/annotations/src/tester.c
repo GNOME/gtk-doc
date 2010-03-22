@@ -29,7 +29,8 @@ annotation_array_length (GObject *list,
 /**
  * annotation_nullable:
  * @uri: a uri
- * @label: (allow-none): an optional string
+ * @label: (allow-none): an optional string, which is used in ways too
+ *  complicated to describe in a single line, making it necessary to wrap it
  *
  * Document optional parameters.
  *
