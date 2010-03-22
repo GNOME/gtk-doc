@@ -34,7 +34,8 @@ annotation_array_length (GObject *list,
  *
  * Document optional parameters.
  *
- * Returns: (transfer full) (allow-none): Returns stuff which you have to free after use
+ * Returns: (transfer full) (allow-none): Returns stuff which you have to
+ *  free after use, whose description is also rather long
  */
 gchar *
 annotation_nullable (const gchar *uri,
