@@ -72,7 +72,8 @@ GtkdocObject *gtkdoc_object_new (void) {
 /**
  * gtkdoc_object_set_otest:
  * @self: the object
- * @value: the new otest value
+ * @value: the new otest value, whose description extends further than one
+ *  line will allow
  *
  * Set the #GtkdocObject:otest property.
  *
