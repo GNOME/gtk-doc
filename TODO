@@ -393,6 +393,12 @@ grep "gst_caps_is_always_compatible" tags
         2m15.221s   1m58.740s   0m1.456s
         >
         1m55.480s   1m44.296s   0m2.125s
+      - override many template related to gentext
+        real        user        sys
+        0m43.327s   0m38.594s	0m4.724s
+        >
+        real        user        sys
+        0m33.282s   0m29.266s	0m4.012s
       - removing the gentext calls for nav-bar alt tags does not help
 
       
