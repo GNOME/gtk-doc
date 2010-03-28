@@ -1,6 +1,61 @@
-GTK-Doc 1.14    (Xxx xx 20xx)
+GTK-Doc 1.14    (Mar 28 2010)
 ============
 
+ Changes
+
+ o 593282 : Append &quot; _struct &quot; prefix to every struct name
+ o 599514 : sane support for per-page images
+ o 604892 : checks fail
+ o 613611 : parameter descriptions with annotations truncated at first \n
+ o 115531 : add short description to index entries
+ o 165425 : gtk-doc fails to parse unions
+ o 512155 : gets confused by multiline typedef
+ o 568711 : undocumented enum values are not reported
+ o 590602 : secondly running gtkdoc-mkdb will generate DOCTYPE missing XML files
+ o 590625 : $(DOC_MODULE)-overrides.txt is required by &quot; make dist &quot; 
+ o 591975 : Section_Id always embeds a trailing newline
+ o 604885 : Fix the use of gtkdocize --flavour option
+ o 604992 : gtkdoc-fixxref broken link warning is broken for functions
+ o 604995 : Syntax error in gtkdoc-mkman
+ o 604998 : Check for syntax errors in the test suite
+ o 605052 : put class structs to the generated section file
+ o 605211 : Many build failures with gtk-doc 1.13
+ o 605281 : Add &quot; Since &quot; and &quot; Deprecated &quot; tag to function example
+ o 605285 : Add &lt; keycap &gt; and &lt; keycombo &gt; example
+ o 605289 : Some documentation improvements
+ o 605452 : Added more info to &quot; Documenting symbols &quot; sectio
+ o 605564 : Env var equivalent to --flavour=no-tmpl
+ o 606661 : XInclude error while gnerating documentation
+ o 607445 : gtk-doc does not support long double as returned value type
+ o 607531 : Execute system() calls in subshells to ease debugging
+ o 609062 : [All-langs] [gtk-doc] Translated *.po files not available within ~/po directory
+ o 609194 : sort interface implementers
+ o 610255 : Self-test failure in git as of 2010-02-17: FAIL: gobject.sh
+ o 610257 : Patch to make GTK-DOC notice functions/variables with 'signed' prototypes
+ o 611848 : gtk-doc produces invalid DocBook markup if the SECTION ends with a tag that cannot be nested inside &lt; para &gt; 
+
+ Contributors
+
+ Bruno Brouard
+ David Nečas
+ Emilio Pozuelo Monfort
+ Francisco Javier F. Serrador
+ Javier Jardón
+ Jorge González
+ Loïc Minier
+ Mario Blättermann
+ Marios Zindilis
+ Nicola Fontana
+ Philip Chimento
+ Runa Bhattacharjee
+ Ryan Lortie
+ Simon Josefsson
+ Simon McVittie
+ Stefan Kost
+ Sweta Kothari
+ Vincent Untz
+ Felix Iyadurai
+ krishnababu k
 
 GTK-Doc 1.13    (Dec 18 2009)
 ============
