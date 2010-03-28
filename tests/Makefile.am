@@ -7,6 +7,7 @@ if BUILD_TESTS
 TESTS = tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh
 TESTS_ENVIRONMENT = \
 	ABS_TOP_BUILDDIR=$(abs_top_builddir) \
+	ABS_TOP_SRCDIR=$(abs_top_srcdir) \
 	PATH=$(abs_top_builddir):$(srcdir):$(PATH) \
 	PERL5LIB=$(abs_top_builddir):$(PERL5LIB)
 

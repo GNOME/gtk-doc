@@ -31,7 +31,7 @@ done
 
 # test xsl files
 
-for file in $ABS_TOP_BUILDDIR/*.xsl; do
+for file in $ABS_TOP_SRCDIR/*.xsl; do
   xmllint --noout --noent $file
   if test $? != 0 ; then
     failed=$(($failed + 1));
