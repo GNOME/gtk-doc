@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2010-02-06 11:07+0000\n"
-"PO-Revision-Date: 2010-02-06 20:11+0100\n"
+"POT-Creation-Date: 2010-03-28 18:28+0000\n"
+"PO-Revision-Date: 2010-03-29 20:51+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -114,8 +114,8 @@ msgid "1.14"
 msgstr "1.14"
 
 #: C/gtk-doc-manual.xml:81(date)
-msgid "19 December 2009"
-msgstr "19 de diciembre de 2009"
+msgid "28 March 2010"
+msgstr "28 de marzo de 2010"
 
 #: C/gtk-doc-manual.xml:82(authorinitials)
 #: C/gtk-doc-manual.xml:88(authorinitials)
@@ -124,8 +124,8 @@ msgid "sk"
 msgstr "sk"
 
 #: C/gtk-doc-manual.xml:83(revremark)
-msgid "development version"
-msgstr "versión de desarrollo"
+msgid "bugfixes and performance improvements"
+msgstr "solución de errores y mejoras de rendimiento"
 
 #: C/gtk-doc-manual.xml:86(revnumber)
 msgid "1.13"
@@ -300,19 +300,6 @@ msgstr ""
 "nunca ha cambiado a mano el archivo tmpl, elimine el directorio una vez."
 
 #: C/gtk-doc-manual.xml:205(para)
-#| msgid ""
-#| "<guilabel>Generating the SGML/XML and HTML.</guilabel><application>gtkdoc-"
-#| "mkdb</application> turns the template files into SGML or XML files in the "
-#| "<filename class=\"directory\">sgml/</filename> or <filename class="
-#| "\"directory\">xml/</filename> subdirectory. If the source code contains "
-#| "documentation on functions, using the special comment blocks, it gets "
-#| "merged in here. If there are no tmpl files used it only reads takes docs "
-#| "from sources and introspection data. <application>gtkdoc-mkhtml</"
-#| "application> turns the SGML files into HTML files in the <filename class="
-#| "\"directory\">html/</filename> subdirectory. Files in <filename class="
-#| "\"directory\">sgml/</filename> or <filename class=\"directory\">xml/</"
-#| "filename> and <filename class=\"directory\">html/</filename> directories "
-#| "are always overwritten. One should never edit them directly."
 msgid ""
 "<guilabel>Generating the SGML/XML and HTML/PDF.</"
 "guilabel><application>gtkdoc-mkdb</application> turns the template files "
@@ -681,12 +668,6 @@ msgid "Integration with autogen"
 msgstr "Integración con autogen"
 
 #: C/gtk-doc-manual.xml:488(para)
-#| msgid ""
-#| "Most projects will have an <filename>autogen.sh</filename> script to "
-#| "setup the build infrastructure after a checkout from version control "
-#| "system (such as cvs). Gtk-Doc comes with a tool called "
-#| "<filename>gtkdocize</filename> which can be used in such a script. It "
-#| "should be run before autoheader, automake or autoconf."
 msgid ""
 "Most projects will have an <filename>autogen.sh</filename> script to setup "
 "the build infrastructure after a checkout from version control system (such "
@@ -706,11 +687,6 @@ msgid "Running gtkdocize from autogen.sh"
 msgstr "Ejecutar gtkdocize desde autogen.sh"
 
 #: C/gtk-doc-manual.xml:506(para)
-#| msgid ""
-#| "When running <filename>gtkdocize</filename> it copies <filename>gtk-doc."
-#| "make</filename> to you project root (or any directory specified by the --"
-#| "docdir option). If also check you configure script for the "
-#| "<function>GTK_DOC_CHECK</function> invocation."
 msgid ""
 "When running <application>gtkdocize</application> it copies <filename>gtk-"
 "doc.make</filename> to you project root (or any directory specified by the "
@@ -723,15 +699,6 @@ msgstr ""
 "invocación de <function>GTK_DOC_CHECK</function>."
 
 #: C/gtk-doc-manual.xml:514(para)
-#| msgid ""
-#| "Historically gtk-doc was gerating template files where developers entered "
-#| "the docs. this turned out to be not so good. Since a few version gtk-doc "
-#| "could also get all the information from source comments. Since gtk-doc "
-#| "1.9 the templates can be avoided. We encourage people to keep "
-#| "documentation in the code. <application>gtkdocize</application> supports "
-#| "now a --flavour=no-tmpl option that chooses a makefile that skips tmpl "
-#| "usage totally. If you have never changed file in tmpl by hand, please "
-#| "remove the dir once."
 msgid ""
 "Historically GTK-Doc was gerating template files where developers entered "
 "the docs. this turned out to be not so good. Since a few version GTK-Doc "
@@ -866,15 +833,10 @@ msgid "Documentation comments"
 msgstr "Comentarios de la documentación"
 
 #: C/gtk-doc-manual.xml:611(title)
-#| msgid "Gtk-Doc comment block"
 msgid "GTK-Doc comment block"
 msgstr "Bloque de comentario de GTK-Doc"
 
 #: C/gtk-doc-manual.xml:608(para)
-#| msgid ""
-#| "A multiline comment that starts with an additional '*' marks a "
-#| "documentation block that will be processed by the Gtk-Doc tools. "
-#| "<placeholder-1/>"
 msgid ""
 "A multiline comment that starts with an additional '*' marks a documentation "
 "block that will be processed by the GTK-Doc tools. <placeholder-1/>"
@@ -948,11 +910,6 @@ msgid "Use #Struct.field to refer to a field inside a structure."
 msgstr "Use #Struct.field para referirse a un campo dentro de una estructura"
 
 #: C/gtk-doc-manual.xml:640(para)
-#| msgid ""
-#| "One advantage of hyper-text over plain-text is the ability to have links "
-#| "in the document. Writing the correct markup for a link can be tedious "
-#| "though. Gtk-Doc comes to help by providing several useful abbreviations. "
-#| "<placeholder-1/>"
 msgid ""
 "One advantage of hyper-text over plain-text is the ability to have links in "
 "the document. Writing the correct markup for a link can be tedious though. "
@@ -965,11 +922,6 @@ msgstr ""
 "<placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:686(para)
-#| msgid ""
-#| "If you need to use the special characters '()', '@', '%', or '#' in your "
-#| "documentation without gtk-doc changing them you can use the XML entities "
-#| "\"&amp;lpar;\", \"&amp;rpar;\", \"&amp;commat;\", \"&amp;percnt;\" and "
-#| "\"&amp;num;\" respectively or escape them with a backslash '\\'."
 msgid ""
 "If you need to use the special characters '&lt;', '&gt;', '()', '@', '%', or "
 "'#' in your documentation without GTK-Doc changing them you can use the XML "
@@ -995,15 +947,6 @@ msgstr ""
 "<symbol>MKDB_OPTIONS</symbol> dentro de <filename>Makefile.am</filename>."
 
 #: C/gtk-doc-manual.xml:703(para)
-#| msgid ""
-#| "As already mentioned earlier Gtk-Doc is for documenting public API. Thus "
-#| "one cannot write documentation for static symbols. Nevertheless it is "
-#| "good to comment those symbols too. This helps other to understand you "
-#| "code. Therefore we recommend to comment these using normal comments "
-#| "(without the 2nd '*' in the first line). If later the function needs to "
-#| "be made public, all one needs to do is to add another '*' in the comment "
-#| "block and insert the symbol name at the right place inside the sections "
-#| "file."
 msgid ""
 "As already mentioned earlier GTK-Doc is for documenting public API. Thus one "
 "cannot write documentation for static symbols. Nevertheless it is good to "
@@ -1028,10 +971,6 @@ msgid "Documenting sections"
 msgstr "Documentar secciones"
 
 #: C/gtk-doc-manual.xml:719(para)
-#| msgid ""
-#| "Each section of the documentation contains information about one class or "
-#| "module. To introduce the component one can write a section block. The "
-#| "short description is also used inside the table of contents."
 msgid ""
 "Each section of the documentation contains information about one class or "
 "module. To introduce the component one can write a section block. The short "
@@ -1076,7 +1015,6 @@ msgstr ""
 "TOC y en la página de la sección."
 
 #: C/gtk-doc-manual.xml:769(term)
-#| msgid "Lyttle"
 msgid "@title"
 msgstr "@title"
 
@@ -1299,14 +1237,10 @@ msgstr ""
 "Mencionar precondiciones y postcondiciones interesantes donde sea apropiado."
 
 #: C/gtk-doc-manual.xml:945(para) C/gtk-doc-manual.xml:1042(para)
-#| msgid "To refer to a type: <placeholder-1/>"
 msgid "Please remember to: <placeholder-1/>"
 msgstr "Recuerde: <placeholder-1/>"
 
 #: C/gtk-doc-manual.xml:967(para)
-#| msgid ""
-#| "Gtk-doc assumes all symbols (macros, functions) starting with '_' are "
-#| "private. They are treated like static functions."
 msgid ""
 "Gtk-doc assumes all symbols (macros, functions) starting with '_' are "
 "private. They are treated like static functions."
@@ -1381,7 +1315,6 @@ msgstr ""
 "revertir el comportamiento anterior."
 
 #: C/gtk-doc-manual.xml:1108(title) C/gtk-doc-manual.xml:1109(title)
-#| msgid "Signal comment block"
 msgid "Enum comment block"
 msgstr "Enumerar bloques de comentarios"
 
@@ -1406,12 +1339,6 @@ msgstr ""
 "Aquí están varias etiquetas de DocBook muy útiles al documentar código."
 
 #: C/gtk-doc-manual.xml:1147(para)
-#| msgid ""
-#| "To link to another section in the GTK docs: <placeholder-1/> The linkend "
-#| "is the SGML id on the top item of the page you want to link to. For most "
-#| "pages this is currently the part (\"gtk\", \"gdk\", glib\") and then the "
-#| "page title (\"Hash Tables\"). For widgets it is just the class name. "
-#| "Spaces and underscores are converted to '-' to conform to SGML."
 msgid ""
 "To link to another section in the GTK docs: <placeholder-1/> The linkend is "
 "the SGML/XML id on the top item of the page you want to link to. For most "
@@ -1615,10 +1542,6 @@ msgid "Editing the section file"
 msgstr "Editar el archivo de sección"
 
 #: C/gtk-doc-manual.xml:1432(para)
-#| msgid ""
-#| "The section file is used to organise the documentation output by Gtk-Doc. "
-#| "Here one specifies which symbol belongs to which module or class and "
-#| "control the visibility (public or private)."
 msgid ""
 "The section file is used to organise the documentation output by GTK-Doc. "
 "Here one specifies which symbol belongs to which module or class and control "
@@ -1639,16 +1562,6 @@ msgstr ""
 "comiencen con «#» se tratan como comentarios."
 
 #: C/gtk-doc-manual.xml:1444(para)
-#| msgid ""
-#| "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
-#| "without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
-#| "FILE&gt;' will result in the section declarations being output in the "
-#| "template file <filename>tmpl/gnome-config.sgml</filename>, which will be "
-#| "converted into the DocBook SGML file <filename>sgml/gnome-config.sgml</"
-#| "filename> or .DocBook XML file <filename>xml/gnome-config.xml</filename>. "
-#| "(The name of the html file is based on the module name and the section "
-#| "title, or for gobjects it is based on the gobjects class name converted "
-#| "to lower case)."
 msgid ""
 "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
 "without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
@@ -1671,10 +1584,6 @@ msgstr ""
 "clase de gobject convertido a minúscula.)"
 
 #: C/gtk-doc-manual.xml:1456(para)
-#| msgid ""
-#| "The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of "
-#| "the section. It is only useful before the templates are initially "
-#| "created, since the title set in the template file overrides this."
 msgid ""
 "The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of the "
 "section. It is only useful before the templates (if used) are initially "
@@ -1732,12 +1641,6 @@ msgid "Controlling the result"
 msgstr "Controlar el resultado"
 
 #: C/gtk-doc-manual.xml:1495(para)
-#| msgid ""
-#| "A Gtk-Doc run generates report files inside the documentation directory. "
-#| "The generated files are named: <filename>&lt;package&gt;-undocumented."
-#| "txt</filename>, <filename>&lt;package&gt;-undeclared.txt</filename> and "
-#| "<filename>&lt;package&gt;-unused.txt</filename>. All those are plain text "
-#| "files that can be viewed and postprocessed easily."
 msgid ""
 "A GTK-Doc run generates report files inside the documentation directory. The "
 "generated files are named: <filename>&lt;package&gt;-undocumented.txt</"
@@ -1778,11 +1681,6 @@ msgstr ""
 "eliminado o no se han escrito correctamente."
 
 #: C/gtk-doc-manual.xml:1520(para)
-#| msgid ""
-#| "The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol "
-#| "names, where the Gtk-Doc scanner has found documentation, but does not "
-#| "know where to put it. This means that the symbol has not yet been added "
-#| "to the <filename>&lt;package&gt;-sections.txt</filename> file."
 msgid ""
 "The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol names, "
 "where the GTK-Doc scanner has found documentation, but does not know where "
@@ -1795,10 +1693,6 @@ msgstr ""
 "todavía al archivo <filename>&lt;package&gt;-sections.txt</filename>."
 
 #: C/gtk-doc-manual.xml:1528(para)
-#| msgid ""
-#| "Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
-#| "am. If at least gtk-doc 1.9 is installed, this will run sanity checks "
-#| "during make check run."
 msgid ""
 "Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
 "am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during "
@@ -2942,8 +2836,8 @@ msgstr ""
 #: C/gtk-doc-manual.xml:629(para)
 msgid "Copyright YEAR YOUR NAME."
 msgstr ""
-"Copyright 2009-2010 Francisco Javier Fernández Serrador\n"
 "Copyright 2009-2010 Jorge González González\n"
+"Copyright 2009-2010 Francisco Javier Fernández Serrador\n"
 "Copyright 2009 Daniel Mustieles"
 
 #: C/gtk-doc-manual.xml:632(para)
@@ -3004,6 +2898,12 @@ msgstr ""
 "Francisco Javier F. Serrador <serrrador@svn.gnome.org>, 2009, 2010\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2009, 2010\n"
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2009"
+
+#~ msgid "19 December 2009"
+#~ msgstr "19 de diciembre de 2009"
+
+#~ msgid "development version"
+#~ msgstr "versión de desarrollo"
 
 #~ msgid "(FIXME) (stability) (glib-enums, ...)"
 #~ msgstr "(ARRÉGLAME) (estabilidad) (glib-enums, ...)"
