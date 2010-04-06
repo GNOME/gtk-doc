@@ -3,7 +3,9 @@ AC_PREREQ(2.58)
 
 dnl Use a simple 2-digit version number for a while, since our old example
 dnl Makefile can only cope with that, i.e. use 1.1, 1.2, 1.3 ... 9.9.
-m4_define(gtk_doc_version, 1.14)
+dnl FIXME: I can't see anything failing (1.14.1), lets try to use a three digit
+dnl number for the development version
+m4_define(gtk_doc_version, 1.14.1)
 
 AC_INIT([gtk-doc], [gtk_doc_version], [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc])
 
