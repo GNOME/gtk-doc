@@ -80,4 +80,7 @@ TESTS_ENVIRONMENT = \
 	PERL5LIB=$(abs_top_builddir):$(PERL5LIB)
 endif
 
+GITIGNOREFILES = \
+	tmpl
+
 -include $(top_srcdir)/git.mk

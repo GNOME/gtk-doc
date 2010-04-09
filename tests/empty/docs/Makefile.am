@@ -82,4 +82,8 @@ TESTS_ENVIRONMENT = \
 	PERL5LIB=$(abs_top_builddir):$(PERL5LIB)
 endif
 
+GITIGNOREFILES = \
+	tester-docs.xml \
+	tester-sections.txt
+
 -include $(top_srcdir)/git.mk

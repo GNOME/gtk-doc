@@ -88,6 +88,8 @@ $(srcdir)/.gitignore: Makefile.am $(top_srcdir)/git.mk
 			for x in \
 				$(DOC_MODULE)-decl-list.txt \
 				$(DOC_MODULE)-decl.txt \
+				$(DOC_MODULE)-overrides.txt \
+				$(DOC_MODULE).pdf \
 				tmpl/$(DOC_MODULE)-unused.sgml \
 				"tmpl/*.bak" \
 				xml html \
