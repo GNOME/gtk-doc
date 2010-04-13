@@ -306,7 +306,10 @@ my %AnnotationDefinition = (
     'out' => "Parameter for returning results. Default is <acronym>transfer full</acronym>.",
     'transfer container' => "Free data container after the code is done.",
     'transfer full' => "Free data after the code is done.",
-    'transfer none' => "Don't free data after the code is done."
+    'transfer none' => "Don't free data after the code is done.",
+    'scope call' => "The callback is valid only during the call to the method.",
+    'scope async' => "The callback is valid until first called.",
+    'scope notfied' => "The callback is valid until the GDestroyNotify argument is called."
 );
 
 # Create the root DocBook output directory if it doens't exist.
@@ -3782,7 +3785,7 @@ sub ScanSourceFile {
 		$symbol = $1;
 		#print "SECTION DOCS found in source for : '$symbol'\n";
 		$ignore_broken_returns = 1;
-	    } elsif (m%^\s*([\w:-]*\w)\s*:?\s*$%) {
+	    } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([a-z ]+\)\s*)*$%) {
 		$symbol = $1;
 		#print "SYMBOL DOCS found in source for : '$symbol'\n";
 	    }

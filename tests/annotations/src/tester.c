@@ -85,3 +85,25 @@ annotation_outparams (GList **list)
    return TRUE;
 }
 
+/**
+ * annotation_skip: (skip)
+ * @list: a pointer to take a list
+ *
+ * Documentation for this function.
+ */
+void
+annotation_skip (GList *list)
+{
+}
+
+/**
+ * annotation_scope:
+ * @callback: (scope async): a callback
+ * @user_data: data to pass to callback
+ *
+ * Documentation for this function.
+ */
+void
+annotation_scope (GCallback *callback, gpointer user_data)
+{
+}
