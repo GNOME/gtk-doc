@@ -7,6 +7,9 @@
  * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
  * returns nothing.
  *
+ * Some special characters need escaping. The tests should pass 100\%.
+ * Try a <ulink url="http://www.gtk.org/gtk-doc/#Top">link containing a # char</ulink>.
+ *
  * <refsect2 id="dummy-id">
  * <para>
  * Second paragraph inside subsection.
