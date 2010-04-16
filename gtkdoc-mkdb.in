@@ -1481,9 +1481,9 @@ sub OutputStruct {
 
 	    foreach $decl_line (split (/\n/, $struct_contents)) {
 	        #print "Struct line: $decl_line\n";
-	        if ($decl_line =~ m%/\*\s*<\s*public\s*>\s*\*/%) {
+	        if ($decl_line =~ m%/\*\s*<\s*(public|protected)\s*>\s*\*/%) {
 		    $public = 1;
-		} elsif ($decl_line =~ m%/\*\s*<\s*(private|protected)\s*>\s*\*/%) {
+		} elsif ($decl_line =~ m%/\*\s*<\s*private\s*>\s*\*/%) {
 		    $public = 0;
 		} elsif ($public) {
 		    $new_declaration .= $decl_line . "\n";
