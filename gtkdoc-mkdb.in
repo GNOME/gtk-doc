@@ -2619,18 +2619,21 @@ sub ExpandAnnotation {
                     $annotation_extra = " $1";
                 }
                 $AnnotationsUsed{$match_annotation} = 1;
-                $param_annotations .= "<acronym>$match_annotation</acronym>$annotation_extra. ";
+                $param_annotations .= "[<acronym>$match_annotation</acronym>$annotation_extra]";
             }
             else {
                 &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                     "unknown annotation \"$annotation\" in documentation for $symbol.");
-                $param_annotations=$annotation;
+                $param_annotations .= "[$annotation]";
             }
         }
         chomp($param_desc);
         $param_desc =~ m/^(.*)\.*\s*$/s;
         $param_desc = "$1. ";
-    }    
+    }
+    if ($param_annotations ne "") {
+        $param_annotations = "<emphasis role=\"annotation\">$param_annotations</emphasis>";
+    }
     return ($param_desc, $param_annotations);
 }
 
