@@ -2628,7 +2628,7 @@ sub ExpandAnnotation {
             }
         }
         chomp($param_desc);
-        $param_desc =~ m/^(.*)\.*\s*$/s;
+        $param_desc =~ m/^(.*?)\.*\s*$/s;
         $param_desc = "$1. ";
     }
     if ($param_annotations ne "") {
