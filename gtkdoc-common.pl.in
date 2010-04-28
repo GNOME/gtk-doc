@@ -116,7 +116,7 @@ sub ParseStructDeclaration {
 
     # Remove all other comments;
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
-    $declaration =~ s@//.*$@@g;
+    $declaration =~ s@//.*@@g;
 
     my @result = ();
 
