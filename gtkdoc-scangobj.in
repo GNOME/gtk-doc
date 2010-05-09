@@ -1601,7 +1601,7 @@ $command = "$CC $CFLAGS -c -o $o_file $MODULE-scan.c";
 system("($command)") == 0 or die "Compilation of scanner failed: $!\n";
 
 print "gtk-doc: Linking scanner\n";
-$command = "$LD -o $MODULE-scan $o_file $LDFLAGS";
+$command = "$LD $LDFLAGS -o $MODULE-scan $o_file";
 system("($command)") == 0 or die "Linking of scanner failed: $!\n";
 
 print "gtk-doc: Running scanner $MODULE-scan\n";
