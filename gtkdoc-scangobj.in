@@ -1601,7 +1601,9 @@ $command = "$CC $CFLAGS -c -o $o_file $MODULE-scan.c";
 system("($command)") == 0 or die "Compilation of scanner failed: $!\n";
 
 print "gtk-doc: Linking scanner\n";
-$command = "$LD $LDFLAGS -o $MODULE-scan $o_file";
+# FIXME: Can we turn off as-needed for the docs (or better fix it?)
+#$command = "$LD -Wl,--no-as-needed $o_file $LDFLAGS -o $MODULE-scan";
+$command = "$LD $o_file $LDFLAGS -o $MODULE-scan";
 system("($command)") == 0 or die "Linking of scanner failed: $!\n";
 
 print "gtk-doc: Running scanner $MODULE-scan\n";
