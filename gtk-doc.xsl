@@ -306,7 +306,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:call-template name="write.text.chunk">
       <xsl:with-param name="filename" select="'index.sgml'"/>
       <xsl:with-param name="content">
-        <xsl:apply-templates select="/book/bookinforeleaseinfo/ulink"
+        <xsl:apply-templates select="/book/bookinfo/releaseinfo/ulink"
                              mode="generate.index.mode"/>
         <!-- check all anchor and refentry elements -->
         <xsl:apply-templates select="//anchor|//refentry|//refsect1|$gtkdoc.refsect2|//refsynopsisdiv|//varlistentry"
@@ -334,8 +334,8 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
   <xsl:template match="/book/bookinfo/releaseinfo/ulink" mode="generate.index.mode">
     <xsl:if test="@role='online-location'">
       <xsl:text>&lt;ONLINE href=&quot;</xsl:text>
-        <xsl:value-of select="@url"/>
-        <xsl:text>&quot;&gt;&#10;</xsl:text>
+      <xsl:value-of select="@url"/>
+      <xsl:text>&quot;&gt;&#10;</xsl:text>
     </xsl:if>
   </xsl:template>
 
