@@ -14,7 +14,7 @@ TESTS_ENVIRONMENT = \
 endif
 
 EXTRA_DIST = gtkdoctest.sh tools.sh \
-	gobject.sh bugs.sh annotations.sh fail.sh empty.sh
+	gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh
 
 # run any given test by running make <test>.check
 %.check: %
