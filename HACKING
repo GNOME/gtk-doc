@@ -13,12 +13,18 @@ http://live.gnome.org/MaintainersCorner/Releasing
 
 - bump release date in:
   help/manual/C/gtk-doc-manual.xml
+- bump version in (1.14.1 -> 1.15)
+  configure.ac
 
 - update NEWS
   ./bugzilla.py general 1.12 gtk-doc >RELNOTES.txt
   git log --summary --format=short GTK_DOC_1_11.. >ChangeLog-1.12
   grep "Author:" ChangeLog-1.12 | sed 's/Author:\(.*\)\ <.*>/\1/' | sort | uniq >>RELNOTES.txt
-  add then copy to NEWS
+  and then copy to NEWS
+
+- commit
+  git add configure.ac NEWS help/manual/C/gtk-doc-manual.xml
+  git commit -m"release: update news and date in manual"
 
 - dist
   make dist
@@ -36,8 +42,12 @@ http://live.gnome.org/MaintainersCorner/Releasing
   exit
 
 - bump versions in:
-  configure.in
+  configure.ac
   help/manual/C/gtk-doc-manual.xml
+
+- commit
+  git add configure.ac help/manual/C/gtk-doc-manual.xml
+  git commit -m"release: bump versions and back to development"
 
 - update web-pages (gtk-web/gtk-doc)
 
