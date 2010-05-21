@@ -33,10 +33,14 @@ shift
 
 if test $uninstalled = yes; then
       # this does not work from buiddir!=srcdir
-      # we could try this
-      # MAKE_SCRDIR=$(abs_srcdir) MAKE_BUILDDIR=$(abs_builddir) gtkdoc-mkhtml ...
       gtkdocdir=`dirname $0`
-      #echo "uninstalled, gtkdocdir=$gtkdocdir"
+      if test ! -e $gtkdocdir/gtk-doc.xsl; then
+        # try to src dir (set from makefiles) too
+        if test -e $ABS_TOP_SRCDIR/gtk-doc.xsl; then
+          gtkdocdir=$ABS_TOP_SRCDIR
+        fi
+      fi
+      #echo "uninstalled, gtkdocdir=$gtkdocdir, cwd=$PWD"
 else
       # the first two are needed to resolve datadir
       prefix=@prefix@
@@ -78,8 +82,8 @@ else
 fi
 
 # copy navigation images and stylesheets to html directory ...
-cp -f $gtkdocdir/*.png .
-cp -f $gtkdocdir/*.css .
+cp -f $gtkdocdir/*.png ./
+cp -f $gtkdocdir/*.css ./
 
 
 echo "timestamp" > ../html.stamp

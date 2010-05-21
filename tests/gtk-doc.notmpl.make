@@ -96,9 +96,9 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@-chmod -R u+w $(srcdir)
 	@rm -rf $(srcdir)/html
 	@mkdir $(srcdir)/html
-	@cd $(srcdir)/html && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	@cd $(srcdir)/html && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
 	gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)  $(MKHTML_OPTIONS)
-	@test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
+	@test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html/ )
 	@echo "gtk-doc: `date +%H:%M:%S.%N`: Fixing cross-references"
 	@cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
@@ -120,7 +120,7 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	    fi; \
 	  done; \
 	fi; \
-	cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	cd $(srcdir) && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
 	gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $$mkpdf_imgdirs $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS)
 	@touch pdf-build.stamp
 
