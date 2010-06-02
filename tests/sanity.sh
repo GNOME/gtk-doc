@@ -1,9 +1,12 @@
 #!/bin/bash
 
 dir=`dirname $0`
+suite="sanity"
 
 failed=0
 tested=0
+
+echo "Running suite(s): gtk-doc-$suite";
 
 # check the presence and non-emptyness of certain files
 nok=0
@@ -23,6 +26,18 @@ for file in $dir/*/docs*/html/index.sgml; do
   if test $? = 1 ; then nok=$(($nok + 1)); break; fi
   grep >/dev/null "<ANCHOR id=" $file
   if test $? = 1 ; then nok=$(($nok + 1)); break; fi
+done
+if test $nok -gt 0 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+
+# check validity of generated xml files
+nok=0
+for file in $dir/*/docs*/xml/*.xml; do
+  xmllint --noout --noent $file
+  if test $? != 0 ; then
+    nok=$(($nok + 1));
+  fi
 done
 if test $nok -gt 0 ; then failed=$(($failed + 1)); fi
 tested=$(($tested + 1))
