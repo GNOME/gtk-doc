@@ -15,6 +15,14 @@
  *   <caption><para>Home sweet home.</para></caption>
  * </mediaobject>
  */
+/**
+ * SECTION:iface2
+ * @title: GtkdocIface2
+ * @short_description: interface with a prerequisite for gtk-doc unit test
+ * @see_also: #GtkdocObject, #GtkdocIface
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */
 
 #include <glib.h>
 #include <glib-object.h>
@@ -86,6 +94,27 @@ GType gtkdoc_iface_get_type (void) {
       NULL // value_table
     };
     type = g_type_register_static(G_TYPE_INTERFACE,"GtkdocIface",&info,0);
+  }
+  return type;
+}
+
+GType gtkdoc_iface2_get_type (void) {
+  static GType type = 0;
+  if (type == 0) {
+    static const GTypeInfo info = {
+      (guint16)sizeof(GtkdocIfaceInterface),
+      NULL, // base_init
+      NULL, // base_finalize
+      NULL, // class_init
+      NULL, // class_finalize
+      NULL, // class_data
+      0,
+      0,   // n_preallocs
+      NULL, // instance_init
+      NULL // value_table
+    };
+    type = g_type_register_static(G_TYPE_INTERFACE,"GtkdocIface2",&info,0);
+    g_type_interface_add_prerequisite(type, GTKDOC_TYPE_IFACE);
   }
   return type;
 }

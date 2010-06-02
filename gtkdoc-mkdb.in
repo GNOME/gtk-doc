@@ -459,7 +459,9 @@ EOF
 	print (OUTPUT "<row><entry> </entry></row>\n");
     }
     else {
-        print (OUTPUT "</row>\n");
+        if ($count % $cols > 0) {
+            print (OUTPUT "</row>\n");
+        }
     }
 
     print (OUTPUT <<EOF);

@@ -37,11 +37,20 @@
  * </para></listitem>
  * </itemizedlist>
  */
+/**
+ * SECTION:object2
+ * @title: GtkdocObject2
+ * @short_description: class with interface for gtk-doc unit test
+ * @see_also: #GtkdocIface
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */
 
 #include <glib.h>
 #include <glib-object.h>
 
 #include "gobject.h"
+#include "giface.h"
 
 /* property ids */
 
@@ -210,6 +219,32 @@ GType gtkdoc_object_get_type (void) {
       NULL // value_table
     };
     type = g_type_register_static(G_TYPE_OBJECT,"GtkdocObject",&info,0);
+  }
+  return type;
+}
+
+GType gtkdoc_object2_get_type (void) {
+  static GType type = 0;
+  if (type == 0) {
+    static const GTypeInfo info = {
+      (guint16)sizeof(GtkdocObject2Class),
+      NULL, // base_init
+      NULL, // base_finalize
+      NULL, // class_init
+      NULL, // class_finalize
+      NULL, // class_data
+      (guint16)sizeof(GtkdocObject2),
+      0,   // n_preallocs
+      NULL, // instance_init
+      NULL // value_table
+    };
+    static const GInterfaceInfo interface_info = {
+      NULL,
+      NULL,
+      NULL
+    };
+    type = g_type_register_static(G_TYPE_OBJECT,"GtkdocObject2",&info,0);
+    g_type_add_interface_static(type, GTKDOC_TYPE_IFACE, &interface_info);
   }
   return type;
 }

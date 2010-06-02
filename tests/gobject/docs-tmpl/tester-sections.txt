@@ -19,6 +19,15 @@ GTKDOC_OBJECT_GET_CLASS
 </SECTION>
 
 <SECTION>
+<FILE>object2</FILE>
+GtkdocObject2
+GtkdocObject2Class
+<SUBSECTION Standard>
+GTKDOC_TYPE_OBJECT2
+gtkdoc_object2_get_type
+</SECTION>
+
+<SECTION>
 <FILE>iface</FILE>
 GtkdocIface
 GtkdocIfaceInterface
@@ -31,6 +40,14 @@ GTKDOC_IS_IFACE
 GTKDOC_TYPE_IFACE
 gtkdoc_iface_get_type
 GTKDOC_IFACE_GET_INTERFACE
+</SECTION>
+
+<SECTION>
+<FILE>iface2</FILE>
+GtkdocIface2
+<SUBSECTION Standard>
+GTKDOC_TYPE_IFACE2
+gtkdoc_iface2_get_type
 </SECTION>
 
 <SECTION>

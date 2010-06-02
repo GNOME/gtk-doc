@@ -11,6 +11,8 @@
 #define GTKDOC_IS_IFACE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTKDOC_TYPE_IFACE))
 #define GTKDOC_IFACE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTKDOC_TYPE_IFACE, GtkdocIfaceInterface))
 
+#define GTKDOC_TYPE_IFACE2              (gtkdoc_iface2_get_type ())
+
 /* type structs */
 
 /**
@@ -20,6 +22,13 @@
  */
 typedef struct _GtkdocIface GtkdocIface;
 typedef struct _GtkdocIfaceInterface GtkdocIfaceInterface;
+
+/**
+ * GtkdocIface2:
+ *
+ * opaque instance of gtk-doc unit test interface
+ */
+typedef struct _GtkdocIface2 GtkdocIface2;
 
 /**
  * GtkdocIfaceInterface:
@@ -36,6 +45,7 @@ struct _GtkdocIfaceInterface {
 };
 
 GType  gtkdoc_iface_get_type(void) G_GNUC_CONST;
+GType  gtkdoc_iface2_get_type(void) G_GNUC_CONST;
 
 gboolean gtkdoc_iface_configure (gchar *config);
 
