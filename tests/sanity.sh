@@ -43,6 +43,18 @@ if test $nok -gt 0 ; then failed=$(($failed + 1)); fi
 tested=$(($tested + 1))
 
 
+# check validity of generated sgml files
+nok=0
+for file in $dir/*/docs*/xml/*.sgml; do
+  xmllint --noout --noent $file
+  if test $? != 0 ; then
+    nok=$(($nok + 1));
+  fi
+done
+if test $nok -gt 0 ; then failed=$(($failed + 1)); fi
+tested=$(($tested + 1))
+
+
 # summary
 rate=$((100*($tested - $failed)/$tested));
 echo "$rate %: Checks $tested, Failures: $failed"
