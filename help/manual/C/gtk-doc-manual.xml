@@ -1114,6 +1114,16 @@ typedef struct _FooWidget {
           you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse
           behavirour.
         </para>
+        
+        <para>
+          Struct comment blocks can also be used for GObjects and GObjectClasses.
+          It is usualy a good idea to add a comment blco for a class, if it has
+          vmethods (as this is how they can be documented). For the GObject
+          itself one can use the related section docs, having a separate block
+          for the instance struct would be useful if the instance has public
+          fields. One disadvantage here is that this creates two index entries
+          of the same name (the structure and the section).
+        </para>
 
       </sect2>
 
@@ -1486,6 +1496,9 @@ gtk_arrow_get_type
         If your library contains private types which you don't want to appear in
         the object hierarchy and the list of implemented or required interfaces,
         add them to a Private subsection.
+        Wheter you would place GObject and GObjectClass like structs in public
+        or Standard section depends if they have public entries (variables,
+        vmethods).
       </para>
 
       <para>
