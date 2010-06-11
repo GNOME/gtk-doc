@@ -158,7 +158,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- silently test if a gentext template exists -->
+  <!-- silently test whether a gentext template exists -->
   <xsl:template name="gentext.template.exists">
     <xsl:param name="context" select="'default'"/>
     <xsl:param name="name" select="'default'"/>
@@ -179,7 +179,9 @@
   </xsl:template>
 
   <!-- shortcut version -->
-  <xsl:template name="generate.html.title">
+  <!-- @bug: https://bugzilla.gnome.org/show_bug.cgi?id=617478 -->
+  <xsl:template name="generate.html.title"/>
+  <!--xsl:template name="generate.html.title">
     <xsl:variable name="has.title.markup">
       <xsl:apply-templates select="." mode="title.markup">
         <xsl:with-param name="verbose" select="0"/>
@@ -195,7 +197,6 @@
             <xsl:value-of select="$gentext.title"/>
           </xsl:attribute>
         </xsl:when>
-        <!-- Fall back to alt if available -->
         <xsl:when test="alt">
           <xsl:attribute name="title">
             <xsl:value-of select="normalize-space(alt)"/>
@@ -203,9 +204,9 @@
         </xsl:when>
       </xsl:choose>
     </xsl:if>
-  </xsl:template>
+  </xsl:template-->
   
-  <!-- Generate a title attribute for the context node -->
+  <!-- Generate a title attribute for the context node (e.g. links) -->  
   <xsl:template match="*" mode="html.title.attribute">
     <xsl:variable name="has.title.markup">
       <xsl:apply-templates select="." mode="title.markup">
@@ -263,7 +264,6 @@
             <xsl:value-of select="$gentext.title"/>
           </xsl:attribute>
         </xsl:when>
-        <!-- Fall back to alt if available -->
         <xsl:when test="alt">
           <xsl:attribute name="title">
             <xsl:value-of select="normalize-space(alt)"/>
@@ -272,6 +272,8 @@
       </xsl:choose>
     </xsl:if>
   </xsl:template>
+  
+
 
   
   <!-- ========================================================= -->
