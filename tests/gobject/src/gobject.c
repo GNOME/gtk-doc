@@ -59,6 +59,10 @@ enum {
   GTKDOC_OBJECT_DEP_TEST
 };
 
+enum {
+  GTKDOC_OBJECT2_ITEST=1
+};
+
 /* constructor methods */
 
 /**
@@ -214,13 +218,23 @@ GType gtkdoc_object_get_type (void) {
       NULL, // class_finalize
       NULL, // class_data
       (guint16)sizeof(GtkdocObject),
-      0,   // n_preallocs
+      0,    // n_preallocs
       NULL, // instance_init
-      NULL // value_table
+      NULL  // value_table
     };
     type = g_type_register_static(G_TYPE_OBJECT,"GtkdocObject",&info,0);
   }
   return type;
+}
+
+
+static void gtkdoc_object2_class_init (GtkdocObjectClass *klass) {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->set_property = gtkdoc_object_set_property;
+  gobject_class->get_property = gtkdoc_object_get_property;
+
+  g_object_class_override_property (gobject_class, GTKDOC_OBJECT2_ITEST, "itest");
 }
 
 GType gtkdoc_object2_get_type (void) {
@@ -230,18 +244,18 @@ GType gtkdoc_object2_get_type (void) {
       (guint16)sizeof(GtkdocObject2Class),
       NULL, // base_init
       NULL, // base_finalize
-      NULL, // class_init
+      (GClassInitFunc)gtkdoc_object2_class_init, // class_init
       NULL, // class_finalize
       NULL, // class_data
       (guint16)sizeof(GtkdocObject2),
-      0,   // n_preallocs
+      0,    // n_preallocs
       NULL, // instance_init
-      NULL // value_table
+      NULL  // value_table
     };
     static const GInterfaceInfo interface_info = {
-      NULL,
-      NULL,
-      NULL
+      NULL,  // interface_init
+      NULL,  // interface_finalize
+      NULL   // interface_data 
     };
     type = g_type_register_static(G_TYPE_OBJECT,"GtkdocObject2",&info,0);
     g_type_add_interface_static(type, GTKDOC_TYPE_IFACE, &interface_info);
