@@ -1579,6 +1579,95 @@ gtk_arrow_get_type
       <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>.
     </para>
   </chapter>
+  
+  <chapter id="documenting-others">
+    <title>Documenting other interfaces</title>
+    
+    <para>
+      So far we have been using GTK-Doc to document the API of code. The next
+      sections contain suggestions how the tools can be used to document other
+      interfaces too.
+    </para>
+    
+    <sect1 id="commandline-interfaces">
+      <title>Commandline options and man pages</title>
+      
+      <para>
+        As one can generate man pages for a docbook refentry as well, it sounds
+        like a good idea to use it for that purpose. This way the interface is
+        part of the reference and one gets the man-page for free.
+      </para>
+
+      <sect2 id="commandline-interfaces-file">
+        <title>Document the tool</title>
+
+        <para>
+          Create one refentry file per tool. Following 
+          <link linkend="settingup_docfiles">our example</link> we would call it
+          <filename>meep/docs/reference/meeper/meep.xml</filename>. For the xml
+          tags that should be used and can look at generated file in the xml
+          subdirectory as well as examples e.g. in glib.
+        </para>
+      </sect2>
+
+      <sect2 id="commandline-interfaces-configure">
+        <title>Adding the extra configure check</title>
+
+        <para>
+          <example><title>Extra configure checks</title>
+            <programlisting>
+<![CDATA[
+AC_ARG_ENABLE(man,
+              [AC_HELP_STRING([--enable-man],
+                              [regenerate man pages from Docbook [default=no]])],enable_man=yes,
+              enable_man=no)
+
+AC_PATH_PROG([XSLTPROC], [xsltproc])
+AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)
+]]>
+            </programlisting>
+          </example>
+        </para>
+      </sect2>
+      
+      <sect2 id="commandline-interfaces-make">
+        <title>Adding the extra makefile rules</title>
+      
+        <para>
+          <example><title>Extra configure checks</title>
+            <programlisting>
+<![CDATA[
+man_MANS = \
+       meeper.1
+
+if ENABLE_GTK_DOC
+if ENABLE_MAN
+
+%.1 : %.xml
+        @XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+
+endif
+endif
+
+BUILT_EXTRA_DIST = $(man_MANS)
+EXTRA_DIST += meep.xml
+]]>
+            </programlisting>
+          </example>
+        </para>
+      </sect2>
+    </sect1>
+    
+    <sect1 id="dbus-interfaces">
+      <title>DBus interfaces</title>
+
+      <para>
+        (FIXME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html,
+http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)
+      </para>
+    </sect1>
+
+  </chapter>
 
   <chapter id="faq">
     <title>Frequently asked question</title>
