@@ -4278,9 +4278,8 @@ sub MergeSourceDocumentation {
 	## See if the symbol is documented in template
 	my $tmpl_doc = defined ($SymbolDocs{$symbol}) ? $SymbolDocs{$symbol} : "";
 	my $check_tmpl_doc =$tmpl_doc;
-	# remove all xml-tags and whitespaces
-	#$check_tmpl_doc =~ s/<\/?[a-z]+>//g;
-	$check_tmpl_doc =~ s/<.*?>//g;
+	# remove all xml-tags and whitespaces (don't kill <include href="..."> tags) 
+	$check_tmpl_doc =~ s/<\/?[a-z]+>//gi;
 	$check_tmpl_doc =~ s/\s//g;
 	# anything left ?
 	if ($check_tmpl_doc ne "") {
