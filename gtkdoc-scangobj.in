@@ -505,7 +505,13 @@ get_type_name (GType type, gboolean * is_pointer)
     *is_pointer = TRUE;
     return "GParamSpec";
 
-  default:
+#if GLIB_CHECK_VERSION (2, 25, 9)
+  case G_TYPE_VARIANT:
+    *is_pointer = TRUE;
+    return "GVariant";
+#endif
+
+default:
     break;
   }
 
@@ -1297,6 +1303,26 @@ describe_type (GParamSpec *spec)
       g_free (lower);
       g_free (upper);
     }
+#if GLIB_CHECK_VERSION (2, 12, 0)
+  else if (G_IS_PARAM_SPEC_GTYPE (spec))
+    {
+      GParamSpecGType *pspec = G_PARAM_SPEC_GTYPE (spec);
+      gboolean is_pointer;
+
+      desc = g_strdup (get_type_name (pspec->is_a_type, &is_pointer));
+    }
+#endif
+#if GLIB_CHECK_VERSION (2, 25, 9)
+  else if (G_IS_PARAM_SPEC_VARIANT (spec))
+    {
+      GParamSpecVariant *pspec = G_PARAM_SPEC_VARIANT (spec);
+      gchar *variant_type;
+
+      variant_type = g_variant_type_dup_string (pspec->type);
+      desc = g_strdup_printf ("GVariant<%s>", variant_type);
+      g_free (variant_type);
+    }
+#endif
   else
     {
       desc = g_strdup ("");
@@ -1441,6 +1467,17 @@ describe_default (GParamSpec *spec)
       else
 	desc = g_strdup_printf ("NULL");
     }
+#if GLIB_CHECK_VERSION (2, 25, 9)
+  else if (G_IS_PARAM_SPEC_VARIANT (spec))
+    {
+      GParamSpecVariant *pspec = G_PARAM_SPEC_VARIANT (spec);
+
+      if (pspec->default_value)
+	desc = g_variant_print (pspec->default_value, TRUE);
+      else
+	desc = g_strdup ("NULL");
+    }
+#endif
   else
     {
       desc = g_strdup ("");
