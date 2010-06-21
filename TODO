@@ -196,9 +196,11 @@ We need parametric, user definable macros.
   - and replace the macro with it
 The changes could be made in gtkdoc-mkdb::ExpandAbbreviations()
 === example macros ===
-|highlight(c)[...]| - highlight source code for a specific language
-|dot(abc.svg)[...]| - format dot graph and include result as mediaobject
-|ditta(abc.svg)[...]| - parse ascii art and include result as mediaobject
+|highlight(c)[...]| - highlight source code for a specific language (c)
+  - what will this output? preformatted html to be xincluded?
+|dot(svg)[...]| - format dot graph and include result as mediaobject (in svg format)
+|ditta(svg)[...]| - parse ascii art and include result as mediaobject (in svg format)
+  - we need to generate a filename for the image or use anoter parameter
 
 === where to define macros ===
 * system wide and with the package, <prefix>/share/gtk-doc/macros, $(srcdir)
@@ -243,7 +245,7 @@ http://www.tjkdesign.com/articles/how_to_style_a_code_listing.asp
 === process docbook ===
 if we highlight to docbook, we just get emphasis (bold)
 === process html ===
-if we hightlight to html we get colors, we need to check what tags we should process though:
+if we highlight to html we get colors, we need to check what tags we should process though:
 <pre class="programlisting"> is used for all code boxes.
 <div class="informalexample"><pre class="programlisting"> is used for examples.
 problems:
@@ -259,7 +261,7 @@ problems:
   emacs: http://www.delorie.com/gnu/docs/emacs/emacs_486.html
 * allow <!-- language="C" --> comments after |[
 * we need to catch those when processing the docbook and expanding the |[
-
+* require new macro syntax
 
 
 = syntax =

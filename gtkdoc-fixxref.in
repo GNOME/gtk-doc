@@ -291,6 +291,9 @@ sub FixHTMLFile {
     close (HTMLFILE);
     
     if ("@HIGHLIGHT@" ne "") {
+        # FIXME: ideally we'd pass a clue about the example language to the highligher
+        # unfortunately the "language" attribute is not appearing in the html output
+        # we could patch the customization to have <code class="xxx"> inside of <pre>
         if ("@HIGHLIGHT@" =~ m%/vim$%) {
             $entire_file =~ s%<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>%&HighlightSourceVim($1,$2);%gse;
         }
