@@ -25,13 +25,19 @@ Developers can also add items here :)
        [print __FILE__ . ":" . __LINE__ . ":" . ] or [#]
      should be a function and the function should support loglevels and an
        envar to enable/disable conditionally;
+== Files ==
+* can we deprecate title in the sectionfile and request people to have this in
+  the SECTION comment?
+
        
 = More abbreviations =
 * expand urls (needds more work, see gtkdoc-mkdb : ExpandAbbreviations)
 
+
 = Testing =
 cd test/gobject
 diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
+
 
 = Issues =
 * gtkdoc-fixxref makefile targets use $HTML_DIR
@@ -48,6 +54,7 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   * we should add mktmpl::CheckAllDeclarationsOutput() to mkdb (call it after
     OutputSGML), but only call it if there is no tmpl dir or
     remove writing the unused.txt in mktmpl.txt
+
 
 = Output =
 * http://sagehill.net/docbookxsl/index.html
@@ -71,66 +78,40 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   * need to check if we can pass the style-sheet class as a parameter (--stringparam gtkdoc.stylesheet=(chunk|docbook))
   * we might also need to reflow some things, as gtk-doc.xsl also runs the devhelp/devhelp2 generation
     - but then the urls in the devhelp file, refer to the chunked html anyway
-* pdf
-  * xmlto via passivetex
-    xmlto --skip-validation pdf tester-docs.xml
-  * fop
-    ~/download/fop-0.95beta/fop -xsl /usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl -xml tester-docs.xml -pdf tester-docs.pdf 
-    ~/download/fop-0.94/fop  -xsl /usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl -xml tester-docs.xml -pdf tester-docs.pdf
-  * xsltproc + fop
-    xsltproc  --nonet --xinclude -o tester-docs.fo ../../../gtk-doc-fo.xsl tester-docs.xml
-    ~/download/fop-0.94/fop -fo tester-docs.fo -pdf tester-docs.pdf
-  * xsltproc + passivetex
-    pdflatex "&pdfxmltex" tester-docs.fo
-    xmltex tester-docs.fo
-  * jade
-    docbook2pdf -e no-valid tester-docs.sgml
-
-  * bugs/problems/howto
-    * xmlto via passivetex
-      http://bugs.gentoo.org/show_bug.cgi?id=224937
-      http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=310148
-      - info
-        http://www.tug.org/texlive/devsrc/Master/texmf-dist/doc/xmltex/passivetex/
-    * fop
-      https://issues.apache.org/bugzilla/show_bug.cgi?id=46386
-      - download fop (don't use 0.95, 0.94 seems to work)
-        http://mirror.eunet.fi/apache/xmlgraphics/fop/binaries/
-        http://xmlgraphics.apache.org/fop/0.94/running.html
-        export FOP_OPTS="-Dhttp.proxyHost=xxx -Dhttp.proxyPort=8080"
-      - download offo
-        http://sourceforge.net/project/showfiles.php?group_id=116740&package_id=129569&release_id=267101
-        and copy fop-hyph.jar to fop-0.9*/lib/
 * rtf
  ~/download/fop-0.94/fop -fo tester-docs.fo -rtf tester-docs.rtf
  * unrtf
    unrtf -t ps tester-docs.rtf >tester-docs.ps
    unrtf -t latex tester-docs.rtf >tester-docs.tex
    - bad output
-* man
-  we shouldn't convert the whole document to man. We should convert e.g. tool
-  sections to man pages.
-
-= Indexes =
-* http://www.w3.org/TR/2003/WD-xinclude-20031110/#syntax
-<xi:include href="index-symbols.html">
-  <xi:fallback><index /></xi:fallback>
-</xi:include>
-* index terms
-  http://sourceforge.net/tracker/index.php?func=detail&aid=1986587&group_id=21935&atid=373747
-
-* we could add smart navigation for index/glossary pages
-  (like the subsections on the doc-pages)
   
-= Cleanup =
-* can we deprecate title in the sectionfile and request people to have this in
-  the SECTION comment?
 
 = Warnings =
-* add some -Wxxx parameters to help qa work
+Bugzilla has some requests for extra warnings. We should support a common
+commandline option(s) in all tools to enable/disable the warnings. The makefiles
+should pass the flags from an env-var (GTKDOC_OPTIONS). The env-var should be
+used after the regular flags, so that the env-var can override hardcoded
+settings (in Makefile.am).
+
+Lets take this warning for the example: 
+  "Symbol name not found at the start of the comment block."
+  
+Version 1: (template "warn-xxx!, warn-yyy!")
+--warn-missing-symbol-at-comment-start
+--no-warn-missing-symbol-at-comment-start
+
+Version 2: (template "warn:s@")
+-Wmissing-symbol-at-comment-start
+-Wno-missing-symbol-at-comment-start
+-warn missing-symbol-at-comment-start
+-warn no-missing-symbol-at-comment-start
+
+more warnings:
   - 'deprecated' deprecating 'features'
   - 'dummy-docs' check if symbol docs are very short and repeat mainly words
     from the symbol.
+  - possible xrefs (e.g. adding a # or () would make it a successful xref)
+
 
 = Markup =
 * protected scope
@@ -173,13 +154,6 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
 * would be good to have a language attribute in book tag to allow filter by language
 * look at /usr/share/gtk-doc/html/pygobject/index.html
 
-= linking to sources =
-- what about a template URL containing a %s for the "path/file". 
-  http://svn.gnome.org/viewvc/gtk-doc/trunk/tests/gobject/src/gobject.c?view=markup
-  http://buzztard.svn.sourceforge.net/viewvc/buzztard/trunk/buzztard/src/lib/core/core.c?view=markup
-  - unfortunately we can't link to symbols
-  - linking to files is difficult as in gtkdoc we have modules
-
 
 = docbook xml =
 Its tedious to write large amounts of docbook.
@@ -198,6 +172,8 @@ The changes could be made in gtkdoc-mkdb::ExpandAbbreviations()
 === example macros ===
 |highlight(c)[...]| - highlight source code for a specific language (c)
   - what will this output? preformatted html to be xincluded?
+  - we could have macros for each format, the docbook xml macro would leave
+    enough traces in the html so that a html macro can continue
 |dot(svg)[...]| - format dot graph and include result as mediaobject (in svg format)
 |ditta(svg)[...]| - parse ascii art and include result as mediaobject (in svg format)
   - we need to generate a filename for the image or use anoter parameter
@@ -338,6 +314,7 @@ some things to check:
 * gobject: uses a <preface> for introductions
 * gobject: uses <reference> as a parent for the xi:includeed <refentry> docs
 
+
 = extra link for symbols =
 need options for configure:
 --enable-gtk-doc-codesearch-links
@@ -346,6 +323,12 @@ need options for configure:
 - link to some online service for the code
 - problem: most don't have local anchors for the symbols
 - where to set the uri (in the document, like for online url)?
+- what about a template URL containing a %s for the "path/file" or a special macro
+  http://svn.gnome.org/viewvc/gtk-doc/trunk/tests/gobject/src/gobject.c?view=markup
+  http://buzztard.svn.sourceforge.net/viewvc/buzztard/trunk/buzztard/src/lib/core/core.c?view=markup
+  - unfortunately we can't link to symbols (only lines)
+  - linking to files is difficult as in gtkdoc we have modules
+
 == codesearch ==
 - google (code) link : http://www.google.com/codesearch?q=g_object_unref
 == live editing ==
@@ -359,6 +342,7 @@ problems:
 - signal that this has been edited already?
 - support for xi:included examples
 - updating the checkout could be slow
+
 
 = fix missing since docs =
 cd gstreamer/gstreamer/docs/gst
@@ -450,3 +434,4 @@ grep "gst_caps_is_always_compatible" tags
 - perl regexps
   not really an issue, but we can improve by compiling the regexps
   http://stackoverflow.com/questions/550258/does-the-o-modifier-for-perl-regular-expressions-still-provide-any-benefit
+
