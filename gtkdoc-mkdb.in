@@ -163,16 +163,19 @@ if ($OUTPUT_FORMAT eq "xml") {
 	    $doctype_header .= $_;
 	}
 	close(INPUT);
+	$doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
+	# if there are SYSTEM ENTITIES here, we should prepend "../" to the path
+	# FIXME: not sure if we can do this now, as people already work-around the problem
+	# $doctype_header =~ s#<!ENTITY % ([a-zA-Z-]+) SYSTEM \"([^/][a-zA-Z./]+)\">#<!ENTITY % $1 SYSTEM \"../$2\">#g;
     } else {
         $doctype_header =
 "<?xml version=\"1.0\"?>\n" .
-"<!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.3//EN\"\n" .
+"<!DOCTYPE refentry PUBLIC \"-//OASIS//DTD DocBook XML V4.3//EN\"\n" .
 "               \"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd\"\n" .
 "[\n" .
 "  <!ENTITY % local.common.attrib \"xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'\">\n" .
 "]>\n";
     }
-    $doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
 } else {
     if (!$MAIN_SGML_FILE) {
         $MAIN_SGML_FILE = "${MODULE}-docs.sgml";
