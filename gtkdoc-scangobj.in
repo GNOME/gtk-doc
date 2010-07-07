@@ -525,7 +525,9 @@ default:
     *is_pointer = TRUE;
   
   /* All boxed subtypes will be pointers as well. */
-  if (g_type_is_a (type, G_TYPE_BOXED))
+  /* Exception: GStrv */
+  if (g_type_is_a (type, G_TYPE_BOXED) &&
+      !g_type_is_a (type, G_TYPE_STRV))
     *is_pointer = TRUE;
 
   /* All pointer subtypes will be pointers as well. */

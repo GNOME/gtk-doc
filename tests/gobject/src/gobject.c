@@ -183,6 +183,36 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
                 0); // n_params
 
   /**
+   * GtkdocObject::strings-changed:
+   * 
+   * Something has happened.
+   */
+  g_signal_new ("strings-changed", G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                0,
+                NULL, // accumulator
+                NULL, // acc data
+                g_cclosure_marshal_VOID__BOXED,
+                G_TYPE_NONE, // return type
+                1, G_TYPE_STRV); // n_params
+  
+#if GLIB_CHECK_VERSION (2, 25, 9)
+  /**
+   * GtkdocObject::variant-changed:
+   * 
+   * Something has happened.
+   */
+  g_signal_new ("variant-changed", G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                0,
+                NULL, // accumulator
+                NULL, // acc data
+                g_cclosure_marshal_VOID__VARIANT,
+                G_TYPE_NONE, // return type
+                1, G_TYPE_VARIANT); // n_params
+#endif
+
+  /**
    * GtkdocObject:otest:
    *
    * Since: 0.1
