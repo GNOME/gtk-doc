@@ -286,5 +286,7 @@ long double bug_607445(long double **a, int n);
 signed long bug_610257(const unsigned char *der, int *len);
 
 
+void bug_623968a(void);
+
 #endif // GTKDOC_TESTER_H
 

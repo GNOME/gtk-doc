@@ -11,6 +11,7 @@
  * Try a <ulink url="http://www.gtk.org/gtk-doc/#Top">link containing a # char</ulink>.
  *
  * <refsect2 id="dummy-id">
+ * <title>more details</title>
  * <para>
  * Second paragraph inside subsection.
  * </para>
@@ -235,8 +236,27 @@ long double bug_607445(long double **a, int n) {
  * http://bugzilla.gnome.org/show_bug.cgi?id=610257
  */
 signed long
-bug_610257 (const unsigned char *der, int *len)
+bug_610257(const unsigned char *der, int *len)
 {
   return 1L;
+}
+
+
+/**
+ * bug_623968a:
+ * 
+ * <para>
+ *   test
+ * </para>
+ * <refsect3>
+ *   <title>subsect</title>
+ *   <para>
+ *     test
+ *   </para>  
+ * </refsect3>
+ **/
+void
+bug_623968a(void)
+{
 }
 
