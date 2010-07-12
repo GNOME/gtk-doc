@@ -1070,10 +1070,12 @@ sub OutputAnnotationGlossary {
     # add acronyms that are referenced from acronym text
 rerun:
     foreach my $annotation (keys(%AnnotationsUsed)) {
-        if($AnnotationDefinition{$annotation} =~ m/<acronym>([\w ]+)<\/acronym>/) {
-            if (!exists($AnnotationsUsed{$1})) {
-                $AnnotationsUsed{$1} = 1;
-                goto rerun;
+        if(defined($AnnotationDefinition{$annotation})) {
+            if($AnnotationDefinition{$annotation} =~ m/<acronym>([\w ]+)<\/acronym>/) {
+                if (!exists($AnnotationsUsed{$1})) {
+                    $AnnotationsUsed{$1} = 1;
+                    goto rerun;
+                }
             }
         }
     }
@@ -1091,19 +1093,20 @@ $header
 EOF
 
     foreach my $annotation (keys(%AnnotationsUsed)) {
-        my $def = $AnnotationDefinition{$annotation};
-        my $curletter = uc(substr($annotation,0,1));
-
-        if ($curletter ne $lastletter) {
-            $lastletter = $curletter;
-      
-            if ($divopen == 1) {
-                print (OUTPUT "</glossdiv>\n");
+        if(defined($AnnotationDefinition{$annotation})) {
+            my $def = $AnnotationDefinition{$annotation};
+            my $curletter = uc(substr($annotation,0,1));
+    
+            if ($curletter ne $lastletter) {
+                $lastletter = $curletter;
+          
+                if ($divopen == 1) {
+                    print (OUTPUT "</glossdiv>\n");
+                }
+                print (OUTPUT "<glossdiv><title>$curletter</title>\n");
+                $divopen = 1;
             }
-            print (OUTPUT "<glossdiv><title>$curletter</title>\n");
-            $divopen = 1;
-        }
-        print (OUTPUT <<EOF);
+            print (OUTPUT <<EOF);
     <glossentry>
       <glossterm><anchor id="annotation-glossterm-$annotation"/>$annotation</glossterm>
       <glossdef>
@@ -1111,6 +1114,7 @@ EOF
       </glossdef>
     </glossentry>
 EOF
+        }
     }
 
     if ($divopen == 1) {
@@ -2591,7 +2595,7 @@ sub ConvertSGMLCharsCallback2 {
 
 #############################################################################
 # Function    : ExpandAnnotation
-# Description : This turns annotations into acrony tags.
+# Description : This turns annotations into acronym tags.
 # Arguments   : $symbol - the symbol being documented, for error messages.
 #		$text - the text to expand.
 #############################################################################
