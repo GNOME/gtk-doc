@@ -931,7 +931,10 @@ sub OutputIndex {
         my $symbol_desc = "";
         my $symbol_section = "";
         my $symbol_section_id = "";
-        my $symbol_type = lc($DeclarationTypes{$symbol});
+        my $symbol_type = "";
+        if (defined($DeclarationTypes{$symbol})) {
+          $symbol_type = lc($DeclarationTypes{$symbol});
+        }
         if ($symbol_type eq "") {
             #print "trying symbol $symbol\n";
             if ($symbol =~ m/(.*)::(.*)/) {
