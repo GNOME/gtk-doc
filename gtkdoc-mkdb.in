@@ -4343,8 +4343,9 @@ sub MergeSourceDocumentation {
                 $src_doc = &ConvertBlankLines ($src_doc, $symbol);
                 $src_doc_para = "<para>\n$src_doc\n</para>";
                 # fixup xml markup
-                $src_doc_para =~ s%<para>\n<refsect2%<refsect2%gms;
-                $src_doc_para =~ s%</refsect2>\n</para>%</refsect2>%gms;
+                $src_doc_para =~ s%<para>\n(<refsect[1-9])%$1%gms;
+                $src_doc_para =~ s%<para>\n<para>\n%<para>\n%gms;
+                $src_doc_para =~ s%(</refsect[1-9]>)\n</para>%$1%gms;
                 #print "$symbol : [$src_doc][$src_doc_para]\n";
             }
 
