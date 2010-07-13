@@ -274,6 +274,8 @@ bug_623968b(void)
 
 /**
  * bug_624200a:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624200
  * 
  * Returns: result
  */
@@ -285,6 +287,8 @@ bug_624200a(void)
 
 /**
  * bug_624200b:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624200
  * 
  * Returns: result
  */
