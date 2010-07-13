@@ -181,7 +181,7 @@ void bug_580300c_get_type() { }
  *
  * Returns: result
  */
-int bug_580300d_get_type() { }
+int bug_580300d_get_type() { return 0; }
 
 
 /**
@@ -271,3 +271,25 @@ bug_623968b(void)
 {
 }
 
+
+/**
+ * bug_624200a:
+ * 
+ * Returns: result
+ */
+const char * const *
+bug_624200a(void)
+{
+  return NULL;
+}
+
+/**
+ * bug_624200b:
+ * 
+ * Returns: result
+ */
+const char ** const
+bug_624200b(void)
+{
+  return NULL;
+}
