@@ -320,18 +320,6 @@ sub ScanHeader {
 	    }
 	    next;
 	}
-	# Skip complete blocks, needed fo inline macros
-	if ($skip_block==1) {
-	    if (m%{%) {
-	        $skip_block=2;
-	    }
-	    next;
-	} elsif ($skip_block==2) {
-	    if (m%}%) {
-	        $skip_block=0;
-	    }
-	    next;
-	}
 
         # Keep a count of #if, #ifdef, #ifndef nesting,
         # and if we enter a deprecation-symbol-bracketed
@@ -393,7 +381,7 @@ sub ScanHeader {
 		    $in_declaration = "macro";
 		}
 		$first_macro = 0;
-                #print "DEBUG: Macro: $symbol\n";
+                 #print "DEBUG: Macro: $symbol\n";
 
 
 	    # TYPEDEF'D FUNCTIONS (i.e. user functions)
@@ -524,21 +512,33 @@ sub ScanHeader {
 
 	    # We assume that functions which start with '_' are private, so
 	    # we skip them.
-	    #                                                                       $1                                                                                                                                                     $2
-	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*_\w+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*\(\s*\*+\s*([A-Za-z]\w*)\s*\)\s*\(/o) {
+	    #                                                                       $1                                                                                                    $2                                                          $3
+	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(/o) {
 		$ret_type = $1;
-		$symbol = $2;
+		if (defined ($2)) { $ret_type .= " $2"; }
+		$symbol = $3;
 		$decl = $';
-		#print "DEBUG: internal Function: $symbol, Returns: $ret_type\n";
+		#print "DEBUG: internal Function: $symbol, Returns: [$1][$2]\n";
 		$in_declaration = "function";
+		if (m/^\s*G_INLINE_FUNC/) {
+		    #print "DEBUG: skip block after inline function\n";
+		    # now we we need to skip a whole { } block
+		    $skip_block = 1;
+		}
 
-	    #                                                                       $1                                                                                                                                                   $2
-	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(/o) {
+	    #                                                                       $1                                                                                                    $2                                                          $3
+	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(/o) {	            
 		$ret_type = $1;
-		$symbol = $2;
+		if (defined ($2)) { $ret_type .= " $2"; }
+		$symbol = $3;
 		$decl = $';
-		#print "DEBUG: Function (1): $symbol, Returns: $ret_type\n";
+		#print "DEBUG: Function (1): $symbol, Returns: [$1][$2]\n";
 		$in_declaration = "function";
+		if (m/^\s*G_INLINE_FUNC/) {
+		    #print "DEBUG: skip block after inline function\n";
+		    # now we we need to skip a whole { } block
+		    $skip_block = 1;
+		}
 
 	    # Try to catch function declarations which have the return type on
 	    # the previous line. But we don't want to catch complete functions
@@ -551,7 +551,7 @@ sub ScanHeader {
 		if ($previous_line !~ m/^\s*G_INLINE_FUNC/) {
 		    if ($previous_line !~ m/^\s*static\s+/) {
                         #                                                                       $1                                                                                                   $2
-                        if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)?\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
+                        if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
                             $ret_type = $1;
                             if (defined ($2)) { $ret_type .= " $2"; }
                             #print "DEBUG: Function  (2): $symbol, Returns: $ret_type\n";
@@ -565,13 +565,11 @@ sub ScanHeader {
                         # now we we need to skip a whole { } block
                         $skip_block = 1;
                         #                                                                                    $1                                                                                                    $2
-                        if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)?\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
+                        if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
                             $ret_type = $1;
                             if (defined ($2)) { $ret_type .= " $2"; }
                             #print "DEBUG: Function (3): $symbol, Returns: $ret_type\n";
                             $in_declaration = "function";
-                            # this is a hack to detect the end of declaration
-                            $decl.=";"
                         }
                     }
 		}
@@ -632,10 +630,24 @@ sub ScanHeader {
 	    }
 
 	} else {
-            #print "1: $_";
+            #print "1: [$skip_block] $_";
 	    # If we were already in the middle of a declaration, we simply add
 	    # the current line onto the end of it.
-	    $decl .= $_;
+	    if ($skip_block == 0) {
+	        $decl .= $_;
+	    } else {
+                if (m%{%) {
+                    $skip_block += 1;
+                } elsif (m%}%) {
+                    $skip_block -= 1;
+                    if ($skip_block == 1) {
+                        # this is a hack to detect the end of declaration
+                        $decl .= ";";
+                        $skip_block = 0;
+                        #print "2: ---\n";
+                    }
+                }
+            }
 	}
 
         #if ($in_declaration ne '') {
@@ -661,7 +673,7 @@ sub ScanHeader {
                         push (@get_types, $symbol);
                     }
                 }
-		$in_declaration = "";
+                $in_declaration = "";
 	    }
 	}
 
