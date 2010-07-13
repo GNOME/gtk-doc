@@ -4349,10 +4349,11 @@ sub MergeSourceDocumentation {
                 # If there is a blank line, finish the paragraph and start another.
                 $src_doc = &ConvertBlankLines ($src_doc, $symbol);
                 $src_doc_para = "<para>\n$src_doc\n</para>";
-                # fixup xml markup
-                $src_doc_para =~ s%<para>\n(<refsect[1-9])%$1%gms;
-                $src_doc_para =~ s%<para>\n<para>%<para>%gms;
-                $src_doc_para =~ s%(</refsect[1-9]>)\n</para>%$1%gms;
+                ## fixup xml markup
+                # FIXME: this is questionable, as we can't make assumtions on the content really
+                #$src_doc_para =~ s%^<para>\n(<refsect[1-9])%$1%gms;
+                #$src_doc_para =~ s%^<para>\n<para>%<para>%gms;
+                #$src_doc_para =~ s%(</refsect[1-9]>)\n</para>$%$1%gms;
                 #print "$symbol : [$src_doc][$src_doc_para]\n";
             }
 
