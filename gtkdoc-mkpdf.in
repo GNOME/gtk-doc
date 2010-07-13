@@ -78,7 +78,8 @@ if $is_xml; then
     # xsltproc is already called with --xinclude
     # does not work: --xslt-opts "$path_arg --nonet $@"
     #echo "calling: @DBLATEX@ -o $module.pdf $imgdirs $document"
-    @DBLATEX@ -o $module.pdf $imgdirs $document
+    @DBLATEX@ 2>&1 -o $module.pdf $imgdirs $document | \
+      grep -v "not supported in programlisting or screen"
   else
     if test -n "@FOP@"; then
       @XSLTPROC@ $path_arg --nonet --xinclude \
