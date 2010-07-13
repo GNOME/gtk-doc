@@ -27,7 +27,7 @@ typedef enum {
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=481811
  **/
-G_INLINE_FUNC double
+static inline double
 bug_481811(double x)
 {
     return g_random_double_range(x,x*x);

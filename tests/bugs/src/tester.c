@@ -29,6 +29,8 @@
  * http://bugzilla.gnome.org/show_bug.cgi?id=141869
  */
 void bug_141869_a (unsigned pid) {
+  /* just silence a compiler warning */
+  bug_481811((double)pid);
 }
 
 /**

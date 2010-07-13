@@ -560,6 +560,17 @@ sub ScanHeader {
                             #print "DEBUG: Function  (2): $symbol, Returns: $ret_type\n";
                             $in_declaration = "function";
                         }
+                    } else {
+                        #print "DEBUG: skip block after inline function\n";
+                        # now we we need to skip a whole { } block
+                        $skip_block = 1;
+                        #                                                                                    $1                                                                                                   $2
+                        if ($previous_line =~ m/^\s*(?:\b(?:extern|static|inline|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
+                            $ret_type = $1;
+                            if (defined ($2)) { $ret_type .= " $2"; }
+                            #print "DEBUG: Function  (3): $symbol, Returns: $ret_type\n";
+                            $in_declaration = "function";
+                        }
                     }
                 }
                 else {
@@ -571,7 +582,7 @@ sub ScanHeader {
                         if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
                             $ret_type = $1;
                             if (defined ($2)) { $ret_type .= " $2"; }
-                            #print "DEBUG: Function (3): $symbol, Returns: $ret_type\n";
+                            #print "DEBUG: Function (4): $symbol, Returns: $ret_type\n";
                             $in_declaration = "function";
                         }
                     }
@@ -584,7 +595,7 @@ sub ScanHeader {
 		if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/o) {
 		    $ret_type = "$1 $2";
 		    $symbol = $3;
-		    #print "DEBUG: Function (4): $symbol, Returns: $ret_type\n";
+		    #print "DEBUG: Function (5): $symbol, Returns: $ret_type\n";
 		    $in_declaration = "function";
 
 		} elsif ($previous_line =~ m/^\s*\w+\s*$/
@@ -596,7 +607,7 @@ sub ScanHeader {
                     $symbol = $previous_line;
                     $symbol =~ s/^\s+//;
                     $symbol =~ s/\s*\n//;
-                    #print "DEBUG: Function (5): $symbol, Returns: $ret_type\n";
+                    #print "DEBUG: Function (6): $symbol, Returns: $ret_type\n";
 		}
 
 	    #} elsif (m/^extern\s+/) {
