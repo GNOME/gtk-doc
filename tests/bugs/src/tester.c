@@ -245,18 +245,29 @@ bug_610257(const unsigned char *der, int *len)
 /**
  * bug_623968a:
  * 
- * <para>
- *   test
- * </para>
+ * <para>test</para>
  * <refsect3>
  *   <title>subsect</title>
- *   <para>
- *     test
- *   </para>  
+ *   <para>test</para>  
  * </refsect3>
  **/
 void
 bug_623968a(void)
+{
+}
+
+/**
+ * bug_623968b:
+ * 
+ * test
+ *
+ * <refsect3>
+ *   <title>subsect</title>
+ *   <para>test</para>  
+ * </refsect3>
+ **/
+void
+bug_623968b(void)
 {
 }
 
