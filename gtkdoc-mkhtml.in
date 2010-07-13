@@ -71,6 +71,10 @@ if test -f index.sgml; then
 fi
 
 if $is_xml; then
+  #echo @XSLTPROC@ $path_arg --nonet --xinclude \
+  #    --stringparam gtkdoc.bookname $module \
+  #    --stringparam gtkdoc.version "@VERSION@" \
+  #    "$@" $gtkdocdir/gtk-doc.xsl $document
   @XSLTPROC@ $path_arg --nonet --xinclude \
       --stringparam gtkdoc.bookname $module \
       --stringparam gtkdoc.version "@VERSION@" \

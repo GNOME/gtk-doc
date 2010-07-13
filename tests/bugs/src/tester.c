@@ -273,6 +273,16 @@ bug_623968b(void)
 {
 }
 
+/**
+ * bug_623968c:
+ * 
+ * <para>test</para>
+ **/
+void
+bug_623968c(void)
+{
+}
+
 
 /**
  * bug_624200a:
