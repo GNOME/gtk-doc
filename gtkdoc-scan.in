@@ -611,7 +611,7 @@ sub ScanHeader {
 		# declaration of struct <struct_name>.
 		$symbol = $1;
 		$decl = $_;
-                # we will find the correct level as below we do $level += tr/{//;
+                 # we will find the correct level as below we do $level += tr/{//;
 		$level = 0;
 		$in_declaration = "struct";
 		#print "DEBUG: Struct(_): $symbol\n";
@@ -636,7 +636,10 @@ sub ScanHeader {
 	    if ($skip_block == 0) {
 	        $decl .= $_;
 	    } else {
-                if (m%{%) {
+                if (m%(.*?){%) {
+                    if ($skip_block == 1) {
+                        $decl .= $1;
+                    }
                     $skip_block += 1;
                 } elsif (m%}%) {
                     $skip_block -= 1;
@@ -645,6 +648,10 @@ sub ScanHeader {
                         $decl .= ";";
                         $skip_block = 0;
                         #print "2: ---\n";
+                    }
+                } else {
+                    if ($skip_block == 1) {
+                        $decl .= $_;
                     }
                 }
             }
@@ -674,6 +681,7 @@ sub ScanHeader {
                     }
                 }
                 $in_declaration = "";
+                $skip_block = 0;
 	    }
 	}
 
