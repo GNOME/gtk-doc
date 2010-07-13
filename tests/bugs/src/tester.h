@@ -20,6 +20,20 @@ typedef enum {
 } Bug324535;
 
 
+
+/** 
+ * bug_481811:
+ * @x: argument
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=481811
+ **/
+G_INLINE_FUNC double
+bug_481811(double x)
+{
+    return g_random_double_range(x,x*x);
+}
+
+
 /**
  * bug_501038:
  * @a: value
