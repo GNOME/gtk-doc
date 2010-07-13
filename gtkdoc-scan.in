@@ -365,6 +365,7 @@ sub ScanHeader {
 
 	    if (m/^\s*#\s*define\s+(\w+)/) {
 		$symbol = $1;
+		$decl = $_;
 		# We assume all macros which start with '_' are private, but
 		# we accept '_' itself which is the standard gettext macro.
 		# We also try to skip the first macro if it looks like the
@@ -377,11 +378,13 @@ sub ScanHeader {
 		     && (($symbol ne 'TRUE' && $symbol ne 'FALSE')
 			 || $MODULE eq 'glib'))
 		    || $symbol eq "_") {
-		    $decl = $_;
 		    $in_declaration = "macro";
+		    #print "DEBUG: Macro: $symbol\n";
+		} else {
+		    $in_declaration = "macro-skip";
+		    #print "DEBUG: skipping Macro: $symbol\n";
 		}
 		$first_macro = 0;
-                 #print "DEBUG: Macro: $symbol\n";
 
 
 	    # TYPEDEF'D FUNCTIONS (i.e. user functions)
@@ -697,6 +700,11 @@ sub ScanHeader {
 	    if ($decl !~ m/\\\s*$/) {
 		&AddSymbolToList (\$list, $symbol);
 		print DECL "<MACRO>\n<NAME>$symbol</NAME>\n$deprecated$decl</MACRO>\n";
+		$in_declaration = "";
+	    }
+	}
+	if ($in_declaration eq 'macro-skip') {
+	    if ($decl !~ m/\\\s*$/) {
 		$in_declaration = "";
 	    }
 	}

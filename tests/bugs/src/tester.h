@@ -290,6 +290,22 @@ void bug_623968a(void);
 void bug_623968b(void);
 
 
+#define _BUG_624199(struct_type, n_structs, func) \
+  (struct_type *) (__extension__ ({			\
+    gsize __n = (gsize) (n_structs);			\
+    gsize __s = sizeof (struct_type);			\
+    gpointer __p;					\
+    if (__s == 1)					\
+      __p = g_##func (__n);				\
+    else if (__builtin_constant_p (__n) &&			\
+             (__s == 0 || __n <= G_MAXSIZE / __s))		\
+      __p = g_##func (__n * __s);				\
+    else							\
+      __p = g_##func##_n (__n, __s);			\
+    __p;							\
+  }))
+
+
 const char * const * bug_624200a(void);
 const char ** const bug_624200b(void);
 
