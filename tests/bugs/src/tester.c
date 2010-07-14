@@ -309,3 +309,12 @@ bug_624200b(void)
 {
   return NULL;
 }
+
+
+/* internal function */
+gchar *
+_bug_000000a (const gchar *name)
+{
+  return NULL;
+}
+

@@ -324,5 +324,11 @@ void bug_623968c(void);
 const char * const * bug_624200a(void);
 const char ** const bug_624200b(void);
 
+
+/* internal function and macro */
+gchar *_bug_000000a (const gchar *name);
+#define _BUG_000000b (a) (a*a);
+
+
 #endif // GTKDOC_TESTER_H
 

@@ -271,6 +271,8 @@ sub ScanHeader {
 				  #   nested structs or unions.
     my @objects = ();		  # Holds declarations that look like GtkObject
 				  #   subclasses, which we remove from the list.
+    my ($internal) = 0;             # Set to 1 for internal symbols, we need to
+                                    #   fully parse, but don't add them to docs
 
     my $file_basename;
 
@@ -381,8 +383,9 @@ sub ScanHeader {
 		    $in_declaration = "macro";
 		    #print "DEBUG: Macro: $symbol\n";
 		} else {
-		    $in_declaration = "macro-skip";
 		    #print "DEBUG: skipping Macro: $symbol\n";
+		    $in_declaration = "macro";
+		    $internal = 1;
 		}
 		$first_macro = 0;
 
@@ -523,6 +526,7 @@ sub ScanHeader {
 		$decl = $';
 		#print "DEBUG: internal Function: $symbol, Returns: [$1][$2]\n";
 		$in_declaration = "function";
+		$internal = 1;
 		if (m/^\s*G_INLINE_FUNC/) {
 		    #print "DEBUG: skip block after inline function\n";
 		    # now we we need to skip a whole { } block
@@ -679,20 +683,24 @@ sub ScanHeader {
 	# ') __attribute__ (...);'.
 	if ($in_declaration eq 'function') {
 	    if ($decl =~ s/\)\s*(G_GNUC_.*|${IGNORE_DECORATORS}\s*|__attribute__\s*\(.*\)\s*)?;.*$//) {
-		$decl =~ s%/\*.*?\*/%%gs;	# remove comments.
-		#$decl =~ s/^\s+//;		# remove leading whitespace.
-		#$decl =~ s/\s+$//;		# remove trailing whitespace.
-		$decl =~ s/\s*\n\s*/ /gs;		# consolidate whitespace at start
-						# and end of lines.
-		$ret_type =~ s%/\*.*?\*/%%g;	# remove comments in ret type.
-		&AddSymbolToList (\$list, $symbol);
-		print DECL "<FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl\n</FUNCTION>\n";
-                if ($REBUILD_TYPES) {
-                    # check if this looks like a get_type function and if so remember
-                    if (($symbol =~ m/_get_type$/) && ($ret_type =~ m/GType/) && ($decl =~ m/(void|)/)) {
-                        #print "Adding get-type: [$ret_type] [$symbol] [$decl]\tfrom $input_file\n";
-                        push (@get_types, $symbol);
-                    }
+		if ($internal == 0) {
+                     $decl =~ s%/\*.*?\*/%%gs;	# remove comments.
+                     #$decl =~ s/^\s+//;		# remove leading whitespace.
+                     #$decl =~ s/\s+$//;		# remove trailing whitespace.
+                     $decl =~ s/\s*\n\s*/ /gs;	# consolidate whitespace at start
+                                                   # and end of lines.
+                     $ret_type =~ s%/\*.*?\*/%%g;	# remove comments in ret type.
+                     &AddSymbolToList (\$list, $symbol);
+                     print DECL "<FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl\n</FUNCTION>\n";
+                     if ($REBUILD_TYPES) {
+                         # check if this looks like a get_type function and if so remember
+                         if (($symbol =~ m/_get_type$/) && ($ret_type =~ m/GType/) && ($decl =~ m/(void|)/)) {
+                             #print "Adding get-type: [$ret_type] [$symbol] [$decl]\tfrom $input_file\n";
+                             push (@get_types, $symbol);
+                         }
+                     }
+                } else {
+                     $internal = 0;
                 }
                 $in_declaration = "";
                 $skip_block = 0;
@@ -709,13 +717,12 @@ sub ScanHeader {
 
 	if ($in_declaration eq 'macro') {
 	    if ($decl !~ m/\\\s*$/) {
-		&AddSymbolToList (\$list, $symbol);
-		print DECL "<MACRO>\n<NAME>$symbol</NAME>\n$deprecated$decl</MACRO>\n";
-		$in_declaration = "";
-	    }
-	}
-	if ($in_declaration eq 'macro-skip') {
-	    if ($decl !~ m/\\\s*$/) {
+	        if ($internal == 0) {
+                    &AddSymbolToList (\$list, $symbol);
+                    print DECL "<MACRO>\n<NAME>$symbol</NAME>\n$deprecated$decl</MACRO>\n";
+	        } else {
+                    $internal = 0;
+	        }
 		$in_declaration = "";
 	    }
 	}
