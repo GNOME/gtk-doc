@@ -2605,8 +2605,9 @@ sub ConvertSGMLCharsCallback2 {
 sub ExpandAnnotation {
     my ($symbol, $param_desc) = @_;
     my $param_annotations = "";
-    
-    if ($param_desc =~ m%\s*\((.*)\):%) {
+
+    # look for annotations at the start of the comment
+    if ($param_desc =~ m%^\s*\(([^)]*)\):%) {
         my @annotations;
         my $annotation;
         my $annotation_extra = "";
