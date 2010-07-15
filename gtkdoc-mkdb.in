@@ -296,6 +296,8 @@ $PreProcessorDirectives{"warning"} = 1;
 # remember used annotation (to write minimal glossary)
 my %AnnotationsUsed;
 
+# the annotations are defined at:
+# http://live.gnome.org/GObjectIntrospection/Annotations
 my %AnnotationDefinition = (
     'allow-none' => "NULL is ok, both for passing and for returning.",
     'array' => "Parameter points to an array of items.",
