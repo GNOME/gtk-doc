@@ -312,7 +312,8 @@ my %AnnotationDefinition = (
     'transfer none' => "Don't free data after the code is done.",
     'scope call' => "The callback is valid only during the call to the method.",
     'scope async' => "The callback is valid until first called.",
-    'scope notfied' => "The callback is valid until the GDestroyNotify argument is called."
+    'scope notfied' => "The callback is valid until the GDestroyNotify argument is called.",
+    'type' => "Override the parsed C type with given type"
 );
 
 # Create the root DocBook output directory if it doens't exist.
