@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2010-07-05 07:25+0000\n"
-"PO-Revision-Date: 2010-07-11 10:09+0200\n"
+"POT-Creation-Date: 2010-07-11 08:10+0000\n"
+"PO-Revision-Date: 2010-07-31 15:22+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -255,7 +255,6 @@ msgstr ""
 "lo que ya no se recomienda)."
 
 #: C/gtk-doc-manual.xml:171(para)
-#, fuzzy
 #| msgid ""
 #| "<guilabel>Gathering information about the code.</"
 #| "guilabel><application>gtkdoc-scan</application> scans the header files of "
@@ -348,14 +347,6 @@ msgstr ""
 "nunca ha cambiado a mano el archivo tmpl, elimine el directorio una vez."
 
 #: C/gtk-doc-manual.xml:217(para)
-#| msgid ""
-#| "<guilabel>Generating the SGML/XML and HTML/PDF.</"
-#| "guilabel><application>gtkdoc-mkdb</application> turns the template files "
-#| "into SGML or XML files in the <filename class=\"directory\">sgml/</"
-#| "filename> or <filename class=\"directory\">xml/</filename> subdirectory. "
-#| "If the source code contains documentation on functions, using the special "
-#| "comment blocks, it gets merged in here. If there are no tmpl files used "
-#| "it only reads takes docs from sources and introspection data."
 msgid ""
 "<guilabel>Generating the SGML/XML and HTML/PDF.</"
 "guilabel><application>gtkdoc-mkdb</application> turns the template files "
@@ -374,12 +365,6 @@ msgstr ""
 "documentos de los fuentes y los datos obtenidos en introspección."
 
 #: C/gtk-doc-manual.xml:227(para)
-#| msgid ""
-#| "<application>gtkdoc-mkhtml</application> turns the SGML/XML files into "
-#| "HTML files in the <filename class=\"directory\">html/</filename> "
-#| "subdirectory. Likewise <application>gtkdoc-mkpdf</application> turns the "
-#| "SGML/XML files into a PDF docuemnt called <filename>&lt;package&gt;.pdf</"
-#| "filename>."
 msgid ""
 "<application>gtkdoc-mkhtml</application> turns the SGML/XML files into HTML "
 "files in the <filename class=\"directory\">html/</filename> subdirectory. "
@@ -566,11 +551,6 @@ msgid "Setting up your project"
 msgstr "Configurando su proyecto"
 
 #: C/gtk-doc-manual.xml:365(para)
-#| msgid ""
-#| "The next sections describe what steps to perform to integrate GTK-Doc "
-#| "into your project. Theses section assume we work on a project called "
-#| "'meep'. This project contains a library called 'libmeep' and an end-user "
-#| "app called 'meeper'."
 msgid ""
 "The next sections describe what steps to perform to integrate GTK-Doc into "
 "your project. Theses sections assume we work on a project called 'meep'. "
@@ -603,7 +583,6 @@ msgid "Example directory structure"
 msgstr "Ejemplo de estructura de directorios"
 
 #: C/gtk-doc-manual.xml:382(para)
-#| msgid "This can then look as show below: <placeholder-1/>"
 msgid "This can then look as shown below: <placeholder-1/>"
 msgstr "Esto después aparecerá como se muestra debajo: <placeholder-1/>"
 
@@ -701,13 +680,6 @@ msgstr ""
 "uno de ellos."
 
 #: C/gtk-doc-manual.xml:468(para)
-#| msgid ""
-#| "The next step is to edit the setting inside the <filename>Makefile.am</"
-#| "filename>. All the settings have a comment above that describes their "
-#| "purpose. Most settings are extra flags passed to the respective tools. "
-#| "Every tool has a variable of the form <option>&lt;TOOLNAME&gt;_OPTIONS</"
-#| "option>. All the tools support <option>--help</option> to list the "
-#| "supported parameters."
 msgid ""
 "The next step is to edit the settings inside the <filename>Makefile.am</"
 "filename>. All the settings have a comment above that describes their "
@@ -725,10 +697,6 @@ msgstr ""
 
 #. FIXME: explain options ?
 #: C/gtk-doc-manual.xml:479(para)
-#| msgid ""
-#| "You may also want to enable GTK-Doc for the distcheckmake target. Just "
-#| "add then one-liner show in the next example to you top-level "
-#| "<filename>Makefile.am</filename>:"
 msgid ""
 "You may also want to enable GTK-Doc for the distcheck make target. Just add "
 "the one line shown in the next example to your top-level <filename>Makefile."
@@ -766,11 +734,6 @@ msgid "Running gtkdocize from autogen.sh"
 msgstr "Ejecutar gtkdocize desde autogen.sh"
 
 #: C/gtk-doc-manual.xml:518(para)
-#| msgid ""
-#| "When running <application>gtkdocize</application> it copies <filename>gtk-"
-#| "doc.make</filename> to you project root (or any directory specified by "
-#| "the <option>--docdir</option> option). If also check you configure script "
-#| "for the <function>GTK_DOC_CHECK</function> invocation."
 msgid ""
 "When running <application>gtkdocize</application> it copies <filename>gtk-"
 "doc.make</filename> to your project root (or any directory specified by the "
@@ -786,7 +749,6 @@ msgstr ""
 "<application>gtkdocize</application>."
 
 #: C/gtk-doc-manual.xml:527(para)
-#, fuzzy
 #| msgid ""
 #| "Historically GTK-Doc was gerating template files where developers entered "
 #| "the docs. this turned out to be not so good. Since a few version GTK-Doc "
@@ -817,17 +779,19 @@ msgid ""
 msgstr ""
 "Históricamente GTK-Doc generaba plantillas de archivos donde los "
 "desarrolladores introducían los documentos. Al final esto resulto no ser muy "
-"bueno. Desde las primeras versiones GTK-Doc también podría obtener toda la "
-"documentación desde los comentarios del código. Desde GTK-Doc 1.9 se pueden "
-"omitir las plantillas. Se anima a los desarrolladores a mantener su "
-"documentación en el código. <application>gtkdocize</application> ahora "
-"soporta una opción <option>--flavour no-tmpl</option> que elije un makefile "
-"que omite completamente el uso de plantillas. Además de añadir la opción "
-"directamente a la línea de comandos al invocarlo, se pueden añadir a una "
-"variable de entorno llamada <symbol>GTKDOCIZE_FLAGS</symbol> o configurar "
-"como un segundo parámetro en la macro <symbol>GTK_DOC_CHECK</symbol> en el "
-"script de configuración. Si nunca ha cambiado un archivo tmpl (plantilla) a "
-"mano, elimine el directorio una vez."
+"bueno (por ejemplo, por la necesidad de tener archivos generados bajo un "
+"control de versiones). Desde la versión de DTK-Doc 1.9 las herramientas "
+"pueden obtener toda la información desde los comentarios del código fuente y "
+"por ello se pueden evitar las plantillas. Se anima a los desarrolladores a "
+"mantener su documentación en el código. <application>gtkdocize</application> "
+"ahora soporta una opción <option>--flavour no-tmpl</option> que elije un "
+"makefile que omite completamente el uso de plantillas. Además de añadir la "
+"opción directamente a la línea de comandos al invocarlo, se pueden añadir a "
+"una variable de entorno llamada <symbol>GTKDOCIZE_FLAGS</symbol> o "
+"configurar como un segundo parámetro en la macro <symbol>GTK_DOC_CHECK</"
+"symbol> en el script de configuración. Si nunca ha cambiado un archivo tmpl "
+"(plantilla) a mano, elimine el directorio una vez (ej. del sistema de "
+"control de versiones)."
 
 #: C/gtk-doc-manual.xml:544(title) C/gtk-doc-manual.xml:561(title)
 msgid "Running the doc build"
@@ -892,11 +856,6 @@ msgid "Documenting the code"
 msgstr "Documentar el código"
 
 #: C/gtk-doc-manual.xml:595(para)
-#| msgid ""
-#| "GTK-Doc uses source code comment with a special syntax for code "
-#| "documentation. Further it retrieves information about your project "
-#| "structure from other sources. During the next section you find all "
-#| "information about the syntax of the comments."
 msgid ""
 "GTK-Doc uses source code comment with a special syntax for code "
 "documentation. Further it retrieves information about your project structure "
@@ -1138,10 +1097,6 @@ msgid "@section_id"
 msgstr "@section_id"
 
 #: C/gtk-doc-manual.xml:794(para)
-#| msgid ""
-#| "Overrides the use of title as a section identifier. For GObjects the &lt;"
-#| "title&gt; is used as a section_id and for other section it is &lt;"
-#| "MODULE&gt;-&lt;title&gt;."
 msgid ""
 "Overrides the use of title as a section identifier. For GObjects the &lt;"
 "title&gt; is used as a section_id and for other sections it is &lt;"
@@ -1156,7 +1111,6 @@ msgid "@see_also"
 msgstr "@see_also"
 
 #: C/gtk-doc-manual.xml:804(para)
-#| msgid "A list of symbols that are related to this section.."
 msgid "A list of symbols that are related to this section."
 msgstr "Una lista de símbolos relacionados con esta sección."
 
@@ -1270,12 +1224,6 @@ msgid "Documenting symbols"
 msgstr "Documentar símbolos"
 
 #: C/gtk-doc-manual.xml:897(para)
-#| msgid ""
-#| "Each symbol (function, macro, struct, enum, signal and property) is "
-#| "documented in a separate block. The block is best placed close to the "
-#| "definition of the symbols so that it is easy to keep them in sync. Thus "
-#| "function are usually documented in the c-source and macros, struct and "
-#| "enum in the header file."
 msgid ""
 "Each symbol (function, macro, struct, enum, signal and property) is "
 "documented in a separate block. The block is best placed close to the "
@@ -1423,10 +1371,6 @@ msgid "Struct comment block"
 msgstr "Bloque de comentario de estructura"
 
 #: C/gtk-doc-manual.xml:1114(para)
-#| msgid ""
-#| "Use <code>/*&lt; private &gt;*/</code> before the private struct fields "
-#| "you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
-#| "behavirour."
 msgid ""
 "Use <code>/*&lt; private &gt;*/</code> before the private struct fields you "
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
@@ -1446,16 +1390,19 @@ msgid ""
 "that this creates two index entries of the same name (the structure and the "
 "section)."
 msgstr ""
+"También se pueden usar bloques de comentario para GObjects y GObjectClasses. "
+"Generalmente es buena idea añadir un bloque de comentario para una clase, si "
+"tiene «vmethods» (ya que así se pueden documentar). Para el GObject en si, se "
+"puede usar la sección relativa a la documentación, tener un bloque separado "
+"para la estructura de la instancia sería útil si la instancia tiene campos "
+"públicos. Una desventaja aquí es que esto crea dos entradas de índice con el "
+"mismo nombre (la estructura y la sección)."
 
 #: C/gtk-doc-manual.xml:1132(title) C/gtk-doc-manual.xml:1133(title)
 msgid "Enum comment block"
 msgstr "Enumerar bloques de comentarios"
 
 #: C/gtk-doc-manual.xml:1154(para)
-#| msgid ""
-#| "Use <code>/*&lt; private &gt;*/</code> before the private enum values you "
-#| "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
-#| "behavirour."
 msgid ""
 "Use <code>/*&lt; private &gt;*/</code> before the private enum values you "
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
@@ -1619,11 +1566,6 @@ msgid "Editing the master document"
 msgstr "Editar la sección maestra del documento"
 
 #: C/gtk-doc-manual.xml:1399(para)
-#| msgid ""
-#| "GTK-Doc produces documentation in DocBook SGML/XML. When processing the "
-#| "inline source comments, the GTK-Doc tools generate one documentation page "
-#| "per class or module as a separate file. The master document includes them "
-#| "and place them in a order."
 msgid ""
 "GTK-Doc produces documentation in DocBook SGML/XML. When processing the "
 "inline source comments, the GTK-Doc tools generate one documentation page "
@@ -1739,7 +1681,6 @@ msgstr ""
 "queda obsoleto."
 
 #: C/gtk-doc-manual.xml:1487(para)
-#, fuzzy
 #| msgid ""
 #| "You can group items in the section by using the &lt;SUBSECTION&gt; tag. "
 #| "Currently it outputs a blank line between subsections in the synopsis "
@@ -1772,11 +1713,13 @@ msgstr ""
 "declaraciones estándar de GObject (ej. funciones como g_object_get_type and "
 "macros como G_OBJECT(), G_IS_OBJECT() etc.). Actualmente éstas se han dejado "
 "fuera de la documentación. También puede usar &lt;SUBSECTION Private&gt; "
-"para declaraciones privadas que no producirán ninguna salida (esta es una "
-"manera práctica de evitar mensajes de advertencia sobre declaraciones sin "
-"usar). Si sus bibliotecas contienen tipos privados que no quiere que "
-"aparezcan en la jerarquía de objetos o en la lista de interfaces "
-"implementados o necesarios, añádalos a una subsección Privada."
+"para declaraciones privadas que no producirán ninguna salida (s una manera "
+"práctica de evitar mensajes de advertencia sobre declaraciones sin usar). Si "
+"sus bibliotecas contienen tipos privados que no quiere que aparezcan en la "
+"jerarquía de objetos o en la lista de interfaces implementados o necesarios, "
+"añádalos a una subsección Privada. Si ubica GObject y GObjectClass como "
+"estructuras en la sección pública o estándar, depende de si tienen entradas "
+"públicas (variables, vmethods)."
 
 #: C/gtk-doc-manual.xml:1506(para)
 msgid ""
@@ -1860,7 +1803,6 @@ msgstr ""
 "de integridad durante la ejecución de make check."
 
 #: C/gtk-doc-manual.xml:1562(para)
-#, fuzzy
 #| msgid ""
 #| "One can also look at the files produced by the source code scanner: "
 #| "<filename>&lt;package&gt;-decl-list.txt</filename> and <filename>&lt;"
@@ -1904,7 +1846,6 @@ msgstr ""
 "ejecutándolo como <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 
 #: C/gtk-doc-manual.xml:1586(title)
-#| msgid "Documenting the code"
 msgid "Documenting other interfaces"
 msgstr "Documentar otras interfaces"
 
@@ -1933,7 +1874,6 @@ msgstr ""
 "interfaz es parte de la referencia y se obtienen las páginas man sin trabajo."
 
 #: C/gtk-doc-manual.xml:1604(title)
-#| msgid "Documenting the code"
 msgid "Document the tool"
 msgstr "Documentar la herramienta"
 
@@ -1952,7 +1892,6 @@ msgstr ""
 "xml así como los ejemplos en, por ejemplo, glib."
 
 #: C/gtk-doc-manual.xml:1616(title)
-#| msgid "Filling the extra files"
 msgid "Adding the extra configure check"
 msgstr "Añadir la comprobación de configuración adicional"
 
@@ -1961,7 +1900,6 @@ msgid "Extra configure checks"
 msgstr "Comprobaciones de configuración adicionales"
 
 #: C/gtk-doc-manual.xml:1636(title)
-#| msgid "Filling the extra files"
 msgid "Adding the extra makefile rules"
 msgstr "Añadir reglas de makefile adicionales"
 
@@ -1978,7 +1916,6 @@ msgstr ""
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
 
 #: C/gtk-doc-manual.xml:1675(title)
-#| msgid "Frequently asked question"
 msgid "Frequently asked questions"
 msgstr "Preguntas más frecuentes"
 
