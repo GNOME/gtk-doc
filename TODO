@@ -430,8 +430,14 @@ grep "gst_caps_is_always_compatible" tags
   - compile xslt
     http://sourceforge.net/projects/xsltc/
     http://www.xmlhack.com/read.php?item=618
+  - extra xsltproc options:
+    --novalid: saves ~ 0.12 sec
 
 - perl regexps
-  not really an issue, but we can improve by compiling the regexps
-  http://stackoverflow.com/questions/550258/does-the-o-modifier-for-perl-regular-expressions-still-provide-any-benefit
+  - not really an issue, but we can improve by compiling the regexps
+    http://stackoverflow.com/questions/550258/does-the-o-modifier-for-perl-regular-expressions-still-provide-any-benefit
+  - we use $&, $', and $` in several places (comple match, pre-match and post-match). 
+    Those are slow and once they are used a single time perl prepares them for every match operation.
+    Since perl 5.10 one can use the /p flag for matches where this is needed and then use
+    ${^PREMATCH} , ${^MATCH}  and ${^POSTMATCH}
 
