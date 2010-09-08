@@ -44,7 +44,7 @@ my $PRINT_VERSION;
 my $PRINT_HELP;
 my $MAIN_SGML_FILE;
 my $EXPAND_CONTENT_FILES = "";
-my $SGML_MODE;
+my $INLINE_MARKUP_MODE;
 my $DEFAULT_STABILITY;
 my $DEFAULT_INCLUDES;
 my $OUTPUT_FORMAT;
@@ -62,7 +62,8 @@ my %optctl = ('module' => \$MODULE,
 	      'help' => \$PRINT_HELP,
 	      'main-sgml-file' => \$MAIN_SGML_FILE,
 	      'expand-content-files' => \$EXPAND_CONTENT_FILES,
-	      'sgml-mode' => \$SGML_MODE,
+	      'sgml-mode' => \$INLINE_MARKUP_MODE,
+	      'xml-mode' => \$INLINE_MARKUP_MODE,
 	      'default-stability' => \$DEFAULT_STABILITY,
 	      'default-includes' => \$DEFAULT_INCLUDES,
 	      'output-format' => \$OUTPUT_FORMAT,
@@ -74,8 +75,8 @@ GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s",
     "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols",
     "outputsymbolswithoutsince",
     "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help",
-    "sgml-mode", "default-stability:s", "default-includes:s", "output-format:s",
-    "name-space:s");
+    "sgml-mode", "xml-mode", "default-stability:s", "default-includes:s", 
+    "output-format:s", "name-space:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -105,7 +106,7 @@ gtkdoc-mkdb version @VERSION@ - generate docbook files
 --main-sgml-file=FILE      File containing the toplevel DocBook file.
 --expand-content-files=FILES Extra DocBook files to expand abbreviations in.
 --output-format=FORMAT     Format to use for the generated docbook, XML or SGML.
---sgml-mode                Allow DocBook markup in inline documentation.
+--{xml,sgml}-mode          Allow DocBook markup in inline documentation.
 --default-stability=LEVEL  Specify default stability Level. Valid values are
                            Stable, Unstable, or Private.
 --default-includes=FILENAMES Specify default includes for section Synopsis
@@ -2526,7 +2527,7 @@ sub CreateValidSGML {
 # Function    : ConvertSGMLChars
 # Description : This is used for text in source code comment blocks, to turn
 #               chars which are used in SGML into entities, e.g. '<' into
-#               '&lt;'. Depending on $SGML_MODE, this is done
+#               '&lt;'. Depending on $INLINE_MARKUP_MODE, this is done
 #               unconditionally or only if the character doesn't seem to be
 #               part of an SGML construct (tag or entity reference).
 # Arguments   : $text - the text to turn into proper SGML.
@@ -2535,8 +2536,8 @@ sub CreateValidSGML {
 sub ConvertSGMLChars {
     my ($symbol, $text) = @_;
 
-    if ($SGML_MODE) {
-        # For the SGML mode only convert to entities outside CDATA sections.
+    if ($INLINE_MARKUP_MODE) {
+        # For the XML/SGML mode only convert to entities outside CDATA sections.
         return &ModifyXMLElements ($text, $symbol,
 				   "<!\\[CDATA\\[|<programlisting[^>]*>",
 				   \&ConvertSGMLCharsEndTag,

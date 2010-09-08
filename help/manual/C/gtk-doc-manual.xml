@@ -709,8 +709,9 @@ make
       <para>
         DocBook can do more that just links. One can also have lists, tables and
         examples. To enable the usage of SGML/XML tags inside doc-comments you
-        need to have <option>--sgml-mode</option> in the variable
-        <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</filename>.
+        need to have <option>--xml-mode</option> or <option>--sgml-mode</option>
+        in the variable <symbol>MKDB_OPTIONS</symbol> inside 
+        <filename>Makefile.am</filename>.
       </para>
 
       <tip>
