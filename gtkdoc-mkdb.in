@@ -2609,13 +2609,12 @@ sub ExpandAnnotation {
     my ($symbol, $param_desc) = @_;
     my $param_annotations = "";
 
-    # look for annotations at the start of the comment
-    if ($param_desc =~ m%^\s*\(([^)]*)\):%) {
+    # look for annotations at the start of the comment part
+    if ($param_desc =~ m%^\s*\((.*?)\):%) {
         my @annotations;
         my $annotation;
-        my $annotation_extra = "";
         $param_desc = $';
-    
+        
         @annotations = split(/\)\s*\(/,$1);
         foreach $annotation (@annotations) {
             # need to search for the longest key-match in %AnnotationDefinition
@@ -2630,6 +2629,7 @@ sub ExpandAnnotation {
                     }
                 }
             }
+            my $annotation_extra = "";
             if ($match_annotation ne "") {
                 if ($annotation =~ m%$match_annotation\s+(.*)%) {
                     $annotation_extra = " $1";
