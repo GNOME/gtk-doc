@@ -62,8 +62,8 @@ fi
 if $is_xml; then
   # see http://bugzilla.gnome.org/show_bug.cgi?id=467488
   @XSLTPROC@ $path_arg --nonet --xinclude \
-      --stringparam gtkdoc.bookname $module
-      --stringparam gtkdoc.version"@VERSION@" \
+      --stringparam gtkdoc.bookname $module \
+      --stringparam gtkdoc.version "@VERSION@" \
       manpages/docbook.xsl $document || exit $?
 else
   for i in `cd sgml;ls *.sgml`; do
