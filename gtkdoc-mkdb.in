@@ -3352,36 +3352,37 @@ sub GetSignals {
 
             if (defined ($flags)) {
               if ($flags =~ m/f/) {
-                $flags_string = "Run First";
+                $flags_string = "<link linkend=\"G-SIGNAL-RUN-FIRST:CAPS\"><literal>Run First</literal></link>";
               }
               elsif ($flags =~ m/l/) {
-                $flags_string = "Run Last";
+                $flags_string = "<link linkend=\"G-SIGNAL-RUN-LAST:CAPS\"><literal>Run Last</literal></link>";
               }
               elsif ($flags =~ m/c/) {
+                $flags_string = "<link linkend=\"G-SIGNAL-RUN-CLEANUP:CAPS\"><literal>Cleanup</literal></link>";
                 $flags_string = "Cleanup";
               }
               if ($flags =~ m/r/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string .= "No Recursion";
+                $flags_string = "<link linkend=\"G-SIGNAL-NO-RECURSE:CAPS\"><literal>No Recursion</literal></link>";
               }
               if ($flags =~ m/d/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string .= "Has Details";
+                $flags_string = "<link linkend=\"G-SIGNAL-DETAILED:CAPS\"><literal>Has Details</literal></link>";
               }
               if ($flags =~ m/a/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string .= "Action";
+                $flags_string = "<link linkend=\"G-SIGNAL-ACTION:CAPS\"><literal>Action</literal></link>";
               }
               if ($flags =~ m/h/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string .= "No Hooks";
+                $flags_string = "<link linkend=\"G-SIGNAL-NO-HOOKS:CAPS\"><literal>No Hooks</literal></link>";
               }
             }
 
 	    if ($flags_string)
 	      {
 		$synop .= ": $flags_string\n";
-
+		
 		$pad = ' ' x (5 + $name_len - length("user_data"));
 		$desc  .= "$pad : $flags_string</programlisting>\n";
 	      }
