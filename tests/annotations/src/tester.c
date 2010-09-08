@@ -59,6 +59,20 @@ annotation_elementtype (const GList *list)
 }
 
 /**
+ * annotation_elementtype_transfer:
+ * @list: (element-type utf8) (transfer full): list of #GObject instances to search
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_elementtype_transfer (const GList *list)
+{
+   return TRUE;
+}
+
+/**
  * annotation_elementtype_returns:
  *
  * Document optional parameters.

@@ -19,6 +19,7 @@ extern void annotation_array_length (GObject *list, gint n_columns, GType *types
 extern gchar * annotation_nullable (const gchar *uri, const gchar *label);
 
 extern gboolean annotation_elementtype (const GList *list);
+extern gboolean annotation_elementtype_transfer (const GList *list);
 extern GList *annotation_elementtype_returns (void);
 
 extern gboolean annotation_outparams (GList **list);
