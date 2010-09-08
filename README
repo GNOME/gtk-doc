@@ -17,7 +17,7 @@ GTK-Doc allows your documentation to be written in 2 ways:
   a) Embedded inside the source code in specially-formatted comments.
  or
   b) Added to the 'template' files which gtk-doc outputs after scanning all
-     the header files and parsing the declarations.
+     the header files and parsing the declarations (deprecated now).
 
 From these source code comments and template files GTK-Doc generates a Docbook
 XML (or SGML) document, which is then transformed into HTML.
@@ -25,6 +25,9 @@ The generated HTML documentation can be browsed in an ordinary web browser or
 by using the special Devhelp API browser
 (see http://developer.imendio.com/wiki/Devhelp).
 
+Please don't use template files in new projects. Support for for those will
+be removed at some point in the future (together with gtkdoc-mktmpl). Please
+also use DoxBook XML instead of DocBook SGML. 
 
 Requirements
 ============
@@ -41,7 +44,7 @@ The DocBook XML DTD.
 The DocBook XSL Stylesheets.
     http://docbook.sourceforge.net/projects/xsl/
 
-libxslt & libxml2 2.3.6.
+libxslt & libxml2 >= 2.3.6.
     http://xmlsoft.org/
 
 

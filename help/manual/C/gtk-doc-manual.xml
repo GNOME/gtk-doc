@@ -222,7 +222,8 @@
             or <filename class='directory'>xml/</filename> subdirectory.
             If the source code contains documentation on functions, using the
             special comment blocks, it gets merged in here. If there are no tmpl files used
-            it only reads docs from sources and introspection data.
+            it only reads docs from sources and introspection data. We recommend
+            to use Docbook XML.
           </para>
           <para>
             <application>gtkdoc-mkhtml</application> turns the SGML/XML files into HTML
@@ -697,13 +698,13 @@ make
       </para>
 
       <tip>
-	<para>
-          If you need to use the special characters '&lt;', '&gt;', '()', '@',
-          '%', or '#' in your documentation without GTK-Doc changing them you
-          can use the XML entities "&amp;lt;", "&amp;gt;", "&amp;lpar;",
-          "&amp;rpar;", "&amp;commat;", "&amp;percnt;" and "&amp;num;"
-          respectively or escape them with a backslash '\'.
-	</para>
+	  <para>
+        If you need to use the special characters '&lt;', '&gt;', '()', '@',
+        '%', or '#' in your documentation without GTK-Doc changing them you
+        can use the XML entities "&amp;lt;", "&amp;gt;", "&amp;lpar;",
+        "&amp;rpar;", "&amp;commat;", "&amp;percnt;" and "&amp;num;"
+        respectively or escape them with a backslash '\'.
+	  </para>
       </tip>
 
       <para>
