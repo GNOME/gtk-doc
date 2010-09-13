@@ -418,6 +418,23 @@ GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
       </para>
       
       <para>
+        This will require all developers to have gtk-doc installed. If it is
+        okay for your project to have optional api-doc build setup, you can
+        solve this as below. Keep it as is, as gtkdocize is looking for
+        <function>GTK_DOC_CHECK</function>  at the start of a line.
+        <example><title>Keep gtk-doc optional</title>
+          <programlisting>
+<![CDATA[
+# check for gtk-doc
+m4_ifdef([GTK_DOC_CHECK], [
+GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+])
+]]>
+          </programlisting>
+        </example>
+      </para>
+      
+      <para>
         The first argument is used to check for the gtkdocversion at configure time.
         The 2nd, optional argument is used by <application>gtkdocize</application>.
         The <symbol>GTK_DOC_CHECK</symbol> macro also adds several configure switches:
