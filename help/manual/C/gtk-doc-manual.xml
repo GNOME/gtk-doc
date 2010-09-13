@@ -614,6 +614,21 @@ make
 	way of documenting code.
       </para>
     </note>
+    
+    <para>
+      The scanner can handle the majority of c headers fine. In the case of
+      receiving warnings from the scanner that look like a special case, one can
+      hint GTK-Doc to skip over them.
+      <example><title>GTK-Doc comment block</title>
+        <programlisting>
+<![CDATA[
+#ifndef __GTK_DOC_IGNORE__
+/* unparseable code here */
+#endif
+]]>
+        </programlisting>
+      </example>
+    </para>
 
     <!--  -->
 

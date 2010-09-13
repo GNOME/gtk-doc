@@ -329,6 +329,9 @@ const char ** const bug_624200b(void);
 gchar *_bug_000000a (const gchar *name);
 #define _BUG_000000b (a) (a*a);
 
+#ifndef __GTK_DOC_IGNORE__
+extern int bug_512565(void);
+#endif
 
 #endif // GTKDOC_TESTER_H
 

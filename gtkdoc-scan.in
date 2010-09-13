@@ -277,6 +277,7 @@ sub ScanHeader {
     my $file_basename;
 
     my $deprecated_conditional_nest = 0;
+    my $ignore_conditional_nest = 0;
 
     my $deprecated = "";
 
@@ -332,13 +333,24 @@ sub ScanHeader {
             } elsif ($deprecated_conditional_nest > 0) {
                  $deprecated_conditional_nest += 1;
             }
+            if ($ignore_conditional_nest == 0 and $1 =~ /__GTK_DOC_IGNORE__/) {
+                 $ignore_conditional_nest = 1;
+            } elsif ($ignore_conditional_nest > 0) {
+                 $ignore_conditional_nest += 1;
+            }
         } elsif (m/^\s*#\sif/) {
             if ($deprecated_conditional_nest > 0) {
                  $deprecated_conditional_nest += 1;
             }
+            if ($ignore_conditional_nest > 0) {
+                 $ignore_conditional_nest += 1;
+            }
         } elsif (m/^\s*#endif/) {
             if ($deprecated_conditional_nest > 0) {
                 $deprecated_conditional_nest -= 1;
+            }
+            if ($ignore_conditional_nest > 0) {
+                $ignore_conditional_nest -= 1;
             }
         }
 
@@ -347,6 +359,10 @@ sub ScanHeader {
             $deprecated = "<DEPRECATED/>\n";
         } else {
             $deprecated = "";
+        }
+        
+        if($ignore_conditional_nest) {
+            next;
         }
 
 	if (!$in_declaration) {
