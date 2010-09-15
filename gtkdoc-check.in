@@ -51,12 +51,16 @@ EOF
     exit 0;
 }
 
-my $DOC_MODULE;
 my $checks = 3;
 
+# Get parameters from test env, if not there try to grab them from the makefile
 # We like Makefile.am more but builddir does not necessarily contain one.
 my $makefile = (-f 'Makefile.am') ? 'Makefile.am' : 'Makefile';
-$DOC_MODULE = &Grep('^\s*DOC_MODULE\s*=\s*(\S+)', $makefile, 'DOC_MODULE');
+
+my $DOC_MODULE = $ENV{"DOC_MODULE"};
+if (!defined($DOC_MODULE) or $DOC_MODULE == "") {
+    $DOC_MODULE = &Grep('^\s*DOC_MODULE\s*=\s*(\S+)', $makefile, 'DOC_MODULE');
+}
 
 print "Running suite(s): gtk-doc-$DOC_MODULE\n";
 
