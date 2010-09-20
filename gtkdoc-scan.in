@@ -354,7 +354,7 @@ sub ScanHeader {
             }
         }
 
-        # set global that affects AddSymbolToList
+        # set global that is used later when we do AddSymbolToList
         if ($deprecated_conditional_nest > 0) {
             $deprecated = "<DEPRECATED/>\n";
         } else {
@@ -480,8 +480,9 @@ sub ScanHeader {
 		# will override this.
 		my $structsym = uc $1;
 		#print "DEBUG: $structsym typedef: $2\n";
-		&AddSymbolToList (\$list, $2);
-		print DECL "<$structsym>\n<NAME>$2</NAME>\n$deprecated</$structsym>\n";
+		if (&AddSymbolToList (\$list, $2)) {
+		    print DECL "<$structsym>\n<NAME>$2</NAME>\n$deprecated</$structsym>\n";
+		}
 
 	    } elsif (m/^\s*(?:struct|union)\s+_(\w+)\s*;/) {
 		# Skip private structs/unions.
@@ -493,8 +494,9 @@ sub ScanHeader {
 	        # can differentiate it from a typedef.
 	        my $structsym = uc $1;
 	        #print "DEBUG: $structsym: $2\n";
-		&AddSymbolToList (\$list, $2);
-		print DECL "<$structsym>\n<NAME>$2</NAME>\n$_$deprecated</$structsym>\n";
+		if (&AddSymbolToList (\$list, $2)) {
+		    print DECL "<$structsym>\n<NAME>$2</NAME>\n$_$deprecated</$structsym>\n";
+		}
 
 	    } elsif (m/^\s*typedef\s+(struct|union)\s*\w*\s*{/) {
 		$symbol = "";
@@ -507,14 +509,16 @@ sub ScanHeader {
 
 	    } elsif (m/^\s*typedef\s+(?:struct|union)\s+\w+[\s\*]+(\w+)\s*;/) {
 		#print "DEBUG: Found struct/union(*) typedef $1: $_";
-		&AddSymbolToList (\$list, $1);
-		print DECL "<TYPEDEF>\n<NAME>$1</NAME>\n$deprecated$_</TYPEDEF>\n";
+		if (&AddSymbolToList (\$list, $1)) {
+		    print DECL "<TYPEDEF>\n<NAME>$1</NAME>\n$deprecated$_</TYPEDEF>\n";
+		}
 
 	    } elsif (m/^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w+)(\s*\[[^\]]+\])*\s*;/) {
 		if ($2 !~ m/^struct\s/ && $2 !~ m/^union\s/) {
 		    #print "DEBUG: Found typedef: $_";
-		    &AddSymbolToList (\$list, $3);
-		    print DECL "<TYPEDEF>\n<NAME>$3</NAME>\n$deprecated$_</TYPEDEF>\n";
+		    if (&AddSymbolToList (\$list, $3)) {
+		        print DECL "<TYPEDEF>\n<NAME>$3</NAME>\n$deprecated$_</TYPEDEF>\n";
+		    }
 		}
 	    } elsif (m/^\s*typedef\s+/) {
 		#print "DEBUG: Skipping typedef: $_";
@@ -526,8 +530,9 @@ sub ScanHeader {
 		$symbol = $5;
 	        s/^\s*([A-Za-z_]+VAR)\b/extern/;
 		#print "DEBUG: Possible extern: $_";
-		&AddSymbolToList (\$list, $symbol);
-		print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$_</VARIABLE>\n";
+		if (&AddSymbolToList (\$list, $symbol)) {
+		    print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$_</VARIABLE>\n";
+		}
 
 
 	    # FUNCTIONS
@@ -706,13 +711,14 @@ sub ScanHeader {
                      $decl =~ s/\s*\n\s*/ /gs;	# consolidate whitespace at start
                                                    # and end of lines.
                      $ret_type =~ s%/\*.*?\*/%%g;	# remove comments in ret type.
-                     &AddSymbolToList (\$list, $symbol);
-                     print DECL "<FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl\n</FUNCTION>\n";
-                     if ($REBUILD_TYPES) {
-                         # check if this looks like a get_type function and if so remember
-                         if (($symbol =~ m/_get_type$/) && ($ret_type =~ m/GType/) && ($decl =~ m/(void|)/)) {
-                             #print "Adding get-type: [$ret_type] [$symbol] [$decl]\tfrom $input_file\n";
-                             push (@get_types, $symbol);
+                     if (&AddSymbolToList (\$list, $symbol)) {
+                         print DECL "<FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl\n</FUNCTION>\n";
+                         if ($REBUILD_TYPES) {
+                             # check if this looks like a get_type function and if so remember
+                             if (($symbol =~ m/_get_type$/) && ($ret_type =~ m/GType/) && ($decl =~ m/(void|)/)) {
+                                 #print "Adding get-type: [$ret_type] [$symbol] [$decl]\tfrom $input_file\n";
+                                 push (@get_types, $symbol);
+                             }
                          }
                      }
                 } else {
@@ -725,8 +731,9 @@ sub ScanHeader {
 
 	if ($in_declaration eq 'user_function') {
 	    if ($decl =~ s/\).*$//) {
-		&AddSymbolToList (\$list, $symbol);
-		print DECL "<USER_FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl</USER_FUNCTION>\n";
+	        if (&AddSymbolToList (\$list, $symbol)) {
+	            print DECL "<USER_FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl</USER_FUNCTION>\n";
+	        }
 		$in_declaration = "";
 	    }
 	}
@@ -734,8 +741,9 @@ sub ScanHeader {
 	if ($in_declaration eq 'macro') {
 	    if ($decl !~ m/\\\s*$/) {
 	        if ($internal == 0) {
-                    &AddSymbolToList (\$list, $symbol);
-                    print DECL "<MACRO>\n<NAME>$symbol</NAME>\n$deprecated$decl</MACRO>\n";
+                    if (&AddSymbolToList (\$list, $symbol)) {
+                        print DECL "<MACRO>\n<NAME>$symbol</NAME>\n$deprecated$decl</MACRO>\n";
+                    }
 	        } else {
                     $internal = 0;
 	        }
@@ -748,8 +756,9 @@ sub ScanHeader {
 		if ($symbol eq "") {
 		    $symbol = $1;
 		}
-		&AddSymbolToList (\$list, $symbol);
-		print DECL "<ENUM>\n<NAME>$symbol</NAME>\n$deprecated$decl</ENUM>\n";
+		if (&AddSymbolToList (\$list, $symbol)) {
+		    print DECL "<ENUM>\n<NAME>$symbol</NAME>\n$deprecated$decl</ENUM>\n";
+		}
 		$in_declaration = "";
 	    }
 	}
@@ -769,10 +778,10 @@ sub ScanHeader {
 		    push (@objects, $objectname);
 		}
 		#print "Store struct: $symbol\n";
-		&AddSymbolToList (\$list, $symbol);
-
-		my $structsym = uc $in_declaration;
-		print DECL "<$structsym>\n<NAME>$symbol</NAME>\n$deprecated$decl</$structsym>\n";
+		if (&AddSymbolToList (\$list, $symbol)) {
+		    my $structsym = uc $in_declaration;
+		    print DECL "<$structsym>\n<NAME>$symbol</NAME>\n$deprecated$decl</$structsym>\n";
+		}
 		$in_declaration = "";
 	    } else {
 		# We use tr to count the brackets in the line, and adjust
@@ -841,8 +850,13 @@ sub AddSymbolToList {
     my ($list, $symbol) = @_;
 
     if ($$list =~ m/\b\Q$symbol\E\b/) {
-#	print "Symbol $symbol already in list. skipping\n";
-	return;
+         #print "Symbol $symbol already in list. skipping\n";
+         # FIXME: ideally we would like to return 0 to skip outputting another
+         # entry to -decl.txt to avoid redeclarations (e.g. in conditional
+         # sections). Unfortunately this does not work, because of forward
+         # declarations
+	return 1;
     }
     $$list .= "$symbol\n";
+    return 1;
 }
