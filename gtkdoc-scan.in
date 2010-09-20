@@ -328,12 +328,13 @@ sub ScanHeader {
         # and if we enter a deprecation-symbol-bracketed
         # zone, take note.
         if (m/^\s*#\s*if(?:n?def\b|\s+!?\s*defined\s*\()\s*(\w+)/) {
-            if ($deprecated_conditional_nest == 0 and $1 =~ /$DEPRECATED_GUARDS/) {
+            my $define_name = $1;
+            if ($deprecated_conditional_nest == 0 and $define_name =~ /$DEPRECATED_GUARDS/) {
                  $deprecated_conditional_nest = 1;
             } elsif ($deprecated_conditional_nest > 0) {
                  $deprecated_conditional_nest += 1;
             }
-            if ($ignore_conditional_nest == 0 and $1 =~ /__GTK_DOC_IGNORE__/) {
+            if ($ignore_conditional_nest == 0 and $define_name =~ /__GTK_DOC_IGNORE__/) {
                  $ignore_conditional_nest = 1;
             } elsif ($ignore_conditional_nest > 0) {
                  $ignore_conditional_nest += 1;
