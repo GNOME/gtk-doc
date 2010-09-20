@@ -273,6 +273,9 @@ sub ScanHeader {
 				  #   subclasses, which we remove from the list.
     my ($internal) = 0;             # Set to 1 for internal symbols, we need to
                                     #   fully parse, but don't add them to docs
+    my %forward_decls = ();         # hashtable of forward declarations, we skip
+                                    #   them if we find the real declaration
+                                    #   later.
 
     my $file_basename;
 
@@ -481,9 +484,7 @@ sub ScanHeader {
 		# will override this.
 		my $structsym = uc $1;
 		#print "DEBUG: $structsym typedef: $2\n";
-		if (&AddSymbolToList (\$list, $2)) {
-		    print DECL "<$structsym>\n<NAME>$2</NAME>\n$deprecated</$structsym>\n";
-		}
+		$forward_decls{$2} = "<$structsym>\n<NAME>$2</NAME>\n$deprecated</$structsym>\n"
 
 	    } elsif (m/^\s*(?:struct|union)\s+_(\w+)\s*;/) {
 		# Skip private structs/unions.
@@ -495,9 +496,7 @@ sub ScanHeader {
 	        # can differentiate it from a typedef.
 	        my $structsym = uc $1;
 	        #print "DEBUG: $structsym: $2\n";
-		if (&AddSymbolToList (\$list, $2)) {
-		    print DECL "<$structsym>\n<NAME>$2</NAME>\n$_$deprecated</$structsym>\n";
-		}
+                $forward_decls{$2} = "<$structsym>\n<NAME>$2</NAME>\n$_$deprecated</$structsym>\n";
 
 	    } elsif (m/^\s*typedef\s+(struct|union)\s*\w*\s*{/) {
 		$symbol = "";
@@ -782,6 +781,9 @@ sub ScanHeader {
 		if (&AddSymbolToList (\$list, $symbol)) {
 		    my $structsym = uc $in_declaration;
 		    print DECL "<$structsym>\n<NAME>$symbol</NAME>\n$deprecated$decl</$structsym>\n";
+		    if (defined($forward_decls{$symbol})) {
+		        undef($forward_decls{$symbol});
+		    }
 		}
 		$in_declaration = "";
 	    } else {
@@ -797,6 +799,14 @@ sub ScanHeader {
 	$previous_line = $_;
     }
     close(INPUT);
+    
+    # print remaining forward declarations
+    foreach $symbol (keys %forward_decls) {
+        if (defined($forward_decls{$symbol})) {
+            &AddSymbolToList (\$list, $symbol);
+            print DECL $forward_decls{$symbol};
+        }
+    }
     
     #print "DEBUG: Scanning $input_file done\n\n\n";
 
@@ -852,11 +862,10 @@ sub AddSymbolToList {
 
     if ($$list =~ m/\b\Q$symbol\E\b/) {
          #print "Symbol $symbol already in list. skipping\n";
-         # FIXME: ideally we would like to return 0 to skip outputting another
-         # entry to -decl.txt to avoid redeclarations (e.g. in conditional
-         # sections). Unfortunately this does not work, because of forward
-         # declarations
-	return 1;
+         # we return 0 to skip outputting another entry to -decl.txt
+         # this is to avoid redeclarations (e.g. in conditional
+         # sections).
+	return 0;
     }
     $$list .= "$symbol\n";
     return 1;
