@@ -58,11 +58,11 @@ my $checks = 4;
 my $makefile = (-f 'Makefile.am') ? 'Makefile.am' : 'Makefile';
 
 my $DOC_MODULE = $ENV{"DOC_MODULE"};
-if (!defined($DOC_MODULE) or $DOC_MODULE == "") {
+if (!defined($DOC_MODULE) or $DOC_MODULE eq "") {
     $DOC_MODULE = &Grep('^\s*DOC_MODULE\s*=\s*(\S+)', $makefile, 'DOC_MODULE');
 }
 my $DOC_MAIN_SGML_FILE = $ENV{"DOC_MAIN_SGML_FILE"};
-if (!defined($DOC_MAIN_SGML_FILE) or $DOC_MAIN_SGML_FILE == "") {
+if (!defined($DOC_MAIN_SGML_FILE) or $DOC_MAIN_SGML_FILE eq "") {
     $DOC_MAIN_SGML_FILE = &Grep('^\s*DOC_MAIN_SGML_FILE\s*=\s*(\S+)', $makefile, 'DOC_MAIN_SGML_FILE');
     $DOC_MAIN_SGML_FILE =~ s/\$\(DOC_MODULE\)/$DOC_MODULE/;
 }
