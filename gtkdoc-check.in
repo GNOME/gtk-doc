@@ -57,6 +57,18 @@ my $checks = 4;
 # We like Makefile.am more but builddir does not necessarily contain one.
 my $makefile = (-f 'Makefile.am') ? 'Makefile.am' : 'Makefile';
 
+# For historic reasons tests are launched in srcdir
+my $SRCDIR = $ENV{"SRCDIR"};
+my $BUILDDIR = $ENV{"BUILDDIR"};
+my $dir = ".";
+if (defined($BUILDDIR) and $BUILDDIR ne "") {
+    $dir=$BUILDDIR;
+}
+
+# debug
+#for my $key (sort(keys(%ENV))) { print "$key = ", $ENV{$key}, "\n"; }
+# debug
+
 my $DOC_MODULE = $ENV{"DOC_MODULE"};
 if (!defined($DOC_MODULE) or $DOC_MODULE eq "") {
     $DOC_MODULE = &Grep('^\s*DOC_MODULE\s*=\s*(\S+)', $makefile, 'DOC_MODULE');
@@ -70,22 +82,22 @@ if (!defined($DOC_MAIN_SGML_FILE) or $DOC_MAIN_SGML_FILE eq "") {
 print "Running suite(s): gtk-doc-$DOC_MODULE\n";
 
 my $undocumented = int &Grep('^(\d+)\s+not\s+documented\.\s*$',
-                             "$DOC_MODULE-undocumented.txt",
+                             "$dir/$DOC_MODULE-undocumented.txt",
                              'number of undocumented symbols');
 my $incomplete = int &Grep('^(\d+)\s+symbols?\s+incomplete\.\s*$',
-                           "$DOC_MODULE-undocumented.txt",
+                           "$dir/$DOC_MODULE-undocumented.txt",
                            'number of incomplete symbols');
 my $total = $undocumented + $incomplete;
 if ($total) {
     print "$DOC_MODULE-undocumented.txt:1:E: $total undocumented or incomplete symbols\n";
 }
 
-my $undeclared = &CheckEmpty("$DOC_MODULE-undeclared.txt",
+my $undeclared = &CheckEmpty("$dir/$DOC_MODULE-undeclared.txt",
                              'undeclared symbols');
-my $unused = &CheckEmpty("$DOC_MODULE-unused.txt",
+my $unused = &CheckEmpty("$dir/$DOC_MODULE-unused.txt",
                          'unused documentation entries');
 
-my $missing_includes = &CheckIncludes ($DOC_MAIN_SGML_FILE);
+my $missing_includes = &CheckIncludes ("$dir/$DOC_MAIN_SGML_FILE");
 
 my $failed = ($total > 0) + ($undeclared != 0) + ($unused != 0) + ($missing_includes != 0);
 my $rate = 100.0*($checks - $failed)/$checks;
