@@ -64,3 +64,10 @@ If the ID contain a ':' xml processors belive it is using a namespace.
 - have an option to disable generating the file
   (or an option to specifically name it)
 
+=== markup ===
+- use a wiki syntax: http://www.wikicreole.org/
+  - we need a template syntax on top of that for the various boxes (function, macro, struct, ...)
+- perl module avaible: http://www.wikicreole.org/wiki/TextWikiCreole
+  http://search.cpan.org/~jburnett/Text-WikiCreole/
+  - we would need to extend it to return docbook xml
+
