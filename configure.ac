@@ -100,26 +100,59 @@ JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/html/ch
 dnl
 dnl Check for syntax highlighters
 dnl
+AC_ARG_WITH([highlight],
+	AS_HELP_STRING([--with-highlight], [Select source code syntax highlighter (no|source-highlight|highlight|vim|auto)]),
+	, [with_highlight=auto])
+
+case $with_highlight in
+	no|source-highlight|highlight|vim|auto) ;;
+	*) AC_MSG_ERROR([Invalid value for syntax highlighting option.]) ;;
+esac
+
 HIGHLIGHT_OPTIONS=""
-AC_PATH_PROG([HIGHLIGHT], [source-highlight])
-if test -n "$HIGHLIGHT"; then
-	HIGHLIGHT_OPTIONS="-t4 -sc -cstyle.css --no-doc -i"
-else
-	AC_PATH_PROG([HIGHLIGHT], [highlight])
+if test "$with_highlight" = "auto"; then
+	AC_PATH_PROG([HIGHLIGHT], [source-highlight])
 	if test -n "$HIGHLIGHT"; then
-		HIGHLIGHT_OPTIONS="-X -f --class-name=gtkdoc "
+		HIGHLIGHT_OPTIONS="-t4 -sc -cstyle.css --no-doc -i"
 	else
-		AC_PATH_PROG([HIGHLIGHT], [vim])
+		AC_PATH_PROG([HIGHLIGHT], [highlight])
 		if test -n "$HIGHLIGHT"; then
-			dnl vim is useless if it does not support syntax highlighting
+			HIGHLIGHT_OPTIONS="-X -f --class-name=gtkdoc "
+		else
+			AC_PATH_PROG([HIGHLIGHT], [vim])
+			if test -n "$HIGHLIGHT"; then
+				dnl vim is useless if it does not support syntax highlighting
+				AC_MSG_CHECKING([whether vim has +syntax feature])
+				if $HIGHLIGHT --version | grep '+syntax' >/dev/null; then
+					AC_MSG_RESULT([yes])
+				else
+					AC_MSG_RESULT([no])
+					HIGHLIGHT=
+				fi
+			fi
+		fi
+	fi
+else
+	if test "$with_highlight" != "no"; then
+		AC_PATH_PROG([HIGHLIGHT], [$with_highlight], [no])
+	fi
+
+	case $with_highlight in
+		source-highlight) HIGHLIGHT_OPTIONS="-t4 -sc -cstyle.css --no-doc -i";;
+		highlight) HIGHLIGHT_OPTIONS="-X -f --class-name=gtkdoc ";;
+		vim)
 			AC_MSG_CHECKING([whether vim has +syntax feature])
 			if $HIGHLIGHT --version | grep '+syntax' >/dev/null; then
 				AC_MSG_RESULT([yes])
 			else
 				AC_MSG_RESULT([no])
-				HIGHLIGHT=
+				HIGHLIGHT=no
 			fi
-		fi
+		;;
+	esac
+
+	if test "$HIGHLIGHT" = "no" && test "$with_highlight" != "no"; then
+		AC_MSG_ERROR([Could not find requested syntax highlighter])
 	fi
 fi
 AC_SUBST([HIGHLIGHT_OPTIONS])
