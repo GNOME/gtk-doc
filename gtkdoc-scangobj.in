@@ -24,11 +24,6 @@
 # by compiling a small C program. CFLAGS and LDFLAGS must be
 # set appropriately before running this script.
 #
-# NOTE: the lookup_signal_arg_names() function contains the argument names of
-#       standard GTK signal handlers. This may need to be updated for new
-#       GTK signals or Gnome widget signals.
-#       FIXME: this is only needed for undocumented signals, we should remove
-#       the list as its totally undermaintained anyway
 
 use Getopt::Long;
 
@@ -214,8 +209,6 @@ static void output_object_signal (FILE *fp,
 static const gchar * get_type_name (GType type,
 			            gboolean * is_pointer);
 static const gchar * get_gdk_event (const gchar * signal_name);
-static const gchar ** lookup_signal_arg_names (const gchar * type,
-					       const gchar * signal_name);
 
 static void output_object_hierarchy (void);
 static void output_hierarchy (FILE *fp,
@@ -313,10 +306,9 @@ output_object_signal (FILE *fp,
   GSignalQuery query_info;
   const gchar *type_name, *ret_type, *object_arg, *arg_name;
   gchar *pos, *object_arg_lower;
-  gboolean is_pointer;                                   
+  gboolean is_pointer;
   gchar buffer[1024];
   guint i, param;
-  const gchar **arg_names;
   gint param_num, widget_num, event_num, callback_num;
   gint *arg_num;
   gchar signal_name[128];
@@ -371,64 +363,54 @@ output_object_signal (FILE *fp,
     }
 
   /* Output the signal parameters. */
-  arg_names = lookup_signal_arg_names (object_name, signal_name);
-
   for (param = 0; param < query_info.n_params; param++)
     {
-      if (arg_names)
-	{
-	  sprintf (pos, "%s\\n", arg_names[param]);
-	  pos += strlen (pos);
-	}
+      type_name = get_type_name (query_info.param_types[param] & ~G_SIGNAL_TYPE_STATIC_SCOPE, &is_pointer);
+
+      /* Most arguments to the callback are called "arg1", "arg2", etc.
+         GdkWidgets are called "widget", "widget2", ...
+         GdkEvents are called "event", "event2", ...
+         GtkCallbacks are called "callback", "callback2", ... */
+      if (!strcmp (type_name, "GtkWidget"))
+        {
+          arg_name = "widget";
+          arg_num = &widget_num;
+        }
+      else if (!strcmp (type_name, "GdkEvent"))
+        {
+          type_name = get_gdk_event (signal_name);
+          arg_name = "event";
+          arg_num = &event_num;
+          is_pointer = TRUE;
+        }
+      else if (!strcmp (type_name, "GtkCallback")
+               || !strcmp (type_name, "GtkCCallback"))
+        {
+          arg_name = "callback";
+          arg_num = &callback_num;
+        }
       else
-	{
-	  type_name = get_type_name (query_info.param_types[param] & ~G_SIGNAL_TYPE_STATIC_SCOPE, &is_pointer);
+        {
+          arg_name = "arg";
+          arg_num = &param_num;
+        }
+      sprintf (pos, "%s ", type_name);
+      pos += strlen (pos);
 
-	  /* Most arguments to the callback are called "arg1", "arg2", etc.
-	     GdkWidgets are called "widget", "widget2", ...
-	     GdkEvents are called "event", "event2", ...
-	     GtkCallbacks are called "callback", "callback2", ... */
-	  if (!strcmp (type_name, "GtkWidget"))
-	    {
-	      arg_name = "widget";
-	      arg_num = &widget_num;
-	    }
-	  else if (!strcmp (type_name, "GdkEvent"))
-	    {
-	      type_name = get_gdk_event (signal_name);
-	      arg_name = "event";
-	      arg_num = &event_num;
-	      is_pointer = TRUE;
-	    }
-	  else if (!strcmp (type_name, "GtkCallback")
-		   || !strcmp (type_name, "GtkCCallback"))
-	    {
-	      arg_name = "callback";
-	      arg_num = &callback_num;
-	    }
-	  else
-	    {
-	      arg_name = "arg";
-	      arg_num = &param_num;
-	    }
-	  sprintf (pos, "%s ", type_name);
-	  pos += strlen (pos);
+      if (!arg_num || *arg_num == 0)
+        sprintf (pos, "%s%s\\n", is_pointer ? "*" : " ", arg_name);
+      else
+        sprintf (pos, "%s%s%i\\n", is_pointer ? "*" : " ", arg_name,
+                 *arg_num);
+      pos += strlen (pos);
 
-	  if (!arg_num || *arg_num == 0)
-	    sprintf (pos, "%s%s\\n", is_pointer ? "*" : " ", arg_name);
-	  else
-	    sprintf (pos, "%s%s%i\\n", is_pointer ? "*" : " ", arg_name,
-		     *arg_num);
-	  pos += strlen (pos);
-
-	  if (arg_num)
-	    {
-	      if (*arg_num == 0)
-		*arg_num = 2;
-	      else
-	        *arg_num += 1;
-	    }
-	}
+      if (arg_num)
+        {
+          if (*arg_num == 0)
+            *arg_num = 2;
+          else
+            *arg_num += 1;
+        }
     }
 
   pos = flags;
@@ -594,230 +576,6 @@ get_gdk_event (const gchar * signal_name)
   return "GdkEvent";
 }
 
-
-/* This returns argument names to use for some known GTK signals.
-    It is passed a widget name, e.g. 'GtkCList' and a signal name, e.g.
-    'select_row' and it returns a pointer to an array of argument types and
-    names. */
-static const gchar **
-lookup_signal_arg_names (const gchar * type, const gchar * signal_name)
-{
-  /* Each arg array starts with the object type name and the signal name,
-     and then signal arguments follow. */
-  static const gchar *GbArgTable[][16] =
-  {
-    {"GtkCList", "select_row",
-     "gint             row",
-     "gint             column",
-     "GdkEventButton  *event"},
-    {"GtkCList", "unselect_row",
-     "gint             row",
-     "gint             column",
-     "GdkEventButton  *event"},
-    {"GtkCList", "click_column",
-     "gint             column"},
-
-    {"GtkCList", "resize_column",
-     "gint             column",
-     "gint             width"},
-
-    {"GtkCList", "extend_selection",
-     "GtkScrollType    scroll_type",
-     "gfloat           position",
-     "gboolean         auto_start_selection"},
-    {"GtkCList", "scroll_vertical",
-     "GtkScrollType    scroll_type",
-     "gfloat           position"},
-    {"GtkCList", "scroll_horizontal",
-     "GtkScrollType    scroll_type",
-     "gfloat           position"},
-
-    {"GtkCTree", "tree_select_row",
-     "GtkCTreeNode    *node",
-     "gint             column"},
-    {"GtkCTree", "tree_unselect_row",
-     "GtkCTreeNode    *node",
-     "gint             column"},
-    {"GtkCTree", "tree_expand",
-     "GtkCTreeNode    *node"},
-    {"GtkCTree", "tree_collapse",
-     "GtkCTreeNode    *node"},
-    {"GtkCTree", "tree_move",
-     "GtkCTreeNode    *node",
-     "GtkCTreeNode    *new_parent",
-     "GtkCTreeNode    *new_sibling"},
-    {"GtkCTree", "change_focus_row_expansion",
-     "GtkCTreeExpansionType expansion"},
-
-    {"GtkEditable", "insert_text",
-     "gchar           *new_text",
-     "gint             new_text_length",
-     "gint            *position"},
-    {"GtkEditable", "delete_text",
-     "gint             start_pos",
-     "gint             end_pos"},
-    {"GtkEditable", "set_editable",
-     "gboolean         is_editable"},
-    {"GtkEditable", "move_cursor",
-     "gint             x",
-     "gint             y"},
-    {"GtkEditable", "move_word",
-     "gint             num_words"},
-    {"GtkEditable", "move_page",
-     "gint             x",
-     "gint             y"},
-    {"GtkEditable", "move_to_row",
-     "gint             row"},
-    {"GtkEditable", "move_to_column",
-     "gint             column"},
-
-    {"GtkEditable", "kill_char",
-     "gint             direction"},
-    {"GtkEditable", "kill_word",
-     "gint             direction"},
-    {"GtkEditable", "kill_line",
-     "gint             direction"},
-
-
-    {"GtkInputDialog", "enable_device",
-     "GdkDevice       *deviceid"},
-    {"GtkInputDialog", "disable_device",
-     "GdkDevice       *deviceid"},
-
-    {"GtkListItem", "extend_selection",
-     "GtkScrollType    scroll_type",
-     "gfloat           position",
-     "gboolean         auto_start_selection"},
-    {"GtkListItem", "scroll_vertical",
-     "GtkScrollType    scroll_type",
-     "gfloat           position"},
-    {"GtkListItem", "scroll_horizontal",
-     "GtkScrollType    scroll_type",
-     "gfloat           position"},
-
-    {"GtkMenuShell", "move_current",
-     "GtkMenuDirectionType direction"},
-    {"GtkMenuShell", "activate_current",
-     "gboolean         force_hide"},
-
-
-    {"GtkNotebook", "switch_page",
-     "GtkNotebookPage *page",
-     "guint            page_num"},
-    {"GtkStatusbar", "text_pushed",
-     "guint            context_id",
-     "gchar           *text"},
-    {"GtkStatusbar", "text_popped",
-     "guint            context_id",
-     "gchar           *text"},
-    {"GtkTipsQuery", "widget_entered",
-     "GtkWidget       *widget",
-     "gchar           *tip_text",
-     "gchar           *tip_private"},
-    {"GtkTipsQuery", "widget_selected",
-     "GtkWidget       *widget",
-     "gchar           *tip_text",
-     "gchar           *tip_private",
-     "GdkEventButton  *event"},
-    {"GtkToolbar", "orientation_changed",
-     "GtkOrientation   orientation"},
-    {"GtkToolbar", "style_changed",
-     "GtkToolbarStyle  style"},
-    {"GtkWidget", "draw",
-     "GdkRectangle    *area"},
-    {"GtkWidget", "size_request",
-     "GtkRequisition  *requisition"},
-    {"GtkWidget", "size_allocate",
-     "GtkAllocation   *allocation"},
-    {"GtkWidget", "state_changed",
-     "GtkStateType     state"},
-    {"GtkWidget", "style_set",
-     "GtkStyle        *previous_style"},
-
-    {"GtkWidget", "install_accelerator",
-     "gchar           *signal_name",
-     "gchar            key",
-     "gint             modifiers"},
-
-    {"GtkWidget", "add_accelerator",
-     "guint            accel_signal_id",
-     "GtkAccelGroup   *accel_group",
-     "guint            accel_key",
-     "GdkModifierType  accel_mods",
-     "GtkAccelFlags    accel_flags"},
-
-    {"GtkWidget", "parent_set",
-     "GtkObject       *old_parent"},
-
-    {"GtkWidget", "remove_accelerator",
-     "GtkAccelGroup   *accel_group",
-     "guint            accel_key",
-     "GdkModifierType  accel_mods"},
-    {"GtkWidget", "debug_msg",
-     "gchar           *message"},
-    {"GtkWindow", "move_resize",
-     "gint            *x",
-     "gint            *y",
-     "gint             width",
-     "gint             height"},
-    {"GtkWindow", "set_focus",
-     "GtkWidget       *widget"},
-
-    {"GtkWidget", "selection_get",
-     "GtkSelectionData *data",
-     "guint            info",
-     "guint            time"},
-    {"GtkWidget", "selection_received",
-     "GtkSelectionData *data",
-     "guint            time"},
-
-    {"GtkWidget", "drag_begin",
-     "GdkDragContext  *drag_context"},
-    {"GtkWidget", "drag_end",
-     "GdkDragContext  *drag_context"},
-    {"GtkWidget", "drag_data_delete",
-     "GdkDragContext  *drag_context"},
-    {"GtkWidget", "drag_leave",
-     "GdkDragContext  *drag_context",
-     "guint            time"},
-    {"GtkWidget", "drag_motion",
-     "GdkDragContext  *drag_context",
-     "gint             x",
-     "gint             y",
-     "guint            time"},
-    {"GtkWidget", "drag_drop",
-     "GdkDragContext  *drag_context",
-     "gint             x",
-     "gint             y",
-     "guint            time"},
-    {"GtkWidget", "drag_data_get",
-     "GdkDragContext  *drag_context",
-     "GtkSelectionData *data",
-     "guint            info",
-     "guint            time"},
-    {"GtkWidget", "drag_data_received",
-     "GdkDragContext  *drag_context",
-     "gint             x",
-     "gint             y",
-     "GtkSelectionData *data",
-     "guint            info",
-     "guint            time"},
-
-    {NULL}
-  };
-
-  gint i;
-
-  for (i = 0; GbArgTable[i][0]; i++)
-    {
-#if 1
-      if (!strcmp (type, GbArgTable[i][0])
-	  && !strcmp (signal_name, GbArgTable[i][1]))
-	return &GbArgTable[i][2];
-#endif
-    }
-  return NULL;
-}
 
 /* This outputs the hierarchy of all objects which have been initialized,
    i.e. by calling their XXX_get_type() initialization function. */
