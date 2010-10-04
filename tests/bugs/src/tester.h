@@ -247,6 +247,7 @@ void bug_580300b_get_type(gint a);
 void bug_580300c_get_type();
 extern int bug_580300d_get_type();
 
+void bug_597937(void (*function_arg)(int arg1, char arg2, void *));
 
 long int bug_602518a(void);
 unsigned long int bug_602518b(void);

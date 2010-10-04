@@ -397,8 +397,8 @@ sub ParseFunctionDeclaration {
             push @result, $label;
 
         # Try to match parameters which are functions
-        #                            $1                                                                  $2          $3      $4                        $5                    $7             $8
-	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|G_GNUC_[A-Z_]+\s+|signed\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict\b)?\s*(const\s+)?\(\s*\*+\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
+        #                            $1                                                                  $2          $3      $4                        $5              $6            $7             $8
+	} elsif ($declaration =~ s/^(const\s+|G_CONST_RETURN\s+|G_GNUC_[A-Z_]+\s+|signed\s+|unsigned\s+)*(struct\s+)?(\w+)\s*(\**)\s*(?:restrict\b)?\s*(const\s+)?\(\s*(\*[\s\*]*)\s*(\w+)\s*\)\s*\(([^)]*)\)\s*[,\n]//) {
  	    my $mod1 = defined($1) ? $1 : "";
 	    if (defined($2)) { $mod1 .= $2; }
 	    my $type = $3;
@@ -416,10 +416,9 @@ sub ParseFunctionDeclaration {
 	    if ($ptr1 && $ptr1 !~ m/\*$/) { $ptr1 .= " "; }
 	    $func_ptr  =~ s/\s+//g;
 
-	    #print "Type: [$mod1][$xref][$ptr1][$mod2] ([$func_ptr][$name]) ($func_params)\n";
-
 	    push @result, $name;
             my $xref = defined $typefunc ? $typefunc->($type, "<type>$type</type>") : $type;
+            #print "Type: [$mod1][$xref][$ptr1][$mod2] ([$func_ptr][$name]) ($func_params)\n";#
             my $label = "$mod1$xref$ptr1$mod2 ($func_ptr$name) ($func_params)";
             if (defined $namefunc) {
                 $label = $namefunc->($label)

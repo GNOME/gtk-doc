@@ -185,6 +185,13 @@ void bug_580300c_get_type() { }
  */
 int bug_580300d_get_type() { return 0; }
 
+/**
+ * bug_597937:
+ * @function_arg: value
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=597937
+ */
+void bug_597937(void (*function_arg)(int arg1, char arg2, void *)) { }
 
 /**
  * bug_602518a:
