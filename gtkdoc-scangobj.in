@@ -1028,8 +1028,13 @@ describe_double_constant (gdouble value)
     desc = g_strdup ("G_MINFLOAT");
   else if (GTKDOC_COMPARE_FLOAT (value, -G_MAXFLOAT))
     desc = g_strdup ("-G_MAXFLOAT");
-  else
-    desc = g_strdup_printf ("%lg", value);
+  else{
+    /* make sure floats are output with a decimal dot irrespective of
+    * current locale. Use formatd since we want human-readable numbers
+    * and do not need the exact same bit representation when deserialising */
+    desc = g_malloc0 (G_ASCII_DTOSTR_BUF_SIZE);
+    g_ascii_formatd (desc, G_ASCII_DTOSTR_BUF_SIZE, "%g", value);
+  }
 
   return desc;
 }
@@ -1446,13 +1451,23 @@ describe_default (GParamSpec *spec)
     {
       GParamSpecFloat *pspec = G_PARAM_SPEC_FLOAT (spec);
 
-      desc = g_strdup_printf ("%g", pspec->default_value);
+      /* make sure floats are output with a decimal dot irrespective of
+       * current locale. Use formatd since we want human-readable numbers
+       * and do not need the exact same bit representation when deserialising */
+      desc = g_malloc0 (G_ASCII_DTOSTR_BUF_SIZE);
+      g_ascii_formatd (desc, G_ASCII_DTOSTR_BUF_SIZE, "%g",
+          pspec->default_value);
     }
   else if (G_IS_PARAM_SPEC_DOUBLE (spec))
     {
       GParamSpecDouble *pspec = G_PARAM_SPEC_DOUBLE (spec);
 
-      desc = g_strdup_printf ("%lg", pspec->default_value);
+      /* make sure floats are output with a decimal dot irrespective of
+       * current locale. Use formatd since we want human-readable numbers
+       * and do not need the exact same bit representation when deserialising */
+      desc = g_malloc0 (G_ASCII_DTOSTR_BUF_SIZE);
+      g_ascii_formatd (desc, G_ASCII_DTOSTR_BUF_SIZE, "%g",
+          pspec->default_value);
     }
   else if (G_IS_PARAM_SPEC_STRING (spec))
     {
