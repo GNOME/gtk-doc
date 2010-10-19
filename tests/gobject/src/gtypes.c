@@ -20,6 +20,7 @@ GType gtkdoc_enum_get_type (void) {
     static const GEnumValue values[] = {
       { GTKDOC_ENUM_V1,          "GTKDOC_ENUM_V1",          "first" },
       { GTKDOC_ENUM_V2,          "GTKDOC_ENUM_V2",          "second" },
+      { GTKDOC_ENUM_V3,          "GTKDOC_ENUM_V3",          "third" },
       { 0, NULL, NULL},
     };
     type = g_enum_register_static ("GtkdocEnum", values);

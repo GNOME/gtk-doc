@@ -18,7 +18,9 @@
  */
 typedef enum {
   GTKDOC_ENUM_V1=0,
-  GTKDOC_ENUM_V2
+  GTKDOC_ENUM_V2,
+  /*< private >*/
+  GTKDOC_ENUM_V3
 } GtkdocEnum;
 
 GType  gtkdoc_enum_get_type(void) G_GNUC_CONST;
