@@ -4296,19 +4296,17 @@ sub MergeSourceDocumentation {
 
 	my $have_tmpl_docs = 0;
 
-	## See if the symbol is documented in template
+	## see if the symbol is documented in template
 	my $tmpl_doc = defined ($SymbolDocs{$symbol}) ? $SymbolDocs{$symbol} : "";
 	my $check_tmpl_doc =$tmpl_doc;
-	# remove all xml-tags and whitespaces (don't kill <include href="..."> tags) 
-	$check_tmpl_doc =~ s/<\/?[a-z]+>//gi;
+	# remove all xml-tags and whitespaces 
+	$check_tmpl_doc =~ s/<.*?>//g;
 	$check_tmpl_doc =~ s/\s//g;
 	# anything left ?
 	if ($check_tmpl_doc ne "") {
 	    $have_tmpl_docs = 1;
             #print "## [$check_tmpl_doc]\n";
-	} else {
-            $tmpl_doc = "";
-        }
+	}
 
 	if (exists ($SourceSymbolDocs{$symbol})) {
 	    my $type = $DeclarationTypes {$symbol};
@@ -4332,7 +4330,7 @@ sub MergeSourceDocumentation {
 	    # remove leading and training whitespaces
 	    $src_doc =~ s/^\s+//;
 	    $src_doc =~ s/\s+$//;
-
+	    
 	    # Don't output warnings for overridden titles as titles are
 	    # automatically generated in the -sections.txt file, and thus they
 	    # are often overridden.
@@ -4377,7 +4375,7 @@ sub MergeSourceDocumentation {
                 $SymbolDocs{$symbol} = "$src_doc_para$tmpl_doc";
             }
 
-            # merge parameters
+	    # merge parameters
 	    if ($symbol =~ m/.*::.*/) {
 		# For signals we prefer the param names from the source docs,
 		# since the ones from the templates are likely to contain the
@@ -4473,7 +4471,6 @@ sub MergeSourceDocumentation {
 	# if this symbol is documented, check if docs are complete
 	$check_tmpl_doc = defined ($SymbolDocs{$symbol}) ? $SymbolDocs{$symbol} : "";
 	# remove all xml-tags and whitespaces
-	#$check_tmpl_doc =~ s/<\/?[a-z]+>//g;
 	$check_tmpl_doc =~ s/<.*?>//g;
 	$check_tmpl_doc =~ s/\s//g;
 	if ($check_tmpl_doc ne "") {
