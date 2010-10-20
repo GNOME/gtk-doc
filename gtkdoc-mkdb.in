@@ -302,6 +302,7 @@ my %AnnotationsUsed;
 my %AnnotationDefinition = (
     'allow-none' => "NULL is ok, both for passing and for returning.",
     'array' => "Parameter points to an array of items.",
+    'closure' => "This parameter is a 'user_data', for callbacks; many bindings can pass NULL here.",
     'default' => "Default parameter value (for in case the <acronym>shadows</acronym>-to function has less parameters).",
     'element-type' => "Generics and defining elements of containers and arrays.",
     'error-domains' => "Typed errors. Similar to throws in Java.",
