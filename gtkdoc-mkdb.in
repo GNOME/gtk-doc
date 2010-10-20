@@ -1584,8 +1584,12 @@ sub OutputStruct {
 	    $desc .= "<varlistentry><term>$text</term>\n";
 	    if (defined $field_descr) {
                 ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
-                $field_descr = &ExpandAbbreviations($symbol, $field_descr);
-		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
+		$field_descr = &ExpandAbbreviations($symbol, $field_descr);
+		$field_descr .= $param_annotations;
+		# trim
+		$field_descr =~ s/^(\s|\n)+//msg;
+		$field_descr =~ s/(\s|\n)+$//msg;
+		$desc .= "<listitem><simpara>$field_descr</simpara></listitem>\n";
 		delete $field_descrs{$field_name};
 	    } else {
 	        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
@@ -1717,8 +1721,12 @@ sub OutputUnion {
 	    $desc .= "<varlistentry><term>$text</term>\n";
 	    if (defined $field_descr) {
                 ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
-                $field_descr = &ExpandAbbreviations($symbol, $field_descr);
-		$desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
+		$field_descr = &ExpandAbbreviations($symbol, $field_descr);
+		$field_descr .= $param_annotations;
+		# trim
+		$field_descr =~ s/^(\s|\n)+//msg;
+		$field_descr =~ s/(\s|\n)+$//msg;
+		$desc .= "<listitem><simpara>$field_descr</simpara></listitem>\n";
 		delete $field_descrs{$field_name};
 	    } else {
 	        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
@@ -2091,6 +2099,9 @@ sub OutputParamDescriptions {
             ($param_desc,$param_annotations) = & ExpandAnnotation($symbol, $param_desc);
             $param_desc = &ExpandAbbreviations($symbol, $param_desc);
             $param_desc .= $param_annotations;
+            # trim
+            $param_desc =~ s/^(\s|\n)+//msg;
+            $param_desc =~ s/(\s|\n)+$//msg;
 	    if ($param_name eq "Returns") {
 		$returns = "$param_desc";
 	    } elsif ($param_name eq "void") {
@@ -2141,7 +2152,7 @@ sub OutputParamDescriptions {
 	        $output .= $params_desc;
 	    }
 
-	    # Output the returns info last.
+	    # Output the returns info last
 	    if ($returns) {
 		$output .= "<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>$returns</simpara></listitem></varlistentry>\n";
 	    }
