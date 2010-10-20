@@ -4306,6 +4306,13 @@ sub MergeSourceDocumentation {
 	if ($check_tmpl_doc ne "") {
 	    $have_tmpl_docs = 1;
             #print "## [$check_tmpl_doc]\n";
+	} else {
+	    # if the docs have just an empty para, don't merge that.
+	    $check_tmpl_doc = $tmpl_doc;
+	    $check_tmpl_doc =~ s/(\s|\n)//msg;
+	    if ($check_tmpl_doc eq "<para></para>") {
+	       $tmpl_doc = ""; 
+	    }
 	}
 
 	if (exists ($SourceSymbolDocs{$symbol})) {
