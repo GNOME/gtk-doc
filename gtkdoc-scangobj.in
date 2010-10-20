@@ -208,8 +208,6 @@ static void output_object_signal (FILE *fp,
 				  guint signal_id);
 static const gchar * get_type_name (GType type,
 			            gboolean * is_pointer);
-static const gchar * get_gdk_event (const gchar * signal_name);
-
 static void output_object_hierarchy (void);
 static void output_hierarchy (FILE *fp,
 			      GType type,
@@ -368,20 +366,12 @@ output_object_signal (FILE *fp,
       type_name = get_type_name (query_info.param_types[param] & ~G_SIGNAL_TYPE_STATIC_SCOPE, &is_pointer);
 
       /* Most arguments to the callback are called "arg1", "arg2", etc.
-         GdkWidgets are called "widget", "widget2", ...
-         GdkEvents are called "event", "event2", ...
+         GtkWidgets are called "widget", "widget2", ...
          GtkCallbacks are called "callback", "callback2", ... */
       if (!strcmp (type_name, "GtkWidget"))
         {
           arg_name = "widget";
           arg_num = &widget_num;
-        }
-      else if (!strcmp (type_name, "GdkEvent"))
-        {
-          type_name = get_gdk_event (signal_name);
-          arg_name = "event";
-          arg_num = &event_num;
-          is_pointer = TRUE;
         }
       else if (!strcmp (type_name, "GtkCallback")
                || !strcmp (type_name, "GtkCCallback"))
@@ -522,58 +512,6 @@ default:
     *is_pointer = FALSE;
 
   return type_name;
-}
-
-
-static const gchar *
-get_gdk_event (const gchar * signal_name)
-{
-  static const gchar *GbGDKEvents[] =
-  {
-    "button_press_event", "GdkEventButton",
-    "button_release_event", "GdkEventButton",
-    "motion_notify_event", "GdkEventMotion",
-    "delete_event", "GdkEvent",
-    "destroy_event", "GdkEvent",
-    "expose_event", "GdkEventExpose",
-    "key_press_event", "GdkEventKey",
-    "key_release_event", "GdkEventKey",
-    "enter_notify_event", "GdkEventCrossing",
-    "leave_notify_event", "GdkEventCrossing",
-    "configure_event", "GdkEventConfigure",
-    "focus_in_event", "GdkEventFocus",
-    "focus_out_event", "GdkEventFocus",
-    "map_event", "GdkEvent",
-    "unmap_event", "GdkEvent",
-    "property_notify_event", "GdkEventProperty",
-    "selection_clear_event", "GdkEventSelection",
-    "selection_request_event", "GdkEventSelection",
-    "selection_notify_event", "GdkEventSelection",
-    "proximity_in_event", "GdkEventProximity",
-    "proximity_out_event", "GdkEventProximity",
-    "drag_begin_event", "GdkEventDragBegin",
-    "drag_request_event", "GdkEventDragRequest",
-    "drag_end_event", "GdkEventDragRequest",
-    "drop_enter_event", "GdkEventDropEnter",
-    "drop_leave_event", "GdkEventDropLeave",
-    "drop_data_available_event", "GdkEventDropDataAvailable",
-    "other_event", "GdkEventOther",
-    "client_event", "GdkEventClient",
-    "no_expose_event", "GdkEventNoExpose",
-    "visibility_notify_event", "GdkEventVisibility",
-    "window_state_event", "GdkEventWindowState",
-    "scroll_event", "GdkEventScroll",
-    NULL
-  };
-
-  gint i;
-
-  for (i = 0; GbGDKEvents[i]; i += 2)
-    {
-      if (!strcmp (signal_name, GbGDKEvents[i]))
-	return GbGDKEvents[i + 1];
-    }
-  return "GdkEvent";
 }
 
 
