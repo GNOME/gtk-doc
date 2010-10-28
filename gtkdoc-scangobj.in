@@ -521,7 +521,9 @@ static void
 output_object_hierarchy (void)
 {
   FILE *fp;
-  gint i;
+  gint i,j;
+  GType root, type;
+  GType root_types[$ntypes] = { G_TYPE_INVALID, };
 
   fp = fopen (hierarchy_filename, "w");
   if (fp == NULL)
@@ -533,18 +535,27 @@ output_object_hierarchy (void)
   output_hierarchy (fp, G_TYPE_INTERFACE, 0);
   
   for (i=0; object_types[i]; i++) {
-    if (!g_type_parent (object_types[i]) &&
-      (object_types[i] != G_TYPE_OBJECT) &&
-      (object_types[i] != G_TYPE_INTERFACE)
-    ) {
-      output_hierarchy (fp, object_types[i], 0);
+    root = object_types[i];
+    while ((type = g_type_parent (root))) {
+      root = type;
+    }
+    if ((root != G_TYPE_OBJECT) && (root != G_TYPE_INTERFACE)) {
+      for (j=0; root_types[j]; j++) {
+        if (root == root_types[j]) {
+          root = G_TYPE_INVALID; break;
+        }
+      }
+      if(root) {
+        root_types[j] = root;
+        output_hierarchy (fp, root, 0);
+      }
     }
   }
 
   fclose (fp);
 }
 
-/* This is called recursively to output the hierarchy of a widget. */
+/* This is called recursively to output the hierarchy of a object. */
 static void
 output_hierarchy (FILE  *fp,
 		  GType  type,
