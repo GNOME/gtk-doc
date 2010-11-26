@@ -56,8 +56,8 @@ CFILE_GLOB=
 # e.g. EXTRA_HFILES=$(top_srcdir}/contrib/extra.h
 EXTRA_HFILES=
 
-# Header files to ignore when scanning. Use base file name, no paths
-# e.g. IGNORE_HFILES=gtkdebug.h gtkintl.h
+# Header files or dirs to ignore when scanning. Use base file/dir names
+# e.g. IGNORE_HFILES=gtkdebug.h gtkintl.h private_code
 IGNORE_HFILES=
 
 # Images to copy into HTML directory.

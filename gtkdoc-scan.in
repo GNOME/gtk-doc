@@ -90,7 +90,8 @@ gtkdoc-scan version @VERSION@ - scan header files for public symbols
 
 --module=MODULE_NAME       Name of the doc module being parsed
 --source-dir=DIRNAME       Directories containing the source files to scan
---ignore-headers=FILES     A space-separated list of header files not to scan
+--ignore-headers=FILES     A space-separated list of header files/dirs not to
+                           scan
 --output-dir=DIRNAME       The directory where the results are stored
 --deprecated-guards=GUARDS A |-separated list of symbols used as deprecation
                            guards
