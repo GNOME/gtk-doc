@@ -1,5 +1,11 @@
 ## Process this file with automake to produce Makefile.in
 
+# this tests bootstraps gtk-doc, that includes generating a default 
+# DOC_MAIN_SGML_FILE
+# right now that fails with parallel make, as make cannot see that what is a
+# dependency for another target is generated as needed
+MAKEFLAGS = -j1
+
 # We require automake 1.6 at least.
 AUTOMAKE_OPTIONS = 1.6
 
