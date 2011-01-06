@@ -1309,6 +1309,14 @@ output_object_args (FILE *fp, GType object_type)
     }
 #endif
 
+#ifdef GTK_IS_CELL_AREA_CLASS
+    if (!child_prop && GTK_IS_CELL_AREA_CLASS (class)) {
+      properties = gtk_cell_area_class_list_cell_properties (class, &n_properties);
+      child_prop = TRUE;
+      continue;
+    }
+#endif
+
 #ifdef GTK_IS_WIDGET_CLASS
 #if GTK_CHECK_VERSION(2,1,0)
     if (!style_prop && GTK_IS_WIDGET_CLASS (class)) {
