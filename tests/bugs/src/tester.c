@@ -253,11 +253,11 @@ bug_610257(const unsigned char *der, int *len)
 
 /**
  * bug_623968a:
- * 
+ *
  * <para>test</para>
  * <refsect3>
  *   <title>subsect</title>
- *   <para>test</para>  
+ *   <para>test</para>
  * </refsect3>
  **/
 void
@@ -267,12 +267,12 @@ bug_623968a(void)
 
 /**
  * bug_623968b:
- * 
+ *
  * test
  *
  * <refsect3>
  *   <title>subsect</title>
- *   <para>test</para>  
+ *   <para>test</para>
  * </refsect3>
  **/
 void
@@ -282,7 +282,7 @@ bug_623968b(void)
 
 /**
  * bug_623968c:
- * 
+ *
  * <para>test</para>
  **/
 void
@@ -295,7 +295,7 @@ bug_623968c(void)
  * bug_624200a:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624200
- * 
+ *
  * Returns: result
  */
 const char * const *
@@ -308,7 +308,7 @@ bug_624200a(void)
  * bug_624200b:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624200
- * 
+ *
  * Returns: result
  */
 const char ** const
@@ -316,6 +316,18 @@ bug_624200b(void)
 {
   return NULL;
 }
+
+/**
+ * bug_638330:
+ * @arg1: arg1
+ * @data: data
+ * @length: length
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=638330
+ */
+void (*bug_638330) (void *arg1,
+     const unsigned char *data,
+     unsigned int length) = NULL;
 
 
 /* internal function */

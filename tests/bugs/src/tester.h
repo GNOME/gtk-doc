@@ -21,7 +21,7 @@ typedef enum {
 
 
 
-/** 
+/**
  * bug_481811:
  * @x: argument
  *
@@ -169,7 +169,7 @@ typedef int (*bug_512155c_function_pointer_t) (unsigned int arg1,
  * BUG_530758:
  *
  * <![CDATA[http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1]]>
- * 
+ *
  * <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1">Test</ulink>
  */
 #define BUG_530758 "dummy"
@@ -262,7 +262,7 @@ unsigned int bug_602518c(void);
  */
 union _Bug165425a {
   int i;
-  float f; 
+  float f;
 };
 typedef union _Bug165425a Bug165425a;
 
@@ -333,6 +333,10 @@ gchar *_bug_000000a (const gchar *name);
 #ifndef __GTK_DOC_IGNORE__
 extern int bug_512565(void);
 #endif
+
+void (*bug_638330) (void *arg1,
+     const unsigned char *data,
+     unsigned int length);
 
 #endif // GTKDOC_TESTER_H
 

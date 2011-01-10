@@ -128,7 +128,7 @@ sub ParseStructDeclaration {
     if (!scalar($declaration =~ m/(?:struct|union)\s+\w*\s*\{/msg)) {
 	die "Declaration '$declaration' does not begin with struct/union [NAME] {\n";
     }
-    
+
     #print "DEBUG: public fields in struct/union: $declaration\n";
 
     # Treat lines in sequence, allowing singly nested anonymous structs
@@ -140,7 +140,7 @@ sub ParseStructDeclaration {
 
 	# FIXME: Just ignore nested structs and unions for now
 	next if $line =~ /{/;
-        
+
         # ignore preprocessor directives
         while ($line =~ /^#.*?\n\s*(.*)/msg) {
             $line=$1;
@@ -252,7 +252,7 @@ sub ParseEnumDeclaration {
     if ($declaration =~ m/enum\s+\S+\s*;/msg) {
 	return ();
     }
-    
+
     # Remove private symbols
     # Assume end of declaration if line begins with '}'
     $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/.*?(?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
@@ -274,7 +274,7 @@ sub ParseEnumDeclaration {
     $declaration =~ s/\([^)]+\)//g;
 
     # Remove comma from comma - possible whitespace - closing brace sequence
-    # since it is legal in GNU C and C99 to have a trailing comma but doesn't 
+    # since it is legal in GNU C and C99 to have a trailing comma but doesn't
     # result in an actual enum member
 
     $declaration =~ s/,(\s*})/$1/g;
@@ -293,7 +293,7 @@ sub ParseEnumDeclaration {
         while ($line =~ /^#.*?\n\s*(.*)/msg) {
             $line=$1;
         }
-        
+
 	if ($line =~ m/^(\w+)\s*(=.*)?$/msg) {
 	    push @result, $1;
 
@@ -332,9 +332,9 @@ sub ParseEnumDeclaration {
 
 sub ParseFunctionDeclaration {
     my ($declaration, $typefunc, $namefunc) = @_;
-    
+
     my @result = ();
-    
+
     my ($param_num) = 0;
     while ($declaration ne "") {
         #print "$declaration";
@@ -360,8 +360,8 @@ sub ParseFunctionDeclaration {
 
         # allow alphanumerics, '_', '[' & ']' in param names
         # Try to match a standard parameter
-        #                                $1                                                                                                                                       $2                             $3                                                                                                $4       $5
-        } elsif ($declaration =~ s/^\s*((?:G_CONST_RETURN|G_GNUC_[A-Z_]+\s+|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const\b|restrict\b|G_GNUC_[A-Z_]+\b)?\s*\*?\s*(?:const\b|restrict\b|G_GNUC_[A-Z_]+\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
+        #                               $1                                                                                                                                            $2                             $3                                                                                                $4       $5
+        } elsif ($declaration =~ s/^\s*((?:(?:G_CONST_RETURN|G_GNUC_[A-Z_]+\s+|unsigned long|unsigned short|signed long|signed short|unsigned|signed|long|short|volatile|const)\s+)*)((?:struct\b|enum\b)?\s*\w+)\s*((?:(?:const\b|restrict\b|G_GNUC_[A-Z_]+\b)?\s*\*?\s*(?:const\b|restrict\b|G_GNUC_[A-Z_]+\b)?\s*)*)(\w+)?\s*((?:\[\S*\])*)\s*[,\n]//) {
 	    my $pre	= defined($1) ? $1 : "";
 	    my $type	= $2;
 	    my $ptr	= defined($3) ? $3 : "";
@@ -407,7 +407,7 @@ sub ParseFunctionDeclaration {
 	    my $func_ptr = $6;
 	    my $name = $7;
 	    my $func_params = defined($8) ? $8 : "";
-            
+
             #if (!defined($type)) { print "## no type\n"; };
             #if (!defined($ptr1)) { print "## no ptr1\n"; };
             #if (!defined($func_ptr)) { print "## no func_ptr\n"; };
@@ -445,12 +445,12 @@ sub ParseFunctionDeclaration {
 
 sub ParseMacroDeclaration {
     my ($declaration, $namefunc) = @_;
-    
+
     my @result = ();
 
     if ($declaration =~ m/^\s*#\s*define\s+\w+\(([^\)]*)\)/) {
 	my $params = $1;
-	
+
 	$params =~ s/\\\n//g;
 	foreach $param (split (/,/, $params)) {
             $param =~ s/^\s+//;
@@ -476,10 +476,10 @@ sub ParseMacroDeclaration {
 
 sub LogWarning {
     my ($file, $line, $message) = @_;
-    
+
     $file="unknown" if !defined($file);
     $line="0" if !defined($line);
-    
+
     print "$file:$line: warning: $message\n"
 }
 
