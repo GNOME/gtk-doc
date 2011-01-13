@@ -12,8 +12,8 @@ AC_INIT([gtk-doc], [gtk_doc_version], [http://bugzilla.gnome.org/enter_bug.cgi?p
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([gtkdoc-common.pl.in])
 
-AM_INIT_AUTOMAKE([check-news std-options])
-AM_MAINTAINER_MODE
+AM_INIT_AUTOMAKE([check-news std-options -Wno-portability])
+AM_MAINTAINER_MODE([enable])
 
 # Support silent build rules, requires at least automake-1.11. Disable
 # by either passing --disable-silent-rules to configure or passing V=1
@@ -24,9 +24,7 @@ dnl Forcing a non-null ACTION-IF-NOT-FOUND disables scrollkeeper if
 dnl gnome-doc-utils is not found but does not invalidate the build.
 GNOME_DOC_INIT([],[],enable_scrollkeeper=no)
 
-dnl make sure $ACLOCAL_FLAGS are used during a rebuild.
-AC_SUBST([ACLOCAL_AMFLAGS], ["\${ACLOCAL_FLAGS}"])
-
+# Check for programs
 AC_ISC_POSIX
 AC_PROG_CC
 AC_PROG_LIBTOOL
