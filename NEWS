@@ -1,9 +1,59 @@
-GTK-Doc 1.16    (xxx xx xxxx)
+GTK-Doc 1.16    (Jan 14 2011)
 ============
 
  o gtkdoc-check can do more checks, one might need to update Makefile.am from
    the examples/Makefile.am
 
+ Changes
+
+ o 625776 : serialise doubles and floats always with a decimal dot
+ o 627269 : link to signalflags docs from signal descriptions
+ o 467488 : GTK+ man pages request
+ o 481811 : Inline function bodies are confused with declarations
+ o 501107 : EXTRA_DIST automake warnings
+ o 512565 : add GTK_DOC_IGNORE
+ o 518427 : documentation best pratices needed
+ o 597937 : Function pointers as parameters to other functions are parsed improperly
+ o 612028 : gtkdoc-fixxref should call /usr/bin/vim -n -e -u NONE -T xterm
+ o 617478 : Tooltip is a nuisance
+ o 618379 : Navigation is hiding anchors title
+ o 620249 : invalid xml for object_index with (n_objects % 3) == 0
+ o 621931 : support GType and GVariant types
+ o 622971 : List of typos in the GTK-doc manual
+ o 623777 : G_TYPE_STRV in signals generate wrong docs
+ o 623968 : gtkdoc-mkdb generates invalid xml from sgml in inline comments
+ o 624199 : parser picks up contents of large macros
+ o 624200 : 'const' confuses the parser
+ o 627223 : gtkdoc-fixxref vim highlight fails on xhtml suffix
+ o 627920 : `make check` rule to list xml files missing from DOC_MAIN_SGML_FILE
+ o 628611 : gtk-doc &gt; = 1.13 creates automagic dependencies on syntax highlighters
+ o 628794 : Issue in gtkdoc-mkman.in
+ o 630288 : Fix 'scope notified' annotation
+ o 631336 : remove lists of gtk+ signal args in gtkdoc-scanobj and -scangobj
+ o 632587 : gtkdoc-scanner fails to identify (closure) annotation
+ o 638330 : const in parameter list is ignored
+ o 638831 : Support GTK+ 3 cell properties
+
+ Contributors
+
+ Bruno Brouard
+ Christian Persch
+ Claude Paroz
+ Gilles Dartiguelongue
+ Javier Jardón
+ Jorge González
+ Maarten Bosmans
+ Mario Blättermann
+ Matej Urbančič
+ Matthias Clasen
+ Pablo Castellano
+ P. F. Chimento
+ Philip Withnall
+ Rodrigo Aliste
+ Simón Pena
+ Stefan Kost
+ Tim-Philipp Müller
+ Vasilis Tsivikis
 
 GTK-Doc 1.15    (May 21 2010)
 ============
