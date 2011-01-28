@@ -73,12 +73,12 @@ $(REPORT_FILES): sgml-build.stamp
 
 setup-build.stamp::
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
-	   cp -a $(abs_srcdir)/$(DOC_MAIN_SGML_FILE) $(abs_builddir)/; \
-	   cp -a $(abs_srcdir)/$(DOC_MODULE)* $(abs_builddir)/; \
+	   cp -r $(abs_srcdir)/$(DOC_MAIN_SGML_FILE) $(abs_builddir)/; \
+	   cp -r $(abs_srcdir)/$(DOC_MODULE)* $(abs_builddir)/; \
 	   if test "x$(content_files) $(expand_content_files)" != "x" ; then \
 	       for file in $(content_files) $(expand_content_files) ; do \
 	           test -f $(abs_srcdir)/$$file && \
-	               cp -a $(abs_srcdir)/$$file $(abs_builddir)/; \
+	               cp -r $(abs_srcdir)/$$file $(abs_builddir)/; \
 	       done \
 	   fi \
 	fi

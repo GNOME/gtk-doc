@@ -73,12 +73,12 @@ $(REPORT_FILES): sgml-build.stamp
 
 setup-build.stamp::
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
-	   cp -a $(abs_srcdir)/$(DOC_MAIN_SGML_FILE) $(abs_builddir)/; \
-	   cp -a $(abs_srcdir)/$(DOC_MODULE)* $(abs_builddir)/; \
+	   cp -r $(abs_srcdir)/$(DOC_MAIN_SGML_FILE) $(abs_builddir)/; \
+	   cp -r $(abs_srcdir)/$(DOC_MODULE)* $(abs_builddir)/; \
 	   if test "x$(content_files) $(expand_content_files)" != "x" ; then \
 	       for file in $(content_files) $(expand_content_files) ; do \
 	           test -f $(abs_srcdir)/$$file && \
-	               cp -a $(abs_srcdir)/$$file $(abs_builddir)/; \
+	               cp -r $(abs_srcdir)/$$file $(abs_builddir)/; \
 	       done \
 	   fi \
 	fi
@@ -117,7 +117,7 @@ sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DO
 	for i in $(DOC_SOURCE_DIR) ; do \
 	    _source_dir="$${_source_dir} --source-dir=$$i" ; \
 	done ; \
-	gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $${_source_dir} $(MKDB_OPTIONS)  
+	gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $${_source_dir} $(MKDB_OPTIONS)
 	@touch sgml-build.stamp
 
 sgml.stamp: sgml-build.stamp
