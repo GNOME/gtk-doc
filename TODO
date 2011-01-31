@@ -29,7 +29,7 @@ Developers can also add items here :)
 * can we deprecate title in the sectionfile and request people to have this in
   the SECTION comment?
 
-       
+
 = More abbreviations =
 * expand urls (needds more work, see gtkdoc-mkdb : ExpandAbbreviations)
 
@@ -48,13 +48,22 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
   * the Makefile uses $(DESTDIR)$(TARGET_DIR)
     where TARGET_DIR = $(HTML_DIR)/$(DOC_MODULE)
     http://www.gnu.org/software/libtool/manual/automake/DESTDIR.html
-    
-* $MODULE-unused.txt is produced in gtkdoc-mktmpl only
-  * we won't find unused doc blobs in notmpl build
-  * we should add mktmpl::CheckAllDeclarationsOutput() to mkdb (call it after
-    OutputSGML), but only call it if there is no tmpl dir or
-    remove writing the unused.txt in mktmpl.txt
 
+
+= Extensibility =
+We'd like to extend gtk-doc to understand conventions/features of gobject libs.
+Ideally libs register their extension hooks, so that other libs that use these
+libs can benefit from the extensions too.
+
+== custom get_types collector ==
+- the default method takes the types from a type file
+- gstreamer plugin docs take a list of types from the gst plugin registry
+
+== custom properties ==
+- gtk has style and child properties
+
+== extra gobject property flags ==
+- gstreamer has 'controllable' properties
 
 = Output =
 * http://sagehill.net/docbookxsl/index.html
@@ -84,7 +93,7 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
    unrtf -t ps tester-docs.rtf >tester-docs.ps
    unrtf -t latex tester-docs.rtf >tester-docs.tex
    - bad output
-  
+
 
 = Warnings =
 Bugzilla has some requests for extra warnings. We should support a common
@@ -93,9 +102,9 @@ should pass the flags from an env-var (GTKDOC_OPTIONS). The env-var should be
 used after the regular flags, so that the env-var can override hardcoded
 settings (in Makefile.am).
 
-Lets take this warning for the example: 
+Lets take this warning for the example:
   "Symbol name not found at the start of the comment block."
-  
+
 Version 1: (template "warn-xxx!, warn-yyy!")
 --warn-missing-symbol-at-comment-start
 --no-warn-missing-symbol-at-comment-start
@@ -148,7 +157,7 @@ more warnings:
     language={C,C++,JavaScript,Perl,Python,...}
   * devhelp could show a selector for the language
   * need to get existing python/~mm docs to use it, gtk-doc could output
-    language=C for own docs 
+    language=C for own docs
 == installation ==
 * need to install each book with a prefix
 * would be good to have a language attribute in book tag to allow filter by language
@@ -387,8 +396,8 @@ grep "gst_caps_is_always_compatible" tags
         0m33.282s   0m29.266s	0m4.012s
       - removing the gentext calls for nav-bar alt tags does not help
 
-      
-  - try plain docbook xslt to see if maybe we have bad xslt templates in the 
+
+  - try plain docbook xslt to see if maybe we have bad xslt templates in the
     customisation layer (gtk-doc.xsl)
 
   - we could do the xinlcude processing once and use it for both html and pdf
@@ -396,32 +405,32 @@ grep "gst_caps_is_always_compatible" tags
     real        user       sys
     0m4.846s    0m4.434s   0m0.147s
     0m4.842s    0m4.386s   0m0.145s
-    
-    
+
+
     time xmllint --nonet --xinclude ../tester-docs.xml >./tester-docs-all.xml
     real        user       sys
     0m0.596s    0m0.546s   0m0.023s
-    
+
     time /usr/bin/xsltproc 2>../xslt5.log --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ./tester-docs-all.xml
     real        user       sys
     0m4.167s    0m3.834s   0m0.106s
     0m4.248s    0m3.851s   0m0.114s
-    
-    
+
+
     time xmllint --nonet --c14n --xinclude ../tester-docs.xml >./tester-docs-all2.xml
-    
+
     real        user       sys
     0m0.700s    0m0.636s   0m0.034s
-    
+
     time /usr/bin/xsltproc 2>../xslt6.log --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ./tester-docs-all2.xml
-    
+
     real        user       sys
     0m3.344s    0m3.026s   0m0.109s
     0m3.372s    0m3.037s   0m0.115s
-    
-    
+
+
     l ../tester-docs.xml ./tester-docs-all*.xml
-    
+
   - we could also try to compact the installed xslt
     xmllint --nonet --c14n --xinclude gtk-doc.xsl | sed -ne '/<!--/ { :c; /-->/! { N; b c; }; /-->/s/<!--.*-->//g }; /^  *$/!p;' | sed '/^$/d' >gtk-doc.pre.xsl
     - unfortunately there is no way to ask xsltproc to pre-transform an xslt, that could
@@ -436,7 +445,7 @@ grep "gst_caps_is_always_compatible" tags
 - perl regexps
   - not really an issue, but we can improve by compiling the regexps
     http://stackoverflow.com/questions/550258/does-the-o-modifier-for-perl-regular-expressions-still-provide-any-benefit
-  - we use $&, $', and $` in several places (comple match, pre-match and post-match). 
+  - we use $&, $', and $` in several places (comple match, pre-match and post-match).
     Those are slow and once they are used a single time perl prepares them for every match operation.
     Since perl 5.10 one can use the /p flag for matches where this is needed and then use
     ${^PREMATCH} , ${^MATCH}  and ${^POSTMATCH}
