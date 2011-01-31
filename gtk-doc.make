@@ -23,12 +23,15 @@ GPATH = $(srcdir)
 
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
-EXTRA_DIST = 				\
+SETUP_FILES = \
 	$(content_files)		\
 	$(HTML_IMAGES)			\
 	$(DOC_MAIN_SGML_FILE)		\
 	$(DOC_MODULE)-sections.txt	\
 	$(DOC_MODULE)-overrides.txt
+
+EXTRA_DIST = 				\
+	$(SETUP_FILES)
 
 DOC_STAMPS=setup-build.stamp scan-build.stamp tmpl-build.stamp sgml-build.stamp \
 	html-build.stamp pdf-build.stamp \
@@ -73,10 +76,9 @@ $(REPORT_FILES): sgml-build.stamp
 
 setup-build.stamp::
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
-	   cp -r $(abs_srcdir)/$(DOC_MAIN_SGML_FILE) $(abs_builddir)/; \
-	   cp -r $(abs_srcdir)/$(DOC_MODULE)* $(abs_builddir)/; \
-	   if test "x$(content_files) $(expand_content_files)" != "x" ; then \
-	       for file in $(content_files) $(expand_content_files) ; do \
+	   files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
+	   if test "x$$files" != "x" ; then \
+	       for file in $$files ; do \
 	           test -f $(abs_srcdir)/$$file && \
 	               cp -r $(abs_srcdir)/$$file $(abs_builddir)/; \
 	       done \
@@ -182,7 +184,7 @@ distclean-local:
 	rm -rf xml $(REPORT_FILES) $(DOC_MODULE).pdf \
 	    $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
 	if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
-	    rm -f $(DOC_MAIN_SGML_FILE) $(DOC_MODULE)*; \
+	    rm -f $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types; \
 	fi
 
 maintainer-clean-local: clean
