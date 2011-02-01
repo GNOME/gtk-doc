@@ -74,7 +74,7 @@ $(REPORT_FILES): sgml-build.stamp
 
 #### setup ####
 
-setup-build.stamp::
+setup-build.stamp:
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	   files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
 	   if test "x$$files" != "x" ; then \
@@ -84,6 +84,7 @@ setup-build.stamp::
 	       done \
 	   fi \
 	fi
+	@touch setup-build.stamp
 
 
 setup.stamp: setup-build.stamp
