@@ -39,6 +39,12 @@ cd test/gobject
 diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
 
 
+= Running =
+gtk-doc is using a makefile with several targets to get from sources to docs.
+It might be easier to have a gtk-doc tool that can run the other gtk-doc tools
+in the right order (ev. by importing them as modules). This could handle a few
+things nicer that the makefiles don't do well.
+
 = Issues =
 * gtkdoc-fixxref makefile targets use $HTML_DIR
   * HTML_DIR: The directory where gtk-doc generated documentation is installed
@@ -139,8 +145,10 @@ more warnings:
   * if gir-files would have the comments too (they are getting this now):
     * we could even drop scanning the sources
     * IDEs could use the gir-files to show doc-tooltips for symbols
+  * we might need yet another makefile flavour to use gir files
 * perl and xml
   * http://www.xml.com/pub/a/2001/04/18/perlxmlqstart1.html
+ 
 == binding docs ==
 * simmillar workflow to gettext
 * add gtkdoc-mk??? to generate binding doc templates
