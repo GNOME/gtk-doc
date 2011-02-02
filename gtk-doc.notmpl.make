@@ -25,7 +25,6 @@ TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
 SETUP_FILES = \
 	$(content_files)		\
-	$(HTML_IMAGES)			\
 	$(DOC_MAIN_SGML_FILE)		\
 	$(DOC_MODULE)-sections.txt	\
 	$(DOC_MODULE)-overrides.txt
@@ -139,7 +138,15 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	  mkhtml_options=--path="$(abs_srcdir)"; \
 	fi; \
 	cd html && gtkdoc-mkhtml $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
-	@test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) $(abs_builddir)/html )
+	-@test "x$(HTML_IMAGES)" = "x" || \
+	for file in $(HTML_IMAGES) ; do \
+	  if test -f $(abs_srcdir)/$$file ; then \
+	    cp $(abs_srcdir)/$$file $(abs_builddir)/html; \
+	  fi; \
+	  if test -f $(abs_builddir)/$$file ; then \
+	    cp $(abs_builddir)/$$file $(abs_builddir)/html; \
+	  fi; \
+	done;
 	@echo 'gtk-doc: Fixing cross-references'
 	@gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	@touch html-build.stamp
