@@ -76,13 +76,16 @@ $(REPORT_FILES): sgml-build.stamp
 
 setup-build.stamp:
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
+	   echo 'gtk-doc: Preparing build'; \
 	   files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
 	   if test "x$$files" != "x" ; then \
 	       for file in $$files ; do \
 	           test -f $(abs_srcdir)/$$file && \
-	               cp -r $(abs_srcdir)/$$file $(abs_builddir)/; \
+	               cp -p $(abs_srcdir)/$$file $(abs_builddir)/; \
 	       done \
-	   fi \
+	   fi; \
+	   test -f $(abs_srcdir)/tmpl && \
+	       cp -rp $(abs_srcdir)/tmpl $(abs_builddir)/; \
 	fi
 	@touch setup-build.stamp
 
@@ -117,6 +120,11 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 tmpl-build.stamp: setup.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
 	@echo 'gtk-doc: Rebuilding template files'
 	@gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
+	@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
+	  if test -w $(abs_srcdir) ; then \
+	    cp -rp $(abs_builddir)/tmpl $(abs_srcdir)/; \
+	  fi \
+	fi
 	@touch tmpl-build.stamp
 
 tmpl.stamp: tmpl-build.stamp
@@ -182,10 +190,11 @@ clean-local:
 	rm -rf .libs
 
 distclean-local:
-	rm -rf xml $(REPORT_FILES) $(DOC_MODULE).pdf \
+	rm -rf xml html $(REPORT_FILES) $(DOC_MODULE).pdf \
 	    $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
 	if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	    rm -f $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types; \
+	    rm -rf tmpl; \
 	fi
 
 maintainer-clean-local: clean

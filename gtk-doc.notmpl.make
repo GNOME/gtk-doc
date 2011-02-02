@@ -76,11 +76,12 @@ $(REPORT_FILES): sgml-build.stamp
 
 setup-build.stamp:
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
+	   echo 'gtk-doc: Preparing build'; \
 	   files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
 	   if test "x$$files" != "x" ; then \
 	       for file in $$files ; do \
 	           test -f $(abs_srcdir)/$$file && \
-	               cp -r $(abs_srcdir)/$$file $(abs_builddir)/; \
+	               cp -p $(abs_srcdir)/$$file $(abs_builddir)/; \
 	       done \
 	   fi \
 	fi
@@ -175,7 +176,7 @@ distclean-local:
 	fi
 
 maintainer-clean-local: clean
-	rm -rf html
+	rm -rf xml html
 
 install-data-local:
 	@installfiles=`echo $(builddir)/html/*`; \
