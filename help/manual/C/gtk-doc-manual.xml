@@ -74,7 +74,7 @@
         or initial caps.
       </para>
     </legalnotice>
-    
+
     <revhistory>
       <revision>
         <revnumber>1.16.1</revnumber>
@@ -422,7 +422,7 @@ GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
           </programlisting>
         </example>
       </para>
-      
+
       <para>
         This will require all developers to have gtk-doc installed. If it is
         okay for your project to have optional api-doc build setup, you can
@@ -441,7 +441,7 @@ AM_CONDITIONAL([ENABLE_GTK_DOC], false)
           </programlisting>
         </example>
       </para>
-      
+
       <para>
         The first argument is used to check for the gtkdocversion at configure time.
         The 2nd, optional argument is used by <application>gtkdocize</application>.
@@ -639,7 +639,7 @@ make
 	way of documenting code.
       </para>
     </note>
-    
+
     <para>
       The scanner can handle the majority of c headers fine. In the case of
       receiving warnings from the scanner that look like a special case, one can
@@ -751,7 +751,7 @@ make
         DocBook can do more that just links. One can also have lists, tables and
         examples. To enable the usage of SGML/XML tags inside doc-comments you
         need to have <option>--xml-mode</option> or <option>--sgml-mode</option>
-        in the variable <symbol>MKDB_OPTIONS</symbol> inside 
+        in the variable <symbol>MKDB_OPTIONS</symbol> inside
         <filename>Makefile.am</filename>.
       </para>
 
@@ -807,7 +807,7 @@ make
             <para>
               The name links the section documentation to the respective part in
               the <filename>&lt;package&gt;-sections.txt</filename> file. The
-              name give here should match the &lt;FILE&gt; tag in the 
+              name give here should match the &lt;FILE&gt; tag in the
               <filename>&lt;package&gt;-sections.txt</filename> file.
             </para>
           </listitem>
@@ -1158,7 +1158,7 @@ typedef struct _FooWidget {
           you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse
           behaviour.
         </para>
-        
+
         <para>
           Struct comment blocks can also be used for GObjects and GObjectClasses.
           It is usualy a good idea to add a comment blco for a class, if it has
@@ -1600,7 +1600,7 @@ gtk_arrow_get_type
         <command>make check</command> run.
       </para>
     </tip>
-    
+
     <para>
       One can also look at the files produced by the source code scanner:
       <filename>&lt;package&gt;-decl-list.txt</filename> and
@@ -1619,23 +1619,23 @@ gtk_arrow_get_type
       <filename>&lt;package&gt;.prerequisites.txt</filename> and
       <filename>&lt;package&gt;.signals.txt</filename>. If there are missing
       symbols in any of those, one can ask gtkdoc to keep the intermedia scanner
-      file for further analysis, but running it as 
+      file for further analysis, but running it as
       <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>.
     </para>
   </chapter>
-  
+
   <chapter id="documenting-others">
     <title>Documenting other interfaces</title>
-    
+
     <para>
       So far we have been using GTK-Doc to document the API of code. The next
       sections contain suggestions how the tools can be used to document other
       interfaces too.
     </para>
-    
+
     <sect1 id="commandline-interfaces">
       <title>Commandline options and man pages</title>
-      
+
       <para>
         As one can generate man pages for a docbook refentry as well, it sounds
         like a good idea to use it for that purpose. This way the interface is
@@ -1646,7 +1646,7 @@ gtk_arrow_get_type
         <title>Document the tool</title>
 
         <para>
-          Create one refentry file per tool. Following 
+          Create one refentry file per tool. Following
           <link linkend="settingup_docfiles">our example</link> we would call it
           <filename>meep/docs/reference/meeper/meep.xml</filename>. For the xml
           tags that should be used and can look at generated file in the xml
@@ -1673,10 +1673,10 @@ AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)
           </example>
         </para>
       </sect2>
-      
+
       <sect2 id="commandline-interfaces-make">
         <title>Adding the extra makefile rules</title>
-      
+
         <para>
           <example><title>Extra configure checks</title>
             <programlisting>
@@ -1701,7 +1701,7 @@ EXTRA_DIST += meep.xml
         </para>
       </sect2>
     </sect1>
-    
+
     <sect1 id="dbus-interfaces">
       <title>DBus interfaces</title>
 
@@ -1759,7 +1759,7 @@ http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)
       <seglistitem>
         <seg>A new class does not appear in the docs.</seg>
         <seg>
-          Is the new page xi:included from 
+          Is the new page xi:included from
           <filename>&lt;package&gt;-docs.{xml,sgml}</filename>.
         </seg>
       </seglistitem>
@@ -1807,7 +1807,22 @@ http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)
       </seglistitem>
     </segmentedlist>
   </chapter>
-    
+
+  <chapter id="contrib">
+    <title>Tools related to gtk-doc</title>
+
+    <para>
+      GtkDocPlugin - a <ulink url="http://trac-hacks.org/wiki/GtkDocPlugin">Trac GTK-Doc</ulink>
+      integration plugin, that adds api docs to a trac site and integrates with
+      the trac search.
+    </para>
+    <para>
+      Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since
+      tags in the api to determine the minimum required version.
+    </para>
+
+  </chapter>
+
   <!-- ======== Appendix: FDL ================================== -->
   &FDL;
 
