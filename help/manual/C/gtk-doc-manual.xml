@@ -379,7 +379,10 @@
       The next sections describe what steps to perform to integrate GTK-Doc into
       your project. Theses sections assume we work on a project called 'meep'.
       This project contains a library called 'libmeep' and
-      an end-user app called 'meeper'.
+      an end-user app called 'meeper'. We also assume you will be using autoconf
+      and automake. In addition section <link linkend="plain_makefiles">plain
+      makefiles or other build systems</link> will describe the basics needed to
+      work in a different build setup.
     </para>
 
     <sect1 id="settingup_docfiles">
@@ -616,6 +619,39 @@ make
         <filename>&lt;package&gt;-docs..xml</filename> (in the past .sgml),
         <filename>&lt;package&gt;-sections.txt</filename>,
         <filename>Makefile.am</filename>
+      </para>
+    </sect1>
+
+    <sect1 id="plain_makefiles">
+      <title>Integration with plain makefiles or other build systems</title>
+
+      <para>
+        In the case one does not want to use automake and therfore
+        <filename>gtk-doc.mak</filename> one will need to call the gtkdoc tools
+        in the right order in own makefiles (or other build tools).
+      </para>
+
+      <para>
+        <example><title>Documentation build steps</title>
+          <programlisting>
+<![CDATA[
+DOC_MODULE=meep
+// sources have changed
+gtkdoc-scan --module=$(DOC_MODULE) --source-dir=...
+gtkdoc-scangobj --module=$(DOC_MODULE)
+gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml
+// xml files have changed
+mkdir html
+cd html && gtkdoc-mkhtml $(DOC_MODULE) ../meep-docs.xml
+gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
+]]>
+          </programlisting>
+        </example>
+      </para>
+
+      <para>
+        One will need to look at the <filename>Makefile.am</filename> and
+        <filename>gtk-doc.mak</filename> to pick the extra options needed.
       </para>
     </sect1>
 
