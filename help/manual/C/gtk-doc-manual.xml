@@ -586,7 +586,7 @@ gtkdocize || exit 1
         The first make run generates several additional files in the doc-dirs.
         The important ones are:
         <filename>&lt;package&gt;.types</filename>,
-        <filename>&lt;package&gt;-docs.sgml</filename>,
+        <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml),
         <filename>&lt;package&gt;-sections.txt</filename>.
       </para>
       <para>
@@ -612,9 +612,9 @@ make
       <para>
         As a rule of the thumb, it's those files you edit, that should go under
         version control. For typical projects it's these files:
-        <filename>&lt;package&gt;.types</filename>
-        <filename>&lt;package&gt;-docs.sgml</filename>
-        <filename>&lt;package&gt;-sections.txt</filename>
+        <filename>&lt;package&gt;.types</filename>,
+        <filename>&lt;package&gt;-docs..xml</filename> (in the past .sgml),
+        <filename>&lt;package&gt;-sections.txt</filename>,
         <filename>Makefile.am</filename>
       </para>
     </sect1>
@@ -1403,7 +1403,7 @@ typedef enum {
       There are a couple of extra files, that need to be maintained along with
       the inline source code comments:
       <filename>&lt;package&gt;.types</filename>,
-      <filename>&lt;package&gt;-docs.sgml</filename>,
+      <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml),
       <filename>&lt;package&gt;-sections.txt</filename>.
     </para>
 
