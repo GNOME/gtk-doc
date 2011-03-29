@@ -71,11 +71,11 @@ my %optctl = ('module' => \$MODULE,
 	      'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
 	      'outputsymbolswithoutsince' => \$OUTPUT_SYMBOLS_WITHOUT_SINCE
               );
-GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s", 
+GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s",
     "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols",
     "outputsymbolswithoutsince",
     "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help",
-    "sgml-mode", "xml-mode", "default-stability:s", "default-includes:s", 
+    "sgml-mode", "xml-mode", "default-stability:s", "default-includes:s",
     "output-format:s", "name-space:s");
 
 if ($PRINT_VERSION) {
@@ -132,7 +132,7 @@ if (! defined($OUTPUT_FORMAT) || ($OUTPUT_FORMAT eq "")) {
             $OUTPUT_FORMAT = lc($1);
         }
     }
-    
+
 } else {
     $OUTPUT_FORMAT = lc($OUTPUT_FORMAT);
 }
@@ -428,7 +428,7 @@ if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
 
 sub OutputObjectList {
     my $cols = 3;
-    
+
     # FIXME: use $OUTPUT_FORMAT
     # my $old_object_index = "$SGML_OUTPUT_DIR/object_index.$OUTPUT_FORMAT";
     my $old_object_index = "$SGML_OUTPUT_DIR/object_index.sgml";
@@ -825,7 +825,7 @@ EOF
                         $prerequisites .= $prereqs;
                         $derived .= $der;
                     }
-    
+
                     # Note that the declaration has been output.
                     $DeclarationOutput{$symbol} = 1;
                 } elsif ($subsection ne "Standard" && $subsection ne "Private") {
@@ -847,7 +847,7 @@ EOF
                         $filename = $title;
                     }
                     $filename =~ s/\s/_/g;
-        
+
                     $section_id = $SourceSymbolDocs{"$TMPL_DIR/$filename:Section_Id"};
                     if (defined ($section_id) && $section_id !~ m/^\s*$/) {
                         # Remove trailing blanks and use as is
@@ -918,11 +918,11 @@ sub OutputIndex {
     print (OUTPUT "$header<indexdiv>\n");
 
     #print "generate $basename index (".%apiindex." entries)\n";
-    
+
     # do a case insensitive sort while chopping off the prefix
     foreach my $hash (
         sort { $$a{criteria} cmp $$b{criteria} }
-        map { my $x = uc($_); $x =~ s/^$NAME_SPACE\_?(.*)/$1/i; { criteria => $x, original => $_, short => $1 } } 
+        map { my $x = uc($_); $x =~ s/^$NAME_SPACE\_?(.*)/$1/i; { criteria => $x, original => $_, short => $1 } }
         keys %apiindex) {
 
         $symbol = $$hash{original};
@@ -1104,10 +1104,10 @@ EOF
         if(defined($AnnotationDefinition{$annotation})) {
             my $def = $AnnotationDefinition{$annotation};
             my $curletter = uc(substr($annotation,0,1));
-    
+
             if ($curletter ne $lastletter) {
                 $lastletter = $curletter;
-          
+
                 if ($divopen == 1) {
                     print (OUTPUT "</glossdiv>\n");
                 }
@@ -1327,7 +1327,7 @@ sub OutputMacro {
         if (length ($symbol) < $SYMBOL_FIELD_WIDTH) {
             $synop .= (' ' x ($SYMBOL_FIELD_WIDTH - length ($symbol)));
         }
-    
+
         $synop .= "(";
         for (my $i = 1; $i <= $#fields; $i += 2) {
             my $field_name = $fields[$i];
@@ -2003,15 +2003,15 @@ sub OutputFunction {
     $desc .= OutputSymbolExtraLinks($symbol);
 
     $desc  .= "<programlisting>${ret_type_output}$symbol_desc_output(";
-    
+
     my @fields = ParseFunctionDeclaration($declaration, \&MakeXRef,
 					sub {
 					    &tagify($_[0],"parameter");
 					});
-    
+
     for (my $i = 1; $i <= $#fields; $i += 2) {
         my $field_name = $fields[$i];
-        
+
         if ($field_name eq "Varargs") {
             $field_name = "...";
         }
@@ -2027,7 +2027,7 @@ sub OutputFunction {
                 . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
                 . " $field_name";
         }
-        
+
     }
 
     $synop .= ");\n";
@@ -2096,7 +2096,7 @@ sub OutputParamDescriptions {
 	    my $param_name = $$params[$j];
 	    my $param_desc = $$params[$j + 1];
 	    my $param_annotations = "";
-	    
+
             ($param_desc,$param_annotations) = & ExpandAnnotation($symbol, $param_desc);
             $param_desc = &ExpandAbbreviations($symbol, $param_desc);
             $param_desc .= $param_annotations;
@@ -2175,7 +2175,7 @@ sub OutputParamDescriptions {
             $AllIncompleteSymbols{$symbol}="<parameters>";
         }
     }
-    
+
     return $output;
 }
 
@@ -2237,7 +2237,7 @@ sub OutputSGMLFile {
     my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $implementations, $prerequisites, $derived, $file_objects) = @_;
 
     #print "Output sgml for file $file with title '$title'\n";
-    
+
     # The edited title overrides the one from the sections file.
     my $new_title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
     if (defined ($new_title) && $new_title !~ m/^\s*$/) {
@@ -2324,7 +2324,7 @@ sub OutputSGMLFile {
     if ($include_output ne '') {
         $include_output = "\n$include_output\n";
     }
-    
+
     my $extralinks = OutputSectionExtraLinks($title,"Section:$file");
 
     my $old_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT";
@@ -2631,7 +2631,7 @@ sub ExpandAnnotation {
         my @annotations;
         my $annotation;
         $param_desc = $';
-        
+
         @annotations = split(/\)\s*\(/,$1);
         foreach $annotation (@annotations) {
             # need to search for the longest key-match in %AnnotationDefinition
@@ -2725,9 +2725,14 @@ sub ExpandAbbreviationsCallback {
     # We are outside any CDATA or <programlisting> sections, so we expand
     # any gtk-doc abbreviations.
 
+    # Convert '@param()'
+    # FIXME: we could make those also links ($symbol.$2), but that would be less
+    # useful as the link target is a few lines up or down
+    $text =~ s/(\A|[^\\])\@(\w+((\.|->)\w+)*)\s*\(\)/$1<parameter>$2()<\/parameter>/g;
+
     # Convert 'function()' or 'macro()'.
     # if there is abc_*_def() we don't want to make a link to _def()
-    # FIXME: also handle abc(....) : but that would need to be done recursively :/
+    # FIXME: also handle abc(def(....)) : but that would need to be done recursively :/
     $text =~ s/([^\*.\w])(\w+)\s*\(\)/$1.&MakeXRef($2, &tagify($2 . "()", "function"));/eg;
     # handle #Object.func()
     $text =~ s/(\A|[^\\])#([\w\-:\.]+[\w]+)\s*\(\)/$1.&MakeXRef($2, &tagify($2 . "()", "function"));/eg;
@@ -2744,7 +2749,7 @@ sub ExpandAbbreviationsCallback {
     # Convert '#symbol', but not '\#symbol'.
     $text =~ s/(\A|[^\\])#([\w\-:\.]+[\w]+)/$1.&MakeHashXRef($2, "type");/eg;
     $text =~ s/\\#/#/g;
-    
+
     # Expand urls
     # FIXME: should we skip urls that are already tagged? (e.g. <literal>http://...</literal>)
     # this is apparently also called for markup and not just for plain text
@@ -2800,7 +2805,7 @@ sub MakeHashXRef {
     if ($tag ne "") {
       $text = tagify ($text, $tag);
     }
-    
+
     return &MakeXRef($symbol, $text);
 }
 
@@ -2917,7 +2922,7 @@ sub MakeIndexterms {
   my ($symbol, $id) = @_;
   my $terms =  "";
   my $sortas = "";
-  
+
   # make the index useful, by ommiting the namespace when sorting
   if ($NAME_SPACE ne "") {
     if ($symbol =~ m/^$NAME_SPACE\_?(.*)/i) {
@@ -3398,7 +3403,7 @@ sub GetSignals {
 	    if ($flags_string)
 	      {
 		$synop .= ": $flags_string\n";
-		
+
 		$pad = ' ' x (5 + $name_len - length("user_data"));
 		$desc  .= "$pad : $flags_string</programlisting>\n";
 	      }
@@ -3796,7 +3801,7 @@ sub ScanSourceFile {
                          # don't warn for signals and properties
                          #if ($symbol !~ m/::?(.*)/) {
                          if (defined $DeclarationTypes{$symbol}) {
-                             &LogWarning ($file, $., 
+                             &LogWarning ($file, $.,
                                  "$symbol is deprecated in the inline comments, but no deprecation guards were found around the declaration.".
                                  " (See the --deprecated-guards option for gtkdoc-scan.)");
                          }
@@ -4070,10 +4075,10 @@ sub OutputMissingDocumentation {
     my $buffer = "";
     my $buffer_deprecated = "";
     my $buffer_descriptions = "";
-    
+
     open(UNDOCUMENTED, ">$new_undocumented_file")
       || die "Can't create $new_undocumented_file";
-    
+
     foreach $symbol (sort (keys (%AllSymbols))) {
         # FIXME: should we print LogWarnings for undocumented stuff?
         # DEBUG
@@ -4124,25 +4129,25 @@ sub OutputMissingDocumentation {
             }
         }
     }
-    
+
     $buffer .= "\n" . $buffer_deprecated . "\n" . $buffer_descriptions;
-    
+
     if ($total == 0) {
       $percent = 100;
     } else {
       $percent = ($n_documented / $total) * 100.0;
     }
-    
+
     printf UNDOCUMENTED "%.0f%% symbol docs coverage.\n", $percent;
     print UNDOCUMENTED "$n_documented symbols documented.\n";
     print UNDOCUMENTED "$n_incomplete symbols incomplete.\n";
     print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
-    
+
     print UNDOCUMENTED $buffer;
     close (UNDOCUMENTED);
-    
+
     return &UpdateFileIfChanged ($old_undocumented_file, $new_undocumented_file, 0);
-    
+
     printf "%.0f%% symbol docs coverage", $percent;
     print "($n_documented symbols documented, $n_incomplete symbols incomplete, " . ($total - $n_documented) . " not documented)\n";
     print "See $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n";
@@ -4205,8 +4210,8 @@ sub OutputUnusedSymbols {
         &LogWarning ($old_unused_file, 1, "$num_unused unused declarations.".
             "They should be added to $MODULE-sections.txt in the appropriate place.");
     }
-    
-    return &UpdateFileIfChanged ($old_unused_file, $new_unused_file, 0); 
+
+    return &UpdateFileIfChanged ($old_unused_file, $new_unused_file, 0);
 }
 
 
@@ -4311,7 +4316,7 @@ sub MergeSourceDocumentation {
 	## see if the symbol is documented in template
 	my $tmpl_doc = defined ($SymbolDocs{$symbol}) ? $SymbolDocs{$symbol} : "";
 	my $check_tmpl_doc =$tmpl_doc;
-	# remove all xml-tags and whitespaces 
+	# remove all xml-tags and whitespaces
 	$check_tmpl_doc =~ s/<.*?>//g;
 	$check_tmpl_doc =~ s/\s//g;
 	# anything left ?
@@ -4323,7 +4328,7 @@ sub MergeSourceDocumentation {
 	    $check_tmpl_doc = $tmpl_doc;
 	    $check_tmpl_doc =~ s/(\s|\n)//msg;
 	    if ($check_tmpl_doc eq "<para></para>") {
-	       $tmpl_doc = ""; 
+	       $tmpl_doc = "";
 	    }
 	}
 
@@ -4349,7 +4354,7 @@ sub MergeSourceDocumentation {
 	    # remove leading and training whitespaces
 	    $src_doc =~ s/^\s+//;
 	    $src_doc =~ s/\s+$//;
-	    
+
 	    # Don't output warnings for overridden titles as titles are
 	    # automatically generated in the -sections.txt file, and thus they
 	    # are often overridden.
@@ -4553,7 +4558,7 @@ sub MergeSourceDocumentation {
 #############################################################################
 sub IsEmptyDoc {
     my ($doc) = @_;
-    
+
     if ($doc =~ /^\s*$/) {
         return 1;
     }
@@ -4941,7 +4946,7 @@ sub ReadTemplateFile {
 		# strip trailing whitespaces and blank lines
 		s/\s+\n$/\n/m;
 		s/\n+$/\n/sm;
-                
+
 	        if (!m/^\s+$/) {
                     if ($in_deprecated) {
                         $Deprecated{$current_symbol} .= $_;

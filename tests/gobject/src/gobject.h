@@ -48,6 +48,7 @@ struct _GtkdocObject {
  * GtkdocObjectClass:
  * @parent: this is a bug :/
  * @test: overideable method
+ * @ping: can be used before calling the @test() function
  *
  * class data of gtk-doc unit test class
  */
@@ -56,6 +57,7 @@ struct _GtkdocObjectClass {
 
   /* class methods */
   void (*test)(const GtkdocObject * const self, gconstpointer const user_data);
+  gboolean (*ping)(const GtkdocObject * const self);
 };
 
 /**
