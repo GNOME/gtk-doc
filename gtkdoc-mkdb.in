@@ -4378,9 +4378,8 @@ sub MergeSourceDocumentation {
 	    # Do not add <para> to nothing, it breaks missing docs checks.
 	    my $src_doc_para = "";
             if ($src_doc ne "") {
-                # If there is a blank line, finish the paragraph and start another.
-                $src_doc = &ConvertBlankLines ($src_doc, $symbol);
-                $src_doc_para = "<para>\n$src_doc\n</para>";
+                # Expand markdown (and do paragraphs)
+                $src_doc_para = &ConvertMarkDown ($src_doc, $symbol);
                 ## fixup xml markup
                 # FIXME: this is questionable, as we can't make assumtions on the content really
                 #$src_doc_para =~ s%^<para>\n(<refsect[1-9])%$1%gms;
@@ -4572,19 +4571,32 @@ sub IsEmptyDoc {
 
 
 #############################################################################
-# Function    : ConvertBlankLines
-# Description : Converts blank lines to "</para><para>", but only outside CDATA
-#               and <programlisting> tags.
+# Function    : ConvertMarkDown
+# Description : Converts mark down syntax to the respective docbook, but only
+#               outside CDATA and <programlisting> tags.
+#               http://de.wikipedia.org/wiki/Markdown
+#               Code snippets have been takesn from
+#               http://daringfireball.net/projects/markdown/
+#                 Copyright (c) 2004 John Gruber
 # Arguments   : the doc-string, the symbol name
 #############################################################################
-sub ConvertBlankLines {
-    return &ModifyXMLElements ($_[0], $_[1],
+my $in_refsect2;
+sub ConvertMarkDown {
+    my ($text, $symbol) = @_;
+    $in_refsect2=0;
+    $text = &ModifyXMLElements ($text, $symbol,
 			       "<!\\[CDATA\\[|<programlisting[^>]*>|\\|\\[",
-			       \&ConvertBlankLinesEndTag,
-			       \&ConvertBlankLinesCallback);
+			       \&ConvertMarkDownEndTag,
+			       \&ConvertMarkDownCallback);
+    if ($in_refsect2==1) {
+        $text = "<para>\n$text\n</para></refsect2>"
+    } else {
+        $text = "<para>\n$text\n</para>";
+    }
+    return $text
 }
 
-sub ConvertBlankLinesEndTag {
+sub ConvertMarkDownEndTag {
   if ($_[0] eq "<!\[CDATA\[") {
     return "]]>";
   } elsif ($_[0] eq "|[") {
@@ -4594,12 +4606,43 @@ sub ConvertBlankLinesEndTag {
   }
 }
 
-sub ConvertBlankLinesCallback {
+sub ConvertMarkDownCallback {
   my ($text, $symbol, $tag) = @_;
 
   # If we're not in CDATA or a <programlisting> we convert blank lines so
   # they start a new <para>.
   if ($tag eq "") {
+    # Setext-style headers:
+    #	  Header 1
+    #	  ========
+    #
+    #	  Header 2
+    #	  --------
+    #
+    if ($in_refsect2==1) {
+        $text =~ s%^\n(.+)[ \t]*\n=+[ \t]*\n\n%</para></refsect2><refsect2><title>$1</title><para>\n%gm;
+    } else {
+        if($text =~ s%^\n(.+)[ \t]*\n=+[ \t]*\n\n%</para><refsect2><title>$1</title><para>\n%gm) {
+            $in_refsect2=1;
+        }
+    }
+
+    # atx-style headers:
+    #	# Header 1
+    #	## Header 2
+    #	## Header 2 with closing hashes ##
+    #	...
+    #	###### Header 6
+    #
+    if ($in_refsect2==1) {
+        $text =~ s%^\n\#[ \t]*(.+?)[ \t]*\#\n+%</para></refsect2><refsect2><title>$1</title><para>\n%gm;
+    } else {
+        if($text =~ s%^\n\#[ \t]*(.+?)[ \t]*\#\n+%</para><refsect2><title>$1</title><para>\n%gm) {
+            $in_refsect2=1;
+        }
+    }
+
+    # Make Paragraphs on blank lines
     $text =~ s%\n{2,}%\n</para>\n<para>\n%g;
   }
 

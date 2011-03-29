@@ -16,11 +16,13 @@
  * whole lifecycle usualy looks like shown in this example:
  * |[<!-- language="C" -->
  * GObject *myobj;
- * 
+ *
  * myobj = gtkdoc_object_new();
  * // do somehing
  * g_object_unref (myobj);
  * ]|
+ *
+ * # Examples #
  *
  * You can also change parameters:
  * <informalexample>
@@ -44,6 +46,11 @@
  * @see_also: #GtkdocIface
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
+ *
+ * Internals
+ * =========
+ *
+ * All the internal details go here or not.
  */
 
 #include <glib.h>
@@ -95,7 +102,7 @@ GtkdocObject *gtkdoc_object_new (void) {
  * Since: 0.5
  */
 void gtkdoc_object_set_otest (GObject *self, const gchar *value) {
-  
+
 }
 
 /**
@@ -114,7 +121,7 @@ void gtkdoc_object_set_otest (GObject *self, const gchar *value) {
  * Since: 0.5
  */
 void gtkdoc_object_frobnicate (GObject *self, gint n) {
-  
+
 }
 
 /**
@@ -184,7 +191,7 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
 
   /**
    * GtkdocObject::strings-changed:
-   * 
+   *
    * Something has happened.
    */
   g_signal_new ("strings-changed", G_TYPE_FROM_CLASS (klass),
@@ -195,11 +202,11 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
                 g_cclosure_marshal_VOID__BOXED,
                 G_TYPE_NONE, // return type
                 1, G_TYPE_STRV); // n_params
-  
+
 #if GLIB_CHECK_VERSION (2, 25, 9)
   /**
    * GtkdocObject::variant-changed:
-   * 
+   *
    * Something has happened.
    */
   g_signal_new ("variant-changed", G_TYPE_FROM_CLASS (klass),
@@ -285,7 +292,7 @@ GType gtkdoc_object2_get_type (void) {
     static const GInterfaceInfo interface_info = {
       NULL,  // interface_init
       NULL,  // interface_finalize
-      NULL   // interface_data 
+      NULL   // interface_data
     };
     type = g_type_register_static(G_TYPE_OBJECT,"GtkdocObject2",&info,0);
     g_type_add_interface_static(type, GTKDOC_TYPE_IFACE, &interface_info);
