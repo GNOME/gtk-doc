@@ -4571,15 +4571,18 @@ sub IsEmptyDoc {
 }
 
 
-# This converts blank lines to "</para><para>", but only outside CDATA and
-# <programlisting> tags.
+#############################################################################
+# Function    : ConvertBlankLines
+# Description : Converts blank lines to "</para><para>", but only outside CDATA
+#               and <programlisting> tags.
+# Arguments   : the doc-string, the symbol name
+#############################################################################
 sub ConvertBlankLines {
     return &ModifyXMLElements ($_[0], $_[1],
 			       "<!\\[CDATA\\[|<programlisting[^>]*>|\\|\\[",
 			       \&ConvertBlankLinesEndTag,
 			       \&ConvertBlankLinesCallback);
 }
-
 
 sub ConvertBlankLinesEndTag {
   if ($_[0] eq "<!\[CDATA\[") {
