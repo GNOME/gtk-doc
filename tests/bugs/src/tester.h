@@ -338,5 +338,27 @@ void (*bug_638330) (void *arg1,
      const unsigned char *data,
      unsigned int length);
 
+/**
+ * Bug644291:
+ * @BUG_644291_START: foo
+ * @BUG_644291_TEXT: bar
+ * @BUG_644291_END: milk
+ * @BUG_644291_ATTRIBUTE: comes
+ * @BUG_644291_XMLNS: from
+ * @BUG_644291_ASSIGN_TO: cows
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=644291
+ */
+typedef enum
+{
+  BUG_644291_START = '(',
+  BUG_644291_TEXT = '$',
+  BUG_644291_END = ')',
+  BUG_644291_ATTRIBUTE = '@',
+  BUG_644291_XMLNS = ':',
+  BUG_644291_ASSIGN_TO = '*'
+} Bug644291;
+
+
 #endif // GTKDOC_TESTER_H
 

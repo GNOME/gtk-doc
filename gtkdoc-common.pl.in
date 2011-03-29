@@ -271,7 +271,7 @@ sub ParseEnumDeclaration {
     # to avoid getting confused by commas they might contain. This
     # doesn't handle nested parentheses correctly.
 
-    $declaration =~ s/\([^)]+\)//g;
+    $declaration =~ s/\([^)\n]+\)//g;
 
     # Remove comma from comma - possible whitespace - closing brace sequence
     # since it is legal in GNU C and C99 to have a trailing comma but doesn't
