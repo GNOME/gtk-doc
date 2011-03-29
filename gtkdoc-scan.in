@@ -293,7 +293,7 @@ sub ScanHeader {
     if ($input_file =~ m/^.*[\/\\](.*)\.h+$/) {
 	$file_basename = $1;
     } else {
-	print "WARNING: Can't find basename of file $input_file\n";
+	LogWarning(__FILE__,__LINE__,"Can't find basename of file $input_file");
 	$file_basename = $input_file;
     }
 
@@ -304,7 +304,7 @@ sub ScanHeader {
     }
 
     if (! -f $input_file) {
-	print "WARNING: File doesn't exist: $input_file\n";
+	LogWarning(__FILE__,__LINE__,"File doesn't exist: $input_file");
 	return;
     }
 
