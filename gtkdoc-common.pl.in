@@ -483,6 +483,17 @@ sub LogWarning {
     print "$file:$line: warning: $message\n"
 }
 
+sub LogTrace {
+    my ($message) = @_;
+
+    if (defined($ENV{"GTKDOC_TRACE"})) {
+        my (undef, $file, $line) = caller;
+
+        chomp($message);
+        print "$file:$line: trace: $message\n"
+    }
+}
+
 
 #############################################################################
 # Function    : CreateValidSGMLID

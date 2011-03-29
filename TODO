@@ -17,14 +17,6 @@ and join discussion about future features.
 Developers can also add items here :)
 
 = Cleanups =
-== Tracing ==
-* there is a bunch of #print statements for tracing
-  => add a sub Trace() to gtkdoc-common.pl
-  => use @TRACE@ "..." and depending on configure flag
-     turn that into
-       [print __FILE__ . ":" . __LINE__ . ":" . ] or [#]
-     should be a function and the function should support loglevels and an
-       envar to enable/disable conditionally;
 == Files ==
 * can we deprecate title in the sectionfile and request people to have this in
   the SECTION comment?
@@ -148,7 +140,7 @@ more warnings:
   * we might need yet another makefile flavour to use gir files
 * perl and xml
   * http://www.xml.com/pub/a/2001/04/18/perlxmlqstart1.html
- 
+
 == binding docs ==
 * simmillar workflow to gettext
 * add gtkdoc-mk??? to generate binding doc templates

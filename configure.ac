@@ -203,8 +203,8 @@ AC_ARG_ENABLE([debug],
 	[enable_debug="no"])
 AC_MSG_RESULT($enable_debug)
 
-if test "$enable_debug" = "yes"; then
-	TRACE="print __FILE__ . \":\" . __LINE__ . \":\" ."
+if test "x$enable_debug" != "xno"; then
+	TRACE="LogTrace"
 else
 	TRACE="#"
 fi
@@ -281,3 +281,7 @@ test -n "$HIGHLIGHT" \
 test "x$build_tests" != "xno" \
     && AC_MSG_NOTICE([** Building regression tests]) \
     || AC_MSG_NOTICE([   Skipping regression tests])
+test "x$enable_debug" != "xno" \
+    && AC_MSG_NOTICE([** Debug tracing enabled]) \
+    || AC_MSG_NOTICE([   Debug tracing disabled])
+
