@@ -338,6 +338,22 @@ void (*bug_638330) (void *arg1,
      const unsigned char *data,
      unsigned int length);
 
+
+/**
+ * Bug642998:
+ * @red: red color intensity, from 0–255
+ * @green: green color intensity, from 0–255
+ * @blue: blue color intensity, from 0–255
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=642998
+ */
+typedef struct {
+    guint16 red;
+    guint16 green;
+    guint16 blue;
+} Bug642998;
+
+
 /**
  * Bug644291:
  * @BUG_644291_START: foo
@@ -358,7 +374,6 @@ typedef enum
   BUG_644291_XMLNS = ':',
   BUG_644291_ASSIGN_TO = '*'
 } Bug644291;
-
 
 #endif // GTKDOC_TESTER_H
 
