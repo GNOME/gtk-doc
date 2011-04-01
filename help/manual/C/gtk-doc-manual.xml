@@ -80,7 +80,7 @@
         <revnumber>1.17.1</revnumber>
         <date>26 Feb 2011</date>
         <authorinitials>sk</authorinitials>
-        <revremark>development version</revremark>
+        <revremark>development version, markdown support</revremark>
       </revision>
       <revision>
         <revnumber>1.17</revnumber>
@@ -790,11 +790,38 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
       </tip>
 
       <para>
-        DocBook can do more that just links. One can also have lists, tables and
-        examples. To enable the usage of SGML/XML tags inside doc-comments you
-        need to have <option>--xml-mode</option> or <option>--sgml-mode</option>
-        in the variable <symbol>MKDB_OPTIONS</symbol> inside
-        <filename>Makefile.am</filename>.
+        DocBook can do more than just links. One can also have lists, tables and
+        examples. To enable the usage of docbook SGML/XML tags inside
+        doc-comments you need to have <option>--xml-mode</option> or
+        <option>--sgml-mode</option> in the variable
+        <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</filename>.
+      </para>
+
+      <para>
+        Since GTK-Doc-1.18 the tool supports a subset or the
+        <ulink url="http://daringfireball.net/projects/markdown/">markdown language</ulink>.
+        One can use it for sub-headings and simple itemized lists. On older
+        GTK-Doc versions the content will be rendered as it (the list items will
+        appear in one line separated by dashes).
+        <example><title>GTK-Doc comment block using markdown</title>
+          <programlisting>
+<![CDATA[
+/**
+ * identifier:
+ *
+ * documentation ...
+ *
+ * # Sub heading #
+ *
+ * more documentation:
+ * - list item 1
+ * - list item 2
+ *
+ * Even more docs.
+ */
+]]>
+          </programlisting>
+        </example>
       </para>
 
       <tip>
