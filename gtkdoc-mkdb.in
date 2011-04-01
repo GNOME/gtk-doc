@@ -4580,18 +4580,22 @@ sub IsEmptyDoc {
 #                 Copyright (c) 2004 John Gruber
 # Arguments   : the doc-string, the symbol name
 #############################################################################
-my $in_refsect2;
+my $md_in_refsect2;
 sub ConvertMarkDown {
     my ($text, $symbol) = @_;
-    $in_refsect2=0;
+
+    # reset state
+    $md_in_refsect2=0;
+
+    # convert
     $text = &ModifyXMLElements ($text, $symbol,
 			       "<!\\[CDATA\\[|<programlisting[^>]*>|\\|\\[",
 			       \&ConvertMarkDownEndTag,
 			       \&ConvertMarkDownCallback);
-    if ($in_refsect2==1) {
-        $text = "<para>\n$text\n</para></refsect2>"
-    } else {
-        $text = "<para>\n$text\n</para>";
+    # encapsulate and terminate
+    $text = "<para>\n$text\n</para>";
+    if ($md_in_refsect2==1) {
+        $text = "$text</refsect2>"
     }
     return $text
 }
@@ -4612,6 +4616,16 @@ sub ConvertMarkDownCallback {
   # If we're not in CDATA or a <programlisting> we convert blank lines so
   # they start a new <para>.
   if ($tag eq "") {
+    my $end_of_para="";
+    my $end_of_section="";
+    my $have_list=0;
+
+    $end_of_para = "$end_of_para</para>";
+    $end_of_section = "$end_of_section</para>";
+    if ($md_in_refsect2==1) {
+        $end_of_section= "$end_of_section</refsect2>";
+    }
+
     # Setext-style headers:
     #	  Header 1
     #	  ========
@@ -4619,12 +4633,8 @@ sub ConvertMarkDownCallback {
     #	  Header 2
     #	  --------
     #
-    if ($in_refsect2==1) {
-        $text =~ s%^\n(.+)[ \t]*\n=+[ \t]*\n\n%</para></refsect2><refsect2><title>$1</title><para>\n%gm;
-    } else {
-        if($text =~ s%^\n(.+)[ \t]*\n=+[ \t]*\n\n%</para><refsect2><title>$1</title><para>\n%gm) {
-            $in_refsect2=1;
-        }
+    if($text =~ s%^\n(.+)[ \t]*\n=+[ \t]*\n\n%$end_of_section<refsect2><title>$1</title><para>\n%gm) {
+        $md_in_refsect2=1;
     }
 
     # atx-style headers:
@@ -4634,16 +4644,27 @@ sub ConvertMarkDownCallback {
     #	...
     #	###### Header 6
     #
-    if ($in_refsect2==1) {
-        $text =~ s%^\n\#[ \t]*(.+?)[ \t]*\#\n+%</para></refsect2><refsect2><title>$1</title><para>\n%gm;
-    } else {
-        if($text =~ s%^\n\#[ \t]*(.+?)[ \t]*\#\n+%</para><refsect2><title>$1</title><para>\n%gm) {
-            $in_refsect2=1;
-        }
+    if($text =~ s%^\n\#[ \t]*(.+?)[ \t]*\#\n+%$end_of_section<refsect2><title>$1</title><para>\n%gm) {
+        $md_in_refsect2=1;
     }
 
+    # Simple (unnested) lists:
+    #   Please select:
+    #   - item 1
+    #   - item 2 with loooong
+    #     description
+    #   - item 3
+    #
+    #   New paragraph.
+    $text.="\n"; # we need a new line to avoid too complicated matching rules below
+    if ($text =~ s%(?<=\n)-\s+(.+?)(?=(?:\n-\s+)|(?:\n\n)|(?:\n$))%<listitem><para>$1</para></listitem>%gs) {
+        $text =~ s%(?<!</listitem>)(\n<listitem>)%\n<itemizedlist>$1%g;
+        $text =~ s%(</listitem>\n)(?!<listitem>)%$1</itemizedlist>\n%g;
+    }
+    chomp $text;
+
     # Make Paragraphs on blank lines
-    $text =~ s%\n{2,}%\n</para>\n<para>\n%g;
+    $text =~ s%\n{2,}%\n$end_of_para\n<para>\n%g;
   }
 
   return $text;

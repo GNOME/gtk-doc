@@ -30,14 +30,12 @@
  * </informalexample>
  *
  * This example serves two main purposes:
- * <itemizedlist>
- * <listitem><para>
- * testing conversion
- * </para></listitem>
- * <listitem><para>
- * catching bugs
- * </para></listitem>
- * </itemizedlist>
+ * - testing conversion (long description
+ *   follows here)
+ * - catching bugs
+ * - having an example
+ *
+ * Nothing more to say.
  */
 /**
  * SECTION:object2
@@ -50,7 +48,8 @@
  * Internals
  * =========
  *
- * All the internal details go here or not.
+ * All the internal details go here or not:
+ * - single item list
  */
 
 #include <glib.h>
