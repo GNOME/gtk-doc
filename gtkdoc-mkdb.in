@@ -3600,7 +3600,17 @@ sub GetArgs {
 sub ReadSourceDocumentation {
     my ($source_dir) = @_;
     my ($file, $dir, @suffix_list, $suffix);
-    #print "Scanning source directory: $source_dir\n";
+
+    # prepend entries from @SOURCE_DIR
+    for my $dir (@SOURCE_DIRS) {
+        # Check if the filename is in the ignore list.
+        if ($source_dir =~ m%^\Q$dir\E/(.*)$% and $IGNORE_FILES =~ m/(\s|^)\Q$1\E(\s|$)/) {
+            @TRACE@("Skipping source directory: $source_dir");
+            return;
+        }
+    }
+
+    @TRACE@("Scanning source directory: $source_dir");
 
     # This array holds any subdirectories found.
     my (@subdirs) = ();
@@ -3629,7 +3639,6 @@ sub ReadSourceDocumentation {
 
     # Now recursively scan the subdirectories.
     foreach $dir (@subdirs) {
-	next if ($IGNORE_FILES =~ m/(\s|^)\Q${dir}\E(\s|$)/);
 	&ReadSourceDocumentation ("$source_dir/$dir");
     }
 }
@@ -3649,6 +3658,15 @@ sub ScanSourceFile {
     my ($file) = @_;
     my $basename;
 
+    # prepend entries from @SOURCE_DIR
+    for my $dir (@SOURCE_DIRS) {
+        # Check if the filename is in the ignore list.
+        if ($file =~ m%^\Q$dir\E/(.*)$% and $IGNORE_FILES =~ m/(\s|^)\Q$1\E(\s|$)/) {
+            @TRACE@("Skipping source file: $file");
+            return;
+        }
+    }
+
     if ($file =~ m/^.*[\/\\]([^\/\\]*)$/) {
 	$basename = $1;
     } else {
@@ -3658,10 +3676,11 @@ sub ScanSourceFile {
 
     # Check if the basename is in the list of files to ignore.
     if ($IGNORE_FILES =~ m/(\s|^)\Q${basename}\E(\s|$)/) {
-	return;
+        @TRACE@("Skipping source file: $file");
+        return;
     }
 
-    #print "DEBUG: Scanning $file\n";
+    @TRACE@("Scanning source file: $file");
 
     open (SRCFILE, $file)
 	|| die "Can't open $file: $!";
