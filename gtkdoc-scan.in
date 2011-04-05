@@ -287,7 +287,10 @@ sub ScanHeader {
 
     # Don't scan headers twice
     my $canonical_input_file = realpath $input_file;
-    return if exists $seen_headers{$canonical_input_file};
+    if (exists $seen_headers{$canonical_input_file}) {
+        @TRACE@("File already scanned: $input_file");
+        return;
+    }
     $seen_headers{$canonical_input_file} = 1;
 
     if ($input_file =~ m/^.*[\/\\](.*)\.h+$/) {
