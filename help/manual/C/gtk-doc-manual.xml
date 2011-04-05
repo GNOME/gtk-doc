@@ -734,6 +734,26 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
         (blank-asterisk-blank-blank).
       </para>
 
+      <tip>
+        <para>
+          When documenting code, describe two apsects:
+          <itemizedlist>
+             <listitem>
+               <para>
+                 What it is: The name for a class or function can sometimes
+                 be misleading for people coming from a different background.
+                </para>
+             </listitem>
+             <listitem>
+               <para>
+                 What it does: Tell about common uses. Put it in releation
+                 with the other API.
+               </para>
+             </listitem>
+           </itemizedlist>
+        </para>
+      </tip>
+
       <para>
         One advantage of hyper-text over plain-text is the ability to have links
         in the document. Writing the correct markup for a link can be tedious
