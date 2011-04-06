@@ -30,6 +30,7 @@ SETUP_FILES = \
 	$(DOC_MODULE)-overrides.txt
 
 EXTRA_DIST = 				\
+	$(HTML_IMAGES)			\
 	$(SETUP_FILES)
 
 DOC_STAMPS=setup-build.stamp scan-build.stamp tmpl-build.stamp sgml-build.stamp \
