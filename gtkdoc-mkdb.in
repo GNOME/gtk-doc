@@ -1941,12 +1941,13 @@ sub OutputFunction {
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
 
-    # Take out the return type     $1                                                                                     $3   $4
-    $declaration =~ s/<RETURNS>\s*((const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|enum\s+)*)(\w+)(\s*\**\s*(const|G_CONST_RETURN)?\s*\**\s*(restrict)?\s*)<\/RETURNS>\n//;
+    # Take out the return type     $1                                                                                       $2   $3
+    $declaration =~ s/<RETURNS>\s*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|enum\s+)*)(\w+)(\s*\**\s*(?:const|G_CONST_RETURN)?\s*\**\s*(?:restrict)?\s*)<\/RETURNS>\n//;
     my $type_modifier = defined($1) ? $1 : "";
-    my $type = $3;
-    my $pointer = $4;
-    #print "$symbol pointer is $pointer\n";
+    my $type = $2;
+    my $pointer = $3;
+    # Trim trailing spaces as we are going to pad to $RETURN_TYPE_FIELD_WIDTH below anyway
+    $pointer =~ s/\s+$//;
     my $xref = &MakeXRef ($type, &tagify($type, "returnvalue"));
     my $start = "";
     #if ($symbol_type eq 'USER_FUNCTION') {
@@ -1958,8 +1959,8 @@ sub OutputFunction {
     $pointer =~ s/G_CONST_RETURN/const/g;
     $pointer =~ s/^\s+/ /g;
 
-    my $ret_type_len = length ($start) + length ($type_modifier)
-	+ length ($pointer) + length ($type);
+    my $ret_type_len = length ($start) + length ($type_modifier)+ length ($type)
+	+ length ($pointer);
     my $ret_type_output;
     my $symbol_len;
     if ($ret_type_len < $RETURN_TYPE_FIELD_WIDTH) {
@@ -1972,6 +1973,7 @@ sub OutputFunction {
 	$ret_type_output = "$start$type_modifier$xref$pointer ";
 	$symbol_len = $ret_type_len + 1 - $RETURN_TYPE_FIELD_WIDTH;
     }
+    #@TRACE@("$symbol ret type output: [$ret_type_output], $ret_type_len");
 
     $symbol_len += length ($symbol);
     my $char1 = my $char2 = my $char3 = "";
