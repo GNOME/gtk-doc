@@ -386,7 +386,7 @@ EOF
 	} else {
 	    $ret_type = "void";
 	}
-	
+
 	my @fields = ParseFunctionDeclaration($declaration);
 
 	for (my $i = 0; $i <= $#fields; $i += 2) {
@@ -407,10 +407,10 @@ EOF
 
     if ($type eq "MACRO") {
         my @fields = ParseMacroDeclaration($declaration);
-    
+
         for (my $i = 0; $i <= $#fields; $i +=2) {
             my $field_name = $fields[$i];
-            
+
             $output .= &OutputParam ($symbol, $field_name, $template_exists,
                                      1, "");
         }
