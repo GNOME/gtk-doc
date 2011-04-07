@@ -46,7 +46,7 @@
 sub UpdateFileIfChanged {
     my ($old_file, $new_file, $make_backup) = @_;
 
-    #print "Comparing $old_file with $new_file...\n";
+    #@TRACE@("Comparing $old_file with $new_file...");
 
     # If the old file doesn't exist we want this to default to 1.
     my $exit_code = 1;
@@ -54,7 +54,7 @@ sub UpdateFileIfChanged {
     if (-e $old_file) {
 	`cmp -s "$old_file" "$new_file"`;
 	$exit_code = $? >> 8;
-	#print "   cmp exit code: $exit_code ($?)\n";
+	#@TRACE@("   cmp exit code: $exit_code ($?)";
     }
 
     if ($exit_code > 1) {
@@ -62,7 +62,7 @@ sub UpdateFileIfChanged {
     }
 
     if ($exit_code == 1) {
-        #print "   files changed - replacing old version with new version.\n";
+        #@TRACE@("   files changed - replacing old version with new version.");
 	if ($make_backup && -e $old_file) {
 	    rename ($old_file, "$old_file.bak")
 		|| die "Can't move $old_file to $old_file.bak: $!";
@@ -72,7 +72,7 @@ sub UpdateFileIfChanged {
 
 	return 1;
     } else {
-        #print "   files the same - deleting new version.\n";
+        #@TRACE@("   files the same - deleting new version.");
 	unlink ("$new_file")
 	    || die "Can't delete file: $new_file: $!";
 
@@ -129,7 +129,7 @@ sub ParseStructDeclaration {
 	die "Declaration '$declaration' does not begin with struct/union [NAME] {\n";
     }
 
-    #print "DEBUG: public fields in struct/union: $declaration\n";
+    #@TRACE@("public fields in struct/union: $declaration");
 
     # Treat lines in sequence, allowing singly nested anonymous structs
     # and unions.
@@ -196,7 +196,7 @@ sub ParseStructDeclaration {
 	    my $mod2 = defined($4) ? " " . $4 : "";
 	    my $list = $5;
 
-            #print "'$mod1' '$type' '$mod2' '$list' \n";
+            #@TRACE@("'$mod1' '$type' '$mod2' '$list'");
 
 	    $mod1 =~ s/ /&#160;/g;
 	    $mod2 =~ s/ /&#160;/g;
@@ -223,7 +223,7 @@ sub ParseStructDeclaration {
 		    }
 		    push @result, "$mod1$ptype$mod2&#160;$ptrs$name$array$bits;";
 
-		    #print "***** Matched line: $mod1$ptype$mod2 $ptrs$name$array$bits\n";
+		    #@TRACE@("Matched line: $mod1$ptype$mod2 $ptrs$name$array$bits");
 		} else {
 		    print "WARNING: Couldn't parse struct field: $n\n";
 		}
@@ -337,7 +337,7 @@ sub ParseFunctionDeclaration {
 
     my ($param_num) = 0;
     while ($declaration ne "") {
-        #print "$declaration";
+        #@TRACE@("$declaration");
 
         if ($declaration =~ s/^[\s,]+//) {
             # skip whitespace and commas
@@ -374,7 +374,7 @@ sub ParseFunctionDeclaration {
 	    $ptr  =~ s/\s+$//;
 	    if ($ptr && $ptr !~ m/\*$/) { $ptr .= " "; }
 
-            #print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
+            #@TRACE@("$symbol: '$pre' '$type' '$ptr' '$name' '$array'");
 
             if (($name eq "") && $pre =~ m/^((un)?signed .*)\s?/ ) {
                 $name = $type;
@@ -386,7 +386,7 @@ sub ParseFunctionDeclaration {
                 $name = "Param" . ($param_num + 1);
             }
 
-            #print "$symbol: '$pre' '$type' '$ptr' '$name' '$array'\n";
+            #@TRACE@("$symbol: '$pre' '$type' '$ptr' '$name' '$array'");
 
             push @result, $name;
             my $xref = defined $typefunc ? $typefunc->($type, "<type>$type</type>") : $type;
@@ -418,7 +418,7 @@ sub ParseFunctionDeclaration {
 
 	    push @result, $name;
             my $xref = defined $typefunc ? $typefunc->($type, "<type>$type</type>") : $type;
-            #print "Type: [$mod1][$xref][$ptr1][$mod2] ([$func_ptr][$name]) ($func_params)\n";#
+            #@TRACE@("Type: [$mod1][$xref][$ptr1][$mod2] ([$func_ptr][$name]) ($func_params)");
             my $label = "$mod1$xref$ptr1$mod2 ($func_ptr$name) ($func_params)";
             if (defined $namefunc) {
                 $label = $namefunc->($label)
