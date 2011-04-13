@@ -211,7 +211,7 @@ maintainer-clean-local: clean
 install-data-local:
 	@installfiles=`echo $(srcdir)/html/*`; \
 	if test "$$installfiles" = '$(srcdir)/html/*'; \
-	then echo '-- Nothing to install' ; \
+	then echo 1>&2 'Nothing to install' ; \
 	else \
 	  if test -n "$(DOC_MODULE_VERSION)"; then \
 	    installdir="$(DESTDIR)$(TARGET_DIR)-$(DOC_MODULE_VERSION)"; \
@@ -220,7 +220,7 @@ install-data-local:
 	  fi; \
 	  $(mkinstalldirs) $${installdir} ; \
 	  for i in $$installfiles; do \
-	    echo '-- Installing '$$i ; \
+	    echo ' $(INSTALL_DATA) '$$i ; \
 	    $(INSTALL_DATA) $$i $${installdir}; \
 	  done; \
 	  if test -n "$(DOC_MODULE_VERSION)"; then \
