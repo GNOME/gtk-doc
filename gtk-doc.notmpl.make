@@ -103,7 +103,15 @@ scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
 	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(SCAN_OPTIONS) $(EXTRA_HFILES)
 	@if grep -l '^..*$$' $(DOC_MODULE).types > /dev/null 2>&1 ; then \
 	    echo "  DOC   Introspecting gobjects"; \
-	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE); \
+	    scanobj_options=""; \
+	    gtkdoc-scangobj 2>&1 --help | grep  >/dev/null "\-\-verbose"; \
+	    if test "$(?)" = "0"; then \
+	        if test "x$(V)" = "x1"; then \
+	            scanobj_options="--verbose"; \
+	        fi; \
+	    fi; \
+	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" \
+	    gtkdoc-scangobj $(SCANGOBJ_OPTIONS) $$scanobj_options --module=$(DOC_MODULE); \
 	else \
 	    for i in $(SCANOBJ_FILES) ; do \
 	        test -f $$i || touch $$i ; \

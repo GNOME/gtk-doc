@@ -94,8 +94,13 @@ scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
 	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(EXTRA_HFILES) $(SCAN_OPTIONS)
 	@if grep -l '^..*$$' $(DOC_MODULE).types > /dev/null 2>&1 ; then \
 	    echo "  DOC   `date +%H:%M:%S.%N`: Introspecting gobjects"; \
+	    scanobj_options=""; \
+	    if test "x$(V)" = "x1"; then \
+	        scanobj_options="--verbose"; \
+	    fi; \
 	    PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
-	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" gtkdoc-scangobj --module=$(DOC_MODULE) $(SCANGOBJ_OPTIONS); \
+	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" \
+	    gtkdoc-scangobj --module=$(DOC_MODULE) $$scanobj_options $(SCANGOBJ_OPTIONS); \
 	else \
 	    for i in $(SCANOBJ_FILES) ; do \
 	        test -f $$i || touch $$i ; \

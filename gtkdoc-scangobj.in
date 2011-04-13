@@ -35,6 +35,7 @@ require "gtkdoc-common.pl";
 # name of documentation module
 my $MODULE;
 my $OUTPUT_DIR;
+my $VERBOSE;
 my $PRINT_VERSION;
 my $PRINT_HELP;
 my $TYPE_INIT_FUNC="g_type_init(); g_type_class_ref(G_TYPE_OBJECT)";
@@ -47,6 +48,7 @@ my $QUERY_CHILD_PROPERTIES;
 	   'type-init-func' => \$TYPE_INIT_FUNC,
 	   'query-child-properties' => \$QUERY_CHILD_PROPERTIES,
 	   'output-dir' => \$OUTPUT_DIR,
+	   'verbose' => \$VERBOSE,
 	   'version' => \$PRINT_VERSION,
 	   'help' => \$PRINT_HELP);
 
@@ -76,6 +78,7 @@ gtkdoc-scangobj version @VERSION@ - introspect g-objects
 --query-child-properties=FUNC A function that returns a list of child
                               properties for a class
 --output-dir=DIRNAME          The directory where the results are stored
+--verbose                     Print extra output while processing
 --version                     Print the version of this program
 --help                        Print this help
 EOF
@@ -1365,14 +1368,19 @@ if ($CC =~ /libtool/) {
   $o_file = "$MODULE-scan.o"
 }
 
+my $stdout="";
+if (!defined($VERBOSE) or $VERBOSE eq "0") {
+    $stdout=">/dev/null";
+}
+
 # Compiling scanner
-$command = "$CC $CFLAGS -c -o $o_file $MODULE-scan.c";
+$command = "$CC $stdout $CFLAGS -c -o $o_file $MODULE-scan.c";
 system("($command)") == 0 or die "Compilation of scanner failed: $!\n";
 
 # Linking scanner
 # FIXME: Can we turn off as-needed for the docs (or better fix it?)
 #$command = "$LD -Wl,--no-as-needed $o_file $LDFLAGS -o $MODULE-scan";
-$command = "$LD $o_file $LDFLAGS -o $MODULE-scan";
+$command = "$LD $stdout $o_file $LDFLAGS -o $MODULE-scan";
 system("($command)") == 0 or die "Linking of scanner failed: $!\n";
 
 # Running scanner $MODULE-scan ";
