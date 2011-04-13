@@ -104,10 +104,10 @@ scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
 	done ; \
 	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(SCAN_OPTIONS) $(EXTRA_HFILES)
 	@if grep -l '^..*$$' $(DOC_MODULE).types > /dev/null 2>&1 ; then \
-	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) ; \
+	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE); \
 	else \
 	    for i in $(SCANOBJ_FILES) ; do \
-               test -f $$i || touch $$i ; \
+	        test -f $$i || touch $$i ; \
 	    done \
 	fi
 	@touch scan-build.stamp
@@ -177,7 +177,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 
 pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo 'gtk-doc: Building PDF'
-	@rm -rf $(DOC_MODULE).pdf
+	@rm -f $(DOC_MODULE).pdf
 	@mkpdf_imgdirs=""; \
 	if test "x$(HTML_IMAGES)" != "x"; then \
 	  for img in $(HTML_IMAGES); do \
@@ -194,19 +194,19 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 ##############
 
 clean-local:
-	rm -f *~ *.bak
-	rm -rf .libs
+	@rm -f *~ *.bak
+	@rm -rf .libs
 
 distclean-local:
-	rm -rf xml html $(REPORT_FILES) $(DOC_MODULE).pdf \
+	@rm -rf xml html $(REPORT_FILES) $(DOC_MODULE).pdf \
 	    $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
-	if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
+	@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	    rm -f $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types; \
 	    rm -rf tmpl; \
 	fi
 
 maintainer-clean-local: clean
-	rm -rf xml html
+	@rm -rf xml html
 
 install-data-local:
 	@installfiles=`echo $(srcdir)/html/*`; \
@@ -252,14 +252,14 @@ dist-check-gtkdoc:
 endif
 
 dist-hook: dist-check-gtkdoc dist-hook-local
-	mkdir $(distdir)/tmpl
-	mkdir $(distdir)/html
-	-cp $(build)/tmpl/*.sgml $(distdir)/tmpl
-	cp $(builddir)/html/* $(distdir)/html
-	-cp $(builddir)/$(DOC_MODULE).pdf $(distdir)/
-	-cp $(build)/$(DOC_MODULE).types $(distdir)/
-	-cp $(build)/$(DOC_MODULE)-sections.txt $(distdir)/
-	cd $(distdir) && rm -f $(DISTCLEANFILES)
-	$(GTKDOC_REBASE) --online --relative --html-dir=$(distdir)/html
+	@mkdir $(distdir)/tmpl
+	@mkdir $(distdir)/html
+	@-cp $(build)/tmpl/*.sgml $(distdir)/tmpl
+	@cp $(builddir)/html/* $(distdir)/html
+	@-cp $(builddir)/$(DOC_MODULE).pdf $(distdir)/
+	@-cp $(build)/$(DOC_MODULE).types $(distdir)/
+	@-cp $(build)/$(DOC_MODULE)-sections.txt $(distdir)/
+	@cd $(distdir) && rm -f $(DISTCLEANFILES)
+	@$(GTKDOC_REBASE) --online --relative --html-dir=$(distdir)/html
 
 .PHONY : dist-hook-local docs
