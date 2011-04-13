@@ -147,8 +147,12 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo "  DOC   `date +%H:%M:%S.%N`: Building HTML"
 	@rm -rf html
 	@mkdir html
-	@cd html && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
-	gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE) $(MKHTML_OPTIONS)
+	@mkhtml_options=""; \
+	if test "x$(V)" = "x1"; then \
+	  mkhtml_options="$$mkhtml_options --verbose"; \
+	fi; \
+	cd html && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
+	gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE) $(MKHTML_OPTIONS)
 	-@test "x$(HTML_IMAGES)" = "x" || \
 	for file in $(HTML_IMAGES) ; do \
 	  if test -f $(abs_srcdir)/$$file ; then \
@@ -168,18 +172,21 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo "  DOC   `date +%H:%M:%S.%N`: Building PDF"
 	@rm -f $(DOC_MODULE).pdf
-	@mkpdf_imgdirs=""; \
+	@mkpdf_options=""; \
+	if test "x$(V)" = "x1"; then \
+	  mkpdf_options="$$mkpdf_options --verbose"; \
+	fi; \
 	if test "x$(HTML_IMAGES)" != "x"; then \
 	  for img in $(HTML_IMAGES); do \
 	    part=`dirname $$img`; \
-	    echo $$mkpdf_imgdirs | grep >/dev/null "\-\-imgdir=$$part "; \
+	    echo $$mkpdf_options | grep >/dev/null "\-\-imgdir=$$part "; \
 	    if test $$? != 0; then \
-	      mkpdf_imgdirs="$$mkpdf_imgdirs --imgdir=$$part"; \
+	      mkpdf_options="$$mkpdf_options --imgdir=$$part"; \
 	    fi; \
 	  done; \
 	fi; \
 	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
-	gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $$mkpdf_imgdirs $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS)
+	gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $$mkpdf_options $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS)
 	@touch pdf-build.stamp
 
 ##############
