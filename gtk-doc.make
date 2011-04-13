@@ -76,7 +76,7 @@ $(REPORT_FILES): sgml-build.stamp
 
 setup-build.stamp:
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
-	   echo 'gtk-doc: Preparing build'; \
+	   echo '  DOC   Preparing build'; \
 	   files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
 	   if test "x$$files" != "x" ; then \
 	       for file in $$files ; do \
@@ -97,13 +97,14 @@ setup.stamp: setup-build.stamp
 #### scan ####
 
 scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
-	@echo 'gtk-doc: Scanning header files'
+	@echo '  DOC   Scanning header files'
 	@_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
 	    _source_dir="$${_source_dir} --source-dir=$$i" ; \
 	done ; \
 	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(SCAN_OPTIONS) $(EXTRA_HFILES)
 	@if grep -l '^..*$$' $(DOC_MODULE).types > /dev/null 2>&1 ; then \
+	    echo "  DOC   Introspecting gobjects"; \
 	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE); \
 	else \
 	    for i in $(SCANOBJ_FILES) ; do \
@@ -118,7 +119,7 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 #### templates ####
 
 tmpl-build.stamp: setup.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
-	@echo 'gtk-doc: Rebuilding template files'
+	@echo '  DOC   Rebuilding template files'
 	@gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
 	@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	  if test -w $(abs_srcdir) ; then \
@@ -136,7 +137,7 @@ $(srcdir)/tmpl/*.sgml:
 #### xml ####
 
 sgml-build.stamp: tmpl.stamp $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(expand_content_files)
-	@echo 'gtk-doc: Building XML'
+	@echo '  DOC   Building XML'
 	@-chmod -R u+w $(srcdir)
 	@_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
@@ -151,7 +152,7 @@ sgml.stamp: sgml-build.stamp
 #### html ####
 
 html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
-	@echo 'gtk-doc: Building HTML'
+	@echo '  DOC   Building HTML'
 	@rm -rf html
 	@mkdir html
 	@mkhtml_options=""; \
@@ -169,14 +170,14 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	    cp $(abs_builddir)/$$file $(abs_builddir)/html; \
 	  fi; \
 	done;
-	@echo 'gtk-doc: Fixing cross-references'
+	@echo '  DOC   Fixing cross-references'
 	@gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	@touch html-build.stamp
 
 #### pdf ####
 
 pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
-	@echo 'gtk-doc: Building PDF'
+	@echo '  DOC   Building PDF'
 	@rm -f $(DOC_MODULE).pdf
 	@mkpdf_imgdirs=""; \
 	if test "x$(HTML_IMAGES)" != "x"; then \
