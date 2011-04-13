@@ -115,7 +115,7 @@ if test "$with_highlight" = "auto"; then
 	else
 		AC_PATH_PROG([HIGHLIGHT], [highlight])
 		if test -n "$HIGHLIGHT"; then
-			HIGHLIGHT_OPTIONS="-X -f --class-name=gtkdoc "
+			HIGHLIGHT_OPTIONS="--out-format=xhtml -f --class-name=gtkdoc "
 		else
 			AC_PATH_PROG([HIGHLIGHT], [vim])
 			if test -n "$HIGHLIGHT"; then
