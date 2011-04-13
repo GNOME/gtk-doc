@@ -1,29 +1,41 @@
 #!/bin/sh
 #
 
-usage="\
-Usage: gtkdoc-mkhtml [--path=SEARCH_PATH] MODULE DRIVER_FILE [BACKEND_OPTIONS...]"
+usage() {
+cat <<EOF
+gtkdoc-mkhtml version @VERSION@ - generate documentation in html format
 
-#echo "args $0\n";
+--verbose               Print extra output while processing
+--path=SEARCH_PATH      Extra source directories
+MODULE                  Name of the doc module being parsed
+DRIVER_FILE             File containing the toplevel DocBook file.
+--version               Print the version of this program
+--help                  Print this help
+EOF
+}
+
+# echo "args $*\n";
 
 # parse options, ignore unknown options for future extensions
 
+verbose="0"
 searchpath=
 uninstalled=no
 while true; do
     case "X$1" in
         X--version) echo "@VERSION@"; exit 0;;
-        X--help) echo "$usage"; exit 0;;
+        X--help) usage; exit 0;;
         X--uninstalled) uninstalled=yes; shift;;
+        X--verbose) verbose="1"; shift;;
         X--path=*) searchpath=`echo $1 | sed s/.*=//`; shift;;
         X--*) shift;;
         X*) break;;
     esac
 done
- 
+
 if test $# -lt 2; then
-      echo "${usage}" 1>&2
-      exit 1
+    usage 1>&2
+    exit 1
 fi
 
 module=$1
@@ -31,29 +43,34 @@ shift
 document=$1
 shift
 
+quiet="1"
+if test $verbose = "1"; then
+    quiet="0"
+fi
+
 if test $uninstalled = yes; then
-      # this does not work from buiddir!=srcdir
-      gtkdocdir=`dirname $0`
-      if test ! -e $gtkdocdir/gtk-doc.xsl; then
+    # this does not work from buiddir!=srcdir
+    gtkdocdir=`dirname $0`
+    if test ! -e $gtkdocdir/gtk-doc.xsl; then
         # try to src dir (set from makefiles) too
         if test -e $ABS_TOP_SRCDIR/gtk-doc.xsl; then
-          gtkdocdir=$ABS_TOP_SRCDIR
+            gtkdocdir=$ABS_TOP_SRCDIR
         fi
-      fi
-      #echo "uninstalled, gtkdocdir=$gtkdocdir, cwd=$PWD"
+    fi
+    #echo "uninstalled, gtkdocdir=$gtkdocdir, cwd=$PWD"
 else
-      # the first two are needed to resolve datadir
-      prefix=@prefix@
-      datarootdir=@datarootdir@
-      gtkdocdir=@datadir@/gtk-doc/data
+    # the first two are needed to resolve datadir
+    prefix=@prefix@
+    datarootdir=@datarootdir@
+    gtkdocdir=@datadir@/gtk-doc/data
 fi
 
 if head -n 1 $document | grep "<?xml" > /dev/null; then
-  is_xml=true
-  path_option='--path'
+    is_xml=true
+    path_option='--path'
 else
-  is_xml=false
-  path_option='--directory'
+    is_xml=false
+    path_option='--directory'
 fi
 
 # we could do "$path_option $PWD "
@@ -67,22 +84,23 @@ fi
 
 # Delete the old index.sgml file, if it exists.
 if test -f index.sgml; then
-      rm -f index.sgml
+  rm -f index.sgml
 fi
 
 if $is_xml; then
-  #echo @XSLTPROC@ $path_arg --nonet --xinclude \
-  #    --stringparam gtkdoc.bookname $module \
-  #    --stringparam gtkdoc.version "@VERSION@" \
-  #    "$@" $gtkdocdir/gtk-doc.xsl $document
-  @XSLTPROC@ $path_arg --nonet --xinclude \
-      --stringparam gtkdoc.bookname $module \
-      --stringparam gtkdoc.version "@VERSION@" \
-      "$@" $gtkdocdir/gtk-doc.xsl $document || exit $?
+    #echo @XSLTPROC@ $path_arg --nonet --xinclude \
+    #    --stringparam gtkdoc.bookname $module \
+    #    --stringparam gtkdoc.version "@VERSION@" \
+    #    "$@" $gtkdocdir/gtk-doc.xsl $document
+    @XSLTPROC@ $path_arg --nonet --xinclude \
+        --stringparam gtkdoc.bookname $module \
+        --stringparam gtkdoc.version "@VERSION@" \
+        --stringparam chunk.quietly $quiet \
+        "$@" $gtkdocdir/gtk-doc.xsl $document || exit $?
 else
-  @JADE@ $path_arg -t @SGML_FORMAT_TYPE@ -w no-idref -d $gtkdocdir/gtk-doc.dsl \
-      -V "gtkdoc-bookname=$module" -V "gtkdoc-version=@VERSION@" \
-      "$@" $gtkdocdir/gtk-doc.dcl $document || exit $?
+    @JADE@ $path_arg -t @SGML_FORMAT_TYPE@ -w no-idref -d $gtkdocdir/gtk-doc.dsl \
+        -V "gtkdoc-bookname=$module" -V "gtkdoc-version=@VERSION@" \
+        "$@" $gtkdocdir/gtk-doc.dcl $document || exit $?
 fi
 
 # copy navigation images and stylesheets to html directory ...
