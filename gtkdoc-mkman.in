@@ -82,6 +82,7 @@ if $is_xml; then
         --stringparam gtkdoc.bookname $module \
         --stringparam gtkdoc.version "@VERSION@" \
         --stringparam chunk.quietly $quiet \
+        --stringparam chunker.output.quiet $quiet \
         manpages/docbook.xsl $document || exit $?
 else
     for i in `cd sgml;ls *.sgml`; do

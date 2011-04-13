@@ -107,6 +107,7 @@ if $is_xml; then
             --stringparam gtkdoc.bookname $module \
             --stringparam gtkdoc.version "@VERSION@" \
             --stringparam chunk.quietly $quiet \
+            --stringparam chunker.output.quiet $quiet \
             "$@" -o $module.fo $gtkdocdir/gtk-doc-fo.xsl $document || cleanexit $?
         # fop dies too easily :(
         # @FOP@ $module.fo $module.pdf

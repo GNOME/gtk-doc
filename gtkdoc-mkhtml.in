@@ -96,6 +96,7 @@ if $is_xml; then
         --stringparam gtkdoc.bookname $module \
         --stringparam gtkdoc.version "@VERSION@" \
         --stringparam chunk.quietly $quiet \
+        --stringparam chunker.output.quiet $quiet \
         "$@" $gtkdocdir/gtk-doc.xsl $document || exit $?
 else
     @JADE@ $path_arg -t @SGML_FORMAT_TYPE@ -w no-idref -d $gtkdocdir/gtk-doc.dsl \
