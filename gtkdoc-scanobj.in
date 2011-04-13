@@ -43,7 +43,7 @@ my $PRINT_VERSION;
 	   'output-dir' => \$OUTPUT_DIR,
 	   'version' => \$PRINT_VERSION,
 	   'help' => \$PRINT_HELP);
-	   
+
 GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "version", "help");
 
 if ($PRINT_VERSION) {
@@ -283,7 +283,7 @@ output_widget_signal (FILE *fp,
   g_strdown (object_arg_start);
   if (!strcmp (object_arg_start, "widget"))
     widget_num++;
-  
+
   /* Convert signal name to use underscores rather than dashes '-'. */
   strncpy (signal_name, query_info->signal_name, 127);
   signal_name[127] = '\\0';
@@ -326,7 +326,7 @@ output_widget_signal (FILE *fp,
         sprintf (pos, "%s%s%i\\n", is_pointer ? "*" : " ", arg_name,
                  *arg_num);
           pos += strlen (pos);
-          
+
           if (arg_num)
             *arg_num += 1;
     }
@@ -531,17 +531,17 @@ if ($CC =~ /libtool/) {
   $o_file = "$MODULE-scan.o"
 }
 
-print "gtk-doc: Compiling scanner\n";
+# Compiling scanner
 $command = "$CC $CFLAGS -c -o $o_file $MODULE-scan.c";
 system("($command)") == 0 or die "Compilation of scanner failed: $!\n";
 
-print "gtk-doc: Linking scanner\n";
+# Linking scanner
 # FIXME: Can we turn off as-needed for the docs (or better fix it?)
 #$command = "$LD -Wl,--no-as-needed $o_file $LDFLAGS -o $MODULE-scan";
 $command = "$LD $o_file $LDFLAGS -o $MODULE-scan";
 system("($command)") == 0 or die "Linking of scanner failed: $!\n";
 
-print "gtk-doc: Running scanner $MODULE-scan\n";
+# Running scanner $MODULE-scan ";
 system("($RUN ./$MODULE-scan)") == 0 or die "Scan failed: $!\n";
 
 if (!defined($ENV{"GTK_DOC_KEEP_INTERMEDIATE"})) {
