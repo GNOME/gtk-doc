@@ -52,7 +52,7 @@ my $QUERY_CHILD_PROPERTIES;
 	   'version' => \$PRINT_VERSION,
 	   'help' => \$PRINT_HELP);
 
-GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "type-init-func:s", "query-child-properties:s", "version", "help");
+GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "type-init-func:s", "query-child-properties:s", "verbose", "version", "help");
 
 if ($NO_GTK_INIT) {
   # Do nothing. This just avoids a warning.
