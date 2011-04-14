@@ -2799,8 +2799,9 @@ sub MakeHashXRef {
       return "#$symbol";
     }
 
-    # Get rid of any special '-struct' suffix.
+    # Get rid of special suffixes ('-struct','-enum').
     $text =~ s/-struct$//;
+    $text =~ s/-enum$//;
 
     # If the symbol is in the form "Object::signal", then change the symbol to
     # "Object-signal" and use "signal" as the text.
@@ -2909,8 +2910,9 @@ sub MakeXRef {
     if (!defined($text)) {
         $text = $symbol;
 
-	# Get rid of special '-struct' suffix.
-	$text =~ s/-struct$//;
+        # Get rid of special suffixes ('-struct','-enum').
+        $text =~ s/-struct$//;
+        $text =~ s/-enum$//;
     }
 
     if ($symbol =~ m/ /) {
