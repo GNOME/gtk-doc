@@ -275,11 +275,11 @@ endif
 dist-hook: dist-check-gtkdoc dist-hook-local
 	@mkdir $(distdir)/tmpl
 	@mkdir $(distdir)/html
-	@-cp $(build)/tmpl/*.sgml $(distdir)/tmpl
+	@-cp $(builddir)/tmpl/*.sgml $(distdir)/tmpl
 	@cp $(builddir)/html/* $(distdir)/html
 	@-cp $(builddir)/$(DOC_MODULE).pdf $(distdir)/
-	@-cp $(build)/$(DOC_MODULE).types $(distdir)/
-	@-cp $(build)/$(DOC_MODULE)-sections.txt $(distdir)/
+	@-cp $(builddir)/$(DOC_MODULE).types $(distdir)/
+	@-cp $(builddir)/$(DOC_MODULE)-sections.txt $(distdir)/
 	@cd $(distdir) && rm -f $(DISTCLEANFILES)
 	@$(GTKDOC_REBASE) --online --relative --html-dir=$(distdir)/html
 
