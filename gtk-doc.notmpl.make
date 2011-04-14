@@ -252,10 +252,10 @@ endif
 
 dist-hook: dist-check-gtkdoc dist-hook-local
 	@mkdir $(distdir)/html
-	@cp $(builddir)/html/* $(distdir)/html
-	@-cp $(builddir)/$(DOC_MODULE).pdf $(distdir)/
-	@-cp $(builddir)/$(DOC_MODULE).types $(distdir)/
-	@-cp $(builddir)/$(DOC_MODULE)-sections.txt $(distdir)/
+	@cp ./html/* $(distdir)/html
+	@-cp ./$(DOC_MODULE).pdf $(distdir)/
+	@-cp ./$(DOC_MODULE).types $(distdir)/
+	@-cp ./$(DOC_MODULE)-sections.txt $(distdir)/
 	@cd $(distdir) && rm -f $(DISTCLEANFILES)
 	@$(GTKDOC_REBASE) --online --relative --html-dir=$(distdir)/html
 
