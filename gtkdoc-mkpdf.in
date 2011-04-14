@@ -93,13 +93,15 @@ if $is_xml; then
       # -V is useful for debugging
       # -T db2latex : different style
       # -d : keep transient files (for debugging)
+      # -P abc.def=$quiet : once the stylesheets have a quiet mode
       # xsltproc is already called with --xinclude
       # does not work: --xslt-opts "$path_arg --nonet $@"
-      #echo "calling: @DBLATEX@ -o $module.pdf $imgdirs $document"
+      dblatex_options="-o $module.pdf $imgdirs $document"
+      #echo "calling: @DBLATEX@ $dblatex_options"
       if test $verbose = "0"; then
-        @DBLATEX@ 2>&1 >/dev/null -o $module.pdf $imgdirs $document | grep -v 'programlisting or screen'
+        @DBLATEX@ 2>&1 >/dev/null $dblatex_options | grep -v 'programlisting or screen'
       else
-        { @DBLATEX@ 2>&1 >&3 -o $module.pdf $imgdirs $document | grep -v 'programlisting or screen' >&2; } 3>&1
+        { @DBLATEX@ 2>&1 >&3 $dblatex_options | grep -v 'programlisting or screen' >&2; } 3>&1
       fi
   else
     if test -n "@FOP@"; then
