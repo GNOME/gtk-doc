@@ -22,8 +22,8 @@
 #############################################################################
 # Script      : gtkdoc-check
 # Description : Runs various checks on built documentation and outputs test
-#		results. Can be run druring make check, by adding this to the
-#		documentations Makefile.am: TESTS = $(GTKDOC_CHECK)
+#                results. Can be run druring make check, by adding this to the
+#                documentations Makefile.am: TESTS = $(GTKDOC_CHECK)
 #############################################################################
 
 use strict;
@@ -33,7 +33,7 @@ my $PRINT_VERSION;
 my $PRINT_HELP;
 
 my %optctl = ('version' => \$PRINT_VERSION,
-	      'help' => \$PRINT_HELP);
+              'help' => \$PRINT_HELP);
 GetOptions(\%optctl, "version", "help");
 
 if ($PRINT_VERSION) {

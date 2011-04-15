@@ -38,11 +38,11 @@ my $OUTPUT_DIR;
 my $PRINT_VERSION;
 
 %optctl = (module => \$MODULE,
-	   types => \$TYPES_FILE,
-	   nogtkinit => \$NO_GTK_INIT,
-	   'output-dir' => \$OUTPUT_DIR,
-	   'version' => \$PRINT_VERSION,
-	   'help' => \$PRINT_HELP);
+           types => \$TYPES_FILE,
+           nogtkinit => \$NO_GTK_INIT,
+           'output-dir' => \$OUTPUT_DIR,
+           'version' => \$PRINT_VERSION,
+           'help' => \$PRINT_HELP);
 
 GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "version", "help");
 
@@ -89,14 +89,14 @@ $includes = "";
 
 for (<TYPES>) {
     if (/^#include/) {
-	$includes .= $_;
+        $includes .= $_;
     } elsif (/^%/) {
-	next;
+        next;
     } elsif (/^\s*$/) {
-	next;
+        next;
     } else {
-	chomp;
-	push @types, $_;
+        chomp;
+        push @types, $_;
     }
 }
 
@@ -140,17 +140,17 @@ gchar *args_filename = "$new_args_filename";
 
 static void output_signals (void);
 static void output_widget_signals (FILE *fp,
-				   GtkType object_type);
+                                   GtkType object_type);
 static void output_widget_signal (FILE *fp,
-				  GtkType object_type,
-				  gchar *object_class_name,
-				  guint signal_id);
+                                  GtkType object_type,
+                                  gchar *object_class_name,
+                                  guint signal_id);
 static gchar * get_type_name (GtkType type,
-			      gboolean * is_pointer);
+                              gboolean * is_pointer);
 static void output_widget_hierarchy (void);
 static void output_hierarchy (FILE *fp,
-			      GtkType type,
-			      guint level);
+                              GtkType type,
+                              guint level);
 
 static void output_args (void);
 static void output_widget_args (FILE *fp, GtkType object_type);
@@ -224,7 +224,7 @@ output_widget_signals (FILE *fp, GtkType object_type)
         }
 
       output_widget_signal (fp, object_type, object_class_name,
-			    class->signals[sig]);
+                            class->signals[sig]);
     }
 }
 
@@ -232,9 +232,9 @@ output_widget_signals (FILE *fp, GtkType object_type)
 /* This outputs one signal. */
 static void
 output_widget_signal (FILE *fp,
-		      GtkType object_type,
-		      gchar *object_name,
-		      guint signal_id)
+                      GtkType object_type,
+                      gchar *object_name,
+                      guint signal_id)
 {
   GtkSignalQuery *query_info;
   gchar *ret_type, *pos, *type_name, *arg_name, *object_arg, *object_arg_start;
@@ -290,7 +290,7 @@ output_widget_signal (FILE *fp,
   for (i = 0; signal_name[i]; i++)
     {
       if (signal_name[i] == '-')
-	signal_name[i] = '_';
+        signal_name[i] = '_';
     }
 
   /* Output the signal parameters. */
@@ -335,8 +335,8 @@ output_widget_signal (FILE *fp,
   ret_type = get_type_name (query_info->return_val, &is_pointer);
 
   fprintf (fp,
-	   "<SIGNAL>\\n<NAME>%s::%s</NAME>\\n<RETURNS>%s%s</RETURNS>\\n%s</SIGNAL>\\n\\n",
-	   object_name, query_info->signal_name, ret_type, is_pointer ? "*" : "", buffer);
+           "<SIGNAL>\\n<NAME>%s::%s</NAME>\\n<RETURNS>%s%s</RETURNS>\\n%s</SIGNAL>\\n\\n",
+           object_name, query_info->signal_name, ret_type, is_pointer ? "*" : "", buffer);
   g_free (query_info);
 }
 
@@ -426,8 +426,8 @@ output_widget_hierarchy (void)
 /* This is called recursively to output the hierarchy of a widget. */
 static void
 output_hierarchy (FILE *fp,
-		  GtkType type,
-		  guint level)
+                  GtkType type,
+                  guint level)
 {
   GList *list;
   guint i;
@@ -494,19 +494,19 @@ output_widget_args (FILE *fp, GtkType object_type)
       pos = flags;
       /* We use one-character flags for simplicity. */
       if (arg_flags[arg] & GTK_ARG_READABLE)
-	*pos++ = 'r';
+        *pos++ = 'r';
       if (arg_flags[arg] & GTK_ARG_WRITABLE)
-	*pos++ = 'w';
+        *pos++ = 'w';
       if (arg_flags[arg] & GTK_ARG_CONSTRUCT)
-	*pos++ = 'x';
+        *pos++ = 'x';
       if (arg_flags[arg] & GTK_ARG_CONSTRUCT_ONLY)
-	*pos++ = 'X';
+        *pos++ = 'X';
       if (arg_flags[arg] & GTK_ARG_CHILD_ARG)
-	*pos++ = 'c';
+        *pos++ = 'c';
       *pos = 0;
 
       fprintf (fp, "<ARG>\\n<NAME>%s</NAME>\\n<TYPE>%s</TYPE>\\n<FLAGS>%s</FLAGS>\\n</ARG>\\n\\n",
-	       args[arg].name, gtk_type_name (args[arg].type), flags);
+               args[arg].name, gtk_type_name (args[arg].type), flags);
     }
 
   g_free (args);

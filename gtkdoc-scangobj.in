@@ -43,14 +43,14 @@ my $QUERY_CHILD_PROPERTIES;
 
 # --nogtkinit is deprecated, as it is the default now anyway.
 %optctl = (module => \$MODULE,
-	   types => \$TYPES_FILE,
-	   nogtkinit => \$NO_GTK_INIT,
-	   'type-init-func' => \$TYPE_INIT_FUNC,
-	   'query-child-properties' => \$QUERY_CHILD_PROPERTIES,
-	   'output-dir' => \$OUTPUT_DIR,
-	   'verbose' => \$VERBOSE,
-	   'version' => \$PRINT_VERSION,
-	   'help' => \$PRINT_HELP);
+           types => \$TYPES_FILE,
+           nogtkinit => \$NO_GTK_INIT,
+           'type-init-func' => \$TYPE_INIT_FUNC,
+           'query-child-properties' => \$QUERY_CHILD_PROPERTIES,
+           'output-dir' => \$OUTPUT_DIR,
+           'verbose' => \$VERBOSE,
+           'version' => \$PRINT_VERSION,
+           'help' => \$PRINT_HELP);
 
 GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "type-init-func:s", "query-child-properties:s", "verbose", "version", "help");
 
@@ -110,17 +110,17 @@ $includes = "";
 
 for (<TYPES>) {
     if (/^#include/) {
-	$includes .= $_;
+        $includes .= $_;
     } elsif (/^gnome_keyring_item_info_get_type$/) {
         # HACK: This isn't really a GObject type so skip it.
         next;
     } elsif (/^%/) {
-	next;
+        next;
     } elsif (/^\s*$/) {
-	next;
+        next;
     } else {
-	chomp;
-	push @types, $_;
+        chomp;
+        push @types, $_;
     }
 }
 
@@ -139,7 +139,7 @@ if ($includes) {
     print OUTPUT $includes;
 } else {
     for (@types) {
-	print OUTPUT "extern GType $_ (void);\n";
+        print OUTPUT "extern GType $_ (void);\n";
     }
 }
 
@@ -205,24 +205,24 @@ const gchar *args_filename = "$new_args_filename";
 
 static void output_signals (void);
 static void output_object_signals (FILE *fp,
-				   GType object_type);
+                                   GType object_type);
 static void output_object_signal (FILE *fp,
-				  const gchar *object_class_name,
-				  guint signal_id);
+                                  const gchar *object_class_name,
+                                  guint signal_id);
 static const gchar * get_type_name (GType type,
-			            gboolean * is_pointer);
+                                    gboolean * is_pointer);
 static void output_object_hierarchy (void);
 static void output_hierarchy (FILE *fp,
-			      GType type,
-			      guint level);
+                              GType type,
+                              guint level);
 
 static void output_object_interfaces (void);
 static void output_interfaces (FILE *fp,
-			       GType type);
+                               GType type);
 
 static void output_interface_prerequisites (void);
 static void output_prerequisites (FILE *fp,
-			          GType type);
+                                  GType type);
 
 static void output_args (void);
 static void output_object_args (FILE *fp, GType object_type);
@@ -301,8 +301,8 @@ output_object_signals (FILE *fp, GType object_type)
 /* This outputs one signal. */
 static void
 output_object_signal (FILE *fp,
-		      const gchar *object_name,
-		      guint signal_id)
+                      const gchar *object_name,
+                      guint signal_id)
 {
   GSignalQuery query_info;
   const gchar *type_name, *ret_type, *object_arg, *arg_name;
@@ -360,7 +360,7 @@ output_object_signal (FILE *fp,
   for (i = 0; signal_name[i]; i++)
     {
       if (signal_name[i] == '-')
-	signal_name[i] = '_';
+        signal_name[i] = '_';
     }
 
   /* Output the signal parameters. */
@@ -428,8 +428,8 @@ output_object_signal (FILE *fp,
   ret_type = get_type_name (query_info.return_type & ~G_SIGNAL_TYPE_STATIC_SCOPE, &is_pointer);
 
   fprintf (fp,
-	   "<SIGNAL>\\n<NAME>%s::%s</NAME>\\n<RETURNS>%s%s</RETURNS>\\n<FLAGS>%s</FLAGS>\\n%s</SIGNAL>\\n\\n",
-	   object_name, query_info.signal_name, ret_type, is_pointer ? "*" : "", flags, buffer);
+           "<SIGNAL>\\n<NAME>%s::%s</NAME>\\n<RETURNS>%s%s</RETURNS>\\n<FLAGS>%s</FLAGS>\\n%s</SIGNAL>\\n\\n",
+           object_name, query_info.signal_name, ret_type, is_pointer ? "*" : "", flags, buffer);
 }
 
 
@@ -561,8 +561,8 @@ output_object_hierarchy (void)
 /* This is called recursively to output the hierarchy of a object. */
 static void
 output_hierarchy (FILE  *fp,
-		  GType  type,
-		  guint   level)
+                  GType  type,
+                  guint   level)
 {
   guint i;
   GType *children;
@@ -610,7 +610,7 @@ static void output_object_interfaces (void)
 
 static void
 output_interfaces (FILE  *fp,
-		   GType  type)
+                   GType  type)
 {
   guint i;
   GType *children, *interfaces;
@@ -654,7 +654,7 @@ static void output_interface_prerequisites (void)
 
 static void
 output_prerequisites (FILE  *fp,
-		      GType  type)
+                      GType  type)
 {
 #if GLIB_CHECK_VERSION(2,1,0)
   guint i;
@@ -851,13 +851,13 @@ describe_type (GParamSpec *spec)
       lower = describe_signed_constant (sizeof(gchar), pspec->minimum);
       upper = describe_signed_constant (sizeof(gchar), pspec->maximum);
       if (pspec->minimum == G_MININT8 && pspec->maximum == G_MAXINT8)
-	desc = g_strdup ("");
+        desc = g_strdup ("");
       else if (pspec->minimum == G_MININT8)
-	desc = g_strdup_printf ("<= %s", upper);
+        desc = g_strdup_printf ("<= %s", upper);
       else if (pspec->maximum == G_MAXINT8)
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -868,13 +868,13 @@ describe_type (GParamSpec *spec)
       lower = describe_unsigned_constant (sizeof(guchar), pspec->minimum);
       upper = describe_unsigned_constant (sizeof(guchar), pspec->maximum);
       if (pspec->minimum == 0 && pspec->maximum == G_MAXUINT8)
-	desc = g_strdup ("");
+        desc = g_strdup ("");
       else if (pspec->minimum == 0)
-	desc = g_strdup_printf ("<= %s", upper);
+        desc = g_strdup_printf ("<= %s", upper);
       else if (pspec->maximum == G_MAXUINT8)
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -885,13 +885,13 @@ describe_type (GParamSpec *spec)
       lower = describe_signed_constant (sizeof(gint), pspec->minimum);
       upper = describe_signed_constant (sizeof(gint), pspec->maximum);
       if (pspec->minimum == G_MININT && pspec->maximum == G_MAXINT)
-	desc = g_strdup ("");
+        desc = g_strdup ("");
       else if (pspec->minimum == G_MININT)
-	desc = g_strdup_printf ("<= %s", upper);
+        desc = g_strdup_printf ("<= %s", upper);
       else if (pspec->maximum == G_MAXINT)
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -902,13 +902,13 @@ describe_type (GParamSpec *spec)
       lower = describe_unsigned_constant (sizeof(guint), pspec->minimum);
       upper = describe_unsigned_constant (sizeof(guint), pspec->maximum);
       if (pspec->minimum == 0 && pspec->maximum == G_MAXUINT)
-	desc = g_strdup ("");
+        desc = g_strdup ("");
       else if (pspec->minimum == 0)
-	desc = g_strdup_printf ("<= %s", upper);
+        desc = g_strdup_printf ("<= %s", upper);
       else if (pspec->maximum == G_MAXUINT)
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -919,13 +919,13 @@ describe_type (GParamSpec *spec)
       lower = describe_signed_constant (sizeof(glong), pspec->minimum);
       upper = describe_signed_constant (sizeof(glong), pspec->maximum);
       if (pspec->minimum == G_MINLONG && pspec->maximum == G_MAXLONG)
-	desc = g_strdup ("");
+        desc = g_strdup ("");
       else if (pspec->minimum == G_MINLONG)
-	desc = g_strdup_printf ("<= %s", upper);
+        desc = g_strdup_printf ("<= %s", upper);
       else if (pspec->maximum == G_MAXLONG)
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -936,13 +936,13 @@ describe_type (GParamSpec *spec)
       lower = describe_unsigned_constant (sizeof(gulong), pspec->minimum);
       upper = describe_unsigned_constant (sizeof(gulong), pspec->maximum);
       if (pspec->minimum == 0 && pspec->maximum == G_MAXULONG)
-	desc = g_strdup ("");
+        desc = g_strdup ("");
       else if (pspec->minimum == 0)
-	desc = g_strdup_printf ("<= %s", upper);
+        desc = g_strdup_printf ("<= %s", upper);
       else if (pspec->maximum == G_MAXULONG)
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -953,13 +953,13 @@ describe_type (GParamSpec *spec)
       lower = describe_signed_constant (sizeof(gint64), pspec->minimum);
       upper = describe_signed_constant (sizeof(gint64), pspec->maximum);
       if (pspec->minimum == G_MININT64 && pspec->maximum == G_MAXINT64)
-	desc = g_strdup ("");
+        desc = g_strdup ("");
       else if (pspec->minimum == G_MININT64)
-	desc = g_strdup_printf ("<= %s", upper);
+        desc = g_strdup_printf ("<= %s", upper);
       else if (pspec->maximum == G_MAXINT64)
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -970,13 +970,13 @@ describe_type (GParamSpec *spec)
       lower = describe_unsigned_constant (sizeof(guint64), pspec->minimum);
       upper = describe_unsigned_constant (sizeof(guint64), pspec->maximum);
       if (pspec->minimum == 0 && pspec->maximum == G_MAXUINT64)
-	desc = g_strdup ("");
+        desc = g_strdup ("");
       else if (pspec->minimum == 0)
-	desc = g_strdup_printf ("<= %s", upper);
+        desc = g_strdup_printf ("<= %s", upper);
       else if (pspec->maximum == G_MAXUINT64)
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -987,16 +987,16 @@ describe_type (GParamSpec *spec)
       lower = describe_double_constant (pspec->minimum);
       upper = describe_double_constant (pspec->maximum);
       if (GTKDOC_COMPARE_FLOAT (pspec->minimum, -G_MAXFLOAT))
-	{
-	  if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXFLOAT))
-	    desc = g_strdup ("");
-	  else
-	    desc = g_strdup_printf ("<= %s", upper);
-	}
+        {
+          if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXFLOAT))
+            desc = g_strdup ("");
+          else
+            desc = g_strdup_printf ("<= %s", upper);
+        }
       else if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXFLOAT))
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -1007,16 +1007,16 @@ describe_type (GParamSpec *spec)
       lower = describe_double_constant (pspec->minimum);
       upper = describe_double_constant (pspec->maximum);
       if (GTKDOC_COMPARE_FLOAT (pspec->minimum, -G_MAXDOUBLE))
-	{
-	  if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXDOUBLE))
-	    desc = g_strdup ("");
-	  else
-	    desc = g_strdup_printf ("<= %s", upper);
-	}
+        {
+          if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXDOUBLE))
+            desc = g_strdup ("");
+          else
+            desc = g_strdup_printf ("<= %s", upper);
+        }
       else if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXDOUBLE))
-	desc = g_strdup_printf (">= %s", lower);
+        desc = g_strdup_printf (">= %s", lower);
       else
-	desc = g_strdup_printf ("[%s,%s]", lower, upper);
+        desc = g_strdup_printf ("[%s,%s]", lower, upper);
       g_free (lower);
       g_free (upper);
     }
@@ -1112,9 +1112,9 @@ describe_default (GParamSpec *spec)
       GParamSpecUnichar *pspec = G_PARAM_SPEC_UNICHAR (spec);
 
       if (g_unichar_isprint (pspec->default_value))
-	desc = g_strdup_printf ("'%c'", pspec->default_value);
+        desc = g_strdup_printf ("'%c'", pspec->default_value);
       else
-	desc = g_strdup_printf ("%u", pspec->default_value);
+        desc = g_strdup_printf ("%u", pspec->default_value);
     }
   else if (G_IS_PARAM_SPEC_ENUM (spec))
     {
@@ -1122,9 +1122,9 @@ describe_default (GParamSpec *spec)
 
       GEnumValue *value = g_enum_get_value (pspec->enum_class, pspec->default_value);
       if (value)
-	desc = g_strdup_printf ("%s", value->value_name);
+        desc = g_strdup_printf ("%s", value->value_name);
       else
-	desc = g_strdup_printf ("%d", pspec->default_value);
+        desc = g_strdup_printf ("%d", pspec->default_value);
     }
   else if (G_IS_PARAM_SPEC_FLAGS (spec))
     {
@@ -1136,26 +1136,26 @@ describe_default (GParamSpec *spec)
       acc = g_string_new ("");
 
       while (default_value)
-	{
-	  GFlagsValue *value = g_flags_get_first_value (pspec->flags_class, default_value);
+        {
+          GFlagsValue *value = g_flags_get_first_value (pspec->flags_class, default_value);
 
-	  if (!value)
-	    break;
+          if (!value)
+            break;
 
-	  if (acc->len > 0)
-	    g_string_append (acc, "|");
-	  g_string_append (acc, value->value_name);
+          if (acc->len > 0)
+            g_string_append (acc, "|");
+          g_string_append (acc, value->value_name);
 
-	  default_value &= ~value->value;
-	}
+          default_value &= ~value->value;
+        }
 
       if (default_value == 0)
-	desc = g_string_free (acc, FALSE);
+        desc = g_string_free (acc, FALSE);
       else
-	{
-	  desc = g_strdup_printf ("%d", pspec->default_value);
-	  g_string_free (acc, TRUE);
-	}
+        {
+          desc = g_strdup_printf ("%d", pspec->default_value);
+          g_string_free (acc, TRUE);
+        }
     }
   else if (G_IS_PARAM_SPEC_FLOAT (spec))
     {
@@ -1184,15 +1184,15 @@ describe_default (GParamSpec *spec)
       GParamSpecString *pspec = G_PARAM_SPEC_STRING (spec);
 
       if (pspec->default_value)
-	{
-	  gchar *esc = g_strescape (pspec->default_value, NULL);
+        {
+          gchar *esc = g_strescape (pspec->default_value, NULL);
 
-	  desc = g_strdup_printf ("\\"%s\\"", esc);
+          desc = g_strdup_printf ("\\"%s\\"", esc);
 
-	  g_free (esc);
-	}
+          g_free (esc);
+        }
       else
-	desc = g_strdup_printf ("NULL");
+        desc = g_strdup_printf ("NULL");
     }
 #if GLIB_CHECK_VERSION (2, 25, 9)
   else if (G_IS_PARAM_SPEC_VARIANT (spec))
@@ -1200,9 +1200,9 @@ describe_default (GParamSpec *spec)
       GParamSpecVariant *pspec = G_PARAM_SPEC_VARIANT (spec);
 
       if (pspec->default_value)
-	desc = g_variant_print (pspec->default_value, TRUE);
+        desc = g_variant_print (pspec->default_value, TRUE);
       else
-	desc = g_strdup ("NULL");
+        desc = g_strdup ("NULL");
     }
 #endif
   else
@@ -1234,7 +1234,7 @@ output_object_args (FILE *fp, GType object_type)
     {
       class = g_type_class_peek (object_type);
       if (!class)
-	return;
+        return;
 
       properties = g_object_class_list_properties (class, &n_properties);
     }
@@ -1244,7 +1244,7 @@ output_object_args (FILE *fp, GType object_type)
       class = g_type_default_interface_ref (object_type);
 
       if (!class)
-	return;
+        return;
 
       properties = g_object_interface_list_properties (class, &n_properties);
     }
@@ -1270,17 +1270,17 @@ output_object_args (FILE *fp, GType object_type)
         pos = flags;
         /* We use one-character flags for simplicity. */
         if (child_prop && !style_prop)
-   	  *pos++ = 'c';
+             *pos++ = 'c';
         if (style_prop)
-   	  *pos++ = 's';
+             *pos++ = 's';
         if (spec->flags & G_PARAM_READABLE)
- 	  *pos++ = 'r';
+           *pos++ = 'r';
         if (spec->flags & G_PARAM_WRITABLE)
-	  *pos++ = 'w';
+          *pos++ = 'w';
         if (spec->flags & G_PARAM_CONSTRUCT)
-	  *pos++ = 'x';
+          *pos++ = 'x';
         if (spec->flags & G_PARAM_CONSTRUCT_ONLY)
-	  *pos++ = 'X';
+          *pos++ = 'X';
         *pos = 0;
 
         nick = g_param_spec_get_nick (spec);
@@ -1293,13 +1293,13 @@ output_object_args (FILE *fp, GType object_type)
             dot = ".";
         }
 
-	type_desc = describe_type (spec);
-	default_value = describe_default (spec);
-	type_name = get_type_name (spec->value_type, &is_pointer);
+        type_desc = describe_type (spec);
+        default_value = describe_default (spec);
+        type_name = get_type_name (spec->value_type, &is_pointer);
         fprintf (fp, "<ARG>\\n<NAME>%s::%s</NAME>\\n<TYPE>%s%s</TYPE>\\n<RANGE>%s</RANGE>\\n<FLAGS>%s</FLAGS>\\n<NICK>%s</NICK>\\n<BLURB>%s%s</BLURB>\\n<DEFAULT>%s</DEFAULT>\\n</ARG>\\n\\n",
-	         object_class_name, g_param_spec_get_name (spec), type_name, is_pointer ? "*" : "", type_desc, flags, nick ? nick : "(null)", blurb ? blurb : "(null)", dot, default_value);
-	g_free (type_desc);
-	g_free (default_value);
+                 object_class_name, g_param_spec_get_name (spec), type_name, is_pointer ? "*" : "", type_desc, flags, nick ? nick : "(null)", blurb ? blurb : "(null)", dot, default_value);
+        g_free (type_desc);
+        g_free (default_value);
       }
 
     g_free (properties);

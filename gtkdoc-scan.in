@@ -22,18 +22,18 @@
 #############################################################################
 # Script      : gtkdoc-scan
 # Description : Extracts declarations of functions, macros, enums, structs
-#		and unions from header files.
+#                and unions from header files.
 #
-#		It is called with a module name, an optional source directory,
-#		an optional output directory, and the header files to scan.
+#                It is called with a module name, an optional source directory,
+#                an optional output directory, and the header files to scan.
 #
-#		It outputs all declarations found to a file named
-#		'$MODULE-decl.txt', and the list of decarations to another
-#		file '$MODULE-decl-list.txt'.
+#                It outputs all declarations found to a file named
+#                '$MODULE-decl.txt', and the list of decarations to another
+#                file '$MODULE-decl-list.txt'.
 #
-#		This second list file is typically copied to
-#		'$MODULE-sections.txt' and organized into sections ready to
-#		output the SGML pages.
+#                This second list file is typically copied to
+#                '$MODULE-sections.txt' and organized into sections ready to
+#                output the SGML pages.
 #############################################################################
 
 use strict;
@@ -62,18 +62,18 @@ my $DEPRECATED_GUARDS;
 my $IGNORE_DECORATORS;
 
 my %optctl = (module => \$MODULE,
-	      'source-dir' => \@SOURCE_DIRS,
-	      'ignore-headers' => \$IGNORE_HEADERS,
-	      'output-dir' => \$OUTPUT_DIR,
-	      'rebuild-types' => \$REBUILD_TYPES,
+              'source-dir' => \@SOURCE_DIRS,
+              'ignore-headers' => \$IGNORE_HEADERS,
+              'output-dir' => \$OUTPUT_DIR,
+              'rebuild-types' => \$REBUILD_TYPES,
               'rebuild-sections' => \$REBUILD_SECTIONS,
-	      'version' => \$PRINT_VERSION,
-	      'help' => \$PRINT_HELP,
-	      'deprecated-guards' => \$DEPRECATED_GUARDS,
-	      'ignore-decorators' => \$IGNORE_DECORATORS);
+              'version' => \$PRINT_VERSION,
+              'help' => \$PRINT_HELP,
+              'deprecated-guards' => \$DEPRECATED_GUARDS,
+              'ignore-decorators' => \$IGNORE_DECORATORS);
 GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
-	   "output-dir:s", "rebuild-types", "rebuild-sections", "version",
-	   "help", "deprecated-guards:s", "ignore-decorators:s");
+           "output-dir:s", "rebuild-types", "rebuild-sections", "version",
+           "help", "deprecated-guards:s", "ignore-decorators:s");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -135,7 +135,7 @@ open (DECL, ">$new_decl")
     || die "Can't open $new_decl";
 if ($REBUILD_TYPES) {
     open (TYPES, ">$new_types")
-	|| die "Can't open $new_types";
+        || die "Can't open $new_types";
 }
 
 my $main_list = "";
@@ -200,9 +200,9 @@ if (! -e $overrides_file) {
 # Description : This scans a directory tree looking for header files.
 #
 # Arguments   : $source_dir - the directory to scan.
-#		$object_list - a reference to the list of object functions &
-#			declarations.
-#		$main_list - a reference to the list of other declarations.
+#                $object_list - a reference to the list of object functions &
+#                        declarations.
+#                $main_list - a reference to the list of other declarations.
 #############################################################################
 
 sub ScanHeaders {
@@ -213,24 +213,24 @@ sub ScanHeaders {
     my (@subdirs) = ();
 
     opendir (SRCDIR, $source_dir)
-	|| die "Can't open source directory $source_dir: $!";
+        || die "Can't open source directory $source_dir: $!";
     my $file;
     foreach $file (readdir (SRCDIR)) {
-	if ($file eq '.' || $file eq '..' || $file =~ /^\./) {
-	    next;
-	} elsif (-d "$source_dir/$file") {
-	    push (@subdirs, $file);
-	} elsif ($file =~ m/\.h$/) {
-	    &ScanHeader ("$source_dir/$file", $object_list, $main_list);
-	}
+        if ($file eq '.' || $file eq '..' || $file =~ /^\./) {
+            next;
+        } elsif (-d "$source_dir/$file") {
+            push (@subdirs, $file);
+        } elsif ($file =~ m/\.h$/) {
+            &ScanHeader ("$source_dir/$file", $object_list, $main_list);
+        }
     }
     closedir (SRCDIR);
 
     # Now recursively scan the subdirectories.
     my $dir;
     foreach $dir (@subdirs) {
-	next if ($IGNORE_HEADERS =~ m/(\s|^)\Q${dir}\E(\s|$)/);
-	&ScanHeaders ("$source_dir/$dir", $object_list, $main_list);
+        next if ($IGNORE_HEADERS =~ m/(\s|^)\Q${dir}\E(\s|$)/);
+        &ScanHeaders ("$source_dir/$dir", $object_list, $main_list);
     }
 }
 
@@ -238,40 +238,40 @@ sub ScanHeaders {
 #############################################################################
 # Function    : ScanHeader
 # Description : This scans a header file, looking for declarations of
-#		functions, macros, typedefs, structs and unions, which it
-#		outputs to the DECL file.
+#                functions, macros, typedefs, structs and unions, which it
+#                outputs to the DECL file.
 # Arguments   : $input_file - the header file to scan.
-#		$object_list - a reference to the list of object functions &
-#			declarations.
-#		$main_list - a reference to the list of other declarations.
+#                $object_list - a reference to the list of object functions &
+#                        declarations.
+#                $main_list - a reference to the list of other declarations.
 # Returns     : it adds declarations to the appropriate list.
 #############################################################################
 
 sub ScanHeader {
     my ($input_file, $object_list, $main_list) = @_;
 
-    my $list = "";		  # Holds the resulting list of declarations.
-    my ($in_comment) = 0;		  # True if we are in a comment.
-    my ($in_declaration) = "";	  # The type of declaration we are in, e.g.
-				  #   'function' or 'macro'.
-    my ($skip_block) = 0;		  # True if we should skip a block.
-    my ($symbol);		  # The current symbol being declared.
-    my ($decl);			  # Holds the declaration of the current symbol.
-    my ($ret_type);		  # For functions and function typedefs this
-				  #   holds the function's return type.
+    my $list = "";                  # Holds the resulting list of declarations.
+    my ($in_comment) = 0;                  # True if we are in a comment.
+    my ($in_declaration) = "";          # The type of declaration we are in, e.g.
+                                  #   'function' or 'macro'.
+    my ($skip_block) = 0;                  # True if we should skip a block.
+    my ($symbol);                  # The current symbol being declared.
+    my ($decl);                          # Holds the declaration of the current symbol.
+    my ($ret_type);                  # For functions and function typedefs this
+                                  #   holds the function's return type.
     my ($pre_previous_line) = "";   # The pre-previous line read in - some Gnome
-				  #   functions have the return type on one
-				  #   line, the function name on the next,
-				  #   and the rest of the declaration after.
-    my ($previous_line) = "";	  # The previous line read in - some Gnome
-				  #   functions have the return type on one line
-				  #   and the rest of the declaration after.
-    my ($first_macro) = 1;	  # Used to try to skip the standard #ifdef XXX
-				  #   #define XXX at the start of headers.
-    my ($level);			  # Used to handle structs/unions which contain
-				  #   nested structs or unions.
-    my @objects = ();		  # Holds declarations that look like GtkObject
-				  #   subclasses, which we remove from the list.
+                                  #   functions have the return type on one
+                                  #   line, the function name on the next,
+                                  #   and the rest of the declaration after.
+    my ($previous_line) = "";          # The previous line read in - some Gnome
+                                  #   functions have the return type on one line
+                                  #   and the rest of the declaration after.
+    my ($first_macro) = 1;          # Used to try to skip the standard #ifdef XXX
+                                  #   #define XXX at the start of headers.
+    my ($level);                          # Used to handle structs/unions which contain
+                                  #   nested structs or unions.
+    my @objects = ();                  # Holds declarations that look like GtkObject
+                                  #   subclasses, which we remove from the list.
     my ($internal) = 0;             # Set to 1 for internal symbols, we need to
                                     #   fully parse, but don't add them to docs
     my %forward_decls = ();         # hashtable of forward declarations, we skip
@@ -294,42 +294,42 @@ sub ScanHeader {
     $seen_headers{$canonical_input_file} = 1;
 
     if ($input_file =~ m/^.*[\/\\](.*)\.h+$/) {
-	$file_basename = $1;
+        $file_basename = $1;
     } else {
-	LogWarning(__FILE__,__LINE__,"Can't find basename of file $input_file");
-	$file_basename = $input_file;
+        LogWarning(__FILE__,__LINE__,"Can't find basename of file $input_file");
+        $file_basename = $input_file;
     }
 
     # Check if the basename is in the list of headers to ignore.
     if ($IGNORE_HEADERS =~ m/(\s|^)\Q${file_basename}\E\.h(\s|$)/) {
-	@TRACE@("File ignored: $input_file");
-	return;
+        @TRACE@("File ignored: $input_file");
+        return;
     }
 
     if (! -f $input_file) {
-	LogWarning(__FILE__,__LINE__,"File doesn't exist: $input_file");
-	return;
+        LogWarning(__FILE__,__LINE__,"File doesn't exist: $input_file");
+        return;
     }
 
     @TRACE@("Scanning $input_file");
 
     open(INPUT, $input_file)
-	|| die "Can't open $input_file: $!";
+        || die "Can't open $input_file: $!";
     while(<INPUT>) {
-	# If this is a private header, skip it.
-	if (m%^\s*/\*\s*<\s*private_header\s*>\s*\*/%) {
-	    close(INPUT);
-	    return;
-	}
+        # If this is a private header, skip it.
+        if (m%^\s*/\*\s*<\s*private_header\s*>\s*\*/%) {
+            close(INPUT);
+            return;
+        }
 
-	# Skip to the end of the current comment.
-	if ($in_comment) {
-	    @TRACE@("Comment: $_");
-	    if (m%\*/%) {
-		$in_comment = 0;
-	    }
-	    next;
-	}
+        # Skip to the end of the current comment.
+        if ($in_comment) {
+            @TRACE@("Comment: $_");
+            if (m%\*/%) {
+                $in_comment = 0;
+            }
+            next;
+        }
 
         # Keep a count of #if, #ifdef, #ifndef nesting,
         # and if we enter a deprecation-symbol-bracketed
@@ -373,76 +373,76 @@ sub ScanHeader {
             next;
         }
 
-	if (!$in_declaration) {
-	    # Skip top-level comments.
-	    if (s%^\s*/\*%%) {
-		if (m%\*/%) {
-		    @TRACE@("Found one-line comment: $_");
-		} else {
-		    $in_comment = 1;
-		    @TRACE@("Found start of comment: $_");
-		}
-		next;
-	    }
+        if (!$in_declaration) {
+            # Skip top-level comments.
+            if (s%^\s*/\*%%) {
+                if (m%\*/%) {
+                    @TRACE@("Found one-line comment: $_");
+                } else {
+                    $in_comment = 1;
+                    @TRACE@("Found start of comment: $_");
+                }
+                next;
+            }
 
             @TRACE@("0: $_");
 
-	    # MACROS
+            # MACROS
 
-	    if (m/^\s*#\s*define\s+(\w+)/) {
-		$symbol = $1;
-		$decl = $_;
-		# We assume all macros which start with '_' are private, but
-		# we accept '_' itself which is the standard gettext macro.
-		# We also try to skip the first macro if it looks like the
-		# standard #ifndef HEADER_FILE #define HEADER_FILE etc.
-		# And we only want TRUE & FALSE defined in GLib (libdefs.h in
-		# libgnome also defines them if they are not already defined).
-		if (($symbol !~ m/^_/
-		     && ($previous_line !~ m/#ifndef\s+$symbol/
-			 || $first_macro == 0)
-		     && (($symbol ne 'TRUE' && $symbol ne 'FALSE')
-			 || $MODULE eq 'glib'))
-		    || $symbol eq "_") {
-		    $in_declaration = "macro";
-		    @TRACE@("Macro: $symbol");
-		} else {
-		    @TRACE@("skipping Macro: $symbol");
-		    $in_declaration = "macro";
-		    $internal = 1;
-		}
-		$first_macro = 0;
+            if (m/^\s*#\s*define\s+(\w+)/) {
+                $symbol = $1;
+                $decl = $_;
+                # We assume all macros which start with '_' are private, but
+                # we accept '_' itself which is the standard gettext macro.
+                # We also try to skip the first macro if it looks like the
+                # standard #ifndef HEADER_FILE #define HEADER_FILE etc.
+                # And we only want TRUE & FALSE defined in GLib (libdefs.h in
+                # libgnome also defines them if they are not already defined).
+                if (($symbol !~ m/^_/
+                     && ($previous_line !~ m/#ifndef\s+$symbol/
+                         || $first_macro == 0)
+                     && (($symbol ne 'TRUE' && $symbol ne 'FALSE')
+                         || $MODULE eq 'glib'))
+                    || $symbol eq "_") {
+                    $in_declaration = "macro";
+                    @TRACE@("Macro: $symbol");
+                } else {
+                    @TRACE@("skipping Macro: $symbol");
+                    $in_declaration = "macro";
+                    $internal = 1;
+                }
+                $first_macro = 0;
 
 
-	    # TYPEDEF'D FUNCTIONS (i.e. user functions)
+            # TYPEDEF'D FUNCTIONS (i.e. user functions)
 
             #                        $1                                $3            $4             $5
-	    } elsif (m/^\s*typedef\s+((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
-		my $p3 = defined($3) ? $3 : "";
-		$ret_type = "$1$p3 $4";
-		$symbol = $5;
-		$decl = $';
-		$in_declaration = "user_function";
-		@TRACE@("user function (1): $symbol, Returns: $ret_type");
+            } elsif (m/^\s*typedef\s+((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
+                my $p3 = defined($3) ? $3 : "";
+                $ret_type = "$1$p3 $4";
+                $symbol = $5;
+                $decl = $';
+                $in_declaration = "user_function";
+                @TRACE@("user function (1): $symbol, Returns: $ret_type");
 
             #                                                       $1                                $3            $4             $5
-	    } elsif (($previous_line =~ m/^\s*typedef\s*/) && m/^\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
-		my $p3 = defined($3) ? $3 : "";
-		$ret_type = "$1$p3 $4";
-		$symbol = $5;
-		$decl = $';
-		$in_declaration = "user_function";
-		@TRACE@("user function (2): $symbol, Returns: $ret_type");
+            } elsif (($previous_line =~ m/^\s*typedef\s*/) && m/^\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
+                my $p3 = defined($3) ? $3 : "";
+                $ret_type = "$1$p3 $4";
+                $symbol = $5;
+                $decl = $';
+                $in_declaration = "user_function";
+                @TRACE@("user function (2): $symbol, Returns: $ret_type");
 
             #                                                       $1            $2
-	    } elsif (($previous_line =~ m/^\s*typedef\s*/) && m/^\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
-		$ret_type = $1;
-		$symbol = $2;
-		$decl = $';
-		#                                     $1                                $3
-		if ($previous_line =~ m/^\s*typedef\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*/) {
-		    my $p3 = defined($3) ? $3 : "";
-		    $ret_type = "$1$p3 ".$ret_type;
+            } elsif (($previous_line =~ m/^\s*typedef\s*/) && m/^\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/) {
+                $ret_type = $1;
+                $symbol = $2;
+                $decl = $';
+                #                                     $1                                $3
+                if ($previous_line =~ m/^\s*typedef\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*/) {
+                    my $p3 = defined($3) ? $3 : "";
+                    $ret_type = "$1$p3 ".$ret_type;
                     $in_declaration = "user_function";
                     @TRACE@("user function (3): $symbol, Returns: $ret_type");
 
@@ -450,138 +450,138 @@ sub ScanHeader {
             # FUNCTION POINTER VARIABLES
             #                                                                       $1                                $3            $4             $5
             } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/o) {
-		my $p3 = defined($3) ? $3 : "";
-		$ret_type = "$1$p3 $4";
-		$symbol = $5;
+                my $p3 = defined($3) ? $3 : "";
+                $ret_type = "$1$p3 $4";
+                $symbol = $5;
                 $decl = $';
                 $in_declaration = "user_function";
                 @TRACE@("function pointer variable: $symbol, Returns: $ret_type");
 
-	    # ENUMS
+            # ENUMS
 
-	    } elsif (s/^\s*enum\s+_(\w+)\s+\{/enum $1 {/) {
-		# We assume that 'enum _<enum_name> {' is really the
-		# declaration of enum <enum_name>.
-		$symbol = $1;
-		@TRACE@("plain enum: $symbol");
-		$decl = $_;
-		$in_declaration = "enum";
+            } elsif (s/^\s*enum\s+_(\w+)\s+\{/enum $1 {/) {
+                # We assume that 'enum _<enum_name> {' is really the
+                # declaration of enum <enum_name>.
+                $symbol = $1;
+                @TRACE@("plain enum: $symbol");
+                $decl = $_;
+                $in_declaration = "enum";
 
-	    } elsif (m/^\s*typedef\s+enum\s+_?(\w+)\s+\1\s*;/) {
-		# We skip 'typedef enum <enum_name> _<enum_name>;' as the enum will
-		# be declared elsewhere.
-		@TRACE@("skipping enum typedef: $1");
+            } elsif (m/^\s*typedef\s+enum\s+_?(\w+)\s+\1\s*;/) {
+                # We skip 'typedef enum <enum_name> _<enum_name>;' as the enum will
+                # be declared elsewhere.
+                @TRACE@("skipping enum typedef: $1");
 
-	    } elsif (m/^\s*typedef\s+enum/) {
-		$symbol = "";
-		@TRACE@("typedef enum: -");
-		$decl = $_;
-		$in_declaration = "enum";
+            } elsif (m/^\s*typedef\s+enum/) {
+                $symbol = "";
+                @TRACE@("typedef enum: -");
+                $decl = $_;
+                $in_declaration = "enum";
 
 
-	    # STRUCTS AND UNIONS
+            # STRUCTS AND UNIONS
 
-	    } elsif (m/^\s*typedef\s+(struct|union)\s+_(\w+)\s+\2\s*;/) {
-		# We've found a 'typedef struct _<name> <name>;'
-		# This could be an opaque data structure, so we output an
-		# empty declaration. If the structure is actually found that
-		# will override this.
-		my $structsym = uc $1;
-		@TRACE@("$structsym typedef: $2");
-		$forward_decls{$2} = "<$structsym>\n<NAME>$2</NAME>\n$deprecated</$structsym>\n"
+            } elsif (m/^\s*typedef\s+(struct|union)\s+_(\w+)\s+\2\s*;/) {
+                # We've found a 'typedef struct _<name> <name>;'
+                # This could be an opaque data structure, so we output an
+                # empty declaration. If the structure is actually found that
+                # will override this.
+                my $structsym = uc $1;
+                @TRACE@("$structsym typedef: $2");
+                $forward_decls{$2} = "<$structsym>\n<NAME>$2</NAME>\n$deprecated</$structsym>\n"
 
-	    } elsif (m/^\s*(?:struct|union)\s+_(\w+)\s*;/) {
-		# Skip private structs/unions.
+            } elsif (m/^\s*(?:struct|union)\s+_(\w+)\s*;/) {
+                # Skip private structs/unions.
                 @TRACE@("private struct/union");
 
-	    } elsif (m/^\s*(struct|union)\s+(\w+)\s*;/) {
-	        # Do a similar thing for normal structs as for typedefs above.
-	        # But we output the declaration as well in this case, so we
-	        # can differentiate it from a typedef.
-	        my $structsym = uc $1;
-	        @TRACE@("$structsym: $2");
+            } elsif (m/^\s*(struct|union)\s+(\w+)\s*;/) {
+                # Do a similar thing for normal structs as for typedefs above.
+                # But we output the declaration as well in this case, so we
+                # can differentiate it from a typedef.
+                my $structsym = uc $1;
+                @TRACE@("$structsym: $2");
                 $forward_decls{$2} = "<$structsym>\n<NAME>$2</NAME>\n$_$deprecated</$structsym>\n";
 
-	    } elsif (m/^\s*typedef\s+(struct|union)\s*\w*\s*{/) {
-		$symbol = "";
- 		$decl = $_;
-		$level = 0;
-		$in_declaration = $1;
-		@TRACE@("typedef struct/union $1");
+            } elsif (m/^\s*typedef\s+(struct|union)\s*\w*\s*{/) {
+                $symbol = "";
+                 $decl = $_;
+                $level = 0;
+                $in_declaration = $1;
+                @TRACE@("typedef struct/union $1");
 
-	    # OTHER TYPEDEFS
+            # OTHER TYPEDEFS
 
-	    } elsif (m/^\s*typedef\s+(?:struct|union)\s+\w+[\s\*]+(\w+)\s*;/) {
-		@TRACE@("Found struct/union(*) typedef $1: $_");
-		if (&AddSymbolToList (\$list, $1)) {
-		    print DECL "<TYPEDEF>\n<NAME>$1</NAME>\n$deprecated$_</TYPEDEF>\n";
-		}
+            } elsif (m/^\s*typedef\s+(?:struct|union)\s+\w+[\s\*]+(\w+)\s*;/) {
+                @TRACE@("Found struct/union(*) typedef $1: $_");
+                if (&AddSymbolToList (\$list, $1)) {
+                    print DECL "<TYPEDEF>\n<NAME>$1</NAME>\n$deprecated$_</TYPEDEF>\n";
+                }
 
-	    } elsif (m/^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w+)(\s*\[[^\]]+\])*\s*;/) {
-		if ($2 !~ m/^struct\s/ && $2 !~ m/^union\s/) {
-		    @TRACE@("Found typedef: $_");
-		    if (&AddSymbolToList (\$list, $3)) {
-		        print DECL "<TYPEDEF>\n<NAME>$3</NAME>\n$deprecated$_</TYPEDEF>\n";
-		    }
-		}
-	    } elsif (m/^\s*typedef\s+/) {
-		@TRACE@("Skipping typedef: $_");
-
-
-	    # VARIABLES (extern'ed variables)
-
-	    } elsif (m/^\s*(extern|[A-Za-z_]+VAR)\s+((const\s+|signed\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*;/) {
-		$symbol = $5;
-	        s/^\s*([A-Za-z_]+VAR)\b/extern/;
-		@TRACE@("Possible extern: $_");
-		if (&AddSymbolToList (\$list, $symbol)) {
-		    print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$_</VARIABLE>\n";
-		}
+            } elsif (m/^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w+)(\s*\[[^\]]+\])*\s*;/) {
+                if ($2 !~ m/^struct\s/ && $2 !~ m/^union\s/) {
+                    @TRACE@("Found typedef: $_");
+                    if (&AddSymbolToList (\$list, $3)) {
+                        print DECL "<TYPEDEF>\n<NAME>$3</NAME>\n$deprecated$_</TYPEDEF>\n";
+                    }
+                }
+            } elsif (m/^\s*typedef\s+/) {
+                @TRACE@("Skipping typedef: $_");
 
 
-	    # FUNCTIONS
+            # VARIABLES (extern'ed variables)
 
-	    # We assume that functions which start with '_' are private, so
-	    # we skip them.
-	    #                                                                       $1                                                                                                    $2                                                          $3
-	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(/o) {
-		$ret_type = $1;
-		if (defined ($2)) { $ret_type .= " $2"; }
-		$symbol = $3;
-		$decl = $';
-		@TRACE@("internal Function: $symbol, Returns: [$1][$2]");
-		$in_declaration = "function";
-		$internal = 1;
-		if (m/^\s*G_INLINE_FUNC/) {
-		    @TRACE@("skip block after inline function");
-		    # now we we need to skip a whole { } block
-		    $skip_block = 1;
-		}
+            } elsif (m/^\s*(extern|[A-Za-z_]+VAR)\s+((const\s+|signed\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*;/) {
+                $symbol = $5;
+                s/^\s*([A-Za-z_]+VAR)\b/extern/;
+                @TRACE@("Possible extern: $_");
+                if (&AddSymbolToList (\$list, $symbol)) {
+                    print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$_</VARIABLE>\n";
+                }
 
-	    #                                                                       $1                                                                                                    $2                                                          $3
-	    } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(/o) {
-		$ret_type = $1;
-		if (defined ($2)) { $ret_type .= " $2"; }
-		$symbol = $3;
-		$decl = $';
-		@TRACE@("Function (1): $symbol, Returns: [$1][$2]");
-		$in_declaration = "function";
-		if (m/^\s*G_INLINE_FUNC/) {
-		    @TRACE@("skip block after inline function");
-		    # now we we need to skip a whole { } block
-		    $skip_block = 1;
-		}
 
-	    # Try to catch function declarations which have the return type on
-	    # the previous line. But we don't want to catch complete functions
-	    # which have been declared G_INLINE_FUNC, e.g. g_bit_nth_lsf in
-	    # glib, or 'static inline' functions.
-	    } elsif (m/^\s*([A-Za-z]\w*)\s*\(/) {
-		$symbol = $1;
-		$decl = $';
+            # FUNCTIONS
 
-		if ($previous_line !~ m/^\s*G_INLINE_FUNC/) {
-		    if ($previous_line !~ m/^\s*static\s+/) {
+            # We assume that functions which start with '_' are private, so
+            # we skip them.
+            #                                                                       $1                                                                                                    $2                                                          $3
+            } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(/o) {
+                $ret_type = $1;
+                if (defined ($2)) { $ret_type .= " $2"; }
+                $symbol = $3;
+                $decl = $';
+                @TRACE@("internal Function: $symbol, Returns: [$1][$2]");
+                $in_declaration = "function";
+                $internal = 1;
+                if (m/^\s*G_INLINE_FUNC/) {
+                    @TRACE@("skip block after inline function");
+                    # now we we need to skip a whole { } block
+                    $skip_block = 1;
+                }
+
+            #                                                                       $1                                                                                                    $2                                                          $3
+            } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(/o) {
+                $ret_type = $1;
+                if (defined ($2)) { $ret_type .= " $2"; }
+                $symbol = $3;
+                $decl = $';
+                @TRACE@("Function (1): $symbol, Returns: [$1][$2]");
+                $in_declaration = "function";
+                if (m/^\s*G_INLINE_FUNC/) {
+                    @TRACE@("skip block after inline function");
+                    # now we we need to skip a whole { } block
+                    $skip_block = 1;
+                }
+
+            # Try to catch function declarations which have the return type on
+            # the previous line. But we don't want to catch complete functions
+            # which have been declared G_INLINE_FUNC, e.g. g_bit_nth_lsf in
+            # glib, or 'static inline' functions.
+            } elsif (m/^\s*([A-Za-z]\w*)\s*\(/) {
+                $symbol = $1;
+                $decl = $';
+
+                if ($previous_line !~ m/^\s*G_INLINE_FUNC/) {
+                    if ($previous_line !~ m/^\s*static\s+/) {
                         #                                                                       $1                                                                                                   $2
                         if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
                             $ret_type = $1;
@@ -603,7 +603,7 @@ sub ScanHeader {
                     }
                 }
                 else {
-		    if ($previous_line !~ m/^\s*static\s+/) {
+                    if ($previous_line !~ m/^\s*static\s+/) {
                         @TRACE@("skip block after inline function");
                         # now we we need to skip a whole { } block
                         $skip_block = 1;
@@ -615,20 +615,20 @@ sub ScanHeader {
                             $in_declaration = "function";
                         }
                     }
-		}
+                }
 
-	    # Try to catch function declarations with the return type and name
-	    # on the previous line(s), and the start of the parameters on this.
-	    } elsif (m/^\s*\(/) {
-		$decl = $';
-		if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/o) {
-		    $ret_type = "$1 $2";
-		    $symbol = $3;
-		    @TRACE@("Function (5): $symbol, Returns: $ret_type");
-		    $in_declaration = "function";
+            # Try to catch function declarations with the return type and name
+            # on the previous line(s), and the start of the parameters on this.
+            } elsif (m/^\s*\(/) {
+                $decl = $';
+                if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/o) {
+                    $ret_type = "$1 $2";
+                    $symbol = $3;
+                    @TRACE@("Function (5): $symbol, Returns: $ret_type");
+                    $in_declaration = "function";
 
-		} elsif ($previous_line =~ m/^\s*\w+\s*$/
-			 && $pre_previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$/o) {
+                } elsif ($previous_line =~ m/^\s*\w+\s*$/
+                         && $pre_previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$/o) {
                     $ret_type = $1;
                     $ret_type =~ s/\s*\n//;
                     $in_declaration = "function";
@@ -637,48 +637,48 @@ sub ScanHeader {
                     $symbol =~ s/^\s+//;
                     $symbol =~ s/\s*\n//;
                     @TRACE@("Function (6): $symbol, Returns: $ret_type");
-		}
+                }
 
-	    #} elsif (m/^extern\s+/) {
-		#print "DEBUG: Skipping extern: $_";
+            #} elsif (m/^extern\s+/) {
+                #print "DEBUG: Skipping extern: $_";
 
 
-	    # STRUCTS
+            # STRUCTS
 
-	    } elsif (m/^\s*struct\s+_(\w+)\s*\*/) {
-		# Skip 'struct _<struct_name> *', since it could be a
-		# return type on its own line.
+            } elsif (m/^\s*struct\s+_(\w+)\s*\*/) {
+                # Skip 'struct _<struct_name> *', since it could be a
+                # return type on its own line.
 
-	    } elsif (m/^\s*struct\s+_(\w+)/) {
-		# We assume that 'struct _<struct_name>' is really the
-		# declaration of struct <struct_name>.
-		$symbol = $1;
-		$decl = $_;
+            } elsif (m/^\s*struct\s+_(\w+)/) {
+                # We assume that 'struct _<struct_name>' is really the
+                # declaration of struct <struct_name>.
+                $symbol = $1;
+                $decl = $_;
                  # we will find the correct level as below we do $level += tr/{//;
-		$level = 0;
-		$in_declaration = "struct";
-		@TRACE@("Struct(_): $symbol");
+                $level = 0;
+                $in_declaration = "struct";
+                @TRACE@("Struct(_): $symbol");
 
 
-	    # UNIONS
+            # UNIONS
 
-	    } elsif (m/^\s*union\s+_(\w+)\s*\*/) {
-	    	# Skip 'union _<union_name> *' (see above)
-	    } elsif (m/^\s*union\s+_(\w+)/) {
-		$symbol = $1;
-		$decl = $_;
-		$level = 0;
-		$in_declaration = "union";
+            } elsif (m/^\s*union\s+_(\w+)\s*\*/) {
+                    # Skip 'union _<union_name> *' (see above)
+            } elsif (m/^\s*union\s+_(\w+)/) {
+                $symbol = $1;
+                $decl = $_;
+                $level = 0;
+                $in_declaration = "union";
                 @TRACE@("Union(_): $symbol");
-	    }
+            }
 
-	} else {
+        } else {
             @TRACE@("1: [$skip_block] $_");
-	    # If we were already in the middle of a declaration, we simply add
-	    # the current line onto the end of it.
-	    if ($skip_block == 0) {
-	        $decl .= $_;
-	    } else {
+            # If we were already in the middle of a declaration, we simply add
+            # the current line onto the end of it.
+            if ($skip_block == 0) {
+                $decl .= $_;
+            } else {
                 if (m%(.*?){%) {
                     if ($skip_block == 1) {
                         $decl .= $1;
@@ -698,23 +698,23 @@ sub ScanHeader {
                     }
                 }
             }
-	}
+        }
 
         #if ($in_declaration ne '') {
         #    print "$in_declaration = $decl\n";
         #}
 
-	# Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);' or
-	# ') __attribute__ (...);'.
-	if ($in_declaration eq 'function') {
-	    if ($decl =~ s/\)\s*(G_GNUC_.*|${IGNORE_DECORATORS}\s*|__attribute__\s*\(.*\)\s*)?;.*$//) {
-		if ($internal == 0) {
-                     $decl =~ s%/\*.*?\*/%%gs;	# remove comments.
-                     #$decl =~ s/^\s+//;		# remove leading whitespace.
-                     #$decl =~ s/\s+$//;		# remove trailing whitespace.
-                     $decl =~ s/\s*\n\s*/ /gs;	# consolidate whitespace at start
+        # Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);' or
+        # ') __attribute__ (...);'.
+        if ($in_declaration eq 'function') {
+            if ($decl =~ s/\)\s*(G_GNUC_.*|${IGNORE_DECORATORS}\s*|__attribute__\s*\(.*\)\s*)?;.*$//) {
+                if ($internal == 0) {
+                     $decl =~ s%/\*.*?\*/%%gs;        # remove comments.
+                     #$decl =~ s/^\s+//;                # remove leading whitespace.
+                     #$decl =~ s/\s+$//;                # remove trailing whitespace.
+                     $decl =~ s/\s*\n\s*/ /gs;        # consolidate whitespace at start
                                                    # and end of lines.
-                     $ret_type =~ s%/\*.*?\*/%%g;	# remove comments in ret type.
+                     $ret_type =~ s%/\*.*?\*/%%g;        # remove comments in ret type.
                      if (&AddSymbolToList (\$list, $symbol)) {
                          print DECL "<FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl\n</FUNCTION>\n";
                          if ($REBUILD_TYPES) {
@@ -730,77 +730,77 @@ sub ScanHeader {
                 }
                 $in_declaration = "";
                 $skip_block = 0;
-	    }
-	}
+            }
+        }
 
-	if ($in_declaration eq 'user_function') {
-	    if ($decl =~ s/\).*$//) {
-	        if (&AddSymbolToList (\$list, $symbol)) {
-	            print DECL "<USER_FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl</USER_FUNCTION>\n";
-	        }
-		$in_declaration = "";
-	    }
-	}
+        if ($in_declaration eq 'user_function') {
+            if ($decl =~ s/\).*$//) {
+                if (&AddSymbolToList (\$list, $symbol)) {
+                    print DECL "<USER_FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl</USER_FUNCTION>\n";
+                }
+                $in_declaration = "";
+            }
+        }
 
-	if ($in_declaration eq 'macro') {
-	    if ($decl !~ m/\\\s*$/) {
-	        if ($internal == 0) {
+        if ($in_declaration eq 'macro') {
+            if ($decl !~ m/\\\s*$/) {
+                if ($internal == 0) {
                     if (&AddSymbolToList (\$list, $symbol)) {
                         print DECL "<MACRO>\n<NAME>$symbol</NAME>\n$deprecated$decl</MACRO>\n";
                     }
-	        } else {
+                } else {
                     $internal = 0;
-	        }
-		$in_declaration = "";
-	    }
-	}
+                }
+                $in_declaration = "";
+            }
+        }
 
-	if ($in_declaration eq 'enum') {
-	    if ($decl =~ m/\}\s*(\w+)?;\s*$/) {
-		if ($symbol eq "") {
-		    $symbol = $1;
-		}
-		if (&AddSymbolToList (\$list, $symbol)) {
-		    print DECL "<ENUM>\n<NAME>$symbol</NAME>\n$deprecated$decl</ENUM>\n";
-		}
-		$in_declaration = "";
-	    }
-	}
+        if ($in_declaration eq 'enum') {
+            if ($decl =~ m/\}\s*(\w+)?;\s*$/) {
+                if ($symbol eq "") {
+                    $symbol = $1;
+                }
+                if (&AddSymbolToList (\$list, $symbol)) {
+                    print DECL "<ENUM>\n<NAME>$symbol</NAME>\n$deprecated$decl</ENUM>\n";
+                }
+                $in_declaration = "";
+            }
+        }
 
-	# We try to handle nested stucts/unions, but unmatched brackets in
-	# comments will cause problems.
-	if ($in_declaration eq 'struct' or $in_declaration eq 'union') {
-	    if ($level <= 1 && $decl =~ m/\}\s*(\w*);\s*$/) {
-		if ($symbol eq "") {
-		    $symbol = $1;
-		}
+        # We try to handle nested stucts/unions, but unmatched brackets in
+        # comments will cause problems.
+        if ($in_declaration eq 'struct' or $in_declaration eq 'union') {
+            if ($level <= 1 && $decl =~ m/\}\s*(\w*);\s*$/) {
+                if ($symbol eq "") {
+                    $symbol = $1;
+                }
 
-		if ($symbol =~ m/^(\S+)(Class|Iface|Interface)\b/) {
-		    my $objectname = $1;
-		    @TRACE@("Found object: $1");
-		    $list = "<TITLE>$objectname</TITLE>\n$list";
-		    push (@objects, $objectname);
-		}
-		@TRACE@("Store struct: $symbol");
-		if (&AddSymbolToList (\$list, $symbol)) {
-		    my $structsym = uc $in_declaration;
-		    print DECL "<$structsym>\n<NAME>$symbol</NAME>\n$deprecated$decl</$structsym>\n";
-		    if (defined($forward_decls{$symbol})) {
-		        undef($forward_decls{$symbol});
-		    }
-		}
-		$in_declaration = "";
-	    } else {
-		# We use tr to count the brackets in the line, and adjust
-		# $level accordingly.
-		$level += tr/{//;
-		$level -= tr/}//;
-		@TRACE@("struct/union level : $level");
-	    }
-	}
+                if ($symbol =~ m/^(\S+)(Class|Iface|Interface)\b/) {
+                    my $objectname = $1;
+                    @TRACE@("Found object: $1");
+                    $list = "<TITLE>$objectname</TITLE>\n$list";
+                    push (@objects, $objectname);
+                }
+                @TRACE@("Store struct: $symbol");
+                if (&AddSymbolToList (\$list, $symbol)) {
+                    my $structsym = uc $in_declaration;
+                    print DECL "<$structsym>\n<NAME>$symbol</NAME>\n$deprecated$decl</$structsym>\n";
+                    if (defined($forward_decls{$symbol})) {
+                        undef($forward_decls{$symbol});
+                    }
+                }
+                $in_declaration = "";
+            } else {
+                # We use tr to count the brackets in the line, and adjust
+                # $level accordingly.
+                $level += tr/{//;
+                $level -= tr/}//;
+                @TRACE@("struct/union level : $level");
+            }
+        }
 
-	$pre_previous_line = $previous_line;
-	$previous_line = $_;
+        $pre_previous_line = $previous_line;
+        $previous_line = $_;
     }
     close(INPUT);
 
@@ -820,31 +820,31 @@ sub ScanHeader {
     my ($class) = "";
     my ($standard_decl) = "";
     if ($list =~ m/^\S+_IS_(\S*)_CLASS/m) {
-	$class = $1;
+        $class = $1;
     } elsif ($list =~ m/^\S+_IS_(\S*)/m) {
-	$class = $1;
+        $class = $1;
     }
 
     if ($class ne "") {
-	if ($list =~ s/^\S+_IS_$class\n//m)          { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_TYPE_$class\n//m)        { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_.*_get_type\n//m)        { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_${class}_CLASS\n//m)     { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_IS_${class}_CLASS\n//m)  { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_${class}_GET_CLASS\n//m) { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_${class}_GET_IFACE\n//m) { $standard_decl .= $&; }
-	if ($list =~ s/^\S+_${class}_GET_INTERFACE\n//m) { $standard_decl .= $&; }
+        if ($list =~ s/^\S+_IS_$class\n//m)          { $standard_decl .= $&; }
+        if ($list =~ s/^\S+_TYPE_$class\n//m)        { $standard_decl .= $&; }
+        if ($list =~ s/^\S+_.*_get_type\n//m)        { $standard_decl .= $&; }
+        if ($list =~ s/^\S+_${class}_CLASS\n//m)     { $standard_decl .= $&; }
+        if ($list =~ s/^\S+_IS_${class}_CLASS\n//m)  { $standard_decl .= $&; }
+        if ($list =~ s/^\S+_${class}_GET_CLASS\n//m) { $standard_decl .= $&; }
+        if ($list =~ s/^\S+_${class}_GET_IFACE\n//m) { $standard_decl .= $&; }
+        if ($list =~ s/^\S+_${class}_GET_INTERFACE\n//m) { $standard_decl .= $&; }
 
-	# We do this one last, otherwise it tends to be caught by the IS_$class macro
-	if ($list =~ s/^\S+_$class\n//m)             { $standard_decl = $& . $standard_decl; }
+        # We do this one last, otherwise it tends to be caught by the IS_$class macro
+        if ($list =~ s/^\S+_$class\n//m)             { $standard_decl = $& . $standard_decl; }
 
         if ($standard_decl ne "") {
-	    $list .= "<SUBSECTION Standard>\n$standard_decl";
-	}
+            $list .= "<SUBSECTION Standard>\n$standard_decl";
+        }
 
-	if ($list ne "") {
-	    $$object_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
-	}
+        if ($list ne "") {
+            $$object_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
+        }
     } else {
         if ($list ne "") {
             $$main_list .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
@@ -856,9 +856,9 @@ sub ScanHeader {
 #############################################################################
 # Function    : AddSymbolToList
 # Description : This adds the symbol to the list of declarations, but only if
-#		it is not already in the list.
+#                it is not already in the list.
 # Arguments   : $list - reference to the list of symbols, one on each line.
-#		$symbol - the symbol to add to the list.
+#                $symbol - the symbol to add to the list.
 #############################################################################
 
 sub AddSymbolToList {
@@ -869,7 +869,7 @@ sub AddSymbolToList {
          # we return 0 to skip outputting another entry to -decl.txt
          # this is to avoid redeclarations (e.g. in conditional
          # sections).
-	return 0;
+        return 0;
     }
     $$list .= "$symbol\n";
     return 1;

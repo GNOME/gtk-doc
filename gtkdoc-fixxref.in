@@ -42,13 +42,13 @@ my $PRINT_VERSION;
 my $PRINT_HELP;
 
 my %optctl = ('module' => \$MODULE,
-	      'module-dir' => \$MODULE_DIR,
-	      'html-dir' => \$HTML_DIR,
-	      'extra-dir' => \@EXTRA_DIRS,
-	      'version' => \$PRINT_VERSION,
-	      'help' => \$PRINT_HELP);
+              'module-dir' => \$MODULE_DIR,
+              'html-dir' => \$HTML_DIR,
+              'extra-dir' => \@EXTRA_DIRS,
+              'version' => \$PRINT_VERSION,
+              'help' => \$PRINT_HELP);
 GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir:s", "extra-dir=s@",
-	"version", "help");
+        "version", "help");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -125,15 +125,15 @@ if (-d $dir && $dir ne $HTML_DIR) {
 if (defined ($ENV{"GNOME2_PATH"})) {
     foreach $dir (split (/:/, $ENV{"GNOME2_PATH"})) {
         $dir = $dir . "/share/gtk-doc/html";
-	if (-d $dir && $dir ne $HTML_DIR) {
-	    #print "Scanning GNOME2_PATH directory: $dir\n";
-	    if ($dir !~ m%^\Q$path_prefix\E/%) {
+        if (-d $dir && $dir ne $HTML_DIR) {
+            #print "Scanning GNOME2_PATH directory: $dir\n";
+            if ($dir !~ m%^\Q$path_prefix\E/%) {
                 &ScanIndices ($dir, 1);
             } else {
                 &ScanIndices ($dir, 0);
             }
             push (@VisitedPaths, $dir);
-	}
+        }
         # ubuntu started to compress this as index.sgml.gz :/
         # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
     }
@@ -217,13 +217,13 @@ sub ScanIndices {
     opendir (HTMLDIR, $scan_dir) || return;
     my $file;
     foreach $file (readdir (HTMLDIR)) {
-	if ($file eq '.' || $file eq '..') {
-	    next;
-	} elsif (-d "$scan_dir/$file") {
-	    push (@subdirs, $file);
-	} elsif ($file eq "index.sgml") {
-	    &ScanIndex ("$scan_dir/$file", $use_absolute_links);
-	}
+        if ($file eq '.' || $file eq '..') {
+            next;
+        } elsif (-d "$scan_dir/$file") {
+            push (@subdirs, $file);
+        } elsif ($file eq "index.sgml") {
+            &ScanIndex ("$scan_dir/$file", $use_absolute_links);
+        }
         # ubuntu started to compress this as index.sgml.gz :/
         # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
     }
@@ -232,7 +232,7 @@ sub ScanIndices {
     # Now recursively scan the subdirectories.
     my $dir;
     foreach $dir (@subdirs) {
-	&ScanIndices ("$scan_dir/$dir", $use_absolute_links);
+        &ScanIndices ("$scan_dir/$dir", $use_absolute_links);
     }
 }
 
@@ -252,12 +252,12 @@ sub ScanIndex {
     }
 
     open (INDEXFILE, $file)
-	|| die "Can't open $file: $!";
+        || die "Can't open $file: $!";
     while (<INDEXFILE>) {
-	if (m/^<ANCHOR\s+id\s*=\s*"([^"]*)"\s+href\s*=\s*"([^"]*)"\s*>/) {
-	    #print "Found id: $1 href: $2\n";
-	    $Links{$1} = "$dir$2";
-	}
+        if (m/^<ANCHOR\s+id\s*=\s*"([^"]*)"\s+href\s*=\s*"([^"]*)"\s*>/) {
+            #print "Found id: $1 href: $2\n";
+            $Links{$1} = "$dir$2";
+        }
     }
     close (INDEXFILE);
 }
@@ -267,14 +267,14 @@ sub FixCrossReferences {
     my ($scan_dir) = @_;
 
     opendir (HTMLDIR, $scan_dir)
-	|| die "Can't open HTML directory $scan_dir: $!";
+        || die "Can't open HTML directory $scan_dir: $!";
     my $file;
     foreach $file (readdir (HTMLDIR)) {
-	if ($file eq '.' || $file eq '..') {
-	    next;
-	} elsif ($file =~ m/.html?$/) {
-	    &FixHTMLFile ("$scan_dir/$file");
-	}
+        if ($file eq '.' || $file eq '..') {
+            next;
+        } elsif ($file =~ m/.html?$/) {
+            &FixHTMLFile ("$scan_dir/$file");
+        }
     }
     closedir (HTMLDIR);
 }
@@ -285,11 +285,11 @@ sub FixHTMLFile {
     #print "Fixing file: $file\n";
 
     open (HTMLFILE, $file)
-	|| die "Can't open $file: $!";
+        || die "Can't open $file: $!";
     undef $/;
     my $entire_file = <HTMLFILE>;
     close (HTMLFILE);
-    
+
     if ("@HIGHLIGHT@" ne "") {
         # FIXME: ideally we'd pass a clue about the example language to the highligher
         # unfortunately the "language" attribute is not appearing in the html output
@@ -303,7 +303,7 @@ sub FixHTMLFile {
         # this just broke existing GTKDOCLINK tags
         # &lt;GTKDOCLINK HREF=&quot;GST-PAD-SINK:CAPS&quot;&gt;GST_PAD_SINK&lt;/GTKDOCLINK&gt;
         $entire_file =~ s%\&lt;GTKDOCLINK\s+HREF=\&quot;(.*?)\&quot;\&gt;(.*?)\&lt;/GTKDOCLINK\&gt;%\<GTKDOCLINK\ HREF=\"$1\"\>$2\</GTKDOCLINK\>%gs;
-        
+
         # from the highlighter we get all the functions marked up
         # now we could turn them into GTKDOCLINK items
         $entire_file =~ s%(<span class=\"function\">)(.*?)(</span>)%&MakeGtkDocLink($1,$2,$3);%gse;
@@ -321,21 +321,21 @@ sub FixHTMLFile {
     $entire_file = join("\n",@lines);
 
     open (NEWFILE, ">$file.new")
-	|| die "Can't open $file: $!";
+        || die "Can't open $file: $!";
     print NEWFILE $entire_file;
     close (NEWFILE);
 
     unlink ($file)
-	|| die "Can't delete $file: $!";
+        || die "Can't delete $file: $!";
     rename ("$file.new", $file)
-	|| die "Can't rename $file.new: $!";
+        || die "Can't rename $file.new: $!";
 }
 
 sub MakeXRef {
     my ($file, $line, $id, $text) = @_;
 
     my $href = $Links{$id};
-    
+
     # this is a workaround for some inconsitency we have with CreateValidSGMLID
     if (!$href && $id =~ m/:/) {
         my $tid = $id;
@@ -378,7 +378,7 @@ sub MakeXRef {
           &LogWarning ($file, $line, "no link for: '$id' -> ($text).");
           $NoLinks{$id} = 1;
         }
-	return $text;
+        return $text;
     }
 }
 
@@ -417,9 +417,9 @@ sub HighlightSource {
     open (NEWFILE, ">$temp_source_file") || die "Can't open $temp_source_file: $!";
     print NEWFILE $source;
     close (NEWFILE);
-    
+
     #print" running @HIGHLIGHT@ @HIGHLIGHT_OPTIONS@$temp_source_file \n";
-    
+
     # format source
     my $highlighted_source=`@HIGHLIGHT@ @HIGHLIGHT_OPTIONS@$temp_source_file`;
     if ("@HIGHLIGHT@" =~ m%/source-highlight$%) {
@@ -441,7 +441,7 @@ sub HighlightSource {
     }
     # remove temp file
     unlink ($temp_source_file)
-	|| die "Can't delete $temp_source_file: $!";
+        || die "Can't delete $temp_source_file: $!";
 
     return &HighlightSourcePostprocess($type, $highlighted_source);
 }
@@ -488,9 +488,9 @@ sub HighlightSourceVim {
 
     # remove temp files
     unlink ($temp_source_file)
-	|| die "Can't delete $temp_source_file: $!";
+        || die "Can't delete $temp_source_file: $!";
     unlink ("$temp_source_file.html")
-	|| die "Can't delete $temp_source_file.html: $!";
+        || die "Can't delete $temp_source_file.html: $!";
 
     return &HighlightSourcePostprocess($type, $highlighted_source);
 }
