@@ -3871,6 +3871,11 @@ sub ScanSourceFile {
             next;
         }
 
+        # FIXME: flip this around
+        # instead of repeating the other parts, just have them once and
+        # do if(!$in_return) { ... }
+        # also maybe have in_part="description,return,since,deprecated,stability,..."
+
         # If we're in the return value description, add it to the end.
         if ($in_return) {
             # If we find another valid returns line, we assume that the first
