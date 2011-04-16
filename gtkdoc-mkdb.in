@@ -2231,13 +2231,13 @@ sub ParseStabilityLevel {
 # Function    : OutputSGMLFile
 # Description : Outputs the final DocBook file for one section.
 # Arguments   : $file - the name of the file.
-#                $title - the title from the $MODULE-sections.txt file, which
-#                  will be overridden by the title in the template file.
-#                $section_id - the SGML id to use for the toplevel tag.
-#                $includes - comma-separates list of include files added at top
-#                  of synopsis, with '<' '>' around them (if not already enclosed in "").
-#                $synopsis - reference to the DocBook for the Synopsis part.
-#                $details - reference to the DocBook for the Details part.
+#               $title - the title from the $MODULE-sections.txt file, which
+#                 will be overridden by the title in the template file.
+#               $section_id - the SGML id to use for the toplevel tag.
+#               $includes - comma-separates list of include files added at top of
+#                 synopsis, with '<' '>' around them (if not already enclosed in "").
+#               $synopsis - reference to the DocBook for the Synopsis part.
+#               $details - reference to the DocBook for the Details part.
 #               $signal_synop - reference to the DocBook for the Signal Synopsis part
 #               $signal_desc - reference to the DocBook for the Signal Description part
 #               $args_synop - reference to the DocBook for the Arg Synopsis part
