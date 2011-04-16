@@ -17,9 +17,31 @@ and join discussion about future features.
 Developers can also add items here :)
 
 = Cleanups =
-== Files ==
-* can we deprecate title in the sectionfile and request people to have this in
-  the SECTION comment?
+== get rid of the -section.txt file ==
+* section-title can be in SECTION comment already
+* when parsing a SECTION comment, everything in the same file will be
+  by default in that section
+* we need comment markup to override the section
+  e.g.: " * InSection: xxxx"
+  this needs gtkdoc-mkdb::ScanSourceFile to understand a new tag, which
+  otherwise would appear as verbatim in the sources
+* if one has "@InSection: xxxx" in a section comment we could patch the
+  main.xml file and insert then xi:include line (would possibly rely on a
+  special comment-pair there, we might also need to rewrite these
+  auto-generated xi:includes everytime as the placements could have been
+  changed, or we have a xi:inlcude for each chapter, that we regenerate).
+* we need a way to specify subsections (Standart, Private)
+  this could be done in the SECTION comment
+  e.g.: "@HideSymbols: <list-of-symbols-to-hide>
+  * we could allow to have a SUBSECTION:xxx comment block too
+    but then we list all the symbols here to override the auto-section placement
+* if we want to avoid the "InSection in symbol docs we could also have
+  e.g.: "@ExtraSymbols: <list-of-symbols-to-include>
+* documented symbols that are in a file without section comment and do not
+  appear in "@ExtraSymbols", "@HideSymbols" would go to unused.txt
+  * shall we deprecated the unused sub-sections?
+* can we have both at the same time (for migration)
+  * yes, read section-file first and add/override from inline comments
 
 
 = More abbreviations =
