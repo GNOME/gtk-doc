@@ -2125,6 +2125,9 @@ sub OutputParamDescriptions {
             } elsif ($param_name eq "void") {
                 #print "!!!! void in params for $symbol?\n";
             } else {
+                if ($param_name eq "Varargs") {
+                    $param_name = "...";
+                }
                 if (@fields) {
                     if (!defined $field_descrs{$param_name}) {
                         &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
@@ -2137,9 +2140,6 @@ sub OutputParamDescriptions {
                     } else {
                         delete $field_descrs{$param_name};
                     }
-                }
-                if ($param_name eq "Varargs") {
-                    $param_name = "...";
                 }
                 if($param_desc ne "") {
                     $params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&#160;:</term>\n<listitem><simpara>$param_desc</simpara></listitem></varlistentry>\n";

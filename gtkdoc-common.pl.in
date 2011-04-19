@@ -354,7 +354,7 @@ sub ParseFunctionDeclaration {
             push @result, $label;
 
         } elsif ($declaration =~ s/^...\s*[,\n]//) {
-            push @result, "Varargs";
+            push @result, "...";
             my $label = defined $namefunc ? $namefunc->("...") : "...";
             push @result, $label;
 
