@@ -137,7 +137,7 @@ else
 
 	case $with_highlight in
 		source-highlight) HIGHLIGHT_OPTIONS="-t4 -sc -cstyle.css --no-doc -i";;
-		highlight) HIGHLIGHT_OPTIONS="-X -f --class-name=gtkdoc ";;
+		highlight) HIGHLIGHT_OPTIONS="--out-format=xhtml -f --class-name=gtkdoc ";;
 		vim)
 			AC_MSG_CHECKING([whether vim has +syntax feature])
 			if $HIGHLIGHT --version | grep '+syntax' >/dev/null; then
