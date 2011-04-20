@@ -1439,7 +1439,7 @@ sub OutputTypedef {
 sub OutputStruct {
     my ($symbol, $declaration) = @_;
 
-    my $is_object_struct = 0;
+    my $is_gtype = 0;
     my $default_to_public = 1;
     if (&CheckIsObject ($symbol)) {
         #print "Found struct gtype: $symbol\n";
