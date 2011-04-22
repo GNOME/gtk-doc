@@ -337,7 +337,7 @@ sub ParseFunctionDeclaration {
 
     my ($param_num) = 0;
     while ($declaration ne "") {
-        #@TRACE@("$declaration");
+        #@TRACE@("[$declaration]");
 
         if ($declaration =~ s/^[\s,]+//) {
             # skip whitespace and commas
@@ -353,7 +353,7 @@ sub ParseFunctionDeclaration {
             my $label = defined $namefunc ? $namefunc->($xref) : $xref;
             push @result, $label;
 
-        } elsif ($declaration =~ s/^...\s*[,\n]//) {
+        } elsif ($declaration =~ s/^\s*[_a-zA-Z0-9]*\.\.\.\s*[,\n]//) {
             push @result, "...";
             my $label = defined $namefunc ? $namefunc->("...") : "...";
             push @result, $label;
@@ -455,6 +455,10 @@ sub ParseMacroDeclaration {
         foreach $param (split (/,/, $params)) {
             $param =~ s/^\s+//;
             $param =~ s/\s*$//;
+            # Allow varargs variations
+            if ($param =~ m/^.*\.\.\.$/) {
+                $param = "...";
+            }
             if ($param =~ m/\S/) {
                 push @result, $param;
                 push @result, defined $namefunc ? $namefunc->($param) : $param;

@@ -2029,10 +2029,6 @@ sub OutputFunction {
     for (my $i = 1; $i <= $#fields; $i += 2) {
         my $field_name = $fields[$i];
 
-        if ($field_name eq "Varargs") {
-            $field_name = "...";
-        }
-
         if ($i == 1) {
             $synop .= "$field_name";
             $desc  .= "$field_name";
@@ -2125,9 +2121,6 @@ sub OutputParamDescriptions {
             } elsif ($param_name eq "void") {
                 #print "!!!! void in params for $symbol?\n";
             } else {
-                if ($param_name eq "Varargs") {
-                    $param_name = "...";
-                }
                 if (@fields) {
                     if (!defined $field_descrs{$param_name}) {
                         &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
@@ -4071,14 +4064,16 @@ sub ScanSourceFile {
             my $param_desc = $';
 
             #print "Found parameter: $param_name\n";
-            # Allow '...' as the Varargs parameter.
-            if ($param_name eq "...") {
-                $param_name = "Varargs";
+            # Allow varargs variations
+            if ($param_name =~ m/^.*\.\.\.$/) {
+                $param_name = "...";
             }
             if ("\L$param_name" eq "returns") {
                 $return_style = 'sane';
                 $ignore_broken_returns = 1;
             }
+            @TRACE@("Found param for symbol $symbol : '$param_name'= '$_'");
+
             push (@params, $param_name);
             push (@params, $param_desc);
             $current_param += $PARAM_FIELD_COUNT;
@@ -4464,11 +4459,6 @@ sub MergeSourceDocumentation {
                     #print "Merge needed for $symbol, tmpl_params: ",$#$tmpl_params,", source_params: ",$#$params," \n";
                     for ($j = 0; $j <= $#$tmpl_params; $j += $PARAM_FIELD_COUNT) {
                         my $tmpl_param_name = $$tmpl_params[$j];
-
-                        # Allow '...' as the Varargs parameter.
-                        if ($tmpl_param_name eq "...") {
-                            $tmpl_param_name = "Varargs";
-                        }
 
                         # Try to find the param in the source comment documentation.
                         my $found = 0;
@@ -5029,11 +5019,15 @@ sub ReadTemplateFile {
                 if ($param_name =~ m/^[Rr]eturns?$/) {
                     $param_name = "Returns";
                 }
+                # Allow varargs variations
+                if ($param_name =~ m/^.*\.\.\.$/) {
+                    $param_name = "...";
+                }
 
                 # strip trailing whitespaces and blank lines
                 s/\s+\n$/\n/m;
                 s/\n+$/\n/sm;
-                #print "Found param for symbol $current_symbol : '$param_name'= '$_'";
+                @TRACE@("Found param for symbol $current_symbol : '$param_name'= '$_'");
 
                 if ($param_name eq "Deprecated") {
                     $in_deprecated = 1;
