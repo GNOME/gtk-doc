@@ -337,3 +337,15 @@ _bug_000000a (const gchar *name)
   return NULL;
 }
 
+/* varargs */
+
+/**
+ * bug_000000_va1:
+ * @name: a name
+ * @...: A printf-style message to output
+ *
+ * Outputs a message.
+ */
+void bug_000000_va1 (gchar name, ...)
+{
+}

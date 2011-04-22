@@ -375,5 +375,26 @@ typedef enum
   BUG_644291_ASSIGN_TO = '*'
 } Bug644291;
 
-#endif // GTKDOC_TESTER_H
+/* varargs */
 
+extern void bug_000000_va1 (gchar name, ...);
+
+/**
+ * BUG_000000_VA2:
+ * @name: a name
+ * @...: A printf-style message to output
+ *
+ * Outputs a message.
+ */
+#define BUG_000000_VA2(name,...)
+
+/**
+ * BUG_000000_VA3:
+ * @name: a name
+ * @...: A printf-style message to output
+ *
+ * Outputs a message.
+ */
+#define BUG_000000_VA3(name,args...)
+
+#endif // GTKDOC_TESTER_H
