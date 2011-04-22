@@ -35,7 +35,7 @@ EXTRA_DIST = 				\
 
 DOC_STAMPS=setup-build.stamp scan-build.stamp tmpl-build.stamp sgml-build.stamp \
 	html-build.stamp pdf-build.stamp \
-	setup.stamp tmpl.stamp sgml.stamp html.stamp pdf.stamp
+	tmpl.stamp sgml.stamp html.stamp pdf.stamp
 
 SCANOBJ_FILES = 		 \
 	$(DOC_MODULE).args 	 \
@@ -90,10 +90,6 @@ setup-build.stamp:
 	@touch setup-build.stamp
 
 
-setup.stamp: setup-build.stamp
-	@true
-
-
 #### scan ####
 
 scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
@@ -126,7 +122,7 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 
 #### templates ####
 
-tmpl-build.stamp: setup.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
+tmpl-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
 	@echo '  DOC   Rebuilding template files'
 	@gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
 	@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \

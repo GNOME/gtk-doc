@@ -36,7 +36,7 @@ EXTRA_DIST = 				\
 
 DOC_STAMPS=setup-build.stamp scan-build.stamp sgml-build.stamp \
 	html-build.stamp pdf-build.stamp \
-	setup.stamp sgml.stamp html.stamp pdf.stamp
+	sgml.stamp html.stamp pdf.stamp
 
 SCANOBJ_FILES = 		 \
 	$(DOC_MODULE).args 	 \
@@ -76,10 +76,6 @@ setup-build.stamp:
 	@touch setup-build.stamp
 
 
-setup.stamp: setup-build.stamp
-	@true
-
-
 #### scan ####
 
 scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
@@ -111,7 +107,7 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 
 #### xml ####
 
-sgml-build.stamp: setup.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt $(expand_content_files)
+sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt $(expand_content_files)
 	@echo "  DOC   `date +%H:%M:%S.%N`: Building XML"
 	@_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
