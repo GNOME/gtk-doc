@@ -373,6 +373,8 @@ sub MakeXRef {
         # if it's a 'type', don't warn if it starts with lowercase
         # - gnome coding style would use CamelCase
         $warn = 0 if ($text =~ m/ class=\"type\"/ && ($id =~ m/^[a-z]/));
+        # don't warn for self links
+        $warn = 0 if ($text eq $id);
 
         if ($warn == 1) {
           &LogWarning ($file, $line, "no link for: '$id' -> ($text).");
