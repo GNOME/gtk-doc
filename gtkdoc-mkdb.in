@@ -4928,7 +4928,6 @@ sub ReadTemplateFile {
         #print "File doesn't exist: $template\n";
         return 0;
     }
-    #print "Reading $template\n";
 
     # start with empty hashes, we merge the source comment for each file
     # afterwards
@@ -4951,6 +4950,9 @@ sub ReadTemplateFile {
 
     open (DOCS, "$template")
         || die "Can't open $template: $!";
+
+    @TRACE@("reading template $template");
+
     while (<DOCS>) {
         if (m/^<!-- ##### ([A-Z_]+) (\S+) ##### -->/) {
             my $type = $1;
