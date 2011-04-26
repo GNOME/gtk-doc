@@ -53,16 +53,19 @@ REPORT_FILES = \
 CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
 
 check-local: html-build.stamp pdf-build.stamp
-	@echo "  DOC   `date +%H:%M:%S.%N`: All done"
+	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: All done"
 
 docs: html-build.stamp pdf-build.stamp
-	@echo "  DOC   `date +%H:%M:%S.%N`: All done"
+	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: All done"
 
 $(REPORT_FILES): sgml-build.stamp
 
 #### setup ####
 
 setup-build.stamp:
+	@echo >ts `date +%s.%N`;
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	   echo '  DOC   Preparing build'; \
 	   files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
@@ -80,7 +83,8 @@ setup-build.stamp:
 #### scan ####
 
 scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
-	@echo "  DOC   `date +%H:%M:%S.%N`: Scanning header files"
+	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Scanning header files"
 	@_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
 	    _source_dir="$${_source_dir} --source-dir=$$i" ; \
@@ -88,7 +92,8 @@ scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
 	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(EXTRA_HFILES) $(SCAN_OPTIONS)
 	@if grep -l '^..*$$' $(DOC_MODULE).types > /dev/null 2>&1 ; then \
-	    echo "  DOC   `date +%H:%M:%S.%N`: Introspecting gobjects"; \
+		ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	    echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Introspecting gobjects"; \
 	    scanobj_options=""; \
 	    if test "x$(V)" = "x1"; then \
 	        scanobj_options="--verbose"; \
@@ -109,7 +114,8 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 #### templates ####
 
 tmpl-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
-	@echo "  DOC   `date +%H:%M:%S.%N`: Rebuilding template files"
+	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Rebuilding template files"
 	@PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
 	@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
@@ -128,7 +134,8 @@ $(srcdir)/tmpl/*.sgml:
 #### xml ####
 
 sgml-build.stamp: tmpl.stamp $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(expand_content_files)
-	@echo "  DOC   `date +%H:%M:%S.%N`: Building XML"
+	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Building XML"
 	@-chmod -R u+w $(srcdir)
 	@_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
@@ -144,7 +151,8 @@ sgml.stamp: sgml-build.stamp
 #### html ####
 
 html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
-	@echo "  DOC   `date +%H:%M:%S.%N`: Building HTML"
+	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	echo "  DOC   `date --utc --date @00$$tsd +%H:%M:%S.%N`: Building HTML"
 	@rm -rf html
 	@mkdir html
 	@mkhtml_options=""; \
@@ -162,7 +170,8 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	    cp $(abs_builddir)/$$file $(abs_builddir)/html; \
 	  fi; \
 	done;
-	@echo "  DOC   `date +%H:%M:%S.%N`: Fixing cross-references"
+	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Fixing cross-references"
 	@PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	@touch html-build.stamp
@@ -170,7 +179,8 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 #### pdf ####
 
 pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
-	@echo "  DOC   `date +%H:%M:%S.%N`: Building PDF"
+	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Building PDF"
 	@rm -f $(DOC_MODULE).pdf
 	@mkpdf_options=""; \
 	if test "x$(V)" = "x1"; then \
@@ -193,7 +203,7 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 
 # we need to enforce a rebuild for the tests
 clean-local:
-	@rm -f *~ *.bak
+	@rm -f *~ *.bak ts
 	@rm -rf .libs
 	$(MAKE) distclean-local
 
