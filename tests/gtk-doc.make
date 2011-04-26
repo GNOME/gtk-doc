@@ -136,7 +136,6 @@ $(srcdir)/tmpl/*.sgml:
 sgml-build.stamp: tmpl.stamp $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(expand_content_files)
 	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Building XML"
-	@-chmod -R u+w $(srcdir)
 	@_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
 	    _source_dir="$${_source_dir} --source-dir=$$i" ; \

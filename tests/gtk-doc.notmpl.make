@@ -159,7 +159,7 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Building PDF"
 	@rm -f $(DOC_MODULE).pdf
-	@kpdf_options=""; \
+	@mkpdf_options=""; \
 	if test "x$(V)" = "x1"; then \
 	  mkpdf_options="$$mkpdf_options --verbose"; \
 	fi; \
