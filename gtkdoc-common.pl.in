@@ -115,7 +115,9 @@ sub ParseStructDeclaration {
     $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/.*?(?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
 
     # Remove all other comments;
+    $declaration =~ s@\n\s*/\*([^*]+|\*(?!/))*\*/\s*\n@\n@msg;
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
+    $declaration =~ s@\n\s*//.*\n@\n@msg;
     $declaration =~ s@//.*@@g;
 
     my @result = ();
@@ -257,9 +259,11 @@ sub ParseEnumDeclaration {
     # Assume end of declaration if line begins with '}'
     $declaration =~ s!\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/.*?(?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))!!msgx;
 
-    # Remove comments
+    # Remove all other comments;
+    $declaration =~ s@\n\s*/\*([^*]+|\*(?!/))*\*/\s*\n@\n@msg;
     $declaration =~ s@/\*([^*]+|\*(?!/))*\*/@ @g;
-    $declaration =~ s@//.*$@@g;
+    $declaration =~ s@\n\s*//.*\n@\n@msg;
+    $declaration =~ s@//.*@@g;
 
     my @result = ();
 
