@@ -1628,7 +1628,8 @@ sub OutputStruct {
             if (! exists ($AllIncompleteSymbols{$symbol})) {
                 $AllIncompleteSymbols{$symbol}="<items>";
                 &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
-                    "Field descriptions for $symbol are missing in source code comment block.");
+                    "Field descriptions for struct $symbol are missing in source code comment block.");
+                @TRACE@("Remaining structs fields: ".@fields.":".join(',',@fields)."\n");
             }
         }
     }
@@ -1765,7 +1766,8 @@ sub OutputUnion {
             if (! exists ($AllIncompleteSymbols{$symbol})) {
                 $AllIncompleteSymbols{$symbol}="<items>";
                 &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
-                    "Field descriptions for $symbol are missing in source code comment block.");
+                    "Field descriptions for union $symbol are missing in source code comment block.");
+                @TRACE@("Remaining union fields: ".@fields.":".join(',',@fields)."\n");
             }
         }
     }
