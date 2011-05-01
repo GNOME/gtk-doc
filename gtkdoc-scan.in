@@ -770,7 +770,7 @@ sub ScanHeader {
         # We try to handle nested stucts/unions, but unmatched brackets in
         # comments will cause problems.
         if ($in_declaration eq 'struct' or $in_declaration eq 'union') {
-            if ($level <= 1 && $decl =~ m/\}\s*(\w*);\s*$/) {
+            if (($level <= 1) && ($decl =~ m/\n\}\s*(\w*);\s*$/)) {
                 if ($symbol eq "") {
                     $symbol = $1;
                 }

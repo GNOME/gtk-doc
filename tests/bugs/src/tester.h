@@ -397,4 +397,25 @@ extern void bug_000000_va1 (gchar name, ...);
  */
 #define BUG_000000_VA3(name,args...)
 
+/**
+ * Bug000000Scope:
+ *
+ * Opaque structure.
+ * "warning: Field descriptions for Bug000000Scope are missing in source code comment block."
+ * but not if we remove the blank line before "int b";
+ */
+typedef struct _Bug000000Scope Bug000000Scope;
+struct _Bug000000Scope {
+  /*< private >*/
+  union {
+    struct {
+      /* comment */
+      int a;
+    } ABI;
+    gpointer _reserved[4 - 1];
+  } abidata;
+
+  int b;
+};
+
 #endif // GTKDOC_TESTER_H
