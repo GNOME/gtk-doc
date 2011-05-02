@@ -76,16 +76,16 @@ $(REPORT_FILES): sgml-build.stamp
 
 setup-build.stamp:
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
-	   echo '  DOC   Preparing build'; \
-	   files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
-	   if test "x$$files" != "x" ; then \
-	       for file in $$files ; do \
-	           test -f $(abs_srcdir)/$$file && \
-	               cp -p $(abs_srcdir)/$$file $(abs_builddir)/; \
-	       done \
-	   fi; \
-	   test -f $(abs_srcdir)/tmpl && \
-	       cp -rp $(abs_srcdir)/tmpl $(abs_builddir)/; \
+	    echo '  DOC   Preparing build'; \
+	    files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
+	    if test "x$$files" != "x" ; then \
+	        for file in $$files ; do \
+	            test -f $(abs_srcdir)/$$file && \
+	                cp -pu $(abs_srcdir)/$$file $(abs_builddir)/ || true; \
+	        done; \
+	    fi; \
+	    test -f $(abs_srcdir)/tmpl && \
+	        cp -rp $(abs_srcdir)/tmpl $(abs_builddir)/; \
 	fi
 	@touch setup-build.stamp
 
