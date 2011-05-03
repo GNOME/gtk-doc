@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-# this tests bootstraps gtk-doc, that includes generating a default 
+# this tests bootstraps gtk-doc, that includes generating a default
 # DOC_MAIN_SGML_FILE
 # right now that fails with parallel make, as make cannot see that what is a
 # dependency for another target is generated as needed
@@ -21,26 +21,25 @@ DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.xml
 DOC_SOURCE_DIR=$(top_srcdir)/tests/empty/src
 
 # Extra options to pass to gtkdoc-scangobj. Not normally needed.
-SCANGOBJ_OPTIONS=2>&1 | tee gtkdoc-scangobj.log
+SCANGOBJ_OPTIONS=
 
 # Extra options to supply to gtkdoc-scan.
 SCAN_OPTIONS=--deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED" \
-  --rebuild-sections \
-  2>&1 | tee gtkdoc-scan.log
+  --rebuild-sections
 
 # Extra options to supply to gtkdoc-mkdb.
-MKDB_OPTIONS=--xml-mode 2>&1 | tee gtkdoc-mkdb.log
+MKDB_OPTIONS=--xml-mode
 
 # Extra options to supply to gtkdoc-mktmpl
 # e.g. MKTMPL_OPTIONS=--only-section-tmpl
-MKTMPL_OPTIONS=2>&1 | tee gtkdoc-mktmpl.log
+MKTMPL_OPTIONS=
 
 # Extra options to supply to gtkdoc-mkhtml
-MKHTML_OPTIONS=2>&1 | tee ../gtkdoc-mkhtml.log
+MKHTML_OPTIONS=
 
 # Extra options to supply to gtkdoc-fixref. Not normally needed.
 # --html-dir=$(HTML_DIR)
-FIXXREF_OPTIONS=--extra-dir=$(glib_prefix)/share/gtk-doc/html 2>&1 | tee gtkdoc-fixxref.log
+FIXXREF_OPTIONS=--extra-dir=$(glib_prefix)/share/gtk-doc/html
 
 # Used for dependencies. The docs will be rebuilt if any of these change.
 HFILE_GLOB=$(top_srcdir)/tests/empty/src/*.h
@@ -50,7 +49,7 @@ CFILE_GLOB=$(top_srcdir)/tests/empty/src/*.c
 IGNORE_HFILES=config.h
 
 # Images to copy into HTML directory.
-HTML_IMAGES = 
+HTML_IMAGES =
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE).
 # e.g. content_files=running.sgml building.sgml changes-2.0.sgml

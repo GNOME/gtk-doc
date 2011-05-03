@@ -67,16 +67,16 @@ $(REPORT_FILES): sgml-build.stamp
 setup-build.stamp:
 	@echo >ts `date +%s.%N`;
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
-	   echo '  DOC   Preparing build'; \
-	   files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
-	   if test "x$$files" != "x" ; then \
-	       for file in $$files ; do \
-	           test -f $(abs_srcdir)/$$file && \
-	               cp -p $(abs_srcdir)/$$file $(abs_builddir)/; \
-	       done \
-	   fi; \
-	   test -f $(abs_srcdir)/tmpl && \
-	       cp -rp $(abs_srcdir)/tmpl $(abs_builddir)/; \
+	    echo '  DOC   Preparing build'; \
+	    files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
+	    if test "x$$files" != "x" ; then \
+	        for file in $$files ; do \
+	            test -f $(abs_srcdir)/$$file && \
+	                cp -pu $(abs_srcdir)/$$file $(abs_builddir)/ || true; \
+	        done; \
+	    fi; \
+	    test -f $(abs_srcdir)/tmpl && \
+	        cp -rp $(abs_srcdir)/tmpl $(abs_builddir)/; \
 	fi
 	@touch setup-build.stamp
 
@@ -89,8 +89,9 @@ scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
 	for i in $(DOC_SOURCE_DIR) ; do \
 	    _source_dir="$${_source_dir} --source-dir=$$i" ; \
 	done ; \
+	echo "gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(SCAN_OPTIONS) $(EXTRA_HFILES)"  >gtkdoc-scan.log; \
 	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
-	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(EXTRA_HFILES) $(SCAN_OPTIONS)
+	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(SCAN_OPTIONS) $(EXTRA_HFILES) 2>&1 | tee -a gtkdoc-scan.log
 	@if grep -l '^..*$$' $(DOC_MODULE).types > /dev/null 2>&1 ; then \
 		ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	    echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Introspecting gobjects"; \
@@ -98,9 +99,10 @@ scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
 	    if test "x$(V)" = "x1"; then \
 	        scanobj_options="--verbose"; \
 	    fi; \
+	    echo "gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) $$scanobj_options" >gtkdoc-scangobj.log; \
 	    PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" \
-	    gtkdoc-scangobj --module=$(DOC_MODULE) $$scanobj_options $(SCANGOBJ_OPTIONS); \
+	    gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) $$scanobj_options 2>&1 | tee -a gtkdoc-scangobj.log; \
 	else \
 	    for i in $(SCANOBJ_FILES) ; do \
 	        test -f $$i || touch $$i ; \
@@ -116,8 +118,9 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 tmpl-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
 	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Rebuilding template files"
-	@PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
-	gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
+	@echo "gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)" >gtkdoc-mktmpl.log; \
+	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS) 2>&1 | tee -a gtkdoc-mktmpl.log
 	@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	  if test -w $(abs_srcdir) ; then \
 	    cp -rp $(abs_builddir)/tmpl $(abs_srcdir)/; \
@@ -140,8 +143,9 @@ sgml-build.stamp: tmpl.stamp $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(
 	for i in $(DOC_SOURCE_DIR) ; do \
 	    _source_dir="$${_source_dir} --source-dir=$$i" ; \
 	done ; \
+	echo "gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $${_source_dir} $(MKDB_OPTIONS)" >gtkdoc-mkdb.log; \
 	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
-	gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $${_source_dir} $(MKDB_OPTIONS)
+	gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $${_source_dir} $(MKDB_OPTIONS) 2>&1 | tee -a gtkdoc-mkdb.log
 	@touch sgml-build.stamp
 
 sgml.stamp: sgml-build.stamp
@@ -158,8 +162,9 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	if test "x$(V)" = "x1"; then \
 	  mkhtml_options="$$mkhtml_options --verbose"; \
 	fi; \
+	echo "gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)" >gtkdoc-mkhtml.log; \
 	cd html && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
-	gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE) $(MKHTML_OPTIONS)
+	gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE) 2>&1 | tee -a ../gtkdoc-mkhtml.log
 	-@test "x$(HTML_IMAGES)" = "x" || \
 	for file in $(HTML_IMAGES) ; do \
 	  if test -f $(abs_srcdir)/$$file ; then \
@@ -171,8 +176,9 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	done;
 	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Fixing cross-references"
-	@PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
-	gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
+	@echo "gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)" >gtkdoc-fixxref.log; \
+	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS) 2>&1 | tee -a gtkdoc-fixxref.log
 	@touch html-build.stamp
 
 #### pdf ####
@@ -194,8 +200,9 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	    fi; \
 	  done; \
 	fi; \
+	echo "gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $$mkpdf_options $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS)" >gtkdoc-mkpdf.log; \
 	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
-	gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $$mkpdf_options $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS)
+	gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $$mkpdf_options $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS) 2>&1 | tee -a gtkdoc-mkpdf.log
 	@touch pdf-build.stamp
 
 ##############
