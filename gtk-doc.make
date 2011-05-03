@@ -89,7 +89,6 @@ setup-build.stamp:
 	fi
 	@touch setup-build.stamp
 
-
 #### scan ####
 
 scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
