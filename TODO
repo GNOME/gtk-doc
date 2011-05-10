@@ -471,4 +471,10 @@ grep "gst_caps_is_always_compatible" tags
     Those are slow and once they are used a single time perl prepares them for every match operation.
     Since perl 5.10 one can use the /p flag for matches where this is needed and then use
     ${^PREMATCH} , ${^MATCH}  and ${^POSTMATCH}
+- perl profiling
+  - http://blog.timbunce.org/2008/07/15/nytprof-v2-a-major-advance-in-perl-profilers/
+    perl -d:NYTProf gtkdoc-mkdb ...
+    nytprofhtml
+    firefox nytprof/index.html
+
 
