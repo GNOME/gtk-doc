@@ -8,7 +8,6 @@
   <!-- http://www.sagehill.net/docbookxsl/Chunking.html says we should use
        "chunkfast.xsl", but I can see a difference -->
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
-  <xsl:include href="devhelp.xsl"/>
   <xsl:include href="devhelp2.xsl"/>
   <xsl:include href="version-greater-or-equal.xsl"/>
 
@@ -39,13 +38,13 @@
        it does not show much effect as we have a user.head.content template
   <xsl:param name="html.extra.head.links" select="0" />
    -->
-    
+
   <!-- use index filtering (if available) -->
   <xsl:param name="index.on.role" select="1"/>
 
   <!-- display variablelists as tables -->
   <xsl:param name="variablelist.as.table" select="1"/>
-  
+
   <!-- new things to consider
   <xsl:param name="glossterm.auto.link" select="0"></xsl:param>
   -->
@@ -101,12 +100,12 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
   <xsl:template name="gentext.template">
     <xsl:param name="context" select="'default'"/>
     <xsl:param name="name" select="'default'"/>
     <xsl:param name="origname" select="$name"/>
-    
+
     <!-- cut leading / if any to avoid one recursion -->
     <xsl:variable name="rname">
       <xsl:choose>
@@ -125,7 +124,7 @@
       <xsl:text>;name:</xsl:text><xsl:value-of select="$rname"/>
       <xsl:text>;origname:</xsl:text><xsl:value-of select="$origname"/>
     </xsl:message>
-   
+
     see html/html.xsl:<xsl:template match="*" mode="html.title.attribute">
     -->
 
@@ -163,7 +162,7 @@
     <xsl:param name="context" select="'default'"/>
     <xsl:param name="name" select="'default'"/>
     <xsl:param name="origname" select="$name"/>
-  
+
     <xsl:variable name="template">
       <xsl:call-template name="gentext.template">
         <xsl:with-param name="context" select="$context"/>
@@ -171,7 +170,7 @@
         <xsl:with-param name="origname" select="$origname"/>
       </xsl:call-template>
     </xsl:variable>
-    
+
     <xsl:choose>
       <xsl:when test="string-length($template) != 0">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
@@ -205,8 +204,8 @@
       </xsl:choose>
     </xsl:if>
   </xsl:template-->
-  
-  <!-- Generate a title attribute for the context node (e.g. links) -->  
+
+  <!-- Generate a title attribute for the context node (e.g. links) -->
   <xsl:template match="*" mode="html.title.attribute">
     <xsl:variable name="has.title.markup">
       <xsl:apply-templates select="." mode="title.markup">
@@ -223,7 +222,7 @@
           </xsl:with-param>
         </xsl:call-template>
       </xsl:variable>
-    
+
       <xsl:variable name="is.title-numbered">
         <xsl:if test="$is.title = 0">
           <xsl:call-template name="gentext.template.exists">
@@ -235,8 +234,8 @@
           </xsl:call-template>
         </xsl:if>
       </xsl:variable>
-        
-    
+
+
       <xsl:variable name="is.title-unnumbered">
         <xsl:if test="$is.title = 0 and $is.title-numbered = 0">
           <xsl:call-template name="gentext.template.exists">
@@ -248,7 +247,7 @@
           </xsl:call-template>
         </xsl:if>
       </xsl:variable>
-    
+
       <xsl:variable name="gentext.title">
         <xsl:if test="$is.title != 0 or
                       $is.title-numbered != 0 or
@@ -257,7 +256,7 @@
                                mode="object.title.markup.textonly"/>
         </xsl:if>
       </xsl:variable>
-  
+
       <xsl:choose>
         <xsl:when test="string-length($gentext.title) != 0">
           <xsl:attribute name="title">
@@ -272,10 +271,10 @@
       </xsl:choose>
     </xsl:if>
   </xsl:template>
-  
 
 
-  
+
+
   <!-- ========================================================= -->
   <!-- template to create the index.sgml anchor index -->
 
@@ -299,8 +298,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
 
     <!-- generate the index.sgml href index -->
     <xsl:call-template name="generate.index"/>
-    <!-- generate $book.devhelp{2} -->
-    <xsl:call-template name="generate.devhelp"/>
+    <!-- generate $book.devhelp2 -->
     <xsl:call-template name="generate.devhelp2"/>
   </xsl:template>
 
@@ -377,7 +375,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     </xsl:if>
     <link rel="stylesheet" href="style.css" type="text/css"/>
   </xsl:template>
-  
+
   <xsl:template name="user.footer.content">
     <div class="footer">
       <hr />
@@ -728,8 +726,8 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     </div>
   </xsl:template-->
 
-  
-  
+
+
   <xsl:template match="link" mode="gallery.mode">
     <div class="gallery-float">
        <xsl:apply-templates select="."/>
@@ -829,7 +827,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
   <xsl:template match="//refsect2/title">
     <h3><xsl:call-template name="user.format.extralinks"/></h3>
   </xsl:template>
-  
+
   <xsl:template match="//refsect1/title">
     <h2><xsl:call-template name="user.format.extralinks"/></h2>
   </xsl:template>
@@ -840,16 +838,16 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
   <xsl:template match="acronym">
     <xsl:call-template name="generate.acronym.link"/>
   </xsl:template>
-  
+
   <xsl:template name="generate.acronym.link">
     <xsl:param name="acronym">
       <xsl:apply-templates/>
     </xsl:param>
     <!--
-      We use for-each to change context to the database document because key() 
+      We use for-each to change context to the database document because key()
       only locates elements in the same document as the context node!
     -->
-   
+
     <xsl:param name="value" >
       <xsl:value-of select="//glossentry/glossterm[text()=$acronym]/../glossdef/para[1]" />
     </xsl:param>
@@ -857,7 +855,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
       <xsl:when test="$value=''">
         <!-- debug -->
         <xsl:message>
-          In gtk-doc.xsl: For acronym (<xsl:value-of select="$acronym"/>) no value found! 
+          In gtk-doc.xsl: For acronym (<xsl:value-of select="$acronym"/>) no value found!
         </xsl:message>
         <a>
           <xsl:attribute name="href">

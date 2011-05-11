@@ -242,8 +242,6 @@ install-data-local:
 	  if test -n "$(DOC_MODULE_VERSION)"; then \
 	    mv -f $${installdir}/$(DOC_MODULE).devhelp2 \
 	      $${installdir}/$(DOC_MODULE)-$(DOC_MODULE_VERSION).devhelp2; \
-	    mv -f $${installdir}/$(DOC_MODULE).devhelp \
-	      $${installdir}/$(DOC_MODULE)-$(DOC_MODULE_VERSION).devhelp; \
 	  fi; \
 	  $(GTKDOC_REBASE) --relative --dest-dir=$(DESTDIR) --html-dir=$${installdir}; \
 	fi

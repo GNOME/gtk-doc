@@ -29,7 +29,6 @@ gtkdocdata_DATA = \
 	gtk-doc.dcl		\
 	gtk-doc.xsl		\
 	version-greater-or-equal.xsl \
-	devhelp.xsl		\
 	devhelp2.xsl		\
 	gtk-doc.make		\
 	gtk-doc.notmpl.make	\
@@ -71,7 +70,6 @@ EXTRA_DIST = \
 	gtk-doc.xsl     \
 	gtk-doc-fo.xsl     \
 	version-greater-or-equal.xsl \
-	devhelp.xsl     \
 	devhelp2.xsl     \
 	gtk-doc.cat.in  \
 	home.png  \
