@@ -141,7 +141,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@mkhtml_options=""; \
 	gtkdoc-mkhtml 2>&1 --help | grep  >/dev/null "\-\-verbose"; \
 	if test "$(?)" = "0"; then \
-	  if test "x$(AM_DEFAULT_VERBOSITY)" = "x1"; then \
+	  if test "x$(V)" = "x1"; then \
 	    mkhtml_options="$$mkhtml_options --verbose"; \
 	  fi; \
 	fi; \
@@ -171,7 +171,7 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@mkpdf_options=""; \
 	gtkdoc-mkpdf 2>&1 --help | grep  >/dev/null "\-\-verbose"; \
 	if test "$(?)" = "0"; then \
-	  if test "x$(AM_DEFAULT_VERBOSITY)" = "x1"; then \
+	  if test "x$(V)" = "x1"; then \
 	    mkpdf_options="$$mkpdf_options --verbose"; \
 	  fi; \
 	fi; \
