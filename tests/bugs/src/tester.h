@@ -418,4 +418,17 @@ struct _Bug000000Scope {
   int b;
 };
 
+/**
+ * gst_play_marshal_BUFFER__BOXED:
+ * @closure: test
+ * @return_value: test
+ * @marshal_data: test
+ *
+ * test.
+ */
+void
+gst_play_marshal_BUFFER__BOXED (gint * closure,
+    gint * return_value G_GNUC_UNUSED,
+    gpointer marshal_data);
+
 #endif // GTKDOC_TESTER_H
