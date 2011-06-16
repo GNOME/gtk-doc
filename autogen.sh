@@ -7,6 +7,8 @@ test -n "$srcdir" || srcdir=.
 olddir=`pwd`
 cd "$srcdir"
 
+mkdir -p build-aux
+
 if gnome-doc-prepare --version < /dev/null > /dev/null 2>&1; then
   echo "* Running gnome-doc-prepare"
   gnome-doc-prepare --copy --force --automake

@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.58)
+AC_PREREQ([2.63])
 
 dnl Use a simple 2-digit version number for a while, since our old example
 dnl Makefile can only cope with that, i.e. use 1.1, 1.2, 1.3 ... 9.9.
@@ -7,10 +7,11 @@ dnl FIXME: I can't see anything failing (1.14.1), lets try to use a three digit
 dnl number for the development version
 m4_define(gtk_doc_version, 1.17.1)
 
-AC_INIT([gtk-doc], [gtk_doc_version], [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc])
+AC_INIT([gtk-doc],[gtk_doc_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc],[gtk-doc])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([gtkdoc-common.pl.in])
+AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([check-news std-options -Wno-portability])
 AM_MAINTAINER_MODE([enable])
@@ -25,9 +26,11 @@ dnl gnome-doc-utils is not found but does not invalidate the build.
 GNOME_DOC_INIT([],[],enable_scrollkeeper=no)
 
 # Check for programs
-AC_ISC_POSIX
 AC_PROG_CC
-AC_PROG_LIBTOOL
+
+# Initialize libtool
+LT_PREREQ([2.2])
+LT_INIT
 
 dnl Make sure we have pkg-config >= 0.19, so installing in $(datadir) is OK.
 PKG_PROG_PKG_CONFIG([0.19])

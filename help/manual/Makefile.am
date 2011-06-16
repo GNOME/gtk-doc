@@ -1,5 +1,5 @@
 if HAVE_GNOME_DOC_UTILS
-include $(top_srcdir)/gnome-doc-utils.make
+include $(top_srcdir)/build-aux/gnome-doc-utils.make
 dist-hook: doc-dist-hook
 else
 dist-hook:
