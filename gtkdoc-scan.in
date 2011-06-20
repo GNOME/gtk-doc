@@ -679,6 +679,9 @@ sub ScanHeader {
             if ($skip_block == 0) {
                 $decl .= $_;
             } else {
+                # Remove all nested pairs of curly braces.
+                while ($_ =~ s/{[^{]*}//g) { }
+                # Then hope at most one remains in the line...
                 if (m%(.*?){%) {
                     if ($skip_block == 1) {
                         $decl .= $1;
