@@ -27,5 +27,37 @@ GType  gtkdoc_enum_get_type(void) G_GNUC_CONST;
 GType  gtkdoc_boxed_get_type(void) G_GNUC_CONST;
 
 
+/**
+ * GtkdocPlainOldData:
+ * @n: Some integer member.
+ * @x: Some floating point member.
+ *
+ * Unboxed plain old data that should default to public members.
+ **/
+typedef struct {
+    guint n;
+    gdouble x;
+    /*<private>*/
+    gpointer priv;
+} GtkdocPlainOldData;
+
+#define GTKDOC_TYPE_BOXED_PLAIN_OLD_DATA (gtkdoc_boxed_plain_old_data_get_type ())
+
+/**
+ * GtkdocBoxedPlainOldData:
+ * @n: Some integer member.
+ * @x: Some floating point member.
+ *
+ * Boxed plain old data that should default to public members.
+ **/
+typedef struct {
+    guint n;
+    gdouble x;
+    /*<private>*/
+    gpointer priv;
+} GtkdocBoxedPlainOldData;
+
+GType  gtkdoc_boxed_plain_old_data_get_type(void) G_GNUC_CONST;
+
 #endif // GTKDOC_TYPES_H
 

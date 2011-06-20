@@ -258,9 +258,11 @@ my %AllDocumentedSymbols;
 # Undeclared yet documented symbols
 my %UndeclaredSymbols;
 
-# These global arrays store GObject, subclasses and the hierarchy.
+# These global arrays store GObject, subclasses and the hierarchy (also of
+# non-object derived types).
 my @Objects;
 my @ObjectLevels;
+my %ObjectRoots;
 
 my %Interfaces;
 my %Prerequisites;
@@ -1444,7 +1446,7 @@ sub OutputStruct {
     if (&CheckIsObject ($symbol)) {
         #print "Found struct gtype: $symbol\n";
         $is_gtype = 1;
-        $default_to_public = 0;
+        $default_to_public = $ObjectRoots{$symbol} eq 'GBoxed';
     }
 
     my $id;
@@ -1558,7 +1560,7 @@ sub OutputStruct {
     my $params = $SymbolParams{$symbol};
 
     # If no parameters are filled in, we don't generate the description
-    # table, for backwards compatibility
+    # table, for backwards compatibility.
 
     my $found = 0;
     if (defined $params) {
@@ -5158,11 +5160,16 @@ sub ReadObjectHierarchy {
     # child turns up.
     my @pending_objects = ();
     my @pending_levels = ();
+    my $root;
     while (<INPUT>) {
         if (m/\S+/) {
             my $object = $&;
             my $level = (length($`)) / 2 + 1;
             my $xref = "";
+
+            if ($level == 1) {
+                $root = $object;
+            }
 
             while (($#pending_levels >= 0) && ($pending_levels[$#pending_levels] >= $level)) {
                 my $pobject = pop(@pending_objects);
@@ -5181,6 +5188,7 @@ sub ReadObjectHierarchy {
                      print (OUTPUT ' ' x ($level * 4), "$xref\n");
                     push (@Objects, $object);
                     push (@ObjectLevels, $level);
+                    $ObjectRoots{$object} = $root;
                 }
             }
             #else {
@@ -5379,14 +5387,10 @@ sub ReadArgsFile {
 
 sub CheckIsObject {
     my ($name) = @_;
-
-    my $object;
-    foreach $object (@Objects) {
-        if ($object eq $name) {
-            return 1;
-        }
-    }
-    return 0;
+    my $root = $ObjectRoots{$name};
+    # Let GBoxed pass as an object here to get -struct appended to the id
+    # and prevent conflicts with sections.
+    return defined($root) and $root ne 'GEnum' and $root ne 'GFlags';
 }
 
 

@@ -46,3 +46,22 @@ GType gtkdoc_boxed_get_type (void) {
   return type;
 }
 
+/* boxed plain old data: class internals */
+
+static gpointer gtkdoc_boxed_plain_old_data_copy (gpointer boxed) {
+  return g_memdup(boxed, sizeof(GtkdocBoxedPlainOldData));
+}
+
+static void gtkdoc_boxed_plain_old_data_free (gpointer boxed) {
+  g_free(boxed);
+}
+
+GType gtkdoc_boxed_plain_old_data_get_type (void) {
+  static GType type = 0;
+  if (type == 0) {
+    type = g_boxed_type_register_static("GtkdocBoxedPlainOldData",
+                                        (GBoxedCopyFunc) gtkdoc_boxed_plain_old_data_copy,
+                                        (GBoxedFreeFunc) gtkdoc_boxed_plain_old_data_free);
+  }
+  return type;
+}
