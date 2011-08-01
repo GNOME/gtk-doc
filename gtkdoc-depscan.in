@@ -248,6 +248,8 @@ def parse_cmdline():
     options.add_option('-d', '--html-dir', metavar='PATH', dest='dirs',
                        help='path of additional folders with devhelp books',
                        default=[], action='append')
+    options.add_option('-s', '--summarize', action='store_true', default=False,
+                       help='print only a brief summary', dest='summarize')
     options.add_option('-u', '--list-unknown', action='store_true', default=False,
                        help='list symbols not found in any book', dest='unknown')
     options.add_option('-v', '--verbose', action='store_true', default=False,
@@ -275,6 +277,25 @@ def merge_gnome_path(options):
     path = filter(os.path.isdir, path)
 
     options.dirs += path
+
+def summarize_matches(matches):
+    counts = {}
+    for filename, lineno, symbol in matches:
+        if not isinstance(symbol, Symbol):
+            if options.verbose:
+                print '%s:%d: unknown symbol %s' % (filename, lineno, symbol)
+            continue
+
+        since = '%s-%s' % (symbol.book.name, symbol.since)
+        name = symbol.name
+        if since not in counts:
+            counts[since] = {}
+        counts[since][name] = counts[since].get(name, 0) + 1
+
+    for since, stats in counts.items():
+        counts[since] = list(sorted(stats.items(), key=lambda x: -x[1]))
+
+    return counts
 
 if '__main__' == __name__:
     options, args = parse_cmdline()
@@ -354,13 +375,20 @@ if '__main__' == __name__:
 
     matches.sort()
 
-    for filename, lineno, symbol in matches:
-        if isinstance(symbol, Symbol):
-            args = filename, lineno, symbol.book.name, symbol.since, symbol.name
-            print '%s:%d: %s-%s required for %s' % args
+    if options.summarize:
+        summary = summarize_matches(matches)
+        for since in sorted(summary.keys()):
+            print '%s required for' % since
+            for x in summary[since]:
+                print '    %u %s' % (x[1], x[0])
+    else:
+        for filename, lineno, symbol in matches:
+            if isinstance(symbol, Symbol):
+                args = filename, lineno, symbol.book.name, symbol.since, symbol.name
+                print '%s:%d: %s-%s required for %s' % args
 
-        elif options.verbose:
-            print '%s:%d: unknown symbol %s' % (filename, lineno, symbol)
+            elif options.verbose:
+                print '%s:%d: unknown symbol %s' % (filename, lineno, symbol)
 
     if options.unknown:
         unknown = [m[2].split('_')[0].lower() for m in unknown_symbols]
