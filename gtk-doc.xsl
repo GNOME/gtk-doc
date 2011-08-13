@@ -11,6 +11,13 @@
   <xsl:include href="devhelp2.xsl"/>
   <xsl:include href="version-greater-or-equal.xsl"/>
 
+  <xsl:key name="acronym.key"
+	   match="glossentry/glossterm"
+	   use="."/>
+  <xsl:key name="gallery.key"
+	   match="para[@role='gallery']/link"
+	   use="@linkend"/>
+
   <!-- change some parameters -->
   <!-- http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html -->
   <xsl:param name="toc.section.depth">2</xsl:param>
@@ -61,11 +68,18 @@
 
   <xsl:param name="gtkdoc.l10n.xml" select="document('http://docbook.sourceforge.net/release/xsl/current/common/en.xml')"/>
 
+  <xsl:key name="gtkdoc.gentext.key"
+	   match="l:gentext[@key]"
+	   use="@key"/>
+  <xsl:key name="gtkdoc.context.key"
+	   match="l:context[@name]"
+	   use="@name"/>
+
   <xsl:template name="gentext">
     <xsl:param name="key" select="local-name(.)"/>
 
-    <xsl:variable name="l10n.gentext"
-                  select="($gtkdoc.l10n.xml/l:l10n/l:gentext[@key=$key])[1]"/>
+    <xsl:for-each select="$gtkdoc.l10n.xml">
+    <xsl:variable name="l10n.gentext" select="key('gtkdoc.gentext.key', $key)"/>
 
     <xsl:choose>
       <xsl:when test="$l10n.gentext">
@@ -79,6 +93,7 @@
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="gentext.dingbat">
@@ -128,9 +143,8 @@
     see html/html.xsl:<xsl:template match="*" mode="html.title.attribute">
     -->
 
-    <xsl:variable name="context.node"
-                  select="$gtkdoc.l10n.xml/l:l10n/l:context[@name=$context]"/>
-
+    <xsl:for-each select="$gtkdoc.l10n.xml">
+    <xsl:variable name="context.node" select="key('gtkdoc.context.key', $context)"/>
     <xsl:variable name="template.node"
                   select="($context.node/l:template[@name=$rname])[1]"/>
 
@@ -155,6 +169,7 @@
         </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
+    </xsl:for-each>
   </xsl:template>
 
   <!-- silently test whether a gentext template exists -->
@@ -278,8 +293,6 @@
   <!-- ========================================================= -->
   <!-- template to create the index.sgml anchor index -->
 
-  <xsl:param name="gtkdoc.refsect2" select="//refsect2" />
-
   <xsl:template match="book|article">
     <xsl:variable name="tooldver">
       <xsl:call-template name="version-greater-or-equal">
@@ -309,7 +322,14 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         <xsl:apply-templates select="/book/bookinfo/releaseinfo/ulink"
                              mode="generate.index.mode"/>
         <!-- check all anchor and refentry elements -->
-        <xsl:apply-templates select="//anchor|//refentry|//refsect1|$gtkdoc.refsect2|//refsynopsisdiv|//varlistentry"
+	<!--
+	    The obvious way to write this is //anchor|//refentry|etc...
+	    The obvious way is slow because it causes multiple traversals
+	    in libxslt. This take about half the time.
+	-->
+	<xsl:apply-templates select="//*[name()='anchor' or name()='refentry' or name()='refsect1' or
+				         name() = 'refsect2' or name()='refsynopsisdiv' or
+					 name()='varlistentry']"
                              mode="generate.index.mode"/>
       </xsl:with-param>
       <xsl:with-param name="default.encoding" select="'UTF-8'"/>
@@ -777,7 +797,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                    - use it here
                 -->
               <xsl:variable name="refentryid" select="../@id"/>
-              <xsl:apply-templates select="//para[@role = 'gallery']/link[@linkend = $refentryid]/inlinegraphic"/>
+	      <xsl:apply-templates select="key('gallery.key', $refentryid)/inlinegraphic"/>
             </xsl:otherwise>
           </xsl:choose>
         </td></tr>
@@ -849,7 +869,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     -->
 
     <xsl:param name="value" >
-      <xsl:value-of select="//glossentry/glossterm[text()=$acronym]/../glossdef/para[1]" />
+      <xsl:value-of select="key('acronym.key', $acronym)/../glossdef/para[1]" />
     </xsl:param>
     <xsl:choose>
       <xsl:when test="$value=''">

@@ -6,6 +6,13 @@
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl"/>
   <xsl:include href="version-greater-or-equal.xsl"/>
 
+  <xsl:key name="acronym.key"
+	   match="glossentry/glossterm"
+	   use="."/>
+  <xsl:key name="gallery.key"
+	   match="para[@role='gallery']/link"
+	   use="@linkend"/>
+
   <!-- change some parameters -->
   <xsl:param name="toc.section.depth">2</xsl:param>
   <xsl:param name="generate.toc">
@@ -62,7 +69,13 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         <xsl:apply-templates select="//releaseinfo/ulink"
                              mode="generate.index.mode"/>
         <!-- check all anchor and refentry elements -->
-        <xsl:apply-templates select="//anchor|//refentry|//refsect1|//refsect2|//refsynopsisdiv"
+	<!--
+	    The obvious way to write this is //anchor|//refentry|etc...
+	    The obvious way is slow because it causes multiple traversals
+	    in libxslt. This take about half the time.
+	-->
+	<xsl:apply-templates select="//*[name()='anchor' or name()='refentry' or name()='refsect1' or
+				         name() = 'refsect2' or name()='refsynopsisdiv']"
                              mode="generate.index.mode"/>
       </xsl:with-param>
       <xsl:with-param name="default.encoding" select="'UTF-8'"/>
@@ -503,7 +516,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                 - use it here
              -->
            <xsl:variable name="refentryid" select="../@id"/>
-           <xsl:apply-templates select="//para[@role = 'gallery']/link[@linkend = $refentryid]/inlinegraphic"/>
+	   <xsl:apply-templates select="key('gallery.key', $refentryid)/inlinegraphic"/>
         </td></tr>
        </table>
      </div>
@@ -529,7 +542,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     -->
    
     <xsl:param name="value" >
-      <xsl:value-of select="//glossentry/glossterm[text()=$acronym]/../glossdef/para[1]" />
+      <xsl:value-of select="key('acronym.key', $acronym)/../glossdef/para[1]" />
     </xsl:param>
     <xsl:choose>
       <xsl:when test="$value=''">

@@ -27,6 +27,8 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:variable name="gtkdoc.refsect2" select="//refsect2"/>
+
   <xsl:template name="devhelp2">
     <xsl:variable name="title">
       <xsl:apply-templates select="." mode="generate.devhelp2.toc.title.mode"/>
