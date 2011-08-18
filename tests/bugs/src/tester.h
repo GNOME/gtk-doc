@@ -431,4 +431,12 @@ gst_play_marshal_BUFFER__BOXED (gint * closure,
     gint * return_value G_GNUC_UNUSED,
     gpointer marshal_data);
 
+
+/**
+ * BUG_656773:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=656773
+ */
+extern const char* const BUG_656773;
+
 #endif // GTKDOC_TESTER_H

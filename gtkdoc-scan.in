@@ -530,10 +530,10 @@ sub ScanHeader {
 
             # VARIABLES (extern'ed variables)
 
-            } elsif (m/^\s*(extern|[A-Za-z_]+VAR)\s+((const\s+|signed\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*;/) {
-                $symbol = $5;
+            } elsif (m/^\s*(extern|[A-Za-z_]+VAR)\s+((const\s+|signed\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*;/) {
+                $symbol = $6;
                 s/^\s*([A-Za-z_]+VAR)\b/extern/;
-                @TRACE@("Possible extern: $_");
+                @TRACE@("Possible extern $6: $_");
                 if (&AddSymbolToList (\$list, $symbol)) {
                     print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$_</VARIABLE>\n";
                 }
