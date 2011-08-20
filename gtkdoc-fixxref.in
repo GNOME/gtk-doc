@@ -336,7 +336,7 @@ sub MakeXRef {
 
     my $href = $Links{$id};
 
-    # this is a workaround for some inconsitency we have with CreateValidSGMLID
+    # this is a workaround for some inconsistency we have with CreateValidSGMLID
     if (!$href && $id =~ m/:/) {
         my $tid = $id;
         $tid =~ s/:/--/g;
