@@ -10,7 +10,8 @@
  * signal.
  *
  * When subclassing it is useful to override the #GtkdocObjectClass.test()
- * method.
+ * method. The #GtkdocObjectClass.foo_bar() vmethod lets you refine your
+ * frobnicator.
  *
  * A new instance can be created using the gtkdoc_object_new() function. The
  * whole lifecycle usualy looks like shown in this example:
