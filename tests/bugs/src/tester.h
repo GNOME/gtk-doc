@@ -433,10 +433,25 @@ gst_play_marshal_BUFFER__BOXED (gint * closure,
 
 
 /**
- * BUG_656773:
+ * BUG_656773a:
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656773
  */
-extern const char* const BUG_656773;
+extern const char* const BUG_656773a;
+
+/**
+ * BUG_656773b:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=656773
+ */
+extern const char* BUG_656773b;
+
+/**
+ * BUG_656773c:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=656773
+ */
+const char* const BUG_656773c = "bug";
+
 
 #endif // GTKDOC_TESTER_H

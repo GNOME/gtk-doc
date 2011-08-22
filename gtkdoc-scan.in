@@ -504,7 +504,7 @@ sub ScanHeader {
 
             } elsif (m/^\s*typedef\s+(struct|union)\s*\w*\s*{/) {
                 $symbol = "";
-                 $decl = $_;
+                $decl = $_;
                 $level = 0;
                 $in_declaration = $1;
                 @TRACE@("typedef struct/union $1");
@@ -533,9 +533,21 @@ sub ScanHeader {
             } elsif (m/^\s*(extern|[A-Za-z_]+VAR)\s+((const\s+|signed\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*;/) {
                 $symbol = $6;
                 s/^\s*([A-Za-z_]+VAR)\b/extern/;
-                @TRACE@("Possible extern $6: $_");
+                $decl = $_;
+                @TRACE@("Possible extern var $6: $decl");
                 if (&AddSymbolToList (\$list, $symbol)) {
-                    print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$_</VARIABLE>\n";
+                    print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$decl</VARIABLE>\n";
+                }
+
+
+            # VARIABLES
+
+            } elsif (m/^\s*((const\s+|signed\s+|unsigned\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*\=/) {
+                $symbol = $5;
+                $decl = $_;
+                @TRACE@("Possible global var $5: $decl");
+                if (&AddSymbolToList (\$list, $symbol)) {
+                    print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$decl</VARIABLE>\n";
                 }
 
 
