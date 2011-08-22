@@ -453,5 +453,11 @@ extern const char* BUG_656773b;
  */
 const char* const BUG_656773c = "bug";
 
+/**
+ * BUG_656946:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=656946
+ */
+extern short int BUG_656946;
 
 #endif // GTKDOC_TESTER_H
