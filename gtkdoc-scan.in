@@ -161,7 +161,7 @@ for my $dir (@SOURCE_DIRS) {
 #print DECLLIST $section_list;
 my $section;
 foreach $section (sort(keys %section_list)) {
-    print DECLLIST "$section_list{$section}\n";
+    print DECLLIST "$section_list{$section}";
 }
 
 close (DECLLIST);
