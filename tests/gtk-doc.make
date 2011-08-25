@@ -76,7 +76,8 @@ setup-build.stamp:
 	        done; \
 	    fi; \
 	    test -d $(abs_srcdir)/tmpl && \
-	        cp -rp $(abs_srcdir)/tmpl $(abs_builddir)/; \
+	       { cp $(abs_builddir)/$$file $(abs_builddir)/html; \
+	       chmod -R u+w $(abs_builddir)/tmpl; } \
 	fi
 	@touch setup-build.stamp
 
