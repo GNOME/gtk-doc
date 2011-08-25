@@ -84,7 +84,7 @@ setup-build.stamp:
 	                cp -pu $(abs_srcdir)/$$file $(abs_builddir)/ || true; \
 	        done; \
 	    fi; \
-	    test -f $(abs_srcdir)/tmpl && \
+	    test -d $(abs_srcdir)/tmpl && \
 	        cp -rp $(abs_srcdir)/tmpl $(abs_builddir)/; \
 	fi
 	@touch setup-build.stamp
