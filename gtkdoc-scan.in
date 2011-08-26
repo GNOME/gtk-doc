@@ -837,6 +837,8 @@ sub ScanHeader {
     # Try to separate the standard macros and functions, placing them at the
     # end of the current section, in a subsection named 'Standard'.
     # do this in a loop to catch object, enums and flags
+    # FIXME: we still leave XxxXxxxxClass in the normal section, it would be
+    # nice to hide it, if it is not documented and empty (only parent) 
     my ($class,$lclass);
     my ($standard_decl) = "";
     do {
@@ -857,17 +859,22 @@ sub ScanHeader {
         }
     
         if ($class ne "") {
-            while ($list =~ s/^\S+_IS_$class\n//m)          { $standard_decl .= $&; }
-            while ($list =~ s/^\S+_TYPE_$class\n//m)        { $standard_decl .= $&; }
-            while ($list =~ s/^\S+_${lclass}_get_type\n//m) { $standard_decl .= $&; }
-            while ($list =~ s/^\S+_${class}_CLASS\n//m)     { $standard_decl .= $&; }
-            while ($list =~ s/^\S+_IS_${class}_CLASS\n//m)  { $standard_decl .= $&; }
-            while ($list =~ s/^\S+_${class}_GET_CLASS\n//m) { $standard_decl .= $&; }
-            while ($list =~ s/^\S+_${class}_GET_IFACE\n//m) { $standard_decl .= $&; }
+            my ($cclass) = $lclass;
+            $cclass =~ s/_//g;
+            
+            if ($list =~ s/^\S+${cclass}Private\n//im)          { $standard_decl .= $&; }
+            
+            while ($list =~ s/^\S+_IS_$class\n//m)              { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_TYPE_$class\n//m)            { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_${lclass}_get_type\n//m)     { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_${class}_CLASS\n//m)         { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_IS_${class}_CLASS\n//m)      { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_${class}_GET_CLASS\n//m)     { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_${class}_GET_IFACE\n//m)     { $standard_decl .= $&; }
             while ($list =~ s/^\S+_${class}_GET_INTERFACE\n//m) { $standard_decl .= $&; }
     
             # We do this one last, otherwise it tends to be caught by the IS_$class macro
-            while ($list =~ s/^\S+_$class\n//m)           { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_$class\n//m)                 { $standard_decl .= $&; }
             
             @TRACE@("Decl '".join(",",split("\n",$list))."'\n");
             @TRACE@("Std  '".join(",",split("\n",$standard_decl))."'\n");
