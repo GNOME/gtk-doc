@@ -829,46 +829,57 @@ sub ScanHeader {
         }
     }
 
-    @TRACE@("Scanning $input_file done\n\n\n");
+    @TRACE@("Scanning $input_file done\n");
     
     # sort the symbols
     $list=join("\n",sort(split("\n",$list)))."\n";
-   
 
     # Try to separate the standard macros and functions, placing them at the
     # end of the current section, in a subsection named 'Standard'.
-    my ($class) = "";
+    # do this in a loop to catch object, enums and flags
+    my ($class,$lclass);
     my ($standard_decl) = "";
-    if ($list =~ m/^\S+_IS_(\S*)_CLASS/m) {
-        $class = $1;
-    } elsif ($list =~ m/^\S+_IS_(\S*)/m) {
-        $class = $1;
+    do {
+        if ($list =~ m/^\S+_IS_(\S*)_CLASS/m) {
+            $class = $1;
+            $lclass = lc($class);
+            @TRACE@("Found gobject class '$class'\n");
+        } elsif ($list =~ m/^\S+_IS_(\S*)/m) {
+            $class = $1;
+            $lclass = lc($class);
+            @TRACE@("Found gobject class '$class'\n");
+        } elsif ($list =~ m/^\S+_(\S*)_get_type\n/m) {
+            $lclass = $1;
+            $class = uc($lclass);
+            @TRACE@("Found gobject class '$class'\n");
+        } else {
+          $class = $lclass = "";
+        }
+    
+        if ($class ne "") {
+            while ($list =~ s/^\S+_IS_$class\n//m)          { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_TYPE_$class\n//m)        { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_${lclass}_get_type\n//m) { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_${class}_CLASS\n//m)     { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_IS_${class}_CLASS\n//m)  { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_${class}_GET_CLASS\n//m) { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_${class}_GET_IFACE\n//m) { $standard_decl .= $&; }
+            while ($list =~ s/^\S+_${class}_GET_INTERFACE\n//m) { $standard_decl .= $&; }
+    
+            # We do this one last, otherwise it tends to be caught by the IS_$class macro
+            while ($list =~ s/^\S+_$class\n//m)           { $standard_decl .= $&; }
+            
+            @TRACE@("Decl '".join(",",split("\n",$list))."'\n");
+            @TRACE@("Std  '".join(",",split("\n",$standard_decl))."'\n");
+        }
+    } while ($class ne "");
+    if ($standard_decl ne "") {
+      # sort the symbols
+      $standard_decl=join("\n",sort(split("\n",$standard_decl)))."\n";
+      $list .= "<SUBSECTION Standard>\n$standard_decl";
     }
-
-    if ($class ne "") {
-        if ($list =~ s/^\S+_IS_$class\n//m)          { $standard_decl .= $&; }
-        if ($list =~ s/^\S+_TYPE_$class\n//m)        { $standard_decl .= $&; }
-        if ($list =~ s/^\S+_.*_get_type\n//m)        { $standard_decl .= $&; }
-        if ($list =~ s/^\S+_${class}_CLASS\n//m)     { $standard_decl .= $&; }
-        if ($list =~ s/^\S+_IS_${class}_CLASS\n//m)  { $standard_decl .= $&; }
-        if ($list =~ s/^\S+_${class}_GET_CLASS\n//m) { $standard_decl .= $&; }
-        if ($list =~ s/^\S+_${class}_GET_IFACE\n//m) { $standard_decl .= $&; }
-        if ($list =~ s/^\S+_${class}_GET_INTERFACE\n//m) { $standard_decl .= $&; }
-
-        # We do this one last, otherwise it tends to be caught by the IS_$class macro
-        if ($list =~ s/^\S+_$class\n//m)             { $standard_decl = $& . $standard_decl; }
-
-        if ($standard_decl ne "") {
-            $list .= "<SUBSECTION Standard>\n$standard_decl";
-        }
-
-        if ($list ne "") {
-            $$section_list{$file_basename} .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
-        }
-    } else {
-        if ($list ne "") {
-            $$section_list{$file_basename} .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
-        }
+    if ($list ne "") {
+        $$section_list{$file_basename} .= "<SECTION>\n<FILE>$file_basename</FILE>\n$list</SECTION>\n\n";
     }
 }
 
