@@ -14,6 +14,9 @@
  *   <imageobject><imagedata fileref="home.png" format="PNG"/></imageobject>
  *   <caption><para>Home sweet home.</para></caption>
  * </mediaobject>
+ *
+ * Just incase you wonder, special caracters can be escaped with a \ like in \%
+ * or \# or even \@.
  */
 /**
  * SECTION:iface2
