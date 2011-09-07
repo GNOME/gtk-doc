@@ -842,18 +842,18 @@ sub ScanHeader {
     my ($class,$lclass);
     my ($standard_decl) = "";
     do {
-        if ($list =~ m/^\S+_IS_(\S*)_CLASS/m) {
+        if ($list =~ m/^\S+_IS_(\S*)_CLASS\n/m) {
             $class = $1;
             $lclass = lc($class);
-            @TRACE@("Found gobject class '$class'\n");
-        } elsif ($list =~ m/^\S+_IS_(\S*)/m) {
+            @TRACE@("Found gobject class '$class' from is class macro\n");
+        } elsif ($list =~ m/^\S+_IS_(\S*)\n/m) {
             $class = $1;
             $lclass = lc($class);
-            @TRACE@("Found gobject class '$class'\n");
-        } elsif ($list =~ m/^\S+_(\S*)_get_type\n/m) {
+            @TRACE@("Found gobject class '$class' from is macro\n");
+        } elsif ($list =~ m/^\S+?_(\S*)_get_type\n/m) {
             $lclass = $1;
             $class = uc($lclass);
-            @TRACE@("Found gobject class '$class'\n");
+            @TRACE@("Found gobject class '$class' from get_type function\n");
         } else {
           $class = $lclass = "";
         }
