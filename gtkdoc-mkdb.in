@@ -2757,14 +2757,14 @@ sub ExpandAbbreviations {
 }
 
 
-# Returns the end tag corresponding to the given start tag.
+# Returns the end tag (as a regexp) corresponding to the given start tag.
 sub ExpandAbbreviationsEndTag {
   my ($start_tag) = @_;
 
   if ($start_tag eq "<!\[CDATA\[") {
     return "]]>";
   } elsif ($start_tag eq "<!DOCTYPE") {
-    return "]>";
+    return ">";
   } elsif ($start_tag =~ m/<(\w+)/) {
     return "</$1>";
   }
@@ -2883,7 +2883,7 @@ sub MakeHashXRef {
 #                      e.g. "<!\\[CDATA\\[|<programlisting[^>]*>" to match
 #                      CDATA sections or programlisting elements.
 #               $end_tag_func - function which is passed the matched start tag
-#                      and should return the appropriate end tag string.
+#                      and should return the appropriate end tag string regexp.
 #               $callback - callback called with each part of the text. It is
 #                      called with a piece of text, the symbol being
 #                      documented, and the matched start tag or "" if the text
@@ -2902,7 +2902,7 @@ sub ModifyXMLElements {
       $result .= &$callback ($before_tag, $symbol, "");
       $result .= $start_tag;
 
-      # get the mathing end-tag for current tag
+      # get the matching end-tag for current tag
       $end_tag_regexp = &$end_tag_func ($start_tag);
 
       if ($text =~ m/$end_tag_regexp/s) {
