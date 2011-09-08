@@ -288,6 +288,8 @@ sub ParseEnumDeclaration {
         die "Enum declaration '$declaration' does not begin with 'typedef enum {' or 'enum XXX {'\n";
     }
 
+    #@TRACE@("public fields in enum: $declaration");
+
     # Treat lines in sequence.
     while ($declaration =~ m/\s*([^,\}]+)([,\}])/msg) {
         my $line = $1;

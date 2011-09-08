@@ -1813,7 +1813,43 @@ sub OutputEnum {
     $desc .= "\n";
     $desc .= OutputSymbolExtraLinks($symbol);
 
-    my $decl_out = &CreateValidSGML ($declaration);
+    my $decl_out = "";
+    my $public = 1;
+    my $new_declaration = "";
+    my $decl_line;
+    my $decl = $declaration;
+
+    if ($decl =~ m/^\s*(typedef\s+)?enum\s*\w*\s*(?:\/\*.*\*\/)?\s*{(.*)}\s*\w*\s*;\s*$/s) {
+        my $has_typedef = ($1 ne "")? 1 : 0;
+        my $enum_contents = $2;
+
+        foreach $decl_line (split (/\n/, $enum_contents)) {
+            #print "Enum line: $decl_line\n";
+            if ($decl_line =~ m%/\*\s*<\s*public\s*>\s*\*/%) {
+                $public = 1;
+            } elsif ($decl_line =~ m%/\*\s*<\s*(private|protected)\s*>\s*\*/%) {
+                $public = 0;
+            } elsif ($public) {
+                $new_declaration .= $decl_line . "\n";
+            }
+        }
+
+        if ($new_declaration) {
+            # Strip any blank lines off the ends.
+            $new_declaration =~ s/^\s*\n//;
+            $new_declaration =~ s/\n\s*$/\n/;
+
+            if ($has_typedef) {
+                $decl_out = "typedef enum {\n" . $new_declaration
+                  . "} $symbol;\n";
+            } else {
+                $decl_out = "enum $symbol {\n" . $new_declaration
+                  . "};\n";
+            }
+        }
+    }
+
+    $decl_out = &CreateValidSGML ($decl_out);
     $desc .= "<programlisting>$decl_out</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);
