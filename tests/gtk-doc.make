@@ -62,10 +62,12 @@ docs: html-build.stamp pdf-build.stamp
 
 $(REPORT_FILES): sgml-build.stamp
 
+ts:
+	@echo >ts `date +%s.%N`;
+
 #### setup ####
 
-setup-build.stamp:
-	@echo >ts `date +%s.%N`;
+setup-build.stamp: ts
 	-@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	    echo '  DOC   Preparing build'; \
 	    files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
@@ -83,7 +85,7 @@ setup-build.stamp:
 
 #### scan ####
 
-scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
+scan-build.stamp: ts $(HFILE_GLOB) $(CFILE_GLOB)
 	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Scanning header files"
 	@_source_dir='' ; \
