@@ -1820,7 +1820,7 @@ sub OutputEnum {
     my $decl = $declaration;
 
     if ($decl =~ m/^\s*(typedef\s+)?enum\s*\w*\s*(?:\/\*.*\*\/)?\s*{(.*)}\s*\w*\s*;\s*$/s) {
-        my $has_typedef = ($1 ne "")? 1 : 0;
+        my $has_typedef = defined($1) ? 1 : 0;
         my $enum_contents = $2;
 
         foreach $decl_line (split (/\n/, $enum_contents)) {
