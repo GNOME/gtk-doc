@@ -180,6 +180,7 @@ more warnings:
   * devhelp could show a selector for the language
   * need to get existing python/~mm docs to use it, gtk-doc could output
     language=C for own docs
+
 == installation ==
 * need to install each book with a prefix
 * would be good to have a language attribute in book tag to allow filter by language
@@ -215,7 +216,7 @@ The changes could be made in gtkdoc-mkdb::ExpandAbbreviations()
 * we could require stdin for input and stdout for output, the wrapper for the
   actual tool can ensure the convention
 
-== ascii doc as a frontend ==
+== asciidoc as a frontend ==
 Can we offer integration with asciidoc (http://www.methods.co.nz/asciidoc/)?
 This way the master document could be written much easier. It would be cool if
 we could use the asciidoc markup in source-comments also.
@@ -269,6 +270,10 @@ problems:
 * allow <!-- language="C" --> comments after |[
 * we need to catch those when processing the docbook and expanding the |[
 * require new macro syntax
+
+== show inherited api ==
+could we write small html files for each object for methods, signals and properties and then use iframes to combine those at runtime like in javadoc?
+could we do that using javascript and some other magic?
 
 
 = syntax =
@@ -476,5 +481,4 @@ grep "gst_caps_is_always_compatible" tags
     perl -d:NYTProf gtkdoc-mkdb ...
     nytprofhtml
     firefox nytprof/index.html
-
 
