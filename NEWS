@@ -1,13 +1,57 @@
-GTK-Doc 1.17.1    (xxx xx 2011)
+GTK-Doc 1.18    (Sep 14 2011)
 ============
 
+ o gtk-doc supports a subset of markdown (headings and lists) - see
+   http://git.gnome.org/browse/gtk-doc/tree/tests/gobject/src/gobject.c
+ o gtk-doc does not generate old devhelp files any more. This cuts down doc
+   generation time and works for devhelp >=0.11 (was released in 2005).
+ o changes for out-of-source dir build caused breakage for projects using
+   DOC_SOURCE_DIR with a relative path (to builddir). It is recommended to use 
+   DOC_SOURCE_DIR=$(top_srcdir)/src/xxx.
+
  Changes
+
+ o 590927 : Support AM_SILENT_RULES for doc-build steps
+ o 617121 : /* &lt; private &gt; */ declarations in enums are still displayed
+ o 627758 : A way to ignore a symbol
+ o 639145 : shorthand syntax for headings
+ o 644291 : Enum parser breaks on assignment of ')'
+ o 646870 : HTML_IMAGES no longer in EXTRA_DIST
+ o 648289 : gtkdoc-mkdb doesn't compile.
+ o 648331 : Specify compatible options for 'highlight' consistently.
+ o 649269 : gtkdoc-scanobj should set some of its own CFLAGS/LDFLAGS
+ o 650407 : Buildings docs while distchecking produces thousands of “No declaration found” warnings, then fails.
+ o 652746 : Documentation of plain boxed structs broken
+ o 652764 : Update autotools config a bit
+ o 655711 : summarize depscan output by package
+ o 656453 : Performance improvements (PATCH)
+ o 656658 : gtk-doc.make: install target doesn't install docs when building in a separate directory
+ o 656773 : gtk-doc fails to find a symbol declared as 'char* const'
+ o 656946 : gtk-doc unable to handle 'extern short int'
+ o 657377 : srcdir!=builddir builds discard contents of tmpl
+
+ Contributors
+
+ Bakaoukas Nikolaos
+ Claude Paroz
+ Daniel Mustieles
+ David Necas
+ David Nečas
+ Javier Jardón
+ Jorge González
+ Mario Blättermann
+ Matthias Clasen
+ Michał Górny
+ Shaun McCance
+ Stefan Sauer (Kost)
+ Will Thompson
+ Yaakov Selkowitz
+
 
 GTK-Doc 1.17    (Feb 16 2011)
 ============
 
  Changes
-
 
  o 127049 : building reference documentation fails when builddir != srcdir
  o 640241 : non-srcdir builds busted
