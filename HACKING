@@ -35,11 +35,11 @@ http://live.gnome.org/MaintainersCorner/Releasing
   git push origin GTK_DOC_1_12
 
 - release
-  scp gtk-doc-1.12.tar.gz <user>@master.gnome.org:
+  scp gtk-doc-1.12.tar.xz <user>@master.gnome.org:
   scp NEWS <user>@master.gnome.org:gtk-doc-1.12.news
   scp ChangeLog-1.12 <user>@master.gnome.org:gtk-doc-1.12.changes
   ssh <user>@master.gnome.org
-  install-module gtk-doc-1.12.tar.gz
+  ftpadmin install gtk-doc-1.12.tar.xz
   exit
 
 - bump versions in:
@@ -52,7 +52,7 @@ http://live.gnome.org/MaintainersCorner/Releasing
   git push
 
 - update web-pages (gtk-web/gtk-doc)
-  git add gtk-doc/news.html
+  git add gtk-doc/news.php
   git commit -m"gtk-doc: new release (1.15)"
   git push
 
