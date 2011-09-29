@@ -304,6 +304,7 @@ my %AnnotationsUsed;
 my %AnnotationDefinition = (
     'allow-none' => "NULL is ok, both for passing and for returning.",
     'array' => "Parameter points to an array of items.",
+    'attribute' => "Free-form custom annotation.",
     'closure' => "This parameter is a 'user_data', for callbacks; many bindings can pass NULL here.",
     'default' => "Default parameter value (for in case the <acronym>shadows</acronym>-to function has less parameters).",
     'element-type' => "Generics and defining elements of containers and arrays.",
@@ -313,6 +314,8 @@ my %AnnotationDefinition = (
     'in-out' => "Parameter for input and for returning results. Default is <acronym>transfer full</acronym>.",
     'not-error' => "A GError parameter is not to be handled like a normal GError.",
     'out' => "Parameter for returning results. Default is <acronym>transfer full</acronym>.",
+    'out caller-allocates' => "Out parameter, where caller must allocate storage.",
+    'out callee-allocates' => "Out parameter, where caller must allocate storage.",
     'transfer container' => "Free data container after the code is done.",
     'transfer full' => "Free data after the code is done.",
     'transfer none' => "Don't free data after the code is done.",
@@ -320,7 +323,7 @@ my %AnnotationDefinition = (
     'scope async' => "The callback is valid until first called.",
     'scope notified' => "The callback is valid until the GDestroyNotify argument is called.",
     'skip' => "Exposed in C code, not necessarily available in other languages.",
-    'type' => "Override the parsed C type with given type"
+    'type' => "Override the parsed C type with given type."
 );
 
 # Create the root DocBook output directory if it doens't exist.
