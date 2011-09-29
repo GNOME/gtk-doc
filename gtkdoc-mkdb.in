@@ -319,6 +319,7 @@ my %AnnotationDefinition = (
     'scope call' => "The callback is valid only during the call to the method.",
     'scope async' => "The callback is valid until first called.",
     'scope notified' => "The callback is valid until the GDestroyNotify argument is called.",
+    'skip' => "Exposed in C code, not necessarily available in other languages.",
     'type' => "Override the parsed C type with given type"
 );
 
