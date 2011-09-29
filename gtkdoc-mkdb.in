@@ -3751,7 +3751,8 @@ sub ScanSourceFile {
         || die "Can't open $file: $!";
     my $in_comment_block = 0;
     my $symbol;
-    my ($in_description, $in_return, $in_since, $in_stability, $in_deprecated);
+    #my ($in_description, $in_return, $in_since, $in_stability, $in_deprecated);
+    my $in_part = "";
     my ($description, $return_desc, $return_start, $return_style);
     my ($since_desc, $stability_desc, $deprecated_desc);
     my $current_param;
@@ -3769,11 +3770,7 @@ sub ScanSourceFile {
 
                 # Reset all the symbol data.
                 $symbol = "";
-                $in_description = 0;
-                $in_return = 0;
-                $in_since = 0;
-                $in_deprecated = 0;
-                $in_stability = 0;
+                $in_part = "";
                 $description = "";
                 $return_desc = "";
                 $return_style = "";
@@ -3919,197 +3916,64 @@ sub ScanSourceFile {
             next;
         }
 
-        # FIXME: flip this around
-        # instead of repeating the other parts, just have them once and
-        # do if(!$in_return) { ... }
-        # also maybe have in_part="description,return,since,deprecated,stability,..."
-
-        # If we're in the return value description, add it to the end.
-        if ($in_return) {
-            # If we find another valid returns line, we assume that the first
-            # one was really part of the description.
-            if (m/^\s*(returns:|return\s+value:)/i) {
-                if ($return_style eq 'broken') {
-                    $description .= $return_start . $return_desc;
-                }
-                $return_start = $1;
-                if ($return_style eq 'sane') {
-                    &LogWarning ($file, $., "Multiple Returns for $symbol.");
-                }
-                $return_style = 'sane';
-                $ignore_broken_returns = 1;
-                $return_desc = $';
-            } elsif (!$ignore_broken_returns && m/^\s*(returns\b\s*)/i) {
-                $description .= $return_start . $return_desc;
-                $return_start = $1;
-                $return_style = 'broken';
-                $return_desc = $';
-            } elsif (m%^\s*since:%i) {
-                $since_desc = $';
-                $in_since = 1;
-                $in_return = 0;
-            } elsif (m%^\s*stability:%i) {
-                $stability_desc = $';
-                $in_stability = 1;
-                $in_return = 0;
-            } elsif (m%^\s*deprecated:%i) {
-                $deprecated_desc = $';
-                $in_deprecated = 1;
-                $in_return = 0;
-            } else {
-                $return_desc .= $_;
-            }
-            next;
-        }
-
-        if ($in_since) {
-            if (m/^\s*(returns:|return\s+value:)/i) {
-                if ($return_style eq 'broken') {
-                    $description .= $return_start . $return_desc;
-                }
-                $return_start = $1;
-                if ($return_style eq 'sane') {
-                    &LogWarning ($file, $., "Multiple Returns for $symbol.");
-                }
-                $return_style = 'sane';
-                $ignore_broken_returns = 1;
-                $return_desc = $';
-                $in_return = 1;
-                $in_since = 0;
-            } elsif (!$ignore_broken_returns && m/^\s*(returns\b\s*)/i) {
-                $return_start = $1;
-                $return_style = 'broken';
-                $return_desc = $';
-                $in_return = 1;
-                $in_since = 0;
-            } elsif (m%^\s*deprecated:%i) {
-                $deprecated_desc = $';
-                $in_deprecated = 1;
-                $in_since = 0;
-            } elsif (m%^\s*stability:%i) {
-                $stability_desc = $';
-                $in_stability = 1;
-                $in_since = 0;
-            } else {
-                $since_desc .= $_;
-            }
-            next;
-        }
-
-        if ($in_stability) {
-            if (m/^\s*(returns:|return\s+value:)/i) {
-                if ($return_style eq 'broken') {
-                    $description .= $return_start . $return_desc;
-                }
-                $return_start = $1;
-                if ($return_style eq 'sane') {
-                    &LogWarning ($file, $., "Multiple Returns for $symbol.");
-                }
-                $return_style = 'sane';
-                $ignore_broken_returns = 1;
-                $return_desc = $';
-                $in_return = 1;
-                $in_stability = 0;
-            } elsif (!$ignore_broken_returns && m/^\s*(returns\b\s*)/i) {
-                $return_start = $1;
-                $return_style = 'broken';
-                $return_desc = $';
-                $in_return = 1;
-                $in_stability = 0;
-            } elsif (m%^\s*deprecated:%i) {
-                $deprecated_desc = $';
-                $in_deprecated = 1;
-                $in_stability = 0;
-            } elsif (m%^\s*since:%i) {
-                $since_desc = $';
-                $in_since = 1;
-                $in_stability = 0;
-            } else {
-                $stability_desc .= $_;
-            }
-            next;
-        }
-
-        if ($in_deprecated) {
-            if (m/^\s*(returns:|return\s+value:)/i) {
-                if ($return_style eq 'broken') {
-                    $description .= $return_start . $return_desc;
-                }
-                $return_start = $1;
-                if ($return_style eq 'sane') {
-                    &LogWarning ($file, $., "Multiple Returns for $symbol.");
-                }
-                $return_style = 'sane';
-                $ignore_broken_returns = 1;
-                $return_desc = $';
-                $in_return = 1;
-                $in_deprecated = 0;
-            } elsif (!$ignore_broken_returns && m/^\s*(returns\b\s*)/i) {
-                $return_start = $1;
-                $return_style = 'broken';
-                $return_desc = $';
-                $in_return = 1;
-                $in_deprecated = 0;
-            } elsif (m%^\s*since:%i) {
-                $since_desc = $';
-                $in_since = 1;
-                $in_deprecated = 0;
-            } elsif (m%^\s*stability:%i) {
-                $stability_desc = $';
-                $in_stability = 1;
-                $in_deprecated = 0;
-            } else {
-                $deprecated_desc .= $_;
-            }
-            next;
-        }
-
-        # If we're in the description part, check for the 'Returns:' line.
-        # If that isn't found, add the text to the end.
-        if ($in_description) {
+        if ($in_part eq "description") {
             # Get rid of 'Description:'
             s%^\s*Description:%%;
+        }
 
-            if (m/^\s*(returns:|return\s+value:)/i) {
-                if ($return_style eq 'broken') {
-                    $description .= $return_start . $return_desc;
-                }
-                $return_start = $1;
-                if ($return_style eq 'sane') {
-                    &LogWarning ($file, $., "Multiple Returns for $symbol.");
-                }
-                $return_style = 'sane';
-                $ignore_broken_returns = 1;
-                $return_desc = $';
-                $in_return = 1;
-                next;
-            } elsif (!$ignore_broken_returns && m/^\s*(returns\b\s*)/i) {
-                $return_start = $1;
-                $return_style = 'broken';
-                $return_desc = $';
-                $in_return = 1;
-                next;
-            } elsif (m%^\s*since:%i) {
-                $since_desc = $';
-                $in_since = 1;
-                next;
-            } elsif (m%^\s*deprecated:%i) {
-                $deprecated_desc = $';
-                $in_deprecated = 1;
-                next;
-            } elsif (m%^\s*stability:%i) {
-                $stability_desc = $';
-                $in_stability = 1;
-                next;
+        if (m/^\s*(returns:|return\s+value:)/i) {
+            if ($return_style eq 'broken') {
+                $description .= $return_start . $return_desc;
             }
+            $return_start = $1;
+            if ($return_style eq 'sane') {
+                &LogWarning ($file, $., "Multiple Returns for $symbol.");
+            }
+            $return_style = 'sane';
+            $ignore_broken_returns = 1;
+            $return_desc = $';
+            $in_part = "return";
+            next;
+        } elsif (!$ignore_broken_returns && m/^\s*(returns\b\s*)/i) {
+            $return_start = $1;
+            $return_style = 'broken';
+            $return_desc = $';
+            $in_part = "return";
+            next;
+        } elsif (m%^\s*since:%i) {
+            $since_desc = $';
+            $in_part = "since";
+            next;
+        } elsif (m%^\s*deprecated:%i) {
+            $deprecated_desc = $';
+            $in_part = "deprecated";
+            next;
+        } elsif (m%^\s*stability:%i) {
+            $stability_desc = $';
+            $in_part = "stability";
+            next;
+        }
 
+        if ($in_part eq "description") {
             $description .= $_;
+            next;
+        } elsif ($in_part eq "return") {
+            $return_desc .= $_;
+            next;
+        } elsif ($in_part eq "since") {
+            $since_desc .= $_;
+            next;
+        } elsif ($in_part eq "stability") {
+            $stability_desc .= $_;
+            next;
+        } elsif ($in_part eq "deprecated") {
+            $deprecated_desc .= $_;
             next;
         }
 
         # We must be in the parameters. Check for the empty line below them.
         if (m%^\s*$%) {
-            $in_description = 1;
+            $in_part = "description";
             next;
         }
 
