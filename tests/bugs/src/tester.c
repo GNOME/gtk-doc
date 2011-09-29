@@ -20,11 +20,6 @@
 
 #include <glib.h>
 
-#ifndef GLIB_DEPRECATED
-#define GLIB_DEPRECATED
-#define GLIB_DEPRECATED_FOR(x)
-#endif
-
 #include "tester.h"
 
 /**
@@ -354,3 +349,50 @@ _bug_000000a (const gchar *name)
 void bug_000000_va1 (gchar name, ...)
 {
 }
+
+
+/**
+ * bug_624001a:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */
+void bug_624001a(void)
+{
+}
+
+/**
+ * bug_624001b:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */
+void bug_624001b(void)
+{
+}
+
+/**
+ * bug_624001c:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */
+void bug_624001c(void)
+{
+}
+
+/**
+ * bug_624001d:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */
+void bug_624001d(void)
+{
+}
+
+/**
+ * bug_624001e:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */
+void bug_624001e(void)
+{
+}
+

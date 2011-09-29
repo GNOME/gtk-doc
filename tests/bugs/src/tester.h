@@ -460,32 +460,26 @@ const char* const BUG_656773c = "bug";
  */
 extern short int BUG_656946;
 
-/**
- * BUG_624001a:
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=624001
- */
-void BUG_624001a (void) G_GNUC_DEPRECATED;
+#ifndef G_GNUC_DEPRECATED
+#define G_GNUC_DEPRECATED
+#endif
+#ifndef G_GNUC_DEPRECATED_FOR
+#define G_GNUC_DEPRECATED_FOR(a)
+#endif
 
-/**
- * BUG_624001b:
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=624001
- */
-void BUG_624001b (void) G_GNUC_DEPRECATED_FOR(other_func);
+void bug_624001a(void) G_GNUC_DEPRECATED;
+void bug_624001b(void) G_GNUC_DEPRECATED_FOR(bug_624001a);
 
-/**
- * BUG_624001c:
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=624001
- */
-void BUG_624001c (void) GLIB_DEPRECATED;
+G_GNUC_DEPRECATED
+void bug_624001c(void);
 
-/**
- * BUG_624001d:
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=624001
- */
-void BUG_624001d (void) GLIB_DEPRECATED;
+G_GNUC_DEPRECATED_FOR(bug_624001c)
+void bug_624001d(void);
+
+#ifndef GLIB_DEPRECATED
+#define GLIB_DEPRECATED
+#endif
+
+void bug_624001e (void) GLIB_DEPRECATED;
 
 #endif // GTKDOC_TESTER_H
