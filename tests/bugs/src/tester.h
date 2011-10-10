@@ -460,4 +460,32 @@ const char* const BUG_656773c = "bug";
  */
 extern short int BUG_656946;
 
+/**
+ * BUG_624001a:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */
+void deprecated_function (void) G_GNUC_DEPRECATED;
+
+/**
+ * BUG_624001b:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */
+void deprecated_function2 (void) G_GNUC_DEPRECATED_FOR(other_func);
+
+/**
+ * BUG_624001c:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */
+void deprecated_function3 (void) GLIB_DEPRECATED;
+
+/**
+ * BUG_624001d:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */
+void deprecated_function4 (void) GLIB_DEPRECATED;
+
 #endif // GTKDOC_TESTER_H

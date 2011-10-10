@@ -20,6 +20,11 @@
 
 #include <glib.h>
 
+#ifndef GLIB_DEPRECATED
+#define GLIB_DEPRECATED
+#define GLIB_DEPRECATED_FOR(x)
+#endif
+
 #include "tester.h"
 
 /**
