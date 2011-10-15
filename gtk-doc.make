@@ -29,7 +29,11 @@ SETUP_FILES = \
 	$(DOC_MODULE)-sections.txt	\
 	$(DOC_MODULE)-overrides.txt
 
-EXTRA_DIST = 				\
+ifeq ($(origin EXTRA_DIST), undefined)
+EXTRA_DIST =
+end
+
+EXTRA_DIST += 				\
 	$(HTML_IMAGES)			\
 	$(SETUP_FILES)
 
