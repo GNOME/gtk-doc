@@ -89,8 +89,14 @@ done
 case "$flavour" in
   legacy*)
     ;;
+  legacy-flat*)
+    makefile=gtk-doc.flat.make
+    ;;
   no-tmpl*)
     makefile=gtk-doc.notmpl.make
+    ;;
+  no-tmpl-flat*)
+    makefile=gtk-doc.notmpl-flat.make
     ;;
   *)
     echo "$progname: invalid value for --flavour" 1>&2
