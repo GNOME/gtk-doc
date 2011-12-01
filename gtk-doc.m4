@@ -37,7 +37,7 @@ AC_DEFUN([GTK_DOC_CHECK],
     dnl don't check for glib if we build glib
     if test "x$PACKAGE_NAME" != "xglib"; then
       dnl don't fail if someone does not have glib
-      PKG_CHECK_MODULES(GTKDOC_DEPS, glib-2.0 >= 2.10.0 gobject-2.0  >= 2.10.0,,)
+      PKG_CHECK_MODULES(GTKDOC_DEPS, glib-2.0 >= 2.10.0 gobject-2.0  >= 2.10.0,,[:])
     fi
   fi
 
