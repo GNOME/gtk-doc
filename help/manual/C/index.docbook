@@ -536,22 +536,6 @@ AC_CONFIG_MACRO_DIR(m4)
 
       <!-- FIXME: explain options ? -->
 
-      <para>
-        You may also want to enable GTK-Doc for the distcheck make target. Just
-        add the one line shown in the next example to your top-level
-        <filename>Makefile.am</filename>:
-      </para>
-
-      <para>
-        <example><title>Enable GTK-Doc during make distcheck</title>
-          <programlisting>
-<![CDATA[
-DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc
-]]>
-          </programlisting>
-        </example>
-      </para>
-
     </sect1>
 
     <sect1 id="settingup_autogen">

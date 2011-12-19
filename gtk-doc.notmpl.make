@@ -56,7 +56,6 @@ gtkdoc-check.test: Makefile
 
 CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS) gtkdoc-check.test
 
-if ENABLE_GTK_DOC
 if GTK_DOC_BUILD_HTML
 HTML_BUILD_STAMP=html-build.stamp
 else
@@ -68,9 +67,11 @@ else
 PDF_BUILD_STAMP=
 endif
 
-all-local: $(HTML_BUILD_STAMP) $(PDF_BUILD_STAMP)
-else
-all-local:
+all-gtk-doc: $(HTML_BUILD_STAMP) $(PDF_BUILD_STAMP)
+.PHONY: all-gtk-doc
+
+if ENABLE_GTK_DOC
+all-local: all-gtk-doc
 endif
 
 docs: $(HTML_BUILD_STAMP) $(PDF_BUILD_STAMP)
@@ -266,15 +267,17 @@ uninstall-local:
 #
 # Require gtk-doc when making dist
 #
-if ENABLE_GTK_DOC
+if HAVE_GTK_DOC
 dist-check-gtkdoc: docs
 else
 dist-check-gtkdoc:
-	@echo "*** gtk-doc must be installed and enabled in order to make dist"
+	@echo "*** gtk-doc is needed to run 'make dist'.         ***"
+	@echo "*** gtk-doc was not found when 'configure' ran.   ***"
+	@echo "*** please install gtk-doc and rerun 'configure'. ***"
 	@false
 endif
 
-dist-hook: dist-check-gtkdoc dist-hook-local
+dist-hook: dist-check-gtkdoc all-gtk-doc dist-hook-local
 	@mkdir $(distdir)/html
 	@cp ./html/* $(distdir)/html
 	@-cp ./$(DOC_MODULE).pdf $(distdir)/
