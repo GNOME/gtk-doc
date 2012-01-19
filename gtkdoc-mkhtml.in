@@ -51,9 +51,10 @@ fi
 if test $uninstalled = yes; then
     # this does not work from buiddir!=srcdir
     gtkdocdir=`dirname $0`
-    if test ! -e $gtkdocdir/gtk-doc.xsl; then
+	# traditional Bourne shells may not support -e here, use -f
+    if test ! -f $gtkdocdir/gtk-doc.xsl; then
         # try to src dir (set from makefiles) too
-        if test -e $ABS_TOP_SRCDIR/gtk-doc.xsl; then
+        if test -f $ABS_TOP_SRCDIR/gtk-doc.xsl; then
             gtkdocdir=$ABS_TOP_SRCDIR
         fi
     fi
