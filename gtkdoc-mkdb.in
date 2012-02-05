@@ -1701,8 +1701,22 @@ sub OutputStruct {
 
 sub OutputUnion {
     my ($symbol, $declaration) = @_;
-    my $id = &CreateValidSGMLID ($symbol);
-    my $condition = &MakeConditionDescription ($symbol);
+
+    my $is_gtype = 0;
+    if (&CheckIsObject ($symbol)) {
+        @TRACE@("Found union gtype: $symbol\n");
+        $is_gtype = 1;
+    }
+
+    my $id;
+    my $condition;
+    if ($is_gtype) {
+        $id = &CreateValidSGMLID ($symbol . "_union");
+        $condition = &MakeConditionDescription ($symbol . "_union");
+    } else {
+        $id = &CreateValidSGMLID ($symbol);
+        $condition = &MakeConditionDescription ($symbol);
+    }
 
     # Determine if it is a simple struct or it also has a typedef.
     my $has_typedef = 0;
