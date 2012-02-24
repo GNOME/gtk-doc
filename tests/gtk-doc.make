@@ -224,7 +224,7 @@ distclean-local:
 	    rm -rf tmpl; \
 	fi
 
-maintainer-clean-local: clean
+maintainer-clean-local:
 	@rm -rf xml html
 
 .PHONY : dist-hook-local docs
