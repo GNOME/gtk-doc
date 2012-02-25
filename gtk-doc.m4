@@ -58,6 +58,10 @@ AC_DEFUN([GTK_DOC_CHECK],
     enable_gtk_doc_pdf=no
   fi
 
+  if test -z "$AM_DEFAULT_VERBOSITY"; then
+    AM_DEFAULT_VERBOSITY=1
+  fi
+  AC_SUBST([AM_DEFAULT_VERBOSITY])
 
   AM_CONDITIONAL([ENABLE_GTK_DOC], [test x$enable_gtk_doc = xyes])
   AM_CONDITIONAL([GTK_DOC_BUILD_HTML], [test x$enable_gtk_doc_html = xyes])
