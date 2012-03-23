@@ -90,8 +90,7 @@ EXTRA_DIST = \
 	tools/docpercentages.pl \
 	tools/gtk-doc.el \
 	style.css \
-	COPYING-DOCS \
-	gnome-doc-utils.make
+	COPYING-DOCS
 
 MAINTAINERCLEANFILES = \
 	$(srcdir)/INSTALL \
@@ -116,8 +115,6 @@ GITIGNOREFILES = \
 	RELNOTES.txt \
 	ChangeLog-?.??
 
-DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
-DISTCLEANFILES = gnome-doc-utils.make
 -include $(top_srcdir)/git.mk
 
 dist-hook:

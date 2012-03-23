@@ -21,10 +21,6 @@ AM_MAINTAINER_MODE([enable])
 # to make
 AM_SILENT_RULES([yes])
 
-dnl Forcing a non-null ACTION-IF-NOT-FOUND disables scrollkeeper if
-dnl gnome-doc-utils is not found but does not invalidate the build.
-GNOME_DOC_INIT([],[],enable_scrollkeeper=no)
-
 # Check for programs
 AC_PROG_CC
 
@@ -213,6 +209,16 @@ else
 fi
 AC_SUBST(TRACE)
 
+dnl
+dnl Documentation
+dnl
+have_yelp_tools=no
+m4_ifdef([YELP_HELP_INIT],[
+YELP_HELP_INIT
+have_yelp_tools=yes
+])
+AM_CONDITIONAL([HAVE_YELP_TOOLS],[test x$have_yelp_tools = xyes])
+
 AC_CONFIG_FILES([Makefile
 gtk-doc.pc
 gtk-doc.dsl
@@ -272,12 +278,6 @@ test -n "$JADE" \
 test -n "$DBLATEX$FOP" \
     && AC_MSG_NOTICE([** XML PDF support enabled, using $DBLATEX$FOP]) \
     || AC_MSG_NOTICE([   XML PDF support disabled, no fop available])
-test "x$gdu_cv_have_gdu" = "xyes" \
-    && AC_MSG_NOTICE([** Gnome-doc-utils support enabled]) \
-    || AC_MSG_NOTICE([   Gnome-doc-utils support disabled])
-test "x$enable_scrollkeeper" = "xyes" \
-    && AC_MSG_NOTICE([** Scrollkeeper support enabled]) \
-    || AC_MSG_NOTICE([   Scrollkeeper support disabled])
 test -n "$HIGHLIGHT" \
     && AC_MSG_NOTICE([** Syntax highlighting of examples enabled, using $HIGHLIGHT]) \
     || AC_MSG_NOTICE([   Syntax highlighting of examples disabled])
@@ -287,4 +287,9 @@ test "x$build_tests" != "xno" \
 test "x$enable_debug" != "xno" \
     && AC_MSG_NOTICE([** Debug tracing enabled]) \
     || AC_MSG_NOTICE([   Debug tracing disabled])
-
+test "x$enable_debug" != "xno" \
+    && AC_MSG_NOTICE([** Debug tracing enabled]) \
+    || AC_MSG_NOTICE([   Debug tracing disabled])
+test "x$have_yelp_tools" != "xno" \
+    && AC_MSG_NOTICE([** Documentation enabled]) \
+    || AC_MSG_NOTICE([   Documentation disabled])
