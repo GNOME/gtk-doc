@@ -195,7 +195,7 @@
 
             <application>gtkdoc-scan</application> scans the header files of the
             code looking for declarations of functions, macros, enums, structs, and unions.
-            It creates the file <filename>&lt;module&gt;-decl-list.txt</filename> containg a list of the
+            It creates the file <filename>&lt;module&gt;-decl-list.txt</filename> containing a list of the
             declarations, placing them into sections according to which header file they
             are in. On the first run this file is copied to <filename>&lt;module&gt;-sections.txt</filename>.
             The author can rearrange the sections, and the order of the
@@ -204,14 +204,19 @@
             This file contains the full declarations found by the scanner. If for
             some reason one would like some symbols to show up in the docs, where
             the full declaration cannot be found by the scanner or the declaration
-            should appear differently, one can place enties similar to the ones in
+            should appear differently, one can place entities similar to the ones in
             <filename>&lt;module&gt;-decl.txt</filename> into <filename>&lt;module&gt;-overrides.txt</filename>.
-
-            <application>gtkdoc-scanobj</application> can also be used to dynamically query a library about
-            any GtkObject subclasses it exports. It saves information about each
-            object's position in the class hierarchy and about any GTK Args and Signals it
-            provides.
+         </para>
+         <para>
+            <application>gtkdoc-scangobj</application> can also be used to dynamically query a library about
+            any GObject subclasses it exports. It saves information about each
+            object's position in the class hierarchy and about any GObject properties
+            and signals it provides.
           </para>
+         <para>
+            <application>gtkdoc-scanobj</application> should not be used anymore.
+            It was needed in the past when GObject was still GtkObject inside gtk+.
+         </para>
         </listitem>
 
         <listitem>
@@ -229,7 +234,7 @@
               documentation in the code. <application>gtkdocize</application> supports now
               a <option>--flavour no-tmpl</option> option that chooses a makefile that
               skips tmpl usage totally.
-              If you have never changed file in tmpl by hand, please remove the dir
+              If you have never changed file in tmpl by hand, please remove the directory
               (e.g. from version control system).
             </para>
           </note>
@@ -581,7 +586,7 @@ gtkdocize || exit 1
         invocation, they can be added also to an environment variable called <symbol>GTKDOCIZE_FLAGS</symbol>
         or set as a 2nd parameter in <symbol>GTK_DOC_CHECK</symbol> macro in the configure script.
         If you have never changed file in tmpl by hand and migrating from older gtkdoc versions,
-        please remove the dir (e.g. from version control system).
+        please remove the directory (e.g. from version control system).
       </para>
     </sect1>
 
@@ -596,7 +601,7 @@ gtkdocize || exit 1
 	afterwards.
       </para>
       <para>
-        The first make run generates several additional files in the doc-dirs.
+        The first make run generates several additional files in the doc-directories.
         The important ones are:
         <filename>&lt;package&gt;.types</filename>,
         <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml),
@@ -636,7 +641,7 @@ make
       <title>Integration with plain makefiles or other build systems</title>
 
       <para>
-        In the case one does not want to use automake and therfore
+        In the case one does not want to use automake and therefore
         <filename>gtk-doc.mak</filename> one will need to call the gtkdoc tools
         in the right order in own makefiles (or other build tools).
       </para>
@@ -756,7 +761,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
              </listitem>
              <listitem>
                <para>
-                 What it does: Tell about common uses. Put it in releation
+                 What it does: Tell about common uses. Put it in relation
                  with the other API.
                </para>
              </listitem>
@@ -1047,7 +1052,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
 
         <para>
           You can add versioning information to all documentation elements to tell
-          when an api was introduced, or when it was deprecated.
+          when an API was introduced, or when it was deprecated.
         </para>
 
         <variablelist><title>Versioning Tags</title>
@@ -1260,7 +1265,7 @@ typedef struct _FooWidget {
 
         <para>
           Struct comment blocks can also be used for GObjects and GObjectClasses.
-          It is usualy a good idea to add a comment block for a class, if it has
+          It is usually a good idea to add a comment block for a class, if it has
           vmethods (as this is how they can be documented). For the GObject
           itself one can use the related section docs, having a separate block
           for the instance struct would be useful if the instance has public
@@ -1639,7 +1644,7 @@ gtk_arrow_get_type
         If your library contains private types which you don't want to appear in
         the object hierarchy and the list of implemented or required interfaces,
         add them to a Private subsection.
-        Wheter you would place GObject and GObjectClass like structs in public
+        Whether you would place GObject and GObjectClass like structs in public
         or Standard section depends if they have public entries (variables,
         vmethods).
       </para>
@@ -1704,8 +1709,8 @@ gtk_arrow_get_type
       One can also look at the files produced by the source code scanner:
       <filename>&lt;package&gt;-decl-list.txt</filename> and
       <filename>&lt;package&gt;-decl.txt</filename>. The first one can be
-      compared with the section file if that is manualy maintained. The second
-      lists all declarations fromt he headers If a symbol is missing one could
+      compared with the section file if that is manually maintained. The second
+      lists all declarations from the headers If a symbol is missing one could
       check if this file contains it.
     </para>
 
@@ -1717,7 +1722,7 @@ gtk_arrow_get_type
       <filename>&lt;package&gt;.interfaces.txt</filename>,
       <filename>&lt;package&gt;.prerequisites.txt</filename> and
       <filename>&lt;package&gt;.signals.txt</filename>. If there are missing
-      symbols in any of those, one can ask gtkdoc to keep the intermedia scanner
+      symbols in any of those, one can ask gtkdoc to keep the intermediate scanner
       file for further analysis, but running it as
       <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>.
     </para>
@@ -1733,7 +1738,7 @@ gtk_arrow_get_type
     </para>
 
     <sect1 id="commandline-interfaces">
-      <title>Commandline options and man pages</title>
+      <title>Command line options and man pages</title>
 
       <para>
         As one can generate man pages for a docbook refentry as well, it sounds
