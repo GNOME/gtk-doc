@@ -3751,7 +3751,6 @@ sub ScanSourceFile {
         || die "Can't open $file: $!";
     my $in_comment_block = 0;
     my $symbol;
-    #my ($in_description, $in_return, $in_since, $in_stability, $in_deprecated);
     my $in_part = "";
     my ($description, $return_desc, $return_start, $return_style);
     my ($since_desc, $stability_desc, $deprecated_desc);
