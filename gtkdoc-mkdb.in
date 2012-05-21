@@ -3940,13 +3940,19 @@ sub ScanSourceFile {
             $in_part = "return";
             next;
         } elsif (m%^\s*since:%i) {
-            $since_desc = $';
-            $in_part = "since";
-            next;
+            # we're in param section and have not seen the blank line
+            if($in_part ne "") {
+              $since_desc = $';
+              $in_part = "since";
+              next;
+            }
         } elsif (m%^\s*deprecated:%i) {
-            $deprecated_desc = $';
-            $in_part = "deprecated";
-            next;
+            # we're in param section and have not seen the blank line
+            if($in_part ne "") {
+              $deprecated_desc = $';
+              $in_part = "deprecated";
+              next;
+            }
         } elsif (m%^\s*stability:%i) {
             $stability_desc = $';
             $in_part = "stability";

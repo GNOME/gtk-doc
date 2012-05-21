@@ -13,6 +13,7 @@
  * GtkdocEnum:
  * @GTKDOC_ENUM_V1: first
  * @GTKDOC_ENUM_V2: second
+ *    Since: 0.10
  *
  * Enum values for the #GtkdocEnum type.
  */
