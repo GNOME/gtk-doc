@@ -831,9 +831,6 @@ sub ScanHeader {
 
     @TRACE@("Scanning $input_file done\n");
     
-    # sort the symbols
-    $list=join("\n",sort(split("\n",$list)))."\n";
-
     # Try to separate the standard macros and functions, placing them at the
     # end of the current section, in a subsection named 'Standard'.
     # do this in a loop to catch object, enums and flags
