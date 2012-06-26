@@ -355,6 +355,8 @@ void bug_000000_va1 (gchar name, ...)
  * bug_624001a:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */
 void bug_624001a(void)
 {
@@ -364,6 +366,8 @@ void bug_624001a(void)
  * bug_624001b:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */
 void bug_624001b(void)
 {
@@ -373,6 +377,8 @@ void bug_624001b(void)
  * bug_624001c:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */
 void bug_624001c(void)
 {
@@ -382,6 +388,8 @@ void bug_624001c(void)
  * bug_624001d:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */
 void bug_624001d(void)
 {
@@ -391,6 +399,8 @@ void bug_624001d(void)
  * bug_624001e:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */
 void bug_624001e(void)
 {

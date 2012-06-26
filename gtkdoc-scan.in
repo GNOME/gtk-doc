@@ -370,6 +370,13 @@ sub ScanHeader {
             }
         }
 
+        # If we find a line containing _DEPRECATED, we hope that this is
+        # attribute based deprecation and also treat this as a deprecation
+        # guard.
+        if ($deprecated_conditional_nest == 0 and m/_DEPRECATED/) {
+            $deprecated_conditional_nest += 0.1;
+        }
+
         # set global that is used later when we do AddSymbolToList
         if ($deprecated_conditional_nest > 0) {
             $deprecated = "<DEPRECATED/>\n";
@@ -751,6 +758,7 @@ sub ScanHeader {
                 } else {
                      $internal = 0;
                 }
+                $deprecated_conditional_nest = int($deprecated_conditional_nest);
                 $in_declaration = "";
                 $skip_block = 0;
             }
@@ -761,6 +769,7 @@ sub ScanHeader {
                 if (&AddSymbolToList (\$list, $symbol)) {
                     print DECL "<USER_FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl</USER_FUNCTION>\n";
                 }
+                $deprecated_conditional_nest = int($deprecated_conditional_nest);
                 $in_declaration = "";
             }
         }
@@ -774,6 +783,7 @@ sub ScanHeader {
                 } else {
                     $internal = 0;
                 }
+                $deprecated_conditional_nest = int($deprecated_conditional_nest);
                 $in_declaration = "";
             }
         }
@@ -786,6 +796,7 @@ sub ScanHeader {
                 if (&AddSymbolToList (\$list, $symbol)) {
                     print DECL "<ENUM>\n<NAME>$symbol</NAME>\n$deprecated$decl</ENUM>\n";
                 }
+                $deprecated_conditional_nest = int($deprecated_conditional_nest);
                 $in_declaration = "";
             }
         }
@@ -812,6 +823,7 @@ sub ScanHeader {
                         undef($forward_decls{$symbol});
                     }
                 }
+                $deprecated_conditional_nest = int($deprecated_conditional_nest);
                 $in_declaration = "";
             } else {
                 # We use tr to count the brackets in the line, and adjust

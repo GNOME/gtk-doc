@@ -3891,9 +3891,7 @@ sub ScanSourceFile {
                 }
 
                 if ($deprecated_desc) {
-                    if (exists $Deprecated{$symbol}) {
-                    }
-                    else {
+                    if (!exists $Deprecated{$symbol}) {
                          # don't warn for signals and properties
                          #if ($symbol !~ m/::?(.*)/) {
                          if (defined $DeclarationTypes{$symbol}) {
