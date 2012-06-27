@@ -746,7 +746,8 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
         listings and CDATA sections) just containing a ' *' (blank-asterisk) are
         converted to paragraph breaks.
         If you don't want a paragraph break, change that into ' *  '
-        (blank-asterisk-blank-blank).
+        (blank-asterisk-blank-blank). This is useful in preformatted text (code
+        listings).
       </para>
 
       <tip>

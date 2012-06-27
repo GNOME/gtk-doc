@@ -95,7 +95,9 @@ GtkdocObject *gtkdoc_object_new (void) {
  * @value: the new otest value, whose description extends further than one
  *  line will allow
  *
- * Set the #GtkdocObject:otest property.
+ * Set the #GtkdocObject:otest property. This is a long paragraph.
+ *
+ * Oh, btw. setting the property directly saves us one method.
  *
  * Deprecated: Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.
  *
