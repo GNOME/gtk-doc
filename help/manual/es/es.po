@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2012-03-25 17:48+0000\n"
-"PO-Revision-Date: 2012-03-25 18:45+0200\n"
+"POT-Creation-Date: 2012-06-27 11:48+0000\n"
+"PO-Revision-Date: 2012-07-02 18:25+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1013,6 +1013,14 @@ msgstr ""
 "hacer: añadir una tabla mostrando los identificadores)"
 
 #: C/gtk-doc-manual.xml:741(para)
+#| msgid ""
+#| "The 'documentation' block is also different for each symbol type. Symbol "
+#| "types that get parameters such as functions or macros have the parameter "
+#| "description first followed by a blank line (just a '*'). Afterwards "
+#| "follows the detailed description. All lines (outside program- listings "
+#| "and CDATA sections) just containing a ' *' (blank-asterisk) are converted "
+#| "to paragraph breaks. If you don't want a paragraph break, change that "
+#| "into ' * ' (blank-asterisk-blank-blank)."
 msgid ""
 "The 'documentation' block is also different for each symbol type. Symbol "
 "types that get parameters such as functions or macros have the parameter "
@@ -1020,17 +1028,17 @@ msgid ""
 "the detailed description. All lines (outside program- listings and CDATA "
 "sections) just containing a ' *' (blank-asterisk) are converted to paragraph "
 "breaks. If you don't want a paragraph break, change that into ' * ' (blank-"
-"asterisk-blank-blank)."
+"asterisk-blank-blank). This is useful in preformatted text (code listings)."
 msgstr ""
 "El bloque de «Documentación» también es diferente para cada tipo de símbolo. "
 "Los tipos de símbolos que obtienen parámetros tales como funciones o macros, "
 "tienen primero las descripciones seguidas por una línea blanca (exactamente "
 "un «*»). Después siguen las descripciones detalladas. Todas las líneas (fuera "
-"de los programas; listaso y CDATA de la secciones) que solo contengan un « "
-"*» (asterisco con espacio) son convertidos en párrafos. Si no quiere un "
+"de los programas; listados y CDATA de la secciones) que solo contengan un « "
+"*» (asterisco con espacio) se convierten en párrafos. Si no quiere un "
 "espaciado de párrafo, cámbielo a un « * » (espacio-asterisco-espacio)."
 
-#: C/gtk-doc-manual.xml:757(para)
+#: C/gtk-doc-manual.xml:758(para)
 msgid ""
 "What it is: The name for a class or function can sometimes be misleading for "
 "people coming from a different background."
@@ -1038,21 +1046,21 @@ msgstr ""
 "Qué es: el nombre de la clase o la función puede confundir a veces a "
 "personas que provengan de otros entornos."
 
-#: C/gtk-doc-manual.xml:763(para)
+#: C/gtk-doc-manual.xml:764(para)
 msgid ""
 "What it does: Tell about common uses. Put it in relation with the other API."
 msgstr "Qué hace: indique los usos comunes, en relación con las otras API."
 
-#: C/gtk-doc-manual.xml:753(para)
+#: C/gtk-doc-manual.xml:754(para)
 msgid "When documenting code, describe two apsects: <placeholder-1/>"
 msgstr "Al documentar código, describa dos aspectos: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:778(para)
+#: C/gtk-doc-manual.xml:779(para)
 msgid "Use function() to refer to functions or macros which take arguments."
 msgstr ""
 "Use función() para referirse a funciones o macros que toman argumentos."
 
-#: C/gtk-doc-manual.xml:783(para)
+#: C/gtk-doc-manual.xml:784(para)
 msgid ""
 "Use @param to refer to parameters. Also use this when referring to "
 "parameters of other functions, related to the one being described."
@@ -1060,11 +1068,11 @@ msgstr ""
 "Use @parámetro para referirse a parámetros. Úselo también al referirse a "
 "parámetros de otras funciones, relacionados al que se describe."
 
-#: C/gtk-doc-manual.xml:789(para)
+#: C/gtk-doc-manual.xml:790(para)
 msgid "Use %constant to refer to a constant, e.g. %G_TRAVERSE_LEAFS."
 msgstr "Use %constant para referirse a una constante, ej: %G_TRAVERSE_LEAFS."
 
-#: C/gtk-doc-manual.xml:794(para)
+#: C/gtk-doc-manual.xml:795(para)
 msgid ""
 "Use #symbol to refer to other types of symbol, e.g. structs and enums and "
 "macros which don't take arguments."
@@ -1072,19 +1080,19 @@ msgstr ""
 "Use #símbolo para referirse a otro tipo de símbolos, como por ejemplo "
 "estructuras, enumeraciones y macros que no toman argumentos."
 
-#: C/gtk-doc-manual.xml:800(para)
+#: C/gtk-doc-manual.xml:801(para)
 msgid "Use #Object::signal to refer to a GObject signal"
 msgstr "Use #Object::signal para referirse a una señal de GObject"
 
-#: C/gtk-doc-manual.xml:805(para)
+#: C/gtk-doc-manual.xml:806(para)
 msgid "Use #Object:property to refer to a GObject property"
 msgstr "Use #Object:property para referirse a una propiedad de GObject"
 
-#: C/gtk-doc-manual.xml:810(para)
+#: C/gtk-doc-manual.xml:811(para)
 msgid "Use #Struct.field to refer to a field inside a structure."
 msgstr "Use #Struct.field para referirse a un campo dentro de una estructura"
 
-#: C/gtk-doc-manual.xml:772(para)
+#: C/gtk-doc-manual.xml:773(para)
 msgid ""
 "One advantage of hyper-text over plain-text is the ability to have links in "
 "the document. Writing the correct markup for a link can be tedious though. "
@@ -1096,7 +1104,7 @@ msgstr ""
 "ser tedioso aunque GTK-Doc le ayuda proporcionando abreviaturas útiles. "
 "<placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:818(para)
+#: C/gtk-doc-manual.xml:819(para)
 msgid ""
 "If you need to use the special characters '&lt;', '&gt;', '()', '@', '%', or "
 "'#' in your documentation without GTK-Doc changing them you can use the XML "
@@ -1109,7 +1117,7 @@ msgstr ""
 "«&amp;lt;», «&amp;gt;», «amp;lpar;», «amp;rpar;», «amp;commat;» «&amp;percnt;» y "
 "«&amp;num;» respectivamente o escaparlas con una contrabarra doble «\\»."
 
-#: C/gtk-doc-manual.xml:827(para)
+#: C/gtk-doc-manual.xml:828(para)
 msgid ""
 "DocBook can do more than just links. One can also have lists, tables and "
 "examples. To enable the usage of docbook SGML/XML tags inside doc-comments "
@@ -1123,11 +1131,11 @@ msgstr ""
 "mode</option> en la variable <symbol>MKDB_OPTIONS</symbol> dentro de "
 "<filename>Makefile.am</filename>."
 
-#: C/gtk-doc-manual.xml:841(title)
+#: C/gtk-doc-manual.xml:842(title)
 msgid "GTK-Doc comment block using markdown"
 msgstr "Bloque de comentario de GTK-Doc usando marcado"
 
-#: C/gtk-doc-manual.xml:835(para)
+#: C/gtk-doc-manual.xml:836(para)
 msgid ""
 "Since GTK-Doc-1.18 the tool supports a subset or the <ulink url=\"http://"
 "daringfireball.net/projects/markdown/\">markdown language</ulink>. One can "
@@ -1142,7 +1150,7 @@ msgstr ""
 "renderizar como tal (la lista de elementos aparecerá en una línea separada "
 "por guiones). <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:863(para)
+#: C/gtk-doc-manual.xml:864(para)
 msgid ""
 "As already mentioned earlier GTK-Doc is for documenting public API. Thus one "
 "cannot write documentation for static symbols. Nevertheless it is good to "
@@ -1162,11 +1170,11 @@ msgstr ""
 "introducir el nombre del símbolo en la parte derecha dentro del archivo de "
 "secciones."
 
-#: C/gtk-doc-manual.xml:877(title)
+#: C/gtk-doc-manual.xml:878(title)
 msgid "Documenting sections"
 msgstr "Documentar secciones"
 
-#: C/gtk-doc-manual.xml:879(para)
+#: C/gtk-doc-manual.xml:880(para)
 msgid ""
 "Each section of the documentation contains information about one class or "
 "module. To introduce the component one can write a section block. The short "
@@ -1178,15 +1186,15 @@ msgstr ""
 "La descripción corta además se usa dentro de la tabla de contenidos. Todos "
 "los campos @ son opcionales."
 
-#: C/gtk-doc-manual.xml:887(title)
+#: C/gtk-doc-manual.xml:888(title)
 msgid "Section comment block"
 msgstr "Bloque de comentarios en una sección"
 
-#: C/gtk-doc-manual.xml:909(term)
+#: C/gtk-doc-manual.xml:910(term)
 msgid "SECTION:&lt;name&gt;"
 msgstr "SECCIÓN &lt;nombre&gt;"
 
-#: C/gtk-doc-manual.xml:911(para)
+#: C/gtk-doc-manual.xml:912(para)
 msgid ""
 "The name links the section documentation to the respective part in the "
 "<filename>&lt;package&gt;-sections.txt</filename> file. The name give here "
@@ -1198,11 +1206,11 @@ msgstr ""
 "proporcionado debería coincidir con la etiqueta &lt;ARCHIVO&gt; en el "
 "archivo <filename>&lt;paquete&gt;-sections.txt</filename>."
 
-#: C/gtk-doc-manual.xml:920(term)
+#: C/gtk-doc-manual.xml:921(term)
 msgid "@short_description"
 msgstr "@short_description"
 
-#: C/gtk-doc-manual.xml:922(para)
+#: C/gtk-doc-manual.xml:923(para)
 msgid ""
 "A one line description of the section, that later will appear after the "
 "links in the TOC and at the top of the section page."
@@ -1210,11 +1218,11 @@ msgstr ""
 "Una línea descrita en la sección, que después aparece tras los enlaces en el "
 "TOC y en la página de la sección."
 
-#: C/gtk-doc-manual.xml:929(term)
+#: C/gtk-doc-manual.xml:930(term)
 msgid "@title"
 msgstr "@title"
 
-#: C/gtk-doc-manual.xml:931(para)
+#: C/gtk-doc-manual.xml:932(para)
 msgid ""
 "The section title defaults to &lt;name&gt; from the SECTION declaration. It "
 "can be overridden with the @title field."
@@ -1222,11 +1230,11 @@ msgstr ""
 "De forma predeterminada el título de la sección es &lt;name&gt; de la "
 "declaración SECTION. Se puede sobreescribir con el campo @title."
 
-#: C/gtk-doc-manual.xml:938(term)
+#: C/gtk-doc-manual.xml:939(term)
 msgid "@section_id"
 msgstr "@section_id"
 
-#: C/gtk-doc-manual.xml:940(para)
+#: C/gtk-doc-manual.xml:941(para)
 msgid ""
 "Overrides the use of title as a section identifier. For GObjects the &lt;"
 "title&gt; is used as a section_id and for other sections it is &lt;"
@@ -1236,19 +1244,19 @@ msgstr ""
 "title&gt; se usa en GObjects como el identificador de sección (section_id) y "
 "para otra sección es &lt;MÓDULO&gt;-&lt;title&gt;."
 
-#: C/gtk-doc-manual.xml:948(term)
+#: C/gtk-doc-manual.xml:949(term)
 msgid "@see_also"
 msgstr "@see_also"
 
-#: C/gtk-doc-manual.xml:950(para)
+#: C/gtk-doc-manual.xml:951(para)
 msgid "A list of symbols that are related to this section."
 msgstr "Una lista de símbolos relacionados con esta sección."
 
-#: C/gtk-doc-manual.xml:956(term)
+#: C/gtk-doc-manual.xml:957(term)
 msgid "@stability"
 msgstr "@stability"
 
-#: C/gtk-doc-manual.xml:963(para)
+#: C/gtk-doc-manual.xml:964(para)
 msgid ""
 "Stable - The intention of a Stable interface is to enable arbitrary third "
 "parties to develop applications to these interfaces, release them, and have "
@@ -1265,7 +1273,7 @@ msgstr ""
 "publicaciones importantes no se espera que existan cambios incompatibles, y "
 "de haberlos habrá buenas razones para ello."
 
-#: C/gtk-doc-manual.xml:975(para)
+#: C/gtk-doc-manual.xml:976(para)
 msgid ""
 "Unstable - Unstable interfaces are experimental or transitional. They are "
 "typically used to give outside developers early access to new or rapidly "
@@ -1280,7 +1288,7 @@ msgstr ""
 "reclamaciones acerca de la compatibilidad del código o del binario desde una "
 "publicación menor a la siguiente."
 
-#: C/gtk-doc-manual.xml:987(para)
+#: C/gtk-doc-manual.xml:988(para)
 msgid ""
 "Private - An interface that can be used within the GNOME stack itself, but "
 "that is not documented for end-users. Such functions should only be used in "
@@ -1290,7 +1298,7 @@ msgstr ""
 "pero que no está documentada para usuarios finales. Tales funciones sólo se "
 "deberían usar de formas especificadas y documentadas."
 
-#: C/gtk-doc-manual.xml:996(para)
+#: C/gtk-doc-manual.xml:997(para)
 msgid ""
 "Internal - An interface that is internal to a module and does not require "
 "end-user documentation. Functions that are undocumented are assumed to be "
@@ -1300,7 +1308,7 @@ msgstr ""
 "para el usuario final. Se asume que las funciones que están sin documentar "
 "son internas."
 
-#: C/gtk-doc-manual.xml:958(para)
+#: C/gtk-doc-manual.xml:959(para)
 msgid ""
 "A informal description of the stability level this API has. We recommend the "
 "use of one of these terms: <placeholder-1/>"
@@ -1308,11 +1316,11 @@ msgstr ""
 "Esta API tiene una descripción informal del nivel de estabilidad. Se "
 "recomienda el uso de uno de estos términos: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1008(term)
+#: C/gtk-doc-manual.xml:1009(term)
 msgid "@include"
 msgstr "@include"
 
-#: C/gtk-doc-manual.xml:1010(para)
+#: C/gtk-doc-manual.xml:1011(para)
 msgid ""
 "The <literal>#include</literal> files to show in the section synopsis (a "
 "comma separated list), overriding the global value from the <link linkend="
@@ -1324,11 +1332,11 @@ msgstr ""
 "<link linkend=\"metafiles_sections\">archivo de secciones</link> o de la "
 "línea de comandos. Este elemento es opcional."
 
-#: C/gtk-doc-manual.xml:1019(term)
+#: C/gtk-doc-manual.xml:1020(term)
 msgid "@image"
 msgstr "@image"
 
-#: C/gtk-doc-manual.xml:1021(para)
+#: C/gtk-doc-manual.xml:1022(para)
 msgid ""
 "The image to display at the top of the reference page for this section. This "
 "will often be some sort of a diagram to illustrate the visual appearance of "
@@ -1340,7 +1348,7 @@ msgstr ""
 "apariencia visual de una clase o diagrama de su relación con otras clases. "
 "Este elemento es opcional."
 
-#: C/gtk-doc-manual.xml:1032(para)
+#: C/gtk-doc-manual.xml:1033(para)
 msgid ""
 "To avoid unnecessary recompilation after doc-changes put the section docs "
 "into the c-source where possible."
@@ -1349,11 +1357,11 @@ msgstr ""
 "documentación ponga los documentos de sección en el código fuente C cuando "
 "sea posible."
 
-#: C/gtk-doc-manual.xml:1041(title)
+#: C/gtk-doc-manual.xml:1042(title)
 msgid "Documenting symbols"
 msgstr "Documentar símbolos"
 
-#: C/gtk-doc-manual.xml:1043(para)
+#: C/gtk-doc-manual.xml:1044(para)
 msgid ""
 "Each symbol (function, macro, struct, enum, signal and property) is "
 "documented in a separate block. The block is best placed close to the "
@@ -1367,11 +1375,11 @@ msgstr ""
 "sincronizados. Por ello las funciones generalmente se documentan en el "
 "código C y las macros, estructuras y enum en el archivo de cabecera."
 
-#: C/gtk-doc-manual.xml:1051(title) C/gtk-doc-manual.xml:1080(title)
+#: C/gtk-doc-manual.xml:1052(title) C/gtk-doc-manual.xml:1081(title)
 msgid "General tags"
 msgstr "Etiquetas generales"
 
-#: C/gtk-doc-manual.xml:1053(para)
+#: C/gtk-doc-manual.xml:1054(para)
 msgid ""
 "You can add versioning information to all documentation elements to tell "
 "when an API was introduced, or when it was deprecated."
@@ -1380,23 +1388,23 @@ msgstr ""
 "documentación para mostrar cuándo se introdujo una API o cuándo se declaró "
 "obsoleta."
 
-#: C/gtk-doc-manual.xml:1058(title)
+#: C/gtk-doc-manual.xml:1059(title)
 msgid "Versioning Tags"
 msgstr "Versionado de etiquetas"
 
-#: C/gtk-doc-manual.xml:1059(term)
+#: C/gtk-doc-manual.xml:1060(term)
 msgid "Since:"
 msgstr "Desde:"
 
-#: C/gtk-doc-manual.xml:1061(para)
+#: C/gtk-doc-manual.xml:1062(para)
 msgid "Description since which version of the code the API is available."
 msgstr "Descripción desde qué versión del código está disponible la API."
 
-#: C/gtk-doc-manual.xml:1066(term)
+#: C/gtk-doc-manual.xml:1067(term)
 msgid "Deprecated:"
 msgstr "Obsoleto:"
 
-#: C/gtk-doc-manual.xml:1068(para)
+#: C/gtk-doc-manual.xml:1069(para)
 msgid ""
 "Paragraph denoting that this function should no be used anymore. The "
 "description should point the reader to the new API."
@@ -1404,15 +1412,15 @@ msgstr ""
 "Párrafo que denota que esta función no se debería usar más. La descripción "
 "debería informar al lector de la nueva API."
 
-#: C/gtk-doc-manual.xml:1076(para)
+#: C/gtk-doc-manual.xml:1077(para)
 msgid "(FIXME : Stability information)"
 msgstr "(ARREGLAR: estabilidad de la información)"
 
-#: C/gtk-doc-manual.xml:1103(title) C/gtk-doc-manual.xml:1139(title)
+#: C/gtk-doc-manual.xml:1104(title) C/gtk-doc-manual.xml:1140(title)
 msgid "Function comment block"
 msgstr "Bloque de comentario de función"
 
-#: C/gtk-doc-manual.xml:1109(para)
+#: C/gtk-doc-manual.xml:1110(para)
 msgid ""
 "Document whether returned objects, lists, strings, etc, should be freed/"
 "unrefed/released."
@@ -1420,23 +1428,23 @@ msgstr ""
 "El documento, dependiendo de si devuelve objetos, listas, cadenas, etc. "
 "debería liberarse/desreferenciarse/etc."
 
-#: C/gtk-doc-manual.xml:1115(para)
+#: C/gtk-doc-manual.xml:1116(para)
 msgid "Document whether parameters can be NULL, and what happens if they are."
 msgstr ""
 "El documento, dependiendo de si sus parámetros pueden ser nulos, y qué "
 "sucede si lo son."
 
-#: C/gtk-doc-manual.xml:1120(para)
+#: C/gtk-doc-manual.xml:1121(para)
 msgid ""
 "Mention interesting pre-conditions and post-conditions where appropriate."
 msgstr ""
 "Mencionar precondiciones y postcondiciones interesantes donde sea apropiado."
 
-#: C/gtk-doc-manual.xml:1105(para) C/gtk-doc-manual.xml:1202(para)
+#: C/gtk-doc-manual.xml:1106(para) C/gtk-doc-manual.xml:1203(para)
 msgid "Please remember to: <placeholder-1/>"
 msgstr "Recuerde: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1127(para)
+#: C/gtk-doc-manual.xml:1128(para)
 msgid ""
 "Gtk-doc assumes all symbols (macros, functions) starting with '_' are "
 "private. They are treated like static functions."
@@ -1444,7 +1452,7 @@ msgstr ""
 "GTK-Doc asume que todos los símbolos (macros, funciones) que empiezan por «_» "
 "son privados. Se tratan como funciones estáticas."
 
-#: C/gtk-doc-manual.xml:1132(para)
+#: C/gtk-doc-manual.xml:1133(para)
 msgid ""
 "Also, take a look at gobject introspection annotation tags: http://live."
 "gnome.org/GObjectIntrospection/Annotations"
@@ -1452,23 +1460,23 @@ msgstr ""
 "Además, consultar las etiquetas de anotaciones de introspección de gobject: "
 "http://live.gnome.org/GObjectIntrospection/Annotations"
 
-#: C/gtk-doc-manual.xml:1163(title)
+#: C/gtk-doc-manual.xml:1164(title)
 msgid "Function tags"
 msgstr "Etiquetas de funciones"
 
-#: C/gtk-doc-manual.xml:1164(term)
+#: C/gtk-doc-manual.xml:1165(term)
 msgid "Returns:"
 msgstr "Devuelve:"
 
-#: C/gtk-doc-manual.xml:1166(para)
+#: C/gtk-doc-manual.xml:1167(para)
 msgid "Paragraph describing the returned result."
 msgstr "Párrafo que describe el resultado devuelto."
 
-#: C/gtk-doc-manual.xml:1171(term)
+#: C/gtk-doc-manual.xml:1172(term)
 msgid "@...:"
 msgstr "@...:"
 
-#: C/gtk-doc-manual.xml:1173(para)
+#: C/gtk-doc-manual.xml:1174(para)
 msgid ""
 "In case the function has variadic arguments, you should use this tag "
 "(@Varargs: does also work for historic reasons)."
@@ -1476,15 +1484,15 @@ msgstr ""
 "En el caso de que la función tenga argumentos variados debe usar esta "
 "etiqueta (@Vargargs: también funciona por razones históricas)."
 
-#: C/gtk-doc-manual.xml:1183(title) C/gtk-doc-manual.xml:1185(title)
+#: C/gtk-doc-manual.xml:1184(title) C/gtk-doc-manual.xml:1186(title)
 msgid "Property comment block"
 msgstr "Bloque de comentario de propiedad"
 
-#: C/gtk-doc-manual.xml:1200(title) C/gtk-doc-manual.xml:1219(title)
+#: C/gtk-doc-manual.xml:1201(title) C/gtk-doc-manual.xml:1220(title)
 msgid "Signal comment block"
 msgstr "Bloque de comentario de señal"
 
-#: C/gtk-doc-manual.xml:1206(para)
+#: C/gtk-doc-manual.xml:1207(para)
 msgid ""
 "Document when the signal is emitted and whether it is emitted before or "
 "after other signals."
@@ -1492,15 +1500,15 @@ msgstr ""
 "Documentar cuando la señal se emite e indica si se emite antes o después de "
 "otras señales."
 
-#: C/gtk-doc-manual.xml:1212(para)
+#: C/gtk-doc-manual.xml:1213(para)
 msgid "Document what an application might do in the signal handler."
 msgstr "Documentar qué aplicación debe gestionar las señales."
 
-#: C/gtk-doc-manual.xml:1239(title) C/gtk-doc-manual.xml:1240(title)
+#: C/gtk-doc-manual.xml:1240(title) C/gtk-doc-manual.xml:1241(title)
 msgid "Struct comment block"
 msgstr "Bloque de comentario de estructura"
 
-#: C/gtk-doc-manual.xml:1260(para)
+#: C/gtk-doc-manual.xml:1261(para)
 msgid ""
 "Use <code>/*&lt; private &gt;*/</code> before the private struct fields you "
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
@@ -1510,7 +1518,7 @@ msgstr ""
 "privadas que quiera ocultar. Use <code>/*&lt; public &gt;*/</code> para "
 "revertir el comportamiento anterior."
 
-#: C/gtk-doc-manual.xml:1266(para)
+#: C/gtk-doc-manual.xml:1267(para)
 msgid ""
 "Struct comment blocks can also be used for GObjects and GObjectClasses. It "
 "is usually a good idea to add a comment block for a class, if it has "
@@ -1528,11 +1536,11 @@ msgstr ""
 "públicos. Una desventaja aquí es que esto crea dos entradas de índice con el "
 "mismo nombre (la estructura y la sección)."
 
-#: C/gtk-doc-manual.xml:1278(title) C/gtk-doc-manual.xml:1279(title)
+#: C/gtk-doc-manual.xml:1279(title) C/gtk-doc-manual.xml:1280(title)
 msgid "Enum comment block"
 msgstr "Enumerar bloques de comentarios"
 
-#: C/gtk-doc-manual.xml:1300(para)
+#: C/gtk-doc-manual.xml:1301(para)
 msgid ""
 "Use <code>/*&lt; private &gt;*/</code> before the private enum values you "
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
@@ -1542,17 +1550,17 @@ msgstr ""
 "que quiera ocultar. Use <code>/*&lt; public &gt;*/</code> para revertir el "
 "comportamiento anterior."
 
-#: C/gtk-doc-manual.xml:1310(title)
+#: C/gtk-doc-manual.xml:1311(title)
 msgid "Useful DocBook tags"
 msgstr "Etiquetas DocBook útiles"
 
-#: C/gtk-doc-manual.xml:1312(para)
+#: C/gtk-doc-manual.xml:1313(para)
 msgid ""
 "Here are some DocBook tags which are most useful when documenting the code."
 msgstr ""
 "Aquí están varias etiquetas de DocBook muy útiles al documentar código."
 
-#: C/gtk-doc-manual.xml:1317(para)
+#: C/gtk-doc-manual.xml:1318(para)
 msgid ""
 "To link to another section in the GTK docs: <placeholder-1/> The linkend is "
 "the SGML/XML id on the top item of the page you want to link to. For most "
@@ -1567,7 +1575,7 @@ msgstr ""
 "de la clase. Los espacios y guiones bajos se convierten a «-» para ajustarse "
 "a SGML/XML."
 
-#: C/gtk-doc-manual.xml:1333(para)
+#: C/gtk-doc-manual.xml:1334(para)
 msgid ""
 "To refer to an external function, e.g. a standard C function: <placeholder-1/"
 ">"
@@ -1575,7 +1583,7 @@ msgstr ""
 "Para referirse a una función externa, ej. una función de C estándar: "
 "<placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1344(para)
+#: C/gtk-doc-manual.xml:1345(para)
 msgid ""
 "To include example code: <placeholder-1/> or possibly this, for very short "
 "code fragments which don't need a title: <placeholder-2/> For the latter GTK-"
@@ -1593,19 +1601,19 @@ msgstr ""
 "]|\n"
 "]]>"
 
-#: C/gtk-doc-manual.xml:1378(para)
+#: C/gtk-doc-manual.xml:1379(para)
 msgid "To include bulleted lists: <placeholder-1/>"
 msgstr "Para incluir listas de topos: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1400(para)
+#: C/gtk-doc-manual.xml:1401(para)
 msgid "To include a note which stands out from the text: <placeholder-1/>"
 msgstr "Para incluir una nota que sobresale del texto: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1415(para)
+#: C/gtk-doc-manual.xml:1416(para)
 msgid "To refer to a type: <placeholder-1/>"
 msgstr "Para referirse a un tipo: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1426(para)
+#: C/gtk-doc-manual.xml:1427(para)
 msgid ""
 "To refer to an external structure (not one described in the GTK docs): "
 "<placeholder-1/>"
@@ -1613,11 +1621,11 @@ msgstr ""
 "Para referirse a una estructura externa (no una descrita en la documentación "
 "de GTK): <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1437(para)
+#: C/gtk-doc-manual.xml:1438(para)
 msgid "To refer to a field of a structure: <placeholder-1/>"
 msgstr "Para referirse a un campo o a una estructura: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1448(para)
+#: C/gtk-doc-manual.xml:1449(para)
 msgid ""
 "To refer to a class name, we could possibly use: <placeholder-1/> but you'll "
 "probably be using #GtkWidget instead (to automatically create a link to the "
@@ -1629,23 +1637,23 @@ msgstr ""
 "automaticamenteun enlace a la página GtkWidget; consulte <link linkend="
 "\"documenting_syntax\">abreviaciones</link>)."
 
-#: C/gtk-doc-manual.xml:1461(para)
+#: C/gtk-doc-manual.xml:1462(para)
 msgid "To emphasize text: <placeholder-1/>"
 msgstr "Para enfatizar un texto: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1472(para)
+#: C/gtk-doc-manual.xml:1473(para)
 msgid "For filenames use: <placeholder-1/>"
 msgstr "Para uso de nombres de archivo: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1483(para)
+#: C/gtk-doc-manual.xml:1484(para)
 msgid "To refer to keys use: <placeholder-1/>"
 msgstr "Para referirse a claves: <placeholder-1/>"
 
-#: C/gtk-doc-manual.xml:1498(title)
+#: C/gtk-doc-manual.xml:1499(title)
 msgid "Filling the extra files"
 msgstr "Rellenar campos adicionales"
 
-#: C/gtk-doc-manual.xml:1500(para)
+#: C/gtk-doc-manual.xml:1501(para)
 msgid ""
 "There are a couple of extra files, that need to be maintained along with the "
 "inline source code comments: <filename>&lt;package&gt;.types</filename>, "
@@ -1657,11 +1665,11 @@ msgstr ""
 "filename>, <filename>&lt;paquete&gt;-docs.xml</filename> (.sgml en el "
 "pasado) y <filename>&lt;paquete&gt;-sections.txt</filename>."
 
-#: C/gtk-doc-manual.xml:1509(title)
+#: C/gtk-doc-manual.xml:1510(title)
 msgid "Editing the types file"
 msgstr "Editar los tipos de archivo"
 
-#: C/gtk-doc-manual.xml:1511(para)
+#: C/gtk-doc-manual.xml:1512(para)
 msgid ""
 "If your library or application includes GtkObjects/GObjects, you want their "
 "signals, arguments/parameters and position in the hierarchy to be shown in "
@@ -1675,11 +1683,11 @@ msgstr ""
 "<function>xxx_get_type</function> junto con sus «include» en el archivo "
 "<filename>&lt;paquete&gt;.types</filename>."
 
-#: C/gtk-doc-manual.xml:1520(title)
+#: C/gtk-doc-manual.xml:1521(title)
 msgid "Example types file snippet"
 msgstr "Fragmento de ejemplo de tipos de archivo"
 
-#: C/gtk-doc-manual.xml:1534(para)
+#: C/gtk-doc-manual.xml:1535(para)
 msgid ""
 "Since GTK-Doc 1.8 <application>gtkdoc-scan</application> can generate this "
 "list for you. Just add \"--rebuild-types\" to SCAN_OPTIONS in "
@@ -1691,11 +1699,11 @@ msgstr ""
 "<filename>Makefile.am</filename>. Si usa esto no debería ejecutar dist sobre "
 "los tipos de archivo ni tenerlos bajo el control de versiones."
 
-#: C/gtk-doc-manual.xml:1543(title)
+#: C/gtk-doc-manual.xml:1544(title)
 msgid "Editing the master document"
 msgstr "Editar la sección maestra del documento"
 
-#: C/gtk-doc-manual.xml:1545(para)
+#: C/gtk-doc-manual.xml:1546(para)
 msgid ""
 "GTK-Doc produces documentation in DocBook SGML/XML. When processing the "
 "inline source comments, the GTK-Doc tools generate one documentation page "
@@ -1707,7 +1715,7 @@ msgstr ""
 "una página de documentación por clase o módulo en un archivo aparte. El "
 "documento maestro las incluye y ordena."
 
-#: C/gtk-doc-manual.xml:1552(para)
+#: C/gtk-doc-manual.xml:1553(para)
 msgid ""
 "While GTK-Doc creates a template master document for you, later run will not "
 "touch it again. This means that one can freely structure the documentation. "
@@ -1723,7 +1731,7 @@ msgstr ""
 "documento maestro se vuelve a crear desde cero. Es una buena idea mirarlo de "
 "vez en cuando para ver si se han introducido algunas mejoras."
 
-#: C/gtk-doc-manual.xml:1562(para)
+#: C/gtk-doc-manual.xml:1563(para)
 msgid ""
 "Do not create tutorials as extra documents. Just write extra chapters. The "
 "benefit of directly embedding the tutorial for your library into the API "
@@ -1737,7 +1745,7 @@ msgstr ""
 "enlazar la documentación de símbolos. Además las posibilidades de actualizar "
 "el tutorial junto con la biblioteca son mayores."
 
-#: C/gtk-doc-manual.xml:1571(para)
+#: C/gtk-doc-manual.xml:1572(para)
 msgid ""
 "So what are the things to change inside the master document? For a start is "
 "only a little. There are some placeholders (text in square brackets) there "
@@ -1747,15 +1755,15 @@ msgstr ""
 "es muy poco. Existen algunos «placeholders» (texto entre corchetes) de los "
 "que habría que encargarse."
 
-#: C/gtk-doc-manual.xml:1578(title)
+#: C/gtk-doc-manual.xml:1579(title)
 msgid "Master document header"
 msgstr "Cabecera del documento maestro"
 
-#: C/gtk-doc-manual.xml:1600(title)
+#: C/gtk-doc-manual.xml:1601(title)
 msgid "Editing the section file"
 msgstr "Editar el archivo de sección"
 
-#: C/gtk-doc-manual.xml:1602(para)
+#: C/gtk-doc-manual.xml:1603(para)
 msgid ""
 "The section file is used to organise the documentation output by GTK-Doc. "
 "Here one specifies which symbol belongs to which module or class and control "
@@ -1765,7 +1773,7 @@ msgstr ""
 "por GTK-Doc. Aquí se especifica qué símbolos pertenecen a qué módulo o clase "
 "y el control de la visibilidad (pública o privada)."
 
-#: C/gtk-doc-manual.xml:1608(para)
+#: C/gtk-doc-manual.xml:1609(para)
 msgid ""
 "The section file is a plain test file with xml like syntax (using tags). "
 "Blank lines are ignored and lines starting with a '#' are treated as comment "
@@ -1775,7 +1783,7 @@ msgstr ""
 "XML (usando etiquetas). Se ignoran las líneas vacías y las líneas que "
 "comiencen con «#» se tratan como comentarios."
 
-#: C/gtk-doc-manual.xml:1614(para)
+#: C/gtk-doc-manual.xml:1615(para)
 msgid ""
 "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
 "without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
@@ -1797,7 +1805,7 @@ msgstr ""
 "en el título de la sección, o para gobjects está basado en el nombre de "
 "clase de gobject convertido a minúscula.)"
 
-#: C/gtk-doc-manual.xml:1626(para)
+#: C/gtk-doc-manual.xml:1627(para)
 msgid ""
 "The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of the "
 "section. It is only useful before the templates (if used) are initially "
@@ -1810,7 +1818,7 @@ msgstr ""
 "sobreescribe. Además, si una usa comentarios SECTION en los fuentes, se "
 "queda obsoleto."
 
-#: C/gtk-doc-manual.xml:1633(para)
+#: C/gtk-doc-manual.xml:1634(para)
 msgid ""
 "You can group items in the section by using the &lt;SUBSECTION&gt; tag. "
 "Currently it outputs a blank line between subsections in the synopsis "
@@ -1839,7 +1847,7 @@ msgstr ""
 "estructuras en la sección pública o estándar, depende de si tienen entradas "
 "públicas (variables, vmethods)."
 
-#: C/gtk-doc-manual.xml:1652(para)
+#: C/gtk-doc-manual.xml:1653(para)
 msgid ""
 "You can also use &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; to specify the "
 "#include files which are shown in the synopsis sections. It contains a comma-"
@@ -1854,11 +1862,11 @@ msgstr ""
 "el final del archivo. Si lo configura dentro de una sección, sólo se aplica "
 "a esa sección."
 
-#: C/gtk-doc-manual.xml:1666(title)
+#: C/gtk-doc-manual.xml:1667(title)
 msgid "Controlling the result"
 msgstr "Controlar el resultado"
 
-#: C/gtk-doc-manual.xml:1668(para)
+#: C/gtk-doc-manual.xml:1669(para)
 msgid ""
 "A GTK-Doc run generates report files inside the documentation directory. The "
 "generated files are named: <filename>&lt;package&gt;-undocumented.txt</"
@@ -1872,7 +1880,7 @@ msgstr ""
 "filename> y <filename>&lt;paquete&gt;-unused.txt</filename>.Todos son "
 "archivos de texto plano y se pueden ver y posprocesar fácilmente."
 
-#: C/gtk-doc-manual.xml:1677(para)
+#: C/gtk-doc-manual.xml:1678(para)
 msgid ""
 "The <filename>&lt;package&gt;-undocumented.txt</filename> file starts with "
 "the documentation coverage summary. Below are two sections divided by blank "
@@ -1887,7 +1895,7 @@ msgstr ""
 "documentos de sección. Las entradas incompletas son aquellas que tienen "
 "documentación pero dónde; p.e. se ha añadido un parámetro nuevo."
 
-#: C/gtk-doc-manual.xml:1686(para)
+#: C/gtk-doc-manual.xml:1687(para)
 msgid ""
 "The <filename>&lt;package&gt;-undeclared.txt</filename> file lists symbols "
 "given in the <filename>&lt;package&gt;-sections.txt</filename> but not found "
@@ -1898,7 +1906,7 @@ msgstr ""
 "txt</filename>, pero no encontrados en los fuentes. Compruebe si se han "
 "eliminado o no se han escrito correctamente."
 
-#: C/gtk-doc-manual.xml:1693(para)
+#: C/gtk-doc-manual.xml:1694(para)
 msgid ""
 "The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol names, "
 "where the GTK-Doc scanner has found documentation, but does not know where "
@@ -1910,7 +1918,7 @@ msgstr ""
 "no sabe dónde ponerla. Esto significa que el símbolo no se ha añadido "
 "todavía al archivo <filename>&lt;paquete&gt;-sections.txt</filename>."
 
-#: C/gtk-doc-manual.xml:1701(para)
+#: C/gtk-doc-manual.xml:1702(para)
 msgid ""
 "Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
 "am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during "
@@ -1920,7 +1928,7 @@ msgstr ""
 "am. Si como mínimo está instalado GTK-Doc 1.9, esto ejecutará comprobaciones "
 "de integridad durante la ejecución de make check."
 
-#: C/gtk-doc-manual.xml:1708(para)
+#: C/gtk-doc-manual.xml:1709(para)
 msgid ""
 "One can also look at the files produced by the source code scanner: "
 "<filename>&lt;package&gt;-decl-list.txt</filename> and <filename>&lt;"
@@ -1936,7 +1944,7 @@ msgstr ""
 "declaraciones desde las cabeceras. Si falta un símbolo, se puede comprobar "
 "si este archivo lo contiene."
 
-#: C/gtk-doc-manual.xml:1717(para)
+#: C/gtk-doc-manual.xml:1718(para)
 msgid ""
 "If the project is GObject based, one can also look into the files produced "
 "by the object scanner: <filename>&lt;package&gt;.args.txt</filename>, "
@@ -1956,11 +1964,11 @@ msgstr ""
 "hacer que gtkdoc guarde el análisis de archivos para futuros análisis, pero "
 "ejecutándolo como <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 
-#: C/gtk-doc-manual.xml:1732(title)
+#: C/gtk-doc-manual.xml:1733(title)
 msgid "Documenting other interfaces"
 msgstr "Documentar otras interfaces"
 
-#: C/gtk-doc-manual.xml:1734(para)
+#: C/gtk-doc-manual.xml:1735(para)
 msgid ""
 "So far we have been using GTK-Doc to document the API of code. The next "
 "sections contain suggestions how the tools can be used to document other "
@@ -1970,11 +1978,11 @@ msgstr ""
 "siguientes secciones contienen sugerencias acerca de cómo se pueden usar las "
 "herramientas para documentar otras interfaces."
 
-#: C/gtk-doc-manual.xml:1741(title)
+#: C/gtk-doc-manual.xml:1742(title)
 msgid "Command line options and man pages"
 msgstr "Opciones de la línea de comandos y páginas man"
 
-#: C/gtk-doc-manual.xml:1743(para)
+#: C/gtk-doc-manual.xml:1744(para)
 msgid ""
 "As one can generate man pages for a docbook refentry as well, it sounds like "
 "a good idea to use it for that purpose. This way the interface is part of "
@@ -1984,11 +1992,11 @@ msgstr ""
 "docbook, parece buena idea usarlas para ese propósito. De esta forma la "
 "interfaz es parte de la referencia y se obtienen las páginas man sin trabajo."
 
-#: C/gtk-doc-manual.xml:1750(title)
+#: C/gtk-doc-manual.xml:1751(title)
 msgid "Document the tool"
 msgstr "Documentar la herramienta"
 
-#: C/gtk-doc-manual.xml:1752(para)
+#: C/gtk-doc-manual.xml:1753(para)
 msgid ""
 "Create one refentry file per tool. Following <link linkend="
 "\"settingup_docfiles\">our example</link> we would call it <filename>meep/"
@@ -2002,23 +2010,23 @@ msgstr ""
 "xml que se deben usar puede mirar al archivo generado en el subdirectorio "
 "xml así como los ejemplos en, por ejemplo, glib."
 
-#: C/gtk-doc-manual.xml:1762(title)
+#: C/gtk-doc-manual.xml:1763(title)
 msgid "Adding the extra configure check"
 msgstr "Añadir la comprobación de configuración adicional"
 
-#: C/gtk-doc-manual.xml:1765(title) C/gtk-doc-manual.xml:1785(title)
+#: C/gtk-doc-manual.xml:1766(title) C/gtk-doc-manual.xml:1786(title)
 msgid "Extra configure checks"
 msgstr "Comprobaciones de configuración adicionales"
 
-#: C/gtk-doc-manual.xml:1782(title)
+#: C/gtk-doc-manual.xml:1783(title)
 msgid "Adding the extra makefile rules"
 msgstr "Añadir reglas de makefile adicionales"
 
-#: C/gtk-doc-manual.xml:1810(title)
+#: C/gtk-doc-manual.xml:1811(title)
 msgid "DBus interfaces"
 msgstr "Interfaces de DBus"
 
-#: C/gtk-doc-manual.xml:1812(para)
+#: C/gtk-doc-manual.xml:1813(para)
 msgid ""
 "(FIXME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://"
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
@@ -2026,31 +2034,31 @@ msgstr ""
 "(ARREGLAR: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://"
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
 
-#: C/gtk-doc-manual.xml:1821(title)
+#: C/gtk-doc-manual.xml:1822(title)
 msgid "Frequently asked questions"
 msgstr "Preguntas más frecuentes"
 
-#: C/gtk-doc-manual.xml:1825(segtitle)
+#: C/gtk-doc-manual.xml:1826(segtitle)
 msgid "Question"
 msgstr "Pregunta"
 
-#: C/gtk-doc-manual.xml:1826(segtitle)
+#: C/gtk-doc-manual.xml:1827(segtitle)
 msgid "Answer"
 msgstr "Respuesta"
 
-#: C/gtk-doc-manual.xml:1828(seg)
+#: C/gtk-doc-manual.xml:1829(seg)
 msgid "No class hierarchy."
 msgstr "Sin jerarquía de clases."
 
-#: C/gtk-doc-manual.xml:1830(function)
+#: C/gtk-doc-manual.xml:1831(function)
 msgid "xxx_get_type()"
 msgstr "xxx_get_type()"
 
-#: C/gtk-doc-manual.xml:1831(filename)
+#: C/gtk-doc-manual.xml:1832(filename)
 msgid "&lt;package&gt;.types"
 msgstr "&lt;paquete&gt;.tipos"
 
-#: C/gtk-doc-manual.xml:1829(seg)
+#: C/gtk-doc-manual.xml:1830(seg)
 msgid ""
 "The objects <placeholder-1/> function has not been entered into the "
 "<placeholder-2/> file."
@@ -2058,35 +2066,35 @@ msgstr ""
 "Los objetos de la función <placeholder-1/> no se han introducido en el "
 "archivo <placeholder-2/>."
 
-#: C/gtk-doc-manual.xml:1835(seg)
+#: C/gtk-doc-manual.xml:1836(seg)
 msgid "Still no class hierarchy."
 msgstr "Aún sin jerarquía de clases."
 
-#: C/gtk-doc-manual.xml:1837(filename) C/gtk-doc-manual.xml:1876(filename)
-#: C/gtk-doc-manual.xml:1884(filename) C/gtk-doc-manual.xml:1906(filename)
+#: C/gtk-doc-manual.xml:1838(filename) C/gtk-doc-manual.xml:1877(filename)
+#: C/gtk-doc-manual.xml:1885(filename) C/gtk-doc-manual.xml:1907(filename)
 msgid "&lt;package&gt;-sections.txt"
 msgstr "&lt;paquete&gt;-sections.txt"
 
-#: C/gtk-doc-manual.xml:1838(ulink)
+#: C/gtk-doc-manual.xml:1839(ulink)
 msgid "explanation"
 msgstr "explicación"
 
-#: C/gtk-doc-manual.xml:1836(seg)
+#: C/gtk-doc-manual.xml:1837(seg)
 msgid ""
 "Missing or wrong naming in <placeholder-1/> file (see <placeholder-2/>)."
 msgstr ""
 "Faltan nombres o son erróneos en el archivo <placeholder-1/> (consultar "
 "<placeholder-2/>)."
 
-#: C/gtk-doc-manual.xml:1842(seg)
+#: C/gtk-doc-manual.xml:1843(seg)
 msgid "Damn, I have still no class hierarchy."
 msgstr "Maldición, aún no hay una jerarquía de clases."
 
-#: C/gtk-doc-manual.xml:1844(type) C/gtk-doc-manual.xml:1885(type)
+#: C/gtk-doc-manual.xml:1845(type) C/gtk-doc-manual.xml:1886(type)
 msgid "GtkWidget"
 msgstr "GtkWidget"
 
-#: C/gtk-doc-manual.xml:1843(seg)
+#: C/gtk-doc-manual.xml:1844(seg)
 msgid ""
 "Is the object name (name of the instance struct, e.g. <placeholder-1/>) part "
 "of the normal section (don't put this into Standard or Private subsections)."
@@ -2095,27 +2103,27 @@ msgstr ""
 "<placeholder-1/>) parte de la sección normal (no ponga esto en Estándar o "
 "Privado)."
 
-#: C/gtk-doc-manual.xml:1850(seg)
+#: C/gtk-doc-manual.xml:1851(seg)
 msgid "No symbol index."
 msgstr "Sin índice de símbolos."
 
-#: C/gtk-doc-manual.xml:1852(filename) C/gtk-doc-manual.xml:1867(filename)
-#: C/gtk-doc-manual.xml:1893(filename)
+#: C/gtk-doc-manual.xml:1853(filename) C/gtk-doc-manual.xml:1868(filename)
+#: C/gtk-doc-manual.xml:1894(filename)
 msgid "&lt;package&gt;-docs.{xml,sgml}"
 msgstr "&lt;paquete&gt;-docs.{xml,sgml}"
 
-#: C/gtk-doc-manual.xml:1851(seg)
+#: C/gtk-doc-manual.xml:1852(seg)
 msgid ""
 "Does the <placeholder-1/> contain a index that xi:includes the generated "
 "index?"
 msgstr ""
 "¿<placeholder-1/> contiene un índice que «xi:includes» el índice generado?"
 
-#: C/gtk-doc-manual.xml:1857(seg)
+#: C/gtk-doc-manual.xml:1858(seg)
 msgid "Symbols are not linked to their doc-section."
 msgstr "Los símbolos no se enlazan con su sección en el documento."
 
-#: C/gtk-doc-manual.xml:1858(seg)
+#: C/gtk-doc-manual.xml:1859(seg)
 msgid ""
 "Is the doc-comment using the correct markup (added #,% or ())? Check if the "
 "gtkdoc-fixxref warns about unresolvable xrefs."
@@ -2123,19 +2131,19 @@ msgstr ""
 "¿Está doc-comment usando el marcado correcto (añadido #,% o ())? Compruebe "
 "si gtk-doc-fixxref avisa de alguna referencia xref sin resolver."
 
-#: C/gtk-doc-manual.xml:1864(seg)
+#: C/gtk-doc-manual.xml:1865(seg)
 msgid "A new class does not appear in the docs."
 msgstr "Una clase nueva no aparece en la documentación."
 
-#: C/gtk-doc-manual.xml:1865(seg)
+#: C/gtk-doc-manual.xml:1866(seg)
 msgid "Is the new page xi:included from <placeholder-1/>."
 msgstr "Es la página nueva «xi:included» desde <placeholder-1/>."
 
-#: C/gtk-doc-manual.xml:1871(seg)
+#: C/gtk-doc-manual.xml:1872(seg)
 msgid "A new symbol does not appear in the docs."
 msgstr "Un símbolo nuevo no aparece en la documentación."
 
-#: C/gtk-doc-manual.xml:1872(seg)
+#: C/gtk-doc-manual.xml:1873(seg)
 msgid ""
 "Is the doc-comment properly formatted. Check for spelling mistakes in the "
 "begin of the comment. Check if the gtkdoc-fixxref warns about unresolvable "
@@ -2148,19 +2156,19 @@ msgstr ""
 "símbolo está listado correctamente en la <placeholder-1/> en una subsección "
 "pública."
 
-#: C/gtk-doc-manual.xml:1880(seg)
+#: C/gtk-doc-manual.xml:1881(seg)
 msgid "A type is missing from the class hierarchy."
 msgstr "Falta un tipo en la clase de jerarquías"
 
-#: C/gtk-doc-manual.xml:1882(filename)
+#: C/gtk-doc-manual.xml:1883(filename)
 msgid "&lt;package&gt;.hierarchy"
 msgstr "&lt;paquete&gt;.jerarquía"
 
-#: C/gtk-doc-manual.xml:1883(filename)
+#: C/gtk-doc-manual.xml:1884(filename)
 msgid "xml/tree_index.sgml"
 msgstr "xml/tree_index.sgml"
 
-#: C/gtk-doc-manual.xml:1881(seg)
+#: C/gtk-doc-manual.xml:1882(seg)
 msgid ""
 "If the type is listed in <placeholder-1/> but not in <placeholder-2/> then "
 "double check that the type is correctly placed in the <placeholder-3/>. If "
@@ -2172,28 +2180,28 @@ msgstr ""
 "<placeholder-3/>. No se mostrará el tipo de instancia (ej. <placeholder-4/>) "
 "si no está listada o accidentalmente marcada como privada."
 
-#: C/gtk-doc-manual.xml:1890(seg)
+#: C/gtk-doc-manual.xml:1891(seg)
 msgid "I get foldoc links for all gobject annotations."
 msgstr ""
 "Obtengo enlaces de seguimiento de documentos para todas las anotaciones "
 "gobject."
 
-#: C/gtk-doc-manual.xml:1892(filename)
+#: C/gtk-doc-manual.xml:1893(filename)
 msgid "xml/annotation-glossary.xml"
 msgstr "xml/annotation-glossary.xml"
 
-#: C/gtk-doc-manual.xml:1891(seg)
+#: C/gtk-doc-manual.xml:1892(seg)
 msgid "Check that <placeholder-1/> is xi:included from <placeholder-2/>."
 msgstr ""
 "Compruebe que <placeholder-1/> está «xi:included» desde <placeholder-2/>."
 
-#: C/gtk-doc-manual.xml:1899(seg)
+#: C/gtk-doc-manual.xml:1900(seg)
 msgid "Parameter described in source code comment block but does not exist"
 msgstr ""
 "Parámetro descrito en el bloque de comentarios del código fuente pero no "
 "existe"
 
-#: C/gtk-doc-manual.xml:1900(seg)
+#: C/gtk-doc-manual.xml:1901(seg)
 msgid ""
 "Check if the prototype in the header has different parameter names as in the "
 "source."
@@ -2201,15 +2209,15 @@ msgstr ""
 "Compruebe si el prototipo en la cabecera tiene nombres de parámetro "
 "diferentes de la fuente."
 
-#: C/gtk-doc-manual.xml:1905(seg)
+#: C/gtk-doc-manual.xml:1906(seg)
 msgid "multiple \"IDs\" for constraint linkend: XYZ"
 msgstr "múltiples «ID» para la restricción enlazada: XYZ"
 
-#: C/gtk-doc-manual.xml:1906(seg)
+#: C/gtk-doc-manual.xml:1907(seg)
 msgid "Symbol XYZ appears twice in <placeholder-1/> file."
 msgstr "El símbolo XYZ aparece dos veces en el archivo <placeholder-1/>."
 
-#: C/gtk-doc-manual.xml:1909(seg)
+#: C/gtk-doc-manual.xml:1910(seg)
 msgid ""
 "Element typename in namespace '' encountered in para, but no template "
 "matches."
@@ -2217,11 +2225,11 @@ msgstr ""
 "Elemento typename en namespac e«» encontrado en para, pero ninguna plantilla "
 "coincide."
 
-#: C/gtk-doc-manual.xml:1916(title)
+#: C/gtk-doc-manual.xml:1917(title)
 msgid "Tools related to gtk-doc"
 msgstr "Herramientas relacionadas con GTK-Doc"
 
-#: C/gtk-doc-manual.xml:1918(para)
+#: C/gtk-doc-manual.xml:1919(para)
 msgid ""
 "GtkDocPlugin - a <ulink url=\"http://trac-hacks.org/wiki/GtkDocPlugin\">Trac "
 "GTK-Doc</ulink> integration plugin, that adds api docs to a trac site and "
@@ -2231,7 +2239,7 @@ msgstr ""
 "org/wiki/GtkDocPlugin\">Trac GTK-Doc</ulink> que añade documentos de la API "
 "al sitio «trac» y se integra con la búsqueda de «trac»."
 
-#: C/gtk-doc-manual.xml:1923(para)
+#: C/gtk-doc-manual.xml:1924(para)
 msgid ""
 "Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since "
 "tags in the api to determine the minimum required version."
