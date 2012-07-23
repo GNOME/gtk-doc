@@ -307,6 +307,11 @@ sub ScanHeader {
         @TRACE@("File ignored: $input_file");
         return;
     }
+    # Check if the full name is in the list of headers to ignore.
+    if ($IGNORE_HEADERS =~ m/(\s|^)\Q${input_file}\E(\s|$)/) {
+        @TRACE@("File ignored: $input_file");
+        return;
+    }
 
     if (! -f $input_file) {
         LogWarning(__FILE__,__LINE__,"File doesn't exist: $input_file");
