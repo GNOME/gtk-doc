@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2012-09-03 13:59+0000\n"
-"PO-Revision-Date: 2012-09-12 11:17+0200\n"
+"POT-Creation-Date: 2012-09-12 09:22+0000\n"
+"PO-Revision-Date: 2012-09-12 17:31+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -263,7 +263,6 @@ msgstr ""
 "lo que ya no se recomienda)."
 
 #: C/index.docbook:193(listitem/para)
-#, fuzzy
 #| msgid ""
 #| "<guilabel>Gathering information about the code.</"
 #| "guilabel><application>gtkdoc-scan</application> scans the header files of "
@@ -337,7 +336,6 @@ msgstr ""
 "necesitó en el pasado, cuando GObject todavía era GtkObject dentro de GTK+."
 
 #: C/index.docbook:223(listitem/para)
-#, fuzzy
 #| msgid ""
 #| "<guilabel>Generating the \"template\" files.</"
 #| "guilabel><application>gtkdoc-mktmpl</application> creates a number of "
@@ -354,8 +352,9 @@ msgstr ""
 "<guilabel>Generar los archivos «plantilla».</guilabel> <application>gtkdoc-"
 "mktmpl</application> crea un número de archivos en el subdirectorio "
 "<filename class=\"directory\">tmpl/</filename>, usando la información "
-"obtenida en el primer paso. (Note que esto se puede ejecutar de forma "
-"separada. Intentará asegurarse de que la documentación nunca se pierde.)"
+"obtenida en el primer paso. (Tenga en cuenta que esto se puede ejecutar de "
+"forma separada. Intentará asegurarse de que la documentación nunca se "
+"pierde.)"
 
 #: C/index.docbook:232(note/para)
 msgid ""
@@ -373,7 +372,6 @@ msgstr ""
 "ejemplo, desde el sistema de control de versiones)."
 
 #: C/index.docbook:244(listitem/para)
-#, fuzzy
 #| msgid ""
 #| "<guilabel>Generating the SGML/XML and HTML/PDF.</"
 #| "guilabel><application>gtkdoc-mkdb</application> turns the template files "
@@ -1362,12 +1360,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:836(sect1/para)
-#| msgid ""
-#| "Since GTK-Doc-1.18 the tool supports a subset or the <ulink url=\"http://"
-#| "daringfireball.net/projects/markdown/\">markdown language</ulink>. One "
-#| "can use it for sub-headings and simple itemized lists. On older GTK-Doc "
-#| "versions the content will be rendered as it (the list items will appear "
-#| "in one line separated by dashes). <placeholder-1/>"
 msgid ""
 "Since GTK-Doc-1.18 the tool supports a subset or the <ulink url=\"http://"
 "daringfireball.net/projects/markdown/\">markdown language</ulink>. One can "
@@ -2914,7 +2906,6 @@ msgid "No class hierarchy."
 msgstr "Sin jerarquía de clases."
 
 #: C/index.docbook:1830(seglistitem/seg)
-#, fuzzy
 #| msgid ""
 #| "The objects <placeholder-1/> function has not been entered into the "
 #| "<placeholder-2/> file."
@@ -2922,8 +2913,8 @@ msgid ""
 "The objects <function>xxx_get_type()</function> function has not been "
 "entered into the <filename>&lt;package&gt;.types</filename> file."
 msgstr ""
-"Los objetos de la función <placeholder-1/> no se han introducido en el "
-"archivo <placeholder-2/>."
+"Los objetos de la función <function>xxx_get_type()</function> no se han "
+"introducido en el archivo <filename>&lt;package&gt;.types</filename>."
 
 #: C/index.docbook:1836(seglistitem/seg)
 msgid "Still no class hierarchy."
@@ -2935,13 +2926,15 @@ msgid ""
 "file (see <ulink url=\"http://mail.gnome.org/archives/gtk-doc-list/2003-"
 "October/msg00006.html\">explanation</ulink>)."
 msgstr ""
+"Nombre incorrecto o ausente en el archivo <filename>&lt;package&gt;-sections."
+"txt</filename> (consulte la <ulink url=\"http://mail.gnome.org/archives/gtk-"
+"doc-list/2003-October/msg00006.html\">explicación</ulink>)."
 
 #: C/index.docbook:1843(seglistitem/seg)
 msgid "Damn, I have still no class hierarchy."
 msgstr "Maldición, aún no hay una jerarquía de clases."
 
 #: C/index.docbook:1844(seglistitem/seg)
-#, fuzzy
 #| msgid ""
 #| "Is the object name (name of the instance struct, e.g. <placeholder-1/>) "
 #| "part of the normal section (don't put this into Standard or Private "
@@ -2952,15 +2945,14 @@ msgid ""
 "subsections)."
 msgstr ""
 "Es el nombre del objeto (nombre de la estructura de la instancia, ej. "
-"<placeholder-1/>) parte de la sección normal (no ponga esto en Estándar o "
-"Privado)."
+"<type>GtkWidget</type>) parte de la sección normal (no ponga esto en "
+"Estándar o Privado)."
 
 #: C/index.docbook:1851(seglistitem/seg)
 msgid "No symbol index."
 msgstr "Sin índice de símbolos."
 
 #: C/index.docbook:1852(seglistitem/seg)
-#, fuzzy
 #| msgid ""
 #| "Does the <placeholder-1/> contain a index that xi:includes the generated "
 #| "index?"
@@ -2968,7 +2960,8 @@ msgid ""
 "Does the <filename>&lt;package&gt;-docs.{xml,sgml}</filename> contain a "
 "index that xi:includes the generated index?"
 msgstr ""
-"¿<placeholder-1/> contiene un índice que «xi:includes» el índice generado?"
+"¿<filename>&lt;package&gt;-docs.{xml,sgml}</filename> contiene un índice que "
+"«xi:includes» el índice generado?"
 
 #: C/index.docbook:1858(seglistitem/seg)
 msgid "Symbols are not linked to their doc-section."
@@ -2987,19 +2980,19 @@ msgid "A new class does not appear in the docs."
 msgstr "Una clase nueva no aparece en la documentación."
 
 #: C/index.docbook:1866(seglistitem/seg)
-#, fuzzy
 #| msgid "Is the new page xi:included from <placeholder-1/>."
 msgid ""
 "Is the new page xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</"
 "filename>."
-msgstr "Es la página nueva «xi:included» desde <placeholder-1/>."
+msgstr ""
+"Es la página nueva «xi:included» desde <filename>&lt;package&gt;-docs.{xml,"
+"sgml}</filename>."
 
 #: C/index.docbook:1872(seglistitem/seg)
 msgid "A new symbol does not appear in the docs."
 msgstr "Un símbolo nuevo no aparece en la documentación."
 
 #: C/index.docbook:1873(seglistitem/seg)
-#, fuzzy
 #| msgid ""
 #| "Is the doc-comment properly formatted. Check for spelling mistakes in the "
 #| "begin of the comment. Check if the gtkdoc-fixxref warns about "
@@ -3014,15 +3007,14 @@ msgstr ""
 "Comprobar que el doc-comment está formateado correctamente. Compruebe "
 "errores de escritura al principio del comentario. Compruebe si gtkdoc-"
 "fixxref avisa acerca de referencias xref no solventables. Compruebe si el "
-"símbolo está listado correctamente en la <placeholder-1/> en una subsección "
-"pública."
+"símbolo está listado correctamente en <filename>&lt;package&gt;-sections."
+"txt</filename> en una subsección pública."
 
 #: C/index.docbook:1881(seglistitem/seg)
 msgid "A type is missing from the class hierarchy."
 msgstr "Falta un tipo en la clase de jerarquías"
 
 #: C/index.docbook:1882(seglistitem/seg)
-#, fuzzy
 #| msgid ""
 #| "If the type is listed in <placeholder-1/> but not in <placeholder-2/> "
 #| "then double check that the type is correctly placed in the <placeholder-3/"
@@ -3035,10 +3027,12 @@ msgid ""
 "filename>. If the type instance (e.g. <type>GtkWidget</type>) is not listed "
 "or incidentialy makred private it will not be shown."
 msgstr ""
-"Si el tipo está listado en <placeholder-1/> pero no en <placeholder-2/>, "
-"entonces compruebe dos veces que el tipo está correctamente ubicado en la  "
-"<placeholder-3/>. No se mostrará el tipo de instancia (ej. <placeholder-4/>) "
-"si no está listada o accidentalmente marcada como privada."
+"Si el tipo está listado en <filename>&lt;package&gt;.hierarchy</filename> "
+"pero no en <filename>xml/tree_index.sgml</filename>, entonces compruebe dos "
+"veces que el tipo está correctamente ubicado en la <filename>&lt;package&gt;-"
+"sections.txt</filename>. No se mostrará el tipo de instancia (ej. "
+"<type>GtkWidget</type>) si no está listada o accidentalmente marcada como "
+"privada."
 
 #: C/index.docbook:1891(seglistitem/seg)
 msgid "I get foldoc links for all gobject annotations."
@@ -3051,6 +3045,8 @@ msgid ""
 "Check that <filename>xml/annotation-glossary.xml</filename> is xi:included "
 "from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
 msgstr ""
+"Compruebe que <filename>xml/annotation-glossary.xml</filename> está «xi:"
+"included» desde <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
 
 #: C/index.docbook:1900(seglistitem/seg)
 msgid "Parameter described in source code comment block but does not exist"
@@ -3134,6 +3130,8 @@ msgid ""
 "<_:address-1/> Everyone is permitted to copy and distribute verbatim copies "
 "of this license document, but changing it is not allowed."
 msgstr ""
+"<_:address-1/>. Se permite la copia y distribución de copias literales de "
+"este documento, pero no se permite su modificación."
 
 #: C/index.docbook:28(appendix/title) C/fdl-appendix.xml:28(appendix/title)
 #: C/fdl-appendix.xml:642(para/quote)
@@ -3429,7 +3427,7 @@ msgid ""
 "year after the last time you distribute an Opaque copy (directly or through "
 "your agents or retailers) of that edition to the public."
 msgstr ""
-" Si Usted publica o distribuye copias <link linkend=\"fdl-transparent"
+"Si Usted publica o distribuye copias <link linkend=\"fdl-transparent"
 "\">Opacas</link> del <link linkend=\"fdl-document\">Documento</link> cuya "
 "cantidad exceda las 100, debe incluir una copia <link linkend=\"fdl-"
 "transparent\">Transparente</link>, que pueda ser leída por una máquina, con "
@@ -3617,7 +3615,7 @@ msgstr "I"
 msgid ""
 "Preserve the section entitled <quote>History</quote>, and its title, and add "
 "to it an item stating at least the title, year, new authors, and publisher "
-"of the <link linkend=\"fdl-modified\">Modified Version </link>as given on "
+"of the <link linkend=\"fdl-modified\">Modified Version</link> as given on "
 "the <link linkend=\"fdl-title-page\">Title Page</link>. If there is no "
 "section entitled <quote>History</quote> in the <link linkend=\"fdl-document"
 "\">Document</link>, create one stating the title, year, authors, and "
@@ -4130,7 +4128,6 @@ msgid "free"
 msgstr "libre"
 
 #: C/fdl-appendix.xml:32(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "The purpose of this License is to make a manual, textbook, or other "
 #| "written document <quote>free</quote> in the sense of freedom: to assure "
@@ -4148,12 +4145,12 @@ msgid ""
 "being considered responsible for modifications made by others."
 msgstr ""
 "El propósito de esta Licencia es permitir que un manual, libro de texto, u "
-"otro documento escrito sea <quote>libre</quote> en el sentido de libertad: "
-"asegurar a todo el mundo la libertad efectiva de copiarlo y redistribuirlo, "
-"con o sin modificaciones, de manera comercial o no. En segundo término, esta "
-"Licencia proporciona al autor y al editor una manera de obtener "
-"reconocimiento por su trabajo, sin que se le considere responsable de las "
-"modificaciones realizadas por otros."
+"otro documento escrito sea <_:quote-1/> en el sentido de libertad: asegurar "
+"a todo el mundo la libertad efectiva de copiarlo y redistribuirlo, con o sin "
+"modificaciones, de manera comercial o no. En segundo término, esta Licencia "
+"proporciona al autor y al editor una manera de obtener reconocimiento por su "
+"trabajo, sin que se le considere responsable de las modificaciones "
+"realizadas por otros."
 
 #: C/fdl-appendix.xml:44(para/quote)
 msgid "copyleft"
@@ -4192,7 +4189,6 @@ msgid "you"
 msgstr "usted"
 
 #: C/fdl-appendix.xml:63(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "This License applies to any manual or other work that contains a notice "
 #| "placed by the copyright holder saying it can be distributed under the "
@@ -4207,9 +4203,9 @@ msgid ""
 msgstr ""
 "Esta Licencia se aplica a cualquier manual u otro trabajo que contenga un "
 "aviso colocado por el poseedor del copyright diciendo que puede distribuirse "
-"bajo los términos de esta Licencia. El <quote>Documento</quote>, abajo, se "
-"refiere a cualquier manual o trabajo. Cualquier miembro del público es un "
-"licenciatario, y será referido como <quote>Usted</quote>."
+"bajo los términos de esta Licencia. El <_:quote-1/>, abajo, se refiere a "
+"cualquier manual o trabajo. Cualquier miembro del público es un "
+"licenciatario, y será referido como <_:quote-2/>."
 
 #: C/fdl-appendix.xml:73(para/quote) C/fdl-appendix.xml:234(para/link)
 #: C/fdl-appendix.xml:269(para/link) C/fdl-appendix.xml:283(para/link)
@@ -4263,11 +4259,11 @@ msgstr ""
 #: C/fdl-appendix.xml:567(para/link) C/fdl-appendix.xml:637(para/link)
 #: C/fdl-appendix.xml:648(para/link)
 msgid "Invariant Sections"
-msgstr "Secciones incariantes"
+msgstr "Secciones invariantes"
 
 #: C/fdl-appendix.xml:96(para/link) C/fdl-appendix.xml:435(para/link)
 msgid "Secondary Sections"
-msgstr ""
+msgstr "Secciones secundarias"
 
 #: C/fdl-appendix.xml:94(sect1/para)
 msgid ""
@@ -4297,11 +4293,11 @@ msgstr ""
 #: C/fdl-appendix.xml:112(para/quote) C/fdl-appendix.xml:124(para/quote)
 #: C/fdl-appendix.xml:207(para/link) C/fdl-appendix.xml:369(para/link)
 msgid "Transparent"
-msgstr ""
+msgstr "Transparente"
 
 #: C/fdl-appendix.xml:125(para/quote) C/fdl-appendix.xml:204(para/link)
 msgid "Opaque"
-msgstr ""
+msgstr "Opacas"
 
 #: C/fdl-appendix.xml:111(sect1/para)
 msgid ""
@@ -4333,7 +4329,7 @@ msgstr ""
 #: C/fdl-appendix.xml:250(para/link) C/fdl-appendix.xml:266(para/link)
 #: C/fdl-appendix.xml:281(para/link) C/fdl-appendix.xml:352(para/link)
 msgid "Title Page"
-msgstr ""
+msgstr "Portada"
 
 #: C/fdl-appendix.xml:141(sect1/para)
 msgid ""
@@ -4356,7 +4352,6 @@ msgid "section 3"
 msgstr "sección 3"
 
 #: C/fdl-appendix.xml:154(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "You may copy and distribute the <link linkend=\"fdl-document\">Document</"
 #| "link> in any medium, either commercially or noncommercially, provided "
@@ -4379,19 +4374,17 @@ msgid ""
 "you distribute a large enough number of copies you must also follow the "
 "conditions in <_:link-2/>."
 msgstr ""
-"Usted puede copiar y distribuir el <link linkend=\"fdl-document\">Documento</"
-"link> en cualquier soporte, sea en forma comercial o no, siempre y cuando "
-"proporcione esta Licencia, las notas de copyright y la nota que indica que "
-"esta Licencia se aplica al Documento reproduciéndola en todas las copias y "
-"que usted no añada ninguna otra condición a las expuestas en esta Licencia. "
-"Usted no puede usar medidas técnicas para obstruir o controlar la lectura o "
-"copia posterior de las copias que usted haga o distribuya. Sin embargo, "
-"usted puede aceptar compensación a cambio de las copias. Si distribuye un "
-"número suficientemente grande de copias también deberá seguir las "
-"condiciones de la <link linkend=\"fdl-section3\">sección 3</link>."
+"Usted puede copiar y distribuir el <_:link-1/> en cualquier soporte, sea en "
+"forma comercial o no, siempre y cuando proporcione esta Licencia, las notas "
+"de copyright y la nota que indica que esta Licencia se aplica al Documento "
+"reproduciéndola en todas las copias y que usted no añada ninguna otra "
+"condición a las expuestas en esta Licencia. Usted no puede usar medidas "
+"técnicas para obstruir o controlar la lectura o copia posterior de las "
+"copias que usted haga o distribuya. Sin embargo, usted puede aceptar "
+"compensación a cambio de las copias. Si distribuye un número suficientemente "
+"grande de copias también deberá seguir las condiciones de la <_:link-2/>."
 
 #: C/fdl-appendix.xml:177(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "If you publish printed copies of the <link linkend=\"fdl-document"
 #| "\">Document</link> numbering more than 100, and the Document's license "
@@ -4417,22 +4410,19 @@ msgid ""
 "covers, as long as they preserve the title of the <_:link-3/> and satisfy "
 "these conditions, can be treated as verbatim copying in other respects."
 msgstr ""
-" Si publica copias impresas del <link linkend=\"fdl-document\">Documento</"
-"link> que sobrepasen las 100, y la nota de licencia del Documento exige "
-"<link linkend=\"fdl-cover-texts\">Textos de Cubierta</link>, debe incluirlas "
-"copias con cubiertas que lleven en forma clara y legible todos esos Textos "
-"de Cubierta: Textos de Cubierta Delantera en la cubierta delantera y Textos "
-"de Cubierta Trasera en la cubierta trasera. Ambas cubiertas deben "
-"identificarlo a Usted clara y legiblemente como editor de tales copias. La "
-"cubierta debe mostrar el título completo con todas las palabras igualmente "
-"prominentes y visibles. Además puede añadir otro material en las cubiertas. "
-"Las copias con cambios limitados a las cubiertas, siempre que conserven el "
-"título del <link linkend=\"fdl-document\">Documento</link> y satisfagan "
-"estas condiciones, pueden considerarse como copias literales en todos los "
-"aspectos."
+" Si publica copias impresas del <_:link-1/> que sobrepasen las 100, y la "
+"nota de licencia del Documento exige <_:link-2/>, debe incluirlas copias con "
+"cubiertas que lleven en forma clara y legible todos esos Textos de Cubierta: "
+"Textos de Cubierta Delantera en la cubierta delantera y Textos de Cubierta "
+"Trasera en la cubierta trasera. Ambas cubiertas deben identificarlo a Usted "
+"clara y legiblemente como editor de tales copias. La cubierta debe mostrar "
+"el título completo con todas las palabras igualmente prominentes y visibles. "
+"Además puede añadir otro material en las cubiertas. Las copias con cambios "
+"limitados a las cubiertas, siempre que conserven el título del <_:link-3/> y "
+"satisfagan estas condiciones, pueden considerarse como copias literales en "
+"todos los aspectos."
 
 #: C/fdl-appendix.xml:202(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "If you publish or distribute <link linkend=\"fdl-transparent\">Opaque</"
 #| "link> copies of the <link linkend=\"fdl-document\">Document</link> "
@@ -4462,22 +4452,20 @@ msgid ""
 "Opaque copy (directly or through your agents or retailers) of that edition "
 "to the public."
 msgstr ""
-" Si Usted publica o distribuye copias <link linkend=\"fdl-transparent"
-"\">Opacas</link> del <link linkend=\"fdl-document\">Documento</link> cuya "
-"cantidad exceda las 100, debe incluir una copia <link linkend=\"fdl-"
-"transparent\">Transparente</link>, que pueda ser leída por una máquina, con "
-"cada copia Opaca, o bien mostrar, en cada copia Opaca, una dirección de red "
-"donde cualquier usuario de la misma tenga acceso por medio de protocolos "
-"públicos y estandarizados a una copia Transparente del Documento completa, "
-"sin material adicional. Si usted hace uso de la última opción, deberá tomar "
-"las medidas necesarias, cuando comience la distribución de las copias Opacas "
-"en cantidad, para asegurar que esta copia Transparente permanecerá accesible "
-"en el sitio establecido por lo menos un año después de la última vez que "
-"distribuya una copia Opaca de esa edición al público (directamente o a "
-"través de sus agentes o distribuidores)."
+"Si Usted publica o distribuye copias <_:link-1/> del <link linkend=\"fdl-"
+"document\">Documento</link> cuya cantidad exceda las 100, debe incluir una "
+"copia <link linkend=\"fdl-transparent\">Transparente</link>, que pueda ser "
+"leída por una máquina, con cada copia Opaca, o bien mostrar, en cada copia "
+"Opaca, una dirección de red donde cualquier usuario de la misma tenga acceso "
+"por medio de protocolos públicos y estandarizados a una copia Transparente "
+"del Documento completa, sin material adicional. Si usted hace uso de la "
+"última opción, deberá tomar las medidas necesarias, cuando comience la "
+"distribución de las copias Opacas en cantidad, para asegurar que esta copia "
+"Transparente permanecerá accesible en el sitio establecido por lo menos un "
+"año después de la última vez que distribuya una copia Opaca de esa edición "
+"al público (directamente o a través de sus agentes o distribuidores)."
 
 #: C/fdl-appendix.xml:222(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "It is requested, but not required, that you contact the authors of the "
 #| "<link linkend=\"fdl-document\">Document</link> well before redistributing "
@@ -4489,9 +4477,9 @@ msgid ""
 "a chance to provide you with an updated version of the Document."
 msgstr ""
 "Se solicita, aunque no es requisito, que se ponga en contacto con los "
-"autores del <link linkend=\"fdl-document\">Documento</link> antes de "
-"redistribuir gran número de copias, para darles la oportunidad de que le "
-"proporcionen una versión actualizada del Documento."
+"autores del <_:link-1/> antes de redistribuir gran número de copias, para "
+"darles la oportunidad de que le proporcionen una versión actualizada del "
+"Documento."
 
 #: C/fdl-appendix.xml:236(para/link)
 msgid "2"
@@ -4502,7 +4490,6 @@ msgid "3"
 msgstr "3"
 
 #: C/fdl-appendix.xml:232(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "You may copy and distribute a <link linkend=\"fdl-modified\">Modified "
 #| "Version</link> of the <link linkend=\"fdl-document\">Document</link> "
@@ -4521,14 +4508,13 @@ msgid ""
 "modification of the Modified Version to whoever possesses a copy of it. In "
 "addition, you must do these things in the Modified Version:"
 msgstr ""
-"Puede copiar y distribuir una <link linkend=\"fdl-modified\">Versión "
-"Modificada</link> del <link linkend=\"fdl-document\">Documento</link> bajo "
-"las condiciones de las secciones <link linkend=\"fdl-section2\">2</link> y "
-"<link linkend=\"fdl-section3\">3</link> anteriores, siempre que Usted libere "
-"la Versión Modificada bajo esta misma Licencia, con la Versión Modificada "
-"haciendo el rol del Documento, por lo tanto dando Licencia de distribución y "
-"modificación de la Versión Modificada a quienquiera posea una copia de la "
-"misma. Además, debe hacer lo siguiente en la Versión Modificada:"
+"Puede copiar y distribuir una <_:link-1/> del <_:link-2/> bajo las "
+"condiciones de las secciones <_:link-3/> y <_:link-4/> anteriores, siempre "
+"que Usted libere la Versión Modificada bajo esta misma Licencia, con la "
+"Versión Modificada haciendo el rol del Documento, por lo tanto dando "
+"Licencia de distribución y modificación de la Versión Modificada a "
+"quienquiera posea una copia de la misma. Además, debe hacer lo siguiente en "
+"la Versión Modificada:"
 
 #: C/fdl-appendix.xml:249(formalpara/para)
 msgid ""
@@ -4565,17 +4551,13 @@ msgstr ""
 "Mostrar en la <_:link-1/> como editor el nombre del editor de la <_:link-2/>."
 
 #: C/fdl-appendix.xml:292(formalpara/para)
-#, fuzzy
 #| msgid ""
 #| "Preserve all the copyright notices of the <link linkend=\"fdl-document"
 #| "\">Document</link>."
 msgid "Preserve all the copyright notices of the <_:link-1/>."
-msgstr ""
-"Conservar todas las notas de copyright del <link linkend=\"fdl-document"
-"\">Documento</link>."
+msgstr "Conservar todas las notas de copyright del <_:link-1/>."
 
 #: C/fdl-appendix.xml:312(formalpara/para)
-#, fuzzy
 #| msgid ""
 #| "Include, immediately after the copyright notices, a license notice giving "
 #| "the public permission to use the <link linkend=\"fdl-modified\">Modified "
@@ -4587,18 +4569,15 @@ msgid ""
 "License, in the form shown in the Addendum below."
 msgstr ""
 "Incluir, inmediatamente después de los avisos de copyright, una nota de "
-"licencia dando el permiso público para usar la <link linkend=\"fdl-modified"
-"\">Versión Modificada</link> bajo los términos de esta Licencia, de la forma "
-"mostrada en el Adenda de más abajo."
+"licencia dando el permiso público para usar la <_:link-1/>. bajo los "
+"términos de esta Licencia, de la forma mostrada en el Adenda de más abajo."
 
 #: C/fdl-appendix.xml:330(para/link)
-#, fuzzy
 #| msgid "Documenting symbols"
 msgid "Document's"
-msgstr "Documentar símbolos"
+msgstr "Documento"
 
 #: C/fdl-appendix.xml:325(formalpara/para)
-#, fuzzy
 #| msgid ""
 #| "Preserve in that license notice the full lists of <link linkend=\"fdl-"
 #| "invariant\"> Invariant Sections</link> and required <link linkend=\"fdl-"
@@ -4609,19 +4588,16 @@ msgid ""
 "<_:link-2/> given in the <_:link-3/> license notice."
 msgstr ""
 "Incluir, inmediatamente después de ese aviso de licencia, la lista completa "
-"de <link linkend=\"fdl-invariant\">Secciones invariantes</link> y de los "
-"<link linkend=\"fdl-cover-texts\">Textos de Cubierta</link> que sean "
-"requeridos en el aviso de Licencia del <link linkend=\"fdl-document"
-"\">Documento</link> original."
+"de <_:link-1/> y de los <_:link-2/> que sean requeridos en el aviso de "
+"Licencia del <_:link-3/> original."
 
 #: C/fdl-appendix.xml:348(para/quote) C/fdl-appendix.xml:353(para/quote)
 #: C/fdl-appendix.xml:372(para/quote) C/fdl-appendix.xml:507(para/quote)
 #: C/fdl-appendix.xml:508(para/quote)
 msgid "History"
-msgstr ""
+msgstr "Historia"
 
 #: C/fdl-appendix.xml:347(formalpara/para)
-#, fuzzy
 #| msgid ""
 #| "Preserve the section entitled <quote>History</quote>, and its title, and "
 #| "add to it an item stating at least the title, year, new authors, and "
@@ -4640,18 +4616,15 @@ msgid ""
 "and publisher of the Document as given on its Title Page, then add an item "
 "describing the Modified Version as stated in the previous sentence."
 msgstr ""
-"Conservar la sección titulada <quote>Historia</quote>, conservar su Título y "
-"añadirle un elemento que declare al menos el título, el año, los nuevos "
-"autores y el editor de la <link linkend=\"fdl-modified\">Versión Modificada</"
-"link>, tal como figuran en la <link linkend=\"fdl-title-page\">Portada</"
-"link>. Si no hay una sección titulada <quote>Historia</quote> en el <link "
-"linkend=\"fdl-document\">Documento</link>, crear una estableciendo el "
+"Conservar la sección titulada <_:quote-1/>, conservar su Título y añadirle "
+"un elemento que declare al menos el título, el año, los nuevos autores y el "
+"editor de la <_:link-2/>, tal como figuran en la <_:link-3/>. Si no hay una "
+"sección titulada <_:quote-4/> en el <_:link-5/>, crear una estableciendo el "
 "título, el año, los autores y el editor del Documento, tal como figuran en "
 "su Portada, añadiendo además un elemento describiendo la Versión Modificada, "
 "como se estableció en la sentencia anterior."
 
 #: C/fdl-appendix.xml:366(formalpara/para)
-#, fuzzy
 #| msgid ""
 #| "Preserve the network location, if any, given in the <link linkend=\"fdl-"
 #| "document\">Document</link> for public access to a <link linkend=\"fdl-"
@@ -4670,25 +4643,23 @@ msgid ""
 "itself, or if the original publisher of the version it refers to gives "
 "permission."
 msgstr ""
-"Conservar la dirección en red, si la hay, dada en el <link linkend=\"fdl-"
-"document\">Documento</link> para el acceso público a una copia <link linkend="
-"\"fdl-transparent\">Transparente</link> del mismo, así como las otras "
+"Conservar la dirección en red, si la hay, dada en el <_:link-1/> para el "
+"acceso público a una copia <_:link-2/> del mismo, así como las otras "
 "direcciones de red dadas en el Documento para versiones anteriores en las "
-"que estuviese basado. Pueden ubicarse en la sección <quote>Historia</quote>. "
-"Se puede omitir la ubicación en red de un trabajo que haya sido publicado "
-"por lo menos cuatro años antes que el Documento mismo, o si el editor "
-"original de dicha versión da permiso."
+"que estuviese basado. Pueden ubicarse en la sección <_:quote-3/>. Se puede "
+"omitir la ubicación en red de un trabajo que haya sido publicado por lo "
+"menos cuatro años antes que el Documento mismo, o si el editor original de "
+"dicha versión da permiso."
 
 #: C/fdl-appendix.xml:385(para/quote) C/fdl-appendix.xml:509(para/quote)
 msgid "Acknowledgements"
-msgstr ""
+msgstr "Agradecimientos"
 
 #: C/fdl-appendix.xml:386(para/quote) C/fdl-appendix.xml:510(para/quote)
 msgid "Dedications"
-msgstr ""
+msgstr "Dedicatorias"
 
 #: C/fdl-appendix.xml:384(formalpara/para)
-#, fuzzy
 #| msgid ""
 #| "In any section entitled <quote>Acknowledgements</quote> or "
 #| "<quote>Dedications</quote>, preserve the section's title, and preserve in "
@@ -4699,13 +4670,11 @@ msgid ""
 "title, and preserve in the section all the substance and tone of each of the "
 "contributor acknowledgements and/or dedications given therein."
 msgstr ""
-"En cualquier sección titulada <quote>Agradecimientos</quote> o "
-"<quote>Dedicatorias</quote>, conservar el título de la sección y conservar "
-"en ella toda la sustancia y el tono de los agradecimientos y/o dedicatorias "
-"incluidas por cada contribuyente."
+"En cualquier sección titulada <_:quote-1/> o <_:quote-2/>, conservar el "
+"título de la sección y conservar en ella toda la sustancia y el tono de los "
+"agradecimientos y/o dedicatorias incluidas por cada contribuyente."
 
 #: C/fdl-appendix.xml:397(formalpara/para)
-#, fuzzy
 #| msgid ""
 #| "Preserve all the <link linkend=\"fdl-invariant\">Invariant Sections</"
 #| "link> of the <link linkend=\"fdl-document\">Document</link>, unaltered in "
@@ -4716,18 +4685,16 @@ msgid ""
 "in their titles. Section numbers or the equivalent are not considered part "
 "of the section titles."
 msgstr ""
-"Conservar todas las <link linkend=\"fdl-invariant\">Secciones Invariantes</"
-"link> del <link linkend=\"fdl-document\">Documento</link>, sin alterar su "
-"texto ni sus títulos. Los números de sección o equivalentes no se consideran "
-"parte de los títulos de la sección."
+"Conservar todas las <_:link-1/> del <_:link-2/>, sin alterar su texto ni sus "
+"títulos. Los números de sección o equivalentes no se consideran parte de los "
+"títulos de la sección."
 
 #: C/fdl-appendix.xml:412(para/quote) C/fdl-appendix.xml:424(para/quote)
 #: C/fdl-appendix.xml:445(para/quote)
 msgid "Endorsements"
-msgstr ""
+msgstr "Aprobaciones"
 
 #: C/fdl-appendix.xml:410(formalpara/para)
-#, fuzzy
 #| msgid ""
 #| "Delete any section entitled <quote>Endorsements</quote>. Such a section "
 #| "may not be included in the <link linkend=\"fdl-modified\">Modified "
@@ -4736,16 +4703,14 @@ msgid ""
 "Delete any section entitled <_:quote-1/>. Such a section may not be included "
 "in the <_:link-2/>."
 msgstr ""
-"Borrar cualquier sección titulada <quote>Aprobaciones</quote>. Tales "
-"secciones no pueden estar incluidas en las <link linkend=\"fdl-modified"
-"\">Versiones Modificadas</link>."
+"Elimine cualquier sección titulada <_:quote-1/>. Tales secciones no pueden "
+"estar incluidas en las <_:link-2/>."
 
 #: C/fdl-appendix.xml:425(para/link)
 msgid "Invariant Section"
-msgstr ""
+msgstr "Sección invariante"
 
 #: C/fdl-appendix.xml:422(formalpara/para)
-#, fuzzy
 #| msgid ""
 #| "Do not retitle any existing section as <quote>Endorsements</quote> or to "
 #| "conflict in title with any <link linkend=\"fdl-invariant\">Invariant "
@@ -4754,12 +4719,10 @@ msgid ""
 "Do not retitle any existing section as <_:quote-1/> or to conflict in title "
 "with any <_:link-2/>."
 msgstr ""
-"No cambiar el título de ninguna sección existente a <quote>Aprobaciones</"
-"quote> ni a uno que entre en conflicto con el de alguna <link linkend=\"fdl-"
-"invariant\">Sección Invariante</link>."
+"No cambiar el título de ninguna sección existente a <_:quote-1/> ni a uno "
+"que entre en conflicto con el de alguna <_:link-2/>."
 
 #: C/fdl-appendix.xml:432(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "If the <link linkend=\"fdl-modified\">Modified Version</link> includes "
 #| "new front-matter sections or appendices that qualify as <link linkend="
@@ -4777,17 +4740,14 @@ msgid ""
 "Version's license notice. These titles must be distinct from any other "
 "section titles."
 msgstr ""
-" Si la <link linkend=\"fdl-modified\">Versión Modificada</link> incluye "
-"secciones o apéndices nuevos que cualifiquen como <link linkend=\"fdl-"
-"secondary\">Secciones Secundarias</link> y no contienen ningún material "
-"copiado del Documento, puede opcionalmente designar algunas o todas esas "
-"secciones como invariantes. Para hacerlo, añada sus títulos a la lista de "
-"<link linkend=\"fdl-invariant\">Secciones Invariantes</link> en el aviso de "
-"licencia de la Versión Modificada. Tales títulos deben ser distintos de "
-"cualquier otro título de sección."
+"Si la <_:link-1/> incluye secciones o apéndices nuevos que cualifiquen como "
+"<_:link-2/> y no contienen ningún material copiado del Documento, puede "
+"opcionalmente designar algunas o todas esas secciones como invariantes. Para "
+"hacerlo, añada sus títulos a la lista de <_:link-3/> en el aviso de licencia "
+"de la Versión Modificada. Tales títulos deben ser distintos de cualquier "
+"otro título de sección."
 
 #: C/fdl-appendix.xml:444(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "You may add a section entitled <quote>Endorsements</quote>, provided it "
 #| "contains nothing but endorsements of your <link linkend=\"fdl-modified"
@@ -4800,11 +4760,10 @@ msgid ""
 "statements of peer review or that the text has been approved by an "
 "organization as the authoritative definition of a standard."
 msgstr ""
-"Puede añadir una sección titulada <quote>Aprobaciones</quote>, siempre que "
-"contenga únicamente aprobaciones de su <link linkend=\"fdl-modified"
-"\">Versión Modificada</link> por otras fuentes --por ejemplo, observaciones "
-"de compañeros o que el texto ha sido aprobado por una organización como "
-"definición oficial de un estándar."
+"Puede añadir una sección titulada <_:quote-1/>, siempre que contenga "
+"únicamente aprobaciones de su <_:link-2/> por otras fuentes --por ejemplo, "
+"observaciones de compañeros o que el texto ha sido aprobado por una "
+"organización como definición oficial de un estándar."
 
 #: C/fdl-appendix.xml:455(para/link)
 msgid "Front-Cover Text"
@@ -4815,7 +4774,6 @@ msgid "Back-Cover Text"
 msgstr "Texto de cubierta trasera"
 
 #: C/fdl-appendix.xml:453(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "You may add a passage of up to five words as a <link linkend=\"fdl-cover-"
 #| "texts\">Front-Cover Text</link>, and a passage of up to 25 words as a "
@@ -4839,20 +4797,16 @@ msgid ""
 "behalf of, you may not add another; but you may replace the old one, on "
 "explicit permission from the previous publisher that added the old one."
 msgstr ""
-"Puede añadir un pasaje de hasta cinco palabras como <link linkend=\"fdl-"
-"cover-texts\">Texto de Cubierta Delantera</link> y un pasaje de hasta 25 "
-"palabras como <link linkend=\"fdl-cover-texts\">Texto de Cubierta Trasera</"
-"link> al final de la lista de <link linkend=\"fdl-cover-texts\">Texto de "
-"Cubierta</link> en la <link linkend=\"fdl-modified\">Versión Modificada</"
-"link>. Una entidad sólo puede añadir (o hacer que se añada) un pasaje al "
-"Texto de Cubierta Delantera y uno al de Cubierta Trasera. Si el <link "
-"linkend=\"fdl-document\">Documento</link> ya incluye un textos de cubiertas "
-"añadidos previamente por usted o por acuerdo previo con la entidad que usted "
-"representa, usted no puede añadir otro; pero puede reemplazar el anterior, "
-"con permiso explícito del editor anterior que agregó el texto anterior."
+"Puede añadir un pasaje de hasta cinco palabras como <_:link-1/> y un pasaje "
+"de hasta 25 palabras como <_:link-2/> al final de la lista de <_:link-3/> en "
+"la <_:link-4/>. Una entidad sólo puede añadir (o hacer que se añada) un "
+"pasaje al Texto de Cubierta Delantera y uno al de Cubierta Trasera. Si el <_:"
+"link-5/> ya incluye un textos de cubiertas añadidos previamente por usted o "
+"por acuerdo previo con la entidad que usted representa, usted no puede "
+"añadir otro; pero puede reemplazar el anterior, con permiso explícito del "
+"editor anterior que agregó el texto anterior."
 
 #: C/fdl-appendix.xml:470(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "The author(s) and publisher(s) of the <link linkend=\"fdl-document"
 #| "\">Document</link> do not by this License give permission to use their "
@@ -4863,17 +4817,15 @@ msgid ""
 "give permission to use their names for publicity for or to assert or imply "
 "endorsement of any <_:link-2/>."
 msgstr ""
-"Con esta Licencia ni los autores ni los editores del <link linkend=\"fdl-"
-"document\">Documento</link> dan permiso para usar sus nombres para "
-"publicidad ni para asegurar o implicar aprobación de cualquier <link linkend="
-"\"fdl-modified\">Versión Modificada</link>."
+"Con esta Licencia ni los autores ni los editores del <_:link-1/> dan permiso "
+"para usar sus nombres para publicidad ni para asegurar o implicar aprobación "
+"de cualquier <_:link-2/>."
 
 #: C/fdl-appendix.xml:484(para/link) C/fdl-appendix.xml:566(para/link)
 msgid "section 4"
 msgstr "sección 4"
 
 #: C/fdl-appendix.xml:481(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "You may combine the <link linkend=\"fdl-document\">Document</link> with "
 #| "other documents released under this License, under the terms defined in "
@@ -4889,16 +4841,14 @@ msgid ""
 "of the original documents, unmodified, and list them all as Invariant "
 "Sections of your combined work in its license notice."
 msgstr ""
-"Usted puede combinar el <link linkend=\"fdl-document\">Documento</link> con "
-"otros documentos liberados bajo esta Licencia, bajo los términos definidos "
-"en la sección <link linkend=\"fdl-section4\">section 4</link> más arriba "
+"Usted puede combinar el <_:link-1/> con otros documentos liberados bajo esta "
+"Licencia, bajo los términos definidos en la sección <_:link-2/> más arriba "
 "para versiones modificadas, siempre que incluya en la combinación todas las "
-"<link linkend=\"fdl-invariant\">Secciones Invariantes</link> de todos los "
-"documentos originales, sin modificaciones, y las liste todas como Secciones "
-"Invariantes de su trabajo combinado en su aviso de licencia."
+"<_:link-3/> de todos los documentos originales, sin modificaciones, y las "
+"liste todas como Secciones Invariantes de su trabajo combinado en su aviso "
+"de licencia."
 
 #: C/fdl-appendix.xml:492(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "The combined work need only contain one copy of this License, and "
 #| "multiple identical <link linkend=\"fdl-invariant\">Invariant Sections</"
@@ -4919,21 +4869,19 @@ msgid ""
 "combined work."
 msgstr ""
 "El trabajo combinado necesita contener solamente una copia de esta Licencia, "
-"y múltiples <link linkend=\"fdl-invariant\">Secciones Invariantes</link> "
-"idénticas pueden reemplazarse por una sola copia. Si hay múltiples Secciones "
-"Invariantes con el mismo nombre pero con contenidos diferentes, haga el "
-"título de cada una de estas secciones único añadiéndolo al final de este, "
-"entre paréntesis, el nombre del autor o de quien editó originalmente esa "
-"sección, si es conocido, o si no, un número único. Haga el mismo ajuste a "
-"los títulos de sección en la lista de Secciones Invariantes en la nota de "
-"licencia del trabajo combinado."
+"y múltiples <_:link-1/> idénticas pueden reemplazarse por una sola copia. Si "
+"hay múltiples Secciones Invariantes con el mismo nombre pero con contenidos "
+"diferentes, haga el título de cada una de estas secciones único añadiéndolo "
+"al final de este, entre paréntesis, el nombre del autor o de quien editó "
+"originalmente esa sección, si es conocido, o si no, un número único. Haga el "
+"mismo ajuste a los títulos de sección en la lista de Secciones Invariantes "
+"en la nota de licencia del trabajo combinado."
 
 #: C/fdl-appendix.xml:511(para/quote)
 msgid "Endorsements."
-msgstr ""
+msgstr "Aprobaciones."
 
 #: C/fdl-appendix.xml:505(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "In the combination, you must combine any sections entitled "
 #| "<quote>History</quote> in the various original documents, forming one "
@@ -4947,15 +4895,13 @@ msgid ""
 "likewise combine any sections entitled <_:quote-3/>, and any sections "
 "entitled <_:quote-4/>. You must delete all sections entitled <_:quote-5/>"
 msgstr ""
-"En la combinación, debe combinar cualquier sección titulada <quote>Historia</"
-"quote> de los distintos documentos originales, formando una sección titulada "
-"<quote>Historia</quote>; de la misma forma, combine cualquier sección "
-"titulada <quote>Reconocimientos</quote> y cualquier sección titulada "
-"<quote>Dedicatorias</quote>. Debe borrar todas las secciones tituladas "
-"<quote>Aprobaciones</quote>."
+"En la combinación, debe combinar cualquier sección titulada <_:quote-1/> de "
+"los distintos documentos originales, formando una sección titulada <_:quote-"
+"2/>; de la misma forma, combine cualquier sección titulada <_:quote-3/> y "
+"cualquier sección titulada <_:quote-4/>. Debe borrar todas las secciones "
+"tituladas <_:quote-5/>."
 
 #: C/fdl-appendix.xml:517(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "You may make a collection consisting of the <link linkend=\"fdl-document"
 #| "\">Document</link> and other documents released under this License, and "
@@ -4970,23 +4916,21 @@ msgid ""
 "collection, provided that you follow the rules of this License for verbatim "
 "copying of each of the documents in all other respects."
 msgstr ""
-"Puede hacer una colección que conste del <link linkend=\"fdl-document"
-"\">Documento</link> y de otros documentos publicados bajo esta Licencia, y "
-"reemplazar las copias individuales de esta Licencia en todos los documentos "
-"por una sola copia que esté incluida en la colección, siempre que siga las "
-"reglas de esta Licencia para cada copia literal de cada uno de los "
-"documentos en cualquiera de los demás aspectos."
+"Puede hacer una colección que conste del <_:link-1/> y de otros documentos "
+"publicados bajo esta Licencia, y reemplazar las copias individuales de esta "
+"Licencia en todos los documentos por una sola copia que esté incluida en la "
+"colección, siempre que siga las reglas de esta Licencia para cada copia "
+"literal de cada uno de los documentos en cualquiera de los demás aspectos."
 
 #: C/fdl-appendix.xml:546(para/quote)
 msgid "aggregate"
-msgstr ""
+msgstr "agregado"
 
 #: C/fdl-appendix.xml:550(para/link)
 msgid "Cover Text"
 msgstr "Texto de cubierta"
 
 #: C/fdl-appendix.xml:538(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "A compilation of the <link linkend=\"fdl-document\">Document</link> or "
 #| "its derivatives with other separate and independent documents or works, "
@@ -5017,24 +4961,21 @@ msgid ""
 "placed on covers that surround only the Document within the aggregate. "
 "Otherwise they must appear on covers around the whole aggregate."
 msgstr ""
-"Una recopilación que conste del <link linkend=\"fdl-document\">Documento</"
-"link> o sus derivados y de otros documentos o trabajos separados e "
-"independientes, en cualquier soporte de almacenamiento o distribución, no "
-"cuenta como un todo como una <link linkend=\"fdl-modified\">Versión "
-"Modificada</link> del Documento, siempre que no se reclame ningún derecho de "
-"copyright por la compilación. Dicha compilación se denomina un "
-"<quote>agregado</quote>, y esta Licencia no se aplica a otros trabajos  "
-"autocontenidos incluidos con el Documento. teniendo en cuenta que son "
-"compilados, si no son los mismos trabajos derivados del Documento. Si el "
-"requisito de <link linkend=\"fdl-cover-texts\">Texto de Cubierta</link> de "
-"la <link linkend=\"fdl-section3\">sección 3</link> es aplicable a estas "
-"copias del Documento, entonces si el Documento es menor que un cuarto del "
-"agregado completo, los Textos de Cubierta del Documento pueden colocarse en "
-"cubiertas que enmarquen solamente el Documento dentro del agregado. En caso "
-"contrario deben aparecer en cubiertas impresas enmarcando todo el agregado."
+"Una recopilación que conste del <_:link-1/> o sus derivados y de otros "
+"documentos o trabajos separados e independientes, en cualquier soporte de "
+"almacenamiento o distribución, no cuenta como un todo como un <_:link-2/> "
+"del Documento, siempre que no se reclame ningún derecho de copyright por la "
+"compilación. Dicha compilación se denomina un <_:quote-3/>, y esta Licencia "
+"no se aplica a otros trabajos autocontenidos incluidos con el Documento. "
+"teniendo en cuenta que son compilados, si no son los mismos trabajos "
+"derivados del Documento. Si el requisito de <_:link-4/> de la <_:link-5/> es "
+"aplicable a estas copias del Documento, entonces si el Documento es menor "
+"que un cuarto del agregado completo, los Textos de Cubierta del Documento "
+"pueden colocarse en cubiertas que enmarquen solamente el Documento dentro "
+"del agregado. En caso contrario deben aparecer en cubiertas impresas "
+"enmarcando todo el agregado."
 
 #: C/fdl-appendix.xml:562(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "Translation is considered a kind of modification, so you may distribute "
 #| "translations of the <link linkend=\"fdl-document\">Document</link> under "
@@ -5059,18 +5000,15 @@ msgid ""
 "original English version will prevail."
 msgstr ""
 "La traducción se considera un tipo de modificación, así que puede distribuir "
-"traducciones del <link linkend=\"fdl-document\">Documento</link> bajo los "
-"términos de la <link linkend=\"fdl-section4\">sección 4</link>. Reemplazar "
-"las <link linkend=\"fdl-invariant\">Secciones invariantes</link> con "
-"traducciones requiere permiso especial de los mantenedores de la "
-"propietarios del copyright, pero puede incluir traducciones de algunos o "
-"todas las Secciones invariantes. Puede incluir una traducción de esta "
-"licencia proporcionada que además incluya la versión original de esta "
-"Sección invariante en adición de esta licencia. En caso de desacuerdo "
-"prevalecerá la versión original en inglés."
+"traducciones del <_:link-1/> bajo los términos de la <_:link-2/>. Reemplazar "
+"las <_:link-3/> con traducciones requiere permiso especial de los "
+"mantenedores de la propietarios del copyright, pero puede incluir "
+"traducciones de algunos o todas las Secciones invariantes. Puede incluir una "
+"traducción de esta licencia proporcionada que además incluya la versión "
+"original de esta Sección invariante en adición de esta licencia. En caso de "
+"desacuerdo prevalecerá la versión original en inglés."
 
 #: C/fdl-appendix.xml:581(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "You may not copy, modify, sublicense, or distribute the <link linkend="
 #| "\"fdl-document\">Document</link> except as expressly provided for under "
@@ -5087,14 +5025,13 @@ msgid ""
 "have received copies, or rights, from you under this License will not have "
 "their licenses terminated so long as such parties remain in full compliance."
 msgstr ""
-" Usted no puede copiar, modificar, sublicenciar o distribuir el <link "
-"linkend=\"fdl-document\">Documento</link> salvo por lo permitido "
-"expresamente por esta Licencia. Cualquier otro intento de copia, "
-"modificación, sublicenciamiento o distribución del Documento es nulo, y dará "
-"por terminados automáticamente sus derechos bajo esa Licencia. Sin embargo, "
-"los terceros que hayan recibido copias, o derechos, de usted bajo esta "
-"Licencia no verán terminadas sus licencias, siempre que permanezcan en total "
-"conformidad con ella."
+" Usted no puede copiar, modificar, sublicenciar o distribuir el <_:link-1/> "
+"salvo por lo permitido expresamente por esta Licencia. Cualquier otro "
+"intento de copia, modificación, sublicenciamiento o distribución del "
+"Documento es nulo, y dará por terminados automáticamente sus derechos bajo "
+"esa Licencia. Sin embargo, los terceros que hayan recibido copias, o "
+"derechos, de usted bajo esta Licencia no verán terminadas sus licencias, "
+"siempre que permanezcan en total conformidad con ella."
 
 #: C/fdl-appendix.xml:597(para/ulink)
 msgid "Free Software Foundation"
@@ -5105,7 +5042,6 @@ msgid "http://www.gnu.org/copyleft/"
 msgstr "http://www.gnu.org/copyleft/"
 
 #: C/fdl-appendix.xml:595(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "The <ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf.html\">Free "
 #| "Software Foundation</ulink> may publish new, revised versions of the GNU "
@@ -5119,20 +5055,16 @@ msgid ""
 "in spirit to the present version, but may differ in detail to address new "
 "problems or concerns. See <_:ulink-2/>."
 msgstr ""
-"La <ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf.html\">Free "
-"Software Foundation</ulink> puede publicar versiones nuevas y revisadas de "
-"la Licencia de Documentación Libre GNU de vez en cuando. Dichas versiones "
-"nuevas serán similares en espíritu a la presente versión, pero pueden "
-"diferir en detalles para solucionar nuevos problemas o preocupaciones. Vea "
-"<ulink type=\"http\" url=\"http://www.gnu.org/copyleft\">http://www.gnu.org/"
-"copyleft/</ulink>."
+"La <_:ulink-1/> puede publicar versiones nuevas y revisadas de la Licencia "
+"de Documentación Libre GNU de vez en cuando. Dichas versiones nuevas serán "
+"similares en espíritu a la presente versión, pero pueden diferir en detalles "
+"para solucionar nuevos problemas o preocupaciones. Consulte <_:ulink-2/>."
 
 #: C/fdl-appendix.xml:610(para/quote)
 msgid "or any later version"
 msgstr "o cualquier versión posterior"
 
 #: C/fdl-appendix.xml:606(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "Each version of the License is given a distinguishing version number. If "
 #| "the <link linkend=\"fdl-document\">Document</link> specifies that a "
@@ -5152,9 +5084,8 @@ msgid ""
 "Document does not specify a version number of this License, you may choose "
 "any version ever published (not as a draft) by the Free Software Foundation."
 msgstr ""
-"Cada versión de la licencia tiene un número de versión. Si la <link linkend="
-"\"fdl-document\">Documentación</link> especifica que el número particular de "
-"versión de esta Licencia <quote>o cualquier posterior versión</quote> "
+"Cada versión de la licencia tiene un número de versión. Si la <_:ulink-1/> "
+"especifica que el número particular de versión de esta Licencia <_:quote-2/> "
 "aplicado sobre él, tiene la opción de seguir los términos y condiciones de "
 "cualquiera de esas versiones especificadas o de cualquiera de las versiones "
 "publicadas (no como borrador) por la Free Software Foundation. Si el "
@@ -5171,7 +5102,6 @@ msgid "Back-Cover Texts"
 msgstr "Textos de cubierta trasera"
 
 #: C/fdl-appendix.xml:632(blockquote/para)
-#, fuzzy
 #| msgid ""
 #| "Permission is granted to copy, distribute and/or modify this document "
 #| "under the terms of the GNU Free Documentation License, Version 1.1 or any "
@@ -5192,12 +5122,9 @@ msgstr ""
 "Se otorga permiso para copiar, distribuir y/o modificar este documento bajo "
 "los términos de la Licencia de Documentación Libre de GNU, Versión 1.1 o "
 "cualquier otra versión posterior publicada por la Free Software Foundation; "
-"con las <link linkend=\"fdl-invariant\">Secciones Invariantes</link> siendo "
-"su LISTE SUS TÍTULOS, con <link linkend=\"fdl-cover-texts\">Textos de "
-"Cubierta Delantera</link> siendo LISTA, y con los <link linkend=\"fdl-cover-"
-"texts\">Textos de Cubierta Trasera</link> siendo LISTA. Una copia de la "
-"licencia está incluida en la sección titulada <quote>GNU Free Documentation "
-"License</quote>."
+"con las <_:link-1/> siendo su LISTE SUS TÍTULOS, con <_:link-3/> siendo "
+"LISTA, y con los <_:link-2/> siendo LISTA. Una copia de la licencia está "
+"incluida en la sección titulada <_:quote-4/>."
 
 #: C/fdl-appendix.xml:649(para/quote)
 msgid "with no Invariant Sections"
@@ -5209,7 +5136,7 @@ msgstr "sin textos de cubierta delantera"
 
 #: C/fdl-appendix.xml:653(para/quote)
 msgid "Front-Cover Texts being LIST"
-msgstr ""
+msgstr "Textos de cubierta LISTADOS"
 
 #: C/fdl-appendix.xml:647(sect1/para)
 msgid ""
@@ -5217,13 +5144,15 @@ msgid ""
 "are invariant. If you have no <_:link-3/>, write <_:quote-4/> instead of <_:"
 "quote-5/>; likewise for <_:link-6/>."
 msgstr ""
+"Si no tiene <_:link-1/>, escriba <_:quote-2/> en lugar de indicar los que "
+"son invariantes. Si no tiene <_:link-3/>, escriba <_:quote-4/> en lugar de "
+"<_:quote-5/>; lo mismo para <_:link-6/>."
 
 #: C/fdl-appendix.xml:661(para/ulink)
 msgid "GNU General Public License"
 msgstr "Licencia Pública General GNU"
 
 #: C/fdl-appendix.xml:657(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "If your document contains nontrivial examples of program code, we "
 #| "recommend releasing these examples in parallel under your choice of free "
@@ -5237,9 +5166,8 @@ msgid ""
 msgstr ""
 "Si su documento contiene ejemplos de código de programa no triviales, "
 "recomendamos liberar estos ejemplos en paralelo bajo la licencia de software "
-"libre que usted elija, como la <ulink type=\"http\" url=\"http://www.gnu.org/"
-"copyleft/gpl.html\">Licencia Pública General de GNU (GNU General Public "
-"License)</ulink>, para permitir su uso en software libre."
+"libre que usted elija, como la <_:ulink-1/>, para permitir su uso en "
+"software libre."
 
 #~ msgid "Chris"
 #~ msgstr "Chris"
