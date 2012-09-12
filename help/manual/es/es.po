@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2012-08-31 13:39+0000\n"
-"PO-Revision-Date: 2012-09-03 14:33+0200\n"
+"POT-Creation-Date: 2012-09-03 13:59+0000\n"
+"PO-Revision-Date: 2012-09-12 11:17+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -19,7 +19,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
-#| msgid "translator-credits"
 msgctxt "_"
 msgid "translator-credits"
 msgstr ""
@@ -125,30 +124,45 @@ msgid ""
 "<revnumber>1.18</revnumber> <date>14 sep 2011</date> <authorinitials>ss</"
 "authorinitials> <revremark>bug fixes, speedups, markdown support</revremark>"
 msgstr ""
+"<revnumber>1.18</revnumber> <date>14 de septiembre de 2011</date> "
+"<authorinitials>ss</authorinitials> <revremark>correcciones de errores, "
+"mejoras y soporte de marcado</revremark>"
 
 #: C/index.docbook:95(revhistory/revision)
 msgid ""
 "<revnumber>1.17</revnumber> <date>26 Feb 2011</date> <authorinitials>sk</"
 "authorinitials> <revremark>urgent bug fix update</revremark>"
 msgstr ""
+"<revnumber>1.17</revnumber> <date>26 de febrero de 2011</date> "
+"<authorinitials>sk</authorinitials> <revremark>actualización urgente de "
+"corrección de error</revremark>"
 
 #: C/index.docbook:101(revhistory/revision)
 msgid ""
 "<revnumber>1.16</revnumber> <date>14 Jan 2011</date> <authorinitials>sk</"
 "authorinitials> <revremark>bugfixes, layout improvements</revremark>"
 msgstr ""
+"<revnumber>1.16</revnumber> <date>14 de enero de 2011</date> "
+"<authorinitials>sk</authorinitials> <revremark>correcciones de errores y "
+"mejoras en la distribución</revremark>"
 
 #: C/index.docbook:107(revhistory/revision)
 msgid ""
 "<revnumber>1.15</revnumber> <date>21 May 2010</date> <authorinitials>sk</"
 "authorinitials> <revremark>bug and regression fixes</revremark>"
 msgstr ""
+"<revnumber>1.15</revnumber> <date>21 de mayo de 2010</date> "
+"<authorinitials>sk</authorinitials> <revremark>correcciones de errores y "
+"regresiones</revremark>"
 
 #: C/index.docbook:113(revhistory/revision)
 msgid ""
 "<revnumber>1.14</revnumber> <date>28 March 2010</date> <authorinitials>sk</"
 "authorinitials> <revremark>bugfixes and performance improvements</revremark>"
 msgstr ""
+"<revnumber>1.14</revnumber> <date>28 de marzo de 2010</date> "
+"<authorinitials>sk</authorinitials> <revremark>correcciones de errores y "
+"mejoras en el rendimiento</revremark>"
 
 #: C/index.docbook:119(revhistory/revision)
 msgid ""
@@ -156,6 +170,9 @@ msgid ""
 "<authorinitials>sk</authorinitials> <revremark>broken tarball update</"
 "revremark>"
 msgstr ""
+"<revnumber>1.13</revnumber> <date>18 de diciembre de 2009</date> "
+"<authorinitials>sk</authorinitials> <revremark>actualización del tarball "
+"roto</revremark>"
 
 #: C/index.docbook:125(revhistory/revision)
 msgid ""
@@ -163,6 +180,9 @@ msgid ""
 "<authorinitials>sk</authorinitials> <revremark>new tool features and "
 "bugfixes</revremark>"
 msgstr ""
+"<revnumber>1.12</revnumber> <date>18 de diciembre de 2009</date> "
+"<authorinitials>sk</authorinitials> <revremark>correcciones de errores y "
+"nuevas características</revremark>"
 
 #: C/index.docbook:131(revhistory/revision)
 msgid ""
@@ -170,6 +190,9 @@ msgid ""
 "<authorinitials>mal</authorinitials> <revremark>GNOME doc-utils migration</"
 "revremark>"
 msgstr ""
+"<revnumber>1.11</revnumber> <date>16 de noviembre de 2008</date> "
+"<authorinitials>mal</authorinitials> <revremark>Migración a GNOME doc-utils</"
+"revremark>"
 
 #: C/index.docbook:144(chapter/title)
 msgid "Introduction"
@@ -633,7 +656,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:413(sect1/para)
-#| msgid "This can then look as shown below: <placeholder-1/>"
 msgid "This can then look as shown below: <_:example-1/>"
 msgstr "Esto después aparecerá como se muestra debajo: <_:example-1/>"
 
@@ -696,12 +718,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:450(sect1/para)
-#| msgid ""
-#| "This will require all developers to have gtk-doc installed. If it is okay "
-#| "for your project to have optional api-doc build setup, you can solve this "
-#| "as below. Keep it as is, as gtkdocize is looking for "
-#| "<function>GTK_DOC_CHECK</function> at the start of a line. <placeholder-1/"
-#| ">"
 msgid ""
 "This will require all developers to have gtk-doc installed. If it is okay "
 "for your project to have optional api-doc build setup, you can solve this as "
@@ -1139,10 +1155,6 @@ msgstr ""
 "        "
 
 #: C/index.docbook:700(chapter/para)
-#| msgid ""
-#| "The scanner can handle the majority of c headers fine. In the case of "
-#| "receiving warnings from the scanner that look like a special case, one "
-#| "can hint GTK-Doc to skip over them. <placeholder-1/>"
 msgid ""
 "The scanner can handle the majority of c headers fine. In the case of "
 "receiving warnings from the scanner that look like a special case, one can "
@@ -1178,10 +1190,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:720(sect1/para)
-#| msgid ""
-#| "A multiline comment that starts with an additional '*' marks a "
-#| "documentation block that will be processed by the GTK-Doc tools. "
-#| "<placeholder-1/>"
 msgid ""
 "A multiline comment that starts with an additional '*' marks a documentation "
 "block that will be processed by the GTK-Doc tools. <_:example-1/>"
@@ -1231,7 +1239,6 @@ msgid ""
 msgstr "Qué hace: indique los usos comunes, en relación con las otras API."
 
 #: C/index.docbook:754(tip/para)
-#| msgid "When documenting code, describe two apsects: <placeholder-1/>"
 msgid "When documenting code, describe two apsects: <_:itemizedlist-1/>"
 msgstr "Al documentar código, describa dos aspectos: <_:itemizedlist-1/>"
 
@@ -1273,11 +1280,6 @@ msgid "Use #Struct.field to refer to a field inside a structure."
 msgstr "Use #Struct.field para referirse a un campo dentro de una estructura"
 
 #: C/index.docbook:773(sect1/para)
-#| msgid ""
-#| "One advantage of hyper-text over plain-text is the ability to have links "
-#| "in the document. Writing the correct markup for a link can be tedious "
-#| "though. GTK-Doc comes to help by providing several useful abbreviations. "
-#| "<placeholder-1/>"
 msgid ""
 "One advantage of hyper-text over plain-text is the ability to have links in "
 "the document. Writing the correct markup for a link can be tedious though. "
@@ -1360,7 +1362,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:836(sect1/para)
-#, fuzzy
 #| msgid ""
 #| "Since GTK-Doc-1.18 the tool supports a subset or the <ulink url=\"http://"
 #| "daringfireball.net/projects/markdown/\">markdown language</ulink>. One "
@@ -1379,7 +1380,7 @@ msgstr ""
 "ulink>. Se pueden usar para títulos secundarios y listas de elementos "
 "simples. En versiones más antiguas de GTK-Doc el contenido se puede "
 "renderizar como tal (la lista de elementos aparecerá en una línea separada "
-"por guiones). <placeholder-1/>"
+"por guiones). <_:example-1/>"
 
 #: C/index.docbook:864(tip/para)
 msgid ""
@@ -1577,9 +1578,6 @@ msgstr ""
 "son internas."
 
 #: C/index.docbook:959(listitem/para)
-#| msgid ""
-#| "A informal description of the stability level this API has. We recommend "
-#| "the use of one of these terms: <placeholder-1/>"
 msgid ""
 "A informal description of the stability level this API has. We recommend the "
 "use of one of these terms: <_:itemizedlist-1/>"
@@ -1755,7 +1753,6 @@ msgstr ""
 "Mencionar precondiciones y postcondiciones interesantes donde sea apropiado."
 
 #: C/index.docbook:1106(sect2/para) C/index.docbook:1203(sect2/para)
-#| msgid "Please remember to: <placeholder-1/>"
 msgid "Please remember to: <_:itemizedlist-1/>"
 msgstr "Recuerde: <_:itemizedlist-1/>"
 
@@ -2078,12 +2075,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1318(sect1/para)
-#| msgid ""
-#| "To link to another section in the GTK docs: <placeholder-1/> The linkend "
-#| "is the SGML/XML id on the top item of the page you want to link to. For "
-#| "most pages this is currently the part (\"gtk\", \"gdk\", \"glib\") and "
-#| "then the page title (\"Hash Tables\"). For widgets it is just the class "
-#| "name. Spaces and underscores are converted to '-' to conform to SGML/XML."
 msgid ""
 "To link to another section in the GTK docs: <_:informalexample-1/> The "
 "linkend is the SGML/XML id on the top item of the page you want to link to. "
@@ -2114,9 +2105,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1334(sect1/para)
-#| msgid ""
-#| "To refer to an external function, e.g. a standard C function: "
-#| "<placeholder-1/>"
 msgid ""
 "To refer to an external function, e.g. a standard C function: <_:"
 "informalexample-1/>"
@@ -2173,14 +2161,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1345(sect1/para)
-#| msgid ""
-#| "To include example code: <placeholder-1/> or possibly this, for very "
-#| "short code fragments which don't need a title: <placeholder-2/> For the "
-#| "latter GTK-Doc also supports an abbreviation: <![CDATA[\n"
-#| "|[\n"
-#| "  ...\n"
-#| "]|\n"
-#| "]]>"
 msgid ""
 "To include example code: <_:informalexample-1/> or possibly this, for very "
 "short code fragments which don't need a title: <_:informalexample-2/> For "
@@ -2228,7 +2208,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1379(sect1/para)
-#| msgid "To include bulleted lists: <placeholder-1/>"
 msgid "To include bulleted lists: <_:informalexample-1/>"
 msgstr "Para incluir listas de topos: <_:informalexample-1/>"
 
@@ -2256,7 +2235,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1401(sect1/para)
-#| msgid "To include a note which stands out from the text: <placeholder-1/>"
 msgid ""
 "To include a note which stands out from the text: <_:informalexample-1/>"
 msgstr "Para incluir una nota que sobresale del texto: <_:informalexample-1/>"
@@ -2277,7 +2255,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1416(sect1/para)
-#| msgid "To refer to a type: <placeholder-1/>"
 msgid "To refer to a type: <_:informalexample-1/>"
 msgstr "Para referirse a un tipo: <_:informalexample-1/>"
 
@@ -2297,9 +2274,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1427(sect1/para)
-#| msgid ""
-#| "To refer to an external structure (not one described in the GTK docs): "
-#| "<placeholder-1/>"
 msgid ""
 "To refer to an external structure (not one described in the GTK docs): <_:"
 "informalexample-1/>"
@@ -2323,7 +2297,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1438(sect1/para)
-#| msgid "To refer to a field of a structure: <placeholder-1/>"
 msgid "To refer to a field of a structure: <_:informalexample-1/>"
 msgstr "Para referirse a un campo o a una estructura: <_:informalexample-1/>"
 
@@ -2343,11 +2316,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1449(sect1/para)
-#| msgid ""
-#| "To refer to a class name, we could possibly use: <placeholder-1/> but "
-#| "you'll probably be using #GtkWidget instead (to automatically create a "
-#| "link to the GtkWidget page - see <link linkend=\"documenting_syntax\">the "
-#| "abbreviations</link>)."
 msgid ""
 "To refer to a class name, we could possibly use: <_:informalexample-1/> but "
 "you'll probably be using #GtkWidget instead (to automatically create a link "
@@ -2375,7 +2343,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1462(sect1/para)
-#| msgid "To emphasize text: <placeholder-1/>"
 msgid "To emphasize text: <_:informalexample-1/>"
 msgstr "Para enfatizar un texto: <_:informalexample-1/>"
 
@@ -2395,7 +2362,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1473(sect1/para)
-#| msgid "For filenames use: <placeholder-1/>"
 msgid "For filenames use: <_:informalexample-1/>"
 msgstr "Para uso de nombres de archivo: <_:informalexample-1/>"
 
@@ -2415,7 +2381,6 @@ msgstr ""
 "          "
 
 #: C/index.docbook:1484(sect1/para)
-#| msgid "To refer to keys use: <placeholder-1/>"
 msgid "To refer to keys use: <_:informalexample-1/>"
 msgstr "Para referirse a claves: <_:informalexample-1/>"
 
@@ -3106,7 +3071,6 @@ msgid "multiple \"IDs\" for constraint linkend: XYZ"
 msgstr "múltiples «ID» para la restricción enlazada: XYZ"
 
 #: C/index.docbook:1907(seglistitem/seg)
-#| msgid "Symbol XYZ appears twice in <placeholder-1/> file."
 msgid ""
 "Symbol XYZ appears twice in <filename>&lt;package&gt;-sections.txt</"
 "filename> file."
@@ -3150,13 +3114,11 @@ msgid "Version 1.1, March 2000"
 msgstr "Versión 1.1, marzo de 2000"
 
 #: C/index.docbook:15(appendixinfo/copyright)
-#| msgid "Free Software Foundation, Inc."
 msgid "<year>2000</year><holder>Free Software Foundation, Inc.</holder>"
 msgstr "<year>2000</year><holder>Free Software Foundation, Inc.</holder>"
 
 #: C/index.docbook:20(para/address)
 #, no-wrap
-#| msgid "<address>Free Software Foundation, Inc. <street>51 Franklin Street, Suite 330</street>, <city>Boston</city>, <state>MA</state><postcode>02110-1301</postcode><country>USA</country></address> Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed."
 msgid ""
 "Free Software Foundation, Inc. <street>51 Franklin Street, \n"
 "        Suite 330</street>, <city>Boston</city>, <state>MA</state>  \n"
@@ -4144,7 +4106,6 @@ msgid "Boston"
 msgstr "Boston"
 
 #: C/fdl-appendix.xml:21(address/state)
-#| msgid "A"
 msgid "MA"
 msgstr "MA"
 
@@ -4199,11 +4160,6 @@ msgid "copyleft"
 msgstr "copyleft"
 
 #: C/fdl-appendix.xml:43(sect1/para)
-#| msgid ""
-#| "This License is a kind of <quote>copyleft</quote>, which means that "
-#| "derivative works of the document must themselves be free in the same "
-#| "sense. It complements the GNU General Public License, which is a copyleft "
-#| "license designed for free software."
 msgid ""
 "This License is a kind of <_:quote-1/>, which means that derivative works of "
 "the document must themselves be free in the same sense. It complements the "
@@ -4228,7 +4184,6 @@ msgstr ""
 #: C/fdl-appendix.xml:519(para/link) C/fdl-appendix.xml:540(para/link)
 #: C/fdl-appendix.xml:565(para/link) C/fdl-appendix.xml:583(para/link)
 #: C/fdl-appendix.xml:608(para/link)
-#| msgid "Document the tool"
 msgid "Document"
 msgstr "Documento"
 
@@ -4263,13 +4218,9 @@ msgstr ""
 #: C/fdl-appendix.xml:447(para/link) C/fdl-appendix.xml:459(para/link)
 #: C/fdl-appendix.xml:475(para/link) C/fdl-appendix.xml:543(para/link)
 msgid "Modified Version"
-msgstr ""
+msgstr "Versión modificada"
 
 #: C/fdl-appendix.xml:72(sect1/para)
-#| msgid ""
-#| "A <quote>Modified Version</quote> of the Document means any work "
-#| "containing the Document or a portion of it, either copied verbatim, or "
-#| "with modifications and/or translated into another language."
 msgid ""
 "A <_:quote-1/> of the Document means any work containing the Document or a "
 "portion of it, either copied verbatim, or with modifications and/or "
@@ -4281,20 +4232,9 @@ msgstr ""
 
 #: C/fdl-appendix.xml:80(para/quote)
 msgid "Secondary Section"
-msgstr ""
+msgstr "Sección secundaria"
 
 #: C/fdl-appendix.xml:79(sect1/para)
-#| msgid ""
-#| "A <quote>Secondary Section</quote> is a named appendix or a front-matter "
-#| "section of the <link linkend=\"fdl-document\">Document</link> that deals "
-#| "exclusively with the relationship of the publishers or authors of the "
-#| "Document to the Document's overall subject (or to related matters) and "
-#| "contains nothing that could fall directly within that overall subject. "
-#| "(For example, if the Document is in part a textbook of mathematics, a "
-#| "Secondary Section may not explain any mathematics.) The relationship "
-#| "could be a matter of historical connection with the subject or with "
-#| "related matters, or of legal, commercial, philosophical, ethical or "
-#| "political position regarding them."
 msgid ""
 "A <_:quote-1/> is a named appendix or a front-matter section of the <_:link-"
 "2/> that deals exclusively with the relationship of the publishers or "
@@ -4323,18 +4263,13 @@ msgstr ""
 #: C/fdl-appendix.xml:567(para/link) C/fdl-appendix.xml:637(para/link)
 #: C/fdl-appendix.xml:648(para/link)
 msgid "Invariant Sections"
-msgstr ""
+msgstr "Secciones incariantes"
 
 #: C/fdl-appendix.xml:96(para/link) C/fdl-appendix.xml:435(para/link)
 msgid "Secondary Sections"
 msgstr ""
 
 #: C/fdl-appendix.xml:94(sect1/para)
-#| msgid ""
-#| "The <quote>Invariant Sections</quote> are certain <link linkend=\"fdl-"
-#| "secondary\"> Secondary Sections</link> whose titles are designated, as "
-#| "being those of Invariant Sections, in the notice that says that the <link "
-#| "linkend=\"fdl-document\">Document</link> is released under this License."
 msgid ""
 "The <_:quote-1/> are certain <_:link-2/> whose titles are designated, as "
 "being those of Invariant Sections, in the notice that says that the <_:link-"
@@ -4347,14 +4282,9 @@ msgstr ""
 #: C/fdl-appendix.xml:104(para/quote) C/fdl-appendix.xml:181(para/link)
 #: C/fdl-appendix.xml:328(para/link) C/fdl-appendix.xml:458(para/link)
 msgid "Cover Texts"
-msgstr ""
+msgstr "Textos de cubierta"
 
 #: C/fdl-appendix.xml:103(sect1/para)
-#| msgid ""
-#| "The <quote>Cover Texts</quote> are certain short passages of text that "
-#| "are listed, as Front-Cover Texts or Back-Cover Texts, in the notice that "
-#| "says that the <link linkend=\"fdl-document\">Document</link> is released "
-#| "under this License."
 msgid ""
 "The <_:quote-1/> are certain short passages of text that are listed, as "
 "Front-Cover Texts or Back-Cover Texts, in the notice that says that the <_:"
@@ -4374,19 +4304,6 @@ msgid "Opaque"
 msgstr ""
 
 #: C/fdl-appendix.xml:111(sect1/para)
-#| msgid ""
-#| "A <quote>Transparent</quote> copy of the <link linkend=\"fdl-document\"> "
-#| "Document</link> means a machine-readable copy, represented in a format "
-#| "whose specification is available to the general public, whose contents "
-#| "can be viewed and edited directly and straightforwardly with generic text "
-#| "editors or (for images composed of pixels) generic paint programs or (for "
-#| "drawings) some widely available drawing editor, and that is suitable for "
-#| "input to text formatters or for automatic translation to a variety of "
-#| "formats suitable for input to text formatters. A copy made in an "
-#| "otherwise Transparent file format whose markup has been designed to "
-#| "thwart or discourage subsequent modification by readers is not "
-#| "Transparent. A copy that is not <quote>Transparent</quote> is called "
-#| "<quote>Opaque</quote>."
 msgid ""
 "A <_:quote-1/> copy of the <_:link-2/> means a machine-readable copy, "
 "represented in a format whose specification is available to the general "
@@ -4419,13 +4336,6 @@ msgid "Title Page"
 msgstr ""
 
 #: C/fdl-appendix.xml:141(sect1/para)
-#| msgid ""
-#| "The <quote>Title Page</quote> means, for a printed book, the title page "
-#| "itself, plus such following pages as are needed to hold, legibly, the "
-#| "material this License requires to appear in the title page. For works in "
-#| "formats which do not have any title page as such, <quote>Title Page</"
-#| "quote> means the text near the most prominent appearance of the work's "
-#| "title, preceding the beginning of the body of the text."
 msgid ""
 "The <_:quote-1/> means, for a printed book, the title page itself, plus such "
 "following pages as are needed to hold, legibly, the material this License "
@@ -4442,7 +4352,6 @@ msgstr ""
 "comienzo del cuerpo del texto."
 
 #: C/fdl-appendix.xml:166(para/link) C/fdl-appendix.xml:551(para/link)
-#| msgid "@section_id"
 msgid "section 3"
 msgstr "sección 3"
 
@@ -4622,13 +4531,6 @@ msgstr ""
 "misma. Además, debe hacer lo siguiente en la Versión Modificada:"
 
 #: C/fdl-appendix.xml:249(formalpara/para)
-#| msgid ""
-#| "Use in the <link linkend=\"fdl-title-page\">Title Page</link> (and on the "
-#| "covers, if any) a title distinct from that of the <link linkend=\"fdl-"
-#| "document\">Document</link>, and from those of previous versions (which "
-#| "should, if there were any, be listed in the History section of the "
-#| "Document). You may use the same title as a previous version if the "
-#| "original publisher of that version gives permission."
 msgid ""
 "Use in the <_:link-1/> (and on the covers, if any) a title distinct from "
 "that of the <_:link-2/>, and from those of previous versions (which should, "
@@ -4643,13 +4545,6 @@ msgstr ""
 "quien las publicó originalmente otorgue permiso."
 
 #: C/fdl-appendix.xml:265(formalpara/para)
-#| msgid ""
-#| "List on the <link linkend=\"fdl-title-page\">Title Page</link>, as "
-#| "authors, one or more persons or entities responsible for authorship of "
-#| "the modifications in the <link linkend=\"fdl-modified\">Modified Version</"
-#| "link>, together with at least five of the principal authors of the <link "
-#| "linkend=\"fdl-document\">Document</link> (all of its principal authors, "
-#| "if it has less than five)."
 msgid ""
 "List on the <_:link-1/>, as authors, one or more persons or entities "
 "responsible for authorship of the modifications in the <_:link-2/>, together "
@@ -4663,10 +4558,6 @@ msgstr ""
 "requisito."
 
 #: C/fdl-appendix.xml:280(formalpara/para)
-#| msgid ""
-#| "State on the <link linkend=\"fdl-title-page\">Title Page</link> the name "
-#| "of the publisher of the <link linkend=\"fdl-modified\">Modified Version</"
-#| "link>, as the publisher."
 msgid ""
 "State on the <_:link-1/> the name of the publisher of the <_:link-2/>, as "
 "the publisher."
@@ -4917,11 +4808,11 @@ msgstr ""
 
 #: C/fdl-appendix.xml:455(para/link)
 msgid "Front-Cover Text"
-msgstr ""
+msgstr "Texto de cubierta delantera"
 
 #: C/fdl-appendix.xml:457(para/link)
 msgid "Back-Cover Text"
-msgstr ""
+msgstr "Texto de cubierta trasera"
 
 #: C/fdl-appendix.xml:453(sect1/para)
 #, fuzzy
@@ -4978,7 +4869,6 @@ msgstr ""
 "\"fdl-modified\">Versión Modificada</link>."
 
 #: C/fdl-appendix.xml:484(para/link) C/fdl-appendix.xml:566(para/link)
-#| msgid "@section_id"
 msgid "section 4"
 msgstr "sección 4"
 
@@ -5093,7 +4983,7 @@ msgstr ""
 
 #: C/fdl-appendix.xml:550(para/link)
 msgid "Cover Text"
-msgstr ""
+msgstr "Texto de cubierta"
 
 #: C/fdl-appendix.xml:538(sect1/para)
 #, fuzzy
@@ -5207,7 +5097,6 @@ msgstr ""
 "conformidad con ella."
 
 #: C/fdl-appendix.xml:597(para/ulink)
-#| msgid "Free Software Foundation, Inc."
 msgid "Free Software Foundation"
 msgstr "Free Software Foundation"
 
@@ -5240,7 +5129,7 @@ msgstr ""
 
 #: C/fdl-appendix.xml:610(para/quote)
 msgid "or any later version"
-msgstr ""
+msgstr "o cualquier versión posterior"
 
 #: C/fdl-appendix.xml:606(sect1/para)
 #, fuzzy
@@ -5275,11 +5164,11 @@ msgstr ""
 
 #: C/fdl-appendix.xml:639(para/link) C/fdl-appendix.xml:651(para/link)
 msgid "Front-Cover Texts"
-msgstr ""
+msgstr "Textos de cubierta delantera"
 
 #: C/fdl-appendix.xml:640(para/link) C/fdl-appendix.xml:654(para/link)
 msgid "Back-Cover Texts"
-msgstr ""
+msgstr "Textos de cubierta trasera"
 
 #: C/fdl-appendix.xml:632(blockquote/para)
 #, fuzzy
@@ -5312,11 +5201,11 @@ msgstr ""
 
 #: C/fdl-appendix.xml:649(para/quote)
 msgid "with no Invariant Sections"
-msgstr ""
+msgstr "sin secciones invariantes"
 
 #: C/fdl-appendix.xml:652(para/quote)
 msgid "no Front-Cover Texts"
-msgstr ""
+msgstr "sin textos de cubierta delantera"
 
 #: C/fdl-appendix.xml:653(para/quote)
 msgid "Front-Cover Texts being LIST"
@@ -5330,7 +5219,6 @@ msgid ""
 msgstr ""
 
 #: C/fdl-appendix.xml:661(para/ulink)
-#| msgid "GNU Free Documentation License"
 msgid "GNU General Public License"
 msgstr "Licencia Pública General GNU"
 
