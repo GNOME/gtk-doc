@@ -246,8 +246,12 @@ sub ScanIndex {
     # the rest.
     my $dir = "../";
     if ($use_absolute_links) {
-        $file =~ /(.*\/)(.*?)\/index\.sgml/;
-        $dir = $1;
+        # For uninstalled index.sgml files we'd need to map the path to where it
+        # will be installed to
+        if ($file !~ /\.\//) {
+          $file =~ /(.*\/)(.*?)\/index\.sgml/;
+          $dir = $1;
+        }
     }
     @TRACE@("Scanning index file=$file, absolute=$use_absolute_links, dir=$dir");
 
