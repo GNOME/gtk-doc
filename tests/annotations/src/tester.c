@@ -41,7 +41,7 @@ gchar *
 annotation_nullable (const gchar *uri,
                      const gchar *label)
 {
-   return NULL;
+  return NULL;
 }
 
 /**
@@ -55,7 +55,7 @@ annotation_nullable (const gchar *uri,
 gboolean
 annotation_elementtype (const GList *list)
 {
-   return TRUE;
+  return TRUE;
 }
 
 /**
@@ -69,7 +69,7 @@ annotation_elementtype (const GList *list)
 gboolean
 annotation_elementtype_transfer (const GList *list)
 {
-   return TRUE;
+  return TRUE;
 }
 
 /**
@@ -82,7 +82,7 @@ annotation_elementtype_transfer (const GList *list)
 GList *
 annotation_elementtype_returns (void)
 {
-   return NULL;
+  return NULL;
 }
 
 /**
@@ -96,7 +96,7 @@ annotation_elementtype_returns (void)
 gboolean
 annotation_outparams (GList **list)
 {
-   return TRUE;
+  return TRUE;
 }
 
 /**
