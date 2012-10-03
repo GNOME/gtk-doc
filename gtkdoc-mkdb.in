@@ -3811,7 +3811,7 @@ sub ScanSourceFile {
 
                     if (scalar %KnownSymbols) {
                         if ((! defined($KnownSymbols{"$TMPL_DIR/$real_symbol:Long_Description"})) || $KnownSymbols{"$TMPL_DIR/$real_symbol:Long_Description"} != 1) {
-                            &LogWarning ($file, $., "Section $real_symbol is not defined in the $MODULE-section.txt file.");
+                            &LogWarning ($file, $., "Section $real_symbol is not defined in the $MODULE-sections.txt file.");
                         }
                     }
 
