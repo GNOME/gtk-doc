@@ -25,6 +25,7 @@ extern GList *annotation_elementtype_returns (void);
 extern gboolean annotation_outparams (GList **list);
 
 extern void annotation_skip (GList *list);
+extern gboolean annotation_skip_return (GList *list);
 
 extern void annotation_scope (GCallback *callback, gpointer user_data);
 

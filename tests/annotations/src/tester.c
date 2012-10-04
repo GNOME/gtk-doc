@@ -111,6 +111,20 @@ annotation_skip (GList *list)
 }
 
 /**
+ * annotation_skip_return: (skip)
+ * @list: a pointer to take a list
+ *
+ * Documentation for this function.
+ *
+ * Returns: (skip): %TRUE for success
+ */
+gboolean
+annotation_skip_return (GList *list)
+{
+  return TRUE;
+}
+
+/**
  * annotation_scope:
  * @callback: (scope async): a callback
  * @user_data: data to pass to callback
