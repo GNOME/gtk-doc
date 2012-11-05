@@ -38,7 +38,7 @@ my $OUTPUT_DIR;
 my $VERBOSE;
 my $PRINT_VERSION;
 my $PRINT_HELP;
-my $TYPE_INIT_FUNC="g_type_init(); g_type_class_ref(G_TYPE_OBJECT)";
+my $TYPE_INIT_FUNC="#if !GLIB_CHECK_VERSION(2,35,0)\n  g_type_init();\n  #endif\n  g_type_class_ref(G_TYPE_OBJECT)";
 my $QUERY_CHILD_PROPERTIES;
 
 # --nogtkinit is deprecated, as it is the default now anyway.
