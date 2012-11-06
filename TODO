@@ -54,10 +54,12 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
 
 
 = Running =
-gtk-doc is using a makefile with several targets to get from sources to docs.
+gtk-doc is using a makefile with several targets to get from sources to docs. It
+uses makefile variables for configuration.
 It might be easier to have a gtk-doc tool that can run the other gtk-doc tools
 in the right order (ev. by importing them as modules). This could handle a few
-things nicer that the makefiles don't do well.
+things nicer that the makefiles don't do well. This would also make it easy to
+run it manually or integrate into other build systems.
 
 = Issues =
 * gtkdoc-fixxref makefile targets use $HTML_DIR
@@ -68,6 +70,11 @@ things nicer that the makefiles don't do well.
   * the Makefile uses $(DESTDIR)$(TARGET_DIR)
     where TARGET_DIR = $(HTML_DIR)/$(DOC_MODULE)
     http://www.gnu.org/software/libtool/manual/automake/DESTDIR.html
+* gtkdoc does not know about module versions
+  * this is causing troubles when multiple library versions are installed
+    (gtk+-{2,3}, gstreamer-{0.8,0.10,1.0}
+  * right now gtk-doc is xreffing against any <module>/index.sgml found
+  * just using the one with a higher number won't work
 
 
 = Extensibility =
