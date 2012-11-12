@@ -79,7 +79,7 @@ GTK_DOC__v_SETUP_=$(GTK_DOC__v_SETUP_$(AM_DEFAULT_VERBOSITY))
 GTK_DOC__v_SETUP_0=@echo "  DOC   Preparing build";
 
 setup-build.stamp:
-	$(GTK_DOC_V_SETUP)if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
+	$(GTK_DOC_V_SETUP)-if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	    files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
 	    if test "x$$files" != "x" ; then \
 	        for file in $$files ; do \
