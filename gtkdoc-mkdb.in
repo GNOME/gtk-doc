@@ -3989,7 +3989,7 @@ sub ScanSourceFile {
 
             #print "Found parameter: $param_name\n";
             # Allow varargs variations
-            if ($param_name =~ m/^.*\.\.\.$/) {
+            if ($param_name =~ m/^\.\.\.$/) {
                 $param_name = "...";
             }
             if ("\L$param_name" eq "returns") {
@@ -4946,7 +4946,7 @@ sub ReadTemplateFile {
                     $param_name = "Returns";
                 }
                 # Allow varargs variations
-                if ($param_name =~ m/^.*\.\.\.$/) {
+                if ($param_name =~ m/^\.\.\.$/) {
                     $param_name = "...";
                 }
 
