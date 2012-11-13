@@ -1867,8 +1867,8 @@ sub OutputEnum {
     my @fields = ParseEnumDeclaration($declaration);
     my $params = $SymbolParams{$symbol};
 
-    # If no parameters are filled in, we don't generate the description
-    # table, for backwards compatibility
+    # If nothing at all is documented log a single summary warning at the end.
+    # Otherwise, warn about each undocumented item.
 
     my $found = 0;
     if (defined $params) {
@@ -1880,56 +1880,57 @@ sub OutputEnum {
         }
     }
 
-    if ($found) {
-        my %field_descrs = @$params;
-        my $missing_parameters = "";
-        my $unused_parameters = "";
+    my %field_descrs = (defined $params ? @$params : ());
+    my $missing_parameters = "";
+    my $unused_parameters = "";
 
-        $desc .= "<variablelist role=\"enum\">\n";
-        for my $field_name (@fields) {
-            my $field_descr = $field_descrs{$field_name};
-            my $param_annotations = "";
+    $desc .= "<variablelist role=\"enum\">\n";
+    for my $field_name (@fields) {
+        my $field_descr = $field_descrs{$field_name};
+        my $param_annotations = "";
 
-            $id = &CreateValidSGMLID ($field_name);
-            $condition = &MakeConditionDescription ($field_name);
-            $desc .= "<varlistentry id=\"$id\" role=\"constant\"$condition>\n<term><literal>$field_name</literal></term>\n";
-            if (defined $field_descr) {
-                ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
-                $field_descr = &ExpandAbbreviations($symbol, $field_descr);
-                $desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
-                delete $field_descrs{$field_name};
-            } else {
+        $id = &CreateValidSGMLID ($field_name);
+        $condition = &MakeConditionDescription ($field_name);
+        $desc .= "<varlistentry id=\"$id\" role=\"constant\"$condition>\n<term><literal>$field_name</literal></term>\n";
+        if (defined $field_descr) {
+            ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
+            $field_descr = &ExpandAbbreviations($symbol, $field_descr);
+            $desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
+            delete $field_descrs{$field_name};
+        } else {
+            if ($found) {
                 &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                     "Value description for $symbol"."::"."$field_name is missing in source code comment block.");
                 if ($missing_parameters ne "") {
-                  $missing_parameters .= ", ".$field_name;
+                    $missing_parameters .= ", ".$field_name;
                 } else {
                     $missing_parameters = $field_name;
                 }
-                $desc .= "<listitem />\n";
             }
-            $desc .= "</varlistentry>\n";
+            $desc .= "<listitem />\n";
         }
-        $desc .= "</variablelist>";
-        foreach my $field_name (keys %field_descrs) {
-            &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
-                "Value description for $symbol"."::"."$field_name is not used from source code comment block.");
-            if ($unused_parameters ne "") {
-              $unused_parameters .= ", ".$field_name;
-            } else {
-               $unused_parameters = $field_name;
-            }
-        }
-
-        # remember missing/unused parameters (needed in tmpl-free build)
-        if (($missing_parameters ne "") and (! exists ($AllIncompleteSymbols{$symbol}))) {
-            $AllIncompleteSymbols{$symbol}=$missing_parameters;
-        }
-        if (($unused_parameters ne "") and (! exists ($AllUnusedSymbols{$symbol}))) {
-            $AllUnusedSymbols{$symbol}=$unused_parameters;
+        $desc .= "</varlistentry>\n";
+    }
+    $desc .= "</variablelist>";
+    foreach my $field_name (keys %field_descrs) {
+        &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+            "Value description for $symbol"."::"."$field_name is not used from source code comment block.");
+        if ($unused_parameters ne "") {
+            $unused_parameters .= ", ".$field_name;
+        } else {
+            $unused_parameters = $field_name;
         }
     }
-    else {
+
+    # remember missing/unused parameters (needed in tmpl-free build)
+    if (($missing_parameters ne "") and (! exists ($AllIncompleteSymbols{$symbol}))) {
+        $AllIncompleteSymbols{$symbol}=$missing_parameters;
+    }
+    if (($unused_parameters ne "") and (! exists ($AllUnusedSymbols{$symbol}))) {
+        $AllUnusedSymbols{$symbol}=$unused_parameters;
+    }
+
+    if (!$found) {
         if (scalar(@fields) > 0) {
             if (! exists ($AllIncompleteSymbols{$symbol})) {
                 $AllIncompleteSymbols{$symbol}="<items>";
