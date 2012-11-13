@@ -4834,15 +4834,15 @@ sub ReadSignalsFile {
 #############################################################################
 # Function    : ReadTemplateFile
 # Description : This reads in the manually-edited documentation file
-#                corresponding to the file currently being created, so we can
-#                insert the documentation at the appropriate places.
-#                It outputs %SymbolTypes, %SymbolDocs and %SymbolParams, which
-#                is a hash of arrays.
-#                NOTE: This function is duplicated in gtkdoc-mktmpl (but
-#                slightly different).
+#               corresponding to the file currently being created, so we can
+#               insert the documentation at the appropriate places.
+#               It outputs %SymbolTypes, %SymbolDocs and %SymbolParams, which
+#               is a hash of arrays.
+#               NOTE: This function is duplicated in gtkdoc-mktmpl (but
+#               slightly different).
 # Arguments   : $docsfile - the template file to read in.
-#                $skip_unused_params - 1 if the unused parameters should be
-#                        skipped.
+#               $skip_unused_params - 1 if the unused parameters should be
+#                 skipped.
 #############################################################################
 
 sub ReadTemplateFile {
@@ -4947,7 +4947,7 @@ sub ReadTemplateFile {
                     $param_name = "Returns";
                 }
                 # Allow varargs variations
-                if ($param_name =~ m/^\.\.\.$/) {
+                if ($param_name =~ m/^.*\.\.\.$/) {
                     $param_name = "...";
                 }
 

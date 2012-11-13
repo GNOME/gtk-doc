@@ -462,7 +462,7 @@ sub ParseMacroDeclaration {
             $param =~ s/^\s+//;
             $param =~ s/\s*$//;
             # Allow varargs variations
-            if ($param =~ m/^\.\.\.$/) {
+            if ($param =~ m/^.*\.\.\.$/) {
                 $param = "...";
             }
             if ($param =~ m/\S/) {
