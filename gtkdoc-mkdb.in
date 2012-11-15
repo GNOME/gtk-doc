@@ -300,7 +300,7 @@ $PreProcessorDirectives{"warning"} = 1;
 my %AnnotationsUsed;
 
 # the annotations are defined at:
-# http://live.gnome.org/GObjectIntrospection/Annotations
+# https://live.gnome.org/GObjectIntrospection/Annotations
 my %AnnotationDefinition = (
     'allow-none' => "NULL is ok, both for passing and for returning.",
     'array' => "Parameter points to an array of items.",
@@ -317,6 +317,7 @@ my %AnnotationDefinition = (
     'out caller-allocates' => "Out parameter, where caller must allocate storage.",
     'out callee-allocates' => "Out parameter, where caller must allocate storage.",
     'transfer container' => "Free data container after the code is done.",
+    'transfer floating' => "Alias for <acronym>transfer none</acronym>, used for objects with floating refs.",
     'transfer full' => "Free data after the code is done.",
     'transfer none' => "Don't free data after the code is done.",
     'scope call' => "The callback is valid only during the call to the method.",
