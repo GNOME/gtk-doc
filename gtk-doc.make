@@ -154,7 +154,7 @@ $(srcdir)/tmpl/*.sgml:
 
 GTK_DOC_V_XML=$(GTK_DOC_V_XML_$(V))
 GTK_DOC_V_XML_=$(GTK_DOC_V_XML_$(AM_DEFAULT_VERBOSITY))
-GTK_DOC_V_XML_0=@echo "  DOC   Building XML":
+GTK_DOC_V_XML_0=@echo "  DOC   Building XML";
 
 sgml-build.stamp: tmpl.stamp $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(expand_content_files)
 	$(GTK_DOC_V_XML)-chmod -R u+w $(srcdir) && _source_dir='' ; \

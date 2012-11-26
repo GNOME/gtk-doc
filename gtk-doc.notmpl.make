@@ -131,7 +131,7 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 
 GTK_DOC_V_XML=$(GTK_DOC_V_XML_$(V))
 GTK_DOC_V_XML_=$(GTK_DOC_V_XML_$(AM_DEFAULT_VERBOSITY))
-GTK_DOC_V_XML_0=@echo "  DOC   Building XML":
+GTK_DOC_V_XML_0=@echo "  DOC   Building XML";
 
 sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt $(expand_content_files)
 	$(GTK_DOC_V_XML)_source_dir='' ; \
