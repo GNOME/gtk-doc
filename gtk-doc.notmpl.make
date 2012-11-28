@@ -82,7 +82,7 @@ setup-build.stamp:
 	-$(GTK_DOC_V_SETUP)if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	    files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
 	    if test "x$$files" != "x" ; then \
-	        for file in $$files ; do \         
+	        for file in $$files ; do \
 	            test -f $(abs_srcdir)/$$file && \
 	                cp -pu $(abs_srcdir)/$$file $(abs_builddir)/ || true; \
 	        done; \
