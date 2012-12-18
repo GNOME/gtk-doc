@@ -15,8 +15,8 @@ DOC_MODULE=
 #DOC_MODULE_VERSION=2
 
 
-# The top-level SGML file. You can change this if you want to.
-DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.sgml
+# The top-level XML file (SGML in the past). You can change this if you want to.
+DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.xml
 
 # Directories containing the source code.
 # gtk-doc will search all .c and .h files beneath these paths
