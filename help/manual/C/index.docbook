@@ -631,7 +631,7 @@ make
         As a rule of the thumb, it's those files you edit, that should go under
         version control. For typical projects it's these files:
         <filename>&lt;package&gt;.types</filename>,
-        <filename>&lt;package&gt;-docs..xml</filename> (in the past .sgml),
+        <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml),
         <filename>&lt;package&gt;-sections.txt</filename>,
         <filename>Makefile.am</filename>
       </para>
@@ -698,7 +698,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
     </note>
 
     <para>
-      The scanner can handle the majority of c headers fine. In the case of
+      The scanner can handle the majority of C headers fine. In the case of
       receiving warnings from the scanner that look like a special case, one can
       hint GTK-Doc to skip over them.
       <example><title>GTK-Doc comment block</title>
@@ -742,7 +742,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
         The 'documentation' block is also different for each symbol type. Symbol
         types that get parameters such as functions or macros have the parameter
         description first followed by a blank line (just a '*').
-        Afterwards follows the detailed description. All lines (outside program-
+        Afterwards follows the detailed description. All lines (outside program
         listings and CDATA sections) just containing a ' *' (blank-asterisk) are
         converted to paragraph breaks.
         If you don't want a paragraph break, change that into ' *  '
@@ -799,12 +799,12 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
           </listitem>
           <listitem>
             <para>
-              Use #Object::signal to refer to a GObject signal
+              Use #Object::signal to refer to a GObject signal.
             </para>
           </listitem>
           <listitem>
             <para>
-              Use #Object:property to refer to a GObject property
+              Use #Object:property to refer to a GObject property.
             </para>
           </listitem>
           <listitem>
@@ -957,7 +957,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
           <term>@stability</term>
           <listitem>
             <para>
-              A informal description of the stability level this API has.
+              An informal description of the stability level this API has.
               We recommend the use of one of these terms:
               <itemizedlist>
                 <listitem>
@@ -1091,7 +1091,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
  *
  * Since: 2.6
  * Deprecated: 2.12: Use foo_baz_get_bar() instead.
- **/
+ */
 Bar *
 foo_get_bar(Foo *foo)
 {
@@ -1133,7 +1133,7 @@ foo_get_bar(Foo *foo)
         <para>
           <!-- FIXME: we should ideally link/describe the gobject introspection
           annotation tag -->
-          Also, take a look at gobject introspection annotation tags:
+          Also, take a look at GObject Introspection annotation tags:
           http://live.gnome.org/GObjectIntrospection/Annotations
         </para>
 
@@ -1286,8 +1286,7 @@ typedef struct _FooWidget {
  * @SOMETHING_BAR: something bar
  *
  * Enum values used for the thing, to specify the thing.
- *
- **/
+ */
 typedef enum {
   SOMETHING_FOO,
   SOMETHING_BAR,
@@ -1510,7 +1509,7 @@ typedef enum {
       <title>Editing the types file</title>
 
       <para>
-        If your library or application includes GtkObjects/GObjects, you want
+        If your library or application includes GObjects, you want
         their signals, arguments/parameters and position in the hierarchy to be
         shown in the documentation. All you need to do, is to list the
         <function>xxx_get_type</function> functions together with their include
@@ -1607,7 +1606,7 @@ gtk_arrow_get_type
       </para>
 
       <para>
-        The section file is a plain test file with xml like syntax (using tags).
+        The section file is a plain text file with XML-like syntax (using tags).
         Blank lines are ignored and lines starting with a '#' are treated as
         comment lines.
       </para>
@@ -1618,9 +1617,9 @@ gtk_arrow_get_type
         will result in the section declarations being output in the template
         file <filename>tmpl/gnome-config.sgml</filename>, which will be
         converted into the DocBook SGML/XML file <filename>sgml/gnome-config.sgml</filename>
-        or .DocBook XML file <filename>xml/gnome-config.xml</filename>.
-        (The name of the html file is based on the module name and the section
-        title, or for gobjects it is based on the gobjects class name converted
+        or the DocBook XML file <filename>xml/gnome-config.xml</filename>.
+        (The name of the HTML file is based on the module name and the section
+        title, or for GObjects it is based on the GObjects class name converted
         to lower case).
       </para>
 
@@ -1640,8 +1639,8 @@ gtk_arrow_get_type
         G_OBJECT(), G_IS_OBJECT() etc.).
         Currently these are left out of the documentation.
         You can also use &lt;SUBSECTION Private&gt; for private declarations
-        which will not be output (It is a handy way to avoid warning messages
-        about unused declarations.).
+        which will not be output (it is a handy way to avoid warning messages
+        about unused declarations).
         If your library contains private types which you don't want to appear in
         the object hierarchy and the list of implemented or required interfaces,
         add them to a Private subsection.
@@ -1711,7 +1710,7 @@ gtk_arrow_get_type
       <filename>&lt;package&gt;-decl-list.txt</filename> and
       <filename>&lt;package&gt;-decl.txt</filename>. The first one can be
       compared with the section file if that is manually maintained. The second
-      lists all declarations from the headers If a symbol is missing one could
+      lists all declarations from the headers. If a symbol is missing one could
       check if this file contains it.
     </para>
 
@@ -1724,7 +1723,7 @@ gtk_arrow_get_type
       <filename>&lt;package&gt;.prerequisites.txt</filename> and
       <filename>&lt;package&gt;.signals.txt</filename>. If there are missing
       symbols in any of those, one can ask gtkdoc to keep the intermediate scanner
-      file for further analysis, but running it as
+      file for further analysis, by running it as
       <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>.
     </para>
   </chapter>
@@ -1918,12 +1917,12 @@ http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)
 
     <para>
       GtkDocPlugin - a <ulink url="http://trac-hacks.org/wiki/GtkDocPlugin">Trac GTK-Doc</ulink>
-      integration plugin, that adds api docs to a trac site and integrates with
+      integration plugin, that adds API docs to a trac site and integrates with
       the trac search.
     </para>
     <para>
       Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since
-      tags in the api to determine the minimum required version.
+      tags in the API to determine the minimum required version.
     </para>
 
   </chapter>
