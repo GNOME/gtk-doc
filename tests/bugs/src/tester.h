@@ -480,6 +480,7 @@ void bug_624001d(void);
 #define GLIB_DEPRECATED
 #endif
 
-void bug_624001e (void) GLIB_DEPRECATED;
+GLIB_DEPRECATED
+void bug_624001e (void);
 
 #endif // GTKDOC_TESTER_H
