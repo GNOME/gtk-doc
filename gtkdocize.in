@@ -11,43 +11,13 @@ datarootdir=@datarootdir@
 datadir=@datadir@
 
 # options
-docdir=.
 copy=no
 makefile=gtk-doc.make
 flavour=legacy
 
 # mini help
 usage="\
-usage: $progname [ --copy ] [ --docdir DIR ] [ --flavour {legacy|legacy-flat|no-tmpl|no-tmpl-flat} ]"
-
-# detect configure script
-no_configure_found=0
-if test -f configure.ac; then
-  configure=configure.ac
-elif test -f configure.in; then
-  configure=configure.in
-else
-  no_configure_found=1
-fi
-
-# check configure script for GTK_DOC_CHECK macro
-no_gtk_doc_check_found=0
-if test $no_configure_found -eq 0; then
-  macro=`grep '^GTK_DOC_CHECK' $configure 2>/dev/null`
-  if test $? -eq 0; then
-    # GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
-    params=`echo $macro | sed -e 's/^GTK_DOC_CHECK(\ *\(.*\))/\1/'`
-    if echo $params | grep -q '^.*\,\ *\[\{0,1\}'; then
-      extra_options=`echo $params | sed -e 's/^.*\,\ *\[\{0,1\}\([^]]*\)\]\{0,1\}\ *$/\1/'`
-      #echo >&2 "DEBUG: adding extra options [$extra_options] to [$*]"
-      set - $* $GTKDOCIZE_FLAGS $extra_options
-    else
-      set - $* $GTKDOCIZE_FLAGS
-    fi
-  else
-    no_gtk_doc_check_found=1;
-  fi
-fi
+usage: $progname [ --copy ] [ --docdir DIR ] [ --flavour {legacy|legacy-flat|no-tmpl|no-tmpl-flat} ] [ --srcdir DIR ]"
 
 while test $# -gt 0; do
   #echo >&2 "DEBUG: parsing args [$1]";
@@ -74,6 +44,13 @@ while test $# -gt 0; do
     shift ;;
   --flavour=*)
     flavour=`expr "X$1" : '[^=]*=\(.*\)'`
+    shift ;;
+  --srcdir)
+    shift
+    srcdir="$1"
+    shift ;;
+  --srcdir=*)
+    srcdir=`expr "X$1" : '[^=]*=\(.*\)'`
     shift ;;
   -*)
     echo "$progname: unrecognised option '$1'" 1>&2
@@ -104,6 +81,39 @@ case "$flavour" in
     exit 1 ;;
 esac
 
+# assume working directory if srcdir is not set
+test "$srcdir" || srcdir=.
+test "$docdir" || docdir="$srcdir"
+
+# detect configure script
+no_configure_found=0
+if test -f "$srcdir"/configure.ac; then
+  configure="$srcdir"/configure.ac
+elif test -f "$srcdir"/configure.in; then
+  configure="$srcdir"/configure.in
+else
+  no_configure_found=1
+fi
+
+# check configure script for GTK_DOC_CHECK macro
+no_gtk_doc_check_found=0
+if test $no_configure_found -eq 0; then
+  macro=`grep '^GTK_DOC_CHECK' $configure 2>/dev/null`
+  if test $? -eq 0; then
+    # GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+    params=`echo $macro | sed -e 's/^GTK_DOC_CHECK(\ *\(.*\))/\1/'`
+    if echo $params | grep -q '^.*\,\ *\[\{0,1\}'; then
+      extra_options=`echo $params | sed -e 's/^.*\,\ *\[\{0,1\}\([^]]*\)\]\{0,1\}\ *$/\1/'`
+      #echo >&2 "DEBUG: adding extra options [$extra_options] to [$*]"
+      set - $* $GTKDOCIZE_FLAGS $extra_options
+    else
+      set - $* $GTKDOCIZE_FLAGS
+    fi
+  else
+    no_gtk_doc_check_found=1;
+  fi
+fi
+
 if test $no_configure_found -eq 1; then
   echo "$progname: neither configure.ac nor configure.in exist" 1>&2
   exit 1
@@ -118,7 +128,7 @@ fi
 # matches the the automake fragment.
 # If AC_CONFIG_MACRO_DIR is not used, the macro won't be copied, and
 # the correct flags must be passed to aclocal for it to find the macro.
-m4dir=`cat "$configure" | grep '^AC_CONFIG_MACRO_DIR' | sed -n -e 's/AC_CONFIG_MACRO_DIR(\([^()]*\))/\1/p' | sed -e 's/^\[\(.*\)\]$/\1/' | sed -e 1q`
+m4dir="$srcdir/`cat "$configure" | grep '^AC_CONFIG_MACRO_DIR' | sed -n -e 's/AC_CONFIG_MACRO_DIR(\([^()]*\))/\1/p' | sed -e 's/^\[\(.*\)\]$/\1/' | sed -e 1q`"
 if test -n "$m4dir"; then
   rm -f $m4dir/gtk-doc.m4
   if test "$copy" = yes; then
