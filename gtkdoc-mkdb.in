@@ -487,6 +487,24 @@ EOF
     &UpdateFileIfChanged ($old_object_index, $new_object_index, 0);
 }
 
+#############################################################################
+# Function    : TrimTextBlock
+# Description : Trims extra whitespace. Empty lines inside a block are
+#                preserved.
+# Arguments   : $desc - the text block to trim. May contain newlines.
+#############################################################################
+
+sub TrimTextBlock {
+  my ($desc) = @_;
+  
+  # strip leading spaces on the block
+  $desc =~ s/^\s+//s;
+  # strip trailing spaces on every line
+  $desc =~ s/\s+$/\n/mg;
+  
+  return $desc;
+}
+
 
 #############################################################################
 # Function    : OutputSGML
@@ -624,9 +642,7 @@ sub OutputSGML {
 ${signals_synop}</synopsis>
 </refsect1>
 EOF
-                     $signals_desc =~ s/^\n*//g;
-                     $signals_desc =~ s/\n+$/\n/g;
-                     $signals_desc =~ s/(\s|\n)+$//ms;
+                     $signals_desc = TrimTextBlock($signals_desc);
                     $signals_desc  = <<EOF;
 <refsect1 id="$section_id.signal-details" role="signals">
 <title role="signals.title">Signal Details</title>
@@ -645,9 +661,7 @@ EOF
 ${args_synop}</synopsis>
 </refsect1>
 EOF
-                     $args_desc =~ s/^\n*//g;
-                     $args_desc =~ s/\n+$/\n/g;
-                     $args_desc =~ s/(\s|\n)+$//ms;
+                     $args_desc = TrimTextBlock($args_desc);
                     $args_desc  = <<EOF;
 <refsect1 id="$section_id.property-details" role="property_details">
 <title role="property_details.title">Property Details</title>
@@ -666,10 +680,8 @@ EOF
 ${child_args_synop}</synopsis>
 </refsect1>
 EOF
-                     $child_args_desc =~ s/^\n*//g;
-                     $child_args_desc =~ s/\n+$/\n/g;
-                     $child_args_desc =~ s/(\s|\n)+$//ms;
-                    $args_desc .= <<EOF;
+                     $child_args_desc = TrimTextBlock($child_args_desc);
+                     $args_desc .= <<EOF;
 <refsect1 id="$section_id.child-property-details" role="child_property_details">
 <title role="child_property_details.title">Child Property Details</title>
 $child_args_desc
@@ -687,9 +699,7 @@ EOF
 ${style_args_synop}</synopsis>
 </refsect1>
 EOF
-                     $style_args_desc =~ s/^\n*//g;
-                     $style_args_desc =~ s/\n+$/\n/g;
-                     $style_args_desc =~ s/(\s|\n)+$//ms;
+                     $style_args_desc = TrimTextBlock($style_args_desc);
                     $args_desc .= <<EOF;
 <refsect1 id="$section_id.style-property-details" role="style_properties_details">
 <title role="style_properties_details.title">Style Property Details</title>
@@ -698,9 +708,7 @@ $style_args_desc
 EOF
                 }
 
-                 $hierarchy =~ s/^\n*//g;
-                 $hierarchy =~ s/\n+$/\n/g;
-                 $hierarchy =~ s/(\s|\n)+$//ms;
+                 $hierarchy = TrimTextBlock($hierarchy);
                 if ($hierarchy ne "") {
                     $hierarchy = <<EOF;
 <refsect1 id="$section_id.object-hierarchy" role="object_hierarchy">
@@ -710,9 +718,7 @@ $hierarchy
 EOF
                 }
 
-                 $interfaces =~ s/^\n*//g;
-                 $interfaces =~ s/\n+$/\n/g;
-                 $interfaces =~ s/(\s|\n)+$//ms;
+                 $interfaces =~ TrimTextBlock($interfaces);
                 if ($interfaces ne "") {
                     $interfaces = <<EOF;
 <refsect1 id="$section_id.implemented-interfaces" role="impl_interfaces">
@@ -722,9 +728,7 @@ $interfaces
 EOF
                 }
 
-                 $implementations =~ s/^\n*//g;
-                 $implementations =~ s/\n+$/\n/g;
-                 $implementations =~ s/(\s|\n)+$//ms;
+                 $implementations = TrimTextBlock($implementations);
                 if ($implementations ne "") {
                     $implementations = <<EOF;
 <refsect1 id="$section_id.implementations" role="implementations">
@@ -734,9 +738,7 @@ $implementations
 EOF
                 }
 
-                 $prerequisites =~ s/^\n*//g;
-                 $prerequisites =~ s/\n+$/\n/g;
-                 $prerequisites =~ s/(\s|\n)+$//ms;
+                 $prerequisites = TrimTextBlock($prerequisites);
                 if ($prerequisites ne "") {
                     $prerequisites = <<EOF;
 <refsect1 id="$section_id.prerequisites" role="prerequisites">
@@ -746,9 +748,7 @@ $prerequisites
 EOF
                 }
 
-                 $derived =~ s/^\n*//g;
-                 $derived =~ s/\n+$/\n/g;
-                 $derived =~ s/(\s|\n)+$//ms;
+                 $derived = TrimTextBlock($derived);
                 if ($derived ne "") {
                     $derived = <<EOF;
 <refsect1 id="$section_id.derived-interfaces" role="derived_interfaces">
