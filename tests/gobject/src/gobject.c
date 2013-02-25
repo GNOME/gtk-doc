@@ -19,7 +19,7 @@
  * GObject *myobj;
  *
  * myobj = gtkdoc_object_new();
- * // do somehing
+ * // do something
  * g_object_unref (myobj);
  * ]|
  *
@@ -79,8 +79,8 @@ enum {
  * <note><para>
  *   This will only work if you have called g_type_init() before.
  * </para></note>
- * Returns: the instance or %NULL in case of an error
  *
+ * Returns: the instance or %NULL in case of an error
  * Since: 0.1
  */
 GtkdocObject *gtkdoc_object_new (void) {
@@ -100,7 +100,6 @@ GtkdocObject *gtkdoc_object_new (void) {
  * Oh, btw. setting the property directly saves us one method.
  *
  * Deprecated: Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.
- *
  * Since: 0.5
  */
 void gtkdoc_object_set_otest (GObject *self, const gchar *value) {
@@ -178,7 +177,19 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
    * GtkdocObject::dep-otest:
    * @self: myself
    *
-   * The event has been triggered.
+   * Here's an example signal handler.
+   * |[
+   * static gchar*
+   * otest_callback (GObject  *o,
+   *                 gpointer  user_data)
+   * {
+   *   gdouble      value;
+   *
+   *   value = abs (o->value);
+   *
+   *   return value;
+   * }
+   * ]|
    *
    * Deprecated: Use the #GtkdocObject::otest signal instead.
    */
