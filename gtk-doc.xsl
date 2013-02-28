@@ -38,6 +38,7 @@
   <xsl:param name="default.encoding" select="'UTF-8'"/>
   <xsl:param name="chapter.autolabel" select="0"/>
   <xsl:param name="use.id.as.filename" select="1"/>
+  <xsl:param name="generate.consistent.ids" select="1"/>
   <xsl:param name="html.ext" select="'.html'"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>

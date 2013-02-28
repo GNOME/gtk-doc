@@ -4583,6 +4583,8 @@ sub ConvertMarkDownCallback {
         $end_of_section= "$end_of_section</refsect2>";
     }
 
+    # TODO(ensonic): it would be nice to add id parameters to the refsect2 elements
+
     # Setext-style headers:
     #          Header 1
     #          ========
