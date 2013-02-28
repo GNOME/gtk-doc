@@ -22,7 +22,7 @@
     </para>
   </preface>
   
-  <part label="I">
+  <part label="I" id="part.i">
     <title>Overview</title>
     <chapter id="Overview-building">
       <title>How to build the library</title>
@@ -30,7 +30,7 @@
     </chapter>
   </part>
 
-  <reference label="II">
+  <reference label="II" id="part.ii">
     <title>API Reference</title>
     <chapter id="main-api">
       <title>Tests</title>
@@ -42,7 +42,7 @@
     </chapter>
   </reference>
 
-  <part label="III">
+  <part label="III" id="part.iii">
     <title>Appendix</title>
 
     <chapter id="object-tree">
@@ -72,7 +72,7 @@
       <xi:include href="xml/api-index-0.5.xml"><xi:fallback /></xi:include>
     </index>
   
-    <glossary>
+    <glossary id="glossary">
       <title>Glossary</title>
       <glossdiv><title>A</title>
         <glossentry>

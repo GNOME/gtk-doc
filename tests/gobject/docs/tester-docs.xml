@@ -15,7 +15,7 @@
       The latest version of this documentation can be found on-line at
       <ulink role="online-location" url="http://[SERVER]/tester/index.html">http://[SERVER]/tester/</ulink>.
     </releaseinfo>
-    <legalnotice>
+    <legalnotice id="legal">
       <para>
         This manual is published as public domain.
       </para>
@@ -27,7 +27,7 @@
     <para>
       This document is for testing purpose only.
       It is generated from Docbook-<acronym>XML</acronym>.
-      <footnote>
+      <footnote id="intro.footnote-1">
         <para>
           Most of the actual text is quite non-sense. Don't pay attention.
         </para>
@@ -35,7 +35,7 @@
     </para>
   </preface>
   
-  <part label="I">
+  <part label="I" id="part.i">
     <title>Overview</title>
     <chapter id="Overview-building">
       <title>How to build the library</title>
@@ -43,7 +43,7 @@
     </chapter>
   </part>
 
-  <reference label="II">
+  <reference label="II" id="part.ii">
     <title>API Reference</title>
     <chapter id="main-api">
       <title>Tests</title>
@@ -55,7 +55,7 @@
     </chapter>
   </reference>
 
-  <part label="III">
+  <part label="III" id="part.iii">
     <title>Appendix</title>
 
     <chapter id="object-tree">
@@ -85,7 +85,7 @@
       <xi:include href="xml/api-index-0.5.xml"><xi:fallback /></xi:include>
     </index>
   
-    <glossary>
+    <glossary id="glossary">
       <title>Glossary</title>
       <glossdiv><title>A</title>
         <glossentry>
