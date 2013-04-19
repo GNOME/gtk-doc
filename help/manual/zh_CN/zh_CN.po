@@ -1,0 +1,4241 @@
+# Chinese (China) translation for gtk-doc.
+# Copyright (C) 2011 gtk-doc's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gtk-doc package.
+# LuYanbo <767344148@qq.com>, 2011.
+# 黄世海 <rochester_h@163.com>, 2012.
+# Wylmer Wang <wantinghard@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk-doc master\n"
+"POT-Creation-Date: 2013-04-16 14:58+0000\n"
+"PO-Revision-Date: 2012-11-02 12:12+0800\n"
+"Last-Translator: Wylmer Wang <wantinghard@gmail.com>\n"
+"Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Bookmarks: 236,211,220,228,94,235,-1,-1,-1,-1\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
+msgctxt "_"
+msgid "translator-credits"
+msgstr ""
+"LuYanbo <767344148@qq.com>, 2011\n"
+"黄世海 <rochester_h@163.com>, 2012\n"
+"Wylmer Wang <wantinghard@gmail.com>, 2012"
+
+#: C/index.docbook:12(bookinfo/title)
+msgid "GTK-Doc Manual"
+msgstr "GTK-Doc 手册"
+
+#: C/index.docbook:13(bookinfo/edition)
+msgid "1.18.1"
+msgstr "1.18.1"
+
+#: C/index.docbook:14(abstract/para)
+msgid "User manual for developers with instructions of GTK-Doc usage."
+msgstr "为开发人员提供 GTK-Doc 用法说明的用户手册。"
+
+#: C/index.docbook:16(authorgroup/author)
+msgid ""
+"<firstname>Chris</firstname> <surname>Lyttle</surname> <affiliation> "
+"<address> <email>chris@wilddev.net</email> </address> </affiliation>"
+msgstr ""
+"<firstname>Chris</firstname> <surname>Lyttle</surname> <affiliation> "
+"<address> <email>chris@wilddev.net</email> </address> </affiliation>"
+
+#: C/index.docbook:25(authorgroup/author)
+msgid ""
+"<firstname>Dan</firstname> <surname>Mueth</surname> <affiliation> <address> "
+"<email>d-mueth@uchicago.edu</email> </address> </affiliation>"
+msgstr ""
+"<firstname>Dan</firstname> <surname>Mueth</surname> <affiliation> <address> "
+"<email>d-mueth@uchicago.edu</email> </address> </affiliation>"
+
+#: C/index.docbook:34(authorgroup/author)
+msgid ""
+"<firstname>Stefan</firstname> <surname>Kost</surname> <affiliation> "
+"<address> <email>ensonic@users.sf.net</email> </address> </affiliation>"
+msgstr ""
+"<firstname>Stefan</firstname> <surname>Kost</surname> <affiliation> "
+"<address> <email>ensonic@users.sf.net</email> </address> </affiliation>"
+
+#: C/index.docbook:45(publisher/publishername)
+msgid "GTK-Doc project"
+msgstr "GTK-Doc 项目"
+
+#: C/index.docbook:44(bookinfo/publisher)
+msgid ""
+"<_:publishername-1/> <address><email>gtk-doc-list@gnome.org</email></address>"
+msgstr ""
+"<_:publishername-1/> <address><email>gtk-doc-list@gnome.org</email></address>"
+
+#: C/index.docbook:48(bookinfo/copyright)
+msgid "<year>2000, 2005</year> <holder>Dan Mueth and Chris Lyttle</holder>"
+msgstr "<year>2000, 2005</year> <holder>Dan Mueth and Chris Lyttle</holder>"
+
+#: C/index.docbook:52(bookinfo/copyright)
+msgid "<year>2007-2011</year> <holder>Stefan Sauer (Kost)</holder>"
+msgstr "<year>2007-2011</year> <holder>Stefan Sauer (Kost)</holder>"
+
+#: C/index.docbook:65(legalnotice/para)
+msgid ""
+"Permission is granted to copy, distribute and/or modify this document under "
+"the terms of the <citetitle>GNU Free Documentation License</citetitle>, "
+"Version 1.1 or any later version published by the Free Software Foundation "
+"with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A "
+"copy of the license is <link linkend=\"fdl\">included</link>."
+msgstr ""
+"允许在<citetitle>GNU 自由文档认证书</citetitle>的规范下复制，发布或者／并且修"
+"改本文档，由自由软件基金会出版的1.1版或更新版本的无变更的部分，无封面文本，以"
+"及无背面文本。取得证书的制件<link linkend=\"fdl\">included</link>."
+
+#: C/index.docbook:73(legalnotice/para)
+msgid ""
+"Many of the names used by companies to distinguish their products and "
+"services are claimed as trademarks. Where those names appear in any GNOME "
+"documentation, and those trademarks are made aware to the members of the "
+"GNOME Documentation Project, the names have been printed in caps or initial "
+"caps."
+msgstr ""
+"公司使用的区别于它们的许多产品及服务的名字就称为商标. 这些名字出现在任何GNOME"
+"文档中, 而且那些商标会提示GNOME文档项目成员, 那些名字会打印在封面或初始页面"
+"中."
+
+#: C/index.docbook:83(revhistory/revision)
+msgid ""
+"<revnumber>1.18.1</revnumber> <date>20 Sep 2011</date> <authorinitials>ss</"
+"authorinitials> <revremark>development version</revremark>"
+msgstr ""
+"<revnumber>1.18.1</revnumber> <date>2011年9月20</date> <authorinitials>ss</"
+"authorinitials> <revremark>开发版本</revremark>"
+
+#: C/index.docbook:89(revhistory/revision)
+msgid ""
+"<revnumber>1.18</revnumber> <date>14 sep 2011</date> <authorinitials>ss</"
+"authorinitials> <revremark>bug fixes, speedups, markdown support</revremark>"
+msgstr ""
+"<revnumber>1.18</revnumber> <date>2011年9月14</date> <authorinitials>ss</"
+"authorinitials> <revremark>修复问题，速度优化、markdown 支持</revremark>"
+
+#: C/index.docbook:95(revhistory/revision)
+msgid ""
+"<revnumber>1.17</revnumber> <date>26 Feb 2011</date> <authorinitials>sk</"
+"authorinitials> <revremark>urgent bug fix update</revremark>"
+msgstr ""
+"<revnumber>1.17</revnumber> <date>2011年2月26</date> <authorinitials>sk</"
+"authorinitials> <revremark>紧急问题修复更新</revremark>"
+
+#: C/index.docbook:101(revhistory/revision)
+msgid ""
+"<revnumber>1.16</revnumber> <date>14 Jan 2011</date> <authorinitials>sk</"
+"authorinitials> <revremark>bugfixes, layout improvements</revremark>"
+msgstr ""
+"<revnumber>1.16</revnumber> <date>2011年1月14</date> <authorinitials>sk</"
+"authorinitials> <revremark>修复问题，布局改进</revremark>"
+
+#: C/index.docbook:107(revhistory/revision)
+msgid ""
+"<revnumber>1.15</revnumber> <date>21 May 2010</date> <authorinitials>sk</"
+"authorinitials> <revremark>bug and regression fixes</revremark>"
+msgstr ""
+"<revnumber>1.15</revnumber> <date>2010年5月21</date> <authorinitials>sk</"
+"authorinitials> <revremark>问题和退化修复</revremark>"
+
+#: C/index.docbook:113(revhistory/revision)
+msgid ""
+"<revnumber>1.14</revnumber> <date>28 March 2010</date> <authorinitials>sk</"
+"authorinitials> <revremark>bugfixes and performance improvements</revremark>"
+msgstr ""
+"<revnumber>1.14</revnumber> <date>2010年3月28</date> <authorinitials>sk</"
+"authorinitials> <revremark>问题修复和性能提高</revremark>"
+
+#: C/index.docbook:119(revhistory/revision)
+msgid ""
+"<revnumber>1.13</revnumber> <date>18 December 2009</date> "
+"<authorinitials>sk</authorinitials> <revremark>broken tarball update</"
+"revremark>"
+msgstr ""
+"<revnumber>1.13</revnumber> <date>2009年10月18</date> <authorinitials>sk</"
+"authorinitials> <revremark>损坏的档案包更新</revremark>"
+
+#: C/index.docbook:125(revhistory/revision)
+msgid ""
+"<revnumber>1.12</revnumber> <date>18 December 2009</date> "
+"<authorinitials>sk</authorinitials> <revremark>new tool features and "
+"bugfixes</revremark>"
+msgstr ""
+"<revnumber>1.12</revnumber> <date>2009年10月18</date> <authorinitials>sk</"
+"authorinitials> <revremark>新工具功能和问题修复</revremark>"
+
+#: C/index.docbook:131(revhistory/revision)
+msgid ""
+"<revnumber>1.11</revnumber> <date>16 November 2008</date> "
+"<authorinitials>mal</authorinitials> <revremark>GNOME doc-utils migration</"
+"revremark>"
+msgstr ""
+"<revnumber>1.11</revnumber> <date>2008年10月16</date> <authorinitials>mal</"
+"authorinitials> <revremark>GNOME doc-utils 迁移</revremark>"
+
+#: C/index.docbook:144(chapter/title)
+msgid "Introduction"
+msgstr "介绍"
+
+#: C/index.docbook:146(chapter/para)
+msgid ""
+"This chapter introduces GTK-Doc and gives an overview of what it is and how "
+"it is used."
+msgstr "本章介绍 GTK-Doc，并概述了它是什么以及如何使用它。"
+
+#: C/index.docbook:152(sect1/title)
+msgid "What is GTK-Doc?"
+msgstr "什么是 GTK-Doc？"
+
+#: C/index.docbook:154(sect1/para)
+msgid ""
+"GTK-Doc is used to document C code. It is typically used to document the "
+"public API of libraries, such as the GTK+ and GNOME libraries. But it can "
+"also be used to document application code."
+msgstr ""
+"GTK-Doc 用于为C代码编写文档。典型地用于编写库的公共API，如GTK+与GNOME库。不过"
+"它也可以用于书写应用程序代码文档。"
+
+#: C/index.docbook:162(sect1/title)
+msgid "How Does GTK-Doc Work?"
+msgstr "GTK Doc 是怎样工作的？"
+
+#: C/index.docbook:164(sect1/para)
+#, fuzzy
+msgid ""
+"GTK-Doc works by using documentation of functions placed inside the source "
+"files in specially-formatted comment blocks, or documentation added to the "
+"template files which GTK-Doc uses (though note that GTK-Doc will only "
+"document functions that are declared in header files; it won't produce "
+"output for static functions)."
+msgstr ""
+"GTK-Doc通过使用放置于源文件内特殊格式的注释块的函数文档工作，或者添加在GTK-"
+"Doc使用的模板文件中。"
+
+#: C/index.docbook:171(sect1/para)
+msgid ""
+"GTK-Doc consists of a number of perl scripts, each performing a different "
+"step in the process."
+msgstr "GTK-Doc由一些perl脚本组成，每个脚本完成这一过程中不同的步骤。"
+
+#: C/index.docbook:176(sect1/para)
+msgid "There are 5 main steps in the process:"
+msgstr "这个进程有五个主要步骤："
+
+#: C/index.docbook:183(listitem/para)
+#, fuzzy
+msgid ""
+"<guilabel>Writing the documentation.</guilabel> The author fills in the "
+"source files with the documentation for each function, macro, union etc. (In "
+"the past information was entered in generated template files, which is not "
+"recommended anymore)."
+msgstr ""
+"<guilabel>书写文档。</guilabel>作者在源文件中为每个函数，宏，联合体等对象书写"
+"了文档（在以往的消息里它进入到已完成的模板文件中，现已经不再介绍了）。"
+
+#: C/index.docbook:193(listitem/para)
+#, fuzzy
+msgid ""
+"<guilabel>Gathering information about the code.</guilabel> "
+"<application>gtkdoc-scan</application> scans the header files of the code "
+"looking for declarations of functions, macros, enums, structs, and unions. "
+"It creates the file <filename>&lt;module&gt;-decl-list.txt</filename> "
+"containing a list of the declarations, placing them into sections according "
+"to which header file they are in. On the first run this file is copied to "
+"<filename>&lt;module&gt;-sections.txt</filename>. The author can rearrange "
+"the sections, and the order of the declarations within them, to produce the "
+"final desired order. The second file it generates is <filename>&lt;"
+"module&gt;-decl.txt</filename>. This file contains the full declarations "
+"found by the scanner. If for some reason one would like some symbols to show "
+"up in the docs, where the full declaration cannot be found by the scanner or "
+"the declaration should appear differently, one can place entities similar to "
+"the ones in <filename>&lt;module&gt;-decl.txt</filename> into <filename>&lt;"
+"module&gt;-overrides.txt</filename>."
+msgstr ""
+"<guilabel>收集关于源代码的信息.</guilabel><application>gtkdoc-扫描</"
+"application>扫描代码的头文件寻找函数，宏，枚举，结构与联合体的声明。它创建包"
+"含一系列声明的文件：<filename>&lt;module&gt;-decl-list.txt</filename>，并按照"
+"它们所在的头文件把它们放入特定的部分中。在第一次运行时这个文件会复制到"
+"<filename>&lt;module&gt;-sections.txt</filename>中。作者可以重新安排这些部分"
+"及在它们当中的声明顺序，以便产生最后所需的顺序。它产生的第二个文件是："
+"<filename>&lt;module&gt;-decl.txt</filename>。这个文件包含了扫描器找到的全声"
+"明。如果基于某种原因你需要在文档中显示出一些符号，扫描器无法在全声明中找到或"
+"者声明会呈现出不同的形态，你可以把相似的实体<filename>&lt:module&gt;-decl."
+"txt</filename>放入<filename>&lt;module&gt;-overrides.txt</filename>中去。"
+
+#: C/index.docbook:210(listitem/para)
+#, fuzzy
+msgid ""
+"<application>gtkdoc-scangobj</application> can also be used to dynamically "
+"query a library about any GObject subclasses it exports. It saves "
+"information about each object's position in the class hierarchy and about "
+"any GObject properties and signals it provides."
+msgstr ""
+"<application>gtkdoc-scangobj</application>也可以用于动态查询关于任何它导出的"
+"GObject子类的一个库。它保存在关于每个对象在继承关系以及它所提供关于任何"
+"GObject属性与信号的位置。"
+
+#: C/index.docbook:216(listitem/para)
+#, fuzzy
+msgid ""
+"<application>gtkdoc-scanobj</application> should not be used anymore. It was "
+"needed in the past when GObject was still GtkObject inside gtk+."
+msgstr ""
+"<application>gtkdoc-scanobj</application>可能不再使用了。它在过去GObject仍就"
+"是gtk+中的GtkObject的时候是需要的。"
+
+#: C/index.docbook:223(listitem/para)
+#, fuzzy
+msgid ""
+"<guilabel>Generating the \"template\" files.</guilabel> <application>gtkdoc-"
+"mktmpl</application> creates a number of files in the <filename class="
+"\"directory\">tmpl/</filename> subdirectory, using the information gathered "
+"in the first step. (Note that this can be run repeatedly. It will try to "
+"ensure that no documentation is ever lost.)"
+msgstr ""
+"<guilabel>生成文件 \"模板\" .</guilabel><application>gtkdoc-mktmpl</"
+"application>用在第一步收集的信息，在filename class=\"directory\">tmpl/</"
+"filename>子目录中创建一定数量的文件。（注意：它能够良好地运行，它将保障没有任"
+"何文档丢失。）"
+
+#: C/index.docbook:232(note/para)
+#, fuzzy
+msgid ""
+"Since GTK-Doc 1.9 the templates can be avoided. We encourage people to keep "
+"documentation in the code. <application>gtkdocize</application> supports now "
+"a <option>--flavour no-tmpl</option> option that chooses a makefile that "
+"skips tmpl usage totally. If you have never changed file in tmpl by hand, "
+"please remove the directory (e.g. from version control system)."
+msgstr ""
+"由于GTK-Doc 1.9模板可以避免使用，我们鼓励人们在代码中保留文档。"
+"<application>gtkdocize</application>支持<option>--flavour no-tmpl</option>这"
+"个选项，以跳过tpml目录的使用来选择一个makefile文件。如果你从未手动修改过tpml"
+"里的文件，请删除这个目录（比如：在版本控制系统中做这件事）。"
+
+#: C/index.docbook:244(listitem/para)
+#, fuzzy
+msgid ""
+"<guilabel>Generating the SGML/XML and HTML/PDF.</guilabel> "
+"<application>gtkdoc-mkdb</application> turns the template files into SGML or "
+"XML files in the <filename class=\"directory\">sgml/</filename> or <filename "
+"class=\"directory\">xml/</filename> subdirectory. If the source code "
+"contains documentation on functions, using the special comment blocks, it "
+"gets merged in here. If there are no tmpl files used it only reads docs from "
+"sources and introspection data. We recommend to use Docbook XML."
+msgstr ""
+"<guilabel>生成  SGML/XML and HTML/PDF文件.</guilabel><application>gtkdoc-"
+"mkdb</application>把<filename class=\"directory\">sgml/</filename> or "
+"<filename class=\"directory\">xml/</filename>子目录中的模板文件转换为 SGML "
+"或 XML格式的文件。如果源代码中包含了用特殊的注释块书写的函数文档，它会在此合"
+"并。如果没有使用tmpl文件，它只从数据源与自检数据中读出文档。我们建议您使用"
+"Docbook XML。"
+
+#: C/index.docbook:255(listitem/para)
+#, fuzzy
+msgid ""
+"<application>gtkdoc-mkhtml</application> turns the SGML/XML files into HTML "
+"files in the <filename class=\"directory\">html/</filename> subdirectory. "
+"Likewise <application>gtkdoc-mkpdf</application> turns the SGML/XML files "
+"into a PDF document called <filename>&lt;package&gt;.pdf</filename>."
+msgstr ""
+"<application>gtkdoc-mkhtml</application> 把<filename class=\"directory"
+"\">html/</filename> 子目录中的SGML/XML文件转换为HTML文件。就如同"
+"application>gtkdoc-mkpdf</application>把SGML/XML文件转换为称为<filename>&lt;"
+"package&gt;.pdf</filename>的PDF文档一样。"
+
+#: C/index.docbook:261(listitem/para)
+#, fuzzy
+msgid ""
+"Files in <filename class=\"directory\">sgml/</filename> or <filename class="
+"\"directory\">xml/</filename> and <filename class=\"directory\">html/</"
+"filename> directories are always overwritten. One should never edit them "
+"directly."
+msgstr ""
+"在<filename class=\"directory\">sgml/</filename>或者 <filename class="
+"\"directory\">xml/</filename> 与 <filename class=\"directory\">html/</"
+"filename>目录中的文件常常被覆盖。任何人都不能直接编辑它们。"
+
+#: C/index.docbook:269(listitem/para)
+#, fuzzy
+msgid ""
+"<guilabel>Fixing up cross-references between documents.</guilabel> After "
+"installing the HTML files, <application>gtkdoc-fixxref</application> can be "
+"run to fix up any cross-references between separate documents. For example, "
+"the GTK+ documentation contains many cross-references to types documented in "
+"the GLib manual. When creating the source tarball for distribution, "
+"<application>gtkdoc-rebase</application> turns all external links into web-"
+"links. When installing distributed (pregenerated) docs the same application "
+"will try to turn links back to local links (where those docs are installed)."
+msgstr ""
+"<guilabel>Fixing up cross-references between documents.</guilabel> ，在安装"
+"HTML文件时，<application>gtkdoc-fixxref</application>能够用于修复任何独立文档"
+"之间的交叉链接。例如：GTK+文档包含了许多交叉链接来显示GLib手册中的文档。在为"
+"发行软件创建tarball源时，<application>gtkdoc-rebase</application>会把所有的外"
+"部链接转换为网页链接。在安装发行文档（事先生成的）时，应用程序会试着把这些链"
+"接换回到本地链接（在那些文档安装的地方）。"
+
+#: C/index.docbook:287(sect1/title)
+msgid "Getting GTK-Doc"
+msgstr "获取 GTK-Doc"
+
+#: C/index.docbook:290(sect2/title)
+msgid "Requirements"
+msgstr "要求"
+
+#: C/index.docbook:291(sect2/para)
+msgid "<guilabel>Perl v5</guilabel> - the main scripts are in Perl."
+msgstr "<guilabel>Perl v5</guilabel>- 主脚本是Perl格式。"
+
+#: C/index.docbook:294(sect2/para)
+msgid ""
+"<guilabel>DocBook DTD v3.0</guilabel> - This is the DocBook SGML DTD. <ulink "
+"url=\"http://www.ora.com/davenport\" type=\"http\">http://www.ora.com/"
+"davenport</ulink>"
+msgstr ""
+"<guilabel>DocBook DTD v3.0</guilabel> - 这是DocBook SGML DTD的链接. <ulink "
+"url=\"http://www.ora.com/davenport\" type=\"http\">http://www.ora.com/"
+"davenport</ulink>"
+
+#: C/index.docbook:298(sect2/para)
+msgid ""
+"<guilabel>Jade v1.1</guilabel> - This is a DSSSL processor for converting "
+"SGML to various formats. <ulink url=\"http://www.jclark.com/jade\" type="
+"\"http\">http://www.jclark.com/jade</ulink>"
+msgstr ""
+"<guilabel>Jade v1.1</guilabel> -这是一个DSSSL处理器，用来把SGML转换为各种格"
+"式。<ulink url=\"http://www.jclark.com/jade\" type=\"http\">http://www."
+"jclark.com/jade</ulink>"
+
+#: C/index.docbook:302(sect2/para)
+#, fuzzy
+msgid ""
+"<guilabel>Modular DocBook Stylesheets</guilabel> This is the DSSSL code to "
+"convert DocBook to HTML (and a few other formats). It's used together with "
+"jade. I've customized the DSSSL code slightly, in gtk-doc.dsl, to colour the "
+"program code listings/declarations, and to support global cross-reference "
+"indices in the generated HTML. <ulink url=\"http://nwalsh.com/docbook/dsssl"
+"\" type=\"http\">http://nwalsh.com/docbook/dsssl</ulink>"
+msgstr ""
+"<guilabel>Modular DocBook Stylesheets</guilabel> 这是把DocBook转换为HTML（和"
+"一些其它格式）格式的DSSSL代码。它与jade共同使用。我稍微地修改了DSSSL代码，在 "
+"gtk-doc.dsl中，用于给程序代码的列表／声明，并且支持在已生成的HTML文档中的全局"
+"链接。<ulink url=\"http://nwalsh.com/docbook/dsssl\" type=\"http\">http://"
+"nwalsh.com/docbook/dsssl</ulink>。"
+
+#: C/index.docbook:311(sect2/para)
+#, fuzzy
+msgid ""
+"<guilabel>docbook-to-man</guilabel> - if you want to create man pages from "
+"the DocBook. I've customized the 'translation spec' slightly, to capitalise "
+"section headings and add the 'GTK Library' title at the top of the pages and "
+"the revision date at the bottom. There is a link to this on <ulink url="
+"\"http://www.ora.com/davenport\" type=\"http\">http://www.ora.com/davenport</"
+"ulink> NOTE: This does not work yet."
+msgstr ""
+"<guilabel>docbook-to-man</guilabel>－如果你想用DocBook创建用户手册。我已经稍"
+"微地修改了'translation spec'，以便描述文件头部和第页顶部的 'GTK Library'标题"
+"与底部的修订时间。这里有一个到它的链接:<ulink url=\"http://www.ora.com/"
+"davenport\" type=\"http\">http://www.ora.com/davenport</ulink>注意：它可能已"
+"经无效了。"
+
+#: C/index.docbook:322(sect2/title)
+msgid "Installation"
+msgstr "安装"
+
+#: C/index.docbook:323(sect2/para)
+msgid ""
+"There is no standard place where the DocBook Modular Stylesheets are "
+"installed."
+msgstr "DocBook Modular Stylesheets没有标准的安装位置。"
+
+#: C/index.docbook:326(sect2/para)
+msgid "GTK-Doc's configure script searches these 3 directories automatically:"
+msgstr "GTK-Doc 的配置脚本会自动地查找这三个目录："
+
+#: C/index.docbook:329(sect2/para)
+msgid ""
+"<filename> /usr/lib/sgml/stylesheets/nwalsh-modular </filename> (used by "
+"RedHat)"
+msgstr ""
+"<filename> /usr/lib/sgml/stylesheets/nwalsh-modular </filename> (在 RedHat 中"
+"使用)"
+
+#: C/index.docbook:332(sect2/para)
+msgid ""
+"<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (used by Debian)"
+msgstr ""
+"<filename> /usr/lib/dsssl/stylesheets/docbook </filename> (在 Debian 中使用)"
+
+#: C/index.docbook:335(sect2/para)
+msgid "<filename> /usr/share/sgml/docbkdsl </filename> (used by SuSE)"
+msgstr "<filename> /usr/share/sgml/docbkdsl </filename> (在 SuSE 中使用)"
+
+#: C/index.docbook:338(sect2/para)
+msgid ""
+"If you have the stylesheets installed somewhere else, you need to configure "
+"GTK-Doc using the option: <command> --with-dsssl-dir=&lt;"
+"PATH_TO_TOPLEVEL_STYLESHEETS_DIR&gt; </command>"
+msgstr ""
+"如果把样式表安装在其它地方，您必须用这个选项来配置GTK-Doc：<command> --with-"
+"dsssl-dir=&lt;PATH_TO_TOPLEVEL_STYLESHEETS_DIR&gt; </command>。"
+
+#: C/index.docbook:362(sect1/title)
+msgid "About GTK-Doc"
+msgstr "关于 GTK-Doc"
+
+#: C/index.docbook:364(sect1/para) C/index.docbook:378(sect1/para)
+#, fuzzy
+msgid "(FIXME)"
+msgstr "(FIXME)"
+
+#: C/index.docbook:368(sect1/para)
+#, fuzzy
+msgid ""
+"(History, authors, web pages, license, future plans, comparison with other "
+"similar systems.)"
+msgstr "(历史, 作者, 网页, 认证, 未来计划, 与其它相似系统的比较.)"
+
+#: C/index.docbook:376(sect1/title)
+msgid "About this Manual"
+msgstr "关于此手册"
+
+#: C/index.docbook:382(sect1/para)
+msgid "(who it is meant for, where you can get it, license)"
+msgstr "(它意味着什么，你可以从哪里获得它, 许可证)"
+
+#: C/index.docbook:391(chapter/title)
+msgid "Setting up your project"
+msgstr "设置您的项目"
+
+#: C/index.docbook:393(chapter/para)
+#, fuzzy
+msgid ""
+"The next sections describe what steps to perform to integrate GTK-Doc into "
+"your project. Theses sections assume we work on a project called 'meep'. "
+"This project contains a library called 'libmeep' and an end-user app called "
+"'meeper'. We also assume you will be using autoconf and automake. In "
+"addition section <link linkend=\"plain_makefiles\">plain makefiles or other "
+"build systems</link> will describe the basics needed to work in a different "
+"build setup."
+msgstr ""
+"下面这些部分描述了要在你的项目中实现完整的GTK-Doc应当经历哪些步骤。这些部分假"
+"定我们在做一个名为'meep'的项目。该项目包含了一个叫做 'libmeep' 的库和一个称"
+"为'meeper'的终端用户应用程序。我们同样也假定你使用autoconf与automake。在附加"
+"的部分<link linkend=\"plain_makefiles\">plain makefiles or other build "
+"systems</link> 将描述构建一个不同的项目所需的基本的工作."
+
+#: C/index.docbook:404(sect1/title)
+msgid "Setting up a skeleton documentation"
+msgstr "设置一个框架文档"
+
+#: C/index.docbook:406(sect1/para)
+#, fuzzy
+msgid ""
+"Under your top-level project directory create folders called docs/reference "
+"(this way you can also have docs/help for end-user documentation). It is "
+"recommended to create another subdirectory with the name of the doc-package. "
+"For packages with just one library this step is not necessary."
+msgstr ""
+"在你的项目的顶级目录里创建一些名字叫做docs/reference的文件夹（用这种方法也可"
+"以为终端用户建立docs/help文件夹）。建议你以文件包的名字创建另一个子目录。仅一"
+"个库对应多个包，这一步骤是没有必要的。"
+
+#: C/index.docbook:415(example/title)
+msgid "Example directory structure"
+msgstr "范例目录结构"
+
+#: C/index.docbook:416(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"meep/\n"
+"  docs/\n"
+"    reference/\n"
+"      libmeep/\n"
+"      meeper/\n"
+"  src/\n"
+"    libmeep/\n"
+"    meeper/\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"meep/\n"
+"  docs/\n"
+"    reference/\n"
+"      libmeep/\n"
+"      meeper/\n"
+"  src/\n"
+"    libmeep/\n"
+"    meeper/\n"
+"\n"
+"          "
+
+#: C/index.docbook:413(sect1/para)
+msgid "This can then look as shown below: <_:example-1/>"
+msgstr "目录结构将会如下所示：<_:example-1/>"
+
+#: C/index.docbook:433(sect1/title) C/index.docbook:440(example/title)
+msgid "Integration with autoconf"
+msgstr "与autoconf集成"
+
+#: C/index.docbook:435(sect1/para)
+msgid ""
+"Very easy! Just add one line to your <filename>configure.ac</filename> "
+"script."
+msgstr ""
+"非常容易！只需在您的 <filename>configure.ac</filename> 脚本中添加一行。"
+
+#: C/index.docbook:441(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"# check for gtk-doc\n"
+"GTK_DOC_CHECK([1.14],[--flavour no-tmpl])\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"# 检查 gtk-doc\n"
+"GTK_DOC_CHECK([1.14],[--flavour no-tmpl])\n"
+"\n"
+"          "
+
+#: C/index.docbook:455(example/title)
+msgid "Keep gtk-doc optional"
+msgstr "让gtk-doc为可选"
+
+#: C/index.docbook:456(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"# check for gtk-doc\n"
+"m4_ifdef([GTK_DOC_CHECK], [\n"
+"GTK_DOC_CHECK([1.14],[--flavour no-tmpl])\n"
+"],[\n"
+"AM_CONDITIONAL([ENABLE_GTK_DOC], false)\n"
+"])\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"# 检查 gtk-doc\n"
+"m4_ifdef([GTK_DOC_CHECK], [\n"
+"GTK_DOC_CHECK([1.14],[--flavour no-tmpl])\n"
+"],[\n"
+"AM_CONDITIONAL([ENABLE_GTK_DOC], false)\n"
+"])\n"
+"\n"
+"          "
+
+#: C/index.docbook:450(sect1/para)
+#, fuzzy
+msgid ""
+"This will require all developers to have gtk-doc installed. If it is okay "
+"for your project to have optional api-doc build setup, you can solve this as "
+"below. Keep it as is, as gtkdocize is looking for <function>GTK_DOC_CHECK</"
+"function> at the start of a line. <_:example-1/>"
+msgstr ""
+"这将要求所有的开发人员都安装了gtk-doc。如果对于你的项目拥有可选的api-doc构建"
+"是可行的，你可以像下面一样解决问题。让它保持正确，就像gtkdocize在一个行的起始"
+"寻找<function>GTK_DOC_CHECK</function>一样。 <placeholder-1/>"
+
+#: C/index.docbook:469(sect1/para)
+#, fuzzy
+msgid ""
+"The first argument is used to check for the gtkdocversion at configure time. "
+"The 2nd, optional argument is used by <application>gtkdocize</application>. "
+"The <symbol>GTK_DOC_CHECK</symbol> macro also adds several configure "
+"switches:"
+msgstr ""
+"第一个参数用来在配置时检查gtkdoc的版本。第二个可选参数由"
+"<application>gtkdocize</application>使用。<symbol>GTK_DOC_CHECK</symbol>宏也"
+"会加入几个配置开关。"
+
+#: C/index.docbook:475(listitem/para)
+msgid "--with-html-dir=PATH : path to installed docs"
+msgstr "--with-html-dir=PATH : 安装文档的路径"
+
+#: C/index.docbook:476(listitem/para)
+msgid "--enable-gtk-doc : use gtk-doc to build documentation [default=no]"
+msgstr "--enable-gtk-doc : 用gtk-doc构建文档［默认值：no］"
+
+#: C/index.docbook:477(listitem/para)
+msgid ""
+"--enable-gtk-doc-html : build documentation in html format [default=yes]"
+msgstr "--enable-gtk-doc-html :用html格式构建文档［默认值：yes］"
+
+#: C/index.docbook:478(listitem/para)
+msgid "--enable-gtk-doc-pdf : build documentation in pdf format [default=no]"
+msgstr "--enable-gtk-doc-pdf : 以PDF格式构建文档［默认值：no］"
+
+#: C/index.docbook:482(important/para)
+msgid ""
+"GTK-Doc is disabled by default! Remember to pass the option <option>'--"
+"enable-gtk-doc'</option> to the next <filename>configure</filename> run. "
+"Otherwise pregenerated documentation is installed (which makes sense for "
+"users but not for developers)."
+msgstr ""
+"GTK-Doc在默认情况下是关闭的！请记得给文本<filename>configure</filename>运作时"
+"传递<option>'--enable-gtk-doc'</option>选项。否则，将会安装预先生成的文档（对"
+"用户有意义但对开发人员没用处）。"
+
+#: C/index.docbook:490(sect1/para)
+msgid ""
+"Furthermore it is recommended that you have the following line inside you "
+"<filename>configure.ac</filename> script. This allows "
+"<application>gtkdocize</application> to automatically copy the macro "
+"definition for <function>GTK_DOC_CHECK</function> to your project."
+msgstr ""
+"而且建议你在<filename>configure.ac</filename>脚本里拥有这样一行。它允许"
+"<application>gtkdocize</application>将<function>GTK_DOC_CHECK</function>的宏"
+"定义复制到您的项目中去。"
+
+#: C/index.docbook:498(example/title)
+msgid "Preparation for gtkdocize"
+msgstr "准备gtkdocize"
+
+#: C/index.docbook:499(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"AC_CONFIG_MACRO_DIR(m4)\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"AC_CONFIG_MACRO_DIR(m4)\n"
+"\n"
+"          "
+
+#: C/index.docbook:509(sect1/title)
+msgid "Integration with automake"
+msgstr "与automake集成"
+
+#: C/index.docbook:511(sect1/para)
+#, fuzzy
+msgid ""
+"First copy the <filename>Makefile.am</filename> from the examples "
+"subdirectory of the gtkdoc-sources to your project's API documentation "
+"directory ( <filename class=\"directory\">./docs/reference/&lt;package&gt;</"
+"filename>). If you have multiple doc-packages repeat this for each one."
+msgstr ""
+"首先从gtkdoc-sources的示例子目录及你项目的 API文档目录中复制"
+"<filename>Makefile.am</filename> ( <filename class=\"directory\">./docs/"
+"reference/&lt;package&gt;</filename>).如果你的每个目录都有多份doc-packages复"
+"件的话。"
+
+#: C/index.docbook:518(sect1/para)
+#, fuzzy
+msgid ""
+"The next step is to edit the settings inside the <filename>Makefile.am</"
+"filename>. All the settings have a comment above that describes their "
+"purpose. Most settings are extra flags passed to the respective tools. Every "
+"tool has a variable of the form <option>&lt;TOOLNAME&gt;_OPTIONS</option>. "
+"All the tools support <option>--help</option> to list the supported "
+"parameters."
+msgstr ""
+"下一步是编辑<filename>Makefile.am</filename>内部的设置了。所有的设置上面都有"
+"用于描述其目的的注释。多数设置是传递给各个工具的额外标志。第各工具有各种各样"
+"的表格<option>&lt;TOOLNAME&gt;_OPTIONS</option>.所有的工具都支持<option>--"
+"help</option>选项以列出它支持的参数。"
+
+#: C/index.docbook:529(sect1/para)
+#, fuzzy
+msgid ""
+"You may also want to enable GTK-Doc for the distcheck make target. Just add "
+"the one line shown in the next example to your top-level <filename>Makefile."
+"am</filename>:"
+msgstr ""
+"你可能也需要打开GTK-Doc为distcheck制造目标。只要加入一行像下个例子展示的，你"
+"的顶级<filename>Makefile.am</filename>:"
+
+#: C/index.docbook:536(example/title)
+msgid "Enable GTK-Doc during make distcheck"
+msgstr "在make distcheck过程中启用GTK-Doc"
+
+#: C/index.docbook:537(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc\n"
+"\n"
+"          "
+
+#: C/index.docbook:548(sect1/title)
+msgid "Integration with autogen"
+msgstr "与autogen集成"
+
+#: C/index.docbook:550(sect1/para)
+#, fuzzy
+msgid ""
+"Most projects will have an <filename>autogen.sh</filename> script to setup "
+"the build infrastructure after a checkout from version control system (such "
+"as cvs/svn/git). GTK-Doc comes with a tool called <application>gtkdocize</"
+"application> which can be used in such a script. It should be run before "
+"autoheader, automake or autoconf."
+msgstr ""
+"在经过版本控制系统(比如 cvs/svn/git)的检查之后，多数项目会有一个"
+"<filename>autogen.sh</filename>脚本来设置构建基础结构。GTK-Doc便带着一个名叫"
+"<application>gtkdocize</application>的可以用在这样一个脚本中的工具出炉了。"
+
+#: C/index.docbook:559(example/title)
+msgid "Running gtkdocize from autogen.sh"
+msgstr "从autogen.sh中运行gtkdocize"
+
+#: C/index.docbook:560(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"gtkdocize || exit 1\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"gtkdocize || exit 1\n"
+"\n"
+"          "
+
+#: C/index.docbook:568(sect1/para)
+#, fuzzy
+msgid ""
+"When running <application>gtkdocize</application> it copies <filename>gtk-"
+"doc.make</filename> to your project root (or any directory specified by the "
+"<option>--docdir</option> option). It also checks you configure script for "
+"the <function>GTK_DOC_CHECK</function> invocation. This macro can be used to "
+"pass extra parameters to <application>gtkdocize</application>."
+msgstr ""
+"当<application>gtkdocize</application> 运行时它复制文件<filename>gtk-doc."
+"make</filename>到你的项目的根目录(或者由选项<option>--docdir</option>指定的任"
+"何目录)。它也为<function>GTK_DOC_CHECK</function> 调用器检查你的配置脚本。这"
+"个宏可以用于向<application>gtkdocize</application>传递参数。"
+
+#: C/index.docbook:577(sect1/para)
+#, fuzzy
+msgid ""
+"Historically GTK-Doc was generating template files where developers entered "
+"the docs. This turned out to be not so good (e.g. the need for having "
+"generated files under version control). Since GTK-Doc 1.9 the tools can get "
+"all the information from source comments and thus the templates can be "
+"avoided. We encourage people to keep documentation in the code. "
+"<application>gtkdocize</application> supports now a <option>--flavour no-"
+"tmpl</option> option that chooses a makefile that skips tmpl usage totally. "
+"Besides adding the option directly to the command invocation, they can be "
+"added also to an environment variable called <symbol>GTKDOCIZE_FLAGS</"
+"symbol> or set as a 2nd parameter in <symbol>GTK_DOC_CHECK</symbol> macro in "
+"the configure script. If you have never changed file in tmpl by hand and "
+"migrating from older gtkdoc versions, please remove the directory (e.g. from "
+"version control system)."
+msgstr ""
+"历史上，GTK-Doc在开发人员进入文档时生成模板文件。这样的结果是不是那么好的（比"
+"如：在版本控制下生成文件的需求）。由于GTK-Doc 1.9 工具能从源代码中获得所有的"
+"信息从而可以获得模板。我们鼓励人们在代码中保留文档。<application>gtkdocize</"
+"application> 支持现在的一个<option>--flavour no-tmpl</option>选项用以选择一个"
+"makefile来完整地跳过tmpl的使用。除了给命令调用直接加入此选项之外，它们也能添"
+"加到一个名为<symbol>GTKDOCIZE_FLAGS</symbol>的环境变量中。或者在配置脚本中作"
+"为<symbol>GTK_DOC_CHECK</symbol>宏的第二个参数。如果你从未手工修改过tmpl目录"
+"里的文件以及从旧版本的gtkdoc中迁移过文件，请删除这个目录（比如从版本控制系"
+"统）。"
+
+#: C/index.docbook:594(sect1/title) C/index.docbook:611(example/title)
+msgid "Running the doc build"
+msgstr "运行文档构建"
+
+#: C/index.docbook:596(sect1/para)
+#, fuzzy
+msgid ""
+"After the previous steps it's time to run the build. First we need to rerun "
+"<filename>autogen.sh</filename>. If this script runs configure for you, then "
+"give it the <option>--enable-gtk-doc</option> option. Otherwise manually run "
+"<filename>configure</filename> with this option afterwards."
+msgstr ""
+"在完成前面的几步之后是运行构建的时间了。首先我们得重新运行<filename>autogen."
+"sh</filename>.如果这个脚本为你运行了configure，那么给它一个<option>--enable-"
+"gtk-doc</option>选项。不然用这个选项手动运行<filename>configure</filename>紧"
+"随其后。 "
+
+#: C/index.docbook:603(sect1/para)
+#, fuzzy
+msgid ""
+"The first make run generates several additional files in the doc-"
+"directories. The important ones are: <filename>&lt;package&gt;.types</"
+"filename>, <filename>&lt;package&gt;-docs.xml</filename> (in the past ."
+"sgml), <filename>&lt;package&gt;-sections.txt</filename>."
+msgstr ""
+"第一次运行make时在文档目录里生成几个额外的文件。其中几个重要的文件是："
+"<filename>&lt;package&gt;.types</filename>, <filename>&lt;package&gt;-docs."
+"xml</filename> (in the past .sgml), <filename>&lt;package&gt;-sections.txt</"
+"filename>."
+
+#: C/index.docbook:612(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"./autogen.sh --enable-gtk-doc\n"
+"make\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"./autogen.sh --enable-gtk-doc\n"
+"make\n"
+"\n"
+"          "
+
+#: C/index.docbook:620(sect1/para)
+#, fuzzy
+msgid ""
+"Now you can point your browser to <filename>docs/reference/&lt;package&gt;/"
+"index.html</filename>. Yes, it's a bit disappointing still. But hang-on, "
+"during the next chapter we tell you how to fill the pages with life."
+msgstr ""
+"现在你可以用你的浏览器指向<filename>docs/reference/&lt;package&gt;/index."
+"html</filename>了.是的，它仍有一点小小遗憾。不过请你坚持住，在下一章里我们会"
+"告诉你怎样用文件来填充页面。 "
+
+#: C/index.docbook:628(sect1/title)
+msgid "Integration with version control systems"
+msgstr "与版本控制系统集成"
+
+#: C/index.docbook:630(sect1/para)
+#, fuzzy
+msgid ""
+"As a rule of the thumb, it's those files you edit, that should go under "
+"version control. For typical projects it's these files: <filename>&lt;"
+"package&gt;.types</filename>, <filename>&lt;package&gt;-docs.xml</filename> "
+"(in the past .sgml), <filename>&lt;package&gt;-sections.txt</filename>, "
+"<filename>Makefile.am</filename>"
+msgstr ""
+"作为首要的规则，你编辑的文件都必须进行版本控制。对于典型的项目它是这些文件："
+"<filename>&lt;package&gt;.types</filename>, <filename>&lt;package&gt;-docs.."
+"xml</filename> (in the past .sgml), <filename>&lt;package&gt;-sections.txt</"
+"filename>, <filename>Makefile.am</filename>"
+
+#: C/index.docbook:641(sect1/title)
+msgid "Integration with plain makefiles or other build systems"
+msgstr "与普通makefile或其它构建系统整合"
+
+#: C/index.docbook:643(sect1/para)
+#, fuzzy
+msgid ""
+"In the case one does not want to use automake and therefore <filename>gtk-"
+"doc.mak</filename> one will need to call the gtkdoc tools in the right order "
+"in own makefiles (or other build tools)."
+msgstr ""
+"在本例中某人不想用automake，因此<filename>gtk-doc.mak</filename>就必须在自己"
+"的makefiles（或其它构建工具）里用正确的顺序调用gtkdoc工具里面。"
+
+#: C/index.docbook:650(example/title)
+msgid "Documentation build steps"
+msgstr "文档构建步骤"
+
+#: C/index.docbook:651(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"DOC_MODULE=meep\n"
+"// sources have changed\n"
+"gtkdoc-scan --module=$(DOC_MODULE) --source-dir=...\n"
+"gtkdoc-scangobj --module=$(DOC_MODULE)\n"
+"gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml\n"
+"// xml files have changed\n"
+"mkdir html\n"
+"cd html &amp;&amp; gtkdoc-mkhtml $(DOC_MODULE) ../meep-docs.xml\n"
+"gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html\n"
+"\n"
+"          "
+msgstr ""
+
+#: C/index.docbook:667(sect1/para)
+msgid ""
+"One will need to look at the <filename>Makefile.am</filename> and "
+"<filename>gtk-doc.mak</filename> to pick the extra options needed."
+msgstr ""
+"您必须查阅<filename>Makefile.am</filename> 和 <filename>gtk-doc.mak</"
+"filename>以获取所须的额外选项。"
+
+#: C/index.docbook:676(chapter/title)
+msgid "Documenting the code"
+msgstr "编写代码文档"
+
+#: C/index.docbook:678(chapter/para)
+#, fuzzy
+msgid ""
+"GTK-Doc uses source code comment with a special syntax for code "
+"documentation. Further it retrieves information about your project structure "
+"from other sources. During the next section you will find all information "
+"about the syntax of the comments."
+msgstr ""
+"GTK－Doc用一种带有特殊语法的源代码注释来编写代码文档。而且它会从其它代码中收"
+"集有关你的项目结构的信息。在下一章节里你将找到有关其注释语法的全部信息。"
+
+#: C/index.docbook:686(note/title)
+msgid "Documentation placement"
+msgstr "文档位置"
+
+#: C/index.docbook:687(note/para)
+msgid ""
+"In the past most documentation had to be filled into files residing inside "
+"the <filename>tmpl</filename> directory. This has the disadvantages that the "
+"information is often not updated and also that the file tend to cause "
+"conflicts with version control systems."
+msgstr ""
+"在过去，多数文档不得不写入驻留在<filename>tmpl</filename>目录的文件中。这样会"
+"出现一些糟糕的情况：其信息常常没有更新，而且文件也倾向于与版本控制系统发生冲"
+"突。"
+
+#: C/index.docbook:693(note/para)
+msgid ""
+"The avoid the aforementioned problems we suggest putting the documentation "
+"inside the sources. This manual will only describe this way of documenting "
+"code."
+msgstr ""
+"为避免上述的问题，我们建议把注释文档放入源代码中去。本手册仅描述此种编写代码"
+"文档的方法。"
+
+#: C/index.docbook:704(example/title) C/index.docbook:723(example/title)
+msgid "GTK-Doc comment block"
+msgstr "GTK-Doc 注释块"
+
+#: C/index.docbook:705(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"#ifndef __GTK_DOC_IGNORE__\n"
+"/* unparseable code here */\n"
+"#endif\n"
+"\n"
+"        "
+msgstr ""
+"\n"
+"\n"
+"#ifndef __GTK_DOC_IGNORE__\n"
+"/* 这里放置无法解析的代码 */\n"
+"#endif\n"
+"\n"
+"        "
+
+#: C/index.docbook:700(chapter/para)
+#, fuzzy
+msgid ""
+"The scanner can handle the majority of C headers fine. In the case of "
+"receiving warnings from the scanner that look like a special case, one can "
+"hint GTK-Doc to skip over them. <_:example-1/>"
+msgstr ""
+"代码扫描程序能够很好地处理主要的C语言头文件。接收扫描程序发出的警告的过程看起"
+"来像个特殊案例，你可以示意GTK-Doc忽略它们。<placeholder-1/>"
+
+#: C/index.docbook:718(sect1/title)
+msgid "Documentation comments"
+msgstr "文档注释"
+
+#: C/index.docbook:724(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"/**\n"
+" * identifier:\n"
+" * documentation ...\n"
+" */\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * identifier:\n"
+" * documentation ...\n"
+" */\n"
+"\n"
+"          "
+
+#: C/index.docbook:720(sect1/para)
+#, fuzzy
+msgid ""
+"A multiline comment that starts with an additional '*' marks a documentation "
+"block that will be processed by the GTK-Doc tools. <_:example-1/>"
+msgstr ""
+"一个以'*'号起始的多行注释标注了一个将由GTK-Doc工具处理的文档块。"
+"<placeholder-1/>"
+
+#: C/index.docbook:735(sect1/para)
+#, fuzzy
+msgid ""
+"The 'identifier' is one line with the name of the item the comment is "
+"related to. The syntax differs a little depending on the item. (TODO add "
+"table showing identifiers)"
+msgstr ""
+"'identifier'是指示注释相关项的名字的行。其语法因其项的不同而而有一点差异。"
+"(TODO add table showing identifiers)"
+
+#: C/index.docbook:741(sect1/para)
+#, fuzzy
+msgid ""
+"The 'documentation' block is also different for each symbol type. Symbol "
+"types that get parameters such as functions or macros have the parameter "
+"description first followed by a blank line (just a '*'). Afterwards follows "
+"the detailed description. All lines (outside program listings and CDATA "
+"sections) just containing a ' *' (blank-asterisk) are converted to paragraph "
+"breaks. If you don't want a paragraph break, change that into ' * ' (blank-"
+"asterisk-blank-blank). This is useful in preformatted text (code listings)."
+msgstr ""
+"'documentation'块也会因标识符类型而不同。标识符类型取得参数如函数与宏一个空行"
+"之后有其参数的描述（只是一个'*'号）。然后紧跟着它的细节描述。所有的行"
+"( program- 列 与 CDATA 段除外)只包括一个 ' *' (空格-星号)会转化为段落分割符。"
+"如果你不想要段落分割符，可以把它改为' * '（空格－星号－空格－空格）。"
+
+#: C/index.docbook:758(listitem/para)
+#, fuzzy
+msgid ""
+"What it is: The name for a class or function can sometimes be misleading for "
+"people coming from a different background."
+msgstr "这就是：有时候来自不同文明的人会误解类或函数。"
+
+#: C/index.docbook:764(listitem/para)
+#, fuzzy
+msgid ""
+"What it does: Tell about common uses. Put it in relation with the other API."
+msgstr "它做的是：告知普通的用法。把它与其它的API发生联系。"
+
+#: C/index.docbook:754(tip/para)
+#, fuzzy
+msgid "When documenting code, describe two aspects: <_:itemizedlist-1/>"
+msgstr "在编写代码文档时，描述两种方向：<placeholder-1/>"
+
+#: C/index.docbook:779(listitem/para)
+msgid "Use function() to refer to functions or macros which take arguments."
+msgstr "用function()来指示带有参数的函数或宏。"
+
+#: C/index.docbook:784(listitem/para)
+msgid ""
+"Use @param to refer to parameters. Also use this when referring to "
+"parameters of other functions, related to the one being described."
+msgstr "用@param指示参数。同样也可以指示其它函数的参数，与所描述的对象有关。"
+
+#: C/index.docbook:790(listitem/para)
+msgid "Use %constant to refer to a constant, e.g. %G_TRAVERSE_LEAFS."
+msgstr "用%constant指示常量，比如：%G_TRAVERSE_LEAFS。"
+
+#: C/index.docbook:795(listitem/para)
+msgid ""
+"Use #symbol to refer to other types of symbol, e.g. structs and enums and "
+"macros which don't take arguments."
+msgstr "用#symbol指示其它符号类型，比如：结构，枚举与不带参数的宏。"
+
+#: C/index.docbook:801(listitem/para)
+#, fuzzy
+#| msgid "Use #Object::signal to refer to a GObject signal"
+msgid "Use #Object::signal to refer to a GObject signal."
+msgstr "用#Object::signal指示一个GObject信号"
+
+#: C/index.docbook:806(listitem/para)
+#, fuzzy
+#| msgid "Use #Object:property to refer to a GObject property"
+msgid "Use #Object:property to refer to a GObject property."
+msgstr "用#Object::property指示一个#Object属性"
+
+#: C/index.docbook:811(listitem/para)
+msgid "Use #Struct.field to refer to a field inside a structure."
+msgstr "用#Struct.field指示结构体的字段。"
+
+#: C/index.docbook:773(sect1/para)
+msgid ""
+"One advantage of hyper-text over plain-text is the ability to have links in "
+"the document. Writing the correct markup for a link can be tedious though. "
+"GTK-Doc comes to help by providing several useful abbreviations. <_:"
+"itemizedlist-1/>"
+msgstr ""
+"与纯文本相比，超文本的优势在于可以在文档内部有链接。但为一个链接编写正确的标"
+"记可能是件枯燥的差事。GTK-Doc提供了几个有用的简化方法帮你解决这个麻烦。<_:"
+"itemizedlist-1/>"
+
+#: C/index.docbook:819(tip/para)
+msgid ""
+"If you need to use the special characters '&lt;', '&gt;', '()', '@', '%', or "
+"'#' in your documentation without GTK-Doc changing them you can use the XML "
+"entities \"&amp;lt;\", \"&amp;gt;\", \"&amp;lpar;\", \"&amp;rpar;\", \"&amp;"
+"commat;\", \"&amp;percnt;\" and \"&amp;num;\" respectively or escape them "
+"with a backslash '\\'."
+msgstr ""
+"如果你要在文档里面使用一些特殊的字符'&lt;', '&gt;', '()', '@', '%', or '#' 且"
+"不用GTK-Doc来修改它们，你可以相应地用XML 实体 \"&amp;lt;\", \"&amp;gt;\", "
+"\"&amp;lpar;\", \"&amp;rpar;\", \"&amp;commat;\", \"&amp;percnt;\" 以及 "
+"\"&amp;num;\"或者用一个反斜线'\\'来转义它们。"
+
+#: C/index.docbook:828(sect1/para)
+msgid ""
+"DocBook can do more than just links. One can also have lists, tables and "
+"examples. To enable the usage of docbook SGML/XML tags inside doc-comments "
+"you need to have <option>--xml-mode</option> or <option>--sgml-mode</option> "
+"in the variable <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</"
+"filename>."
+msgstr ""
+"DocBook可以做比链接多得多的事情。你可以有列表，表格和示例。要在doc-comments中"
+"激活docbook SGML/XML标识的使用，你得往<filename>Makefile.am</filename>文件中"
+"的变量<symbol>MKDB_OPTIONS</symbol>上加入<option>--xml-mode</option> 或 "
+"<option>--sgml-mode</option>选项。"
+
+#: C/index.docbook:842(example/title)
+msgid "GTK-Doc comment block using markdown"
+msgstr "使用markdown进行GTK-Doc块注释"
+
+#: C/index.docbook:843(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"/**\n"
+" * identifier:\n"
+" *\n"
+" * documentation ...\n"
+" *\n"
+" * # Sub heading #\n"
+" *\n"
+" * more documentation:\n"
+" * - list item 1\n"
+" * - list item 2\n"
+" *\n"
+" * Even more docs.\n"
+" */\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * 标识符:\n"
+" *\n"
+" * 文档内容 ...\n"
+" *\n"
+" * # 小标题 #\n"
+" *\n"
+" * 更多文档：\n"
+" * - 列表项1\n"
+" * - 列表项2\n"
+" *\n"
+" * 其余更多文档。\n"
+" */\n"
+"\n"
+"          "
+
+#: C/index.docbook:836(sect1/para)
+msgid ""
+"Since GTK-Doc-1.18 the tool supports a subset or the <ulink url=\"http://"
+"daringfireball.net/projects/markdown/\">markdown language</ulink>. One can "
+"use it for sub-headings and simple itemized lists. On older GTK-Doc versions "
+"the content will be rendered as it (the list items will appear in one line "
+"separated by dashes). <_:example-1/>"
+msgstr ""
+"从 GTK-Doc-1.18 版本开始，该工具支持 <ulink url=\"http://daringfireball.net/"
+"projects/markdown/\">markdown 标记语言</ulink> 的一个子集。可以用它定义小标题"
+"和简单的项目列表。在较早的 GTK-Doc 版本中，内容会原样渲染(列表项会显示在一"
+"行，以短划线隔开)。<_:example-1/>"
+
+#: C/index.docbook:864(tip/para)
+msgid ""
+"As already mentioned earlier GTK-Doc is for documenting public API. Thus one "
+"cannot write documentation for static symbols. Nevertheless it is good to "
+"comment those symbols too. This helps other to understand you code. "
+"Therefore we recommend to comment these using normal comments (without the "
+"2nd '*' in the first line). If later the function needs to be made public, "
+"all one needs to do is to add another '*' in the comment block and insert "
+"the symbol name at the right place inside the sections file."
+msgstr ""
+"如早先所述，GTK-Doc是为编写公共的API而作的。所以你不能够为静态符号编写文档。"
+"尽管如此，它也可以很好地为那些符号作注释。这有助于他人理解你的代码。因此我们"
+"建议你用普通的注释来注释它们（不使用第一行的第二个'*'号）。如果以后函数须要作"
+"为public，你须做的只是在注释块中加入另一个 '*'号并且在区段文件里插入正确的标"
+"识符名称。"
+
+#: C/index.docbook:878(sect1/title)
+msgid "Documenting sections"
+msgstr "文档章节"
+
+#: C/index.docbook:880(sect1/para)
+msgid ""
+"Each section of the documentation contains information about one class or "
+"module. To introduce the component one can write a section block. The short "
+"description is also used inside the table of contents. All the @fields are "
+"optional."
+msgstr ""
+"文档的每个章节都包含着关于一个类或模块的信息。要介绍它的组件，你可以编写一节"
+"注释块。在内容表格中也可以使用简短的描述。所有的@fields都是可选的。"
+
+#: C/index.docbook:888(example/title)
+msgid "Section comment block"
+msgstr "节注释块"
+
+#: C/index.docbook:889(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"/**\n"
+" * SECTION:meepapp\n"
+" * @short_description: the application class\n"
+" * @title: Meep application\n"
+" * @section_id:\n"
+" * @see_also: #MeepSettings\n"
+" * @stability: Stable\n"
+" * @include: meep/app.h\n"
+" * @image: application.png\n"
+" *\n"
+" * The application class handles ...\n"
+" */\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * SECTION:meepapp\n"
+" * @short_description: the application class\n"
+" * @title: Meep application\n"
+" * @section_id:\n"
+" * @see_also: #MeepSettings\n"
+" * @stability: Stable\n"
+" * @include: meep/app.h\n"
+" * @image: application.png\n"
+" *\n"
+" * The application class handles ...\n"
+" */\n"
+"\n"
+"          "
+
+#: C/index.docbook:910(varlistentry/term)
+msgid "SECTION:&lt;name&gt;"
+msgstr "SECTION:&lt;name&gt;"
+
+#: C/index.docbook:912(listitem/para)
+msgid ""
+"The name links the section documentation to the respective part in the "
+"<filename>&lt;package&gt;-sections.txt</filename> file. The name give here "
+"should match the &lt;FILE&gt; tag in the <filename>&lt;package&gt;-sections."
+"txt</filename> file."
+msgstr ""
+"名字链接这节文档到文件<filename>&lt;package&gt;-sections.txt</filename>中对应"
+"的部分。这里的名字应匹配<filename>&lt;package&gt;-sections.txt</filename>文件"
+"中的&lt;FILE&gt;标识。"
+
+#: C/index.docbook:921(varlistentry/term)
+msgid "@short_description"
+msgstr "@short_description"
+
+#: C/index.docbook:923(listitem/para)
+msgid ""
+"A one line description of the section, that later will appear after the "
+"links in the TOC and at the top of the section page."
+msgstr "该节的单行描述，不久将出现在TOC里的链接后和该节页面的顶部。"
+
+#: C/index.docbook:930(varlistentry/term)
+msgid "@title"
+msgstr "@title"
+
+#: C/index.docbook:932(listitem/para)
+msgid ""
+"The section title defaults to &lt;name&gt; from the SECTION declaration. It "
+"can be overridden with the @title field."
+msgstr ""
+"段落的标题在SECTION声明里默认是 &lt;name&gt; 。它可以由@title字段替换。"
+
+#: C/index.docbook:939(varlistentry/term)
+msgid "@section_id"
+msgstr "@section_id"
+
+#: C/index.docbook:941(listitem/para)
+msgid ""
+"Overrides the use of title as a section identifier. For GObjects the &lt;"
+"title&gt; is used as a section_id and for other sections it is &lt;"
+"MODULE&gt;-&lt;title&gt;."
+msgstr ""
+"替换标题的用途作为一个段落指示器。对于GObjects，&lt;title&gt;用作section_id且"
+"对于其它的段落它是&lt;MODULE&gt;-&lt;title&gt;。"
+
+#: C/index.docbook:949(varlistentry/term)
+msgid "@see_also"
+msgstr "@see_also"
+
+#: C/index.docbook:951(listitem/para)
+msgid "A list of symbols that are related to this section."
+msgstr "与本节相关的标识符。"
+
+#: C/index.docbook:957(varlistentry/term)
+msgid "@stability"
+msgstr "@stability"
+
+#: C/index.docbook:964(listitem/para)
+#, fuzzy
+msgid ""
+"Stable - The intention of a Stable interface is to enable arbitrary third "
+"parties to develop applications to these interfaces, release them, and have "
+"confidence that they will run on all minor releases of the product (after "
+"the one in which the interface was introduced, and within the same major "
+"release). Even at a major release, incompatible changes are expected to be "
+"rare, and to have strong justifications."
+msgstr ""
+"稳定版－一个稳定版本软件界面的目的是让任意第三方开发者为这些界面开发应用程"
+"序，发行它们，并且确信它们的产品可以在所有的小版本号发布版上运行（after the "
+"one in which the interface was introduced, and within the same major "
+"release）。即使在一个主发行版，兼容的修改也是非常稀少的，并且要有大量的修正。"
+
+#: C/index.docbook:976(listitem/para)
+#, fuzzy
+msgid ""
+"Unstable - Unstable interfaces are experimental or transitional. They are "
+"typically used to give outside developers early access to new or rapidly "
+"changing technology, or to provide an interim solution to a problem where a "
+"more general solution is anticipated. No claims are made about either source "
+"or binary compatibility from one minor release to the next."
+msgstr ""
+"不稳定版－不稳定版本的界面是用于体验或者过渡的软件版本。它们通常是给外部开发"
+"人员早期访问新的或快速改变的技术，或者为已获得预期的更普遍的方案提供一个内部"
+"解决方案。以保证从一个镜像发行版到另一个之间没有源代码与二进制代码兼容性的问"
+"题。"
+
+#: C/index.docbook:988(listitem/para)
+#, fuzzy
+msgid ""
+"Private - An interface that can be used within the GNOME stack itself, but "
+"that is not documented for end-users. Such functions should only be used in "
+"specified and documented ways."
+msgstr ""
+"个人版－一种可以离开GNOME堆栈而自己运行的界面，但是并没有正式声明给终端用户使"
+"用。这样的函数只能以指定的且正式声明的方法来使用它。"
+
+#: C/index.docbook:997(listitem/para)
+msgid ""
+"Internal - An interface that is internal to a module and does not require "
+"end-user documentation. Functions that are undocumented are assumed to be "
+"Internal."
+msgstr ""
+"内部版－一种为一个模块而设计的内部界面，并且不需要终端用户文档。未正式声明的"
+"函数假定是属于内部的。"
+
+#: C/index.docbook:959(listitem/para)
+#, fuzzy
+#| msgid ""
+#| "A informal description of the stability level this API has. We recommend "
+#| "the use of one of these terms: <_:itemizedlist-1/>"
+msgid ""
+"An informal description of the stability level this API has. We recommend "
+"the use of one of these terms: <_:itemizedlist-1/>"
+msgstr ""
+"对这个API对稳定级别的一个非正式的描述。我们建议你使用以下术语：<_:"
+"itemizedlist-1/>"
+
+#: C/index.docbook:1009(varlistentry/term)
+msgid "@include"
+msgstr "@include"
+
+#: C/index.docbook:1011(listitem/para)
+#, fuzzy
+msgid ""
+"The <literal>#include</literal> files to show in the section synopsis (a "
+"comma separated list), overriding the global value from the <link linkend="
+"\"metafiles_sections\">section file</link> or command line. This item is "
+"optional."
+msgstr ""
+"<literal>#include</literal> 文件在段落提纲内部显现（一个由分号‘；’分隔的列"
+"表），从<link linkend=\"metafiles_sections\">section file</link>或者命令行中"
+"取代全局数值。这是个可选项。"
+
+#: C/index.docbook:1020(varlistentry/term)
+msgid "@image"
+msgstr "@image"
+
+#: C/index.docbook:1022(listitem/para)
+msgid ""
+"The image to display at the top of the reference page for this section. This "
+"will often be some sort of a diagram to illustrate the visual appearance of "
+"a class or a diagram of its relationship to other classes. This item is "
+"optional."
+msgstr ""
+"本章节的参考页顶部显示的图像。这常常是某些用于阐释一个类或者图表与其它类之间"
+"关系的可视化图示。这个项是可选的。"
+
+#: C/index.docbook:1033(tip/para)
+msgid ""
+"To avoid unnecessary recompilation after doc-changes put the section docs "
+"into the c-source where possible."
+msgstr ""
+"为避免不必要的重编译，在文档改动后尽可能把段落文档放入C代码中合适的位置。"
+
+#: C/index.docbook:1042(sect1/title)
+msgid "Documenting symbols"
+msgstr "编写符号文档"
+
+#: C/index.docbook:1044(sect1/para)
+msgid ""
+"Each symbol (function, macro, struct, enum, signal and property) is "
+"documented in a separate block. The block is best placed close to the "
+"definition of the symbols so that it is easy to keep them in sync. Thus "
+"functions are usually documented in the c-source and macros, structs and "
+"enums in the header file."
+msgstr ""
+"每个符号（函数，宏，结构，枚举，信号及属性）都在各自独立的块中描述。这些块最"
+"好放置于接近标识符定义的地方，这样可以容易地让它们保持同步。因此函数通常在C代"
+"码中定义，宏和结构及枚举在头文件里定义。"
+
+#: C/index.docbook:1052(sect2/title) C/index.docbook:1081(example/title)
+msgid "General tags"
+msgstr "一般标记"
+
+#: C/index.docbook:1054(sect2/para)
+msgid ""
+"You can add versioning information to all documentation elements to tell "
+"when an API was introduced, or when it was deprecated."
+msgstr "你可以为所有的文档元素加入版本信息，表明何时引入或废弃了某个API。"
+
+#: C/index.docbook:1059(variablelist/title)
+msgid "Versioning Tags"
+msgstr "版本标记"
+
+#: C/index.docbook:1060(varlistentry/term)
+msgid "Since:"
+msgstr "始于："
+
+#: C/index.docbook:1062(listitem/para)
+msgid "Description since which version of the code the API is available."
+msgstr "描述从哪个版本的代码开始加入了该API。"
+
+#: C/index.docbook:1067(varlistentry/term)
+msgid "Deprecated:"
+msgstr "废弃："
+
+#: C/index.docbook:1069(listitem/para)
+msgid ""
+"Paragraph denoting that this function should no be used anymore. The "
+"description should point the reader to the new API."
+msgstr "表明这个函数不应再使用的一段文档。描述文字应向读者介绍新的API。"
+
+#: C/index.docbook:1077(sect2/para)
+msgid "(FIXME : Stability information)"
+msgstr "(FIXME : 稳定性信息)"
+
+#: C/index.docbook:1082(example/programlisting)
+#, fuzzy, no-wrap
+#| msgid ""
+#| "\n"
+#| "\n"
+#| "/**\n"
+#| " * foo_get_bar:\n"
+#| " * @foo: some foo\n"
+#| " *\n"
+#| " * Retrieves @foo's bar.\n"
+#| " *\n"
+#| " * Returns: @foo's bar\n"
+#| " *\n"
+#| " * Since: 2.6\n"
+#| " * Deprecated: 2.12: Use foo_baz_get_bar() instead.\n"
+#| " **/\n"
+#| "Bar *\n"
+#| "foo_get_bar(Foo *foo)\n"
+#| "{\n"
+#| "...\n"
+#| "\n"
+#| "          "
+msgid ""
+"\n"
+"\n"
+"/**\n"
+" * foo_get_bar:\n"
+" * @foo: some foo\n"
+" *\n"
+" * Retrieves @foo's bar.\n"
+" *\n"
+" * Returns: @foo's bar\n"
+" *\n"
+" * Since: 2.6\n"
+" * Deprecated: 2.12: Use foo_baz_get_bar() instead.\n"
+" */\n"
+"Bar *\n"
+"foo_get_bar(Foo *foo)\n"
+"{\n"
+"...\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * foo_get_bar:\n"
+" * @foo: some foo\n"
+" *\n"
+" * Retrieves @foo's bar.\n"
+" *\n"
+" * 返回值: @foo's bar\n"
+" *\n"
+" * 始于: 2.6\n"
+" * 废弃: 2.12: 请转用 foo_baz_get_bar()。\n"
+" **/\n"
+"Bar *\n"
+"foo_get_bar(Foo *foo)\n"
+"{\n"
+"...\n"
+"\n"
+"          "
+
+#: C/index.docbook:1104(sect2/title) C/index.docbook:1140(example/title)
+msgid "Function comment block"
+msgstr "函数注释块"
+
+#: C/index.docbook:1110(listitem/para)
+msgid ""
+"Document whether returned objects, lists, strings, etc, should be freed/"
+"unrefed/released."
+msgstr ""
+"描述返回的对象、列表、字符串等是否应释放内存(freed)/解除引用/释放(released)。"
+
+#: C/index.docbook:1116(listitem/para)
+msgid "Document whether parameters can be NULL, and what happens if they are."
+msgstr "描述参数可否为NULL，如果是的话会发生什么。"
+
+#: C/index.docbook:1121(listitem/para)
+msgid ""
+"Mention interesting pre-conditions and post-conditions where appropriate."
+msgstr "在适当时提及相关的前提条件与后续条件。"
+
+#: C/index.docbook:1106(sect2/para) C/index.docbook:1203(sect2/para)
+msgid "Please remember to: <_:itemizedlist-1/>"
+msgstr "请记得：<_:itemizedlist-1/>"
+
+#: C/index.docbook:1128(sect2/para)
+msgid ""
+"Gtk-doc assumes all symbols (macros, functions) starting with '_' are "
+"private. They are treated like static functions."
+msgstr ""
+"Gtk-doc 假定所有以'_'符开头的符号（宏，函数）是私有的并视它们为静态函数。"
+
+#: C/index.docbook:1133(sect2/para)
+#, fuzzy
+#| msgid ""
+#| "Also, take a look at gobject introspection annotation tags: http://live."
+#| "gnome.org/GObjectIntrospection/Annotations"
+msgid ""
+"Also, take a look at GObject Introspection annotation tags: http://live."
+"gnome.org/GObjectIntrospection/Annotations"
+msgstr ""
+"另请参阅gobject内省(introspection)标记的介绍：http://live.gnome.org/"
+"GObjectIntrospection/Annotations"
+
+#: C/index.docbook:1141(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"/**\n"
+" * function_name:\n"
+" * @par1:  description of parameter 1. These can extend over more than\n"
+" * one line.\n"
+" * @par2:  description of parameter 2\n"
+" * @...: a %NULL-terminated list of bars\n"
+" *\n"
+" * The function description goes here. You can use @par1 to refer to parameters\n"
+" * so that they are highlighted in the output. You can also use %constant\n"
+" * for constants, function_name2() for functions and #GtkWidget for links to\n"
+" * other declarations (which may be documented elsewhere).\n"
+" *\n"
+" * Returns: an integer.\n"
+" *\n"
+" * Since: 2.2\n"
+" * Deprecated: 2.18: Use other_function() instead.\n"
+" */\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * function_name:\n"
+" * @par1:  对参数 1 的描述。\n"
+" * 可超过一行。\n"
+" * @par2:  对参数 2 的描述\n"
+" * @...: 一个以 %NULL 终止的 bars 列表\n"
+" *\n"
+" * 这里是函数描述。您可以用 @par1 引用参数，这样在输出中它们会突出显示。\n"
+" * 您也可以使用 %constant 代表常量，function_name2() 代表函数，#GtkWidget \n"
+" * 代表指向指向其他声明的链接(可能在其他位置描述)。\n"
+" *\n"
+" * 返回值: 一个整型值。\n"
+" *\n"
+" * 始于: 2.2\n"
+" * 废弃: 2.18: 请转用 other_function()。\n"
+" */\n"
+"\n"
+"          "
+
+#: C/index.docbook:1164(variablelist/title)
+msgid "Function tags"
+msgstr "函数标记"
+
+#: C/index.docbook:1165(varlistentry/term)
+msgid "Returns:"
+msgstr "返回值："
+
+#: C/index.docbook:1167(listitem/para)
+msgid "Paragraph describing the returned result."
+msgstr "描述返回结果的段落。"
+
+#: C/index.docbook:1172(varlistentry/term)
+msgid "@...:"
+msgstr "@...:"
+
+#: C/index.docbook:1174(listitem/para)
+msgid ""
+"In case the function has variadic arguments, you should use this tag "
+"(@Varargs: does also work for historic reasons)."
+msgstr ""
+"如果函数有变长参数列表，你应当使用这个标记（@Varargs: 由于历史原因确实也管"
+"用）。"
+
+#: C/index.docbook:1184(sect2/title) C/index.docbook:1186(example/title)
+msgid "Property comment block"
+msgstr "属性注释块"
+
+#: C/index.docbook:1187(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"/**\n"
+" * SomeWidget:some-property:\n"
+" *\n"
+" * Here you can document a property.\n"
+" */\n"
+"g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * SomeWidget:some-property:\n"
+" *\n"
+" * 这里您可以描述一个属性。\n"
+" */\n"
+"g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);\n"
+"\n"
+"          "
+
+#: C/index.docbook:1201(sect2/title) C/index.docbook:1220(example/title)
+msgid "Signal comment block"
+msgstr "信号注释块"
+
+#: C/index.docbook:1207(listitem/para)
+msgid ""
+"Document when the signal is emitted and whether it is emitted before or "
+"after other signals."
+msgstr "描述信号何时发射(emitted)及在其它信号之前还是之后发射。"
+
+#: C/index.docbook:1213(listitem/para)
+msgid "Document what an application might do in the signal handler."
+msgstr "描述应用程序在信号处理函数中能做些什么。"
+
+#: C/index.docbook:1221(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"/**\n"
+" * FooWidget::foobarized:\n"
+" * @widget: the widget that received the signal\n"
+" * @foo: some foo\n"
+" * @bar: some bar\n"
+" *\n"
+" * The ::foobarized signal is emitted each time someone tries to foobarize @widget.\n"
+" */\n"
+"foo_signals[FOOBARIZE] =\n"
+"  g_signal_new (\"foobarize\",\n"
+"                ...\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * FooWidget::foobarized:\n"
+" * @widget: 接受信号的窗口部件\n"
+" * @foo: some foo\n"
+" * @bar: some bar\n"
+" *\n"
+" * ::foobarized 信号在每次有人尝试 foobarize @widget 时发射。\n"
+" */\n"
+"foo_signals[FOOBARIZE] =\n"
+"  g_signal_new (\"foobarize\",\n"
+"                ...\n"
+"\n"
+"          "
+
+#: C/index.docbook:1240(sect2/title) C/index.docbook:1241(example/title)
+msgid "Struct comment block"
+msgstr "结构注释块"
+
+#: C/index.docbook:1242(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"/**\n"
+" * FooWidget:\n"
+" * @bar: some #gboolean\n"
+" *\n"
+" * This is the best widget, ever.\n"
+" */\n"
+"typedef struct _FooWidget {\n"
+"  /*&lt; private &gt;*/\n"
+"  GtkWidget parent;\n"
+"\n"
+"  /*&lt; public &gt;*/\n"
+"  gboolean bar;\n"
+"} FooWidget;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * FooWidget:\n"
+" * @bar: some #gboolean\n"
+" *\n"
+" * 这是史上最好的窗口部件。\n"
+" */\n"
+"typedef struct _FooWidget {\n"
+"  /*&lt; private &gt;*/\n"
+"  GtkWidget parent;\n"
+"\n"
+"  /*&lt; public &gt;*/\n"
+"  gboolean bar;\n"
+"} FooWidget;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1261(sect2/para)
+msgid ""
+"Use <code>/*&lt; private &gt;*/</code> before the private struct fields you "
+"want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
+"behaviour."
+msgstr ""
+"在你需要隐藏的私有结构字段之前使用<code>/*&lt; private &gt;*/</code> 。反之使"
+"用<code>/*&lt; public &gt;*/</code>."
+
+# 什么是vmethod？难以理解。
+#: C/index.docbook:1267(sect2/para)
+msgid ""
+"Struct comment blocks can also be used for GObjects and GObjectClasses. It "
+"is usually a good idea to add a comment block for a class, if it has "
+"vmethods (as this is how they can be documented). For the GObject itself one "
+"can use the related section docs, having a separate block for the instance "
+"struct would be useful if the instance has public fields. One disadvantage "
+"here is that this creates two index entries of the same name (the structure "
+"and the section)."
+msgstr ""
+"结构注释块也可以用于GObjects与GObjectClasses。为一个类添加注释块通常是个极好"
+"的主意，如果它有vmethod（因为这是怎样制作它的文档的方法）。对于GObject自身而"
+"言，你可以使用相关的章节文档，如果对象实例有公共字段，为每个实例结构体单独块"
+"注释是非常有用的。缺点是这会为同一名字创建两个索引记录（结构与章节）。"
+
+#: C/index.docbook:1279(sect2/title) C/index.docbook:1280(example/title)
+msgid "Enum comment block"
+msgstr "枚举注释块"
+
+#: C/index.docbook:1281(example/programlisting)
+#, fuzzy, no-wrap
+#| msgid ""
+#| "\n"
+#| "\n"
+#| "/**\n"
+#| " * Something:\n"
+#| " * @SOMETHING_FOO: something foo\n"
+#| " * @SOMETHING_BAR: something bar\n"
+#| " *\n"
+#| " * Enum values used for the thing, to specify the thing.\n"
+#| " *\n"
+#| " **/\n"
+#| "typedef enum {\n"
+#| "  SOMETHING_FOO,\n"
+#| "  SOMETHING_BAR,\n"
+#| "  /*&lt; private &gt;*/\n"
+#| "  SOMETHING_COUNT\n"
+#| "} Something;\n"
+#| "\n"
+#| "          "
+msgid ""
+"\n"
+"\n"
+"/**\n"
+" * Something:\n"
+" * @SOMETHING_FOO: something foo\n"
+" * @SOMETHING_BAR: something bar\n"
+" *\n"
+" * Enum values used for the thing, to specify the thing.\n"
+" */\n"
+"typedef enum {\n"
+"  SOMETHING_FOO,\n"
+"  SOMETHING_BAR,\n"
+"  /*&lt; private &gt;*/\n"
+"  SOMETHING_COUNT\n"
+"} Something;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * Something:\n"
+" * @SOMETHING_FOO: something foo\n"
+" * @SOMETHING_BAR: something bar\n"
+" *\n"
+" * 用来解决问题和指定事物的枚举值。\n"
+" *\n"
+" **/\n"
+"typedef enum {\n"
+"  SOMETHING_FOO,\n"
+"  SOMETHING_BAR,\n"
+"  /*&lt; private &gt;*/\n"
+"  SOMETHING_COUNT\n"
+"} Something;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1300(sect2/para)
+msgid ""
+"Use <code>/*&lt; private &gt;*/</code> before the private enum values you "
+"want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
+"behaviour."
+msgstr ""
+"在你要隐藏的枚举数值前使用<code>/*&lt; private &gt;*/</code>。反之使用<code>/"
+"*&lt; public &gt;*/</code> 。"
+
+#: C/index.docbook:1310(sect1/title)
+msgid "Useful DocBook tags"
+msgstr "有用的DocBook标记"
+
+#: C/index.docbook:1312(sect1/para)
+msgid ""
+"Here are some DocBook tags which are most useful when documenting the code."
+msgstr "这些是在编写代码文档时非常有用处的DocBook标记。"
+
+#: C/index.docbook:1321(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;link linkend=\"glib-Hash-Tables\"&gt;Hash Tables&lt;/link&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;link linkend=\"glib-Hash-Tables\"&gt;Hash Tables&lt;/link&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1317(sect1/para)
+#, fuzzy
+msgid ""
+"To link to another section in the GTK docs: <_:informalexample-1/> The "
+"linkend is the SGML/XML id on the top item of the page you want to link to. "
+"For most pages this is currently the part (\"gtk\", \"gdk\", \"glib\") and "
+"then the page title (\"Hash Tables\"). For widgets it is just the class "
+"name. Spaces and underscores are converted to '-' to conform to SGML/XML."
+msgstr ""
+"在GTK文档中链接到另一章节：<_:informalexample-1/> 链接尾部是你要链接的页面顶"
+"部选项上的SGML/XML id。目前对于大多页面，它是(\"gtk\", \"gdk\", \"glib\") 部"
+"分与页面标题(\"Hash Tables\")。对于widgets它只是类和名称而已。空格字符和下划"
+"线都转换成 '-' 以适应SGML/XML.。"
+
+#: C/index.docbook:1336(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;function&gt;...&lt;/function&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;function&gt;...&lt;/function&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1333(sect1/para)
+msgid ""
+"To refer to an external function, e.g. a standard C function: <_:"
+"informalexample-1/>"
+msgstr "引用一个外部函数，比如一个标准 C 函数：<_:informalexample-1/>"
+
+#: C/index.docbook:1347(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;example&gt;\n"
+"  &lt;title&gt;Using a GHashTable.&lt;/title&gt;\n"
+"  &lt;programlisting&gt;\n"
+"      ...\n"
+"  &lt;/programlisting&gt;\n"
+"&lt;/example&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;example&gt;\n"
+"  &lt;title&gt;Using a GHashTable.&lt;/title&gt;\n"
+"  &lt;programlisting&gt;\n"
+"      ...\n"
+"  &lt;/programlisting&gt;\n"
+"&lt;/example&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1360(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;informalexample&gt;\n"
+"  &lt;programlisting&gt;\n"
+"  ...\n"
+"  &lt;/programlisting&gt;\n"
+"&lt;/informalexample&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;informalexample&gt;\n"
+"  &lt;programlisting&gt;\n"
+"  ...\n"
+"  &lt;/programlisting&gt;\n"
+"&lt;/informalexample&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1344(sect1/para)
+msgid ""
+"To include example code: <_:informalexample-1/> or possibly this, for very "
+"short code fragments which don't need a title: <_:informalexample-2/> For "
+"the latter GTK-Doc also supports an abbreviation: |[ ... ]|"
+msgstr ""
+"要包含示例代码：<_:informalexample-1/> 或类似的，很短的不需要标题的代码段："
+"<_:informalexample-2/> 对后者，GTK-Doc 还支持一种缩写方式：|[ ... ]|"
+
+#: C/index.docbook:1381(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;itemizedlist&gt;\n"
+"  &lt;listitem&gt;\n"
+"    &lt;para&gt;\n"
+"      ...\n"
+"    &lt;/para&gt;\n"
+"  &lt;/listitem&gt;\n"
+"  &lt;listitem&gt;\n"
+"    &lt;para&gt;\n"
+"      ...\n"
+"    &lt;/para&gt;\n"
+"  &lt;/listitem&gt;\n"
+"&lt;/itemizedlist&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;itemizedlist&gt;\n"
+"  &lt;listitem&gt;\n"
+"    &lt;para&gt;\n"
+"      ...\n"
+"    &lt;/para&gt;\n"
+"  &lt;/listitem&gt;\n"
+"  &lt;listitem&gt;\n"
+"    &lt;para&gt;\n"
+"      ...\n"
+"    &lt;/para&gt;\n"
+"  &lt;/listitem&gt;\n"
+"&lt;/itemizedlist&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1378(sect1/para)
+msgid "To include bulleted lists: <_:informalexample-1/>"
+msgstr "要包含符号列表：<_:informalexample-1/>"
+
+#: C/index.docbook:1403(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;note&gt;\n"
+"  &lt;para&gt;\n"
+"    Make sure you free the data after use.\n"
+"  &lt;/para&gt;\n"
+"&lt;/note&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;note&gt;\n"
+"  &lt;para&gt;\n"
+"    Make sure you free the data after use.\n"
+"  &lt;/para&gt;\n"
+"&lt;/note&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1400(sect1/para)
+msgid ""
+"To include a note which stands out from the text: <_:informalexample-1/>"
+msgstr "要包含一条文字中突出显示的注解：<_:informalexample-1/>"
+
+#: C/index.docbook:1418(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;type&gt;unsigned char&lt;/type&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;type&gt;unsigned char&lt;/type&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1415(sect1/para)
+msgid "To refer to a type: <_:informalexample-1/>"
+msgstr "要引用一个类型：<_:informalexample-1/>"
+
+#: C/index.docbook:1429(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;structname&gt;XFontStruct&lt;/structname&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;structname&gt;XFontStruct&lt;/structname&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1426(sect1/para)
+msgid ""
+"To refer to an external structure (not one described in the GTK docs): <_:"
+"informalexample-1/>"
+msgstr "引用一个外部结构（不是在GTK 文档中描述的）：<_:informalexample-1/>"
+
+#: C/index.docbook:1440(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;structfield&gt;len&lt;/structfield&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;structfield&gt;len&lt;/structfield&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1437(sect1/para)
+msgid "To refer to a field of a structure: <_:informalexample-1/>"
+msgstr "要引用一个结构字段：<_:informalexample-1/>"
+
+#: C/index.docbook:1451(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;classname&gt;GtkWidget&lt;/classname&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;classname&gt;GtkWidget&lt;/classname&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1448(sect1/para)
+msgid ""
+"To refer to a class name, we could possibly use: <_:informalexample-1/> but "
+"you'll probably be using #GtkWidget instead (to automatically create a link "
+"to the GtkWidget page - see <link linkend=\"documenting_syntax\">the "
+"abbreviations</link>)."
+msgstr ""
+"要引用一个类的名字，你可能会使用：<_:informalexample-1/> 但是你可能正在使用"
+"#GtkWidget（要自动创建一个到GtkWidget 页面的链接－请参阅<link linkend="
+"\"documenting_syntax\">缩写</link>）。"
+
+#: C/index.docbook:1464(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;emphasis&gt;This is important&lt;/emphasis&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;emphasis&gt;This is important&lt;/emphasis&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1461(sect1/para)
+msgid "To emphasize text: <_:informalexample-1/>"
+msgstr "要强调文本：<_:informalexample-1/>"
+
+#: C/index.docbook:1475(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;filename&gt;/home/user/documents&lt;/filename&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;filename&gt;/home/user/documents&lt;/filename&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1472(sect1/para)
+msgid "For filenames use: <_:informalexample-1/>"
+msgstr "对于文件名，使用：<_:informalexample-1/>"
+
+#: C/index.docbook:1486(informalexample/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap&gt;&lt;/keycombo&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap&gt;&lt;/keycombo&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1483(sect1/para)
+msgid "To refer to keys use: <_:informalexample-1/>"
+msgstr "要引用键值，使用：<_:informalexample-1/>"
+
+#: C/index.docbook:1498(chapter/title)
+msgid "Filling the extra files"
+msgstr "填充额外的文件"
+
+#: C/index.docbook:1500(chapter/para)
+msgid ""
+"There are a couple of extra files, that need to be maintained along with the "
+"inline source code comments: <filename>&lt;package&gt;.types</filename>, "
+"<filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml), "
+"<filename>&lt;package&gt;-sections.txt</filename>."
+msgstr ""
+"另有几个文件要和内嵌源代码注释一起维护：<filename>&lt;package&gt;.types</"
+"filename>, <filename>&lt;package&gt;-docs.xml</filename> (原为 .sgml), "
+"<filename>&lt;package&gt;-sections.txt</filename>。"
+
+#: C/index.docbook:1509(sect1/title)
+msgid "Editing the types file"
+msgstr "编辑类型文件"
+
+#: C/index.docbook:1511(sect1/para)
+#, fuzzy
+msgid ""
+"If your library or application includes GObjects, you want their signals, "
+"arguments/parameters and position in the hierarchy to be shown in the "
+"documentation. All you need to do, is to list the <function>xxx_get_type</"
+"function> functions together with their include inside the <filename>&lt;"
+"package&gt;.types</filename> file."
+msgstr ""
+"如果你的厍或应用程序包含了GtkObjects/GObjects，想把它们的信号，形式参数／实际"
+"参数以及在继承关系中所在位置都写入文档，只需将<function>xxx_get_type</"
+"function>及其引用在<filename>&lt;package&gt;.types</filename> 文件中列出。"
+
+#: C/index.docbook:1520(example/title)
+msgid "Example types file snippet"
+msgstr "示例类型文件代码段"
+
+#: C/index.docbook:1521(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"#include &lt;gtk/gtk.h&gt;\n"
+"\n"
+"gtk_accel_label_get_type\n"
+"gtk_adjustment_get_type\n"
+"gtk_alignment_get_type\n"
+"gtk_arrow_get_type\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"#include &lt;gtk/gtk.h&gt;\n"
+"\n"
+"gtk_accel_label_get_type\n"
+"gtk_adjustment_get_type\n"
+"gtk_alignment_get_type\n"
+"gtk_arrow_get_type\n"
+"\n"
+"          "
+
+#: C/index.docbook:1534(sect1/para)
+msgid ""
+"Since GTK-Doc 1.8 <application>gtkdoc-scan</application> can generate this "
+"list for you. Just add \"--rebuild-types\" to SCAN_OPTIONS in "
+"<filename>Makefile.am</filename>. If you use this approach you should not "
+"dist the types file nor have it under version control."
+msgstr ""
+"从GTK-Doc 1.8开始<application>gtkdoc-scan</application>能够自动生成这个列表。"
+"只要往<filename>Makefile.am</filename>文件中的SCAN_OPTIONS项加入“--rebuild-"
+"types”即可。如果你要使用它请保证不发行类型文件也不将它置于版本控制系统的管理"
+"之下。"
+
+#: C/index.docbook:1543(sect1/title)
+msgid "Editing the master document"
+msgstr "编辑主文档"
+
+#: C/index.docbook:1545(sect1/para)
+msgid ""
+"GTK-Doc produces documentation in DocBook SGML/XML. When processing the "
+"inline source comments, the GTK-Doc tools generate one documentation page "
+"per class or module as a separate file. The master document includes them "
+"and place them in an order."
+msgstr ""
+"GTK-Doc 以 DocBook SGML/XML 格式生成文档。当处理源代码内嵌注释时， GTK-Doc 工"
+"具以独立文件为每个类或模块生成一个文档页。主文档包含了它们并且将它们按顺序排"
+"列。"
+
+#: C/index.docbook:1552(sect1/para)
+msgid ""
+"While GTK-Doc creates a template master document for you, later run will not "
+"touch it again. This means that one can freely structure the documentation. "
+"That includes grouping pages and adding extra pages. GTK-Doc has now a test "
+"suite, where also the master-document is recreated from scratch. Its a good "
+"idea to look at this from time to time to see if there are some new goodies "
+"introduced there."
+msgstr ""
+"GTK-Doc为你创建一个模板主文档，之后的运行就不会再动它了。这意味着你可以自由地"
+"组织这个文档，包括分组页和加入的额外页面。GTK-Doc现在有一个测试套件，它的主文"
+"档也重新生成。建议您经常关注它，又了解是否引入了新的功能特性。"
+
+#: C/index.docbook:1562(tip/para)
+msgid ""
+"Do not create tutorials as extra documents. Just write extra chapters. The "
+"benefit of directly embedding the tutorial for your library into the API "
+"documentation is that it is easy to link for the tutorial to symbol "
+"documentation. Apart chances are higher that the tutorial gets updates along "
+"with the library."
+msgstr ""
+"不要把教程(tutorial)当作额外的文档来编写。写成额外的章节即可。把你的库教程直"
+"接放入API文档的好处就是教程与符号文档之间的链接很容易。另外教程与库一同升级时"
+"分离的机会也更高。"
+
+#: C/index.docbook:1571(sect1/para)
+msgid ""
+"So what are the things to change inside the master document? For a start is "
+"only a little. There are some placeholders (text in square brackets) there "
+"which you should take care of."
+msgstr ""
+"那么什么是主文档内部要修改的东西呢？开始只是一点点东西。有一些占位标识（在方"
+"括号内部的文本）你应当多留意。"
+
+#: C/index.docbook:1578(example/title)
+msgid "Master document header"
+msgstr "主文档头部"
+
+#: C/index.docbook:1579(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"&lt;bookinfo&gt;\n"
+"  &lt;title&gt;MODULENAME Reference Manual&lt;/title&gt;\n"
+"  &lt;releaseinfo&gt;\n"
+"    for MODULENAME [VERSION]\n"
+"    The latest version of this documentation can be found on-line at\n"
+"    &lt;ulink role=\"online-location\" url=\"http://[SERVER]/MODULENAME/index.html\"&gt;http://[SERVER]/MODULENAME/&lt;/ulink&gt;.\n"
+"  &lt;/releaseinfo&gt;\n"
+"&lt;/bookinfo&gt;\n"
+"\n"
+"&lt;chapter&gt;\n"
+"  &lt;title&gt;[Insert title here]&lt;/title&gt;\n"
+"\n"
+"          "
+msgstr ""
+"\n"
+"\n"
+"&lt;bookinfo&gt;\n"
+"  &lt;title&gt;MODULENAME Reference Manual&lt;/title&gt;\n"
+"  &lt;releaseinfo&gt;\n"
+"    for MODULENAME [VERSION]\n"
+"    The latest version of this documentation can be found on-line at\n"
+"    &lt;ulink role=\"online-location\" url=\"http://[SERVER]/MODULENAME/index.html\"&gt;http://[SERVER]/MODULENAME/&lt;/ulink&gt;.\n"
+"  &lt;/releaseinfo&gt;\n"
+"&lt;/bookinfo&gt;\n"
+"\n"
+"&lt;chapter&gt;\n"
+"  &lt;title&gt;[Insert title here]&lt;/title&gt;\n"
+"\n"
+"          "
+
+#: C/index.docbook:1600(sect1/title)
+msgid "Editing the section file"
+msgstr "编辑节文件(section file)"
+
+#: C/index.docbook:1602(sect1/para)
+msgid ""
+"The section file is used to organise the documentation output by GTK-Doc. "
+"Here one specifies which symbol belongs to which module or class and control "
+"the visibility (public or private)."
+msgstr ""
+"节文件用于组织由GTK-Doc输出的文档。在此你指定哪个符号属于哪个类或模块，并控制"
+"它是否可见(公共的或私有的)。"
+
+#: C/index.docbook:1608(sect1/para)
+#, fuzzy
+#| msgid ""
+#| "The section file is a plain test file with xml like syntax (using tags). "
+#| "Blank lines are ignored and lines starting with a '#' are treated as "
+#| "comment lines."
+msgid ""
+"The section file is a plain text file with XML-like syntax (using tags). "
+"Blank lines are ignored and lines starting with a '#' are treated as comment "
+"lines."
+msgstr ""
+"节文件是一个类xml语法的纯文本文件（使用标记）。忽略空白行且以'#' 起始的行视为"
+"注释行。"
+
+#: C/index.docbook:1614(sect1/para)
+#, fuzzy
+#| msgid ""
+#| "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
+#| "without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
+#| "FILE&gt;' will result in the section declarations being output in the "
+#| "template file <filename>tmpl/gnome-config.sgml</filename>, which will be "
+#| "converted into the DocBook SGML/XML file <filename>sgml/gnome-config."
+#| "sgml</filename> or .DocBook XML file <filename>xml/gnome-config.xml</"
+#| "filename>. (The name of the html file is based on the module name and the "
+#| "section title, or for gobjects it is based on the gobjects class name "
+#| "converted to lower case)."
+msgid ""
+"The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
+"without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
+"FILE&gt;' will result in the section declarations being output in the "
+"template file <filename>tmpl/gnome-config.sgml</filename>, which will be "
+"converted into the DocBook SGML/XML file <filename>sgml/gnome-config.sgml</"
+"filename> or the DocBook XML file <filename>xml/gnome-config.xml</filename>. "
+"(The name of the HTML file is based on the module name and the section "
+"title, or for GObjects it is based on the GObjects class name converted to "
+"lower case)."
+msgstr ""
+"&lt;FILE&gt; ... &lt;/FILE&gt;标记用于指定文件名，不加任何后缀。例如：用'&lt;"
+"FILE&gt;gnome-config&lt;/FILE&gt;' 会导致段落声明输出到模板文件"
+"<filename>tmpl/gnome-config.sgml</filename>中去，它将会转换为DocBook SGML/XML"
+"文件<filename>sgml/gnome-config.sgml</filename>或者 .DocBook XML文件"
+"<filename>xml/gnome-config.xml</filename>。（html文件的名字是基于模块名字与节"
+"标题形成的，或者对gobjects是基于转换为小写的gobjects类名字形成的。）"
+
+#: C/index.docbook:1626(sect1/para)
+msgid ""
+"The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of the "
+"section. It is only useful before the templates (if used) are initially "
+"created, since the title set in the template file overrides this. Also if "
+"one uses SECTION comment in the sources, this is obsolete."
+msgstr ""
+"&lt;TITLE&gt; ... &lt;/TITLE&gt;标记用于节的标题。它只在模板（如果使用的话）"
+"最初创建之前有用，因为设置在模板文件内的标题覆盖了它。或者如果你在源代码中使"
+"用了SECTION注释（此功能已过时）。"
+
+#: C/index.docbook:1633(sect1/para)
+msgid ""
+"You can group items in the section by using the &lt;SUBSECTION&gt; tag. "
+"Currently it outputs a blank line between subsections in the synopsis "
+"section. You can also use &lt;SUBSECTION Standard&gt; for standard GObject "
+"declarations (e.g. the functions like g_object_get_type and macros like "
+"G_OBJECT(), G_IS_OBJECT() etc.). Currently these are left out of the "
+"documentation. You can also use &lt;SUBSECTION Private&gt; for private "
+"declarations which will not be output (it is a handy way to avoid warning "
+"messages about unused declarations). If your library contains private types "
+"which you don't want to appear in the object hierarchy and the list of "
+"implemented or required interfaces, add them to a Private subsection. "
+"Whether you would place GObject and GObjectClass like structs in public or "
+"Standard section depends if they have public entries (variables, vmethods)."
+msgstr ""
+
+#: C/index.docbook:1652(sect1/para)
+msgid ""
+"You can also use &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; to specify the "
+"#include files which are shown in the synopsis sections. It contains a comma-"
+"separate list of #include files, without the angle brackets. If you set it "
+"outside of any sections, it acts for all sections until the end of the file. "
+"If you set it within a section, it only applies to that section."
+msgstr ""
+
+#: C/index.docbook:1666(chapter/title)
+msgid "Controlling the result"
+msgstr "控制结果"
+
+#: C/index.docbook:1668(chapter/para)
+msgid ""
+"A GTK-Doc run generates report files inside the documentation directory. The "
+"generated files are named: <filename>&lt;package&gt;-undocumented.txt</"
+"filename>, <filename>&lt;package&gt;-undeclared.txt</filename> and "
+"<filename>&lt;package&gt;-unused.txt</filename>. All those are plain text "
+"files that can be viewed and postprocessed easily."
+msgstr ""
+
+#: C/index.docbook:1677(chapter/para)
+msgid ""
+"The <filename>&lt;package&gt;-undocumented.txt</filename> file starts with "
+"the documentation coverage summary. Below are two sections divided by blank "
+"lines. The first section lists undocumented or incomplete symbols. The "
+"second section does the same for section docs. Incomplete entries are those, "
+"which have documentation, but where e.g. a new parameter has been added."
+msgstr ""
+
+#: C/index.docbook:1686(chapter/para)
+msgid ""
+"The <filename>&lt;package&gt;-undeclared.txt</filename> file lists symbols "
+"given in the <filename>&lt;package&gt;-sections.txt</filename> but not found "
+"in the sources. Check if they have been removed or if they are misspelled."
+msgstr ""
+
+#: C/index.docbook:1693(chapter/para)
+msgid ""
+"The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol names, "
+"where the GTK-Doc scanner has found documentation, but does not know where "
+"to put it. This means that the symbol has not yet been added to the "
+"<filename>&lt;package&gt;-sections.txt</filename> file."
+msgstr ""
+
+#: C/index.docbook:1701(tip/para)
+msgid ""
+"Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
+"am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during "
+"<command>make check</command> run."
+msgstr ""
+
+#: C/index.docbook:1708(chapter/para)
+msgid ""
+"One can also look at the files produced by the source code scanner: "
+"<filename>&lt;package&gt;-decl-list.txt</filename> and <filename>&lt;"
+"package&gt;-decl.txt</filename>. The first one can be compared with the "
+"section file if that is manually maintained. The second lists all "
+"declarations from the headers. If a symbol is missing one could check if "
+"this file contains it."
+msgstr ""
+
+#: C/index.docbook:1717(chapter/para)
+msgid ""
+"If the project is GObject based, one can also look into the files produced "
+"by the object scanner: <filename>&lt;package&gt;.args.txt</filename>, "
+"<filename>&lt;package&gt;.hierarchy.txt</filename>, <filename>&lt;"
+"package&gt;.interfaces.txt</filename>, <filename>&lt;package&gt;."
+"prerequisites.txt</filename> and <filename>&lt;package&gt;.signals.txt</"
+"filename>. If there are missing symbols in any of those, one can ask gtkdoc "
+"to keep the intermediate scanner file for further analysis, by running it as "
+"<command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
+msgstr ""
+
+#: C/index.docbook:1732(chapter/title)
+msgid "Documenting other interfaces"
+msgstr "为其它接口书写文档"
+
+#: C/index.docbook:1734(chapter/para)
+msgid ""
+"So far we have been using GTK-Doc to document the API of code. The next "
+"sections contain suggestions how the tools can be used to document other "
+"interfaces too."
+msgstr ""
+
+#: C/index.docbook:1741(sect1/title)
+msgid "Command line options and man pages"
+msgstr "命令行选项与 man 页面"
+
+#: C/index.docbook:1743(sect1/para)
+msgid ""
+"As one can generate man pages for a docbook refentry as well, it sounds like "
+"a good idea to use it for that purpose. This way the interface is part of "
+"the reference and one gets the man-page for free."
+msgstr ""
+
+#: C/index.docbook:1750(sect2/title)
+msgid "Document the tool"
+msgstr "为工具书写文档"
+
+#: C/index.docbook:1752(sect2/para)
+msgid ""
+"Create one refentry file per tool. Following <link linkend="
+"\"settingup_docfiles\">our example</link> we would call it <filename>meep/"
+"docs/reference/meeper/meep.xml</filename>. For the xml tags that should be "
+"used and can look at generated file in the xml subdirectory as well as "
+"examples e.g. in glib."
+msgstr ""
+
+#: C/index.docbook:1762(sect2/title)
+msgid "Adding the extra configure check"
+msgstr "添加额外的配置检查"
+
+#: C/index.docbook:1765(example/title) C/index.docbook:1785(example/title)
+msgid "Extra configure checks"
+msgstr "额外的配置检查"
+
+#: C/index.docbook:1766(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"AC_ARG_ENABLE(man,\n"
+"              [AC_HELP_STRING([--enable-man],\n"
+"                              [regenerate man pages from Docbook [default=no]])],enable_man=yes,\n"
+"              enable_man=no)\n"
+"\n"
+"AC_PATH_PROG([XSLTPROC], [xsltproc])\n"
+"AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)\n"
+"\n"
+"            "
+msgstr ""
+
+#: C/index.docbook:1782(sect2/title)
+msgid "Adding the extra makefile rules"
+msgstr "添加额外的makefile规则"
+
+#: C/index.docbook:1786(example/programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"\n"
+"man_MANS = \\\n"
+"       meeper.1\n"
+"\n"
+"if ENABLE_GTK_DOC\n"
+"if ENABLE_MAN\n"
+"\n"
+"%.1 : %.xml\n"
+"        @XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $&lt;\n"
+"\n"
+"endif\n"
+"endif\n"
+"\n"
+"BUILT_EXTRA_DIST = $(man_MANS)\n"
+"EXTRA_DIST += meep.xml\n"
+"\n"
+"            "
+msgstr ""
+
+#: C/index.docbook:1810(sect1/title)
+msgid "DBus interfaces"
+msgstr "DBus接口"
+
+#: C/index.docbook:1812(sect1/para)
+msgid ""
+"(FIXME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://"
+"cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
+msgstr ""
+
+#: C/index.docbook:1821(chapter/title)
+msgid "Frequently asked questions"
+msgstr "常见问题"
+
+#: C/index.docbook:1825(segmentedlist/segtitle)
+msgid "Question"
+msgstr "问题"
+
+#: C/index.docbook:1826(segmentedlist/segtitle)
+msgid "Answer"
+msgstr "答案"
+
+#: C/index.docbook:1828(seglistitem/seg)
+msgid "No class hierarchy."
+msgstr "无类继承关系。"
+
+#: C/index.docbook:1829(seglistitem/seg)
+msgid ""
+"The objects <function>xxx_get_type()</function> function has not been "
+"entered into the <filename>&lt;package&gt;.types</filename> file."
+msgstr ""
+"对象的 <function>xxx_get_type()</function> 函数未进入 <filename>&lt;"
+"package&gt;.types</filename> 文件。"
+
+#: C/index.docbook:1835(seglistitem/seg)
+msgid "Still no class hierarchy."
+msgstr "仍无类继承关系。"
+
+#: C/index.docbook:1836(seglistitem/seg)
+msgid ""
+"Missing or wrong naming in <filename>&lt;package&gt;-sections.txt</filename> "
+"file (see <ulink url=\"http://mail.gnome.org/archives/gtk-doc-list/2003-"
+"October/msg00006.html\">explanation</ulink>)."
+msgstr ""
+
+#: C/index.docbook:1842(seglistitem/seg)
+msgid "Damn, I have still no class hierarchy."
+msgstr "该死，我仍然没有类继承关系。"
+
+#: C/index.docbook:1843(seglistitem/seg)
+msgid ""
+"Is the object name (name of the instance struct, e.g. <type>GtkWidget</"
+"type>) part of the normal section (don't put this into Standard or Private "
+"subsections)."
+msgstr ""
+
+#: C/index.docbook:1850(seglistitem/seg)
+msgid "No symbol index."
+msgstr "无标识符索引。"
+
+#: C/index.docbook:1851(seglistitem/seg)
+msgid ""
+"Does the <filename>&lt;package&gt;-docs.{xml,sgml}</filename> contain a "
+"index that xi:includes the generated index?"
+msgstr ""
+
+#: C/index.docbook:1857(seglistitem/seg)
+msgid "Symbols are not linked to their doc-section."
+msgstr ""
+
+#: C/index.docbook:1858(seglistitem/seg)
+msgid ""
+"Is the doc-comment using the correct markup (added #,% or ())? Check if the "
+"gtkdoc-fixxref warns about unresolvable xrefs."
+msgstr ""
+
+#: C/index.docbook:1864(seglistitem/seg)
+msgid "A new class does not appear in the docs."
+msgstr ""
+
+#: C/index.docbook:1865(seglistitem/seg)
+msgid ""
+"Is the new page xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</"
+"filename>."
+msgstr ""
+
+#: C/index.docbook:1871(seglistitem/seg)
+msgid "A new symbol does not appear in the docs."
+msgstr ""
+
+#: C/index.docbook:1872(seglistitem/seg)
+msgid ""
+"Is the doc-comment properly formatted. Check for spelling mistakes in the "
+"begin of the comment. Check if the gtkdoc-fixxref warns about unresolvable "
+"xrefs. Check if the symbol is correctly listed in the <filename>&lt;"
+"package&gt;-sections.txt</filename> in a public subsection."
+msgstr ""
+
+#: C/index.docbook:1880(seglistitem/seg)
+msgid "A type is missing from the class hierarchy."
+msgstr ""
+
+#: C/index.docbook:1881(seglistitem/seg)
+msgid ""
+"If the type is listed in <filename>&lt;package&gt;.hierarchy</filename> but "
+"not in <filename>xml/tree_index.sgml</filename> then double check that the "
+"type is correctly placed in the <filename>&lt;package&gt;-sections.txt</"
+"filename>. If the type instance (e.g. <type>GtkWidget</type>) is not listed "
+"or incidentialy makred private it will not be shown."
+msgstr ""
+
+#: C/index.docbook:1890(seglistitem/seg)
+msgid "I get foldoc links for all gobject annotations."
+msgstr ""
+
+#: C/index.docbook:1891(seglistitem/seg)
+msgid ""
+"Check that <filename>xml/annotation-glossary.xml</filename> is xi:included "
+"from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
+msgstr ""
+
+#: C/index.docbook:1899(seglistitem/seg)
+msgid "Parameter described in source code comment block but does not exist"
+msgstr ""
+
+#: C/index.docbook:1900(seglistitem/seg)
+msgid ""
+"Check if the prototype in the header has different parameter names as in the "
+"source."
+msgstr ""
+
+#: C/index.docbook:1905(seglistitem/seg)
+msgid "multiple \"IDs\" for constraint linkend: XYZ"
+msgstr ""
+
+#: C/index.docbook:1906(seglistitem/seg)
+msgid ""
+"Symbol XYZ appears twice in <filename>&lt;package&gt;-sections.txt</"
+"filename> file."
+msgstr ""
+
+#: C/index.docbook:1909(seglistitem/seg)
+msgid ""
+"Element typename in namespace '' encountered in para, but no template "
+"matches."
+msgstr ""
+
+#: C/index.docbook:1916(chapter/title)
+msgid "Tools related to gtk-doc"
+msgstr ""
+
+#: C/index.docbook:1918(chapter/para)
+msgid ""
+"GtkDocPlugin - a <ulink url=\"http://trac-hacks.org/wiki/GtkDocPlugin\">Trac "
+"GTK-Doc</ulink> integration plugin, that adds API docs to a trac site and "
+"integrates with the trac search."
+msgstr ""
+
+#: C/index.docbook:1923(chapter/para)
+msgid ""
+"Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since "
+"tags in the API to determine the minimum required version."
+msgstr ""
+
+#: C/index.docbook:12(appendixinfo/releaseinfo)
+#: C/fdl-appendix.xml:12(appendixinfo/releaseinfo)
+msgid "Version 1.1, March 2000"
+msgstr ""
+
+#: C/index.docbook:15(appendixinfo/copyright)
+msgid "<year>2000</year><holder>Free Software Foundation, Inc.</holder>"
+msgstr "<year>2000</year><holder>Free Software Foundation, Inc.</holder>"
+
+#: C/index.docbook:20(para/address)
+#, no-wrap
+msgid ""
+"Free Software Foundation, Inc. <street>51 Franklin Street, \n"
+"        Suite 330</street>, <city>Boston</city>, <state>MA</state>  \n"
+"        <postcode>02110-1301</postcode>  <country>USA</country>"
+msgstr ""
+
+#: C/index.docbook:19(legalnotice/para)
+#: C/fdl-appendix.xml:19(legalnotice/para)
+msgid ""
+"<_:address-1/> Everyone is permitted to copy and distribute verbatim copies "
+"of this license document, but changing it is not allowed."
+msgstr ""
+
+#: C/index.docbook:28(appendix/title) C/fdl-appendix.xml:28(appendix/title)
+#: C/fdl-appendix.xml:642(para/quote)
+msgid "GNU Free Documentation License"
+msgstr "GNU 自由文档许可证"
+
+#: C/index.docbook:31(sect1/title) C/fdl-appendix.xml:31(sect1/title)
+msgid "0. PREAMBLE"
+msgstr ""
+
+#: C/index.docbook:32(sect1/para)
+msgid ""
+"The purpose of this License is to make a manual, textbook, or other written "
+"document <quote>free</quote> in the sense of freedom: to assure everyone the "
+"effective freedom to copy and redistribute it, with or without modifying it, "
+"either commercially or noncommercially. Secondarily, this License preserves "
+"for the author and publisher a way to get credit for their work, while not "
+"being considered responsible for modifications made by others."
+msgstr ""
+
+#: C/index.docbook:43(sect1/para)
+msgid ""
+"This License is a kind of <quote>copyleft</quote>, which means that "
+"derivative works of the document must themselves be free in the same sense. "
+"It complements the GNU General Public License, which is a copyleft license "
+"designed for free software."
+msgstr ""
+
+#: C/index.docbook:50(sect1/para) C/fdl-appendix.xml:50(sect1/para)
+msgid ""
+"We have designed this License in order to use it for manuals for free "
+"software, because free software needs free documentation: a free program "
+"should come with manuals providing the same freedoms that the software does. "
+"But this License is not limited to software manuals; it can be used for any "
+"textual work, regardless of subject matter or whether it is published as a "
+"printed book. We recommend this License principally for works whose purpose "
+"is instruction or reference."
+msgstr ""
+
+#: C/index.docbook:62(sect1/title) C/fdl-appendix.xml:62(sect1/title)
+msgid "1. APPLICABILITY AND DEFINITIONS"
+msgstr ""
+
+#: C/index.docbook:63(sect1/para)
+msgid ""
+"This License applies to any manual or other work that contains a notice "
+"placed by the copyright holder saying it can be distributed under the terms "
+"of this License. The <quote>Document</quote>, below, refers to any such "
+"manual or work. Any member of the public is a licensee, and is addressed as "
+"<quote>you</quote>."
+msgstr ""
+
+#: C/index.docbook:72(sect1/para)
+msgid ""
+"A <quote>Modified Version</quote> of the Document means any work containing "
+"the Document or a portion of it, either copied verbatim, or with "
+"modifications and/or translated into another language."
+msgstr ""
+
+#: C/index.docbook:79(sect1/para)
+msgid ""
+"A <quote>Secondary Section</quote> is a named appendix or a front-matter "
+"section of the <link linkend=\"fdl-document\">Document</link> that deals "
+"exclusively with the relationship of the publishers or authors of the "
+"Document to the Document's overall subject (or to related matters) and "
+"contains nothing that could fall directly within that overall subject. (For "
+"example, if the Document is in part a textbook of mathematics, a Secondary "
+"Section may not explain any mathematics.) The relationship could be a matter "
+"of historical connection with the subject or with related matters, or of "
+"legal, commercial, philosophical, ethical or political position regarding "
+"them."
+msgstr ""
+
+#: C/index.docbook:94(sect1/para)
+msgid ""
+"The <quote>Invariant Sections</quote> are certain <link linkend=\"fdl-"
+"secondary\"> Secondary Sections</link> whose titles are designated, as being "
+"those of Invariant Sections, in the notice that says that the <link linkend="
+"\"fdl-document\">Document</link> is released under this License."
+msgstr ""
+
+#: C/index.docbook:103(sect1/para)
+msgid ""
+"The <quote>Cover Texts</quote> are certain short passages of text that are "
+"listed, as Front-Cover Texts or Back-Cover Texts, in the notice that says "
+"that the <link linkend=\"fdl-document\">Document</link> is released under "
+"this License."
+msgstr ""
+
+#: C/index.docbook:111(sect1/para)
+msgid ""
+"A <quote>Transparent</quote> copy of the <link linkend=\"fdl-document\"> "
+"Document</link> means a machine-readable copy, represented in a format whose "
+"specification is available to the general public, whose contents can be "
+"viewed and edited directly and straightforwardly with generic text editors "
+"or (for images composed of pixels) generic paint programs or (for drawings) "
+"some widely available drawing editor, and that is suitable for input to text "
+"formatters or for automatic translation to a variety of formats suitable for "
+"input to text formatters. A copy made in an otherwise Transparent file "
+"format whose markup has been designed to thwart or discourage subsequent "
+"modification by readers is not Transparent. A copy that is not "
+"<quote>Transparent</quote> is called <quote>Opaque</quote>."
+msgstr ""
+
+#: C/index.docbook:128(sect1/para) C/fdl-appendix.xml:128(sect1/para)
+msgid ""
+"Examples of suitable formats for Transparent copies include plain ASCII "
+"without markup, Texinfo input format, LaTeX input format, SGML or XML using "
+"a publicly available DTD, and standard-conforming simple HTML designed for "
+"human modification. Opaque formats include PostScript, PDF, proprietary "
+"formats that can be read and edited only by proprietary word processors, "
+"SGML or XML for which the DTD and/or processing tools are not generally "
+"available, and the machine-generated HTML produced by some word processors "
+"for output purposes only."
+msgstr ""
+
+#: C/index.docbook:141(sect1/para)
+msgid ""
+"The <quote>Title Page</quote> means, for a printed book, the title page "
+"itself, plus such following pages as are needed to hold, legibly, the "
+"material this License requires to appear in the title page. For works in "
+"formats which do not have any title page as such, <quote>Title Page</quote> "
+"means the text near the most prominent appearance of the work's title, "
+"preceding the beginning of the body of the text."
+msgstr ""
+
+#: C/index.docbook:153(sect1/title) C/fdl-appendix.xml:153(sect1/title)
+msgid "2. VERBATIM COPYING"
+msgstr ""
+
+#: C/index.docbook:154(sect1/para)
+msgid ""
+"You may copy and distribute the <link linkend=\"fdl-document\">Document</"
+"link> in any medium, either commercially or noncommercially, provided that "
+"this License, the copyright notices, and the license notice saying this "
+"License applies to the Document are reproduced in all copies, and that you "
+"add no other conditions whatsoever to those of this License. You may not use "
+"technical measures to obstruct or control the reading or further copying of "
+"the copies you make or distribute. However, you may accept compensation in "
+"exchange for copies. If you distribute a large enough number of copies you "
+"must also follow the conditions in <link linkend=\"fdl-section3\">section 3</"
+"link>."
+msgstr ""
+
+#: C/index.docbook:169(sect1/para) C/fdl-appendix.xml:169(sect1/para)
+msgid ""
+"You may also lend copies, under the same conditions stated above, and you "
+"may publicly display copies."
+msgstr ""
+
+#: C/index.docbook:176(sect1/title) C/fdl-appendix.xml:176(sect1/title)
+msgid "3. COPYING IN QUANTITY"
+msgstr ""
+
+#: C/index.docbook:177(sect1/para)
+msgid ""
+"If you publish printed copies of the <link linkend=\"fdl-document"
+"\">Document</link> numbering more than 100, and the Document's license "
+"notice requires <link linkend=\"fdl-cover-texts\">Cover Texts</link>, you "
+"must enclose the copies in covers that carry, clearly and legibly, all these "
+"Cover Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on "
+"the back cover. Both covers must also clearly and legibly identify you as "
+"the publisher of these copies. The front cover must present the full title "
+"with all words of the title equally prominent and visible. You may add other "
+"material on the covers in addition. Copying with changes limited to the "
+"covers, as long as they preserve the title of the <link linkend=\"fdl-"
+"document\">Document</link> and satisfy these conditions, can be treated as "
+"verbatim copying in other respects."
+msgstr ""
+
+#: C/index.docbook:195(sect1/para) C/fdl-appendix.xml:195(sect1/para)
+msgid ""
+"If the required texts for either cover are too voluminous to fit legibly, "
+"you should put the first ones listed (as many as fit reasonably) on the "
+"actual cover, and continue the rest onto adjacent pages."
+msgstr ""
+
+#: C/index.docbook:202(sect1/para)
+msgid ""
+"If you publish or distribute <link linkend=\"fdl-transparent\">Opaque</link> "
+"copies of the <link linkend=\"fdl-document\">Document</link> numbering more "
+"than 100, you must either include a machine-readable <link linkend=\"fdl-"
+"transparent\">Transparent</link> copy along with each Opaque copy, or state "
+"in or with each Opaque copy a publicly-accessible computer-network location "
+"containing a complete Transparent copy of the Document, free of added "
+"material, which the general network-using public has access to download "
+"anonymously at no charge using public-standard network protocols. If you use "
+"the latter option, you must take reasonably prudent steps, when you begin "
+"distribution of Opaque copies in quantity, to ensure that this Transparent "
+"copy will remain thus accessible at the stated location until at least one "
+"year after the last time you distribute an Opaque copy (directly or through "
+"your agents or retailers) of that edition to the public."
+msgstr ""
+
+#: C/index.docbook:222(sect1/para)
+msgid ""
+"It is requested, but not required, that you contact the authors of the <link "
+"linkend=\"fdl-document\">Document</link> well before redistributing any "
+"large number of copies, to give them a chance to provide you with an updated "
+"version of the Document."
+msgstr ""
+
+#: C/index.docbook:231(sect1/title) C/fdl-appendix.xml:231(sect1/title)
+msgid "4. MODIFICATIONS"
+msgstr "4. 修改"
+
+#: C/index.docbook:232(sect1/para)
+msgid ""
+"You may copy and distribute a <link linkend=\"fdl-modified\">Modified "
+"Version</link> of the <link linkend=\"fdl-document\">Document</link> under "
+"the conditions of sections <link linkend=\"fdl-section2\">2</link> and <link "
+"linkend=\"fdl-section3\">3</link> above, provided that you release the "
+"Modified Version under precisely this License, with the Modified Version "
+"filling the role of the Document, thus licensing distribution and "
+"modification of the Modified Version to whoever possesses a copy of it. In "
+"addition, you must do these things in the Modified Version:"
+msgstr ""
+
+#: C/index.docbook:248(formalpara/title)
+#: C/fdl-appendix.xml:248(formalpara/title)
+msgid "A"
+msgstr "A"
+
+#: C/index.docbook:249(formalpara/para)
+msgid ""
+"Use in the <link linkend=\"fdl-title-page\">Title Page</link> (and on the "
+"covers, if any) a title distinct from that of the <link linkend=\"fdl-"
+"document\">Document</link>, and from those of previous versions (which "
+"should, if there were any, be listed in the History section of the "
+"Document). You may use the same title as a previous version if the original "
+"publisher of that version gives permission."
+msgstr ""
+
+#: C/index.docbook:264(formalpara/title)
+#: C/fdl-appendix.xml:264(formalpara/title)
+msgid "B"
+msgstr "B"
+
+#: C/index.docbook:265(formalpara/para)
+msgid ""
+"List on the <link linkend=\"fdl-title-page\">Title Page</link>, as authors, "
+"one or more persons or entities responsible for authorship of the "
+"modifications in the <link linkend=\"fdl-modified\">Modified Version</link>, "
+"together with at least five of the principal authors of the <link linkend="
+"\"fdl-document\">Document</link> (all of its principal authors, if it has "
+"less than five)."
+msgstr ""
+
+#: C/index.docbook:279(formalpara/title)
+#: C/fdl-appendix.xml:279(formalpara/title)
+msgid "C"
+msgstr "C"
+
+#: C/index.docbook:280(formalpara/para)
+msgid ""
+"State on the <link linkend=\"fdl-title-page\">Title Page</link> the name of "
+"the publisher of the <link linkend=\"fdl-modified\">Modified Version</link>, "
+"as the publisher."
+msgstr ""
+
+#: C/index.docbook:291(formalpara/title)
+#: C/fdl-appendix.xml:291(formalpara/title)
+msgid "D"
+msgstr "D"
+
+#: C/index.docbook:292(formalpara/para)
+msgid ""
+"Preserve all the copyright notices of the <link linkend=\"fdl-document"
+"\">Document</link>."
+msgstr ""
+
+#: C/index.docbook:301(formalpara/title)
+#: C/fdl-appendix.xml:301(formalpara/title)
+msgid "E"
+msgstr "E"
+
+#: C/index.docbook:302(formalpara/para)
+#: C/fdl-appendix.xml:302(formalpara/para)
+msgid ""
+"Add an appropriate copyright notice for your modifications adjacent to the "
+"other copyright notices."
+msgstr ""
+
+#: C/index.docbook:311(formalpara/title)
+#: C/fdl-appendix.xml:311(formalpara/title)
+msgid "F"
+msgstr "F"
+
+#: C/index.docbook:312(formalpara/para)
+msgid ""
+"Include, immediately after the copyright notices, a license notice giving "
+"the public permission to use the <link linkend=\"fdl-modified\">Modified "
+"Version</link> under the terms of this License, in the form shown in the "
+"Addendum below."
+msgstr ""
+
+#: C/index.docbook:324(formalpara/title)
+#: C/fdl-appendix.xml:324(formalpara/title)
+msgid "G"
+msgstr "G"
+
+#: C/index.docbook:325(formalpara/para)
+msgid ""
+"Preserve in that license notice the full lists of <link linkend=\"fdl-"
+"invariant\"> Invariant Sections</link> and required <link linkend=\"fdl-"
+"cover-texts\">Cover Texts</link> given in the <link linkend=\"fdl-document"
+"\">Document's</link> license notice."
+msgstr ""
+
+#: C/index.docbook:337(formalpara/title)
+#: C/fdl-appendix.xml:337(formalpara/title)
+msgid "H"
+msgstr "H"
+
+#: C/index.docbook:338(formalpara/para)
+#: C/fdl-appendix.xml:338(formalpara/para)
+msgid "Include an unaltered copy of this License."
+msgstr ""
+
+#: C/index.docbook:346(formalpara/title)
+#: C/fdl-appendix.xml:346(formalpara/title)
+msgid "I"
+msgstr "I"
+
+#: C/index.docbook:347(formalpara/para)
+msgid ""
+"Preserve the section entitled <quote>History</quote>, and its title, and add "
+"to it an item stating at least the title, year, new authors, and publisher "
+"of the <link linkend=\"fdl-modified\">Modified Version</link> as given on "
+"the <link linkend=\"fdl-title-page\">Title Page</link>. If there is no "
+"section entitled <quote>History</quote> in the <link linkend=\"fdl-document"
+"\">Document</link>, create one stating the title, year, authors, and "
+"publisher of the Document as given on its Title Page, then add an item "
+"describing the Modified Version as stated in the previous sentence."
+msgstr ""
+
+#: C/index.docbook:365(formalpara/title)
+#: C/fdl-appendix.xml:365(formalpara/title)
+msgid "J"
+msgstr "J"
+
+#: C/index.docbook:366(formalpara/para)
+msgid ""
+"Preserve the network location, if any, given in the <link linkend=\"fdl-"
+"document\">Document</link> for public access to a <link linkend=\"fdl-"
+"transparent\">Transparent</link> copy of the Document, and likewise the "
+"network locations given in the Document for previous versions it was based "
+"on. These may be placed in the <quote>History</quote> section. You may omit "
+"a network location for a work that was published at least four years before "
+"the Document itself, or if the original publisher of the version it refers "
+"to gives permission."
+msgstr ""
+
+#: C/index.docbook:383(formalpara/title)
+#: C/fdl-appendix.xml:383(formalpara/title)
+msgid "K"
+msgstr "K"
+
+#: C/index.docbook:384(formalpara/para)
+msgid ""
+"In any section entitled <quote>Acknowledgements</quote> or "
+"<quote>Dedications</quote>, preserve the section's title, and preserve in "
+"the section all the substance and tone of each of the contributor "
+"acknowledgements and/or dedications given therein."
+msgstr ""
+
+#: C/index.docbook:396(formalpara/title)
+#: C/fdl-appendix.xml:396(formalpara/title)
+msgid "L"
+msgstr "L"
+
+#: C/index.docbook:397(formalpara/para)
+msgid ""
+"Preserve all the <link linkend=\"fdl-invariant\">Invariant Sections</link> "
+"of the <link linkend=\"fdl-document\">Document</link>, unaltered in their "
+"text and in their titles. Section numbers or the equivalent are not "
+"considered part of the section titles."
+msgstr ""
+
+#: C/index.docbook:409(formalpara/title)
+#: C/fdl-appendix.xml:409(formalpara/title)
+msgid "M"
+msgstr "M"
+
+#: C/index.docbook:410(formalpara/para)
+msgid ""
+"Delete any section entitled <quote>Endorsements</quote>. Such a section may "
+"not be included in the <link linkend=\"fdl-modified\">Modified Version</"
+"link>."
+msgstr ""
+
+#: C/index.docbook:421(formalpara/title)
+#: C/fdl-appendix.xml:421(formalpara/title)
+msgid "N"
+msgstr "N"
+
+#: C/index.docbook:422(formalpara/para)
+msgid ""
+"Do not retitle any existing section as <quote>Endorsements</quote> or to "
+"conflict in title with any <link linkend=\"fdl-invariant\">Invariant "
+"Section</link>."
+msgstr ""
+
+#: C/index.docbook:432(sect1/para)
+msgid ""
+"If the <link linkend=\"fdl-modified\">Modified Version</link> includes new "
+"front-matter sections or appendices that qualify as <link linkend=\"fdl-"
+"secondary\">Secondary Sections</link> and contain no material copied from "
+"the Document, you may at your option designate some or all of these sections "
+"as invariant. To do this, add their titles to the list of <link linkend="
+"\"fdl-invariant\">Invariant Sections</link> in the Modified Version's "
+"license notice. These titles must be distinct from any other section titles."
+msgstr ""
+
+#: C/index.docbook:444(sect1/para)
+msgid ""
+"You may add a section entitled <quote>Endorsements</quote>, provided it "
+"contains nothing but endorsements of your <link linkend=\"fdl-modified"
+"\">Modified Version</link> by various parties--for example, statements of "
+"peer review or that the text has been approved by an organization as the "
+"authoritative definition of a standard."
+msgstr ""
+
+#: C/index.docbook:453(sect1/para)
+msgid ""
+"You may add a passage of up to five words as a <link linkend=\"fdl-cover-"
+"texts\">Front-Cover Text</link>, and a passage of up to 25 words as a <link "
+"linkend=\"fdl-cover-texts\">Back-Cover Text</link>, to the end of the list "
+"of <link linkend=\"fdl-cover-texts\">Cover Texts</link> in the <link linkend="
+"\"fdl-modified\">Modified Version</link>. Only one passage of Front-Cover "
+"Text and one of Back-Cover Text may be added by (or through arrangements "
+"made by) any one entity. If the <link linkend=\"fdl-document\">Document</"
+"link> already includes a cover text for the same cover, previously added by "
+"you or by arrangement made by the same entity you are acting on behalf of, "
+"you may not add another; but you may replace the old one, on explicit "
+"permission from the previous publisher that added the old one."
+msgstr ""
+
+#: C/index.docbook:470(sect1/para)
+msgid ""
+"The author(s) and publisher(s) of the <link linkend=\"fdl-document"
+"\">Document</link> do not by this License give permission to use their names "
+"for publicity for or to assert or imply endorsement of any <link linkend="
+"\"fdl-modified\">Modified Version </link>."
+msgstr ""
+
+#: C/index.docbook:480(sect1/title) C/fdl-appendix.xml:480(sect1/title)
+msgid "5. COMBINING DOCUMENTS"
+msgstr ""
+
+#: C/index.docbook:481(sect1/para)
+msgid ""
+"You may combine the <link linkend=\"fdl-document\">Document</link> with "
+"other documents released under this License, under the terms defined in "
+"<link linkend=\"fdl-section4\">section 4</link> above for modified versions, "
+"provided that you include in the combination all of the <link linkend=\"fdl-"
+"invariant\">Invariant Sections</link> of all of the original documents, "
+"unmodified, and list them all as Invariant Sections of your combined work in "
+"its license notice."
+msgstr ""
+
+#: C/index.docbook:492(sect1/para)
+msgid ""
+"The combined work need only contain one copy of this License, and multiple "
+"identical <link linkend=\"fdl-invariant\">Invariant Sections</link> may be "
+"replaced with a single copy. If there are multiple Invariant Sections with "
+"the same name but different contents, make the title of each such section "
+"unique by adding at the end of it, in parentheses, the name of the original "
+"author or publisher of that section if known, or else a unique number. Make "
+"the same adjustment to the section titles in the list of Invariant Sections "
+"in the license notice of the combined work."
+msgstr ""
+
+#: C/index.docbook:505(sect1/para)
+msgid ""
+"In the combination, you must combine any sections entitled <quote>History</"
+"quote> in the various original documents, forming one section entitled "
+"<quote>History</quote>; likewise combine any sections entitled "
+"<quote>Acknowledgements</quote>, and any sections entitled "
+"<quote>Dedications</quote>. You must delete all sections entitled "
+"<quote>Endorsements.</quote>"
+msgstr ""
+
+#: C/index.docbook:516(sect1/title) C/fdl-appendix.xml:516(sect1/title)
+msgid "6. COLLECTIONS OF DOCUMENTS"
+msgstr ""
+
+#: C/index.docbook:517(sect1/para)
+msgid ""
+"You may make a collection consisting of the <link linkend=\"fdl-document"
+"\">Document</link> and other documents released under this License, and "
+"replace the individual copies of this License in the various documents with "
+"a single copy that is included in the collection, provided that you follow "
+"the rules of this License for verbatim copying of each of the documents in "
+"all other respects."
+msgstr ""
+
+#: C/index.docbook:527(sect1/para) C/fdl-appendix.xml:527(sect1/para)
+msgid ""
+"You may extract a single document from such a collection, and dispbibute it "
+"individually under this License, provided you insert a copy of this License "
+"into the extracted document, and follow this License in all other respects "
+"regarding verbatim copying of that document."
+msgstr ""
+
+#: C/index.docbook:537(sect1/title) C/fdl-appendix.xml:537(sect1/title)
+msgid "7. AGGREGATION WITH INDEPENDENT WORKS"
+msgstr ""
+
+#: C/index.docbook:538(sect1/para)
+msgid ""
+"A compilation of the <link linkend=\"fdl-document\">Document</link> or its "
+"derivatives with other separate and independent documents or works, in or on "
+"a volume of a storage or distribution medium, does not as a whole count as a "
+"<link linkend=\"fdl-modified\">Modified Version</link> of the Document, "
+"provided no compilation copyright is claimed for the compilation. Such a "
+"compilation is called an <quote>aggregate</quote>, and this License does not "
+"apply to the other self-contained works thus compiled with the Document , on "
+"account of their being thus compiled, if they are not themselves derivative "
+"works of the Document. If the <link linkend=\"fdl-cover-texts\">Cover Text</"
+"link> requirement of <link linkend=\"fdl-section3\">section 3</link> is "
+"applicable to these copies of the Document, then if the Document is less "
+"than one quarter of the entire aggregate, the Document's Cover Texts may be "
+"placed on covers that surround only the Document within the aggregate. "
+"Otherwise they must appear on covers around the whole aggregate."
+msgstr ""
+
+#: C/index.docbook:561(sect1/title) C/fdl-appendix.xml:561(sect1/title)
+msgid "8. TRANSLATION"
+msgstr ""
+
+#: C/index.docbook:562(sect1/para)
+msgid ""
+"Translation is considered a kind of modification, so you may distribute "
+"translations of the <link linkend=\"fdl-document\">Document</link> under the "
+"terms of <link linkend=\"fdl-section4\">section 4</link>. Replacing <link "
+"linkend=\"fdl-invariant\"> Invariant Sections</link> with translations "
+"requires special permission from their copyright holders, but you may "
+"include translations of some or all Invariant Sections in addition to the "
+"original versions of these Invariant Sections. You may include a translation "
+"of this License provided that you also include the original English version "
+"of this License. In case of a disagreement between the translation and the "
+"original English version of this License, the original English version will "
+"prevail."
+msgstr ""
+
+#: C/index.docbook:580(sect1/title) C/fdl-appendix.xml:580(sect1/title)
+msgid "9. TERMINATION"
+msgstr ""
+
+#: C/index.docbook:581(sect1/para)
+msgid ""
+"You may not copy, modify, sublicense, or distribute the <link linkend=\"fdl-"
+"document\">Document</link> except as expressly provided for under this "
+"License. Any other attempt to copy, modify, sublicense or distribute the "
+"Document is void, and will automatically terminate your rights under this "
+"License. However, parties who have received copies, or rights, from you "
+"under this License will not have their licenses terminated so long as such "
+"parties remain in full compliance."
+msgstr ""
+
+#: C/index.docbook:594(sect1/title) C/fdl-appendix.xml:594(sect1/title)
+msgid "10. FUTURE REVISIONS OF THIS LICENSE"
+msgstr ""
+
+#: C/index.docbook:595(sect1/para)
+msgid ""
+"The <ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf.html\">Free "
+"Software Foundation</ulink> may publish new, revised versions of the GNU "
+"Free Documentation License from time to time. Such new versions will be "
+"similar in spirit to the present version, but may differ in detail to "
+"address new problems or concerns. See <ulink type=\"http\" url=\"http://www."
+"gnu.org/copyleft\">http://www.gnu.org/copyleft/</ulink>."
+msgstr ""
+
+#: C/index.docbook:606(sect1/para)
+msgid ""
+"Each version of the License is given a distinguishing version number. If the "
+"<link linkend=\"fdl-document\">Document</link> specifies that a particular "
+"numbered version of this License <quote>or any later version</quote> applies "
+"to it, you have the option of following the terms and conditions either of "
+"that specified version or of any later version that has been published (not "
+"as a draft) by the Free Software Foundation. If the Document does not "
+"specify a version number of this License, you may choose any version ever "
+"published (not as a draft) by the Free Software Foundation."
+msgstr ""
+
+#: C/index.docbook:621(sect1/title) C/fdl-appendix.xml:621(sect1/title)
+msgid "Addendum"
+msgstr ""
+
+#: C/index.docbook:622(sect1/para) C/fdl-appendix.xml:622(sect1/para)
+msgid ""
+"To use this License in a document you have written, include a copy of the "
+"License in the document and put the following copyright and license notices "
+"just after the title page:"
+msgstr ""
+
+#: C/index.docbook:629(blockquote/para)
+#: C/fdl-appendix.xml:629(blockquote/para)
+msgid "Copyright YEAR YOUR NAME."
+msgstr ""
+
+#: C/index.docbook:632(blockquote/para)
+msgid ""
+"Permission is granted to copy, distribute and/or modify this document under "
+"the terms of the GNU Free Documentation License, Version 1.1 or any later "
+"version published by the Free Software Foundation; with the <link linkend="
+"\"fdl-invariant\">Invariant Sections</link> being LIST THEIR TITLES, with "
+"the <link linkend=\"fdl-cover-texts\">Front-Cover Texts</link> being LIST, "
+"and with the <link linkend=\"fdl-cover-texts\">Back-Cover Texts</link> being "
+"LIST. A copy of the license is included in the section entitled <quote>GNU "
+"Free Documentation License</quote>."
+msgstr ""
+
+#: C/index.docbook:647(sect1/para)
+msgid ""
+"If you have no <link linkend=\"fdl-invariant\">Invariant Sections</link>, "
+"write <quote>with no Invariant Sections</quote> instead of saying which ones "
+"are invariant. If you have no <link linkend=\"fdl-cover-texts\">Front-Cover "
+"Texts</link>, write <quote>no Front-Cover Texts</quote> instead of "
+"<quote>Front-Cover Texts being LIST</quote>; likewise for <link linkend="
+"\"fdl-cover-texts\">Back-Cover Texts</link>."
+msgstr ""
+
+#: C/index.docbook:657(sect1/para)
+msgid ""
+"If your document contains nontrivial examples of program code, we recommend "
+"releasing these examples in parallel under your choice of free software "
+"license, such as the <ulink type=\"http\" url=\"http://www.gnu.org/copyleft/"
+"gpl.html\"> GNU General Public License</ulink>, to permit their use in free "
+"software."
+msgstr ""
+
+#: C/fdl-appendix.xml:16(copyright/year)
+msgid "2000"
+msgstr "2000"
+
+#: C/fdl-appendix.xml:16(copyright/holder)
+msgid "Free Software Foundation, Inc."
+msgstr "自由软件基金会, Inc."
+
+#: C/fdl-appendix.xml:20(address/street)
+msgid "51 Franklin Street, Suite 330"
+msgstr ""
+
+#: C/fdl-appendix.xml:21(address/city)
+msgid "Boston"
+msgstr ""
+
+#: C/fdl-appendix.xml:21(address/state)
+msgid "MA"
+msgstr "MA"
+
+#: C/fdl-appendix.xml:22(address/postcode)
+msgid "02110-1301"
+msgstr "02110-1301"
+
+#: C/fdl-appendix.xml:22(address/country)
+msgid "USA"
+msgstr "USA"
+
+#: C/fdl-appendix.xml:20(para/address)
+msgid ""
+"Free Software Foundation, Inc. <_:street-1/>, <_:city-2/>, <_:state-3/> <_:"
+"postcode-4/> <_:country-5/>"
+msgstr ""
+
+#: C/fdl-appendix.xml:34(para/quote)
+msgid "free"
+msgstr ""
+
+#: C/fdl-appendix.xml:32(sect1/para)
+msgid ""
+"The purpose of this License is to make a manual, textbook, or other written "
+"document <_:quote-1/> in the sense of freedom: to assure everyone the "
+"effective freedom to copy and redistribute it, with or without modifying it, "
+"either commercially or noncommercially. Secondarily, this License preserves "
+"for the author and publisher a way to get credit for their work, while not "
+"being considered responsible for modifications made by others."
+msgstr ""
+
+#: C/fdl-appendix.xml:44(para/quote)
+msgid "copyleft"
+msgstr "copyleft"
+
+#: C/fdl-appendix.xml:43(sect1/para)
+msgid ""
+"This License is a kind of <_:quote-1/>, which means that derivative works of "
+"the document must themselves be free in the same sense. It complements the "
+"GNU General Public License, which is a copyleft license designed for free "
+"software."
+msgstr ""
+
+#: C/fdl-appendix.xml:67(para/quote) C/fdl-appendix.xml:82(para/link)
+#: C/fdl-appendix.xml:99(para/link) C/fdl-appendix.xml:107(para/link)
+#: C/fdl-appendix.xml:113(para/link) C/fdl-appendix.xml:156(para/link)
+#: C/fdl-appendix.xml:179(para/link) C/fdl-appendix.xml:190(para/link)
+#: C/fdl-appendix.xml:205(para/link) C/fdl-appendix.xml:224(para/link)
+#: C/fdl-appendix.xml:235(para/link) C/fdl-appendix.xml:253(para/link)
+#: C/fdl-appendix.xml:271(para/link) C/fdl-appendix.xml:294(para/link)
+#: C/fdl-appendix.xml:354(para/link) C/fdl-appendix.xml:368(para/link)
+#: C/fdl-appendix.xml:400(para/link) C/fdl-appendix.xml:462(para/link)
+#: C/fdl-appendix.xml:472(para/link) C/fdl-appendix.xml:482(para/link)
+#: C/fdl-appendix.xml:519(para/link) C/fdl-appendix.xml:540(para/link)
+#: C/fdl-appendix.xml:565(para/link) C/fdl-appendix.xml:583(para/link)
+#: C/fdl-appendix.xml:608(para/link)
+msgid "Document"
+msgstr "文档"
+
+#: C/fdl-appendix.xml:69(para/quote)
+msgid "you"
+msgstr ""
+
+#: C/fdl-appendix.xml:63(sect1/para)
+msgid ""
+"This License applies to any manual or other work that contains a notice "
+"placed by the copyright holder saying it can be distributed under the terms "
+"of this License. The <_:quote-1/>, below, refers to any such manual or work. "
+"Any member of the public is a licensee, and is addressed as <_:quote-2/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:73(para/quote) C/fdl-appendix.xml:234(para/link)
+#: C/fdl-appendix.xml:269(para/link) C/fdl-appendix.xml:283(para/link)
+#: C/fdl-appendix.xml:315(para/link) C/fdl-appendix.xml:351(para/link)
+#: C/fdl-appendix.xml:413(para/link) C/fdl-appendix.xml:433(para/link)
+#: C/fdl-appendix.xml:447(para/link) C/fdl-appendix.xml:459(para/link)
+#: C/fdl-appendix.xml:475(para/link) C/fdl-appendix.xml:543(para/link)
+msgid "Modified Version"
+msgstr ""
+
+#: C/fdl-appendix.xml:72(sect1/para)
+msgid ""
+"A <_:quote-1/> of the Document means any work containing the Document or a "
+"portion of it, either copied verbatim, or with modifications and/or "
+"translated into another language."
+msgstr ""
+
+#: C/fdl-appendix.xml:80(para/quote)
+msgid "Secondary Section"
+msgstr ""
+
+#: C/fdl-appendix.xml:79(sect1/para)
+msgid ""
+"A <_:quote-1/> is a named appendix or a front-matter section of the <_:"
+"link-2/> that deals exclusively with the relationship of the publishers or "
+"authors of the Document to the Document's overall subject (or to related "
+"matters) and contains nothing that could fall directly within that overall "
+"subject. (For example, if the Document is in part a textbook of mathematics, "
+"a Secondary Section may not explain any mathematics.) The relationship could "
+"be a matter of historical connection with the subject or with related "
+"matters, or of legal, commercial, philosophical, ethical or political "
+"position regarding them."
+msgstr ""
+
+#: C/fdl-appendix.xml:95(para/quote) C/fdl-appendix.xml:327(para/link)
+#: C/fdl-appendix.xml:398(para/link) C/fdl-appendix.xml:439(para/link)
+#: C/fdl-appendix.xml:486(para/link) C/fdl-appendix.xml:494(para/link)
+#: C/fdl-appendix.xml:567(para/link) C/fdl-appendix.xml:637(para/link)
+#: C/fdl-appendix.xml:648(para/link)
+msgid "Invariant Sections"
+msgstr ""
+
+#: C/fdl-appendix.xml:96(para/link) C/fdl-appendix.xml:435(para/link)
+msgid "Secondary Sections"
+msgstr ""
+
+#: C/fdl-appendix.xml:94(sect1/para)
+msgid ""
+"The <_:quote-1/> are certain <_:link-2/> whose titles are designated, as "
+"being those of Invariant Sections, in the notice that says that the <_:"
+"link-3/> is released under this License."
+msgstr ""
+
+#: C/fdl-appendix.xml:104(para/quote) C/fdl-appendix.xml:181(para/link)
+#: C/fdl-appendix.xml:328(para/link) C/fdl-appendix.xml:458(para/link)
+msgid "Cover Texts"
+msgstr ""
+
+#: C/fdl-appendix.xml:103(sect1/para)
+msgid ""
+"The <_:quote-1/> are certain short passages of text that are listed, as "
+"Front-Cover Texts or Back-Cover Texts, in the notice that says that the <_:"
+"link-2/> is released under this License."
+msgstr ""
+
+#: C/fdl-appendix.xml:112(para/quote) C/fdl-appendix.xml:124(para/quote)
+#: C/fdl-appendix.xml:207(para/link) C/fdl-appendix.xml:369(para/link)
+msgid "Transparent"
+msgstr ""
+
+#: C/fdl-appendix.xml:125(para/quote) C/fdl-appendix.xml:204(para/link)
+msgid "Opaque"
+msgstr ""
+
+#: C/fdl-appendix.xml:111(sect1/para)
+msgid ""
+"A <_:quote-1/> copy of the <_:link-2/> means a machine-readable copy, "
+"represented in a format whose specification is available to the general "
+"public, whose contents can be viewed and edited directly and "
+"straightforwardly with generic text editors or (for images composed of "
+"pixels) generic paint programs or (for drawings) some widely available "
+"drawing editor, and that is suitable for input to text formatters or for "
+"automatic translation to a variety of formats suitable for input to text "
+"formatters. A copy made in an otherwise Transparent file format whose markup "
+"has been designed to thwart or discourage subsequent modification by readers "
+"is not Transparent. A copy that is not <_:quote-3/> is called <_:quote-4/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:142(para/quote) C/fdl-appendix.xml:146(para/quote)
+#: C/fdl-appendix.xml:250(para/link) C/fdl-appendix.xml:266(para/link)
+#: C/fdl-appendix.xml:281(para/link) C/fdl-appendix.xml:352(para/link)
+msgid "Title Page"
+msgstr ""
+
+#: C/fdl-appendix.xml:141(sect1/para)
+msgid ""
+"The <_:quote-1/> means, for a printed book, the title page itself, plus such "
+"following pages as are needed to hold, legibly, the material this License "
+"requires to appear in the title page. For works in formats which do not have "
+"any title page as such, <_:quote-2/> means the text near the most prominent "
+"appearance of the work's title, preceding the beginning of the body of the "
+"text."
+msgstr ""
+
+#: C/fdl-appendix.xml:166(para/link) C/fdl-appendix.xml:551(para/link)
+msgid "section 3"
+msgstr ""
+
+#: C/fdl-appendix.xml:154(sect1/para)
+msgid ""
+"You may copy and distribute the <_:link-1/> in any medium, either "
+"commercially or noncommercially, provided that this License, the copyright "
+"notices, and the license notice saying this License applies to the Document "
+"are reproduced in all copies, and that you add no other conditions "
+"whatsoever to those of this License. You may not use technical measures to "
+"obstruct or control the reading or further copying of the copies you make or "
+"distribute. However, you may accept compensation in exchange for copies. If "
+"you distribute a large enough number of copies you must also follow the "
+"conditions in <_:link-2/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:177(sect1/para)
+msgid ""
+"If you publish printed copies of the <_:link-1/> numbering more than 100, "
+"and the Document's license notice requires <_:link-2/>, you must enclose the "
+"copies in covers that carry, clearly and legibly, all these Cover Texts: "
+"Front-Cover Texts on the front cover, and Back-Cover Texts on the back "
+"cover. Both covers must also clearly and legibly identify you as the "
+"publisher of these copies. The front cover must present the full title with "
+"all words of the title equally prominent and visible. You may add other "
+"material on the covers in addition. Copying with changes limited to the "
+"covers, as long as they preserve the title of the <_:link-3/> and satisfy "
+"these conditions, can be treated as verbatim copying in other respects."
+msgstr ""
+
+#: C/fdl-appendix.xml:202(sect1/para)
+msgid ""
+"If you publish or distribute <_:link-1/> copies of the <_:link-2/> numbering "
+"more than 100, you must either include a machine-readable <_:link-3/> copy "
+"along with each Opaque copy, or state in or with each Opaque copy a publicly-"
+"accessible computer-network location containing a complete Transparent copy "
+"of the Document, free of added material, which the general network-using "
+"public has access to download anonymously at no charge using public-standard "
+"network protocols. If you use the latter option, you must take reasonably "
+"prudent steps, when you begin distribution of Opaque copies in quantity, to "
+"ensure that this Transparent copy will remain thus accessible at the stated "
+"location until at least one year after the last time you distribute an "
+"Opaque copy (directly or through your agents or retailers) of that edition "
+"to the public."
+msgstr ""
+
+#: C/fdl-appendix.xml:222(sect1/para)
+msgid ""
+"It is requested, but not required, that you contact the authors of the <_:"
+"link-1/> well before redistributing any large number of copies, to give them "
+"a chance to provide you with an updated version of the Document."
+msgstr ""
+
+#: C/fdl-appendix.xml:236(para/link)
+msgid "2"
+msgstr "2"
+
+#: C/fdl-appendix.xml:237(para/link)
+msgid "3"
+msgstr "3"
+
+#: C/fdl-appendix.xml:232(sect1/para)
+msgid ""
+"You may copy and distribute a <_:link-1/> of the <_:link-2/> under the "
+"conditions of sections <_:link-3/> and <_:link-4/> above, provided that you "
+"release the Modified Version under precisely this License, with the Modified "
+"Version filling the role of the Document, thus licensing distribution and "
+"modification of the Modified Version to whoever possesses a copy of it. In "
+"addition, you must do these things in the Modified Version:"
+msgstr ""
+
+#: C/fdl-appendix.xml:249(formalpara/para)
+msgid ""
+"Use in the <_:link-1/> (and on the covers, if any) a title distinct from "
+"that of the <_:link-2/>, and from those of previous versions (which should, "
+"if there were any, be listed in the History section of the Document). You "
+"may use the same title as a previous version if the original publisher of "
+"that version gives permission."
+msgstr ""
+
+#: C/fdl-appendix.xml:265(formalpara/para)
+msgid ""
+"List on the <_:link-1/>, as authors, one or more persons or entities "
+"responsible for authorship of the modifications in the <_:link-2/>, together "
+"with at least five of the principal authors of the <_:link-3/> (all of its "
+"principal authors, if it has less than five)."
+msgstr ""
+
+#: C/fdl-appendix.xml:280(formalpara/para)
+msgid ""
+"State on the <_:link-1/> the name of the publisher of the <_:link-2/>, as "
+"the publisher."
+msgstr ""
+
+#: C/fdl-appendix.xml:292(formalpara/para)
+msgid "Preserve all the copyright notices of the <_:link-1/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:312(formalpara/para)
+msgid ""
+"Include, immediately after the copyright notices, a license notice giving "
+"the public permission to use the <_:link-1/> under the terms of this "
+"License, in the form shown in the Addendum below."
+msgstr ""
+
+#: C/fdl-appendix.xml:330(para/link)
+msgid "Document's"
+msgstr ""
+
+#: C/fdl-appendix.xml:325(formalpara/para)
+msgid ""
+"Preserve in that license notice the full lists of <_:link-1/> and required "
+"<_:link-2/> given in the <_:link-3/> license notice."
+msgstr ""
+
+#: C/fdl-appendix.xml:348(para/quote) C/fdl-appendix.xml:353(para/quote)
+#: C/fdl-appendix.xml:372(para/quote) C/fdl-appendix.xml:507(para/quote)
+#: C/fdl-appendix.xml:508(para/quote)
+msgid "History"
+msgstr ""
+
+#: C/fdl-appendix.xml:347(formalpara/para)
+msgid ""
+"Preserve the section entitled <_:quote-1/>, and its title, and add to it an "
+"item stating at least the title, year, new authors, and publisher of the <_:"
+"link-2/> as given on the <_:link-3/>. If there is no section entitled <_:"
+"quote-4/> in the <_:link-5/>, create one stating the title, year, authors, "
+"and publisher of the Document as given on its Title Page, then add an item "
+"describing the Modified Version as stated in the previous sentence."
+msgstr ""
+
+#: C/fdl-appendix.xml:366(formalpara/para)
+msgid ""
+"Preserve the network location, if any, given in the <_:link-1/> for public "
+"access to a <_:link-2/> copy of the Document, and likewise the network "
+"locations given in the Document for previous versions it was based on. These "
+"may be placed in the <_:quote-3/> section. You may omit a network location "
+"for a work that was published at least four years before the Document "
+"itself, or if the original publisher of the version it refers to gives "
+"permission."
+msgstr ""
+
+#: C/fdl-appendix.xml:385(para/quote) C/fdl-appendix.xml:509(para/quote)
+msgid "Acknowledgements"
+msgstr ""
+
+#: C/fdl-appendix.xml:386(para/quote) C/fdl-appendix.xml:510(para/quote)
+msgid "Dedications"
+msgstr ""
+
+#: C/fdl-appendix.xml:384(formalpara/para)
+msgid ""
+"In any section entitled <_:quote-1/> or <_:quote-2/>, preserve the section's "
+"title, and preserve in the section all the substance and tone of each of the "
+"contributor acknowledgements and/or dedications given therein."
+msgstr ""
+
+#: C/fdl-appendix.xml:397(formalpara/para)
+msgid ""
+"Preserve all the <_:link-1/> of the <_:link-2/>, unaltered in their text and "
+"in their titles. Section numbers or the equivalent are not considered part "
+"of the section titles."
+msgstr ""
+
+#: C/fdl-appendix.xml:412(para/quote) C/fdl-appendix.xml:424(para/quote)
+#: C/fdl-appendix.xml:445(para/quote)
+msgid "Endorsements"
+msgstr ""
+
+#: C/fdl-appendix.xml:410(formalpara/para)
+msgid ""
+"Delete any section entitled <_:quote-1/>. Such a section may not be included "
+"in the <_:link-2/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:425(para/link)
+msgid "Invariant Section"
+msgstr ""
+
+#: C/fdl-appendix.xml:422(formalpara/para)
+msgid ""
+"Do not retitle any existing section as <_:quote-1/> or to conflict in title "
+"with any <_:link-2/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:432(sect1/para)
+msgid ""
+"If the <_:link-1/> includes new front-matter sections or appendices that "
+"qualify as <_:link-2/> and contain no material copied from the Document, you "
+"may at your option designate some or all of these sections as invariant. To "
+"do this, add their titles to the list of <_:link-3/> in the Modified "
+"Version's license notice. These titles must be distinct from any other "
+"section titles."
+msgstr ""
+
+#: C/fdl-appendix.xml:444(sect1/para)
+msgid ""
+"You may add a section entitled <_:quote-1/>, provided it contains nothing "
+"but endorsements of your <_:link-2/> by various parties--for example, "
+"statements of peer review or that the text has been approved by an "
+"organization as the authoritative definition of a standard."
+msgstr ""
+
+#: C/fdl-appendix.xml:455(para/link)
+msgid "Front-Cover Text"
+msgstr ""
+
+#: C/fdl-appendix.xml:457(para/link)
+msgid "Back-Cover Text"
+msgstr ""
+
+#: C/fdl-appendix.xml:453(sect1/para)
+msgid ""
+"You may add a passage of up to five words as a <_:link-1/>, and a passage of "
+"up to 25 words as a <_:link-2/>, to the end of the list of <_:link-3/> in "
+"the <_:link-4/>. Only one passage of Front-Cover Text and one of Back-Cover "
+"Text may be added by (or through arrangements made by) any one entity. If "
+"the <_:link-5/> already includes a cover text for the same cover, previously "
+"added by you or by arrangement made by the same entity you are acting on "
+"behalf of, you may not add another; but you may replace the old one, on "
+"explicit permission from the previous publisher that added the old one."
+msgstr ""
+
+#: C/fdl-appendix.xml:470(sect1/para)
+msgid ""
+"The author(s) and publisher(s) of the <_:link-1/> do not by this License "
+"give permission to use their names for publicity for or to assert or imply "
+"endorsement of any <_:link-2/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:484(para/link) C/fdl-appendix.xml:566(para/link)
+msgid "section 4"
+msgstr ""
+
+#: C/fdl-appendix.xml:481(sect1/para)
+msgid ""
+"You may combine the <_:link-1/> with other documents released under this "
+"License, under the terms defined in <_:link-2/> above for modified versions, "
+"provided that you include in the combination all of the <_:link-3/> of all "
+"of the original documents, unmodified, and list them all as Invariant "
+"Sections of your combined work in its license notice."
+msgstr ""
+
+#: C/fdl-appendix.xml:492(sect1/para)
+msgid ""
+"The combined work need only contain one copy of this License, and multiple "
+"identical <_:link-1/> may be replaced with a single copy. If there are "
+"multiple Invariant Sections with the same name but different contents, make "
+"the title of each such section unique by adding at the end of it, in "
+"parentheses, the name of the original author or publisher of that section if "
+"known, or else a unique number. Make the same adjustment to the section "
+"titles in the list of Invariant Sections in the license notice of the "
+"combined work."
+msgstr ""
+
+#: C/fdl-appendix.xml:511(para/quote)
+msgid "Endorsements."
+msgstr ""
+
+#: C/fdl-appendix.xml:505(sect1/para)
+msgid ""
+"In the combination, you must combine any sections entitled <_:quote-1/> in "
+"the various original documents, forming one section entitled <_:quote-2/>; "
+"likewise combine any sections entitled <_:quote-3/>, and any sections "
+"entitled <_:quote-4/>. You must delete all sections entitled <_:quote-5/>"
+msgstr ""
+
+#: C/fdl-appendix.xml:517(sect1/para)
+msgid ""
+"You may make a collection consisting of the <_:link-1/> and other documents "
+"released under this License, and replace the individual copies of this "
+"License in the various documents with a single copy that is included in the "
+"collection, provided that you follow the rules of this License for verbatim "
+"copying of each of the documents in all other respects."
+msgstr ""
+
+#: C/fdl-appendix.xml:546(para/quote)
+msgid "aggregate"
+msgstr ""
+
+#: C/fdl-appendix.xml:550(para/link)
+msgid "Cover Text"
+msgstr ""
+
+#: C/fdl-appendix.xml:538(sect1/para)
+msgid ""
+"A compilation of the <_:link-1/> or its derivatives with other separate and "
+"independent documents or works, in or on a volume of a storage or "
+"distribution medium, does not as a whole count as a <_:link-2/> of the "
+"Document, provided no compilation copyright is claimed for the compilation. "
+"Such a compilation is called an <_:quote-3/>, and this License does not "
+"apply to the other self-contained works thus compiled with the Document , on "
+"account of their being thus compiled, if they are not themselves derivative "
+"works of the Document. If the <_:link-4/> requirement of <_:link-5/> is "
+"applicable to these copies of the Document, then if the Document is less "
+"than one quarter of the entire aggregate, the Document's Cover Texts may be "
+"placed on covers that surround only the Document within the aggregate. "
+"Otherwise they must appear on covers around the whole aggregate."
+msgstr ""
+
+#: C/fdl-appendix.xml:562(sect1/para)
+msgid ""
+"Translation is considered a kind of modification, so you may distribute "
+"translations of the <_:link-1/> under the terms of <_:link-2/>. Replacing <_:"
+"link-3/> with translations requires special permission from their copyright "
+"holders, but you may include translations of some or all Invariant Sections "
+"in addition to the original versions of these Invariant Sections. You may "
+"include a translation of this License provided that you also include the "
+"original English version of this License. In case of a disagreement between "
+"the translation and the original English version of this License, the "
+"original English version will prevail."
+msgstr ""
+
+#: C/fdl-appendix.xml:581(sect1/para)
+msgid ""
+"You may not copy, modify, sublicense, or distribute the <_:link-1/> except "
+"as expressly provided for under this License. Any other attempt to copy, "
+"modify, sublicense or distribute the Document is void, and will "
+"automatically terminate your rights under this License. However, parties who "
+"have received copies, or rights, from you under this License will not have "
+"their licenses terminated so long as such parties remain in full compliance."
+msgstr ""
+
+#: C/fdl-appendix.xml:597(para/ulink)
+msgid "Free Software Foundation"
+msgstr "Free Software Foundation"
+
+#: C/fdl-appendix.xml:603(para/ulink)
+msgid "http://www.gnu.org/copyleft/"
+msgstr ""
+
+#: C/fdl-appendix.xml:595(sect1/para)
+msgid ""
+"The <_:ulink-1/> may publish new, revised versions of the GNU Free "
+"Documentation License from time to time. Such new versions will be similar "
+"in spirit to the present version, but may differ in detail to address new "
+"problems or concerns. See <_:ulink-2/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:610(para/quote)
+msgid "or any later version"
+msgstr ""
+
+#: C/fdl-appendix.xml:606(sect1/para)
+msgid ""
+"Each version of the License is given a distinguishing version number. If the "
+"<_:link-1/> specifies that a particular numbered version of this License <_:"
+"quote-2/> applies to it, you have the option of following the terms and "
+"conditions either of that specified version or of any later version that has "
+"been published (not as a draft) by the Free Software Foundation. If the "
+"Document does not specify a version number of this License, you may choose "
+"any version ever published (not as a draft) by the Free Software Foundation."
+msgstr ""
+
+#: C/fdl-appendix.xml:639(para/link) C/fdl-appendix.xml:651(para/link)
+msgid "Front-Cover Texts"
+msgstr ""
+
+#: C/fdl-appendix.xml:640(para/link) C/fdl-appendix.xml:654(para/link)
+msgid "Back-Cover Texts"
+msgstr ""
+
+#: C/fdl-appendix.xml:632(blockquote/para)
+msgid ""
+"Permission is granted to copy, distribute and/or modify this document under "
+"the terms of the GNU Free Documentation License, Version 1.1 or any later "
+"version published by the Free Software Foundation; with the <_:link-1/> "
+"being LIST THEIR TITLES, with the <_:link-2/> being LIST, and with the <_:"
+"link-3/> being LIST. A copy of the license is included in the section "
+"entitled <_:quote-4/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:649(para/quote)
+msgid "with no Invariant Sections"
+msgstr ""
+
+#: C/fdl-appendix.xml:652(para/quote)
+msgid "no Front-Cover Texts"
+msgstr ""
+
+#: C/fdl-appendix.xml:653(para/quote)
+msgid "Front-Cover Texts being LIST"
+msgstr ""
+
+#: C/fdl-appendix.xml:647(sect1/para)
+msgid ""
+"If you have no <_:link-1/>, write <_:quote-2/> instead of saying which ones "
+"are invariant. If you have no <_:link-3/>, write <_:quote-4/> instead of <_:"
+"quote-5/>; likewise for <_:link-6/>."
+msgstr ""
+
+#: C/fdl-appendix.xml:661(para/ulink)
+msgid "GNU General Public License"
+msgstr "GNU 自由文档许可证"
+
+#: C/fdl-appendix.xml:657(sect1/para)
+msgid ""
+"If your document contains nontrivial examples of program code, we recommend "
+"releasing these examples in parallel under your choice of free software "
+"license, such as the <_:ulink-1/>, to permit their use in free software."
+msgstr ""
+
+#~ msgid "Chris"
+#~ msgstr "Chris"
+
+#~ msgid "Lyttle"
+#~ msgstr "Lyttle"
+
+#~ msgid "chris@wilddev.net"
+#~ msgstr "chris@wilddev.net"
+
+#~ msgid "Dan"
+#~ msgstr "Dan"
+
+#~ msgid "Mueth"
+#~ msgstr "Mueth"
+
+#~ msgid "d-mueth@uchicago.edu"
+#~ msgstr "d-mueth@uchicago.edu"
+
+#~ msgid "Stefan"
+#~ msgstr "Stefan"
+
+#~ msgid "Kost"
+#~ msgstr "Kost"
+
+#~ msgid "ensonic@users.sf.net"
+#~ msgstr "ensonic@users.sf.net"
+
+#~ msgid "gtk-doc-list@gnome.org"
+#~ msgstr "gtk-doc-list@gnome.org"
+
+#~| msgid "2000, 2005, 2007-2009"
+#~ msgid "2000, 2005"
+#~ msgstr "2000, 2005"
+
+#~| msgid "Dan Mueth and Chris Lyttle and Stefan Kost"
+#~ msgid "Dan Mueth and Chris Lyttle"
+#~ msgstr "Dan Mueth and Chris Lyttle"
+
+#~| msgid "2000"
+#~ msgid "2007-2011"
+#~ msgstr "2007-2011"
+
+#~ msgid "Stefan Sauer (Kost)"
+#~ msgstr "Stefan Sauer (Kost)"
+
+#~| msgid "26 Feb 2011"
+#~ msgid "20 Sep 2011"
+#~ msgstr "2011年二月二十日"
+
+#~ msgid "ss"
+#~ msgstr "ss"
+
+#~ msgid "development version"
+#~ msgstr "开发版本"
+
+#~| msgid "1.15"
+#~ msgid "1.18"
+#~ msgstr "1.18"
+
+#~| msgid "14 Jan 2011"
+#~ msgid "14 sep 2011"
+#~ msgstr "2011年一月十四日"
+
+#~ msgid "bug fixes, speedups, markdown support"
+#~ msgstr "补漏, speedups, markdown support"
+
+#~ msgid "1.17"
+#~ msgstr "1.17"
+
+#~ msgid "26 Feb 2011"
+#~ msgstr "2011年二月二十六日"
+
+#~ msgid "sk"
+#~ msgstr "sk"
+
+#~ msgid "urgent bug fix update"
+#~ msgstr "紧急的bug修复更新"
+
+#~ msgid "1.16"
+#~ msgstr "1.16"
+
+#~ msgid "14 Jan 2011"
+#~ msgstr "2011年一月十四日"
+
+#~ msgid "bugfixes, layout improvements"
+#~ msgstr "错误修正,布局的改进"
+
+#~ msgid "1.15"
+#~ msgstr "1.15"
+
+#~ msgid "21 May 2010"
+#~ msgstr "2010年五月二十一日"
+
+#~ msgid "bug and regression fixes"
+#~ msgstr "错误与复原修补"
+
+#~ msgid "1.14"
+#~ msgstr "1.14"
+
+#~ msgid "28 March 2010"
+#~ msgstr "2010三月二十八日"
+
+#~ msgid "bugfixes and performance improvements"
+#~ msgstr "补漏与性能提高"
+
+#~ msgid "1.13"
+#~ msgstr "1.13"
+
+#~ msgid "18 December 2009"
+#~ msgstr "2009年十二月十八日"
+
+#~ msgid "broken tarball update"
+#~ msgstr "不完整的tarball升级"
+
+#~ msgid "1.12"
+#~ msgstr "1.12"
+
+#~ msgid "new tool features and bugfixes"
+#~ msgstr "工具的新功能和错误修正"
+
+#~ msgid "1.11"
+#~ msgstr "1.11"
+
+#~ msgid "16 Novemebr 2008"
+#~ msgstr "2008年十一月十六日"
+
+#~ msgid "mal"
+#~ msgstr "不良品"
+
+#~ msgid "GNOME doc-utils migration"
+#~ msgstr "GNOME文档组件迁移"
+
+#~ msgid "xxx_get_type()"
+#~ msgstr "xxx_get_type()"
+
+#~ msgid "&lt;package&gt;.types"
+#~ msgstr "&lt;package&gt;.types"
+
+#~ msgid "&lt;package&gt;-sections.txt"
+#~ msgstr "&lt;package&gt;-sections.txt"
+
+#~ msgid "explanation"
+#~ msgstr "解释"
+
+#~ msgid ""
+#~ "Missing or wrong naming in <placeholder-1/> file (see <placeholder-2/>)."
+#~ msgstr "在<placeholder-1/>文件中缺失或错误的命名（参看<placeholder-2/>）."
+
+#~ msgid "GtkWidget"
+#~ msgstr "GtkWidget"
+
+#~ msgid "&lt;package&gt;-docs.{xml,sgml}"
+#~ msgstr "&lt;package&gt;-docs.{xml,sgml}"
