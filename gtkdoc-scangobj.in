@@ -761,8 +761,6 @@ describe_signed_constant (gsize size, gint64 value)
           desc = g_strdup ("G_MAXINT");
         else if (value == G_MININT)
           desc = g_strdup ("G_MININT");
-        else if (value == (gint64)G_MAXUINT)
-          desc = g_strdup ("G_MAXUINT");
       }
       break;
     case 4:
@@ -771,15 +769,11 @@ describe_signed_constant (gsize size, gint64 value)
           desc = g_strdup ("G_MAXINT");
         else if (value == G_MININT)
           desc = g_strdup ("G_MININT");
-        else if (value == (gint64)G_MAXUINT)
-          desc = g_strdup ("G_MAXUINT");
       }
       if (value == G_MAXLONG)
         desc = g_strdup ("G_MAXLONG");
       else if (value == G_MINLONG)
         desc = g_strdup ("G_MINLONG");
-      else if (value == (gint64)G_MAXULONG)
-        desc = g_strdup ("G_MAXULONG");
       break;
     case 8:
       if (value == G_MAXINT64)
