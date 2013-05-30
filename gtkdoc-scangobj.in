@@ -41,6 +41,12 @@ my $PRINT_HELP;
 my $TYPE_INIT_FUNC="#if !GLIB_CHECK_VERSION(2,35,0)\n  g_type_init();\n  #endif\n  g_type_class_ref(G_TYPE_OBJECT)";
 my $QUERY_CHILD_PROPERTIES;
 
+my $CC;
+my $LD;
+my $CFLAGS;
+my $LDFLAGS;
+my $RUN;
+
 # --nogtkinit is deprecated, as it is the default now anyway.
 %optctl = (module => \$MODULE,
            types => \$TYPES_FILE,
@@ -48,11 +54,16 @@ my $QUERY_CHILD_PROPERTIES;
            'type-init-func' => \$TYPE_INIT_FUNC,
            'query-child-properties' => \$QUERY_CHILD_PROPERTIES,
            'output-dir' => \$OUTPUT_DIR,
+           'cc' => \$CC,
+           'ld' => \$LD,
+           'cflags' => \$CFLAGS,
+           'ldflags' => \$LDFLAGS,
+           'run' => \$RUN,
            'verbose' => \$VERBOSE,
            'version' => \$PRINT_VERSION,
            'help' => \$PRINT_HELP);
 
-GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "type-init-func:s", "query-child-properties:s", "verbose", "version", "help");
+GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "type-init-func:s", "query-child-properties:s", "cc:s", "ld:s", "run:s", "cflags:s", "ldflags:s", "verbose", "version", "help");
 
 if ($NO_GTK_INIT) {
   # Do nothing. This just avoids a warning.
@@ -78,6 +89,11 @@ gtkdoc-scangobj version @VERSION@ - introspect g-objects
 --query-child-properties=FUNC A function that returns a list of child
                               properties for a class
 --output-dir=DIRNAME          The directory where the results are stored
+--cc=COMPILER                 The compiler to use
+--ld=LINKER                   The linker to use
+--run=RUN                     Command for running the scanner
+--cflags=CFLAGS               Compiler flags
+--ldflags=LDFLAGS             Linker flags
 --verbose                     Print extra output while processing
 --version                     Print the version of this program
 --help                        Print this help
@@ -1349,11 +1365,21 @@ close OUTPUT;
 
 # Compile and run our file
 
-$CC = $ENV{CC} ? $ENV{CC} : "gcc";
-$LD = $ENV{LD} ? $ENV{LD} : $CC;
-$CFLAGS = $ENV{CFLAGS} ? $ENV{CFLAGS} : "";
-$LDFLAGS = $ENV{LDFLAGS} ? $ENV{LDFLAGS} : "";
-$RUN = $ENV{RUN} ? $ENV{RUN} : "";
+unless ($CC) {
+    $CC = $ENV{CC} ? $ENV{CC} : "gcc";
+}
+unless ($LD) {
+    $LD = $ENV{LD} ? $ENV{LD} : $CC;
+}
+unless ($CFLAGS) {
+    $CFLAGS = $ENV{CFLAGS} ? $ENV{CFLAGS} : "";
+}
+unless ($LDFLAGS) {
+    $LDFLAGS = $ENV{LDFLAGS} ? $ENV{LDFLAGS} : "";
+}
+unless ($RUN) {
+    $RUN = $ENV{RUN} ? $ENV{RUN} : "";
+}
 
 my $o_file;
 if ($CC =~ /libtool/) {

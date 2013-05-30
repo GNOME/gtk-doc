@@ -37,14 +37,25 @@ my $MODULE;
 my $OUTPUT_DIR;
 my $PRINT_VERSION;
 
+my $CC;
+my $LD;
+my $CFLAGS;
+my $LDFLAGS;
+my $RUN;
+
 %optctl = (module => \$MODULE,
            types => \$TYPES_FILE,
            nogtkinit => \$NO_GTK_INIT,
            'output-dir' => \$OUTPUT_DIR,
+           'cc' => \$CC,
+           'ld' => \$LD,
+           'cflags' => \$CFLAGS,
+           'ldflags' => \$LDFLAGS,
+           'run' => \$RUN,
            'version' => \$PRINT_VERSION,
            'help' => \$PRINT_HELP);
 
-GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "version", "help");
+GetOptions(\%optctl, "module=s", "types:s", "output-dir:s", "nogtkinit", "cc:s", "ld:s", "run:s", "cflags:s", "ldflags:s", "version", "help");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -62,6 +73,11 @@ gtkdoc-scanobj version @VERSION@ - introspect gtk-objects
 --module=MODULE_NAME          Name of the doc module being parsed
 --types=FILE                  The name of the file to store the types in
 --output-dir=DIRNAME          The directory where the results are stored
+--cc=COMPILER                 The compiler to use
+--ld=LINKER                   The linker to use
+--run=RUN                     Command for running the scanner
+--cflags=CFLAGS               Compiler flags
+--ldflags=LDFLAGS             Linker flags
 --version                     Print the version of this program
 --help                        Print this help
 EOF
@@ -518,11 +534,21 @@ close OUTPUT;
 
 # Compile and run our file
 
-$CC = $ENV{CC} ? $ENV{CC} : "gcc";
-$LD = $ENV{LD} ? $ENV{LD} : $CC;
-$CFLAGS = $ENV{CFLAGS} ? $ENV{CFLAGS} : "";
-$LDFLAGS = $ENV{LDFLAGS} ? $ENV{LDFLAGS} : "";
-$RUN = $ENV{RUN} ? $ENV{RUN} : "";
+unless ($CC) {
+    $CC = $ENV{CC} ? $ENV{CC} : "gcc";
+}
+unless ($LD) {
+    $LD = $ENV{LD} ? $ENV{LD} : $CC;
+}
+unless ($CFLAGS) {
+    $CFLAGS = $ENV{CFLAGS} ? $ENV{CFLAGS} : "";
+}
+unless ($LDFLAGS) {
+    $LDFLAGS = $ENV{LDFLAGS} ? $ENV{LDFLAGS} : "";
+}
+unless ($RUN) {
+    $RUN = $ENV{RUN} ? $ENV{RUN} : "";
+}
 
 my $o_file;
 if ($CC =~ /libtool/) {
