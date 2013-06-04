@@ -209,6 +209,15 @@ else
 fi
 AC_SUBST(TRACE)
 
+dnl check what date format we can use for the makefile tracing in tests
+date +%s.%N | grep -q "%N"
+if test "$?" == "1"; then
+  TS_FMT="+%s.%N"
+else
+  TS_FMT="+%s.0"
+fi
+AC_SUBST(TS_FMT)
+
 dnl
 dnl Documentation
 dnl

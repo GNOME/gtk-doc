@@ -53,17 +53,17 @@ REPORT_FILES = \
 CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
 
 check-local: html-build.stamp pdf-build.stamp
-	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: All done"
 
 docs: html-build.stamp pdf-build.stamp
-	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: All done"
 
 $(REPORT_FILES): sgml-build.stamp
 
 ts:
-	@echo >ts `date +%s.%N`;
+	@echo >ts `date $(TS_FMT)`;
 
 #### setup ####
 
@@ -83,7 +83,7 @@ setup-build.stamp: ts
 #### scan ####
 
 scan-build.stamp: ts $(HFILE_GLOB) $(CFILE_GLOB)
-	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Scanning header files"
 	@_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
@@ -93,7 +93,7 @@ scan-build.stamp: ts $(HFILE_GLOB) $(CFILE_GLOB)
 	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
 	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(SCAN_OPTIONS) $(EXTRA_HFILES) 2>&1 | tee -a gtkdoc-scan.log
 	@if grep -l '^..*$$' $(DOC_MODULE).types > /dev/null 2>&1 ; then \
-		ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+		ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	    echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Introspecting gobjects"; \
 	    scanobj_options=""; \
 	    if test "x$(V)" = "x1"; then \
@@ -116,7 +116,7 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 #### xml ####
 
 sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt $(expand_content_files)
-	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Building XML"
 	@_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
@@ -133,7 +133,7 @@ sgml.stamp: sgml-build.stamp
 #### html ####
 
 html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
-	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @00$$tsd +%H:%M:%S.%N`: Building HTML"
 	@rm -rf html
 	@mkdir html
@@ -153,7 +153,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	    cp $(abs_builddir)/$$file $(abs_builddir)/html; \
 	  fi; \
 	done;
-	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Fixing cross-references"
 	@echo "gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)" >gtkdoc-fixxref.log; \
 	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
@@ -163,7 +163,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 #### pdf ####
 
 pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
-	@ts1=`cat ts`;ts2=`date +%s.%N`;tsd=`echo $$ts2-$$ts1 | bc`; \
+	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Building PDF"
 	@rm -f $(DOC_MODULE).pdf
 	@mkpdf_options=""; \
