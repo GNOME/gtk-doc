@@ -49,7 +49,12 @@ REPORT_FILES = \
 	$(DOC_MODULE)-undeclared.txt \
 	$(DOC_MODULE)-unused.txt
 
-CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
+gtkdoc-check.test: Makefile
+	$(AM_V_GEN)echo "#!/bin/sh -e" > $@; \
+		echo "$(GTKDOC_CHECK_PATH) || exit 1" >> $@; \
+		chmod +x $@
+
+CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS) gtkdoc-check.test
 
 if ENABLE_GTK_DOC
 if GTK_DOC_BUILD_HTML

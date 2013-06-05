@@ -11,7 +11,12 @@ AC_DEFUN([GTK_DOC_CHECK],
   AC_BEFORE([AM_PROG_LIBTOOL],[$0])dnl setup libtool first
 
   dnl check for tools we added during development
-  AC_PATH_PROG([GTKDOC_CHECK],[gtkdoc-check])
+  dnl Use AC_CHECK_PROG to avoid the check target using an absolute path that
+  dnl may not be writable by the user. Currently, automake requires that the
+  dnl test name must end in '.test'.
+  dnl https://bugzilla.gnome.org/show_bug.cgi?id=701638
+  AC_CHECK_PROG([GTKDOC_CHECK],[gtkdoc-check],[gtkdoc-check.test])
+  AC_PATH_PROG([GTKDOC_CHECK_PATH],[gtkdoc-check])
   AC_PATH_PROGS([GTKDOC_REBASE],[gtkdoc-rebase],[true])
   AC_PATH_PROG([GTKDOC_MKPDF],[gtkdoc-mkpdf])
 
