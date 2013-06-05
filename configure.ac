@@ -286,7 +286,7 @@ test -n "$JADE" \
     || AC_MSG_NOTICE([   SGML support disabled, no jade processor available])
 test -n "$DBLATEX$FOP" \
     && AC_MSG_NOTICE([** XML PDF support enabled, using $DBLATEX$FOP]) \
-    || AC_MSG_NOTICE([   XML PDF support disabled, no fop available])
+    || AC_MSG_NOTICE([   XML PDF support disabled, no dblatex or fop available])
 test -n "$HIGHLIGHT" \
     && AC_MSG_NOTICE([** Syntax highlighting of examples enabled, using $HIGHLIGHT]) \
     || AC_MSG_NOTICE([   Syntax highlighting of examples disabled])
