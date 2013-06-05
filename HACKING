@@ -23,7 +23,7 @@ http://live.gnome.org/MaintainersCorner/Releasing
   and then copy to NEWS
 
 - commit
-  git add configure.ac NEWS help/manual/C/gtk-doc-manual.xml
+  git add configure.ac NEWS help/manual/C/index.docbook
   git commit -m"release: update news and date in manual"
   git push
 
@@ -47,7 +47,7 @@ http://live.gnome.org/MaintainersCorner/Releasing
   help/manual/C/gtk-doc-manual.xml
 
 - commit
-  git add configure.ac help/manual/C/gtk-doc-manual.xml
+  git add configure.ac help/manual/C/index.docbook
   git commit -m"release: bump versions and back to development"
   git push
 
