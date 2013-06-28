@@ -483,4 +483,8 @@ void bug_624001d(void);
 GLIB_DEPRECATED
 void bug_624001e (void);
 
+#ifdef GTKDOC_DISABLE_DEPRECATED
+void deprecation_notice(void);
+#endif
+
 #endif // GTKDOC_TESTER_H

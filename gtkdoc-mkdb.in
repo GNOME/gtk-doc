@@ -3093,7 +3093,9 @@ sub MakeConditionDescription {
     }
 
     if ($desc ne "") {
-        $desc=" condition=\"".$desc."\"";
+        my $cond = $desc;
+        $cond =~ s/\"/&quot;/g;
+        $desc=" condition=\"".$cond."\"";
         #print "condition for '$symbol' = '$desc'\n";
     }
     return $desc;

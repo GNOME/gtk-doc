@@ -396,3 +396,14 @@ void bug_624001e(void)
 {
 }
 
+/**
+ * deprecation_notice:
+ *
+ * Foo.
+ *
+ * Deprecated: 3.10: Use named icon "bar" instead.
+ */
+void deprecation_notice(void)
+{
+}
+
