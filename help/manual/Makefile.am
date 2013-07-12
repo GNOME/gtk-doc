@@ -6,6 +6,6 @@ HELP_FILES = \
         index.docbook \
 	fdl-appendix.xml
 
-HELP_LINGUAS = bn_IN de el en_GB es fr gu sl sv ta te zh_CN
+HELP_LINGUAS = bn_IN de el en_GB es fr gu pt_BR sl sv ta te zh_CN
 
 -include $(top_srcdir)/git.mk
