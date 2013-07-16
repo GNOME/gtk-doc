@@ -465,7 +465,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                       <xsl:with-param name="object" select="$prev"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                  <img src="left.png" width="24" height="24" border="0">
+                  <img src="left.png" width="16" height="16" border="0">
                     <xsl:attribute name="alt">
                       <xsl:call-template name="gentext">
                         <xsl:with-param name="key">nav-prev</xsl:with-param>
@@ -488,7 +488,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                       <xsl:with-param name="object" select="$up"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                  <img src="up.png" width="24" height="24" border="0">
+                  <img src="up.png" width="16" height="16" border="0">
                     <xsl:attribute name="alt">
                       <xsl:call-template name="gentext">
                         <xsl:with-param name="key">nav-up</xsl:with-param>
@@ -511,7 +511,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                       <xsl:with-param name="object" select="$home"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                  <img src="home.png" width="24" height="24" border="0">
+                  <img src="home.png" width="16" height="16" border="0">
                     <xsl:attribute name="alt">
                       <xsl:call-template name="gentext">
                         <xsl:with-param name="key">nav-home</xsl:with-param>
@@ -537,7 +537,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                       <xsl:with-param name="object" select="$next"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                  <img src="right.png" width="24" height="24" border="0">
+                  <img src="right.png" width="16" height="16" border="0">
                     <xsl:attribute name="alt">
                       <xsl:call-template name="gentext">
                         <xsl:with-param name="key">nav-next</xsl:with-param>
