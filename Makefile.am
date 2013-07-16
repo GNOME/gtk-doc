@@ -36,8 +36,11 @@ gtkdocdata_DATA = \
 	gtk-doc.notmpl-flat.make	\
 	home.png			\
 	left.png			\
+	left-insensitive.png		\
 	right.png		\
+	right-insensitive.png		\
 	up.png			\
+	up-insensitive.png		\
 	style.css
 
 pkgconfigdir = $(datadir)/pkgconfig
