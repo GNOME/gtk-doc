@@ -234,10 +234,8 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         <tr valign="middle">
           <td width="100%" align="left">
             <!--<xsl:if test="name()='refentry'"-->
+            <a href="#" class="shortcut">Top</a>
             <xsl:if test="count($sections) > 0">
-              <xsl:if test="count($sect_synopsis) > 0">
-                <a href="#{$section_id}.synopsis" class="shortcut">Top</a>
-              </xsl:if>
               <xsl:if test="count($sect_desc) > 0">
                 &#160;|&#160;
                 <a href="#{$section_id}.description" class="shortcut">

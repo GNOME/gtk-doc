@@ -469,9 +469,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
             <!--<xsl:if test="name()='refentry'"-->
             <xsl:choose>
               <xsl:when test="count($refsections) > 0">
-                <xsl:if test="count($sect_synopsis) > 0">
-                  <a href="#{$section_id}.synopsis" class="shortcut">Top</a>
-                </xsl:if>
+                <a href="#" class="shortcut">Top</a>
                 <xsl:if test="count($sect_desc) > 0">
                   &#160;|&#160;
                   <a href="#{$section_id}.description" class="shortcut">
