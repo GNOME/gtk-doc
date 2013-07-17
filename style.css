@@ -178,6 +178,18 @@ hr
   font-size: 80%;
 }
 
+.informalfigure,
+.figure
+{
+  margin: 2em;
+}
+
+.informalexample,
+.example
+{
+  margin: 2em;
+}
+
 .warning
 {
   /* tango:orange 0/1 */
@@ -195,6 +207,7 @@ hr
   padding: 0.5em;
   border-width: 1px;
   border-style: solid;
+  margin: 2em;
 }
 .note h3, .warning h3
 {
@@ -203,6 +216,21 @@ hr
 .note p, .warning p
 {
   margin-bottom: 0.0em
+}
+
+p + div.section
+{
+  margin-top: 2.5em;
+}
+
+div.refnamediv,
+div.refsynopsisdiv,
+div.refsect1,
+div.refsect2,
+div.toc,
+div.section
+{
+  margin-bottom: 2.5em;
 }
 
 /* blob links */
