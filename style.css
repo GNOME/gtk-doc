@@ -164,6 +164,24 @@ hr
   clear: both;
 }
 
+dl.toc dt
+{
+  padding-bottom: 0.25em;
+}
+
+dl.toc > dd > dl > dt
+{
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+}
+
+dl.toc > dt
+{
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+  font-weight: bold;
+}
+
 .parameter
 {
   font-style: normal;
