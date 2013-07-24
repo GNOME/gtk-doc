@@ -20,6 +20,7 @@
 
   <!-- change some parameters -->
   <!-- http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html -->
+  <xsl:param name="admon.style"/>
   <xsl:param name="toc.section.depth">2</xsl:param>
   <xsl:param name="generate.toc">
     book	toc
