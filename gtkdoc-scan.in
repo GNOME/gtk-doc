@@ -253,6 +253,7 @@ sub ScanHeader {
     my ($input_file, $section_list) = @_;
 
     my $list = "";                  # Holds the resulting list of declarations.
+    my $title = "";                 # Holds the title of the section    
     my ($in_comment) = 0;                  # True if we are in a comment.
     my ($in_declaration) = "";          # The type of declaration we are in, e.g.
                                   #   'function' or 'macro'.
@@ -800,7 +801,7 @@ sub ScanHeader {
                 if ($symbol =~ m/^(\S+)(Class|Iface|Interface)\b/) {
                     my $objectname = $1;
                     @TRACE@("Found object: $1");
-                    $list = "<TITLE>$objectname</TITLE>\n$list";
+                    $title = "<TITLE>$objectname</TITLE>\n";
                     push (@objects, $objectname);
                 }
                 @TRACE@("Store struct: $symbol");
@@ -834,6 +835,9 @@ sub ScanHeader {
         }
     }
 
+    # add title
+    $list = "$title$list";
+    
     @TRACE@("Scanning $input_file done\n");
     
     # Try to separate the standard macros and functions, placing them at the
