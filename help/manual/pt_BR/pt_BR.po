@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc master\n"
-"POT-Creation-Date: 2013-07-11 17:37+0000\n"
-"PO-Revision-Date: 2013-07-12 02:57-0300\n"
+"POT-Creation-Date: 2013-07-24 20:28+0000\n"
+"PO-Revision-Date: 2013-07-30 03:17-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
@@ -75,7 +75,7 @@ msgstr "Muitos dos nomes usados por empresas para distinguir seus produtos e ser
 
 #: C/index.docbook:83(revhistory/revision)
 msgid "<revnumber>1.19.1</revnumber> <date>05 Jun 2013</date> <authorinitials>ss</authorinitials> <revremark>development version</revremark>"
-msgstr "<revnumber>1.19.1</revnumber> <date>05 Jun 2013</date> <authorinitials>ss</authorinitials>"
+msgstr "<revnumber>1.19.1</revnumber> <date>05 Jun 2013</date> <authorinitials>ss</authorinitials> <revremark>versão de desenvolvimento</revremark>"
 
 #: C/index.docbook:89(revhistory/revision)
 msgid "<revnumber>1.19</revnumber> <date>05 Jun 2013</date> <authorinitials>ss</authorinitials> <revremark>bug fixes</revremark>"
@@ -219,7 +219,7 @@ msgstr "Instalação"
 
 #: C/index.docbook:329(sect2/para)
 msgid "There is no standard place where the DocBook Modular Stylesheets are installed."
-msgstr "Não há um lugar padrão onde as folhas de estilogs modulares de DocBook são instaladas."
+msgstr "Não há um lugar padrão onde as folhas de estilos modulares de DocBook são instaladas."
 
 #: C/index.docbook:332(sect2/para)
 msgid "GTK-Doc's configure script searches these 3 directories automatically:"
@@ -245,10 +245,9 @@ msgstr "Se você tiver as folhas de estilos instaladas em algum lugar, você pre
 msgid "About GTK-Doc"
 msgstr "Sobre GTK-Doc"
 
-# Expressão comum, assim como o TODO. Deixei a original, para o leitor saber que é algo a ser feito.
 #: C/index.docbook:370(sect1/para) C/index.docbook:384(sect1/para)
 msgid "(FIXME)"
-msgstr "(FIXME)"
+msgstr "(CORRIJA-ME)"
 
 #: C/index.docbook:374(sect1/para)
 msgid "(History, authors, web pages, license, future plans, comparison with other similar systems.)"
@@ -268,7 +267,7 @@ msgstr "Preparando seu projeto"
 
 #: C/index.docbook:399(chapter/para)
 msgid "The next sections describe what steps to perform to integrate GTK-Doc into your project. Theses sections assume we work on a project called 'meep'. This project contains a library called 'libmeep' and an end-user app called 'meeper'. We also assume you will be using autoconf and automake. In addition section <link linkend=\"plain_makefiles\">plain makefiles or other build systems</link> will describe the basics needed to work in a different build setup."
-msgstr "As próximas seções descrevem quais as etapas para realizar a integração do GTK-Doc em seu projeto. Estas seções consideram que nós trabalhamos em um projeto chamado \"meep\". Este projeto contém uma biblioteca chamada \"libmeep\" e um aplicativo para usuário final chamado \"meeper\". Nós também consideramos que você estará usando autoconf e automake. Além disso, a seção sobre <link linkend=\"plain_makefiles\"makefiles simples ou outros sistemas de compilação</link> vai descrever as necessidades básicas para trabalhar em uma configuração de compilação diferente."
+msgstr "As próximas seções descrevem quais as etapas para realizar a integração do GTK-Doc em seu projeto. Estas seções consideram que nós trabalhamos em um projeto chamado \"meep\". Este projeto contém uma biblioteca chamada \"libmeep\" e um aplicativo para usuário final chamado \"meeper\". Nós também consideramos que você estará usando autoconf e automake. Além disso, a seção sobre <link linkend=\"plain_makefiles\">makefiles simples ou outros sistemas de compilação</link> vai descrever as necessidades básicas para trabalhar em uma configuração de compilação diferente."
 
 #: C/index.docbook:410(sect1/title)
 msgid "Setting up a skeleton documentation"
@@ -395,7 +394,7 @@ msgstr "--enable-gtk-doc-pdf : compila documentação em formato pdf [padrão=n�
 
 #: C/index.docbook:488(important/para)
 msgid "GTK-Doc is disabled by default! Remember to pass the option <option>'--enable-gtk-doc'</option> to the next <filename>configure</filename> run. Otherwise pregenerated documentation is installed (which makes sense for users but not for developers)."
-msgstr "GTK-Doc está desabilitado por padrão! Lembre-se de passar a opção  <option>\"--enable-gtk-doc\"</option> à próxima execução do <filename>configure</filename>. Do contrário, uma documentação gerada previamente é instalada (o que faz sentido para usuários, mas não para desenvolvedores)."
+msgstr "GTK-Doc está desabilitado por padrão! Lembre-se de passar a opção <option>\"--enable-gtk-doc\"</option> à próxima execução do <filename>configure</filename>. Do contrário, uma documentação gerada previamente é instalada (o que faz sentido para usuários, mas não para desenvolvedores)."
 
 #: C/index.docbook:496(sect1/para)
 msgid "Furthermore it is recommended that you have the following line inside you <filename>configure.ac</filename> script. This allows <application>gtkdocize</application> to automatically copy the macro definition for <function>GTK_DOC_CHECK</function> to your project."
@@ -654,8 +653,9 @@ msgstr ""
 msgid "A multiline comment that starts with an additional '*' marks a documentation block that will be processed by the GTK-Doc tools. <_:example-1/>"
 msgstr "Um comentário multilinha que começa com um \"*\" adicional marca um bloco de documentação que será processado pelas ferramentas do GTK-Doc. <_:example-1/>"
 
+# Ocultei o TODO da tradução. Para que server? :/
 #: C/index.docbook:741(sect1/para)
-msgid "The 'identifier' is one line with the name of the item the comment is related to. The syntax differs a little depending on the item. (TODO: add table showing identifiers)"
+msgid "The 'identifier' is one line with the name of the item the comment is related to. The syntax differs a little depending on the item. (TODO add table showing identifiers)"
 msgstr "O \"identificador\" é uma linha com o nome do item ao qual o comentário está relacionado. A sintaxe difere um pouco dependendo do item."
 
 #: C/index.docbook:747(sect1/para)
@@ -712,7 +712,7 @@ msgstr "Se você precisar usar os caracteres especiais \"&lt;\", \"&gt;\", \"()\
 
 #: C/index.docbook:834(sect1/para)
 msgid "DocBook can do more than just links. One can also have lists, tables and examples. To enable the usage of docbook SGML/XML tags inside doc-comments you need to have <option>--xml-mode</option> or <option>--sgml-mode</option> in the variable <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</filename>."
-msgstr "DocBook pode fazer mais do que apenas links. Pode-se também ter listas, tabelas e exemplos. Para habilitar o uso do tags de SGML/XML de docbook dentro de comentários de documentação para  ter <option>--xml-mode</option> ou <option>--sgml-mode</option> na variável <symbol>MKDB_OPTIONS</symbol> dentro de <filename>Makefile.am</filename>."
+msgstr "DocBook pode fazer mais do que apenas links. Pode-se também ter listas, tabelas e exemplos. Para habilitar o uso do tags de SGML/XML de docbook dentro de comentários de documentação para ter <option>--xml-mode</option> ou <option>--sgml-mode</option> na variável <symbol>MKDB_OPTIONS</symbol> dentro de <filename>Makefile.am</filename>."
 
 #: C/index.docbook:848(example/title)
 msgid "GTK-Doc comment block using markdown"
@@ -860,19 +860,19 @@ msgstr "@stability"
 
 #: C/index.docbook:970(listitem/para)
 msgid "Stable - The intention of a Stable interface is to enable arbitrary third parties to develop applications to these interfaces, release them, and have confidence that they will run on all minor releases of the product (after the one in which the interface was introduced, and within the same major release). Even at a major release, incompatible changes are expected to be rare, and to have strong justifications."
-msgstr ""
+msgstr "Estável - A intenção de uma interface estável é permitir terceiros arbitrários desenvolverem aplicativos para essas interfaces, lançá-los e ter a confiança de que eles vão funcionar em todos os lançamentos menores do produto (após aquele no qual a interface foi introduzida e naquele mesmo lançamento maior). Atém mesmo em um lançamento maior, espera-se que alterações incompatíveis sejam raras e que tenham fortes justificativas."
 
 #: C/index.docbook:982(listitem/para)
 msgid "Unstable - Unstable interfaces are experimental or transitional. They are typically used to give outside developers early access to new or rapidly changing technology, or to provide an interim solution to a problem where a more general solution is anticipated. No claims are made about either source or binary compatibility from one minor release to the next."
-msgstr ""
+msgstr "Instável - Interfaces instáveis são experimentais ou transicionais. Elas são normalmente usadas para dar a desenvolvedores externos um acesso prévio a nova tecnologia ou em rápida alteração, ou para fornecer uma solução interina para um problema que uma solução mais genérica foi antecipada. Nenhuma responsabilidade é assumida pela compatbilidade dos binários ou dos fontes de uma versão menor para a próxima."
 
 #: C/index.docbook:994(listitem/para)
 msgid "Private - An interface that can be used within the GNOME stack itself, but that is not documented for end-users. Such functions should only be used in specified and documented ways."
-msgstr ""
+msgstr "Privado - Uma interface que pode ser usada dentro da própria pilha do GNOME, mas que não está documentada para usuários finais. Tais funções deveriam ser usadas nas formas especificadas e documentadas."
 
 #: C/index.docbook:1003(listitem/para)
 msgid "Internal - An interface that is internal to a module and does not require end-user documentation. Functions that are undocumented are assumed to be Internal."
-msgstr ""
+msgstr "Interna - Uma interface que é interna a um módulo e não requer documentação para o usuário final. Funções que não estão documentadas são presumidas como sendo \"Interna\"."
 
 #: C/index.docbook:965(listitem/para)
 msgid "An informal description of the stability level this API has. We recommend the use of one of these terms: <_:itemizedlist-1/>"
@@ -884,7 +884,7 @@ msgstr "@include"
 
 #: C/index.docbook:1017(listitem/para)
 msgid "The <literal>#include</literal> files to show in the section synopsis (a comma separated list), overriding the global value from the <link linkend=\"metafiles_sections\">section file</link> or command line. This item is optional."
-msgstr ""
+msgstr "Os arquivos <literal>#include</literal> a ser mostrado na sinopse da seção (uma lista separada por vírgulas), sobrescrevendo o valor global do <link linkend=\"metafiles_sections\">arquivo de seção</link> ou linha de comando. Este item é opcional."
 
 #: C/index.docbook:1026(varlistentry/term)
 msgid "@image"
@@ -892,11 +892,11 @@ msgstr "@image"
 
 #: C/index.docbook:1028(listitem/para)
 msgid "The image to display at the top of the reference page for this section. This will often be some sort of a diagram to illustrate the visual appearance of a class or a diagram of its relationship to other classes. This item is optional."
-msgstr ""
+msgstr "A imagem a ser exibida no topo da página de referência desta seção. Isso frequentemente será um tipo de diagrama para ilustrar a aparência visual de uma classe ou uma diagrama de suas relações a outras classes. Este item é opcional."
 
 #: C/index.docbook:1039(tip/para)
 msgid "To avoid unnecessary recompilation after doc-changes put the section docs into the c-source where possible."
-msgstr ""
+msgstr "Para evitar recompilação desnecessária após alterações de documentação inseridas nas documentações de seção no fonte em C onde possível."
 
 #: C/index.docbook:1048(sect1/title)
 msgid "Documenting symbols"
@@ -904,7 +904,7 @@ msgstr "Documentando símbolos"
 
 #: C/index.docbook:1050(sect1/para)
 msgid "Each symbol (function, macro, struct, enum, signal and property) is documented in a separate block. The block is best placed close to the definition of the symbols so that it is easy to keep them in sync. Thus functions are usually documented in the c-source and macros, structs and enums in the header file."
-msgstr ""
+msgstr "Cada símbolo (função, macro, struct, enum, signal e property) é documentado em uma bloco separado. O bloco é melhor localizado perto da definição dos símbolos, de forma que seja fácil de mantê-los em sincronia. Portanto, as funções são normalmente documentadas no fonte em C e macros, scructs e enums no arquivo de header."
 
 #: C/index.docbook:1058(sect2/title) C/index.docbook:1087(example/title)
 msgid "General tags"
@@ -912,31 +912,31 @@ msgstr "Tags gerais"
 
 #: C/index.docbook:1060(sect2/para)
 msgid "You can add versioning information to all documentation elements to tell when an API was introduced, or when it was deprecated."
-msgstr ""
+msgstr "Você pode adicionar informação sobre versionamento em todos os elementos de documentação para informar quando uma API foi introduzida ou quando ela se tornou obsoleta."
 
 #: C/index.docbook:1065(variablelist/title)
 msgid "Versioning Tags"
-msgstr "Versionando de tags"
+msgstr "Tags de versionamento"
 
 #: C/index.docbook:1066(varlistentry/term)
 msgid "Since:"
-msgstr "Desde:"
+msgstr "Since:"
 
 #: C/index.docbook:1068(listitem/para)
 msgid "Description since which version of the code the API is available."
-msgstr ""
+msgstr "Descrição de desde qual versão do código a API está disponível."
 
 #: C/index.docbook:1073(varlistentry/term)
 msgid "Deprecated:"
-msgstr "Obsoleto:"
+msgstr "Deprecated:"
 
 #: C/index.docbook:1075(listitem/para)
 msgid "Paragraph denoting that this function should no be used anymore. The description should point the reader to the new API."
-msgstr ""
+msgstr "Parágrafo denotando que esta função deveria não mais ser usada. A descrição deveria apontar o leitor para a nova API."
 
 #: C/index.docbook:1083(sect2/para)
 msgid "(FIXME : Stability information)"
-msgstr "(CONSERTE-ME : Informação sobre estabilidade)"
+msgstr "(CORRIJA-ME : Informação sobre estabilidade)"
 
 #: C/index.docbook:1088(example/programlisting)
 #, no-wrap
@@ -961,6 +961,25 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * foo_get_bar:\n"
+" * @foo: Um foo\n"
+" *\n"
+" * Obtém o bar do @foo.\n"
+" *\n"
+" * Returns: bar do @foo\n"
+" *\n"
+" * Since: 2.6\n"
+" * Deprecated: 2.12: Use foo_baz_get_bar() no seu lugar.\n"
+" */\n"
+"Bar *\n"
+"foo_get_bar(Foo *foo)\n"
+"{\n"
+"...\n"
+"\n"
+"          "
 
 #: C/index.docbook:1110(sect2/title) C/index.docbook:1146(example/title)
 msgid "Function comment block"
@@ -968,15 +987,15 @@ msgstr "Bloco de comentário de função"
 
 #: C/index.docbook:1116(listitem/para)
 msgid "Document whether returned objects, lists, strings, etc, should be freed/unrefed/released."
-msgstr ""
+msgstr "Documente se objetos, listas, strings, etc. retornados devem ser não usados/não referenciados/liberada."
 
 #: C/index.docbook:1122(listitem/para)
 msgid "Document whether parameters can be NULL, and what happens if they are."
-msgstr ""
+msgstr "Documente se parâmetros pode ser NULL e o que acontece se eles o forem."
 
 #: C/index.docbook:1127(listitem/para)
 msgid "Mention interesting pre-conditions and post-conditions where appropriate."
-msgstr ""
+msgstr "Mencione pré-condições e pós-condições interessantes onde for apropriado."
 
 #: C/index.docbook:1112(sect2/para) C/index.docbook:1209(sect2/para)
 msgid "Please remember to: <_:itemizedlist-1/>"
@@ -984,11 +1003,11 @@ msgstr "Por favor, lembre-se de: <_:itemizedlist-1/>"
 
 #: C/index.docbook:1134(sect2/para)
 msgid "Gtk-doc assumes all symbols (macros, functions) starting with '_' are private. They are treated like static functions."
-msgstr ""
+msgstr "Gtk-doc presume que todos os símbolos (macros, funções) começando com \"_\" são privadas. Elas são tratadas como funções estáticas."
 
 #: C/index.docbook:1139(sect2/para)
 msgid "Also, take a look at GObject Introspection annotation tags: http://live.gnome.org/GObjectIntrospection/Annotations"
-msgstr ""
+msgstr "Também, dê uma olhada nas tags de anotação do GObject Introspection: http://live.gnome.org/GObjectIntrospection/Annotations"
 
 #: C/index.docbook:1147(example/programlisting)
 #, no-wrap
@@ -1015,15 +1034,35 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * nome_da_função:\n"
+" * @par1:  descrição do parâmetro 1. Esta pode se estender por mais de\n"
+" * uma linha.\n"
+" * @par2:  descrição do parâmetro 2\n"
+" * @...: uma lista de bars terminada em %NULL\n"
+" *\n"
+" * A descrição vai aqui. Você pode usar @par1 para se referir a parâmetros\n"
+" * de forma que eles ficam em destaque na saída. Você também pode usar %constant\n"
+" * para constantes, nome_da_função2() para funções e #GtkWidget para links para\n"
+" * outras declarações (que pode ser documentada em outro lugar).\n"
+" *\n"
+" * Returns: um inteiro.\n"
+" *\n"
+" * Since: 2.2\n"
+" * Deprecated: 2.18: Use outra_função() em seu lugar.\n"
+" */\n"
+"\n"
+"          "
 
 #: C/index.docbook:1170(variablelist/title)
-#, fuzzy
 msgid "Function tags"
-msgstr "entre as tags"
+msgstr "Tags de função"
 
 #: C/index.docbook:1171(varlistentry/term)
 msgid "Returns:"
-msgstr "Returna:"
+msgstr "Returns:"
 
 #: C/index.docbook:1173(listitem/para)
 msgid "Paragraph describing the returned result."
@@ -1035,7 +1074,7 @@ msgstr "@...:"
 
 #: C/index.docbook:1180(listitem/para)
 msgid "In case the function has variadic arguments, you should use this tag (@Varargs: does also work for historic reasons)."
-msgstr ""
+msgstr "No caso da função possuir argumentos variados, você deveria usar esta tag (@Varargs: também funciona por motivos de histórico)."
 
 #: C/index.docbook:1190(sect2/title) C/index.docbook:1192(example/title)
 msgid "Property comment block"
@@ -1055,6 +1094,16 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * AlgumWidget:alguma-propriedade:\n"
+" *\n"
+" * Aqui você pode documentar uma propriedade.\n"
+" */\n"
+"g_object_propriedade_install_classe (object_classe, PROP_ALGUMA_PROPRIEDADE, ...);\n"
+"\n"
+"          "
 
 #: C/index.docbook:1207(sect2/title) C/index.docbook:1226(example/title)
 msgid "Signal comment block"
@@ -1062,11 +1111,11 @@ msgstr "Bloco de comentário de sinal"
 
 #: C/index.docbook:1213(listitem/para)
 msgid "Document when the signal is emitted and whether it is emitted before or after other signals."
-msgstr ""
+msgstr "Documente quando o sinal é emitido e se ele é emitido antes ou após outros sinais."
 
 #: C/index.docbook:1219(listitem/para)
 msgid "Document what an application might do in the signal handler."
-msgstr ""
+msgstr "Documente o que um aplicativo pode fazer no manipulador do sinal."
 
 #: C/index.docbook:1227(example/programlisting)
 #, no-wrap
@@ -1087,6 +1136,21 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * FooWidget::foobarizado:\n"
+" * @widget: o widget que recebeu o sinal\n"
+" * @foo: algum foo\n"
+" * @bar: algum bar\n"
+" *\n"
+" * O sinal ::foobarized é emitido cada vez que alguém tenta foobarizar @widget.\n"
+" */\n"
+"foo_sinais[FOOBARIZAR] =\n"
+"  g_signal_novo (\"foobarizar\",\n"
+"                ...\n"
+"\n"
+"          "
 
 #: C/index.docbook:1246(sect2/title) C/index.docbook:1247(example/title)
 msgid "Struct comment block"
@@ -1113,14 +1177,31 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * FooWidget:\n"
+" * @bar: algum #gboolean\n"
+" *\n"
+" * Este é o melhor widget, já mais visto.\n"
+" */\n"
+"typedef struct _FooWidget {\n"
+"  /*&lt; private &gt;*/\n"
+"  GtkWidget parent;\n"
+"\n"
+"  /*&lt; public &gt;*/\n"
+"  gboolean bar;\n"
+"} FooWidget;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1267(sect2/para)
 msgid "Use <code>/*&lt; private &gt;*/</code> before the private struct fields you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse behaviour."
-msgstr ""
+msgstr "Use <code>/*&lt; private &gt;*/</code> antes dos campos da struct privada que você deseja esconder. Use <code>/*&lt; public &gt;*/</code> para o comportamento inverso."
 
 #: C/index.docbook:1273(sect2/para)
 msgid "Struct comment blocks can also be used for GObjects and GObjectClasses. It is usually a good idea to add a comment block for a class, if it has vmethods (as this is how they can be documented). For the GObject itself one can use the related section docs, having a separate block for the instance struct would be useful if the instance has public fields. One disadvantage here is that this creates two index entries of the same name (the structure and the section)."
-msgstr ""
+msgstr "Blocos de comentário de struct também podem ser usados para GObjects e GObjectClasses. É normalmente uma boa ideia adicionar um bloco de comentário para uma classe, se ela possui vmethods (pois assim é como elas podem ser documentadas). Para o próprio GOBject pode-se usar os documentos de seção relacionados, tendo um bloco separado para a instância do struct seria útil se a instância possui campos públicos. Uma desvantagem aqui é que isso cria duas entradas no índice do mesmo nome (a estrutura e a seção)."
 
 #: C/index.docbook:1285(sect2/title) C/index.docbook:1286(example/title)
 msgid "Enum comment block"
@@ -1147,10 +1228,27 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"/**\n"
+" * Alguma coisa:\n"
+" * @ALGUMACOISA_FOO: alguma coisa foo\n"
+" * @ALGUMCAOISA_BAR: alguma coisa bar\n"
+" *\n"
+" * Valores de enum usados para a coisa, para especificar a coisa.\n"
+" */\n"
+"typedef enum {\n"
+"  ALGUMACOISA_FOO,\n"
+"  ALGUMACOISA_BAR,\n"
+"  /*&lt; private &gt;*/\n"
+"  ALGUMACOISA_CONTAGEM\n"
+"} Alguma coisa;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1306(sect2/para)
 msgid "Use <code>/*&lt; private &gt;*/</code> before the private enum values you want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse behaviour."
-msgstr ""
+msgstr "Use <code>/*&lt; private &gt;*/</code> antes de valores privados de enum que você deseja ocultar. Use <code>/*&lt; public &gt;*/</code> para o comportamento inverso."
 
 #: C/index.docbook:1316(sect1/title)
 msgid "Useful DocBook tags"
@@ -1158,7 +1256,7 @@ msgstr "Tags úteis do DocBook"
 
 #: C/index.docbook:1318(sect1/para)
 msgid "Here are some DocBook tags which are most useful when documenting the code."
-msgstr ""
+msgstr "Aqui estão algumas tags de DocBook que são muito úteis quando se está documentado o código."
 
 #: C/index.docbook:1327(informalexample/programlisting)
 #, no-wrap
@@ -1169,10 +1267,15 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"&lt;link linkend=\"glib-Hash-Tables\"&gt;Tabela de hashes&lt;/link&gt;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1323(sect1/para)
 msgid "To link to another section in the GTK docs: <_:informalexample-1/> The linkend is the SGML/XML id on the top item of the page you want to link to. For most pages this is currently the part (\"gtk\", \"gdk\", \"glib\") and then the page title (\"Hash Tables\"). For widgets it is just the class name. Spaces and underscores are converted to '-' to conform to SGML/XML."
-msgstr ""
+msgstr "PAra vincular a outra seção nas documentações do GTK: <_:informalexample-1/> O fim do link é o ID do SGML/XML no item superior da páginao a qual você deseja vincular. Para a maioria das páginas isto é atualmente a parte (\"gtk\", \"gdk\", \"glib\") e, então, o título da página (\"Hash Tables\"). Para os widgets isso é apenas o nome da classe. Espaços e sublinhados são convertidos em '-' para estar em conformidade com SGML/XML."
 
 #: C/index.docbook:1342(informalexample/programlisting)
 #, no-wrap
@@ -1191,7 +1294,7 @@ msgstr ""
 
 #: C/index.docbook:1339(sect1/para)
 msgid "To refer to an external function, e.g. a standard C function: <_:informalexample-1/>"
-msgstr ""
+msgstr "Para se referir a uma função externa, como, por exemplo, uma função padrão do C: <_:informalexample-1/>"
 
 #: C/index.docbook:1353(informalexample/programlisting)
 #, no-wrap
@@ -1207,6 +1310,16 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"&lt;example&gt;\n"
+"  &lt;title&gt;Usando uma GHashTable.&lt;/title&gt;\n"
+"  &lt;programlisting&gt;\n"
+"      ...\n"
+"  &lt;/programlisting&gt;\n"
+"&lt;/example&gt;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1366(informalexample/programlisting)
 #, no-wrap
@@ -1233,7 +1346,7 @@ msgstr ""
 
 #: C/index.docbook:1350(sect1/para)
 msgid "To include example code: <_:informalexample-1/> or possibly this, for very short code fragments which don't need a title: <_:informalexample-2/> For the latter GTK-Doc also supports an abbreviation: |[ ... ]|"
-msgstr ""
+msgstr "Para incluir um código de exemplo: <_:informalexample-1/> ou possivelmente este, para fragmentos de código bem curtos que não precisam de um título: <_:informalexample-2/> Para este último, GTK-Doc também possui suporte a uma abreviação: |[ ... ]|"
 
 #: C/index.docbook:1387(informalexample/programlisting)
 #, no-wrap
@@ -1255,10 +1368,26 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"&lt;itemizedlist&gt;\n"
+"  &lt;listitem&gt;\n"
+"    &lt;para&gt;\n"
+"      ...\n"
+"    &lt;/para&gt;\n"
+"  &lt;/listitem&gt;\n"
+"  &lt;listitem&gt;\n"
+"    &lt;para&gt;\n"
+"      ...\n"
+"    &lt;/para&gt;\n"
+"  &lt;/listitem&gt;\n"
+"&lt;/itemizedlist&gt;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1384(sect1/para)
 msgid "To include bulleted lists: <_:informalexample-1/>"
-msgstr ""
+msgstr "Para incluir listas com marcadores: <_:informalexample-1/>"
 
 #: C/index.docbook:1409(informalexample/programlisting)
 #, no-wrap
@@ -1273,6 +1402,15 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"&lt;note&gt;\n"
+"  &lt;para&gt;\n"
+"    Certifique-se de que você liberou os dados após usá-los.\n"
+"  &lt;/para&gt;\n"
+"&lt;/note&gt;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1406(sect1/para)
 msgid "To include a note which stands out from the text: <_:informalexample-1/>"
@@ -1287,10 +1425,15 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"&lt;type&gt;unsigned char&lt;/type&gt;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1421(sect1/para)
 msgid "To refer to a type: <_:informalexample-1/>"
-msgstr "Para fazer referência a um tipo: <_:informalexample-1/>"
+msgstr "Para se referir a um tipo: <_:informalexample-1/>"
 
 #: C/index.docbook:1435(informalexample/programlisting)
 #, no-wrap
@@ -1309,7 +1452,7 @@ msgstr ""
 
 #: C/index.docbook:1432(sect1/para)
 msgid "To refer to an external structure (not one described in the GTK docs): <_:informalexample-1/>"
-msgstr ""
+msgstr "Para se referir a uma estrutura externa (não uma descrita nos documentos do GTK): <_:informalexample-1/>"
 
 #: C/index.docbook:1446(informalexample/programlisting)
 #, no-wrap
@@ -1347,7 +1490,7 @@ msgstr ""
 
 #: C/index.docbook:1454(sect1/para)
 msgid "To refer to a class name, we could possibly use: <_:informalexample-1/> but you'll probably be using #GtkWidget instead (to automatically create a link to the GtkWidget page - see <link linkend=\"documenting_syntax\">the abbreviations</link>)."
-msgstr ""
+msgstr "Para se referir a um nome de classe, nós possivelmente poderíamos usar: <_:informalexample-1/> mas você provavelmente vai estar usando #GtkWidget em vez disso (para criar automaticamente um link para a página do GtkWidget - veja <link linkend=\"documenting_syntax\">as abreviações</link>)."
 
 #: C/index.docbook:1470(informalexample/programlisting)
 #, no-wrap
@@ -1358,10 +1501,15 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"&lt;emphasis&gt;Isso é importante&lt;/emphasis&gt;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1467(sect1/para)
 msgid "To emphasize text: <_:informalexample-1/>"
-msgstr "Para enfatizar texto: <_:informalexample-1/>"
+msgstr "Para enfatizar um texto: <_:informalexample-1/>"
 
 #: C/index.docbook:1481(informalexample/programlisting)
 #, no-wrap
@@ -1372,6 +1520,11 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"&lt;filename&gt;/home/usuario/documentos&lt;/filename&gt;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1478(sect1/para)
 msgid "For filenames use: <_:informalexample-1/>"
@@ -1386,10 +1539,15 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap&gt;&lt;/keycombo&gt;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1489(sect1/para)
 msgid "To refer to keys use: <_:informalexample-1/>"
-msgstr "Para fazer referência a chaves use: <_:informalexample-1/>"
+msgstr "Para se referir a chaves use: <_:informalexample-1/>"
 
 #: C/index.docbook:1504(chapter/title)
 msgid "Filling the extra files"
@@ -1397,7 +1555,7 @@ msgstr "Preenchendo os arquivos extras"
 
 #: C/index.docbook:1506(chapter/para)
 msgid "There are a couple of extra files, that need to be maintained along with the inline source code comments: <filename>&lt;package&gt;.types</filename>, <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml), <filename>&lt;package&gt;-sections.txt</filename>."
-msgstr ""
+msgstr "Há alguns poucos arquivos extras, que precisam ser mantidos junto com os comentários inseridos no código fonte: <filename>&lt;pacote&gt;.types</filename>, <filename>&lt;pacote&gt;-docs.xml</filename> (no passado, .sgml), <filename>&lt;pacote&gt;-sections.txt</filename>."
 
 #: C/index.docbook:1515(sect1/title)
 msgid "Editing the types file"
@@ -1405,12 +1563,11 @@ msgstr "Editando o arquivo de tipos"
 
 #: C/index.docbook:1517(sect1/para)
 msgid "If your library or application includes GObjects, you want their signals, arguments/parameters and position in the hierarchy to be shown in the documentation. All you need to do, is to list the <function>xxx_get_type</function> functions together with their include inside the <filename>&lt;package&gt;.types</filename> file."
-msgstr ""
+msgstr "Se sua biblioteca ou aplicativo inclui GObjects, você deseja que seus sinais, argumentos/parâmetros e posição na hierarquia sejam mostrados na documentação. Tudo que você precisa fazer é listar as funções <function>xxx_get_type</function> junto com seus include dentro do arquivo <filename>&lt;pacote&gt;.types</filename>."
 
 #: C/index.docbook:1526(example/title)
-#, fuzzy
 msgid "Example types file snippet"
-msgstr "Criando a partir do arquivo de exemplo"
+msgstr "Trecho de exemplo de arquivo de tipos"
 
 #: C/index.docbook:1527(example/programlisting)
 #, no-wrap
@@ -1426,10 +1583,20 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"#include &lt;gtk/gtk.h&gt;\n"
+"\n"
+"gtk_accel_label_get_type\n"
+"gtk_adjustment_get_type\n"
+"gtk_alignment_get_type\n"
+"gtk_arrow_get_type\n"
+"\n"
+"          "
 
 #: C/index.docbook:1540(sect1/para)
 msgid "Since GTK-Doc 1.8 <application>gtkdoc-scan</application> can generate this list for you. Just add \"--rebuild-types\" to SCAN_OPTIONS in <filename>Makefile.am</filename>. If you use this approach you should not dist the types file nor have it under version control."
-msgstr ""
+msgstr "Desde o GTK-Doc 1.8, o <application>gtkdoc-scan</application> pode gerar esta lista para você. Basta adicionar \"--rebuild-types\" a SCAN_OPTIONS no <filename>Makefile.am</filename>. Se você usar esta abordagem, você não deveria distribuir o arquivo de tipos nem tê-lo sob um controle de versão."
 
 #: C/index.docbook:1549(sect1/title)
 msgid "Editing the master document"
@@ -1437,19 +1604,19 @@ msgstr "Editando o documento mestre"
 
 #: C/index.docbook:1551(sect1/para)
 msgid "GTK-Doc produces documentation in DocBook SGML/XML. When processing the inline source comments, the GTK-Doc tools generate one documentation page per class or module as a separate file. The master document includes them and place them in an order."
-msgstr ""
+msgstr "O Gtk-Doc produz documentação em DocBook SGML/XML. Ao processar os comentários inseridos nos fontes, as ferramentas do GTK-Doc geram uma página de documentação por classe ou módulo como um arquivo separado. O documento mestre os inclui e os coloca em uma ordem."
 
 #: C/index.docbook:1558(sect1/para)
 msgid "While GTK-Doc creates a template master document for you, later run will not touch it again. This means that one can freely structure the documentation. That includes grouping pages and adding extra pages. GTK-Doc has now a test suite, where also the master-document is recreated from scratch. Its a good idea to look at this from time to time to see if there are some new goodies introduced there."
-msgstr ""
+msgstr "Enquanto o Gtk-Doc cria um modelo de documento mestre para você, execução posterior não vai tocá-lo novamente. Isso significa que se pode estruturar a documentação livremente. Isso inclui agrupamento de páginas e adição de páginas extras. O Gtk-Doc agora possui uma suíte de teste, na qual também o documento mestr é recriado do zero. É uma boa ideia verificar isso de tempo em tempo para ver se há itens a serem introduzidos lá."
 
 #: C/index.docbook:1568(tip/para)
 msgid "Do not create tutorials as extra documents. Just write extra chapters. The benefit of directly embedding the tutorial for your library into the API documentation is that it is easy to link for the tutorial to symbol documentation. Apart chances are higher that the tutorial gets updates along with the library."
-msgstr ""
+msgstr "Não crie tutoriais como documentos extras. Apenas escreva capítulos extras. O benefício de embutir diretamente o tutorial para sua biblioteca na documentação da API é que é mais fácil vincular o tutorial a um símbolo da documentação. Além disso, as chances são mais altas que o tutorial obtenha atualizações junto com a biblioteca."
 
 #: C/index.docbook:1577(sect1/para)
 msgid "So what are the things to change inside the master document? For a start is only a little. There are some placeholders (text in square brackets) there which you should take care of."
-msgstr "Então, quais são as coisas para se alterar dentro do documento mestre? Para começar é apenas um pouco. Existem alguns mantedores de espaço (texto em colchetes quadrados) que você deve cuidar."
+msgstr "Então, quais são as coisas para se alterar dentro do documento mestre? Para começar é apenas um pouco. Existem alguns mantedores de espaço (texto em colchetes) que você deve cuidar."
 
 #: C/index.docbook:1584(example/title)
 msgid "Master document header"
@@ -1474,34 +1641,49 @@ msgid ""
 "\n"
 "          "
 msgstr ""
+"\n"
+"\n"
+"&lt;bookinfo&gt;\n"
+"  &lt;title&gt;Manual de referência do NOMEDOMÓDULO&lt;/title&gt;\n"
+"  &lt;releaseinfo&gt;\n"
+"    for NOMEDOMÓDULO [VERSÃO]\n"
+"    A última versão desta documentação também pode ser encontrada on-line em\n"
+"    &lt;ulink role=\"online-location\" url=\"http://[SERVIDOR]/NOMEDOMÓDULO/index.html\"&gt;http://[SERVIDOR]/NOMEDOMÓDULO/&lt;/ulink&gt;.\n"
+"  &lt;/releaseinfo&gt;\n"
+"&lt;/bookinfo&gt;\n"
+"\n"
+"&lt;chapter&gt;\n"
+"  &lt;title&gt;[Insira o título aqui]&lt;/title&gt;\n"
+"\n"
+"          "
 
 #: C/index.docbook:1606(sect1/title)
 msgid "Editing the section file"
-msgstr "Editando o arquivo de sessão"
+msgstr "Editando o arquivo de seção"
 
 #: C/index.docbook:1608(sect1/para)
 msgid "The section file is used to organise the documentation output by GTK-Doc. Here one specifies which symbol belongs to which module or class and control the visibility (public or private)."
-msgstr ""
+msgstr "O arquivo de seção é usado para organizar a saída da documentação pelo GTK-Doc. Aqui pode-se especificar qual símbolo pertence a qual módulo ou classe e controla a visibilidade (pública ou privada)."
 
 #: C/index.docbook:1614(sect1/para)
 msgid "The section file is a plain text file with XML-like syntax (using tags). Blank lines are ignored and lines starting with a '#' are treated as comment lines."
-msgstr ""
+msgstr "O arquivo de seção é uma arquivo texto simples com sintaxe do tipo XML (usando tags). Linhas em branco são ignoradas e linhas começando com um \"#\" são tratadas como linhas de comentários."
 
 #: C/index.docbook:1620(sect1/para)
 msgid "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/FILE&gt;' will result in the section declarations being output in the template file <filename>tmpl/gnome-config.sgml</filename>, which will be converted into the DocBook SGML/XML file <filename>sgml/gnome-config.sgml</filename> or the DocBook XML file <filename>xml/gnome-config.xml</filename>. (The name of the HTML file is based on the module name and the section title, or for GObjects it is based on the GObjects class name converted to lower case)."
-msgstr ""
+msgstr "A tag &lt;FILE&gt; ... &lt;/FILE&gt; é usada para especificar o nome de arquivo, sem qualquer sufixo. Por exemplo, ao usar \"&lt;FILE&gt;gnome-config&lt;/FILE&gt;\" resultará nas declarações da seção serem retornadas no arquivo modelo <filename>tmpl/gnome-config.sgml</filename>, o qual será convertido no arquivo DocBook SGML/XML <filename>sgml/gnome-config.sgml</filename> ou no arquivo DocBook XML <filename>xml/gnome-config.xml</filename>. (O nome do arquivo HTML é baseado no nome do módulo e no título da seção ou, para GObjects, é baseado no nome da classe GObjects convertidos os caracteres para minúsculos)."
 
 #: C/index.docbook:1632(sect1/para)
 msgid "The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of the section. It is only useful before the templates (if used) are initially created, since the title set in the template file overrides this. Also if one uses SECTION comment in the sources, this is obsolete."
-msgstr ""
+msgstr "A tag &lt;TITLE&gt; ... &lt;/TITLE&gt; é usada para especificar o título da seção. Ela é usada apenas antes do modelo (se usado) ser criado inicialmente, já que o título definido no arquivo de modelo sobrescreve este. Também, se for usado o comentário SECTION nos fontes, isso está obsoleto."
 
 #: C/index.docbook:1639(sect1/para)
 msgid "You can group items in the section by using the &lt;SUBSECTION&gt; tag. Currently it outputs a blank line between subsections in the synopsis section. You can also use &lt;SUBSECTION Standard&gt; for standard GObject declarations (e.g. the functions like g_object_get_type and macros like G_OBJECT(), G_IS_OBJECT() etc.). Currently these are left out of the documentation. You can also use &lt;SUBSECTION Private&gt; for private declarations which will not be output (it is a handy way to avoid warning messages about unused declarations). If your library contains private types which you don't want to appear in the object hierarchy and the list of implemented or required interfaces, add them to a Private subsection. Whether you would place GObject and GObjectClass like structs in public or Standard section depends if they have public entries (variables, vmethods)."
-msgstr ""
+msgstr "Você pode agrupar itens na seção usando a tag &lt;SUBSECTION&gt;. Atualmente, ela retorna uma linha em branco entre as subseções na seção de sinópse. Você também pode usar &lt;SUBSECTION Standard&gt; para declarações padrão do GObject (ex.: as funções como g_object_get_type e macros como G_OBJECT(), G_IS_OBJECT() etc.). Atualmente, estas são deixadas fora da documentação. Você também pode usar &lt;SUBSECTION Private&gt; para declarações privadas que não serão retornadas (é uma forma prática de evitar mensagens de aviso sobre declarações não usadas). Se sua biblioteca contém tipos privados que você não deseja que apareçam na hierarquia do objeto e a linha de classes implementadas ou exigidas, adicione-as a uma subseção privada. Se você colocaria o GObject e GObjectClass como structs numa seção padrão ou pública depende se há entradas públicas (variáveis, vmethods)."
 
 #: C/index.docbook:1658(sect1/para)
 msgid "You can also use &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; to specify the #include files which are shown in the synopsis sections. It contains a comma-separate list of #include files, without the angle brackets. If you set it outside of any sections, it acts for all sections until the end of the file. If you set it within a section, it only applies to that section."
-msgstr ""
+msgstr "Você também pode usar &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; para especificar os arquivos #include que são mostrados nas seções de sinópse. Ela contém uma lista separada por vírgula de arquivos #include, sem os sinais de maior que e menor que. Se você define-a fora de quaisquer seções, ela age para todas as seções até o fim do arquivo. Se você define-a em uma seção, ela só vai se aplicar àquela seção."
 
 #: C/index.docbook:1672(chapter/title)
 msgid "Controlling the result"
@@ -1509,31 +1691,31 @@ msgstr "Controlando o resultado"
 
 #: C/index.docbook:1674(chapter/para)
 msgid "A GTK-Doc run generates report files inside the documentation directory. The generated files are named: <filename>&lt;package&gt;-undocumented.txt</filename>, <filename>&lt;package&gt;-undeclared.txt</filename> and <filename>&lt;package&gt;-unused.txt</filename>. All those are plain text files that can be viewed and postprocessed easily."
-msgstr ""
+msgstr "Uma execução do GTK-Doc gera arquivos de relatórios dentro do diretório de documentação. Os arquivos gerados são chamados: <filename>&lt;pacote&gt;-undocumented.txt</filename>, <filename>&lt;pacote&gt;-undeclared.txt</filename> e <filename>&lt;pacote&gt;-unused.txt</filename>. Todos eles são arquivos texto simples que podem ser facilmente visualizados e pós-processados."
 
 #: C/index.docbook:1683(chapter/para)
 msgid "The <filename>&lt;package&gt;-undocumented.txt</filename> file starts with the documentation coverage summary. Below are two sections divided by blank lines. The first section lists undocumented or incomplete symbols. The second section does the same for section docs. Incomplete entries are those, which have documentation, but where e.g. a new parameter has been added."
-msgstr ""
+msgstr "O arquivo <filename>&lt;pacote&gt;-undocumented.txt</filename> começa com um sumário de cobertura da documentação. Abaixo estão duas seções divididas por linhas brancas. A primeira seção lista símbolos não documentados e incompletos. A segunda seção faz o mesmo para os documentos de seção. Entradas incompletas são aquelas que foram documentadas, mas nas quais, por exemplo, um novo parâmetro foi adicionado."
 
 #: C/index.docbook:1692(chapter/para)
 msgid "The <filename>&lt;package&gt;-undeclared.txt</filename> file lists symbols given in the <filename>&lt;package&gt;-sections.txt</filename> but not found in the sources. Check if they have been removed or if they are misspelled."
-msgstr ""
+msgstr "O arquivo <filename>&lt;pacote&gt;-undeclared.txt</filename> lista símbolos dados no <filename>&lt;pacote&gt;-sections.txt</filename>, mas não encontrados nos fontes. Verifique se eles foram removidos ou se eles foram escritos incorretamente."
 
 #: C/index.docbook:1699(chapter/para)
 msgid "The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol names, where the GTK-Doc scanner has found documentation, but does not know where to put it. This means that the symbol has not yet been added to the <filename>&lt;package&gt;-sections.txt</filename> file."
-msgstr ""
+msgstr "O arquivo <filename>&lt;pacote&gt;-unused.txt</filename> lista nomes de símbolo cuja documentação foi localizada na varredura do GTK-Doc, mas que não sabe onde colocá-los. Isso significa que o símbolo não foi adicionado ainda ao arquivo <filename>&lt;pacote&gt;-sections.txt</filename>."
 
 #: C/index.docbook:1707(tip/para)
 msgid "Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile.am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during <command>make check</command> run."
-msgstr ""
+msgstr "Habilite ou adicione a linha <option>TESTS=$(GTKDOC_CHECK)</option> no Makefile.am. Se pelo menos GTK-Doc 1.9 estiver instalado, isso vai executar verificações de sanidade durante a execução de <command>make check</command>."
 
 #: C/index.docbook:1714(chapter/para)
 msgid "One can also look at the files produced by the source code scanner: <filename>&lt;package&gt;-decl-list.txt</filename> and <filename>&lt;package&gt;-decl.txt</filename>. The first one can be compared with the section file if that is manually maintained. The second lists all declarations from the headers. If a symbol is missing one could check if this file contains it."
-msgstr ""
+msgstr "Também pode-se buscar nos arquivos produzidos pela varredura do código aberto: <filename>&lt;pacote&gt;-decl-list.txt</filename> e <filename>&lt;pacote&gt;-decl.txt</filename>. O primeiro pode ser comparado com o arquivo de seção, se ele for mantido manualmente. O segundo lista todas as declarações de cabeçalhos. Se um símbolo está faltando, pode-se verificar se este arquivo o contém."
 
 #: C/index.docbook:1723(chapter/para)
 msgid "If the project is GObject based, one can also look into the files produced by the object scanner: <filename>&lt;package&gt;.args.txt</filename>, <filename>&lt;package&gt;.hierarchy.txt</filename>, <filename>&lt;package&gt;.interfaces.txt</filename>, <filename>&lt;package&gt;.prerequisites.txt</filename> and <filename>&lt;package&gt;.signals.txt</filename>. If there are missing symbols in any of those, one can ask gtkdoc to keep the intermediate scanner file for further analysis, by running it as <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
-msgstr ""
+msgstr "Se o projeto é baseado em GObject, pode-se também procurar nos arquivos produzidos pela varredura de objetos: <filename>&lt;pacote&gt;.args.txt</filename>, <filename>&lt;pacote&gt;.hierarchy.txt</filename>, <filename>&lt;pacote&gt;.interfaces.txt</filename>, <filename>&lt;pacote&gt;.prerequisites.txt</filename> e <filename>&lt;pacote&gt;.signals.txt</filename>. Se há símbolos faltando em qualquer um deles, pode-se exigir que o gtkdoc mantenha o arquivo intermediário de varredura para análise posterior, executando <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 
 #: C/index.docbook:1738(chapter/title)
 msgid "Documenting other interfaces"
@@ -1545,11 +1727,12 @@ msgstr "Até agora nós temos usado o GTK-Doc para documentar a API de um códig
 
 #: C/index.docbook:1747(sect1/title)
 msgid "Command line options and man pages"
-msgstr "Opções de linha de comando e páginas man"
+msgstr "Opções de linha de comando e de páginas man"
 
+# RefEntry é uma página de referência do DocBook (http://www.docbook.org/tdg/en/html/refentry.html)
 #: C/index.docbook:1749(sect1/para)
 msgid "As one can generate man pages for a docbook refentry as well, it sounds like a good idea to use it for that purpose. This way the interface is part of the reference and one gets the man-page for free."
-msgstr ""
+msgstr "Já que também é possível gerar páginas man para um refentry do docbook, soa como uma boa ideia usá-lo para este propósito. Desta forma, a interface é parte da referência e é possível obter a página man de graça."
 
 #: C/index.docbook:1756(sect2/title)
 msgid "Document the tool"
@@ -1557,15 +1740,15 @@ msgstr "Documentar a ferramenta"
 
 #: C/index.docbook:1758(sect2/para)
 msgid "Create one refentry file per tool. Following <link linkend=\"settingup_docfiles\">our example</link> we would call it <filename>meep/docs/reference/meeper/meep.xml</filename>. For the xml tags that should be used and can look at generated file in the xml subdirectory as well as examples e.g. in glib."
-msgstr ""
+msgstr "Crie um arquivo refentry por ferramenta. Segundo <link linkend=\"settingup_docfiles\">nosso exemplo</link> nós chamaríamos ele de <filename>meep/docs/reference/meeper/meep.xml</filename>. Para as tags xml que devem ser usadas e podem parecer no arquivo gerado no subdiretório xml assim como exemplos, por exemplo, em glib."
 
 #: C/index.docbook:1768(sect2/title)
 msgid "Adding the extra configure check"
-msgstr ""
+msgstr "Adicionando a verificação extra ao configure"
 
 #: C/index.docbook:1771(example/title) C/index.docbook:1791(example/title)
 msgid "Extra configure checks"
-msgstr "Verificações de configuração extra"
+msgstr "Verificações extra no configure"
 
 #: C/index.docbook:1772(example/programlisting)
 #, no-wrap
@@ -1582,10 +1765,21 @@ msgid ""
 "\n"
 "            "
 msgstr ""
+"\n"
+"\n"
+"AC_ARG_ENABLE(man,\n"
+"              [AC_HELP_STRING([--enable-man],\n"
+"                              [regenerate man pages from Docbook [default=no]])],enable_man=yes,\n"
+"              enable_man=no)\n"
+"\n"
+"AC_PATH_PROG([XSLTPROC], [xsltproc])\n"
+"AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)\n"
+"\n"
+"            "
 
 #: C/index.docbook:1788(sect2/title)
 msgid "Adding the extra makefile rules"
-msgstr ""
+msgstr "Adicionando as regras extras ao makefile"
 
 #: C/index.docbook:1792(example/programlisting)
 #, no-wrap
@@ -1609,6 +1803,24 @@ msgid ""
 "\n"
 "            "
 msgstr ""
+"\n"
+"\n"
+"man_MANS = \\\n"
+"       meeper.1\n"
+"\n"
+"if ENABLE_GTK_DOC\n"
+"if ENABLE_MAN\n"
+"\n"
+"%.1 : %.xml\n"
+"        @XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $&lt;\n"
+"\n"
+"endif\n"
+"endif\n"
+"\n"
+"BUILT_EXTRA_DIST = $(man_MANS)\n"
+"EXTRA_DIST += meep.xml\n"
+"\n"
+"            "
 
 #: C/index.docbook:1816(sect1/title)
 msgid "DBus interfaces"
@@ -1616,7 +1828,7 @@ msgstr "Interfaces DBus"
 
 #: C/index.docbook:1818(sect1/para)
 msgid "(FIXME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
-msgstr ""
+msgstr "(CORRIJA-ME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
 
 #: C/index.docbook:1827(chapter/title)
 msgid "Frequently asked questions"
@@ -1636,7 +1848,7 @@ msgstr "Sem hierarquia de classe."
 
 #: C/index.docbook:1835(seglistitem/seg)
 msgid "The objects <function>xxx_get_type()</function> function has not been entered into the <filename>&lt;package&gt;.types</filename> file."
-msgstr ""
+msgstr "A função de objetos <function>xxx_get_type()</function> não foi inserida no arquivo <filename>&lt;pacote&gt;.types</filename>."
 
 #: C/index.docbook:1841(seglistitem/seg)
 msgid "Still no class hierarchy."
@@ -1644,15 +1856,15 @@ msgstr "Ainda sem hierarquia."
 
 #: C/index.docbook:1842(seglistitem/seg)
 msgid "Missing or wrong naming in <filename>&lt;package&gt;-sections.txt</filename> file (see <ulink url=\"http://mail.gnome.org/archives/gtk-doc-list/2003-October/msg00006.html\">explanation</ulink>)."
-msgstr ""
+msgstr "Nomenclatura faltando ou incorreta no arquivo <filename>&lt;pacote&gt;-sections.txt</filename> (veja a <ulink url=\"http://mail.gnome.org/archives/gtk-doc-list/2003-October/msg00006.html\">explicação</ulink>)."
 
 #: C/index.docbook:1848(seglistitem/seg)
 msgid "Damn, I have still no class hierarchy."
-msgstr ""
+msgstr "Droga. Eu ainda não tenho hierarquia de classes."
 
 #: C/index.docbook:1849(seglistitem/seg)
 msgid "Is the object name (name of the instance struct, e.g. <type>GtkWidget</type>) part of the normal section (don't put this into Standard or Private subsections)."
-msgstr ""
+msgstr "Por acaso o nome do objeto (nome da struct da instância, ex. <type>GtkWidget</type>) faz parte da seção normal (não coloque isso em subsções Standard ou Private)?"
 
 #: C/index.docbook:1856(seglistitem/seg)
 msgid "No symbol index."
@@ -1660,15 +1872,15 @@ msgstr "Nenhum símbolo de índice."
 
 #: C/index.docbook:1857(seglistitem/seg)
 msgid "Does the <filename>&lt;package&gt;-docs.{xml,sgml}</filename> contain a index that xi:includes the generated index?"
-msgstr ""
+msgstr "O <filename>&lt;pacote&gt;-docs.{xml,sgml}</filename> contém um índice que \"xi:inclui\" o índice gerado?"
 
 #: C/index.docbook:1863(seglistitem/seg)
 msgid "Symbols are not linked to their doc-section."
-msgstr ""
+msgstr "Símbolos não estão vinculados ao seus doc-section."
 
 #: C/index.docbook:1864(seglistitem/seg)
 msgid "Is the doc-comment using the correct markup (added #,% or ())? Check if the gtkdoc-fixxref warns about unresolvable xrefs."
-msgstr ""
+msgstr "O doc-comment está usando a marcação correta (adicionado #,% or ())? Verifique se o gtkdoc-fixxref avisa sobre xrefs não resolvidos."
 
 #: C/index.docbook:1870(seglistitem/seg)
 msgid "A new class does not appear in the docs."
@@ -1676,7 +1888,7 @@ msgstr "Uma nova classe não aparece nos documentos."
 
 #: C/index.docbook:1871(seglistitem/seg)
 msgid "Is the new page xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
-msgstr ""
+msgstr "A nova página foi \"xi:incluída\" do <filename>&lt;pacote&gt;-docs.{xml,sgml}</filename>?"
 
 #: C/index.docbook:1877(seglistitem/seg)
 msgid "A new symbol does not appear in the docs."
@@ -1684,7 +1896,7 @@ msgstr "Um novo símbolo não aparece nos documentos."
 
 #: C/index.docbook:1878(seglistitem/seg)
 msgid "Is the doc-comment properly formatted. Check for spelling mistakes in the begin of the comment. Check if the gtkdoc-fixxref warns about unresolvable xrefs. Check if the symbol is correctly listed in the <filename>&lt;package&gt;-sections.txt</filename> in a public subsection."
-msgstr ""
+msgstr "O doc-comment está formatado adequadamente? Verifique erros de escrita no começo do comentário. Verifique se o gtkdoc-fixxref avisa sobre xrefs não resolvíveis. Verifique se o símbolo está listado corretamente no <filename>&lt;pacote&gt;-sections.txt</filename> em uma subseção pública."
 
 #: C/index.docbook:1886(seglistitem/seg)
 msgid "A type is missing from the class hierarchy."
@@ -1692,15 +1904,15 @@ msgstr "Um tipo está faltando da hierarquia de classe."
 
 #: C/index.docbook:1887(seglistitem/seg)
 msgid "If the type is listed in <filename>&lt;package&gt;.hierarchy</filename> but not in <filename>xml/tree_index.sgml</filename> then double check that the type is correctly placed in the <filename>&lt;package&gt;-sections.txt</filename>. If the type instance (e.g. <type>GtkWidget</type>) is not listed or incidentialy makred private it will not be shown."
-msgstr ""
+msgstr "Se o tipo está listado no <filename>&lt;pacote&gt;.hierarchy</filename>, mas não em <filename>xml/tree_index.sgml</filename>, então certifique-se de que o tipo está colocado corretamente no <filename>&lt;pacote&gt;-sections.txt</filename>. Se a instância do tipo (ex.: <type>GtkWidget</type>) não está listada ou incidentalmente marcada como privada, ela não será mostrada."
 
 #: C/index.docbook:1896(seglistitem/seg)
 msgid "I get foldoc links for all gobject annotations."
-msgstr ""
+msgstr "Obtenho links de seguimento de documentos para todas as anotações gobject."
 
 #: C/index.docbook:1897(seglistitem/seg)
 msgid "Check that <filename>xml/annotation-glossary.xml</filename> is xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
-msgstr ""
+msgstr "Verifique se <filename>xml/annotation-glossary.xml</filename> está \"xi:incluído\" de <filename>&lt;pacote&gt;-docs.{xml,sgml}</filename>."
 
 #: C/index.docbook:1905(seglistitem/seg)
 msgid "Parameter described in source code comment block but does not exist"
@@ -1712,27 +1924,27 @@ msgstr "Verifique se o protótipo no cabeçalho tem nomes de parâmetros diferen
 
 #: C/index.docbook:1911(seglistitem/seg)
 msgid "multiple \"IDs\" for constraint linkend: XYZ"
-msgstr ""
+msgstr "Múltiplos \"IDs\" para restrições do fim do link XYZ"
 
 #: C/index.docbook:1912(seglistitem/seg)
 msgid "Symbol XYZ appears twice in <filename>&lt;package&gt;-sections.txt</filename> file."
-msgstr ""
+msgstr "O símbolo XYZ aparece duas vezes no arquivo <filename>&lt;pacote&gt;-sections.txt</filename>."
 
 #: C/index.docbook:1915(seglistitem/seg)
 msgid "Element typename in namespace '' encountered in para, but no template matches."
-msgstr ""
+msgstr "Elemento typename no espaço de nome '' encontrado em para, mas nenhum modelo correspondeu."
 
 #: C/index.docbook:1922(chapter/title)
 msgid "Tools related to gtk-doc"
-msgstr ""
+msgstr "Ferramentas relacionadas ao gtk-doc"
 
 #: C/index.docbook:1924(chapter/para)
 msgid "GtkDocPlugin - a <ulink url=\"http://trac-hacks.org/wiki/GtkDocPlugin\">Trac GTK-Doc</ulink> integration plugin, that adds API docs to a trac site and integrates with the trac search."
-msgstr ""
+msgstr "GtkDocPlugin - um plug-in de integração com <ulink url=\"http://trac-hacks.org/wiki/GtkDocPlugin\">Trac GTK-Doc</ulink>, que adiciona documentos de API a um site trac e integra com a pesquisa do trac."
 
 #: C/index.docbook:1929(chapter/para)
 msgid "Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since tags in the API to determine the minimum required version."
-msgstr ""
+msgstr "Gtkdoc-depscan - uma ferramenta (parte do gtk-doc) para verificar APIs usadas, a partir de suas tags, para determinar a versão mínima necessária."
 
 #: C/index.docbook:12(appendixinfo/releaseinfo)
 #: C/fdl-appendix.xml:12(appendixinfo/releaseinfo)
@@ -1750,6 +1962,9 @@ msgid ""
 "        Suite 330</street>, <city>Boston</city>, <state>MA</state>  \n"
 "        <postcode>02110-1301</postcode>  <country>USA</country>"
 msgstr ""
+"Free Software Foundation, Inc. <street>51 Franklin Street, \n"
+"        Suite 330</street>, <city>Boston</city>, <state>MA</state>  \n"
+"        <postcode>02110-1301</postcode>  <country>USA</country>"
 
 #: C/index.docbook:19(legalnotice/para)
 #: C/fdl-appendix.xml:19(legalnotice/para)
