@@ -21,3 +21,15 @@
 void test (gint a) {
 }
 
+/**
+ * GtkDocTestIf:
+ *
+ * test object
+ */
+/**
+ * GtkDocTestIfInterface:
+ * @parent: parent interface type.
+ *
+ * test interface
+ */
+
