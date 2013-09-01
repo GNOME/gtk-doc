@@ -4,15 +4,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc help master\n"
-"POT-Creation-Date: 2013-06-12 11:36+0000\n"
-"PO-Revision-Date: 2013-06-17 16:36+0100\n"
+"POT-Creation-Date: 2013-08-25 14:20+0000\n"
+"PO-Revision-Date: 2013-09-01 16:36+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
@@ -109,43 +109,28 @@ msgstr ""
 "Anfangsbuchstaben geschrieben."
 
 #: C/index.docbook:83(revhistory/revision)
-#, fuzzy
-#| msgid ""
-#| "<revnumber>1.18.1</revnumber> <date>20 Sep 2011</date> "
-#| "<authorinitials>ss</authorinitials> <revremark>development version</"
-#| "revremark>"
 msgid ""
 "<revnumber>1.19.1</revnumber> <date>05 Jun 2013</date> <authorinitials>ss</"
 "authorinitials> <revremark>development version</revremark>"
 msgstr ""
-"<revnumber>1.18.1</revnumber> <date>20. September 2011</date> "
-"<authorinitials>ss</authorinitials> <revremark>Entwicklerversion</revremark>"
+"<revnumber>1.19.1</revnumber> <date>05. Juni 2013</date> <authorinitials>ss</"
+"authorinitials> <revremark>Entwicklerversion</revremark>"
 
 #: C/index.docbook:89(revhistory/revision)
-#, fuzzy
-#| msgid ""
-#| "<revnumber>1.17</revnumber> <date>26 Feb 2011</date> <authorinitials>sk</"
-#| "authorinitials> <revremark>urgent bug fix update</revremark>"
 msgid ""
 "<revnumber>1.19</revnumber> <date>05 Jun 2013</date> <authorinitials>ss</"
 "authorinitials> <revremark>bug fixes</revremark>"
 msgstr ""
-"<revnumber>1.17</revnumber> <date>26. Februar 2011</date> "
-"<authorinitials>sk</authorinitials> <revremark>Dringende Bugfix-"
-"Aktualisierung</revremark>"
+"<revnumber>1.19</revnumber> <date>05. Juni 2013</date> <authorinitials>sk</"
+"authorinitials> <revremark>Fehlerbehebungen</revremark>"
 
 #: C/index.docbook:95(revhistory/revision)
-#, fuzzy
-#| msgid ""
-#| "<revnumber>1.18</revnumber> <date>14 sep 2011</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>bug fixes, speedups, markdown support</"
-#| "revremark>"
 msgid ""
 "<revnumber>1.18</revnumber> <date>14 Sep 2011</date> <authorinitials>ss</"
 "authorinitials> <revremark>bug fixes, speedups, markdown support</revremark>"
 msgstr ""
 "<revnumber>1.18</revnumber> <date>14. September 2011</date> "
-"<authorinitials>ss</authorinitials> <revremark>fehlerbehebungen, Verbesserte "
+"<authorinitials>ss</authorinitials> <revremark>Fehlerbehebungen, Verbesserte "
 "Geschwindigkeit, Unterstützung für markdown</revremark>"
 
 #: C/index.docbook:101(revhistory/revision)
@@ -1550,6 +1535,12 @@ msgid ""
 "more general solution is anticipated. No claims are made about either source "
 "or binary compatibility from one minor release to the next."
 msgstr ""
+"Instabil - Instabile Schnittstellen sind experimentell oder vorübergehend. "
+"Sie werden typischerweise verwendet, um außenstehenden Entwicklern frühen "
+"Zugang zu neuen oder sich schnell ändernder Technologie zu geben, oder um "
+"eine Übergangslösung für ein Problem zu liefern, für das eine allgemeinere "
+"Lösung erwartet wird. Es werden keine Garantien zu Quell- oder "
+"Binärkompatibilität von einer minor-Freigabe zur nächsten gegeben."
 
 #: C/index.docbook:994(listitem/para)
 msgid ""
@@ -1557,6 +1548,9 @@ msgid ""
 "that is not documented for end-users. Such functions should only be used in "
 "specified and documented ways."
 msgstr ""
+"Privat - Eine Schnittstelle, die im GNOME-Stack selbst verwendet werden "
+"kann, aber nicht für Endanwender dokumentiert ist. Solche Funktionen sollten "
+"nur auf spezifizierte und dokumentierte Weisen verwendet werden."
 
 #: C/index.docbook:1003(listitem/para)
 msgid ""
@@ -1564,6 +1558,9 @@ msgid ""
 "end-user documentation. Functions that are undocumented are assumed to be "
 "Internal."
 msgstr ""
+"Intern - Eine Schnittstelle, die für ein Modul intern ist und keine "
+"Endanwender-Dokumentation erfordert. Undokumentierte Funktionen werden als "
+"intern angesehen."
 
 #: C/index.docbook:965(listitem/para)
 msgid ""
@@ -2437,8 +2434,8 @@ msgid ""
 "<filename>Makefile.am</filename>. If you use this approach you should not "
 "dist the types file nor have it under version control."
 msgstr ""
-"Seit GTK-Doc 1.8 kann <application>gtkdoc-scan</application> diese Liste "
-"erstellen. Fügen Sie einfach »--rebuild-types« zu SCAN_OPTIONS in "
+"Seit GTK-Doc 1.8 kann <application>gtkdoc-scan</application> diese Liste für "
+"Sie erstellen. Fügen Sie einfach »--rebuild-types« zu SCAN_OPTIONS in "
 "<filename>Makefile.am</filename> hinzu. Wenn Sie so vorgehen sollten Sie "
 "nicht ??"
 
@@ -2620,7 +2617,7 @@ msgstr ""
 "g_object_get_type und Makros wie G_OBJECT(), G_IS_OBJECT() etc.). Derzeit "
 "werden diese nicht in die Dokumentation aufgenommen. Die können auch &lt;"
 "SUBSECTION Private&gt; für private Deklarationen verwenden, welche nicht "
-"ausgegeben werden ..."
+"ausgegeben werden …"
 
 #: C/index.docbook:1658(sect1/para)
 msgid ""
@@ -2785,10 +2782,11 @@ msgid ""
 "used and can look at generated file in the xml subdirectory as well as "
 "examples e.g. in glib."
 msgstr ""
-"Erstellen Sie eine Referenzeintrag-Datei pro Werkzeug. In <link linkend="
-"\"settingup_docfiles\">unserem Beispiel</link>  nennen wir sie "
-"<filename>meep/docs/reference/meeper/meep.xml</filename>. Für die zu "
-"verwendenden xml-Tags ?? "
+"Erstellen Sie eine Referenzeintragsdatei pro Werkzeug. In <link linkend="
+"\"settingup_docfiles\">unserem Beispiel</link> nennen wir sie <filename>meep/"
+"docs/reference/meeper/meep.xml</filename>. Für die zu verwendenden XML-Tags "
+"können Sie die generierte Datei im XML-Verzeichnis oder Beispiele (z.B. in "
+"glib) ansehen."
 
 #: C/index.docbook:1768(sect2/title)
 msgid "Adding the extra configure check"
@@ -3065,13 +3063,12 @@ msgstr ""
 "Seite hinzufügt und die trac-Suche einbindet."
 
 #: C/index.docbook:1929(chapter/para)
-#, fuzzy
 msgid ""
 "Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since "
 "tags in the API to determine the minimum required version."
 msgstr ""
-"Gtkdoc-depscan - ein Werkzeug (teil von gtk-doc), um die verwendete API "
-"mit ? zu prüfen"
+"Gtkdoc-depscan - ein Werkzeug (Teil von gtk-doc), um die verwendete API für "
+"die minimal erforderliche Version zu prüfen."
 
 #: C/index.docbook:12(appendixinfo/releaseinfo)
 #: C/fdl-appendix.xml:12(appendixinfo/releaseinfo)
