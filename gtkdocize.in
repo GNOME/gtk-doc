@@ -146,7 +146,7 @@ fi
 # matches the the automake fragment.
 # If AC_CONFIG_MACRO_DIR is not used, the macro won't be copied, and
 # the correct flags must be passed to aclocal for it to find the macro.
-m4dir="$srcdir/`cat "$configure" | grep '^AC_CONFIG_MACRO_DIR' | sed -n -e 's/AC_CONFIG_MACRO_DIR(\([^()]*\))/\1/p' | sed -e 's/^\[\(.*\)\]$/\1/' | sed -e 1q`"
+m4dir="$srcdir"/`autoconf 2>/dev/null --trace 'AC_CONFIG_MACRO_DIR:$1' "$configure"`
 if test -n "$m4dir"; then
   rm -f $m4dir/gtk-doc.m4
   if test "$copy" = yes; then
