@@ -75,10 +75,13 @@ EXTRA_DIST = \
 	version-greater-or-equal.xsl \
 	devhelp2.xsl     \
 	gtk-doc.cat.in  \
-	home.png  \
-	left.png  \
-	right.png \
-	up.png    \
+	home.png              \
+	left.png              \
+	left-insensitive.png  \
+	right.png             \
+	right-insensitive.png \
+	up.png                \
+	up-insensitive.png    \
 	doc/README            \
 	doc/authors.txt       \
 	doc/gnome.txt         \
