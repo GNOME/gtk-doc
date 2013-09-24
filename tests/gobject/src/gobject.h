@@ -97,6 +97,7 @@ GType  gtkdoc_object2_get_type(void) G_GNUC_CONST;
 GtkdocObject *gtkdoc_object_new(void);
 #ifndef GTKDOC_TESTER_DISABLE_DEPRECATED
 void gtkdoc_object_set_otest (GObject *self, const gchar *value);
+void gtkdoc_object_do_not_use (GObject *self);
 #endif
 void gtkdoc_object_frobnicate (GObject *self, gint n);
 gboolean gtkdoc_object_fooify (GObject *self, ...);

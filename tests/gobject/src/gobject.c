@@ -230,6 +230,18 @@ gboolean gtkdoc_object_fooify (GObject *self, ...) {
   return TRUE;
 }
 
+/**
+ * gtkdoc_object_do_not_use:
+ * @self: the object
+ *
+ * Test a deprecation without additional message.
+ *
+ * Deprecated: 3.10
+ */
+void gtkdoc_object_do_not_use (GObject *self) {
+
+}
+
 /* class internals */
 
 static void gtkdoc_object_get_property (GObject  *object, guint property_id,
