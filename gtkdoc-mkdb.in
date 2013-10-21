@@ -1119,7 +1119,7 @@ $header
   <title>Annotation Glossary</title>
 EOF
 
-    foreach my $annotation (keys(%AnnotationsUsed)) {
+    foreach my $annotation (sort(keys(%AnnotationsUsed))) {
         if(defined($AnnotationDefinition{$annotation})) {
             my $def = $AnnotationDefinition{$annotation};
             my $curletter = uc(substr($annotation,0,1));
