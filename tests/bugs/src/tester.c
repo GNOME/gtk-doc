@@ -397,6 +397,15 @@ void bug_624001e(void)
 }
 
 /**
+ * bug_711598:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=711598
+ */
+void bug_711598(void)
+{
+}
+
+/**
  * deprecation_notice:
  *
  * Foo.

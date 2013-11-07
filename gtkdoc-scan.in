@@ -456,8 +456,8 @@ sub ScanHeader {
 
                 }
             # FUNCTION POINTER VARIABLES
-            #                                                                       $1                                $3            $4             $5
-            } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/o) {
+            #                                                                     $1                                $3            $4             $5
+            } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\s*)*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(/o) {
                 my $p3 = defined($3) ? $3 : "";
                 $ret_type = "$1$p3 $4";
                 $symbol = $5;
@@ -563,8 +563,8 @@ sub ScanHeader {
 
             # We assume that functions which start with '_' are private, so
             # we skip them.
-            #                                                                       $1                                                                                                    $2                                                          $3
-            } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(/o) {
+            #                                                                     $1                                                                                                    $2                                                          $3
+            } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(/o) {
                 $ret_type = $1;
                 if (defined ($2)) { $ret_type .= " $2"; }
                 $symbol = $3;
@@ -578,8 +578,8 @@ sub ScanHeader {
                     $skip_block = 1;
                 }
 
-            #                                                                       $1                                                                                                    $2                                                          $3
-            } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(/o) {
+            #                                                                     $1                                                                                                    $2                                                          $3
+            } elsif (m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(/o) {
                 $ret_type = $1;
                 if (defined ($2)) { $ret_type .= " $2"; }
                 $symbol = $3;
@@ -602,8 +602,8 @@ sub ScanHeader {
 
                 if ($previous_line !~ m/^\s*G_INLINE_FUNC/) {
                     if ($previous_line !~ m/^\s*static\s+/) {
-                        #                                                                       $1                                                                                                   $2
-                        if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
+                        #                                                                     $1                                                                                                   $2
+                        if ($previous_line =~ m/^\s*(?:\b(?:extern|${IGNORE_DECORATORS})\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
                             $ret_type = $1;
                             if (defined ($2)) { $ret_type .= " $2"; }
                             @TRACE@("Function  (2): $symbol, Returns: $ret_type");
@@ -613,8 +613,8 @@ sub ScanHeader {
                         @TRACE@("skip block after inline function");
                         # now we we need to skip a whole { } block
                         $skip_block = 1;
-                        #                                                                                    $1                                                                                                   $2
-                        if ($previous_line =~ m/^\s*(?:\b(?:extern|static|inline|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
+                        #                                                                                  $1                                                                                                    $2
+                        if ($previous_line =~ m/^\s*(?:\b(?:extern|static|inline|${IGNORE_DECORATORS})\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
                             $ret_type = $1;
                             if (defined ($2)) { $ret_type .= " $2"; }
                             @TRACE@("Function  (3): $symbol, Returns: $ret_type");
@@ -627,8 +627,8 @@ sub ScanHeader {
                         @TRACE@("skip block after inline function");
                         # now we we need to skip a whole { } block
                         $skip_block = 1;
-                        #                                                                                    $1                                                                                                    $2
-                        if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
+                        #                                                                                  $1                                                                                                    $2
+                        if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$/o) {
                             $ret_type = $1;
                             if (defined ($2)) { $ret_type .= " $2"; }
                             @TRACE@("Function (4): $symbol, Returns: $ret_type");
@@ -641,14 +641,14 @@ sub ScanHeader {
             # on the previous line(s), and the start of the parameters on this.
             } elsif (m/^\s*\(/) {
                 $decl = $';
-                if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/o) {
+                if ($previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$/o) {
                     $ret_type = "$1 $2";
                     $symbol = $3;
                     @TRACE@("Function (5): $symbol, Returns: $ret_type");
                     $in_declaration = "function";
 
                 } elsif ($previous_line =~ m/^\s*\w+\s*$/
-                         && $pre_previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\b\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$/o) {
+                         && $pre_previous_line =~ m/^\s*(?:\b(?:extern|G_INLINE_FUNC|${IGNORE_DECORATORS})\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$/o) {
                     $ret_type = $1;
                     $ret_type =~ s/\s*\n//;
                     $in_declaration = "function";

@@ -483,6 +483,10 @@ void bug_624001d(void);
 GLIB_DEPRECATED
 void bug_624001e (void);
 
+#define BUG_711598_DEPRECATED_FOR(f) G_GNUC_DEPRECATED_FOR(f)
+BUG_711598_DEPRECATED_FOR(bug_711598b) void
+bug_711598(void);
+
 #ifdef GTKDOC_DISABLE_DEPRECATED
 void deprecation_notice(void);
 #endif
