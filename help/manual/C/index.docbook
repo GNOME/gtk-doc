@@ -815,7 +815,8 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
           </listitem>
           <listitem>
             <para>
-              Use #Struct.field to refer to a field inside a structure.
+              Use #Struct.field to refer to a field inside a structure and
+              #GObjectClass.foo_bar() to refer to a vmethod.
             </para>
           </listitem>
         </itemizedlist>
