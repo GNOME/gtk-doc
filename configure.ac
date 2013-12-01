@@ -221,11 +221,16 @@ AC_SUBST(TS_FMT)
 dnl
 dnl Documentation
 dnl
+AC_MSG_CHECKING([for yelp-tools])
 have_yelp_tools=no
 m4_ifdef([YELP_HELP_INIT],[
+AC_MSG_RESULT([yes])
 YELP_HELP_INIT
 have_yelp_tools=yes
 ])
+if test "x$have_yelp_tools" != "xyes"; then
+  AC_MSG_RESULT([no])
+fi
 AM_CONDITIONAL([HAVE_YELP_TOOLS],[test x$have_yelp_tools = xyes])
 
 AC_CONFIG_FILES([Makefile
