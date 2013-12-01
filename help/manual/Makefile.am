@@ -1,4 +1,6 @@
+if HAVE_YELP_TOOLS
 @YELP_HELP_RULES@
+endif
 
 HELP_ID = gtk-doc-manual
 
