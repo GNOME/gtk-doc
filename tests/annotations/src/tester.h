@@ -29,5 +29,7 @@ extern gboolean annotation_skip_return (GList *list);
 
 extern void annotation_scope (GCallback *callback, gpointer user_data);
 
+extern void annotation_rename_to (void);
+
 #endif // GTKDOC_TESTER_H
 

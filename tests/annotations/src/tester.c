@@ -135,3 +135,13 @@ void
 annotation_scope (GCallback *callback, gpointer user_data)
 {
 }
+
+/**
+ * annotation_rename_to: (rename-to annotation_scope)
+ *
+ * Documentation for this function.
+ */
+void
+annotation_rename_to (void)
+{
+}
