@@ -88,6 +88,8 @@ setup-build.stamp:
 	    files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
 	    if test "x$$files" != "x" ; then \
 	        for file in $$files ; do \
+	            destdir=`dirname $(abs_builddir)/$$file` ;\
+	            test -d "$$destdir" || mkdir -p "$$destdir"; \
 	            test -f $(abs_srcdir)/$$file && \
 	                cp -pu $(abs_srcdir)/$$file $(abs_builddir)/$$file || true; \
 	        done; \
