@@ -2761,8 +2761,8 @@ sub ExpandAbbreviations {
 
   # Convert "|[" and "]|" into the start and end of program listing examples.
   # FIXME: we like to have a way to specify parameters e.g. language="c"
-  $text =~ s%\|\[%<informalexample><programlisting>%g;
-  $text =~ s%\]\|%</programlisting></informalexample>%g;
+  $text =~ s%\|\[%<informalexample><programlisting><![CDATA[%g;
+  $text =~ s%\]\|%]]></programlisting></informalexample>%g;
   # TODO: check for a xml comment after |[ and pick the language attribute from
   # that
 
