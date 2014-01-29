@@ -36,6 +36,10 @@
  * - catching bugs
  * - having an example
  *
+ * # Discussion
+ *
+ * This is a section with a heading without a trailing hash mark.
+ *
  * # Coda #
  *
  * Nothing more to say.
