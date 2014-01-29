@@ -2850,6 +2850,38 @@ sub ExpandAbbreviationsCallback2 {
     # FIXME: why is this different from &ExpandAbbreviationsCallback(),
     #        why not just call it
     $text =~ s/#(\w+)/&MakeHashXRef($1, "");/eg;
+  } elsif ($tag eq "<![CDATA[") {
+    my $warn = "";
+    my @entities = ( [ "&lt;", "<" ],
+                     [ "&gt;", ">" ],
+                     [ "&ast;", "*" ],
+                     [ "&num;", "#" ],
+                     [ "&percnt;", "%"],
+                     [ "&colon;", ":" ],
+                     [ "&quot;", "\"" ],
+                     [ "&apos;", "'" ],
+                     [ "&nbsp;", " " ],
+                     [ "&amp;", "&" ] ); # Do this last, or the others get messed up.
+    my $i;
+
+    # Expand entities in <programlisting> even inside CDATA since
+    # we changed the definition of |[ to add CDATA
+    for ($i = 0; $i <= $#entities; $i++) {
+      if ($text =~ s/$entities[$i][0]/$entities[$i][1]/g) {
+        # don't warn about &ast; since it is expected to be present
+        # for C-style comments
+        if ($entities[$i][0] ne "&ast;") {
+          $warn .= "$entities[$i][0] ";
+        }
+      }
+    }
+
+    if ($warn ne "") {
+      chomp $warn;
+      &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                   "Deprecated entities found in documentation for $symbol: $warn");
+    }
+
   }
 
   return $text;
