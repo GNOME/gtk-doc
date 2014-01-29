@@ -4646,7 +4646,7 @@ sub ConvertMarkDownCallback {
     #        ...
     #        ###### Header 6
     #
-    if($text =~ s%(?<=\n)\#[ \t]*(.+?)[ \t]*\#*\n+%$end_of_section\n<refsect2>\n<title>$1</title>\n<para>\n%gm) {
+    if($text =~ s%(?<=\n)\#[ \t]+(.+?)[ \t]*\#*\n+%$end_of_section\n<refsect2>\n<title>$1</title>\n<para>\n%gm) {
         $md_in_refsect2=1;
     }
 
