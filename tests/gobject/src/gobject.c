@@ -25,6 +25,10 @@
  *
  * # Examples #
  *
+ * Here are a few examples.
+ *
+ * ## Example 1 ##
+ *
  * You can also change parameters:
  * <informalexample>
  * <programlisting language="c"><xi:include xmlns:xi="http://www.w3.org/2003/XInclude" parse="text" href="../../examples/gobject.c" /></programlisting>
