@@ -36,8 +36,11 @@
  * - catching bugs
  * - having an example
  *
+ * # Coda #
+ *
  * Nothing more to say.
  */
+
 /**
  * SECTION:object2
  * @title: GtkdocObject2
