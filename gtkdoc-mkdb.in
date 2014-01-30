@@ -4611,6 +4611,7 @@ sub ConvertMarkDown {
     $md_in_tags{"refsect2"} = 0;
     $md_in_tags{"refsect3"} = 0;
     $md_in_tags{"itemizedlist"} = 0;
+    $md_in_tags{"orderedlist"} = 0;
 
     $text = ConvertMarkDownOpenTag ("para") . $text;
 
@@ -4659,18 +4660,17 @@ sub ReplaceMarkDownSections {
 }
 
 sub ReplaceMarkDownListItem {
-  my ($block, $is_last) = @_;
+  my ($block, $type, $is_last) = @_;
   my $result = "";
-  my $tag = "refsect3";
 
-  if ($md_in_tags{"itemizedlist"} < 1) {
-    $result .= ConvertMarkDownOpenTag ("itemizedlist");
+  if ($md_in_tags{$type} < 1) {
+    $result .= ConvertMarkDownOpenTag ($type);
   }
 
   $result .= "<listitem><para>$block</para></listitem>";
 
   if ($is_last == 1) {
-    $result .= &ConvertMarkDownTerminateTag ("itemizedlist");
+    $result .= &ConvertMarkDownTerminateTag ($type);
   }
 
   return $result;
@@ -4723,7 +4723,31 @@ sub ConvertMarkDownCallback {
     #   New paragraph.
     $text.="\n"; # we need a new line to avoid too complicated matching rules below
     our $is_last = 0;
-    $text =~ s%(?<=\n)-\s+(.+?)(?=(?:\n-\s+(?{$is_last=0}))|(?:\n\n(?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, $is_last)%egs;
+    $text =~ s%(?<=\n)-\s+(.+?)(?=(?:\n-\s+(?{$is_last=0}))|(?:\n\n(?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "itemizedlist", $is_last)%egs;
+    chomp $text;
+
+    # Simple (unnested) lists:
+    #   Please select:
+    #   * item 1
+    #   * item 2 with loooong
+    #     description
+    #   * item 3
+    #
+    #   New paragraph.
+    $text.="\n"; # we need a new line to avoid too complicated matching rules below
+    $text =~ s%(?<=\n)\*\s+(.+?)(?=(?:\n\*\s+(?{$is_last=0}))|(?:\n\n(?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "itemizedlist", $is_last)%egs;
+    chomp $text;
+
+    # Ordered (unnested) lists:
+    #   Please select:
+    #   1. item 1
+    #   1. item 2 with loooong
+    #     description
+    #   3. item 3
+    #
+    #   New paragraph.
+    $text.="\n"; # we need a new line to avoid too complicated matching rules below
+    $text =~ s%(?<=\n)\d+\.\s+(.+?)(?=(?:\n\d+\.\s+(?{$is_last=0}))|(?:\n\n(?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "orderedlist", $is_last)%egs;
     chomp $text;
 
     # Make Paragraphs on blank lines

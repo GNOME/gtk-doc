@@ -53,7 +53,15 @@
  * </para></listitem>
  * </orderedlist>
  *
+ * This example serves two main purposes:
+ * * testing alternate list syntax
+ * * not sure if we want this one
+ *
  * # Coda #
+ *
+ * 1. There
+ * 1. Really
+ * 1. Is
  *
  * Nothing more to say.
  */
