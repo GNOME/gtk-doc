@@ -4610,6 +4610,7 @@ sub ConvertMarkDown {
     $md_in_tags{"para"} = 0;
     $md_in_tags{"refsect2"} = 0;
     $md_in_tags{"refsect3"} = 0;
+    $md_in_tags{"itemizedlist"} = 0;
 
     $text = ConvertMarkDownOpenTag ("para") . $text;
 
@@ -4620,6 +4621,7 @@ sub ConvertMarkDown {
                                \&ConvertMarkDownCallback);
 
     $text .= &ConvertMarkDownTerminateTag ("para");
+    $text .= &ConvertMarkDownTerminateTag ("itemizedlist");
     $text .= &ConvertMarkDownTerminateTag ("refsect3");
     $text .= &ConvertMarkDownTerminateTag ("refsect2");
 
@@ -4652,6 +4654,24 @@ sub ReplaceMarkDownSections {
   $result .= ConvertMarkDownOpenTag ($tag);
   $result .= "<title>$title</title>\n";
   $result .= ConvertMarkDownOpenTag ("para");
+
+  return $result;
+}
+
+sub ReplaceMarkDownListItem {
+  my ($block, $is_last) = @_;
+  my $result = "";
+  my $tag = "refsect3";
+
+  if ($md_in_tags{"itemizedlist"} < 1) {
+    $result .= ConvertMarkDownOpenTag ("itemizedlist");
+  }
+
+  $result .= "<listitem><para>$block</para></listitem>";
+
+  if ($is_last == 1) {
+    $result .= &ConvertMarkDownTerminateTag ("itemizedlist");
+  }
 
   return $result;
 }
@@ -4702,10 +4722,8 @@ sub ConvertMarkDownCallback {
     #
     #   New paragraph.
     $text.="\n"; # we need a new line to avoid too complicated matching rules below
-    if ($text =~ s%(?<=\n)-\s+(.+?)(?=(?:\n-\s+)|(?:\n\n)|(?:\n$))%<listitem><para>$1</para></listitem>%gs) {
-        $text =~ s%(?<!</listitem>)(\n<listitem>)%\n<itemizedlist>$1%g;
-        $text =~ s%(</listitem>\n)(?!<listitem>)%$1</itemizedlist>\n%g;
-    }
+    our $is_last = 0;
+    $text =~ s%(?<=\n)-\s+(.+?)(?=(?:\n-\s+(?{$is_last=0}))|(?:\n\n(?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, $is_last)%egs;
     chomp $text;
 
     # Make Paragraphs on blank lines
