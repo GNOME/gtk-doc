@@ -44,6 +44,15 @@
  *
  * This is a section with a heading without a trailing hash mark.
  *
+ * <orderedlist>
+ * <listitem><para>
+ * This list is here to ensure the parsing of the above list
+ * </para></listitem>
+ * <listitem><para>
+ * Doesn't change it.
+ * </para></listitem>
+ * </orderedlist>
+ *
  * # Coda #
  *
  * Nothing more to say.
