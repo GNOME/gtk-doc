@@ -4609,6 +4609,7 @@ sub ConvertMarkDown {
     # reset state
     $md_in_tags{"para"} = 0;
     $md_in_tags{"refsect2"} = 0;
+    $md_in_tags{"refsect3"} = 0;
 
     $text = ConvertMarkDownOpenTag ("para") . $text;
 
@@ -4619,6 +4620,7 @@ sub ConvertMarkDown {
                                \&ConvertMarkDownCallback);
 
     $text .= &ConvertMarkDownTerminateTag ("para");
+    $text .= &ConvertMarkDownTerminateTag ("refsect3");
     $text .= &ConvertMarkDownTerminateTag ("refsect2");
 
     return $text
@@ -4637,10 +4639,15 @@ sub ConvertMarkDownEndTag {
 sub ReplaceMarkDownSections {
   my ($title, $depth) = @_;
   my $result = "";
-  my $tag = "refsect2";
+  my $tag = "refsect3";
 
   $result .= &ConvertMarkDownTerminateTag ("para");
-  $result .= &ConvertMarkDownTerminateTag ("refsect2");
+  $result .= &ConvertMarkDownTerminateTag ("refsect3");
+
+  if ($depth == 1) {
+    $tag = "refsect2";
+    $result .= &ConvertMarkDownTerminateTag ("refsect2");
+  }
 
   $result .= ConvertMarkDownOpenTag ($tag);
   $result .= "<title>$title</title>\n";
@@ -4674,7 +4681,8 @@ sub ConvertMarkDownCallback {
     #          Header 2
     #          --------
     #
-    $text =~ s%(?<=\n)(.+)[ \t]*\n=+[ \t]*\n\n%ReplaceMarkDownSections($1, 1);%egm;
+    $text =~ s%(?<=\n)(.+)[ \t]*\n={4,}[ \t]*\n\n%ReplaceMarkDownSections($1, 1);%egm;
+    $text =~ s%(?<=\n)(.+)[ \t]*\n-{4,}[ \t]*\n\n%ReplaceMarkDownSections($1, 2);%egm;
 
     # atx-style headers:
     #        # Header 1
@@ -4683,7 +4691,7 @@ sub ConvertMarkDownCallback {
     #        ...
     #        ###### Header 6
     #
-    $text =~ s%(?<=\n)\#[ \t]+(.+?)[ \t]*\#*\n+%ReplaceMarkDownSections($1, 1);%egm;
+    $text =~ s%(?<=\n)(\#{1,2})[ \t]+(.+?)[ \t]*\#*\n+%ReplaceMarkDownSections($2, length($1));%egm;
 
     # Simple (unnested) lists:
     #   Please select:
