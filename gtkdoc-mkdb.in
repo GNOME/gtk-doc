@@ -4723,7 +4723,7 @@ sub ConvertMarkDownCallback {
     #   New paragraph.
     $text.="\n"; # we need a new line to avoid too complicated matching rules below
     our $is_last = 0;
-    $text =~ s%(?<=\n)-\s+(.+?)(?=(?:\n-\s+(?{$is_last=0}))|(?:\n\n(?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "itemizedlist", $is_last)%egs;
+    $text =~ s%(?<=\n)-\s+(.+?)(?=(?:\n-\s+(?{$is_last=0}))|(?:\n\n[^ \-\t](?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "itemizedlist", $is_last)%egs;
     chomp $text;
 
     # Simple (unnested) lists:
@@ -4735,7 +4735,7 @@ sub ConvertMarkDownCallback {
     #
     #   New paragraph.
     $text.="\n"; # we need a new line to avoid too complicated matching rules below
-    $text =~ s%(?<=\n)\*\s+(.+?)(?=(?:\n\*\s+(?{$is_last=0}))|(?:\n\n(?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "itemizedlist", $is_last)%egs;
+    $text =~ s%(?<=\n)\*\s+(.+?)(?=(?:\n\*\s+(?{$is_last=0}))|(?:\n\n[^ *\t](?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "itemizedlist", $is_last)%egs;
     chomp $text;
 
     # Ordered (unnested) lists:
@@ -4747,7 +4747,7 @@ sub ConvertMarkDownCallback {
     #
     #   New paragraph.
     $text.="\n"; # we need a new line to avoid too complicated matching rules below
-    $text =~ s%(?<=\n)\d+\.\s+(.+?)(?=(?:\n\d+\.\s+(?{$is_last=0}))|(?:\n\n(?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "orderedlist", $is_last)%egs;
+    $text =~ s%(?<=\n)\d+\.\s+(.+?)(?=(?:\n\d+\.\s+(?{$is_last=0}))|(?:\n\n[^ \d\t](?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "orderedlist", $is_last)%egs;
     chomp $text;
 
     # Make Paragraphs on blank lines

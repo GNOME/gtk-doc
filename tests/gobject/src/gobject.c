@@ -55,7 +55,12 @@
  *
  * This example serves two main purposes:
  * * testing alternate list syntax
+ *
+ *   With section text in each.
+ *
  * * not sure if we want this one
+ *
+ *   It has more stuff.
  *
  * # Coda #
  *
