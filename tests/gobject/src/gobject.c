@@ -35,9 +35,12 @@
  * </informalexample>
  *
  * This example serves two main purposes:
+ *
  * - testing conversion (long description
  *   follows here)
+ *
  * - catching bugs
+ *
  * - having an example
  *
  * # Discussion
@@ -54,6 +57,7 @@
  * </orderedlist>
  *
  * This example serves two main purposes:
+ *
  * * testing alternate list syntax
  *
  *   With section text in each.
@@ -104,6 +108,7 @@
  * =========
  *
  * All the internal details go here or not:
+ *
  * - single item list
  */
 

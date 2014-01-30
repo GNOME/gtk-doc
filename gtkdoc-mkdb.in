@@ -25,6 +25,7 @@
 # Description : This creates the DocBook files from the edited templates.
 #############################################################################
 
+use warnings;
 use strict;
 use Getopt::Long;
 
@@ -4569,120 +4570,391 @@ sub IsEmptyDoc {
     return 0;
 }
 
-my %md_in_tags;
-
-# If the tag is open, close it and update counter
-sub ConvertMarkDownTerminateTag {
-  my ($key) = @_;
-  my $text = "";
-
-  if ($md_in_tags{$key} > 0) {
-    $text .= "</$key>\n";
-    $md_in_tags{$key}--;
-  }
-
-  return $text;
-}
-
-sub ConvertMarkDownOpenTag {
-  my ($key) = @_;
-  my $text = "<$key>\n";
-
-  $md_in_tags{$key}++;
-
-  return $text;
-}
-
 #############################################################################
 # Function    : ConvertMarkDown
-# Description : Converts mark down syntax to the respective docbook, but only
-#               outside CDATA and <programlisting> tags.
+# Description : Converts mark down syntax to the respective docbook.
 #               http://de.wikipedia.org/wiki/Markdown
-#               Code snippets have been takesn from
-#               http://daringfireball.net/projects/markdown/
-#                 Copyright (c) 2004 John Gruber
+#               Inspired by the design of ParseDown
+#               http://parsedown.org/
+#               Copyright (c) 2013 Emanuil Rusev, erusev.com
 # Arguments   : the doc-string, the symbol name
 #############################################################################
+
 sub ConvertMarkDown {
     my ($text, $symbol) = @_;
 
-    # reset state
-    $md_in_tags{"para"} = 0;
-    $md_in_tags{"refsect2"} = 0;
-    $md_in_tags{"refsect3"} = 0;
-    $md_in_tags{"itemizedlist"} = 0;
-    $md_in_tags{"orderedlist"} = 0;
-
-    $text = ConvertMarkDownOpenTag ("para") . $text;
-
-    # convert
-    $text = &ModifyXMLElements ($text, $symbol,
-                               "<!\\[CDATA\\[|<programlisting[^>]*>|\\|\\[",
-                               \&ConvertMarkDownEndTag,
-                               \&ConvertMarkDownCallback);
-
-    $text .= &ConvertMarkDownTerminateTag ("para");
-    $text .= &ConvertMarkDownTerminateTag ("itemizedlist");
-    $text .= &ConvertMarkDownTerminateTag ("refsect3");
-    $text .= &ConvertMarkDownTerminateTag ("refsect2");
+    $text = &MarkDownParse ($text);
 
     return $text
 }
 
-sub ConvertMarkDownEndTag {
-  if ($_[0] eq "<!\[CDATA\[") {
-    return "]]>";
-  } elsif ($_[0] eq "|[") {
-    return "]\\|";
-  } else {
-    return "</programlisting>";
+# SUPPORTED MARKDOWN
+# ==================
+#
+# Atx-style Headers
+# -----------------
+#
+# # Header 1
+#
+# ## Header 2 ##
+#
+# Setext-style Headers
+# --------------------
+#
+# Header 1
+# ========
+#
+# Header 2
+# --------
+#
+# Ordered (unnested) Lists
+# ------------------------
+#
+# 1. item 1
+#
+# 1. item 2 with loooong
+#    description
+#
+# 3. item 3
+#
+# Note: we require a blank line above the list items
+#
+
+# TODO(ensonic): it would be nice to add id parameters to the refsect2 elements
+
+sub MarkDownParseBlocks {
+  my ($linesref, $context) = @_;
+  my $line;
+  my @md_blocks = ();
+  my $md_block = { type => "" };
+
+ OUTER: foreach $line (@$linesref) {
+    my $first_char = substr ($line, 0, 1);
+    my $deindented_line = $line;
+    $deindented_line =~ s/^\s+//;
+
+    if ($md_block->{"type"} eq "heading") {
+      # a heading is ended by any level less than or equal
+      if ($md_block->{"level"} == 1) {
+        if ($line =~ /^={4,}[ \t]*$/) {
+          my $text = pop $md_block->{"lines"};
+          $md_block->{"interrupted"} = 0;
+          push @md_blocks, $md_block;
+
+          $md_block = { type => "heading",
+                        text => $text,
+                        lines => [],
+                        level => 1 };
+          next OUTER;
+        } elsif ($line =~ /^[#][ \t]+(.+?)[ \t]*[#]*\s*$/) {
+          $md_block->{"interrupted"} = 0;
+          push @md_blocks, $md_block;
+
+          $md_block = { type => "heading",
+                        text => $1,
+                        lines => [],
+                        level => 1 };
+          next OUTER;
+        } else {
+          # push lines into the block until the end is reached
+          push $md_block->{"lines"}, $line;
+          next OUTER;
+        }
+      } else {
+        if ($line =~ /^[=]{4,}[ \t]*$/) {
+          my $text = pop $md_block->{"lines"};
+          $md_block->{"interrupted"} = 0;
+          push @md_blocks, $md_block;
+
+          $md_block = { type => "heading",
+                        text => $text,
+                        lines => [],
+                        level => 1 };
+          next OUTER;
+        } elsif ($line =~ /^[-]{4,}[ \t]*$/) {
+          my $text = pop $md_block->{"lines"};
+          $md_block->{"interrupted"} = 0;
+          push @md_blocks, $md_block;
+
+          $md_block = { type => "heading",
+                        text => $text,
+                        lines => [],
+                        level => 2 };
+          next OUTER;
+        } elsif ($line =~ /^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*\s*$/) {
+          $md_block->{"interrupted"} = 0;
+          push @md_blocks, $md_block;
+
+          $md_block = { type => "heading",
+                        text => $2,
+                        lines => [],
+                        level => length($1) };
+          next OUTER;
+        } else {
+          # push lines into the block until the end is reached
+          push $md_block->{"lines"}, $line;
+          next OUTER;
+        }
+      }
+    } elsif ($md_block->{"type"} eq "code") {
+      push $md_block->{"lines"}, $line;
+      if ($line =~ /^[ \t]*\]\|/) {
+        push @md_blocks, $md_block;
+        $md_block = { type => "paragraph",
+                      text => "",
+                      lines => [] };
+      }
+      next OUTER;
+    }
+
+    if ($deindented_line eq "") {
+      $md_block->{"interrupted"} = 1;
+      next;
+    }
+
+    if ($md_block->{"type"} eq "li") {
+      if ($line =~ /^([ ]{0,3})(\d+[.]|[*+-])[ ](.*)/) {
+        my $indentation = $1;
+        if ($md_block->{"indentation"} ne $indentation) {
+          push $md_block->{"lines"}, $line;
+        } else {
+          my $lines = $3;
+          my $ordered = $md_block->{"ordered"};
+          $lines =~ s/^[ ]{0,4}//;
+          $md_block->{"last"} = 0;
+          push @md_blocks, $md_block;
+          $md_block = { type => "li",
+                        ordered => $ordered,
+                        indentation => $indentation,
+                        first => 0,
+                        last => 1,
+                        lines => [ $lines ] };
+        }
+        next OUTER;
+      }
+
+      if ($md_block->{"interrupted"}) {
+        if ($first_char eq " ") {
+          push $md_block->{"lines"}, "";
+          $line =~ s/^[ ]{0,4}//;
+          push $md_block->{"lines"}, $line;
+          $md_block->{"interrupted"} = 0;
+          next OUTER;
+        }
+      } else {
+        $line =~ s/^[ ]{0,4}//;
+        push $md_block->{"lines"}, $line;
+        next OUTER;
+      }
+    }
+
+    # indentation sensitive types
+
+    if ($line =~ /^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*\s*$/) {
+      # atx heading (#)
+      push @md_blocks, $md_block;
+
+      $md_block = { type => "heading",
+                    text => $2,
+                    lines => [],
+                    level => length($1) };
+
+      next OUTER;
+    } elsif ($line =~ /^={4,}[ \t]*$/) {
+      # setext heading (====)
+
+      if ($md_block->{"type"} eq "paragraph" && $md_block->{"interrupted"}) {
+        push @md_blocks, $md_block;
+        $md_block->{"type"} = "heading";
+        $md_block->{"lines"} = [];
+        $md_block->{"level"} = 1;
+      }
+
+      next OUTER;
+    } elsif ($line =~ /^-{4,}[ \t]*$/) {
+      # setext heading (-----)
+
+      if ($md_block->{"type"} eq "paragraph" && $md_block->{"interrupted"}) {
+        push @md_blocks, $md_block;
+        $md_block->{"type"} = "heading";
+        $md_block->{"lines"} = [];
+        $md_block->{"level"} = 2;
+      }
+
+      next OUTER;
+    } elsif ($line =~ /^[ \t]*\|\[/) {
+      # code
+      $md_block->{"interrupted"} = 1;
+      push @md_blocks, $md_block;
+
+      $md_block = { type => "code",
+                    lines => [ $line ] };
+      next OUTER;
+    }
+
+    # indentation insensitive types
+
+    if ($line =~ /^([ ]*)[*+-][ ](.*)/) {
+      # li
+      push @md_blocks, $md_block;
+      my $lines = $2;
+      my $indentation = $1;
+      $lines =~ s/^[ ]{0,4}//;
+      $md_block = { type => "li",
+                    ordered => 0,
+                    indentation => $indentation,
+                    first => 1,
+                    last => 1,
+                    lines => [ $lines ] };
+      next OUTER;
+    }
+
+    # list item
+
+    if ($line =~ /^([ ]{0,4})\d+[.][ ]+(.*)/) {
+      push @md_blocks, $md_block;
+      my $lines = $2;
+      my $indentation = $1;
+      $lines =~ s/^[ ]{0,4}//;
+
+      $md_block = { type => "li",
+                    ordered => 1,
+                    indentation => $indentation,
+                    first => 1,
+                    last => 1,
+                    lines => [ $lines ] };
+
+      next;
+    }
+
+    # paragraph
+    if ($md_block->{"type"} eq "paragraph") {
+      if ($md_block->{"interrupted"}) {
+        push @md_blocks, $md_block;
+        $md_block = { type => "paragraph",
+                      interrupted => 0,
+                      text => $line };
+      } else {
+        $md_block->{"text"} .= "\n" . $line;
+      }
+    } else {
+      push @md_blocks, $md_block;
+      $md_block = { type => "paragraph",
+                    text => $line };
+    }
   }
+
+  push @md_blocks, $md_block;
+
+  shift @md_blocks;
+
+  return @md_blocks;
 }
 
-sub ReplaceMarkDownSections {
-  my ($title, $depth) = @_;
-  my $result = "";
-  my $tag = "refsect3";
+sub MarkDownParseSpanElements {
+  my ($text) = @_;
 
-  $result .= &ConvertMarkDownTerminateTag ("para");
-  $result .= &ConvertMarkDownTerminateTag ("refsect3");
-
-  if ($depth == 1) {
-    $tag = "refsect2";
-    $result .= &ConvertMarkDownTerminateTag ("refsect2");
-  }
-
-  $result .= ConvertMarkDownOpenTag ($tag);
-  $result .= "<title>$title</title>\n";
-  $result .= ConvertMarkDownOpenTag ("para");
-
-  return $result;
+  return $text;
 }
 
-sub ReplaceMarkDownListItem {
-  my ($block, $type, $is_last) = @_;
-  my $result = "";
+sub MarkDownOutputDocBook {
+  my ($blocksref, $context) = @_;
+  my $output = "";
+  my $block;
+  my @blocks = @$blocksref;
 
-  if ($md_in_tags{$type} < 1) {
-    $result .= ConvertMarkDownOpenTag ($type);
+  foreach $block (@blocks) {
+    my $text;
+    my $title;
+
+    if ($block->{"type"} eq "paragraph") {
+      $text = &MarkDownParseSpanElements ($block->{"text"});
+
+      if ($context eq "li" && $output eq "") {
+        if ($block->{"interrupted"}) {
+          $output .= "\n"."<para>".$text."</para>"."\n";
+        } else {
+          $output .= $text;
+          if ($#blocks > 0) {
+            $output .= "\n";
+          }
+        }
+      } else {
+        $output .= "<para>".$text."</para>"."\n";
+      }
+
+    } elsif ($block->{"type"} eq "heading") {
+      my $tag;
+
+      $title = &MarkDownParseSpanElements ($block->{"text"});
+      if ($block->{"level"} == 1) {
+        $tag = "refsect2";
+      } else {
+        $tag = "refsect3";
+      }
+
+      $text = &MarkDownParseLines ($block->{"lines"}, "heading");
+      $output .= "<".$tag."><title>".$title."</title>".$text."</".$tag.">\n";
+
+    } elsif ($block->{"type"} eq "li") {
+      my $tag = "itemizedlist";
+
+      if ($block->{"first"}) {
+        if ($block->{"ordered"}) {
+          $tag = "orderedlist";
+        }
+        $output .= "<".$tag.">\n";
+      }
+
+      if ($block->{"interrupted"}) {
+        push $block->{"lines"}, "";
+      }
+
+      $text = &MarkDownParseLines ($block->{"lines"}, "li");
+      $output .= "<listitem>".$text."</listitem>\n";
+      if ($block->{"last"}) {
+        if ($block->{"ordered"}) {
+          $tag = "orderedlist";
+        }
+        $output .= "</".$tag.">\n";
+      }
+    } elsif ($block->{"type"} eq "code") {
+      foreach (@{$block->{"lines"}}) {
+        $output .= $_ . "\n";
+      }
+    } else {
+      $output .= $block->{"text"}."\n";
+    }
   }
 
-  $result .= "<listitem><para>$block</para></listitem>";
-
-  if ($is_last == 1) {
-    $result .= &ConvertMarkDownTerminateTag ($type);
-  }
-
-  return $result;
+  return $output;
 }
 
-sub ReplaceMarkDownPara {
-  my $result = "";
+sub MarkDownParseLines {
+  my ($linesref, $context) = @_;
+  my $output;
+  my @lines = @$linesref;
+  my @blocks;
 
-  $result .= &ConvertMarkDownTerminateTag ("para");
-  $result .= ConvertMarkDownOpenTag ("para");
+  @blocks = &MarkDownParseBlocks (\@lines, $context);
+  $output = &MarkDownOutputDocBook (\@blocks, $context);
 
-  return $result;
+  return $output;
+}
+
+sub MarkDownParse {
+  my ($text) = @_;
+  my @lines;
+
+  # take out some variability in line endings
+  $text =~ s%\r\n%\n%g;
+  $text =~ s%\r%\n%g;
+
+  # split lines
+  @lines = split("\n", $text);
+  $text = MarkDownParseLines(\@lines, "");
+
+  return $text;
 }
 
 sub ConvertMarkDownCallback {
@@ -4691,67 +4963,7 @@ sub ConvertMarkDownCallback {
   # If we're not in CDATA or a <programlisting> we convert blank lines so
   # they start a new <para>.
   if ($tag eq "") {
-
-    # TODO(ensonic): it would be nice to add id parameters to the refsect2 elements
-
-    # Setext-style headers:
-    #          Header 1
-    #          ========
-    #
-    #          Header 2
-    #          --------
-    #
-    $text =~ s%(?<=\n)(.+)[ \t]*\n={4,}[ \t]*\n\n%ReplaceMarkDownSections($1, 1);%egm;
-    $text =~ s%(?<=\n)(.+)[ \t]*\n-{4,}[ \t]*\n\n%ReplaceMarkDownSections($1, 2);%egm;
-
-    # atx-style headers:
-    #        # Header 1
-    #        ## Header 2
-    #        ## Header 2 with closing hashes ##
-    #        ...
-    #        ###### Header 6
-    #
-    $text =~ s%(?<=\n)(\#{1,2})[ \t]+(.+?)[ \t]*\#*\n+%ReplaceMarkDownSections($2, length($1));%egm;
-
-    # Simple (unnested) lists:
-    #   Please select:
-    #   - item 1
-    #   - item 2 with loooong
-    #     description
-    #   - item 3
-    #
-    #   New paragraph.
-    $text.="\n"; # we need a new line to avoid too complicated matching rules below
-    our $is_last = 0;
-    $text =~ s%(?<=\n)-\s+(.+?)(?=(?:\n-\s+(?{$is_last=0}))|(?:\n\n[^ \-\t](?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "itemizedlist", $is_last)%egs;
-    chomp $text;
-
-    # Simple (unnested) lists:
-    #   Please select:
-    #   * item 1
-    #   * item 2 with loooong
-    #     description
-    #   * item 3
-    #
-    #   New paragraph.
-    $text.="\n"; # we need a new line to avoid too complicated matching rules below
-    $text =~ s%(?<=\n)\*\s+(.+?)(?=(?:\n\*\s+(?{$is_last=0}))|(?:\n\n[^ *\t](?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "itemizedlist", $is_last)%egs;
-    chomp $text;
-
-    # Ordered (unnested) lists:
-    #   Please select:
-    #   1. item 1
-    #   1. item 2 with loooong
-    #     description
-    #   3. item 3
-    #
-    #   New paragraph.
-    $text.="\n"; # we need a new line to avoid too complicated matching rules below
-    $text =~ s%(?<=\n)\d+\.\s+(.+?)(?=(?:\n\d+\.\s+(?{$is_last=0}))|(?:\n\n[^ \d\t](?{$is_last=1}))|(?:\n$(?{$is_last=1})))%ReplaceMarkDownListItem($1, "orderedlist", $is_last)%egs;
-    chomp $text;
-
-    # Make Paragraphs on blank lines
-    $text =~ s%\n{2,}%ReplaceMarkDownPara()%eg;
+    $text = &MarkDownParse ($text);
   }
 
   return $text;
