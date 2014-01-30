@@ -64,7 +64,15 @@
  *
  * # Coda #
  *
- * 1. There
+ * 1. This is a code block in a list:
+ *    |[<!-- language="C" -->
+ *    GObject *myobj;
+ *
+ *    myobj = gtkdoc_object_new();
+ *    // do something
+ *    g_object_unref (myobj);
+ *    ]|
+ *
  * 1. Really
  * 1. Is
  *
