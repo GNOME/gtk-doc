@@ -4569,6 +4569,29 @@ sub IsEmptyDoc {
     return 0;
 }
 
+my %md_in_tags;
+
+# If the tag is open, close it and update counter
+sub ConvertMarkDownTerminateTag {
+  my ($key) = @_;
+  my $text = "";
+
+  if ($md_in_tags{$key} > 0) {
+    $text .= "</$key>\n";
+    $md_in_tags{$key}--;
+  }
+
+  return $text;
+}
+
+sub ConvertMarkDownOpenTag {
+  my ($key) = @_;
+  my $text = "<$key>\n";
+
+  $md_in_tags{$key}++;
+
+  return $text;
+}
 
 #############################################################################
 # Function    : ConvertMarkDown
@@ -4580,23 +4603,24 @@ sub IsEmptyDoc {
 #                 Copyright (c) 2004 John Gruber
 # Arguments   : the doc-string, the symbol name
 #############################################################################
-my $md_in_refsect2;
 sub ConvertMarkDown {
     my ($text, $symbol) = @_;
 
     # reset state
-    $md_in_refsect2=0;
+    $md_in_tags{"para"} = 0;
+    $md_in_tags{"refsect2"} = 0;
+
+    $text = ConvertMarkDownOpenTag ("para") . $text;
 
     # convert
     $text = &ModifyXMLElements ($text, $symbol,
                                "<!\\[CDATA\\[|<programlisting[^>]*>|\\|\\[",
                                \&ConvertMarkDownEndTag,
                                \&ConvertMarkDownCallback);
-    # encapsulate and terminate
-    $text = "<para>\n$text\n</para>";
-    if ($md_in_refsect2==1) {
-        $text = "$text\n</refsect2>"
-    }
+
+    $text .= &ConvertMarkDownTerminateTag ("para");
+    $text .= &ConvertMarkDownTerminateTag ("refsect2");
+
     return $text
 }
 
@@ -4610,21 +4634,36 @@ sub ConvertMarkDownEndTag {
   }
 }
 
+sub ReplaceMarkDownSections {
+  my ($title, $depth) = @_;
+  my $result = "";
+  my $tag = "refsect2";
+
+  $result .= &ConvertMarkDownTerminateTag ("para");
+  $result .= &ConvertMarkDownTerminateTag ("refsect2");
+
+  $result .= ConvertMarkDownOpenTag ($tag);
+  $result .= "<title>$title</title>\n";
+  $result .= ConvertMarkDownOpenTag ("para");
+
+  return $result;
+}
+
+sub ReplaceMarkDownPara {
+  my $result = "";
+
+  $result .= &ConvertMarkDownTerminateTag ("para");
+  $result .= ConvertMarkDownOpenTag ("para");
+
+  return $result;
+}
+
 sub ConvertMarkDownCallback {
   my ($text, $symbol, $tag) = @_;
 
   # If we're not in CDATA or a <programlisting> we convert blank lines so
   # they start a new <para>.
   if ($tag eq "") {
-    my $end_of_para="";
-    my $end_of_section="";
-    my $have_list=0;
-
-    $end_of_para = "$end_of_para</para>";
-    $end_of_section = "$end_of_section</para>";
-    if ($md_in_refsect2==1) {
-        $end_of_section= "$end_of_section\n</refsect2>";
-    }
 
     # TODO(ensonic): it would be nice to add id parameters to the refsect2 elements
 
@@ -4635,9 +4674,7 @@ sub ConvertMarkDownCallback {
     #          Header 2
     #          --------
     #
-    if($text =~ s%(?<=\n)(.+)[ \t]*\n=+[ \t]*\n\n%$end_of_section\n<refsect2>\n<title>$1</title>\n<para>\n%gm) {
-        $md_in_refsect2=1;
-    }
+    $text =~ s%(?<=\n)(.+)[ \t]*\n=+[ \t]*\n\n%ReplaceMarkDownSections($1, 1);%egm;
 
     # atx-style headers:
     #        # Header 1
@@ -4646,9 +4683,7 @@ sub ConvertMarkDownCallback {
     #        ...
     #        ###### Header 6
     #
-    if($text =~ s%(?<=\n)\#[ \t]+(.+?)[ \t]*\#*\n+%$end_of_section\n<refsect2>\n<title>$1</title>\n<para>\n%gm) {
-        $md_in_refsect2=1;
-    }
+    $text =~ s%(?<=\n)\#[ \t]+(.+?)[ \t]*\#*\n+%ReplaceMarkDownSections($1, 1);%egm;
 
     # Simple (unnested) lists:
     #   Please select:
@@ -4666,7 +4701,7 @@ sub ConvertMarkDownCallback {
     chomp $text;
 
     # Make Paragraphs on blank lines
-    $text =~ s%\n{2,}%\n$end_of_para\n<para>\n%g;
+    $text =~ s%\n{2,}%ReplaceMarkDownPara()%eg;
   }
 
   return $text;
