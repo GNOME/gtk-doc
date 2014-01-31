@@ -64,7 +64,17 @@
  *
  * # Coda #
  *
+ * 1. This is a ordered list
+ *
  * 1. This is a code block in a list:
+ *    |[<!-- language="C" -->
+ *    GObject *myobj;
+ *
+ *    myobj = gtkdoc_object_new();
+ *    // do something
+ *    g_object_unref (myobj);
+ *    ]|
+ *    And another:
  *    |[<!-- language="C" -->
  *    GObject *myobj;
  *
@@ -74,6 +84,9 @@
  *    ]|
  *
  * 1. Really
+ *
+ *    Has a paragraph.
+ *
  * 1. Is
  *
  * Nothing more to say.
