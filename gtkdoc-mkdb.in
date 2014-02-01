@@ -340,6 +340,11 @@ my %AnnotationDefinition = (
     'value' => "The specified value overrides the evaluated value of the constant."
 );
 
+# Elements to consider non-block items in MarkDown parsing
+my @MD_TEXT_LEVEL_ELEMENTS = ( "literal", "emphasis", "envar", "filename", "firstterm",
+                               "function", "manvolnum", "option", "replaceable", "structname",
+                               "title", "varname" );
+
 # Create the root DocBook output directory if it doens't exist.
 if (! -e $SGML_OUTPUT_DIR) {
     mkdir ("$SGML_OUTPUT_DIR", 0777)
@@ -4622,6 +4627,12 @@ sub ConvertMarkDown {
 
 # TODO(ensonic): it would be nice to add id parameters to the refsect2 elements
 
+sub in_array {
+  my ($arr, $search_for) = @_;
+  my %items = map {$_ => 1} @$arr; # create a hash out of the array values
+  return (exists ($items{$search_for})) ? 1 : 0;
+}
+
 sub MarkDownParseBlocks {
   my ($linesref, $context) = @_;
   my $line;
@@ -4630,7 +4641,26 @@ sub MarkDownParseBlocks {
 
  OUTER: foreach $line (@$linesref) {
     my $first_char = substr ($line, 0, 1);
-    my $deindented_line = $line;
+    my $deindented_line;
+
+    if ($md_block->{"type"} eq "markup") {
+      if (!$md_block->{"closed"}) {
+        if (index ($line, $md_block->{"start"}) != -1) {
+          $md_block->{"depth"}++;
+        }
+        if (index ($line, $md_block->{"end"}) != -1) {
+          if ($md_block->{"depth"} > 0) {
+            $md_block->{"depth"}--;
+          } else {
+            $md_block->{"closed"} = 1;
+          }
+        }
+        $md_block->{"text"} .= "\n" . $line;
+        next OUTER;
+      }
+    }
+
+    $deindented_line = $line;
     $deindented_line =~ s/^\s+//;
 
     if ($md_block->{"type"} eq "heading") {
@@ -4794,7 +4824,33 @@ sub MarkDownParseBlocks {
 
     # indentation insensitive types
 
-    if ($line =~ /^([ ]*)[*+-][ ](.*)/) {
+    if ($line =~ /^[ ]*<(\w+)[^>]*([\/])?[ \t]*>/) {
+      # markup
+      my $tag = $1;
+      my $is_self_closing = defined($2);
+
+      if (! &in_array (\@MD_TEXT_LEVEL_ELEMENTS, $tag)) {
+        push @md_blocks, $md_block;
+
+        if ($is_self_closing) {
+          $md_block = { type => "self-closing tag",
+                        text => $deindented_line };
+          $is_self_closing = 0;
+          next OUTER;
+        }
+
+        $md_block = { type   => "markup",
+                      text   => $deindented_line,
+                      start  => "<" . $tag . ">",
+                      end    => "</" . $tag . ">",
+                      closed => 0,
+                      depth  => 0 };
+        if ($deindented_line =~ /<\/$tag>/) {
+          $md_block->{"closed"} = 1;
+        }
+        next OUTER;
+      }
+    } elsif ($line =~ /^([ ]*)[*+-][ ](.*)/) {
       # li
       push @md_blocks, $md_block;
       my $lines = $2;
@@ -4922,6 +4978,8 @@ sub MarkDownOutputDocBook {
       foreach (@{$block->{"lines"}}) {
         $output .= $_ . "\n";
       }
+    } elsif ($block->{"type"} eq "markup") {
+      $output .= $block->{"text"}."\n";
     } else {
       $output .= $block->{"text"}."\n";
     }
