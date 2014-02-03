@@ -36,10 +36,12 @@
  *
  * This example serves two main purposes:
  *
- * - testing conversion (long description
- *   follows here)
+ * - `test`ing conversion (`long description
+ *   follows here`)
  *
  * - catching bugs
+ *
+ *   [GTK](http://www.gtk.org) ![Some image](file.png)
  *
  * - having an example
  *

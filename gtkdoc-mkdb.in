@@ -4907,10 +4907,136 @@ sub MarkDownParseBlocks {
   return @md_blocks;
 }
 
+sub MarkDownParseSpanElementsInner {
+  my ($text, $markersref) = @_;
+  my $markup = "";
+  my %markers = map { $_ => 1 } @$markersref;
+
+  while ($text ne "") {
+    my $closest_marker = "";
+    my $closest_marker_index = 0;
+    my $closest_marker_position = -1;
+    my $text_marker = "";
+    my $i = 0;
+    my $offset = 0;
+    my @markers_rest;
+    my $marker;
+    my $use;
+
+    while ( ($marker, $use) = each %markers ) {
+      my $marker_position;
+
+      if (!$use) {
+        next;
+      }
+
+      $marker_position = index ($text, $marker);
+
+      if ($marker_position < 0) {
+        $markers{$marker} = 0;
+        next;
+      }
+
+      if ($closest_marker eq "" || $marker_position < $closest_marker_position) {
+        $closest_marker = $marker;
+        $closest_marker_index = $i;
+        $closest_marker_position = $marker_position;
+      }
+    }
+
+    if ($closest_marker_position >= 0) {
+      $text_marker = substr ($text, $closest_marker_position);
+    }
+
+    if ($text_marker eq "") {
+      $markup .= $text;
+      $text = "";
+      next; # last
+    }
+
+    $markup .= substr ($text, 0, $closest_marker_position);
+    $text = substr ($text, $closest_marker_position);
+    @markers_rest = map { $markers{$_} ? ($_ eq $closest_marker ? () : $_) : () } keys %markers;
+
+    if ($closest_marker eq "![" || $closest_marker eq "[") {
+      my %element;
+
+      if (index ($text, "]") && $text =~ /\[((?:[^][]|(?R))*)\]/) {
+        my $remaining_text;
+
+        %element = ( "!" => (substr ($text, 0, 1) eq "!"),
+                     "a" => $1 );
+
+        $offset = length ($&);
+        if ($element{"!"}) {
+          $offset++;
+        }
+
+        $remaining_text = substr ($text, $offset);
+        if ($remaining_text =~ /\([ ]*([^)'"]*?)(?:[ ]+['"](.+?)['"])?[ ]*\)/) {
+          $element{"»"} = $1;
+          if (defined ($2)) {
+            $element{"#"} = $2;
+          }
+          $offset += length ($&);
+        } else {
+          undef %element;
+        }
+      }
+
+      if (%element) {
+        $element{"»"} =~ s/&/&amp;/g;
+        $element{"»"} =~ s/</&lt;/g;
+        if ($element{"!"}) {
+          $markup .= "<inlinemediaobject><imageobject><imagedata fileref=\"" . $element{"»"} . "\"></imagedata></imageobject>";
+
+          if (defined ($element{"a"})) {
+            $markup .= "<textobject><phrase>" . $element{"a"} . "</phrase></textobject>";
+          }
+
+          $markup .= "</inlinemediaobject>";
+        } else {
+          $element{"a"} = &MarkDownParseSpanElementsInner ($element{"a"}, \@markers_rest);
+          $markup .= "<ulink url=\"" . $element{"»"} . "\"";
+
+          if (defined ($element{"#"})) {
+            # title attribute not supported
+          }
+
+          $markup .= ">" . $element{"a"} . "</ulink>";
+        }
+      } else {
+        $markup .= $closest_marker;
+        if ($closest_marker eq "![") {
+          $offset = 2;
+        } else {
+          $offset = 1;
+        }
+      }
+    } elsif ($closest_marker eq "`") {
+      if ($text =~ /^(`+)([^`]+?)\1(?!`)/) {
+        my $element_text = $2;
+        $markup .= "<literal>" . $element_text . "</literal>";
+        $offset = length ($&);
+      } else {
+        $markup .= '`';
+        $offset = 1;
+      }
+    }
+
+    if ($offset > 0) {
+      $text = substr ($text, $offset);
+    }
+  }
+
+  return $markup;
+}
+
 sub MarkDownParseSpanElements {
   my ($text) = @_;
+  my @markers = ( '![', '[', '`' );
 
-  return $text;
+  return &MarkDownParseSpanElementsInner ($text, \@markers);
 }
 
 sub MarkDownOutputDocBook {
