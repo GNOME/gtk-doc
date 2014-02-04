@@ -4824,8 +4824,18 @@ sub MarkDownParseBlocks {
 
     # indentation insensitive types
 
-    if ($line =~ /^[ ]*<(\w+)[^>]*([\/])?[ \t]*>/) {
-      # markup
+    if ($line =~ /^[ ]*<!DOCTYPE/) {
+      push @md_blocks, $md_block;
+
+      $md_block = { type   => "markup",
+                    text   => $deindented_line,
+                    start  => "<",
+                    end    => ">",
+                    closed => 0,
+                    depth  => 0 };
+
+    } elsif ($line =~ /^[ ]*<\??(\w+)[^>]*([\/\?])?[ \t]*>/) {
+      # markup, including <?xml version="1.0"?>
       my $tag = $1;
       my $is_self_closing = defined($2);
 
@@ -5013,6 +5023,24 @@ sub MarkDownParseSpanElementsInner {
           $offset = 1;
         }
       }
+    } elsif ($closest_marker eq "<") {
+      if ($text =~ /^<(https?:[\/]{2}[^\s]+?)>/i) {
+        my $element_url = $1;
+        $element_url =~ s/&/&amp;/g;
+        $element_url =~ s/</&lt;/g;
+
+        $markup .= "<ulink url=\"" . $element_url . "\">" . $element_url . "</ulink>";
+        $offset = length ($&);
+      } elsif ($text =~ /^<(\S+?@\S+?)>/) {
+        $markup .= "<ulink url=\"mailto:" . $1 . "\">" . $1 . "</a>";
+        $offset = length ($&);
+      } elsif ($text =~ /^<[^>]+?>/) {
+        $markup .= $&;
+        $offset = length ($&);
+      } else {
+        $markup .= "&lt;";
+        $offset = 1;
+      }
     } elsif ($closest_marker eq "`") {
       if ($text =~ /^(`+)([^`]+?)\1(?!`)/) {
         my $element_text = $2;
@@ -5034,7 +5062,7 @@ sub MarkDownParseSpanElementsInner {
 
 sub MarkDownParseSpanElements {
   my ($text) = @_;
-  my @markers = ( '![', '[', '`' );
+  my @markers = ( '<', '![', '[', '`' );
 
   return &MarkDownParseSpanElementsInner ($text, \@markers);
 }
