@@ -68,6 +68,15 @@
  *
  *   It has more stuff.
  *
+ * <refsect3><title>An embedded docbook section</title>
+ * <para>Some stuff</para>
+ *
+ * - A list
+ *
+ * - Inside markup
+ *
+ * </refsect3>
+ *
  * # Coda #
  *
  * 1. This is a ordered list
