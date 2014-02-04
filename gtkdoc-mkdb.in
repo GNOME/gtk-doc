@@ -1395,7 +1395,7 @@ sub OutputMacro {
     my $parameters_output = 0;
 
     if (defined ($SymbolDocs{$symbol})) {
-        my $symbol_docs = &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+        my $symbol_docs = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
 
         # Try to insert the parameter table at the author's desired position.
         # Otherwise we need to tag it onto the end.
@@ -1442,7 +1442,7 @@ sub OutputTypedef {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-        $desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+        $desc .= &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
     }
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
@@ -1567,7 +1567,7 @@ sub OutputStruct {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-        $desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+        $desc .= &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
     }
 
     # Create a table of fields and descriptions
@@ -1610,12 +1610,12 @@ sub OutputStruct {
             $desc .= "<varlistentry><term>$text</term>\n";
             if (defined $field_descr) {
                 ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
-                $field_descr = &ExpandAbbreviations($symbol, $field_descr);
+                $field_descr = &ConvertMarkDown($symbol, $field_descr);
                 $field_descr .= $param_annotations;
                 # trim
                 $field_descr =~ s/^(\s|\n)+//msg;
                 $field_descr =~ s/(\s|\n)+$//msg;
-                $desc .= "<listitem><simpara>$field_descr</simpara></listitem>\n";
+                $desc .= "<listitem>$field_descr</listitem>\n";
                 delete $field_descrs{$field_name};
             } else {
                 &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
@@ -1705,7 +1705,7 @@ sub OutputUnion {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-        $desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+        $desc .= &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
     }
 
     # Create a table of fields and descriptions
@@ -1748,12 +1748,12 @@ sub OutputUnion {
             $desc .= "<varlistentry><term>$text</term>\n";
             if (defined $field_descr) {
                 ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
-                $field_descr = &ExpandAbbreviations($symbol, $field_descr);
+                $field_descr = &ConvertMarkDown($symbol, $field_descr);
                 $field_descr .= $param_annotations;
                 # trim
                 $field_descr =~ s/^(\s|\n)+//msg;
                 $field_descr =~ s/(\s|\n)+$//msg;
-                $desc .= "<listitem><simpara>$field_descr</simpara></listitem>\n";
+                $desc .= "<listitem>$field_descr</listitem>\n";
                 delete $field_descrs{$field_name};
             } else {
                 &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
@@ -1878,7 +1878,7 @@ sub OutputEnum {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-        $desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+        $desc .= &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
     }
 
     # Create a table of fields and descriptions
@@ -1913,8 +1913,8 @@ sub OutputEnum {
         $desc .= "<varlistentry id=\"$id\" role=\"constant\"$condition>\n<term><literal>$field_name</literal></term>\n";
         if (defined $field_descr) {
             ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
-            $field_descr = &ExpandAbbreviations($symbol, $field_descr);
-            $desc .= "<listitem><simpara>$field_descr$param_annotations</simpara></listitem>\n";
+            $field_descr = &ConvertMarkDown($symbol, $field_descr);
+            $desc .= "<listitem>$field_descr$param_annotations</listitem>\n";
             delete $field_descrs{$field_name};
         } else {
             if ($found) {
@@ -2009,7 +2009,7 @@ sub OutputVariable {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-        $desc .= &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+        $desc .= &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
     }
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
@@ -2125,7 +2125,7 @@ sub OutputFunction {
     my $parameters_output = 0;
 
     if (defined ($SymbolDocs{$symbol})) {
-        my $symbol_docs = &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+        my $symbol_docs = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
 
         # Try to insert the parameter table at the author's desired position.
         # Otherwise we need to tag it onto the end.
@@ -2184,7 +2184,7 @@ sub OutputParamDescriptions {
             my $param_annotations = "";
 
             ($param_desc,$param_annotations) = & ExpandAnnotation($symbol, $param_desc);
-            $param_desc = &ExpandAbbreviations($symbol, $param_desc);
+            $param_desc = &ConvertMarkDown($symbol, $param_desc);
             $param_desc .= $param_annotations;
             # trim
             $param_desc =~ s/^(\s|\n)+//msg;
@@ -2208,7 +2208,7 @@ sub OutputParamDescriptions {
                     }
                 }
                 if($param_desc ne "") {
-                    $params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&#160;:</term>\n<listitem><simpara>$param_desc</simpara></listitem></varlistentry>\n";
+                    $params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&#160;:</term>\n<listitem>$param_desc</listitem></varlistentry>\n";
                     $num_params++;
                 }
             }
@@ -2238,7 +2238,7 @@ sub OutputParamDescriptions {
 
             # Output the returns info last
             if ($returns) {
-                $output .= "<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>$returns</simpara></listitem></varlistentry>\n";
+                $output .= "<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem>$returns</listitem></varlistentry>\n";
             }
 
             # Finish the table.
@@ -2331,6 +2331,7 @@ sub OutputSGMLFile {
     if (!defined ($short_desc) || $short_desc =~ m/^\s*$/) {
         $short_desc = "";
     } else {
+        # Don't use ConvertMarkDown here for now since we don't want blocks
         $short_desc = &ExpandAbbreviations("$title:Short_description",
                                            $short_desc);
         #print "Found short_desc: $short_desc";
@@ -2339,7 +2340,7 @@ sub OutputSGMLFile {
     if (!defined ($long_desc) || $long_desc =~ m/^\s*$/) {
         $long_desc = "";
     } else {
-        $long_desc = &ExpandAbbreviations("$title:Long_description",
+        $long_desc = &ConvertMarkDown("$title:Long_description",
                                           $long_desc);
         #print "Found long_desc: $long_desc";
     }
@@ -2347,7 +2348,7 @@ sub OutputSGMLFile {
     if (!defined ($see_also) || $see_also =~ m%^\s*(<para>)?\s*(</para>)?\s*$%) {
         $see_also = "";
     } else {
-        $see_also = &ExpandAbbreviations("$title:See_Also", $see_also);
+        $see_also = &ConvertMarkDown("$title:See_Also", $see_also);
         #print "Found see_also: $see_also";
     }
     if ($see_also) {
@@ -2765,6 +2766,8 @@ sub ExpandAnnotation {
 sub ExpandAbbreviations {
   my ($symbol, $text) = @_;
 
+  # Note: This is a fallback and normally done in the markdown parser
+
   # Convert "|[" and "]|" into the start and end of program listing examples.
   # Support \[<!-- language="C" --> modifiers
   $text =~ s%\|\[<!-- language="([^"]+)" -->%<informalexample><programlisting language="$1"><![CDATA[%g;
@@ -2804,6 +2807,8 @@ sub ExpandAbbreviationsCallback {
                                \&ExpandAbbreviationsEndTag,
                                \&ExpandAbbreviationsCallback2);
   } elsif ($tag eq "") {
+    # NOTE: this is a fallback. It is normally done by the Markdown parser.
+
     # We are outside any CDATA or <programlisting> sections, so we expand
     # any gtk-doc abbreviations.
 
@@ -2831,15 +2836,6 @@ sub ExpandAbbreviationsCallback {
     # Convert '#symbol', but not '\#symbol'.
     $text =~ s/(\A|[^\\])#([\w\-:\.]+[\w]+)/$1.&MakeHashXRef($2, "type");/eg;
     $text =~ s/\\#/#/g;
-
-    # Expand urls
-    # FIXME: should we skip urls that are already tagged? (e.g. <literal>http://...</literal>)
-    # this is apparently also called for markup and not just for plain text
-    # disable for now.
-    #$text =~ s%(http|https|ftp)://(.*?)((?:\s|,|\)|\]|\<|\.\s))%<ulink url="$1://$2">$2</ulink>$3%g;
-
-    # TODO: optionally check all words from $text against internal symbols and
-    # warn if those could be xreffed, but miss a %,# or ()
   }
 
   return $text;
@@ -2856,37 +2852,8 @@ sub ExpandAbbreviationsCallback2 {
     #        why not just call it
     $text =~ s/#(\w+)/&MakeHashXRef($1, "");/eg;
   } elsif ($tag eq "<![CDATA[") {
-    my $warn = "";
-    my @entities = ( [ "&lt;", "<" ],
-                     [ "&gt;", ">" ],
-                     [ "&ast;", "*" ],
-                     [ "&num;", "#" ],
-                     [ "&percnt;", "%"],
-                     [ "&colon;", ":" ],
-                     [ "&quot;", "\"" ],
-                     [ "&apos;", "'" ],
-                     [ "&nbsp;", " " ],
-                     [ "&amp;", "&" ] ); # Do this last, or the others get messed up.
-    my $i;
-
-    # Expand entities in <programlisting> even inside CDATA since
-    # we changed the definition of |[ to add CDATA
-    for ($i = 0; $i <= $#entities; $i++) {
-      if ($text =~ s/$entities[$i][0]/$entities[$i][1]/g) {
-        # don't warn about &ast; since it is expected to be present
-        # for C-style comments
-        if ($entities[$i][0] ne "&ast;") {
-          $warn .= "$entities[$i][0] ";
-        }
-      }
-    }
-
-    if ($warn ne "") {
-      chomp $warn;
-      &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
-                   "Deprecated entities found in documentation for $symbol: $warn");
-    }
-
+    # NOTE: this is a fallback. It is normally done by the Markdown parser.
+    $text = &ReplaceEntities ($text, $symbol);
   }
 
   return $text;
@@ -3088,7 +3055,7 @@ sub MakeDeprecationNote {
                 $desc .= "<para><literal>$symbol</literal> is deprecated and should not be used in newly-written code.";
         }
         if ($Deprecated{$symbol} ne "") {
-            $note = &ExpandAbbreviations($symbol, $Deprecated{$symbol});
+            $note = &ConvertMarkDown($symbol, $Deprecated{$symbol});
             $note =~ s/^\s*([0-9\.]+)\s*:\s*//;
             $note =~ s/^\s+//;
             $note =~ s/\s+$//;
@@ -3538,7 +3505,7 @@ sub GetSignals {
 
             $AllSymbols{$symbol} = 1;
             if (defined ($SymbolDocs{$symbol})) {
-                my $symbol_docs = &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+                my $symbol_docs = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
 
                 # Try to insert the parameter table at the author's desired
                 # position. Otherwise we need to tag it onto the end.
@@ -3646,7 +3613,7 @@ sub GetArgs {
             my $blurb;
             if (defined($SymbolDocs{$symbol}) &&
                 !IsEmptyDoc($SymbolDocs{$symbol})) {
-                $blurb = &ExpandAbbreviations($symbol, $SymbolDocs{$symbol});
+                $blurb = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
                 #print ".. [$SymbolDocs{$symbol}][$blurb]\n";
                 $AllDocumentedSymbols{$symbol} = 1;
             }
@@ -4389,14 +4356,7 @@ sub MergeSourceDocumentation {
             # Do not add <para> to nothing, it breaks missing docs checks.
             my $src_doc_para = "";
             if ($src_doc ne "") {
-                # Expand markdown (and do paragraphs)
-                $src_doc_para = &ConvertMarkDown ($src_doc, $symbol);
-                ## fixup xml markup
-                # FIXME: this is questionable, as we can't make assumtions on the content really
-                #$src_doc_para =~ s%^<para>\n(<refsect[1-9])%$1%gms;
-                #$src_doc_para =~ s%^<para>\n<para>%<para>%gms;
-                #$src_doc_para =~ s%(</refsect[1-9]>)\n</para>$%$1%gms;
-                #print "$symbol : [$src_doc][$src_doc_para]\n";
+                $src_doc_para = $src_doc;
             }
 
             if ($symbol =~ m/$TMPL_DIR\/.+:Long_Description/) {
@@ -4582,13 +4542,13 @@ sub IsEmptyDoc {
 #               Inspired by the design of ParseDown
 #               http://parsedown.org/
 #               Copyright (c) 2013 Emanuil Rusev, erusev.com
-# Arguments   : the doc-string, the symbol name
+# Arguments   : the symbol name, the doc-string
 #############################################################################
 
 sub ConvertMarkDown {
-    my ($text, $symbol) = @_;
+    my ($symbol, $text) = @_;
 
-    $text = &MarkDownParse ($text);
+    $text = &MarkDownParse ($text, $symbol);
 
     return $text
 }
@@ -4634,7 +4594,7 @@ sub in_array {
 }
 
 sub MarkDownParseBlocks {
-  my ($linesref, $context) = @_;
+  my ($linesref, $symbol, $context) = @_;
   my $line;
   my @md_blocks = ();
   my $md_block = { type => "" };
@@ -4727,12 +4687,13 @@ sub MarkDownParseBlocks {
         }
       }
     } elsif ($md_block->{"type"} eq "code") {
-      push $md_block->{"lines"}, $line;
       if ($line =~ /^[ \t]*\]\|/) {
         push @md_blocks, $md_block;
         $md_block = { type => "paragraph",
                       text => "",
                       lines => [] };
+      } else {
+        push $md_block->{"lines"}, $line;
       }
       next OUTER;
     }
@@ -4812,13 +4773,13 @@ sub MarkDownParseBlocks {
       }
 
       next OUTER;
-    } elsif ($line =~ /^[ \t]*\|\[/) {
+    } elsif ($line =~ /^[ \t]*\|\[[ ]*(?:<!-- language="([^"]+?)" -->)?/) {
       # code
       $md_block->{"interrupted"} = 1;
       push @md_blocks, $md_block;
-
       $md_block = { type => "code",
-                    lines => [ $line ] };
+                    language => $1,
+                    lines => [] };
       next OUTER;
     }
 
@@ -5050,6 +5011,53 @@ sub MarkDownParseSpanElementsInner {
         $markup .= '`';
         $offset = 1;
       }
+    } elsif ($closest_marker eq "@") {
+      # Convert '@param()'
+      # FIXME: we could make those also links ($symbol.$2), but that would be less
+      # useful as the link target is a few lines up or down
+      if ($text =~ /^(\A|[^\\])\@(\w+((\.|->)\w+)*)\s*\(\)/) {
+        $markup .= $1 . "<parameter>" . $2 . "()</parameter>\n";
+        $offset = length ($&);
+      } elsif ($text =~ /^(\A|[^\\])\@(\w+((\.|->)\w+)*)/) {
+        # Convert '@param', but not '\@param'.
+        $markup .= $1 . "<parameter>" . $2 . "</parameter>\n";
+        $offset = length ($&);
+      } elsif ($text =~ /^\\\@/) {
+        $markup .= '\@';
+        $offset = length ($&);
+      } else {
+        $markup .= '@';
+        $offset = 1;
+      }
+    } elsif ($closest_marker eq "#") {
+      if ($text =~ /^(\A|[^\\])#([\w\-:\.]+[\w]+)\s*\(\)/) {
+        # handle #Object.func()
+        $markup .= $1 . &MakeXRef ($2, &tagify ($2 . "()", "function"));
+        $offset = length ($&);
+      } elsif ($text =~ /^(\A|[^\\])#([\w\-:\.]+[\w]+)/) {
+        # Convert '#symbol', but not '\#symbol'.
+        $markup .= $1 . &MakeHashXRef ($2, "type");
+        $offset = length ($&);
+      } elsif ($text =~ /^\\#/) {
+        $markup .= '#';
+        $offset = length ($&);
+      } else {
+        $markup .= '#';
+        $offset = 1;
+      }
+    } elsif ($closest_marker eq "%") {
+      if ($text =~ /^(\A|[^\\])\%(-?\w+)/) {
+        # Convert '%constant', but not '\%constant'.
+        # Also allow negative numbers, e.g. %-1.
+        $markup .= $1 . &MakeXRef ($2, &tagify ($2, "literal"));
+        $offset = length ($&);
+      } elsif ($text =~ /^\\%/) {
+        $markup .= '\%';
+        $offset = length ($&);
+      } else {
+        $markup .= '%';
+        $offset = 1;
+      }
     }
 
     if ($offset > 0) {
@@ -5062,13 +5070,56 @@ sub MarkDownParseSpanElementsInner {
 
 sub MarkDownParseSpanElements {
   my ($text) = @_;
-  my @markers = ( '<', '![', '[', '`' );
+  my @markers = ( '<', '![', '[', '`', '%', '#', '@' );
 
-  return &MarkDownParseSpanElementsInner ($text, \@markers);
+  $text = &MarkDownParseSpanElementsInner ($text, \@markers);
+
+  # Convert 'function()' or 'macro()'.
+  # if there is abc_*_def() we don't want to make a link to _def()
+  # FIXME: also handle abc(def(....)) : but that would need to be done recursively :/
+  $text =~ s/([^\*.\w])(\w+)\s*\(\)/$1.&MakeXRef($2, &tagify($2 . "()", "function"));/eg;
+
+  return $text;
+}
+
+sub ReplaceEntities {
+  my ($text, $symbol) = @_;
+  my $warn = "";
+  my @entities = ( [ "&lt;", "<" ],
+                   [ "&gt;", ">" ],
+                   [ "&ast;", "*" ],
+                   [ "&num;", "#" ],
+                   [ "&percnt;", "%"],
+                   [ "&colon;", ":" ],
+                   [ "&quot;", "\"" ],
+                   [ "&apos;", "'" ],
+                   [ "&nbsp;", " " ],
+                   [ "&amp;", "&" ] ); # Do this last, or the others get messed up.
+  my $i;
+
+  # Expand entities in <programlisting> even inside CDATA since
+  # we changed the definition of |[ to add CDATA
+  for ($i = 0; $i <= $#entities; $i++) {
+    if ($text =~ s/$entities[$i][0]/$entities[$i][1]/g) {
+      # don't warn about &ast; since it is expected to be present
+      # for C-style comments
+      if ($entities[$i][0] ne "&ast;") {
+        $warn .= "$entities[$i][0] ";
+      }
+    }
+  }
+
+  if ($warn ne "") {
+    chomp $warn;
+    &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
+                 "Deprecated entities found in documentation for $symbol: $warn");
+  }
+
+  return $text;
 }
 
 sub MarkDownOutputDocBook {
-  my ($blocksref, $context) = @_;
+  my ($blocksref, $symbol, $context) = @_;
   my $output = "";
   my $block;
   my @blocks = @$blocksref;
@@ -5097,13 +5148,14 @@ sub MarkDownOutputDocBook {
       my $tag;
 
       $title = &MarkDownParseSpanElements ($block->{"text"});
+
       if ($block->{"level"} == 1) {
         $tag = "refsect2";
       } else {
         $tag = "refsect3";
       }
 
-      $text = &MarkDownParseLines ($block->{"lines"}, "heading");
+      $text = &MarkDownParseLines ($block->{"lines"}, $symbol, "heading");
       $output .= "<".$tag."><title>".$title."</title>".$text."</".$tag.">\n";
 
     } elsif ($block->{"type"} eq "li") {
@@ -5120,7 +5172,7 @@ sub MarkDownOutputDocBook {
         push $block->{"lines"}, "";
       }
 
-      $text = &MarkDownParseLines ($block->{"lines"}, "li");
+      $text = &MarkDownParseLines ($block->{"lines"}, $symbol, "li");
       $output .= "<listitem>".$text."</listitem>\n";
       if ($block->{"last"}) {
         if ($block->{"ordered"}) {
@@ -5129,11 +5181,18 @@ sub MarkDownOutputDocBook {
         $output .= "</".$tag.">\n";
       }
     } elsif ($block->{"type"} eq "code") {
-      foreach (@{$block->{"lines"}}) {
-        $output .= $_ . "\n";
+      if ($block->{"language"}) {
+        $output .= "<informalexample><programlisting language=\"" . $block->{"language"} . "\"><![CDATA[\n";
+      } else {
+        $output .= "<informalexample><programlisting><![CDATA[\n";
       }
+      foreach (@{$block->{"lines"}}) {
+        $output .= &ReplaceEntities ($_, $symbol) . "\n";
+      }
+      $output .= "]]></programlisting></informalexample>\n";
     } elsif ($block->{"type"} eq "markup") {
-      $output .= $block->{"text"}."\n";
+      $text = &ExpandAbbreviations($symbol, $block->{"text"});
+      $output .= $text."\n";
     } else {
       $output .= $block->{"text"}."\n";
     }
@@ -5143,19 +5202,19 @@ sub MarkDownOutputDocBook {
 }
 
 sub MarkDownParseLines {
-  my ($linesref, $context) = @_;
+  my ($linesref, $symbol, $context) = @_;
   my $output;
   my @lines = @$linesref;
   my @blocks;
 
-  @blocks = &MarkDownParseBlocks (\@lines, $context);
-  $output = &MarkDownOutputDocBook (\@blocks, $context);
+  @blocks = &MarkDownParseBlocks (\@lines, $symbol, $context);
+  $output = &MarkDownOutputDocBook (\@blocks, $symbol, $context);
 
   return $output;
 }
 
 sub MarkDownParse {
-  my ($text) = @_;
+  my ($text, $symbol) = @_;
   my @lines;
 
   # take out some variability in line endings
@@ -5164,23 +5223,10 @@ sub MarkDownParse {
 
   # split lines
   @lines = split("\n", $text);
-  $text = MarkDownParseLines(\@lines, "");
+  $text = MarkDownParseLines(\@lines, $symbol, "");
 
   return $text;
 }
-
-sub ConvertMarkDownCallback {
-  my ($text, $symbol, $tag) = @_;
-
-  # If we're not in CDATA or a <programlisting> we convert blank lines so
-  # they start a new <para>.
-  if ($tag eq "") {
-    $text = &MarkDownParse ($text);
-  }
-
-  return $text;
-}
-
 
 #############################################################################
 # LIBRARY FUNCTIONS -        These functions are used in both gtkdoc-mkdb and

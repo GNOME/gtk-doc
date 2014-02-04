@@ -85,7 +85,7 @@
  *    GObject *myobj;
  *
  *    myobj = gtkdoc_object_new();
- *    // do something
+ *    /&ast; do something &ast;/
  *    g_object_unref (myobj);
  *    ]|
  *
