@@ -51,19 +51,21 @@ fi
 if test $uninstalled = yes; then
     # this does not work from buiddir!=srcdir
     gtkdocdir=`dirname $0`
-	# traditional Bourne shells may not support -e here, use -f
+	  # traditional Bourne shells may not support -e here, use -f
     if test ! -f $gtkdocdir/gtk-doc.xsl; then
         # try to src dir (set from makefiles) too
         if test -f $ABS_TOP_SRCDIR/gtk-doc.xsl; then
             gtkdocdir=$ABS_TOP_SRCDIR
         fi
     fi
+    styledir=$gtkdocdir/style
     #echo "uninstalled, gtkdocdir=$gtkdocdir, cwd=$PWD"
 else
     # the first two are needed to resolve datadir
     prefix=@prefix@
     datarootdir=@datarootdir@
     gtkdocdir=@datadir@/gtk-doc/data
+    styledir=$gtkdocdir
 fi
 
 if head -n 1 $document | grep "<?xml" > /dev/null; then
@@ -106,8 +108,7 @@ else
 fi
 
 # copy navigation images and stylesheets to html directory ...
-cp -f $gtkdocdir/*.png ./
-cp -f $gtkdocdir/*.css ./
+cp -f $styledir/*.png $styledir/*.css ./
 
 
 echo "timestamp" > ../html.stamp
