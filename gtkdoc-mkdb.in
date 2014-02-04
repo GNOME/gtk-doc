@@ -4636,12 +4636,13 @@ sub MarkDownParseBlocks {
                         lines => [],
                         level => 1 };
           next OUTER;
-        } elsif ($line =~ /^[#][ \t]+(.+?)[ \t]*[#]*\s*$/) {
+        } elsif ($line =~ /^[#][ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$/) {
           $md_block->{"interrupted"} = 0;
           push @md_blocks, $md_block;
 
           $md_block = { type => "heading",
                         text => $1,
+                        id => $2,
                         lines => [],
                         level => 1 };
           next OUTER;
@@ -4671,12 +4672,13 @@ sub MarkDownParseBlocks {
                         lines => [],
                         level => 2 };
           next OUTER;
-        } elsif ($line =~ /^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*\s*$/) {
+        } elsif ($line =~ /^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$/) {
           $md_block->{"interrupted"} = 0;
           push @md_blocks, $md_block;
 
           $md_block = { type => "heading",
                         text => $2,
+                        id => $3,
                         lines => [],
                         level => length($1) };
           next OUTER;
@@ -4741,12 +4743,13 @@ sub MarkDownParseBlocks {
 
     # indentation sensitive types
 
-    if ($line =~ /^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*\s*$/) {
+    if ($line =~ /^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$/) {
       # atx heading (#)
       push @md_blocks, $md_block;
 
       $md_block = { type => "heading",
                     text => $2,
+                    id => $3,
                     lines => [],
                     level => length($1) };
 
@@ -5156,8 +5159,13 @@ sub MarkDownOutputDocBook {
       }
 
       $text = &MarkDownParseLines ($block->{"lines"}, $symbol, "heading");
-      $output .= "<".$tag."><title>".$title."</title>".$text."</".$tag.">\n";
+      if (defined ($block->{"id"})) {
+        $output .= "<" . $tag . " id=\"" . $block->{"id"} . "\">";
+      } else {
+        $output .= "<" . $tag . ">";
+      }
 
+      $output .= "<title>" . $title . "</title>" . $text . "</" . $tag . ">\n";
     } elsif ($block->{"type"} eq "li") {
       my $tag = "itemizedlist";
 

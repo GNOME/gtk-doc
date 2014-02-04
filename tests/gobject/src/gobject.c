@@ -77,7 +77,7 @@
  *
  * </refsect3>
  *
- * # Coda #
+ * # Coda # {#this-is-an-id-tag}
  *
  * 1. This is a ordered list
  *
