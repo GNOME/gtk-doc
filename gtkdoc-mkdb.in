@@ -4947,7 +4947,7 @@ sub MarkDownParseSpanElementsInner {
         }
 
         $remaining_text = substr ($text, $offset);
-        if ($remaining_text =~ /\([ ]*([^)'"]*?)(?:[ ]+['"](.+?)['"])?[ ]*\)/) {
+        if ($remaining_text =~ /^\([ ]*([^)'"]*?)(?:[ ]+['"](.+?)['"])?[ ]*\)/) {
           $element{"»"} = $1;
           if (defined ($2)) {
             $element{"#"} = $2;
