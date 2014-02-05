@@ -5,6 +5,16 @@
  * @see_also: #GtkdocIface
  * @Image: object.png
  *
+ * Offsets are time values to be added to local
+ * time to get Coordinated Universal Time (UTC) and should be
+ * <literal>"[±]hh[[:]mm[:ss]]"</literal>.  Dates are either
+ * <literal>"Jn"</literal> (Julian day with n between 1 and 365, leap
+ * years not counted), <literal>"n"</literal> (zero-based Julian day
+ * with n between 0 and 365) or <literal>"Mm.w.d"</literal> (day d
+ * (0 <= d <= 6) of week w (1 <= w <= 5) of month m (1 <= m <= 12), day
+ * 0 is a Sunday).  Times are in local wall clock time, the default is
+ * 02:00:00.
+ *
  * This file contains non-sense code for the sole purpose of testing the docs.
  * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
  * signal.
