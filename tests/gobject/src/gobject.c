@@ -15,6 +15,8 @@
  * 0 is a Sunday).  Times are in local wall clock time, the default is
  * 02:00:00.
  *
+ * <literal>lang_COUNTRY@MODIFIER</literal>
+ *
  * This file contains non-sense code for the sole purpose of testing the docs.
  * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
  * signal.
