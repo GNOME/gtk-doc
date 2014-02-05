@@ -5,6 +5,9 @@
  * @see_also: #GtkdocIface
  * @Image: object.png
  *
+ * > Two line
+ * > quote
+ *
  * Offsets are time values to be added to local
  * time to get Coordinated Universal Time (UTC) and should be
  * <literal>"[±]hh[[:]mm[:ss]]"</literal>.  Dates are either
@@ -60,6 +63,12 @@
  * # Discussion
  *
  * This is a section with a heading without a trailing hash mark.
+ *
+ * > Do not confuse the GtkUIManager UI Definitions described here with
+ * > the similarly named <link linkend="BUILDER-UI">GtkBuilder UI
+ * > Definitions</link>.
+ *
+ * > Single line quote
  *
  * <orderedlist>
  * <listitem><para>

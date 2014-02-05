@@ -224,7 +224,11 @@ dl.toc > dt
   background: #d8ffb2;
   border-color: #abf562;
 }
-.note, .warning
+div.blockquote
+{
+  border-color: #eeeeec;
+}
+.note, .warning, div.blockquote
 {
   padding: 0.5em;
   border-width: 1px;

@@ -2673,7 +2673,8 @@ sub ConvertSGMLCharsCallback {
     # If we're not in CDATA convert to entities.
     $text =~ s/&(?![a-zA-Z#]+;)/&amp;/g;        # Do this first, or the others get messed up.
     $text =~ s/<(?![a-zA-Z\/!])/&lt;/g;
-    $text =~ s/(?<![a-zA-Z0-9"'\/-])>/&gt;/g;
+    # Allow ">" at beginning of string for blockquote markdown
+    $text =~ s/(?<=[^\w\n"'\/-])>/&gt;/g;
 
     # Handle "#include <xxxxx>"
     $text =~ s/#include(\s+)<([^>]+)>/#include$1&lt;$2&gt;/g;
@@ -4705,7 +4706,13 @@ sub MarkDownParseBlocks {
       next;
     }
 
-    if ($md_block->{"type"} eq "li") {
+    if ($md_block->{"type"} eq "quote") {
+      if (!$md_block->{"interrupted"}) {
+        $line =~ s/^[ ]*>[ ]?//;
+        push $md_block->{"lines"}, $line;
+        next OUTER;
+      }
+    } elsif ($md_block->{"type"} eq "li") {
       if ($line =~ /^([ ]{0,3})(\d+[.]|[*+-])[ ](.*)/) {
         my $indentation = $1;
         if ($md_block->{"indentation"} ne $indentation) {
@@ -4836,6 +4843,11 @@ sub MarkDownParseBlocks {
                     first => 1,
                     last => 1,
                     lines => [ $lines ] };
+      next OUTER;
+    } elsif ($line =~ /^[ ]*>[ ]?(.*)/) {
+      push @md_blocks, $md_block;
+      $md_block = { type => "quote",
+                    lines => [ $1 ] };
       next OUTER;
     }
 
@@ -5188,6 +5200,9 @@ sub MarkDownOutputDocBook {
         }
         $output .= "</".$tag.">\n";
       }
+    } elsif ($block->{"type"} eq "quote") {
+      $text = &MarkDownParseLines ($block->{"lines"}, $symbol, "quote");
+      $output .= "<blockquote>\n" . $text . "</blockquote>\n";
     } elsif ($block->{"type"} eq "code") {
       if ($block->{"language"}) {
         $output .= "<informalexample><programlisting language=\"" . $block->{"language"} . "\"><![CDATA[\n";
