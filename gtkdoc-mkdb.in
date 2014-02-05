@@ -4996,7 +4996,7 @@ sub MarkDownParseSpanElementsInner {
         $markup .= "<ulink url=\"" . $element_url . "\">" . $element_url . "</ulink>";
         $offset = length ($&);
       } elsif ($text =~ /^<([A-Za-z0-9._-]+?@[A-Za-z0-9._-]+?)>/) {
-        $markup .= "<ulink url=\"mailto:" . $1 . "\">" . $1 . "</a>";
+        $markup .= "<ulink url=\"mailto:" . $1 . "\">" . $1 . "</ulink>";
         $offset = length ($&);
       } elsif ($text =~ /^<[^>]+?>/) {
         $markup .= $&;
