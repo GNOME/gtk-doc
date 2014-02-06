@@ -873,19 +873,19 @@ sub ScanHeader {
             $lprefix = lc($prefix);
             $class = $2;
             $lclass = lc($class);
-            @TRACE@("Found gobject class '$class' from is class macro\n");
+            @TRACE@("Found gobject type '${prefix}_$class' from is_class macro\n");
         } elsif ($list =~ m/^(\S+)_IS_(\S*)\n/m) {
             $prefix = $1;
             $lprefix = lc($prefix);
             $class = $2;
             $lclass = lc($class);
-            @TRACE@("Found gobject class '$class' from is macro\n");
+            @TRACE@("Found gobject type '${prefix}_$class' from is_ macro\n");
         } elsif ($list =~ m/^(\S+?)_(\S*)_get_type\n/m) {
             $lprefix = $1;
             $prefix = uc($lprefix);
             $lclass = $2;
             $class = uc($lclass);
-            @TRACE@("Found gobject class '$class' from get_type function\n");
+            @TRACE@("Found gobject type '${prefix}_$class' from get_type function\n");
         } else {
           $class = $lclass = "";
         }
@@ -893,25 +893,26 @@ sub ScanHeader {
         if ($class ne "") {
             my ($cclass) = $lclass;
             $cclass =~ s/_//g;
+            my ($type) = $lprefix.$cclass;
             
-            if ($list =~ s/^\S+${cclass}Private\n//im)          { $standard_decl .= $&; }
+            if ($list =~ s/^${type}Private\n//im)               { $standard_decl .= $&; }
             
             # We only leave XxYy* in the normal section if they have docs 
-            if (! defined($doc_comments{$lprefix.$cclass})) {
-              @TRACE@("  Hide instance docs for $lprefix$cclass");
-              if ($list =~ s/^\S+${cclass}\n//im)               { $standard_decl .= $&; }
+            if (! defined($doc_comments{$type})) {
+              @TRACE@("  Hide instance docs for $type");
+              if ($list =~ s/^${type}\n//im)                    { $standard_decl .= $&; }
             }
-            if (! defined($doc_comments{$lprefix.$cclass."class"})) {
-              @TRACE@("  Hide class docs for $lprefix$cclass");
-              if ($list =~ s/^\S+${cclass}Class\n//im)          { $standard_decl .= $&; }
+            if (! defined($doc_comments{$type."class"})) {
+              @TRACE@("  Hide class docs for $type");
+              if ($list =~ s/^${type}Class\n//im)               { $standard_decl .= $&; }
             }
-            if (! defined($doc_comments{$lprefix.$cclass."interface"})) {
-              @TRACE@("  Hide iface docs for $lprefix$cclass");
-              if ($list =~ s/^\S+${cclass}Interface\n//im)      { $standard_decl .= $&; }
+            if (! defined($doc_comments{$type."interface"})) {
+              @TRACE@("  Hide iface docs for $type");
+              if ($list =~ s/^$type}Interface\n//im)            { $standard_decl .= $&; }
             }
-            if (! defined($doc_comments{$lprefix.$cclass."iface"})) {
-              @TRACE@("  Hide iface docs for $lprefix$cclass");
-              if ($list =~ s/^\S+${cclass}Iface\n//im)          { $standard_decl .= $&; }
+            if (! defined($doc_comments{$type."iface"})) {
+              @TRACE@("  Hide iface docs for $type");
+              if ($list =~ s/${type}Iface\n//im)                { $standard_decl .= $&; }
             }
             
             while ($list =~ s/^\S+_IS_$class\n//m)              { $standard_decl .= $&; }
