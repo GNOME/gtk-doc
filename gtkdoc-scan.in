@@ -280,6 +280,9 @@ sub ScanHeader {
     my %forward_decls = ();         # hashtable of forward declarations, we skip
                                     #   them if we find the real declaration
                                     #   later.
+    my %doc_comments = ();          # hastable of doc-comment we found. We can
+                                    # use that to put element to the right
+                                    # sction in the generated section-file 
 
     my $file_basename;
 
@@ -287,6 +290,7 @@ sub ScanHeader {
     my $ignore_conditional_nest = 0;
 
     my $deprecated = "";
+    my $doc_comment = "";
 
     # Don't scan headers twice
     my $canonical_input_file = realpath $input_file;
@@ -333,8 +337,13 @@ sub ScanHeader {
         # Skip to the end of the current comment.
         if ($in_comment) {
             @TRACE@("Comment: $_");
+            $doc_comment .= $_;
             if (m%\*/%) {
+                if ($doc_comment =~ m/\* ([a-zA-Z][a-zA-Z0-9_]+):/) {
+                  $doc_comments{lc($1)} = 1;
+                }
                 $in_comment = 0;
+                $doc_comment = "";
             }
             next;
         }
@@ -395,6 +404,7 @@ sub ScanHeader {
                     @TRACE@("Found one-line comment: $_");
                 } else {
                     $in_comment = 1;
+                    $doc_comment = $_;
                     @TRACE@("Found start of comment: $_");
                 }
                 next;
@@ -855,21 +865,25 @@ sub ScanHeader {
     # Try to separate the standard macros and functions, placing them at the
     # end of the current section, in a subsection named 'Standard'.
     # do this in a loop to catch object, enums and flags
-    # FIXME: we still leave XxxXxxxxClass in the normal section, it would be
-    # nice to hide it, if it is not documented and empty (only parent) 
-    my ($class,$lclass);
+    my ($class,$lclass,$prefix,$lprefix);
     my ($standard_decl) = "";
     do {
-        if ($list =~ m/^\S+_IS_(\S*)_CLASS\n/m) {
-            $class = $1;
+        if ($list =~ m/^(\S+)_IS_(\S*)_CLASS\n/m) {
+            $prefix = $1;
+            $lprefix = lc($prefix);
+            $class = $2;
             $lclass = lc($class);
             @TRACE@("Found gobject class '$class' from is class macro\n");
-        } elsif ($list =~ m/^\S+_IS_(\S*)\n/m) {
-            $class = $1;
+        } elsif ($list =~ m/^(\S+)_IS_(\S*)\n/m) {
+            $prefix = $1;
+            $lprefix = lc($prefix);
+            $class = $2;
             $lclass = lc($class);
             @TRACE@("Found gobject class '$class' from is macro\n");
-        } elsif ($list =~ m/^\S+?_(\S*)_get_type\n/m) {
-            $lclass = $1;
+        } elsif ($list =~ m/^(\S+?)_(\S*)_get_type\n/m) {
+            $lprefix = $1;
+            $prefix = uc($lprefix);
+            $lclass = $2;
             $class = uc($lclass);
             @TRACE@("Found gobject class '$class' from get_type function\n");
         } else {
@@ -881,6 +895,24 @@ sub ScanHeader {
             $cclass =~ s/_//g;
             
             if ($list =~ s/^\S+${cclass}Private\n//im)          { $standard_decl .= $&; }
+            
+            # We only leave XxYy* in the normal section if they have docs 
+            if (! defined($doc_comments{$lprefix.$cclass})) {
+              @TRACE@("  Hide instance docs for $lprefix$cclass");
+              if ($list =~ s/^\S+${cclass}\n//im)               { $standard_decl .= $&; }
+            }
+            if (! defined($doc_comments{$lprefix.$cclass."class"})) {
+              @TRACE@("  Hide class docs for $lprefix$cclass");
+              if ($list =~ s/^\S+${cclass}Class\n//im)          { $standard_decl .= $&; }
+            }
+            if (! defined($doc_comments{$lprefix.$cclass."interface"})) {
+              @TRACE@("  Hide iface docs for $lprefix$cclass");
+              if ($list =~ s/^\S+${cclass}Interface\n//im)      { $standard_decl .= $&; }
+            }
+            if (! defined($doc_comments{$lprefix.$cclass."iface"})) {
+              @TRACE@("  Hide iface docs for $lprefix$cclass");
+              if ($list =~ s/^\S+${cclass}Iface\n//im)          { $standard_decl .= $&; }
+            }
             
             while ($list =~ s/^\S+_IS_$class\n//m)              { $standard_decl .= $&; }
             while ($list =~ s/^\S+_TYPE_$class\n//m)            { $standard_decl .= $&; }
