@@ -85,7 +85,7 @@ setup-build.stamp: ts
 
 #### scan ####
 
-scan-build.stamp: ts $(HFILE_GLOB) $(CFILE_GLOB)
+scan-build.stamp: ts setup-build.stamp $(HFILE_GLOB) $(CFILE_GLOB)
 	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `date --utc --date @0$$tsd +%H:%M:%S.%N`: Scanning header files"
 	@_source_dir='' ; \

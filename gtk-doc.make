@@ -110,7 +110,7 @@ GTK_DOC_V_INTROSPECT=$(GTK_DOC_V_INTROSPECT_$(V))
 GTK_DOC_V_INTROSPECT_=$(GTK_DOC_V_INTROSPECT_$(AM_DEFAULT_VERBOSITY))
 GTK_DOC_V_INTROSPECT_0=@echo "  DOC   Introspecting gobjects";
 
-scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
+scan-build.stamp: setup-build.stamp $(HFILE_GLOB) $(CFILE_GLOB)
 	$(GTK_DOC_V_SCAN)_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
 	    _source_dir="$${_source_dir} --source-dir=$$i" ; \
