@@ -344,6 +344,9 @@ my %AnnotationDefinition = (
 my @MD_TEXT_LEVEL_ELEMENTS = ( "literal", "emphasis", "envar", "filename", "firstterm",
                                "function", "manvolnum", "option", "replaceable", "structname",
                                "title", "varname" );
+my @MD_ESCAPABLE_CHARS = ("\\", "`", "*", "_", "{", "}", "[", "]", "(", ")", ">", "#",
+                          "+", "-", ".", "!" );
+my @MD_GTK_ESCAPABLE_CHARS = ("@", "%" );
 
 # Create the root DocBook output directory if it doens't exist.
 if (! -e $SGML_OUTPUT_DIR) {
@@ -5017,6 +5020,16 @@ sub MarkDownParseSpanElementsInner {
         $markup .= "&lt;";
         $offset = 1;
       }
+    } elsif ($closest_marker eq "\\") {
+      my $special_char = substr ($text, 1, 1);
+      if (&in_array (\@MD_ESCAPABLE_CHARS, $special_char) ||
+          &in_array (\@MD_GTK_ESCAPABLE_CHARS, $special_char)) {
+        $markup .= $special_char;
+        $offset = 2;
+      } else {
+        $markup .= "\\";
+        $offset = 1;
+      }
     } elsif ($closest_marker eq "`") {
       if ($text =~ /^(`+)([^`]+?)\1(?!`)/) {
         my $element_text = $2;
@@ -5085,7 +5098,7 @@ sub MarkDownParseSpanElementsInner {
 
 sub MarkDownParseSpanElements {
   my ($text) = @_;
-  my @markers = ( "<", "![", "[", "`", "%", "#", "@" );
+  my @markers = ( "\\", "<", "![", "[", "`", "%", "#", "@" );
 
   $text = &MarkDownParseSpanElementsInner ($text, \@markers);
 
