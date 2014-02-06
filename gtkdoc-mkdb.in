@@ -341,12 +341,36 @@ my %AnnotationDefinition = (
 );
 
 # Elements to consider non-block items in MarkDown parsing
-my @MD_TEXT_LEVEL_ELEMENTS = ( "literal", "emphasis", "envar", "filename", "firstterm",
-                               "function", "manvolnum", "option", "replaceable", "structname",
-                               "title", "varname" );
-my @MD_ESCAPABLE_CHARS = ("\\", "`", "*", "_", "{", "}", "[", "]", "(", ")", ">", "#",
-                          "+", "-", ".", "!" );
-my @MD_GTK_ESCAPABLE_CHARS = ("@", "%" );
+my %MD_TEXT_LEVEL_ELEMENTS = ( "literal" => 1,
+                               "emphasis" => 1,
+                               "envar" => 1,
+                               "filename" => 1,
+                               "firstterm" => 1,
+                               "function" => 1,
+                               "manvolnum" => 1,
+                               "option" => 1,
+                               "replaceable" => 1,
+                               "structname" => 1,
+                               "title" => 1,
+                               "varname" => 1 );
+my %MD_ESCAPABLE_CHARS = ( "\\" => 1,
+                           "`" => 1,
+                           "*" => 1,
+                           "_" => 1,
+                           "{" => 1,
+                           "}" => 1,
+                           "[" => 1,
+                           "]" => 1,
+                           "(" => 1,
+                           ")" => 1,
+                           ">" => 1,
+                           "#" => 1,
+                           "+" => 1,
+                           "-" => 1,
+                           "." => 1,
+                           "!" => 1 );
+my %MD_GTK_ESCAPABLE_CHARS = ( "@" => 1,
+                               "%" => 1 );
 
 # Create the root DocBook output directory if it doens't exist.
 if (! -e $SGML_OUTPUT_DIR) {
@@ -4591,12 +4615,6 @@ sub ConvertMarkDown {
 
 # TODO(ensonic): it would be nice to add id parameters to the refsect2 elements
 
-sub in_array {
-  my ($arr, $search_for) = @_;
-  my %items = map {$_ => 1} @$arr; # create a hash out of the array values
-  return (exists ($items{$search_for})) ? 1 : 0;
-}
-
 sub MarkDownParseBlocks {
   my ($linesref, $symbol, $context) = @_;
   my $line;
@@ -4813,7 +4831,7 @@ sub MarkDownParseBlocks {
       my $tag = $1;
       my $is_self_closing = defined($2);
 
-      if (! &in_array (\@MD_TEXT_LEVEL_ELEMENTS, $tag)) {
+      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag}) {
         push @md_blocks, $md_block;
 
         if ($is_self_closing) {
@@ -5022,8 +5040,8 @@ sub MarkDownParseSpanElementsInner {
       }
     } elsif ($closest_marker eq "\\") {
       my $special_char = substr ($text, 1, 1);
-      if (&in_array (\@MD_ESCAPABLE_CHARS, $special_char) ||
-          &in_array (\@MD_GTK_ESCAPABLE_CHARS, $special_char)) {
+      if ($MD_ESCAPABLE_CHARS{$special_char} ||
+          $MD_GTK_ESCAPABLE_CHARS{$special_char}) {
         $markup .= $special_char;
         $offset = 2;
       } else {
