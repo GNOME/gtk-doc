@@ -5023,7 +5023,7 @@ sub MarkDownParseSpanElementsInner {
         $markup .= "<literal>" . $element_text . "</literal>";
         $offset = length ($&);
       } else {
-        $markup .= '`';
+        $markup .= "`";
         $offset = 1;
       }
     } elsif ($closest_marker eq "@") {
@@ -5038,10 +5038,10 @@ sub MarkDownParseSpanElementsInner {
         $markup .= $1 . "<parameter>" . $2 . "</parameter>\n";
         $offset = length ($&);
       } elsif ($text =~ /^\\\@/) {
-        $markup .= '\@';
+        $markup .= "\@";
         $offset = length ($&);
       } else {
-        $markup .= '@';
+        $markup .= "@";
         $offset = 1;
       }
     } elsif ($closest_marker eq "#") {
@@ -5054,10 +5054,10 @@ sub MarkDownParseSpanElementsInner {
         $markup .= $1 . &MakeHashXRef ($2, "type");
         $offset = length ($&);
       } elsif ($text =~ /^\\#/) {
-        $markup .= '#';
+        $markup .= "#";
         $offset = length ($&);
       } else {
-        $markup .= '#';
+        $markup .= "#";
         $offset = 1;
       }
     } elsif ($closest_marker eq "%") {
@@ -5067,10 +5067,10 @@ sub MarkDownParseSpanElementsInner {
         $markup .= $1 . &MakeXRef ($2, &tagify ($2, "literal"));
         $offset = length ($&);
       } elsif ($text =~ /^\\%/) {
-        $markup .= '\%';
+        $markup .= "\%";
         $offset = length ($&);
       } else {
-        $markup .= '%';
+        $markup .= "%";
         $offset = 1;
       }
     }
@@ -5085,7 +5085,7 @@ sub MarkDownParseSpanElementsInner {
 
 sub MarkDownParseSpanElements {
   my ($text) = @_;
-  my @markers = ( '<', '![', '[', '`', '%', '#', '@' );
+  my @markers = ( "<", "![", "[", "`", "%", "#", "@" );
 
   $text = &MarkDownParseSpanElementsInner ($text, \@markers);
 
