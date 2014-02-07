@@ -84,7 +84,7 @@
  *
  * * testing alternate list syntax
  *
- *   With section text in each.
+ *   Don't match this as a link [ style | binding ][ : <replaceable>priority</replaceable> ]
  *
  * * not sure if we want this one
  *

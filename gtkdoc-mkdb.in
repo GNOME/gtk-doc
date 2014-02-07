@@ -4988,7 +4988,7 @@ sub MarkDownParseSpanElementsInner {
             $element{"#"} = $2;
           }
           $offset += length ($&);
-        } elsif ($remaining_text =~ /^\s*\[([^\]]*?)\]/) {
+        } elsif ($remaining_text =~ /^\s*\[([^\]<]*?)\]/) {
           $element{"ref"} = $1;
           $offset += length ($&);
         } else {
