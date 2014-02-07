@@ -2903,13 +2903,13 @@ sub MakeHashXRef {
     # If the symbol is in the form "Object::signal", then change the symbol to
     # "Object-signal" and use "signal" as the text.
     if ($symbol =~ s/::/-/) {
-      $text = "\"$'\"";
+      $text = "“$'”";
     }
 
     # If the symbol is in the form "Object:property", then change the symbol to
     # "Object--property" and use "property" as the text.
     if ($symbol =~ s/:/--/) {
-      $text = "\"$'\"";
+      $text = "“$'”";
     }
 
     if ($tag ne "") {
@@ -3415,9 +3415,9 @@ sub GetSignals {
             my $id = &CreateValidSGMLID ("$object-$name");
 
             my $pad = ' ' x (46 - length($name));
-            $synop .= "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad ";
+            $synop .= "  “<link linkend=\"$id\">$name</link>”$pad ";
 
-            $desc .= "<refsect2 id=\"$id\" role=\"signal\"><title>The <literal>&quot;$name&quot;</literal> signal</title>\n";
+            $desc .= "<refsect2 id=\"$id\" role=\"signal\"><title>The <literal>“$name”</literal> signal</title>\n";
             $desc .= MakeIndexterms($symbol, $id);
             $desc .= "\n";
             $desc .= OutputSymbolExtraLinks($symbol);
@@ -3660,13 +3660,13 @@ sub GetArgs {
             my $pad1 = " " x (24 - length ($name));
             my $pad2 = " " x (20 - length ($type));
 
-             my $arg_synop = "  &quot;<link linkend=\"$id\">$name</link>&quot;$pad1 $type_output $pad2 : $flags_string\n";
-            my $arg_desc = "<refsect2 id=\"$id\" role=\"property\"><title>The <literal>&quot;$name&quot;</literal> $kind</title>\n";
+            my $arg_synop = "  “<link linkend=\"$id\">$name</link>”$pad1 $type_output $pad2 : $flags_string\n";
+            my $arg_desc = "<refsect2 id=\"$id\" role=\"property\"><title>The <literal>“$name”</literal> $kind</title>\n";
             $arg_desc .= MakeIndexterms($symbol, $id);
             $arg_desc .= "\n";
             $arg_desc .= OutputSymbolExtraLinks($symbol);
 
-            $arg_desc .= "<programlisting>  &quot;$name&quot;$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
+            $arg_desc .= "<programlisting>  “$name”$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
             $arg_desc .= &MakeDeprecationNote($symbol);
             $arg_desc .= $blurb;
             if ($range ne "") {
