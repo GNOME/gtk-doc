@@ -57,7 +57,7 @@
  *
  * - catching bugs
  *
- *   [GTK](http://www.gtk.org) ![Some image](file.png)
+ *   [GTK](http://www.gtk.org) ![Some image](home.png)
  *
  * - having an example
  *
