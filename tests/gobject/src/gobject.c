@@ -88,7 +88,7 @@
  *
  * * not sure if we want this one
  *
- *   It has more stuff.
+ *   A link <http://en.wikipedia.org/wiki/MOS_Technology_SID#Technical_details>
  *
  * <refsect3><title>An embedded docbook section</title>
  * <para>Some stuff</para>
