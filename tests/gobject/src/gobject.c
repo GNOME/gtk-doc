@@ -126,7 +126,10 @@
  *
  * 1. Is
  *
- * Nothing more to say.
+ * Nothing more to say. Except one more link:
+ *
+ * <http://www.gnome.org/>
+ *
  */
 
 /**
