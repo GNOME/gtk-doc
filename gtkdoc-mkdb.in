@@ -4833,7 +4833,7 @@ sub MarkDownParseBlocks {
       my $tag = $1;
       my $is_self_closing = defined($2);
 
-      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag}) {
+      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag ne "http") {
         push @md_blocks, $md_block;
 
         if ($is_self_closing) {
