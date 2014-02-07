@@ -39,7 +39,7 @@
  * g_object_unref (myobj);
  * ]|
  *
- * # Examples #
+ * # Examples # {#examples}
  *
  * Here are a few examples.
  *
@@ -122,7 +122,7 @@
  *
  * 1. Really
  *
- *    Has a paragraph.
+ *    Has a paragraph with a [link to the examples][examples].
  *
  * 1. Is
  *
