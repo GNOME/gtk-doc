@@ -1399,16 +1399,16 @@ system("($command)") == 0 or die "Compilation of scanner failed: $!\n";
 
 # Linking scanner
 # FIXME: Can we turn off as-needed for the docs (or better fix it?)
-#$command = "$LD -Wl,--no-as-needed $o_file $LDFLAGS -o $MODULE-scan";
-$command = "$LD $stdout $o_file $LDFLAGS -o $MODULE-scan";
+#$command = "$LD -Wl,--no-as-needed $o_file $LDFLAGS -o $MODULE-scan@EXEEXT@";
+$command = "$LD $stdout $o_file $LDFLAGS -o $MODULE-scan@EXEEXT@";
 system("($command)") == 0 or die "Linking of scanner failed: $!\n";
 
 # Running scanner $MODULE-scan ";
-system("($RUN ./$MODULE-scan)") == 0 or die "Scan failed: $!\n";
+system("($RUN ./$MODULE-scan@EXEEXT@)") == 0 or die "Scan failed: $!\n";
 
 
 if (!defined($ENV{"GTK_DOC_KEEP_INTERMEDIATE"})) {
-  unlink "./$MODULE-scan.c", "./$MODULE-scan.o", "./$MODULE-scan.lo", "./$MODULE-scan";
+  unlink "./$MODULE-scan.c", "./$MODULE-scan.o", "./$MODULE-scan.lo", "./$MODULE-scan@EXEEXT@";
 }
 
 &UpdateFileIfChanged ($old_signals_filename, $new_signals_filename, 0);
