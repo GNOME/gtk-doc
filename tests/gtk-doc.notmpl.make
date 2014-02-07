@@ -190,6 +190,9 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 clean-local:
 	@rm -f *~ *.bak ts
 	@rm -rf .libs
+	@if echo $(SCAN_OPTIONS) | grep -q "\-\-rebuild-types" ; then \
+	  rm $(DOC_MODULE).types; \
+	fi
 	$(MAKE) distclean-local
 
 distclean-local:

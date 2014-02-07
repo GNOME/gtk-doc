@@ -219,6 +219,9 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 clean-local:
 	@rm -f *~ *.bak
 	@rm -rf .libs
+	@if echo $(SCAN_OPTIONS) | grep -q "\-\-rebuild-types" ; then \
+	  rm $(DOC_MODULE).types; \
+	fi
 
 distclean-local:
 	@rm -rf xml html $(REPORT_FILES) $(DOC_MODULE).pdf \
