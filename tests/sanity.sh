@@ -1,6 +1,7 @@
 #!/bin/sh
 
-dir=`dirname $0`
+dir=$BUILDDIR
+#`dirname $0`
 suite="sanity"
 
 failed=0

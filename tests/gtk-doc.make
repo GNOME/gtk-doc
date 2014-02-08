@@ -212,7 +212,7 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 
 # we need to enforce a rebuild for the tests
 clean-local:
-	@rm -f *~ *.bak ts
+	@rm -f *~ *.bak ts gtkdoc-*.log
 	@rm -rf .libs
 	@if echo $(SCAN_OPTIONS) | grep -q "\-\-rebuild-types" ; then \
 	  rm -f $(DOC_MODULE).types; \
