@@ -5985,7 +5985,7 @@ sub CheckIsObject {
     my $root = $ObjectRoots{$name};
     # Let GBoxed pass as an object here to get -struct appended to the id
     # and prevent conflicts with sections.
-    return defined($root) and $root ne 'GEnum' and $root ne 'GFlags';
+    return (defined($root) and $root ne 'GEnum' and $root ne 'GFlags');
 }
 
 
