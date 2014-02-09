@@ -4848,7 +4848,8 @@ sub MarkDownParseBlocks {
       # markup, including <?xml version="1.0"?>
       my $tag = $1;
       my $is_self_closing = defined($2);
-      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag !~ /^https?/) {
+      # skip uri (we're matching the schema part according to RFC 2396 only)
+      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag !~ /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//) {
         push @md_blocks, $md_block;
 
         if ($is_self_closing) {
