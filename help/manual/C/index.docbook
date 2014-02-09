@@ -494,6 +494,18 @@ AM_CONDITIONAL([ENABLE_GTK_DOC], false)
       </important>
 
       <para>
+        To ensure that a release contains the docuemntation, add this line to
+        Makefile.am:
+        <example><title>Enable gtk-doc when creating a release</title>
+          <programlisting>
+<![CDATA[
+DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+]]>
+          </programlisting>
+        </example>
+      </para>
+
+      <para>
         Furthermore it is recommended that you have the following line inside
         you <filename>configure.ac</filename> script.
         This allows <application>gtkdocize</application> to automatically copy the
