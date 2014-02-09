@@ -697,14 +697,22 @@ $signals_desc
 EOF
                 }
 
-                 $args_synop =~ s/^\n*//g;
-                 $args_synop =~ s/\n+$/\n/g;
+                $args_synop =~ s/^\n*//g;
+                $args_synop =~ s/\n+$/\n/g;
                 if ($args_synop ne '') {
                     $args_synop = <<EOF;
 <refsect1 id="$section_id.properties" role="properties">
 <title role="properties.title">Properties</title>
-<synopsis>
-${args_synop}</synopsis>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="type" colwidth="150px"/>
+<colspec colname="name" colwidth="300px"/>
+<colspec colname="flags" colwidth="200px"/>
+<tbody>
+${args_synop}
+</tbody>
+</tgroup>
+</informaltable>
 </refsect1>
 EOF
                      $args_desc = TrimTextBlock($args_desc);
@@ -716,14 +724,22 @@ $args_desc
 EOF
                 }
 
-                 $child_args_synop =~ s/^\n*//g;
-                 $child_args_synop =~ s/\n+$/\n/g;
+                $child_args_synop =~ s/^\n*//g;
+                $child_args_synop =~ s/\n+$/\n/g;
                 if ($child_args_synop ne '') {
                     $args_synop .= <<EOF;
 <refsect1 id="$section_id.child-properties" role="child_properties">
 <title role="child_properties.title">Child Properties</title>
-<synopsis>
-${child_args_synop}</synopsis>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="type" colwidth="150px"/>
+<colspec colname="name" colwidth="300px"/>
+<colspec colname="flags" colwidth="200px"/>
+<tbody>
+${child_args_synop}
+</tbody>
+</tgroup>
+</informaltable>
 </refsect1>
 EOF
                      $child_args_desc = TrimTextBlock($child_args_desc);
@@ -735,14 +751,22 @@ $child_args_desc
 EOF
                 }
 
-                 $style_args_synop =~ s/^\n*//g;
-                 $style_args_synop =~ s/\n+$/\n/g;
+                $style_args_synop =~ s/^\n*//g;
+                $style_args_synop =~ s/\n+$/\n/g;
                 if ($style_args_synop ne '') {
                     $args_synop .= <<EOF;
 <refsect1 id="$section_id.style-properties" role="style_properties">
 <title role="style_properties.title">Style Properties</title>
-<synopsis>
-${style_args_synop}</synopsis>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="type" colwidth="150px"/>
+<colspec colname="name" colwidth="300px"/>
+<colspec colname="flags" colwidth="200px"/>
+<tbody>
+${style_args_synop}
+</tbody>
+</tgroup>
+</informaltable>
 </refsect1>
 EOF
                      $style_args_desc = TrimTextBlock($style_args_desc);
@@ -3714,7 +3738,7 @@ sub GetArgs {
             my $pad1 = " " x (24 - length ($name));
             my $pad2 = " " x (20 - length ($type));
 
-            my $arg_synop = "  “<link linkend=\"$id\">$name</link>”$pad1 $type_output $pad2 : $flags_string\n";
+            my $arg_synop = "<row><entry role=\"property_type\">$type_output</entry><entry role=\"property_name\"><link linkend=\"$id\">$name</link></entry><entry role=\"property_flags\">$flags_string</entry></row>\n";
             my $arg_desc = "<refsect2 id=\"$id\" role=\"property\"><title>The <literal>“$name”</literal> $kind</title>\n";
             $arg_desc .= MakeIndexterms($symbol, $id);
             $arg_desc .= "\n";
