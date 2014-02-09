@@ -575,10 +575,12 @@ sub OutputSGML {
     my $title = "";
     my $section_id = "";
     my $subsection = "";
-    my $synopsis;
-    my $details;
     my $num_symbols;
     my $changed = 0;
+    my $functions_synop = "";
+    my $other_synop = "";
+    my $functions_details = "";
+    my $other_details = "";
     my $signals_synop = "";
     my $signals_desc = "";
     my $args_synop = "";
@@ -604,15 +606,14 @@ sub OutputSGML {
             next;
 
         } elsif (m/^<SECTION>/) {
-            $synopsis = "";
-            $details = "";
             $num_symbols = 0;
             $in_section = 1;
             @file_objects = ();
             %symbol_def_line = ();
 
         } elsif (m/^<SUBSECTION\s*(.*)>/i) {
-            $synopsis .= "\n";
+            $other_synop .= "\n";
+            $functions_synop .= "\n";
             $subsection = $1;
 
         } elsif (m/^<SUBSECTION>/) {
@@ -803,11 +804,34 @@ $derived
 EOF
                 }
 
-                $synopsis =~ s/^\n*//g;
-                $synopsis =~ s/\n+$/\n/g;
+                $functions_synop =~ s/^\n*//g;
+                $functions_synop =~ s/\n+$/\n/g;
+                if ($functions_synop ne '') {
+                  $functions_synop = <<EOF;
+<refsect1 id="$section_id.functions" role="functions_proto">
+<title role="functions_proto.title">Functions</title>
+<synopsis>
+${functions_synop}</synopsis>
+</refsect1>
+EOF
+                }
+
+                $other_synop =~ s/^\n*//g;
+                $other_synop =~ s/\n+$/\n/g;
+                if ($other_synop ne '') {
+                  $other_synop = <<EOF;
+<refsect1 id="$section_id.other" role="other_proto">
+<title role="other_proto.title">Types and Values</title>
+<synopsis>
+${other_synop}</synopsis>
+</refsect1>
+EOF
+                }
+
                 my $file_changed = &OutputSGMLFile ($filename, $title, $section_id,
                                                     $section_includes,
-                                                    \$synopsis, \$details,
+                                                    \$functions_synop, \$other_synop,
+                                                    \$functions_details, \$other_details,
                                                     \$signals_synop, \$signals_desc,
                                                     \$args_synop, \$args_desc,
                                                     \$hierarchy, \$interfaces,
@@ -823,6 +847,10 @@ EOF
             $subsection = "";
             $in_section = 0;
             $section_includes = "";
+            $functions_synop = "";
+            $other_synop = "";
+            $functions_details = "";
+            $other_details = "";
             $signals_synop = "";
             $signals_desc = "";
             $args_synop = "";
@@ -832,8 +860,8 @@ EOF
             $child_args_desc = "";
             $style_args_desc = "";
             $hierarchy = "";
-             $interfaces = "";
-             $implementations = "";
+            $interfaces = "";
+            $implementations = "";
             $prerequisites = "";
             $derived = "";
 
@@ -861,8 +889,18 @@ EOF
                         my $impls = &GetImplementations ($symbol);
                         my $prereqs = &GetPrerequisites ($symbol);
                         my $der = &GetDerived ($symbol);
-                        $synopsis .= $synop;
-                        $details .= $desc;
+                        my $type = $DeclarationTypes {$symbol};
+
+                        if ($type eq 'FUNCTION' || $type eq 'USER_FUNCTION') {
+                          $functions_synop .= $synop;
+                          $functions_details .= $desc;
+                        } elsif ($type eq 'MACRO' && $declaration =~ /$symbol[ ]*\(/) {
+                          $functions_synop .= $synop;
+                          $functions_details .= $desc;
+                        } else {
+                          $other_synop .= $synop;
+                          $other_details .= $desc;
+                        }
                         $signals_synop .= $sig_synop;
                         $signals_desc .= $sig_desc;
                         $args_synop .= $arg_synop;
@@ -2343,8 +2381,10 @@ sub ParseStabilityLevel {
 #               $section_id - the SGML id to use for the toplevel tag.
 #               $includes - comma-separates list of include files added at top of
 #                 synopsis, with '<' '>' around them (if not already enclosed in "").
-#               $synopsis - reference to the DocBook for the Synopsis part.
-#               $details - reference to the DocBook for the Details part.
+#               $functions_synop - reference to the DocBook for the Functions Synopsis part.
+#               $other_synop - reference to the DocBook for the Types and Values Synopsis part.
+#               $functions_details - reference to the DocBook for the Functions Details part.
+#               $other_details - reference to the DocBook for the Types and Values Details part.
 #               $signal_synop - reference to the DocBook for the Signal Synopsis part
 #               $signal_desc - reference to the DocBook for the Signal Description part
 #               $args_synop - reference to the DocBook for the Arg Synopsis part
@@ -2358,7 +2398,7 @@ sub ParseStabilityLevel {
 #############################################################################
 
 sub OutputSGMLFile {
-    my ($file, $title, $section_id, $includes, $synopsis, $details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $implementations, $prerequisites, $derived, $file_objects) = @_;
+    my ($file, $title, $section_id, $includes, $functions_synop, $other_synop, $functions_details, $other_details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $implementations, $prerequisites, $derived, $file_objects) = @_;
 
     #print "Output sgml for file $file with title '$title'\n";
 
@@ -2488,19 +2528,18 @@ $image</refmiscinfo>
 <refpurpose>$short_desc</refpurpose>
 </refnamediv>
 $stability
-<refsynopsisdiv id="$section_id.synopsis" role="synopsis">
-<title role="synopsis.title">Synopsis</title>
-$object_anchors
-<synopsis>$include_output$${synopsis}</synopsis>
-</refsynopsisdiv>
-$$args_synop$$signals_synop$$hierarchy$$prerequisites$$derived$$interfaces$$implementations
+$$functions_synop$object_anchors$$other_synop$$args_synop$$signals_synop$$hierarchy$$prerequisites$$derived$$interfaces$$implementations
 <refsect1 id="$section_id.description" role="desc">
 <title role="desc.title">Description</title>
 $extralinks$long_desc
 </refsect1>
-<refsect1 id="$section_id.details" role="details">
-<title role="details.title">Details</title>
-$$details
+<refsect1 id="$section_id.functions_details" role="details">
+<title role="details.title">Functions</title>
+$$functions_details
+</refsect1>
+<refsect1 id="$section_id.other_details" role="details">
+<title role="details.title">Types and Values</title>
+$$other_details
 </refsect1>
 $$args_desc$$signals_desc$see_also
 </refentry>
