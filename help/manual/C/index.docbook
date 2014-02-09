@@ -515,9 +515,13 @@ AC_CONFIG_MACRO_DIR(m4)
       <title>Integration with automake</title>
 
       <para>
-        First copy the <filename>Makefile.am</filename> from the examples subdirectory of the gtkdoc-sources
+        First copy the <filename>Makefile.am</filename> from the 
+        <filename class='directory'>examples</filename> sub directory of the
+        <ulink url="https://git.gnome.org/browse/gtk-doc/tree/examples/Makefile.am">gtkdoc-sources</ulink>
         to your project's API documentation directory (
         <filename class='directory'>./docs/reference/&lt;package&gt;</filename>).
+        A local copy should be available under e.g. 
+        <filename>/usr/share/doc/gtk-doc-tools/examples/Makefile.am</filename>.
         If you have multiple doc-packages repeat this for each one.
       </para>
 
