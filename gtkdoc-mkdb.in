@@ -5206,12 +5206,11 @@ sub MarkDownOutputDocBook {
 
     if ($block->{"type"} eq "paragraph") {
       $text = &MarkDownParseSpanElements ($block->{"text"});
-
       if ($context eq "li" && $output eq "") {
         if ($block->{"interrupted"}) {
           $output .= "\n"."<para>".$text."</para>"."\n";
         } else {
-          $output .= $text;
+          $output .= "<para>".$text."</para>";
           if ($#blocks > 0) {
             $output .= "\n";
           }
