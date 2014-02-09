@@ -4848,8 +4848,9 @@ sub MarkDownParseBlocks {
       # markup, including <?xml version="1.0"?>
       my $tag = $1;
       my $is_self_closing = defined($2);
-      # skip uri (we're matching the schema part according to RFC 2396 only)
-      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag !~ /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//) {
+      # FIXME: why do we need to skip https? here, if we generalize this to all
+      # uri schemes we get parsing errors
+      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag !~ /^https?/) {
         push @md_blocks, $md_block;
 
         if ($is_self_closing) {
