@@ -810,8 +810,15 @@ EOF
                   $functions_synop = <<EOF;
 <refsect1 id="$section_id.functions" role="functions_proto">
 <title role="functions_proto.title">Functions</title>
-<synopsis>
-${functions_synop}</synopsis>
+<informaltable pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="return" colwidth="150px"/>
+<colspec colname="name"/>
+<tbody>
+${functions_synop}
+</tbody>
+</tgroup>
+</informaltable>
 </refsect1>
 EOF
                 }
@@ -2153,18 +2160,17 @@ sub OutputFunction {
 
     my ($symbol_output, $symbol_desc_output);
     if ($symbol_len < $SYMBOL_FIELD_WIDTH) {
-        $symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3"
-            . (' ' x ($SYMBOL_FIELD_WIDTH - $symbol_len));
+        $symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3";
         $symbol_desc_output = "$char1$char2$symbol$char3"
             . (' ' x ($SYMBOL_FIELD_WIDTH - $symbol_len));
     } else {
-        $symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3\n"
-            . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
+        $symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3";
         $symbol_desc_output = "$char1$char2$symbol$char3\n"
             . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
     }
 
-    my $synop = $ret_type_output . $symbol_output . '(';
+    my $synop = "<row><entry role=\"function_type\">${ret_type_output}</entry><entry role=\"function_name\">${symbol_output} ()</entry></row>\n";
+
     my $desc = "<refsect2 id=\"$id\" role=\"function\"$condition>\n<title>${symbol} ()</title>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
@@ -2182,12 +2188,8 @@ sub OutputFunction {
         my $field_name = $fields[$i];
 
         if ($i == 1) {
-            $synop .= "$field_name";
             $desc  .= "$field_name";
         } else {
-            $synop .= ",\n"
-                . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-                . " $field_name";
             $desc  .= ",\n"
                 . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
                 . " $field_name";
@@ -2195,7 +2197,6 @@ sub OutputFunction {
 
     }
 
-    $synop .= ");\n";
     $desc  .= ");</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);

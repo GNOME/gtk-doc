@@ -136,6 +136,23 @@ a:hover
   color: #729fcf;
 }
 
+div.informaltable table
+{
+  border-collapse: separate;
+  border-spacing: 20px 3px;
+  border: none;
+}
+
+div.informaltable table td, div.informaltable table th
+{
+  vertical-align: top;
+}
+
+.function_type
+{
+  text-align: right;
+}
+
 div.table table
 {
   border-collapse: collapse;
