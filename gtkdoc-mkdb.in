@@ -4848,8 +4848,7 @@ sub MarkDownParseBlocks {
       # markup, including <?xml version="1.0"?>
       my $tag = $1;
       my $is_self_closing = defined($2);
-
-      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag ne "http") {
+      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag !~ /^https?/) {
         push @md_blocks, $md_block;
 
         if ($is_self_closing) {
