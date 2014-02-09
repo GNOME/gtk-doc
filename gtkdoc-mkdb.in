@@ -4750,7 +4750,8 @@ sub MarkDownParseBlocks {
         next OUTER;
       }
     } elsif ($md_block->{"type"} eq "li") {
-      if ($line =~ /^([ ]{0,3})(\d+[.]|[*+-])[ ](.*)/) {
+      my $marker = $md_block->{"marker"};
+      if ($line =~ /^([ ]{0,3})($marker)[ ](.*)/) {
         my $indentation = $1;
         if ($md_block->{"indentation"} ne $indentation) {
           push $md_block->{"lines"}, $line;
@@ -4763,6 +4764,7 @@ sub MarkDownParseBlocks {
           $md_block = { type => "li",
                         ordered => $ordered,
                         indentation => $indentation,
+                        marker => $marker,
                         first => 0,
                         last => 1,
                         lines => [ $lines ] };
@@ -4877,6 +4879,7 @@ sub MarkDownParseBlocks {
       $md_block = { type => "li",
                     ordered => 0,
                     indentation => $indentation,
+                    marker => "[*+-]",
                     first => 1,
                     last => 1,
                     lines => [ $lines ] };
@@ -4899,6 +4902,7 @@ sub MarkDownParseBlocks {
       $md_block = { type => "li",
                     ordered => 1,
                     indentation => $indentation,
+                    marker => "\\d+[.]",
                     first => 1,
                     last => 1,
                     lines => [ $lines ] };

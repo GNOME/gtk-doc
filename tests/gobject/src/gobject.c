@@ -101,6 +101,10 @@
  *
  * # Coda # {#this-is-an-id-tag}
  *
+ * - One
+ * - Two
+ * - Three
+ *
  * 1. This is a ordered list
  *
  * 1. This is a code block in a list:
