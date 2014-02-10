@@ -62,6 +62,9 @@
   <xsl:param name="gtkdoc.version" select="''"/>
   <xsl:param name="gtkdoc.bookname" select="''"/>
 
+  <!-- Override the typical template to prevent showing titles -->
+  <xsl:param name="admon.textlabel" select="0"/>
+
   <!-- ========================================================= -->
 
   <!-- l10n is slow, we don't ue it, so we'd like to turn it off

@@ -300,13 +300,15 @@ div.blockquote
   border-style: solid;
   margin: 2em;
 }
-.note h3, .warning h3
-{
-  margin-top: 0.0em
-}
 .note p, .warning p
 {
-  margin-bottom: 0.0em
+  margin: 0;
+}
+
+div.warning h3.title,
+div.note h3.title
+{
+  display: none;
 }
 
 p + div.section

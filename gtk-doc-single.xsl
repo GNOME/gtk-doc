@@ -39,6 +39,9 @@
   <xsl:param name="gtkdoc.version" select="''"/>
   <xsl:param name="gtkdoc.bookname" select="''"/>
 
+  <!-- Override the typical template to prevent showing titles -->
+  <xsl:param name="admon.textlabel" select="0"/>
+
   <!-- ========================================================= -->
   <!-- template to create the index.sgml anchor index -->
 
@@ -135,7 +138,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:apply-imports/>
   </xsl:template>
 
- <xsl:template name="user.head.title">
+  <xsl:template name="user.head.title">
     <xsl:variable name="home" select="/*[1]"/>
     <title>
       <xsl:apply-templates select="$home" mode="object.title.markup"/>: <xsl:copy-of select="$title"/>
