@@ -1480,9 +1480,9 @@ sub OutputMacro {
     if (!defined ($DeclarationConditional{$symbol}) && ($symbol !~ m/^g_/)
         && ($symbol !~ m/^_?gnome_/) && (($declaration =~ tr/\n//) < 2)) {
         my $decl_out = &CreateValidSGML ($declaration);
-        $desc .= "<programlisting>$decl_out</programlisting>\n";
+        $desc .= "<programlisting language=\"C\">$decl_out</programlisting>\n";
     } else {
-        $desc .= "<programlisting>" . &MakeReturnField("#define") . "$symbol";
+        $desc .= "<programlisting language=\"C\">" . &MakeReturnField("#define") . "$symbol";
         if ($declaration =~ m/^\s*#\s*define\s+\w+(\([^\)]*\))/) {
             my $args = $1;
             my $pad = ' ' x ($RETURN_TYPE_FIELD_WIDTH - length ("#define "));
@@ -1540,7 +1540,7 @@ sub OutputTypedef {
 
     if (!defined ($DeclarationConditional{$symbol})) {
         my $decl_out = &CreateValidSGML ($declaration);
-        $desc .= "<programlisting>$decl_out</programlisting>\n";
+        $desc .= "<programlisting language=\"C\">$decl_out</programlisting>\n";
     }
 
     $desc .= &MakeDeprecationNote($symbol);
@@ -1666,7 +1666,7 @@ sub OutputStruct {
     }
 
     $decl_out = &CreateValidSGML ($decl_out);
-    $desc .= "<programlisting>$decl_out</programlisting>\n";
+    $desc .= "<programlisting language=\"C\">$decl_out</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);
 
@@ -1818,7 +1818,7 @@ sub OutputUnion {
 
     # FIXME: we do more for structs
     my $decl_out = &CreateValidSGML ($declaration);
-    $desc .= "<programlisting>$decl_out</programlisting>\n";
+    $desc .= "<programlisting language=\"C\">$decl_out</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);
 
@@ -1991,7 +1991,7 @@ sub OutputEnum {
     }
 
     $decl_out = &CreateValidSGML ($decl_out);
-    $desc .= "<programlisting>$decl_out</programlisting>\n";
+    $desc .= "<programlisting language=\"C\">$decl_out</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);
 
@@ -2122,7 +2122,7 @@ sub OutputVariable {
     $desc .= OutputSymbolExtraLinks($symbol);
 
     my $decl_out = &CreateValidSGML ($declaration);
-    $desc .= "<programlisting>$decl_out</programlisting>\n";
+    $desc .= "<programlisting language=\"C\">$decl_out</programlisting>\n";
 
     $desc .= &MakeDeprecationNote($symbol);
 
@@ -2209,7 +2209,7 @@ sub OutputFunction {
     $desc .= "\n";
     $desc .= OutputSymbolExtraLinks($symbol);
 
-    $desc  .= "<programlisting>${ret_type_output}$symbol_desc_output(";
+    $desc  .= "<programlisting language=\"C\">${ret_type_output}$symbol_desc_output(";
 
     my @fields = ParseFunctionDeclaration($declaration, \&MakeXRef,
                                         sub {
@@ -3507,7 +3507,7 @@ sub GetSignals {
             $desc .= "\n";
             $desc .= OutputSymbolExtraLinks($symbol);
 
-            $desc .= "<programlisting>";
+            $desc .= "<programlisting language=\"C\">";
 
             $SignalReturns[$i] =~ m/\s*(const\s+)?(\w+)\s*(\**)/;
             my $type_modifier = defined($1) ? $1 : "";
