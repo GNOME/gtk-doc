@@ -3330,15 +3330,19 @@ sub GetHierarchy {
         if ($level == 0) {
             $hierarchy .= "  $link_text\n";
         } else {
-#            $hierarchy .= ' ' x ($level * 6 - 3) . "|\n";
-            $hierarchy .= ' ' x ($level * 6 - 3) . "+----$link_text\n";
+            # Unicode chars for: ╰───
+            $hierarchy .= ' ' x ($level * 6 - 3) . "<phrase role=\"lineart\">&#9584;&#9472;&#9472;&#9472;&#9472;</phrase> $link_text\n";
         }
         $level++;
     }
     for ($i = 0; $i <= $#children; $i++) {
       my $id = &CreateValidSGMLID ($children[$i]);
       my $link_text = "<link linkend=\"$id\">$children[$i]</link>";
-      $hierarchy .= ' ' x ($level * 6 - 3) . "+----$link_text\n";
+      my $junction = "&#9500;"; # unicde for ├
+      if ($i == $#children) {
+        $junction = "&#9584;"; # unicode for ╰
+      }
+      $hierarchy .= ' ' x ($level * 6 - 3) . "<phrase role=\"lineart\">" . $junction . "&#9472;&#9472;&#9472;&#9472;</phrase> $link_text\n";
     }
     $hierarchy .= "</synopsis>\n";
 
