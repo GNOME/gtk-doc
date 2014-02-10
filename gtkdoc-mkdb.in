@@ -684,8 +684,16 @@ sub OutputSGML {
                     $signals_synop = <<EOF;
 <refsect1 id="$section_id.signals" role="signal_proto">
 <title role="signal_proto.title">Signals</title>
-<synopsis>
-${signals_synop}</synopsis>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="return" colwidth="150px"/>
+<colspec colname="name" colwidth="300px"/>
+<colspec colname="flags" colwidth="200px"/>
+<tbody>
+${signals_synop}
+</tbody>
+</tgroup>
+</informaltable>
 </refsect1>
 EOF
                      $signals_desc = TrimTextBlock($signals_desc);
@@ -3493,7 +3501,6 @@ sub GetSignals {
             my $id = &CreateValidSGMLID ("$object-$name");
 
             my $pad = ' ' x (46 - length($name));
-            $synop .= "  “<link linkend=\"$id\">$name</link>”$pad ";
 
             $desc .= "<refsect2 id=\"$id\" role=\"signal\"><title>The <literal>“$name”</literal> signal</title>\n";
             $desc .= MakeIndexterms($symbol, $id);
@@ -3524,31 +3531,32 @@ sub GetSignals {
             # do two passes, the first one is to calculate padding
             for ($l = 0; $l < 2; $l++) {
                 for ($j = 0; $j <= $#params; $j++) {
+                    my $param_name;
                     # allow alphanumerics, '_', '[' & ']' in param names
                     if ($params[$j] =~ m/^\s*(\w+)\s*(\**)\s*([\w\[\]]+)\s*$/) {
                         $type = $1;
                         $pointer = $2;
                         if (defined($sourceparams)) {
-                            $name = $$sourceparams[$PARAM_FIELD_COUNT * $j];
+                            $param_name = $$sourceparams[$PARAM_FIELD_COUNT * $j];
                         }
                         else {
-                            $name = $3;
+                            $param_name = $3;
                         }
-                        if (!defined($name)) {
-                            $name = "arg$j";
+                        if (!defined($param_name)) {
+                            $param_name = "arg$j";
                         }
                         if ($l == 0) {
                             if (length($type) + length($pointer) > $type_len) {
                                 $type_len = length($type) + length($pointer);
                             }
-                            if (length($name) > $name_len) {
-                                $name_len = length($name);
+                            if (length($param_name) > $name_len) {
+                                $name_len = length($param_name);
                             }
                         }
                         else {
                             $xref = &MakeXRef ($type, &tagify($type, "type"));
                             $pad = ' ' x ($type_len - length($type) - length($pointer));
-                            $desc .= "$xref$pad $pointer$name,\n";
+                            $desc .= "$xref$pad $pointer${param_name},\n";
                             $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
                         }
                     } else {
@@ -3566,45 +3574,44 @@ sub GetSignals {
 
             if (defined ($flags)) {
               if ($flags =~ m/f/) {
-                $flags_string = "<link linkend=\"G-SIGNAL-RUN-FIRST:CAPS\"><literal>Run First</literal></link>";
+                $flags_string = "<link linkend=\"G-SIGNAL-RUN-FIRST:CAPS\">Run First</link>";
               }
               elsif ($flags =~ m/l/) {
-                $flags_string = "<link linkend=\"G-SIGNAL-RUN-LAST:CAPS\"><literal>Run Last</literal></link>";
+                $flags_string = "<link linkend=\"G-SIGNAL-RUN-LAST:CAPS\">Run Last</link>";
               }
               elsif ($flags =~ m/c/) {
-                $flags_string = "<link linkend=\"G-SIGNAL-RUN-CLEANUP:CAPS\"><literal>Cleanup</literal></link>";
+                $flags_string = "<link linkend=\"G-SIGNAL-RUN-CLEANUP:CAPS\">Cleanup</link>";
                 $flags_string = "Cleanup";
               }
               if ($flags =~ m/r/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string = "<link linkend=\"G-SIGNAL-NO-RECURSE:CAPS\"><literal>No Recursion</literal></link>";
+                $flags_string = "<link linkend=\"G-SIGNAL-NO-RECURSE:CAPS\">No Recursion</link>";
               }
               if ($flags =~ m/d/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string = "<link linkend=\"G-SIGNAL-DETAILED:CAPS\"><literal>Has Details</literal></link>";
+                $flags_string = "<link linkend=\"G-SIGNAL-DETAILED:CAPS\">Has Details</link>";
               }
               if ($flags =~ m/a/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string = "<link linkend=\"G-SIGNAL-ACTION:CAPS\"><literal>Action</literal></link>";
+                $flags_string = "<link linkend=\"G-SIGNAL-ACTION:CAPS\">Action</link>";
               }
               if ($flags =~ m/h/) {
                 if ($flags_string) { $flags_string .= " / "; }
-                $flags_string = "<link linkend=\"G-SIGNAL-NO-HOOKS:CAPS\"><literal>No Hooks</literal></link>";
+                $flags_string = "<link linkend=\"G-SIGNAL-NO-HOOKS:CAPS\">No Hooks</link>";
               }
             }
 
             if ($flags_string)
               {
-                $synop .= ": $flags_string\n";
-
                 $pad = ' ' x (5 + $name_len - length("user_data"));
                 $desc  .= "$pad : $flags_string</programlisting>\n";
               }
             else
               {
-                $synop .= "\n";
                 $desc  .= "</programlisting>\n";
               }
+
+            $synop .= "<row><entry role=\"signal_type\">${ret_type_output}</entry><entry role=\"signal_name\"><link linkend=\"$id\">${name}</link></entry><entry role=\"signal_flags\">${flags_string}</entry></row>\n";
 
             $desc .= &MakeDeprecationNote($symbol);
 
