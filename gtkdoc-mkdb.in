@@ -3696,14 +3696,14 @@ sub GetArgs {
             my $default_output = CreateValidSGML ($default);
 
             if ($type eq "GtkString") {
-                $type = "char*";
+                $type = "char&#160;*";
             }
             if ($type eq "GtkSignal") {
                 $type = "GtkSignalFunc, gpointer";
                 $type_output = &MakeXRef ("GtkSignalFunc") . ", "
                     . &MakeXRef ("gpointer");
             } elsif ($type =~ m/^(\w+)\*$/) {
-                $type_output = &MakeXRef ($1, &tagify($1, "type")) . "*";
+                $type_output = &MakeXRef ($1, &tagify($1, "type")) . "&#160;*";
             } else {
                 $type_output = &MakeXRef ($type, &tagify($type, "type"));
             }
