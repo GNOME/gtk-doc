@@ -183,6 +183,16 @@ div.informaltable table td, div.informaltable table th
   color: #555753;
 }
 
+.struct_member_name
+{
+  text-align: right;
+}
+
+.struct_member_annotations
+{
+  color: #555753;
+}
+
 div.table table
 {
   border-collapse: collapse;
@@ -320,6 +330,12 @@ h2 .extralinks, h3 .extralinks
 {
   /* tango:aluminium 5 */
   color: #555753;
+  font-weight: normal;
+}
+
+.structfield
+{
+  font-style: normal;
   font-weight: normal;
 }
 

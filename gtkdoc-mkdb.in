@@ -1704,22 +1704,31 @@ sub OutputStruct {
         my $missing_parameters = "";
         my $unused_parameters = "";
 
-        $desc .= "<variablelist role=\"struct\">\n";
+        $desc .= <<EOF;
+<refsect3 role="struct_members">\n<title>Members</title>
+<informaltable role="struct_members_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="name" colwidth="300px"/>
+<colspec colname="description"/>
+<colspec colname="annotations" colwidth="200px"/>
+<tbody>
+EOF
+
         while (@fields) {
             my $field_name = shift @fields;
             my $text = shift @fields;
             my $field_descr = $field_descrs{$field_name};
             my $param_annotations = "";
 
-            $desc .= "<varlistentry><term>$text</term>\n";
+            $desc .= "<row><entry role=\"struct_member_name\"><para>$text</para></entry>\n";
             if (defined $field_descr) {
                 ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
                 $field_descr = &ConvertMarkDown($symbol, $field_descr);
-                $field_descr .= $param_annotations;
                 # trim
                 $field_descr =~ s/^(\s|\n)+//msg;
                 $field_descr =~ s/(\s|\n)+$//msg;
                 $desc .= "<listitem>$field_descr</listitem>\n";
+                $desc .= "<entry role=\"struct_member_description\">$field_descr</entry>\n<entry role=\"struct_member_annotations\">$param_annotations</entry>\n";
                 delete $field_descrs{$field_name};
             } else {
                 &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
@@ -1729,11 +1738,11 @@ sub OutputStruct {
                 } else {
                     $missing_parameters = $field_name;
                 }
-                $desc .= "<listitem />\n";
+                $desc .= "<entry /><entry />\n";
             }
-            $desc .= "</varlistentry>\n";
+            $desc .= "</row>\n";
         }
-        $desc .= "</variablelist>";
+        $desc .= "</tbody></tgroup></informaltable>\n</refsect3>\n";
         foreach my $field_name (keys %field_descrs) {
             &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                 "Field description for $symbol"."::"."$field_name is not used from source code comment block.");
