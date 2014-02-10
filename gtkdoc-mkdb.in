@@ -2297,12 +2297,11 @@ sub OutputParamDescriptions {
 
             ($param_desc,$param_annotations) = & ExpandAnnotation($symbol, $param_desc);
             $param_desc = &ConvertMarkDown($symbol, $param_desc);
-            $param_desc .= $param_annotations;
             # trim
             $param_desc =~ s/^(\s|\n)+//msg;
             $param_desc =~ s/(\s|\n)+$//msg;
             if ($param_name eq "Returns") {
-                $returns = "$param_desc";
+                $returns = "$param_desc\n<para>$param_annotations</para>";
             } elsif ($param_name eq "void") {
                 #print "!!!! void in params for $symbol?\n";
             } else {
@@ -2320,7 +2319,7 @@ sub OutputParamDescriptions {
                     }
                 }
                 if($param_desc ne "") {
-                    $params_desc .= "<varlistentry><term><parameter>$param_name</parameter>&#160;:</term>\n<listitem>$param_desc</listitem></varlistentry>\n";
+                    $params_desc .= "<row><entry role=\"parameter_name\"><para>$param_name</para></entry>\n<entry role=\"parameter_description\">$param_desc</entry>\n<entry role=\"parameter_annotations\">$param_annotations</entry></row>\n";
                     $num_params++;
                 }
             }
@@ -2337,24 +2336,31 @@ sub OutputParamDescriptions {
 
         # Signals have an implicit user_data parameter which we describe.
         if ($symbol_type eq "SIGNAL") {
-            $params_desc .= "<varlistentry><term><parameter>user_data</parameter>&#160;:</term>\n<listitem><simpara>user data set when the signal handler was connected.</simpara></listitem></varlistentry>\n";
+            $params_desc .= "<row><entry role=\"parameter_name\"><simpara>user_data</simpara></entry>\n<entry role=\"parameter_description\"><simpara>user data set when the signal handler was connected.</simpara></entry>\n<entry role=\"parameter_annotations\"></entry></row>\n";
         }
 
         # Start a table if we need one.
-        if ($params_desc || $returns) {
-            $output .= "<variablelist role=\"params\">\n";
-            if ($params_desc ne "") {
-                #$output .= "<varlistentry><term>Parameters:</term><listitem></listitem></varlistentry>\n";
-                $output .= $params_desc;
-            }
+        if ($params_desc ne "") {
+          $output .= <<EOF;
+<refsect3 role="parameters">\n<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="name" colwidth="150px"/>
+<colspec colname="description"/>
+<colspec colname="annotations" colwidth="200px"/>
+<tbody>
+EOF
+          $output .= $params_desc;
+          $output .= "</tbody></tgroup></informaltable>\n</refsect3>";
+        }
 
-            # Output the returns info last
-            if ($returns) {
-                $output .= "<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem>$returns</listitem></varlistentry>\n";
-            }
-
-            # Finish the table.
-            $output .= "</variablelist>";
+        # Output the returns info last
+        if ($returns ne "") {
+          $output .= <<EOF;
+<refsect3 role=\"returns\">\n<title>Returns</title>
+EOF
+          $output .= $returns;
+          $output .= "\n</refsect3>";
         }
 
         # remember missing/unused parameters (needed in tmpl-free build)
