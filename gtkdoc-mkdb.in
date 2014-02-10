@@ -2021,18 +2021,27 @@ sub OutputEnum {
     my $missing_parameters = "";
     my $unused_parameters = "";
 
-    $desc .= "<variablelist role=\"enum\">\n";
+    $desc .= <<EOF;
+<refsect3 role="enum_members">\n<title>Members</title>
+<informaltable role="enum_members_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="name" colwidth="300px"/>
+<colspec colname="description"/>
+<colspec colname="annotations" colwidth="200px"/>
+<tbody>
+EOF
+
     for my $field_name (@fields) {
         my $field_descr = $field_descrs{$field_name};
         my $param_annotations = "";
 
         $id = &CreateValidSGMLID ($field_name);
         $condition = &MakeConditionDescription ($field_name);
-        $desc .= "<varlistentry id=\"$id\" role=\"constant\"$condition>\n<term><literal>$field_name</literal></term>\n";
+        $desc .= "<row role=\"constant\"><entry role=\"enum_member_name\"><para id=\"$id\">$field_name</para></entry>\n";
         if (defined $field_descr) {
             ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
             $field_descr = &ConvertMarkDown($symbol, $field_descr);
-            $desc .= "<listitem>$field_descr$param_annotations</listitem>\n";
+            $desc .= "<entry role=\"enum_member_description\">$field_descr</entry>\n<entry role=\"enum_member_annotations\">$param_annotations</entry>\n";
             delete $field_descrs{$field_name};
         } else {
             if ($found) {
@@ -2044,11 +2053,11 @@ sub OutputEnum {
                     $missing_parameters = $field_name;
                 }
             }
-            $desc .= "<listitem />\n";
+            $desc .= "<entry /><entry />\n";
         }
-        $desc .= "</varlistentry>\n";
+        $desc .= "</row>\n";
     }
-    $desc .= "</variablelist>";
+    $desc .= "</tbody></tgroup></informaltable>\n</refsect3>";
     foreach my $field_name (keys %field_descrs) {
         &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
             "Value description for $symbol"."::"."$field_name is not used from source code comment block.");
