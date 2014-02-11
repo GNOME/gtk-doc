@@ -176,6 +176,22 @@ div.informaltable table td, div.informaltable table th
   color: #555753;
 }
 
+.function_type a,
+.function_type a:visited,
+.function_type a:hover,
+.property_type a,
+.property_type a:visited,
+.property_type a:hover,
+.signal_type a,
+.signal_type a:visited,
+.signal_type a:hover
+.signal_flags a,
+.signal_flags a:visited,
+.signal_flags a:hover
+{
+ color: #729fcf;
+}
+
 div.table table
 {
   border-collapse: collapse;
