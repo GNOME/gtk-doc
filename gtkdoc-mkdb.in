@@ -2228,9 +2228,9 @@ sub OutputFunction {
             . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
     }
 
-    my $synop = "<row><entry role=\"function_type\">${ret_type_output}</entry><entry role=\"function_name\">${symbol_output}&#160;()</entry></row>\n";
+    my $synop = "<row><entry role=\"function_type\">${ret_type_output}</entry><entry role=\"function_name\">${symbol_output}&#160;<phrase role=\"c_punctuation\">()</phrase></entry></row>\n";
 
-    my $desc = "<refsect2 id=\"$id\" role=\"function\"$condition>\n<title>${symbol}&#160;()</title>\n";
+    my $desc = "<refsect2 id=\"$id\" role=\"function\"$condition>\n<title>${symbol}&#160;<phrase role=\"c_punctuation\">()</phrase></title>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
     $desc .= "\n";
