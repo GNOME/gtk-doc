@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2014-02-09 16:53+0000\n"
-"PO-Revision-Date: 2014-02-10 14:25+0100\n"
+"POT-Creation-Date: 2014-02-10 13:30+0000\n"
+"PO-Revision-Date: 2014-02-11 10:35+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -872,11 +872,6 @@ msgstr "Integración con automake"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:517
-#| msgid ""
-#| "First copy the <filename>Makefile.am</filename> from the examples "
-#| "subdirectory of the gtkdoc-sources to your project's API documentation "
-#| "directory ( <filename class=\"directory\">./docs/reference/&lt;package&gt;"
-#| "</filename>). If you have multiple doc-packages repeat this for each one."
 msgid ""
 "First copy the <filename>Makefile.am</filename> from the <filename class="
 "\"directory\">examples</filename> sub directory of the <ulink url=\"https://"
@@ -1458,15 +1453,14 @@ msgstr ""
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:831
-#, fuzzy
 #| msgid ""
-#| "Since GTK-Doc-1.18 the tool supports a subset or the <ulink url=\"http://"
+#| "Since GTK-Doc-1.18 the tool supports a subset of the <ulink url=\"http://"
 #| "daringfireball.net/projects/markdown/\">markdown language</ulink>. One "
 #| "can use it for sub-headings and simple itemized lists. On older GTK-Doc "
 #| "versions the content will be rendered as it (the list items will appear "
 #| "in one line separated by dashes). <_:example-1/>"
 msgid ""
-"Since GTK-Doc-1.18 the tool supports a subset or the <ulink url=\"http://"
+"Since GTK-Doc-1.18 the tool supports a subset of the <ulink url=\"http://"
 "daringfireball.net/projects/markdown/\">markdown language</ulink>. The "
 "support has improved a lot with version 1.20. On older GTK-Doc versions the "
 "content will be rendered as it (the list items will appear in one line "
@@ -1474,10 +1468,9 @@ msgid ""
 msgstr ""
 "Desde GTK-Doc-1.18 la herramienta soporta un subconjunto de <ulink url="
 "\"http://daringfireball.net/projects/markdown/\">lenguajes de marcado</"
-"ulink>. Se pueden usar para títulos secundarios y listas de elementos "
-"simples. En versiones más antiguas de GTK-Doc el contenido se puede "
-"renderizar como tal (la lista de elementos aparecerá en una línea separada "
-"por guiones). <_:example-1/>"
+"ulink>. En la versión 1.20 se ha mejorado ucho este soporte. En versiones "
+"más antiguas de GTK-Doc el contenido se puede renderizar como tal (la lista "
+"de elementos aparecerá en una línea separada por guiones). <_:example-1/>"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:858
@@ -1486,6 +1479,9 @@ msgid ""
 "url=\"http://git.gnome.org/browse/gtk-doc/tree/tests\">gtk-doc test suite</"
 "ulink>."
 msgstr ""
+"Se pueden encontrar más ejemplos de las etiquetas de marcado soportadas en "
+"el <ulink url=\"http://git.gnome.org/browse/gtk-doc/tree/tests\">conjunto de "
+"pruebas de gtk-doc</ulink>."
 
 #. (itstool) path: tip/para
 #: C/index.docbook:864
@@ -2968,7 +2964,6 @@ msgstr ""
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:1717
-#, fuzzy
 #| msgid ""
 #| "If the project is GObject based, one can also look into the files "
 #| "produced by the object scanner: <filename>&lt;package&gt;.args.txt</"
@@ -2993,14 +2988,13 @@ msgstr ""
 "archivos producidos por el analizador de objetos: <filename>&lt;paquete&gt;."
 "args.txt</filename>, <filename>&lt;paquete&gt;.hierarchy.txt</filename>, "
 "<filename>&lt;paquete&gt;.interfaces.txt</filename>, <filename>&lt;"
-"paquete&gt;.prerequisites.txt</filename> and <filename>&lt;paquete&gt;."
-"signals.txt</filename>. Si faltan símbolos en cualquiera de ellos, puede "
-"hacer que gtkdoc guarde el análisis de archivos para futuros análisis, pero "
+"paquete&gt;.prerequisites.txt</filename> y <filename>&lt;paquete&gt;.signals."
+"txt</filename>. Si faltan símbolos en cualquiera de ellos, puede hacer que "
+"GTK-Doc guarde el análisis de archivos para futuros análisis, pero "
 "ejecutándolo como <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:1732
-#| msgid "Editing the master document"
 msgid "Modernizing the documentation"
 msgstr "Modernizar la documentación"
 
@@ -3010,16 +3004,16 @@ msgid ""
 "GTK-Doc has been around for quite some time. In this section we list new "
 "features together with the version since when it is available."
 msgstr ""
+"GTK-Doc ha existido durante mucho tiempo. En esta sección se listan las "
+"características nuevas junto con la versión desde la que están disponibles."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1740
-#| msgid "GTK-Doc Manual"
 msgid "GTK-Doc 1.9"
 msgstr "GTK-Doc 1.9"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1742
-#, fuzzy
 #| msgid ""
 #| "Is the new page xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}"
 #| "</filename>."
@@ -3027,8 +3021,8 @@ msgid ""
 "When using xml instead of sgml, one can actually name the master document "
 "<filename>&lt;package&gt;-docs.xml</filename>."
 msgstr ""
-"Es la página nueva «xi:included» desde <filename>&lt;package&gt;-docs.{xml,"
-"sgml}</filename>."
+"Al usar XML en lugar de SGML, actualmente se puede nombrar el documento "
+"maestro <filename>&lt;paquete&gt;-docs.xml</filename>."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1747
@@ -3037,11 +3031,19 @@ msgid ""
 "<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
 "package&gt;-sections.txt</filename> is autogenerated and can be removed from "
 "the vcs. This only works nicely for projects that have a very regular "
-"structure (e.g. each .{c,h} pair will create new section. If one organize a "
+"structure (e.g. each .{c,h} pair will create new section). If one organize a "
 "project close to that updating a manually maintained section file can be as "
 "simple as running <code>meld &lt;package&gt;-decl-list.txt &lt;package&gt;-"
 "sections.txt</code>."
 msgstr ""
+"Esta versión soporta <option>SCAN_OPTIONS=--rebuild-sections</option> en "
+"<filename>Makefile.am</filename>. Cuando está activada, el archivo "
+"<filename>&lt;paquete&gt;-sections.txt</filename> se genera automáticamente "
+"y se puede quitar del control de versiones. Esto sólo funciona en proyectos "
+"que tienen una estructura regular (ej. cada pareja .{c,h} creará una sección "
+"nueva). Si se organiza un proyecto parecido a esto, actualizar una sección "
+"mantenida manualmente puede ser tan sencillo como ejecutar <code>meld &lt;"
+"paquete&gt;-decl-list.txt &lt;paquete&gt;-sections.txt</code>."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1758
@@ -3052,10 +3054,15 @@ msgid ""
 "to not use the extra tmpl build step at all, by using <option>--flavour no-"
 "tmpl</option> in <filename>configure.ac</filename>."
 msgstr ""
+"La versión 1.18 ya introdujo la sintaxis para documentar secciones en las "
+"fuentes en lugar de tener que hacerlo en archivos separados bajo <filename "
+"class=\"directory\">tmpl</filename>. Esta versión añade opciones para "
+"cambiar todo el módulo «doc» del documento para que no realice el paso de "
+"construcción de tmpl adicional, usando <option>--flavour no-tmpl</option> en "
+"<filename>configure.ac</filename>."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1768
-#| msgid "GTK-Doc Manual"
 msgid "GTK-Doc 1.10"
 msgstr "GTK-Doc 1.10"
 
@@ -3079,7 +3086,6 @@ msgstr ""
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1781
-#| msgid "GTK-Doc Manual"
 msgid "GTK-Doc 1.16"
 msgstr "GTK-Doc 1.16"
 
@@ -3128,7 +3134,6 @@ msgstr ""
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1803
-#| msgid "GTK-Doc Manual"
 msgid "GTK-Doc 1.20"
 msgstr "GTK-Doc 1.20"
 
@@ -3140,6 +3145,11 @@ msgid ""
 "lot on this and add a lot more styles. The section that explains the <link "
 "linkend=\"documenting_syntax\">comment syntax</link> has all the details."
 msgstr ""
+"La versión 1.18 incluía soporte para cierto marcado inicial. Usar el marcado "
+"en los comentarios del documento es menos intrusivo que escribir el XML del "
+"«docbook». Esta versión mejora mucho esto y añade muchos más estilos. La "
+"sección que explica la <link linkend=\"documenting_syntax\">sintaxis de los "
+"comentarios</link> contiene todos los detalles."
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:1816
