@@ -152,56 +152,24 @@ div.informaltable table td, div.informaltable table th
   vertical-align: top;
 }
 
-.function_type
-{
-  text-align: right;
-}
-
-.property_type
-{
-  text-align: right;
-}
-
-.property_flags
-{
-  color: #555753;
-}
-
-.signal_type
-{
-  text-align: right;
-}
-
-.signal_flags
-{
-  color: #555753;
-}
-
-.parameter_name
-{
-  text-align: right;
-}
-
-.enum_member_annotations
-{
-  color: #555753;
-}
-
-.struct_member_name
-{
-  text-align: right;
-}
-
-.struct_member_annotations
-{
-  color: #555753;
-}
-
+.function_type,
+.property_type,
+.signal_type,
+.parameter_name,
+.struct_member_name,
 .union_member_name
 {
   text-align: right;
 }
 
+/* dim non-primary columns */
+.function_type,
+.property_type,
+.signal_type,
+.property_flags,
+.signal_flags,
+.enum_member_annotations,
+.struct_member_annotations,
 .union_member_annotations
 {
   color: #555753;
