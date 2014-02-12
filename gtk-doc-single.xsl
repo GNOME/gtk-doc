@@ -240,97 +240,65 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
             <a href="#" class="shortcut">Top</a>
             <xsl:if test="count($sections) > 0">
               <xsl:if test="count($sect_desc) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_description">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.description" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='desc']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
               <xsl:if test="count($sect_object_hierarchy) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_hierarchy">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.object-hierarchy" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='object_hierarchy']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
               <xsl:if test="count($sect_impl_interfaces) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_interfaces">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.implemented-interfaces" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='impl_interfaces']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
               <xsl:if test="count($sect_prerequisites) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_prerequisites">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.prerequisites" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='prerequisites']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
               <xsl:if test="count($sect_derived_interfaces) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_derived_interfaces">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.derived-interfaces" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='derived_interfaces']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
               <xsl:if test="count($sect_implementations) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_implementations">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.implementations" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='implementations']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
               <xsl:if test="count($sect_properties) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_properties">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.properties" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='properties']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
               <xsl:if test="count($sect_child_properties) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_child_properties">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.child-properties" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='child_properties']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
               <xsl:if test="count($sect_style_properties) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_style_properties">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.style-properties" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='style_properties']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
               <xsl:if test="count($sect_signal_proto) > 0">
-                &#160;<span class="dim">|</span>&#160;
+                <span id="nav_signals">&#160;<span class="dim">|</span>&#160;
                 <a href="#{$section_id}.signals" class="shortcut">
                   <xsl:value-of select="./refsect1[@role='signal_proto']/title"/>
-                </a>
+                </a></span>
               </xsl:if>
-              <!--
-              <xsl:if test="count($sect_details) > 0">
-                <a href="#details" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='details']/title"/>
-                </a>
-                &#160;<span class="dim">|</span>&#160;
-              </xsl:if>
-              <xsl:if test="count($sect_property_details) > 0">
-                <a href="#property_details" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='property_details']/title"/>
-                </a>
-                &#160;<span class="dim">|</span>&#160;
-              </xsl:if>
-              <xsl:if test="count($sect_child_property_details) > 0">
-                <a href="#child_property_details" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='property_child_details']/title"/>
-                </a>
-                &#160;<span class="dim">|</span>&#160;
-              </xsl:if>
-              <xsl:if test="count($sect_style_property_details) > 0">
-                <a href="#style_property_details" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='style_property_details']/title"/>
-                </a>
-                &#160;<span class="dim">|</span>&#160;
-              </xsl:if>
-              <xsl:if test="count($sect_signals) > 0">
-                <a href="#signals" class="shortcut">
-                  <xsl:value-of select="./refsect1[@id='signals']/title"/>
-                </a>
-                &#160;<span class="dim">|</span>&#160;
-              </xsl:if>
-              -->
             </xsl:if>
           </td>
           <xsl:choose>
