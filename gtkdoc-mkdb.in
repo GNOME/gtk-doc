@@ -3765,7 +3765,6 @@ sub GetArgs {
             }
 
             my $pad1 = " " x (24 - length ($name));
-            my $pad2 = " " x (20 - length ($type));
 
             my $arg_synop = "<row><entry role=\"property_type\">$type_output</entry><entry role=\"property_name\"><link linkend=\"$id\">$name</link></entry><entry role=\"property_flags\">$flags_string</entry></row>\n";
             my $arg_desc = "<refsect2 id=\"$id\" role=\"property\"><title>The <literal>“$name”</literal> $kind</title>\n";
@@ -3773,7 +3772,11 @@ sub GetArgs {
             $arg_desc .= "\n";
             $arg_desc .= OutputSymbolExtraLinks($symbol);
 
-            $arg_desc .= "<programlisting>  “$name”$pad1 $type_output $pad2 : $flags_string</programlisting>\n";
+            $arg_desc .= "<programlisting>  “$name”$pad1 $type_output</programlisting>\n";
+            if ($flags_string) {
+              $arg_desc  .= "<para>Flags: $flags_string</para>\n";
+            }
+
             $arg_desc .= &MakeDeprecationNote($symbol);
             $arg_desc .= $blurb;
             if ($range ne "") {
