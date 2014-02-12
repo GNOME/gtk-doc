@@ -3528,8 +3528,6 @@ sub GetSignals {
             my $symbol = "${object}::${name}";
             my $id = &CreateValidSGMLID ("$object-$name");
 
-            my $pad = ' ' x (46 - length($name));
-
             $desc .= "<refsect2 id=\"$id\" role=\"signal\"><title>The <literal>“$name”</literal> signal</title>\n";
             $desc .= MakeIndexterms($symbol, $id);
             $desc .= "\n";
@@ -3543,12 +3541,12 @@ sub GetSignals {
             my $pointer = $3;
             my $xref = &MakeXRef ($type, &tagify($type, "returnvalue"));
 
-            my $ret_type_len = length ($type_modifier) + length ($pointer)
-                + length ($type);
-            my $ret_type_output = "$type_modifier$xref$pointer"
-                . (' ' x ($RETURN_TYPE_FIELD_WIDTH - $ret_type_len));
+            my $ret_type_output = "$type_modifier$xref$pointer";
+            my $callback_name = "user_function";
+            $desc  .= "${ret_type_output}\n${callback_name} (";
 
-            $desc  .= "${ret_type_output}user_function " . &MakeReturnField("") . " (";
+            my $indentation = ' ' x (length($callback_name) + 2);
+            my $pad = $indentation;
 
             my $sourceparams = $SourceSymbolParams{$symbol};
             my @params = split ("\n", $SignalPrototypes[$i]);
@@ -3585,7 +3583,7 @@ sub GetSignals {
                             $xref = &MakeXRef ($type, &tagify($type, "type"));
                             $pad = ' ' x ($type_len - length($type) - length($pointer));
                             $desc .= "$xref$pad $pointer${param_name},\n";
-                            $desc .= (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
+                            $desc .= $indentation;
                         }
                     } else {
                         &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
@@ -3629,14 +3627,10 @@ sub GetSignals {
               }
             }
 
+            $desc  .= "</programlisting>\n";
             if ($flags_string)
               {
-                $pad = ' ' x (5 + $name_len - length("user_data"));
-                $desc  .= "$pad : $flags_string</programlisting>\n";
-              }
-            else
-              {
-                $desc  .= "</programlisting>\n";
+                $desc  .= "<para>Flags: $flags_string</para>\n";
               }
 
             $synop .= "<row><entry role=\"signal_type\">${ret_type_output}</entry><entry role=\"signal_name\"><link linkend=\"$id\">${name}</link></entry><entry role=\"signal_flags\">${flags_string}</entry></row>\n";
