@@ -1153,7 +1153,7 @@ describe_default (GParamSpec *spec)
             break;
 
           if (acc->len > 0)
-            g_string_append (acc, "|");
+            g_string_append (acc, " | ");
           g_string_append (acc, value->value_name);
 
           default_value &= ~value->value;
