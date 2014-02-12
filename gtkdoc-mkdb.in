@@ -381,6 +381,7 @@ if (! -e $SGML_OUTPUT_DIR) {
 # Function and other declaration output settings.
 my $RETURN_TYPE_FIELD_WIDTH = 20;
 my $SYMBOL_FIELD_WIDTH = 36;
+my $MAX_SYMBOL_FIELD_WIDTH = 40;
 my $SIGNAL_FIELD_WIDTH = 16;
 my $PARAM_FIELD_COUNT = 2;
 
@@ -2192,22 +2193,10 @@ sub OutputFunction {
     $pointer =~ s/G_CONST_RETURN/const/g;
     $pointer =~ s/^\s+/&#160;/g;
 
-    my $ret_type_len = length ($start) + length ($type_modifier)+ length ($type)
-        + length ($pointer);
     my $ret_type_output;
+    $ret_type_output = "$start$type_modifier$xref$pointer\n";
+
     my $symbol_len;
-    if ($ret_type_len < $RETURN_TYPE_FIELD_WIDTH) {
-        $ret_type_output = "$start$type_modifier$xref$pointer"
-            . (' ' x ($RETURN_TYPE_FIELD_WIDTH - $ret_type_len));
-        $symbol_len = 0;
-    } else {
-        #$ret_type_output = "$start$type_modifier$xref$pointer\n" . (' ' x $RETURN_TYPE_FIELD_WIDTH);
-
-        $ret_type_output = "$start$type_modifier$xref$pointer ";
-        $symbol_len = $ret_type_len + 1 - $RETURN_TYPE_FIELD_WIDTH;
-    }
-    #@TRACE@("$symbol ret type output: [$ret_type_output], $ret_type_len");
-
     $symbol_len += length ($symbol);
     my $char1 = my $char2 = my $char3 = "";
     if ($symbol_type eq 'USER_FUNCTION') {
@@ -2218,15 +2207,15 @@ sub OutputFunction {
     }
 
     my ($symbol_output, $symbol_desc_output);
-    if ($symbol_len < $SYMBOL_FIELD_WIDTH) {
-        $symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3";
-        $symbol_desc_output = "$char1$char2$symbol$char3"
-            . (' ' x ($SYMBOL_FIELD_WIDTH - $symbol_len));
+    $symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3";
+    if ($symbol_len < $MAX_SYMBOL_FIELD_WIDTH) {
+        $symbol_desc_output = "$char1$char2$symbol$char3 ";
     } else {
-        $symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3";
+        $symbol_len = $MAX_SYMBOL_FIELD_WIDTH;
         $symbol_desc_output = "$char1$char2$symbol$char3\n"
-            . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH));
+          . (' ' x $symbol_len);
     }
+    $symbol_len++;
 
     my $synop = "<row><entry role=\"function_type\">${ret_type_output}</entry><entry role=\"function_name\">${symbol_output}&#160;<phrase role=\"c_punctuation\">()</phrase></entry></row>\n";
 
@@ -2250,8 +2239,8 @@ sub OutputFunction {
             $desc  .= "$field_name";
         } else {
             $desc  .= ",\n"
-                . (' ' x ($SYMBOL_FIELD_WIDTH + $RETURN_TYPE_FIELD_WIDTH))
-                . " $field_name";
+                . (' ' x $symbol_len)
+                . "$field_name";
         }
 
     }
