@@ -2196,11 +2196,11 @@ sub OutputFunction {
     my $ret_type_output;
     $ret_type_output = "$start$type_modifier$xref$pointer\n";
 
-    my $symbol_len;
-    $symbol_len += length ($symbol);
+    my $indent_len;
+    $indent_len += length ($symbol);
     my $char1 = my $char2 = my $char3 = "";
     if ($symbol_type eq 'USER_FUNCTION') {
-        $symbol_len += 3;
+        $indent_len += 3;
         $char1 = "(";
         $char2 = "*";
         $char3 = ")";
@@ -2208,14 +2208,14 @@ sub OutputFunction {
 
     my ($symbol_output, $symbol_desc_output);
     $symbol_output = "$char1<link linkend=\"$id\">$char2$symbol</link>$char3";
-    if ($symbol_len < $MAX_SYMBOL_FIELD_WIDTH) {
+    if ($indent_len < $MAX_SYMBOL_FIELD_WIDTH) {
         $symbol_desc_output = "$char1$char2$symbol$char3 ";
     } else {
-        $symbol_len = $MAX_SYMBOL_FIELD_WIDTH;
+        $indent_len = $MAX_SYMBOL_FIELD_WIDTH - 8;
         $symbol_desc_output = "$char1$char2$symbol$char3\n"
-          . (' ' x $symbol_len);
+          . (' ' x $indent_len);
     }
-    $symbol_len++;
+    $indent_len++;
 
     my $synop = "<row><entry role=\"function_type\">${ret_type_output}</entry><entry role=\"function_name\">${symbol_output}&#160;<phrase role=\"c_punctuation\">()</phrase></entry></row>\n";
 
@@ -2239,7 +2239,7 @@ sub OutputFunction {
             $desc  .= "$field_name";
         } else {
             $desc  .= ",\n"
-                . (' ' x $symbol_len)
+                . (' ' x $indent_len)
                 . "$field_name";
         }
 
