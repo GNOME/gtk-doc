@@ -2542,18 +2542,19 @@ sub OutputSGMLFile {
     $year += 1900;
 
     my $include_output = "";
-    my $include;
-    foreach $include (split (/,/, $includes)) {
+    if ($includes) {
+      $include_output .= "<refsect1 id=\"$section_id.includes\"><title>Includes</title><synopsis>";
+      my $include;
+      foreach $include (split (/,/, $includes)) {
         if ($include =~ m/^\".+\"$/) {
-            $include_output .= "#include ${include}\n";
+          $include_output .= "#include ${include}\n";
         }
         else {
-            $include =~ s/^\s+|\s+$//gs;
-            $include_output .= "#include &lt;${include}&gt;\n";
+          $include =~ s/^\s+|\s+$//gs;
+          $include_output .= "#include &lt;${include}&gt;\n";
         }
-    }
-    if ($include_output ne '') {
-        $include_output = "\n$include_output\n";
+      }
+      $include_output .= "</synopsis></refsect1>\n";
     }
 
     my $extralinks = OutputSectionExtraLinks($title,"Section:$file");
@@ -2595,6 +2596,7 @@ $image</refmiscinfo>
 </refnamediv>
 $stability
 $$functions_synop$$args_synop$$signals_synop$object_anchors$$other_synop$$hierarchy$$prerequisites$$derived$$interfaces$$implementations
+$include_output
 <refsect1 id="$section_id.description" role="desc">
 <title role="desc.title">Description</title>
 $extralinks$long_desc
