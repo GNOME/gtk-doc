@@ -303,13 +303,14 @@ dl.toc > dt
 .informalfigure,
 .figure
 {
-  margin: 2em;
+  margin: 1em;
 }
 
 .informalexample,
 .example
 {
-  margin: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .warning
@@ -421,6 +422,11 @@ h2 .extralinks, h3 .extralinks
   margin-top: 0px;
   margin-bottom: 0px;
   padding: 0.5em;
+}
+.listing_lines {
+  /* this just adds visual clutter and
+     takes precious room from small screens */
+  display: none;
 }
 .listing_lines {
   /* tango:sky blue 0.5 */
