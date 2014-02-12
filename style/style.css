@@ -113,9 +113,19 @@ body
   #nav_glossary { display: none; }
   .property_flags { display: none; }
   .signal_flags { display: none; }
+  .parameter_annotations { display: none; }
   .enum_member_annotations { display: none; }
   .struct_member_annotations { display: none; }
   .union_member_annotations { display: none; }
+  /* now that a column is hidden, optimize space */
+  col.parameters_name { width: auto; }
+  col.parameters_description { width: auto; }
+  col.struct_members_name { width: auto; }
+  col.struct_members_description { width: auto; }
+  col.enum_members_name { width: auto; }
+  col.enum_members_description { width: auto; }
+  col.union_members_name { width: auto; }
+  col.union_members_description { width: auto; }
 }
 @media print {
   table.navigation {
@@ -196,6 +206,7 @@ div.informaltable table td, div.informaltable table th
 .signal_type,
 .property_flags,
 .signal_flags,
+.parameter_annotations,
 .enum_member_annotations,
 .struct_member_annotations,
 .union_member_annotations

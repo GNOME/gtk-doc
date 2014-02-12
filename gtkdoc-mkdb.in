@@ -687,9 +687,9 @@ sub OutputSGML {
 <title role="signal_proto.title">Signals</title>
 <informaltable frame="none">
 <tgroup cols="3">
-<colspec colname="return" colwidth="150px"/>
-<colspec colname="name" colwidth="300px"/>
-<colspec colname="flags" colwidth="200px"/>
+<colspec colname="signals_return" colwidth="150px"/>
+<colspec colname="signals_name" colwidth="300px"/>
+<colspec colname="signals_flags" colwidth="200px"/>
 <tbody>
 ${signals_synop}
 </tbody>
@@ -714,9 +714,9 @@ EOF
 <title role="properties.title">Properties</title>
 <informaltable frame="none">
 <tgroup cols="3">
-<colspec colname="type" colwidth="150px"/>
-<colspec colname="name" colwidth="300px"/>
-<colspec colname="flags" colwidth="200px"/>
+<colspec colname="properties_type" colwidth="150px"/>
+<colspec colname="properties_name" colwidth="300px"/>
+<colspec colname="properties_flags" colwidth="200px"/>
 <tbody>
 ${args_synop}
 </tbody>
@@ -741,9 +741,9 @@ EOF
 <title role="child_properties.title">Child Properties</title>
 <informaltable frame="none">
 <tgroup cols="3">
-<colspec colname="type" colwidth="150px"/>
-<colspec colname="name" colwidth="300px"/>
-<colspec colname="flags" colwidth="200px"/>
+<colspec colname="child_properties_type" colwidth="150px"/>
+<colspec colname="child_properties_name" colwidth="300px"/>
+<colspec colname="child_properties_flags" colwidth="200px"/>
 <tbody>
 ${child_args_synop}
 </tbody>
@@ -768,9 +768,9 @@ EOF
 <title role="style_properties.title">Style Properties</title>
 <informaltable frame="none">
 <tgroup cols="3">
-<colspec colname="type" colwidth="150px"/>
-<colspec colname="name" colwidth="300px"/>
-<colspec colname="flags" colwidth="200px"/>
+<colspec colname="style_properties_type" colwidth="150px"/>
+<colspec colname="style_properties_name" colwidth="300px"/>
+<colspec colname="style_properties_flags" colwidth="200px"/>
 <tbody>
 ${style_args_synop}
 </tbody>
@@ -845,8 +845,8 @@ EOF
 <title role="functions_proto.title">Functions</title>
 <informaltable pgwide="1" frame="none">
 <tgroup cols="2">
-<colspec colname="return" colwidth="150px"/>
-<colspec colname="name"/>
+<colspec colname="functions_return" colwidth="150px"/>
+<colspec colname="functions_name"/>
 <tbody>
 ${functions_synop}
 </tbody>
@@ -1709,9 +1709,9 @@ sub OutputStruct {
 <refsect3 role="struct_members">\n<title>Members</title>
 <informaltable role="struct_members_table" pgwide="1" frame="none">
 <tgroup cols="3">
-<colspec colname="name" colwidth="300px"/>
-<colspec colname="description"/>
-<colspec colname="annotations" colwidth="200px"/>
+<colspec colname="struct_members_name" colwidth="300px"/>
+<colspec colname="struct_members_description"/>
+<colspec colname="struct_members_annotations" colwidth="200px"/>
 <tbody>
 EOF
 
@@ -1870,9 +1870,9 @@ sub OutputUnion {
 <refsect3 role="union_members">\n<title>Members</title>
 <informaltable role="union_members_table" pgwide="1" frame="none">
 <tgroup cols="3">
-<colspec colname="name" colwidth="300px"/>
-<colspec colname="description"/>
-<colspec colname="annotations" colwidth="200px"/>
+<colspec colname="union_members_name" colwidth="300px"/>
+<colspec colname="union_members_description"/>
+<colspec colname="union_members_annotations" colwidth="200px"/>
 <tbody>
 EOF
 
@@ -2044,9 +2044,9 @@ sub OutputEnum {
 <refsect3 role="enum_members">\n<title>Members</title>
 <informaltable role="enum_members_table" pgwide="1" frame="none">
 <tgroup cols="3">
-<colspec colname="name" colwidth="300px"/>
-<colspec colname="description"/>
-<colspec colname="annotations" colwidth="200px"/>
+<colspec colname="enum_members_name" colwidth="300px"/>
+<colspec colname="enum_members_description"/>
+<colspec colname="enum_members_annotations" colwidth="200px"/>
 <tbody>
 EOF
 
@@ -2361,9 +2361,9 @@ sub OutputParamDescriptions {
 <refsect3 role="parameters">\n<title>Parameters</title>
 <informaltable role="parameters_table" pgwide="1" frame="none">
 <tgroup cols="3">
-<colspec colname="name" colwidth="150px"/>
-<colspec colname="description"/>
-<colspec colname="annotations" colwidth="200px"/>
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
 <tbody>
 EOF
           $output .= $params_desc;
