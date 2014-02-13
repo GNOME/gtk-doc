@@ -3736,18 +3736,26 @@ sub GetArgs {
             $arg_desc .= OutputSymbolExtraLinks($symbol);
 
             $arg_desc .= "<programlisting>  “$name”$pad1 $type_output</programlisting>\n";
-            if ($flags_string) {
-              $arg_desc  .= "<para>Flags: $flags_string</para>\n";
-            }
-
-            $arg_desc .= &MakeDeprecationNote($symbol);
             $arg_desc .= $blurb;
+            $arg_desc .= &MakeDeprecationNote($symbol);
+
+            $arg_desc .= <<EOF;
+<informaltable role="property_details_table" pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<tbody>
+EOF
+            if ($flags_string) {
+              $arg_desc  .= "<row><entry role=\"property_detail\">Flags</entry><entry>$flags_string</entry></row>\n";
+            }
             if ($range ne "") {
-                $arg_desc .= "<para>Allowed values: $range_output</para>\n";
+                $arg_desc .= "<row><entry role=\"property_detail\">Allowed values</entry><entry>$range_output</entry></row>\n";
             }
             if ($default ne "") {
-                $arg_desc .= "<para>Default value: $default_output</para>\n";
+                $arg_desc .= "<row><entry role=\"property_detail\">Default value</entry><entry>$default_output</entry></row>\n";
             }
+            $arg_desc .= "</tbody></tgroup></informaltable>\n";
             $arg_desc .= OutputSymbolTraits ($symbol);
             $arg_desc .= "</refsect2>\n";
 
