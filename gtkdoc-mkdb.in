@@ -862,8 +862,15 @@ EOF
                   $other_synop = <<EOF;
 <refsect1 id="$section_id.other" role="other_proto">
 <title role="other_proto.title">Types and Values</title>
-<synopsis>
-${other_synop}</synopsis>
+<informaltable role="enum_members_table" pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="name" colwidth="150px"/>
+<colspec colname="description"/>
+<tbody>
+${other_synop}
+</tbody>
+</tgroup>
+</informaltable>
 </refsect1>
 EOF
                 }
@@ -1378,7 +1385,7 @@ sub OutputSymbolTraits {
 }
 
 #############################################################################
-# Function    : Outpu{Symbol,Section}ExtraLinks
+# Function    : Output{Symbol,Section}ExtraLinks
 # Description : Returns extralinks for the symbol (if enabled).
 # Arguments   : $symbol - the name of the function/macro begin described.
 #############################################################################
@@ -1442,7 +1449,7 @@ sub OutputMacro {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
-    my $synop = &MakeReturnField("#define") . "<link linkend=\"$id\">$symbol</link>";
+    my $synop = "<row><entry role=\"define_keyword\">#define</entry><entry role=\"function_name\"><link linkend=\"$id\">$symbol</link>";
     my $desc;
 
     my @fields = ParseMacroDeclaration($declaration, \&CreateValidSGML);
@@ -1472,7 +1479,7 @@ sub OutputMacro {
         }
         $synop .= ")";
     }
-    $synop .= "\n";
+    $synop .= "</entry></row>\n";
 
     # Don't output the macro definition if is is a conditional macro or it
     # looks like a function, i.e. starts with "g_" or "_?gnome_", or it is
@@ -1532,8 +1539,8 @@ sub OutputTypedef {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
-    my $synop = &MakeReturnField("typedef") . "<link linkend=\"$id\">$symbol</link>;\n";
     my $desc = "<refsect2 id=\"$id\" role=\"typedef\"$condition>\n<title>$symbol</title>\n";
+    my $synop = "<row><entry role=\"c_punctuation\">typedef</entry><entry role=\"function_name\"><link linkend=\"$id\">$symbol</link></entry></row>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
     $desc .= "\n";
@@ -1593,16 +1600,17 @@ sub OutputStruct {
       $has_typedef = 1;
     }
 
-    my $synop;
+    my $type_output;
     my $desc;
     if ($has_typedef) {
         # For structs with typedefs we just output the struct name.
-        $synop = &MakeReturnField("") . "<link linkend=\"$id\">$symbol</link>;\n";
+        $type_output = "";
         $desc = "<refsect2 id=\"$id\" role=\"struct\"$condition>\n<title>$symbol</title>\n";
     } else {
-        $synop = &MakeReturnField("struct") . "<link linkend=\"$id\">$symbol</link>;\n";
+        $type_output = "struct";
         $desc = "<refsect2 id=\"$id\" role=\"struct\"$condition>\n<title>struct $symbol</title>\n";
     }
+    my $synop = "<row><entry role=\"datatype_keyword\">${type_output}</entry><entry role=\"function_name\"><link linkend=\"$id\">$symbol</link></entry></row>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
     $desc .= "\n";
@@ -1811,16 +1819,17 @@ sub OutputUnion {
       $has_typedef = 1;
     }
 
-    my $synop;
+    my $type_output;
     my $desc;
     if ($has_typedef) {
         # For unions with typedefs we just output the union name.
-        $synop = &MakeReturnField("") . "<link linkend=\"$id\">$symbol</link>;\n";
+        $type_output = "";
         $desc = "<refsect2 id=\"$id\" role=\"union\"$condition>\n<title>$symbol</title>\n";
     } else {
-        $synop = &MakeReturnField("union") . "<link linkend=\"$id\">$symbol</link>;\n";
+        $type_output = "union";
         $desc = "<refsect2 id=\"$id\" role=\"union\"$condition>\n<title>union $symbol</title>\n";
     }
+    my $synop = "<row><entry role=\"datatype_keyword\">${type_output}</entry><entry role=\"function_name\"><link linkend=\"$id\">$symbol</link></entry></row>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
     $desc .= "\n";
@@ -1961,7 +1970,7 @@ sub OutputEnum {
         $condition = &MakeConditionDescription ($symbol);
     }
 
-    my $synop = &MakeReturnField("enum") . "<link linkend=\"$id\">$symbol</link>;\n";
+    my $synop = "<row><entry role=\"datatype_keyword\">enum</entry><entry role=\"function_name\"><link linkend=\"$id\">$symbol</link></entry></row>\n";
     my $desc = "<refsect2 id=\"$id\" role=\"enum\"$condition>\n<title>enum $symbol</title>\n";
 
     $desc .= MakeIndexterms($symbol, $id);
@@ -2080,23 +2089,23 @@ sub OutputVariable {
     
     @TRACE@("ouputing variable: '$symbol' '$declaration'");
 
-    my $synop;
+    my $type_output;
     if ($declaration =~ m/^\s*extern\s+((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)(\s*)(const\s+)*([A-Za-z]\w*)\s*;/) {
         my $mod1 = defined ($1) ? $1 : "";
         my $ptr = defined ($3) ? $3 : "";
         my $space = defined ($4) ? $4 : "";
         my $mod2 = defined ($5) ? $5 : "";
-        $synop = &MakeReturnField("extern $mod1$ptr$space$mod2") . "<link linkend=\"$id\">$symbol</link>;\n";
+        $type_output = "extern $mod1$ptr$space$mod2";
     } elsif ($declaration =~ m/^\s*((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)(\s*)(const\s+)*([A-Za-z]\w*)\s*=/) {
         my $mod1 = defined ($1) ? $1 : "";
         my $ptr = defined ($3) ? $3 : "";
         my $space = defined ($4) ? $4 : "";
         my $mod2 = defined ($5) ? $5 : "";
-        $synop = &MakeReturnField("$mod1$ptr$space$mod2") . "<link linkend=\"$id\">$symbol</link>;\n";
-
+        $type_output = "$mod1$ptr$space$mod2";
     } else {
-        $synop = &MakeReturnField("extern") . "<link linkend=\"$id\">$symbol</link>;\n";
+        $type_output = "extern";
     }
+    my $synop = "<row><entry role=\"c_punctuation\">${type_output}</entry><entry role=\"function_name\"><link linkend=\"$id\">$symbol</link></entry></row>\n";
 
     my $desc = "<refsect2 id=\"$id\" role=\"variable\"$condition>\n<title>$symbol</title>\n";
 

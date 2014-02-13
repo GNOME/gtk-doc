@@ -195,7 +195,9 @@ div.informaltable table td, div.informaltable table th
 .signal_type,
 .parameter_name,
 .struct_member_name,
-.union_member_name
+.union_member_name,
+.define_keyword,
+.datatype_keyword
 {
   text-align: right;
 }
@@ -205,6 +207,8 @@ div.informaltable table td, div.informaltable table th
 .function_type,
 .property_type,
 .signal_type,
+.define_keyword,
+.datatype_keyword,
 .property_flags,
 .signal_flags,
 .parameter_annotations,
