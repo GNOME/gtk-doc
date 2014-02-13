@@ -3282,10 +3282,10 @@ sub GetHierarchy {
             $link_text = "$ancestors[$i]";
         }
         if ($level == 0) {
-            $hierarchy .= "  $link_text\n";
+            $hierarchy .= " $link_text\n";
         } else {
             # Unicode chars for: ╰───
-            $hierarchy .= ' ' x ($level * 6 - 3) . "<phrase role=\"lineart\">&#9584;&#9472;&#9472;&#9472;&#9472;</phrase> $link_text\n";
+            $hierarchy .= ' ' x ($level * 4 - 3) . "<phrase role=\"lineart\">&#9584;&#9472;&#9472;</phrase> $link_text\n";
         }
         $level++;
     }
@@ -3296,7 +3296,7 @@ sub GetHierarchy {
       if ($i == $#children) {
         $junction = "&#9584;"; # unicode for ╰
       }
-      $hierarchy .= ' ' x ($level * 6 - 3) . "<phrase role=\"lineart\">" . $junction . "&#9472;&#9472;&#9472;&#9472;</phrase> $link_text\n";
+      $hierarchy .= ' ' x ($level * 4 - 3) . "<phrase role=\"lineart\">" . $junction . "&#9472;&#9472;</phrase> $link_text\n";
     }
     $hierarchy .= "</synopsis>\n";
 
@@ -5831,16 +5831,16 @@ sub ReadObjectHierarchy {
                 my $plevel = pop(@pending_levels);
             }
 
-               push (@pending_objects, $object);
+            push (@pending_objects, $object);
             push (@pending_levels, $level);
 
             if (exists($KnownSymbols{$object}) && $KnownSymbols{$object} == 1) {
-                   while ($#pending_levels >= 0) {
+                while ($#pending_levels >= 0) {
                     $object = shift @pending_objects;
                     $level = shift @pending_levels;
-                       $xref = &MakeXRef ($object);
+                    $xref = &MakeXRef ($object);
 
-                     print (OUTPUT ' ' x ($level * 4), "$xref\n");
+                    print (OUTPUT ' ' x ($level * 4), "$xref\n");
                     push (@Objects, $object);
                     push (@ObjectLevels, $level);
                     $ObjectRoots{$object} = $root;
