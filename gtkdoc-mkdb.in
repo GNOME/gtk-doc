@@ -1825,11 +1825,6 @@ sub OutputUnion {
     $desc .= MakeIndexterms($symbol, $id);
     $desc .= "\n";
     $desc .= OutputSymbolExtraLinks($symbol);
-
-    # FIXME: we do more for structs
-    my $decl_out = &CreateValidSGML ($declaration);
-    $desc .= "<programlisting language=\"C\">$decl_out</programlisting>\n";
-
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
