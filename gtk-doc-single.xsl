@@ -480,7 +480,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
             <xsl:apply-templates/>
           </p>
         </td>
-        <td valign="top" align="right">
+        <td class="gallery_image" valign="top" align="right">
            <!-- find the gallery image to use here
                 - determine the id of the enclosing refentry
                 - look for an inlinegraphic inside a link with linkend == refentryid inside a para with role == gallery

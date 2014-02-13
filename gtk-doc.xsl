@@ -756,7 +756,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
             <xsl:apply-templates/>
           </p>
         </td>
-        <td valign="top" align="right">
+        <td class="gallery_image" valign="top" align="right">
           <xsl:choose>
             <xsl:when test="../refmeta/refmiscinfo/inlinegraphic">
               <xsl:apply-templates select="../refmeta/refmiscinfo/inlinegraphic"/>
