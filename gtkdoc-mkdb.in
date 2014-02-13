@@ -3557,6 +3557,7 @@ sub GetSignals {
             $xref = &MakeXRef ("gpointer", &tagify("gpointer", "type"));
             $pad = ' ' x ($type_len - length("gpointer"));
             $desc  .= "$xref$pad user_data)";
+            $desc  .= "</programlisting>\n";
 
             my $flags = $SignalFlags[$i];
             my $flags_string = "";
@@ -3590,15 +3591,7 @@ sub GetSignals {
               }
             }
 
-            $desc  .= "</programlisting>\n";
-            if ($flags_string)
-              {
-                $desc  .= "<para>Flags: $flags_string</para>\n";
-              }
-
             $synop .= "<row><entry role=\"signal_type\">${ret_type_output}</entry><entry role=\"signal_name\"><link linkend=\"$id\">${name}</link></entry><entry role=\"signal_flags\">${flags_string}</entry></row>\n";
-
-            $desc .= &MakeDeprecationNote($symbol);
 
             my $parameters = &OutputParamDescriptions ("SIGNAL", $symbol);
             my $parameters_output = 0;
@@ -3618,10 +3611,14 @@ sub GetSignals {
                     $AllDocumentedSymbols{$symbol} = 1;
                 }
             }
+            $desc .= &MakeDeprecationNote($symbol);
 
             if ($parameters_output == 0) {
                 $desc .= $parameters;
-              }
+            }
+            if ($flags_string) {
+                $desc  .= "<para>Flags: $flags_string</para>\n";
+            }
             $desc .= OutputSymbolTraits ($symbol);
             $desc .= "</refsect2>";
         }
@@ -3739,23 +3736,15 @@ sub GetArgs {
             $arg_desc .= $blurb;
             $arg_desc .= &MakeDeprecationNote($symbol);
 
-            $arg_desc .= <<EOF;
-<informaltable role="property_details_table" pgwide="1" frame="none">
-<tgroup cols="2">
-<colspec colname="parameters_name" colwidth="150px"/>
-<colspec colname="parameters_description"/>
-<tbody>
-EOF
             if ($flags_string) {
-              $arg_desc  .= "<row><entry role=\"property_detail\">Flags</entry><entry>$flags_string</entry></row>\n";
+              $arg_desc  .= "<para>Flags: $flags_string</para>\n";
             }
             if ($range ne "") {
-                $arg_desc .= "<row><entry role=\"property_detail\">Allowed values</entry><entry>$range_output</entry></row>\n";
+                $arg_desc .= "<para>Allowed values: $range_output</para>\n";
             }
             if ($default ne "") {
-                $arg_desc .= "<row><entry role=\"property_detail\">Default value</entry><entry>$default_output</entry></row>\n";
+                $arg_desc .= "<para>Default value: $default_output</para>\n";
             }
-            $arg_desc .= "</tbody></tgroup></informaltable>\n";
             $arg_desc .= OutputSymbolTraits ($symbol);
             $arg_desc .= "</refsect2>\n";
 
