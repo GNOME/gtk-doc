@@ -92,7 +92,7 @@ setup-build.stamp:
 	            destdir=`dirname $(abs_builddir)/$$file`; \
 	            test -d "$$destdir" || mkdir -p "$$destdir"; \
 	            test -f $(abs_srcdir)/$$file && \
-	                cp -pu $(abs_srcdir)/$$file $(abs_builddir)/$$file || true; \
+	                cp -pf $(abs_srcdir)/$$file $(abs_builddir)/$$file || true; \
 	        done; \
 	    fi; \
 	fi

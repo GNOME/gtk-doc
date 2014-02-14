@@ -92,11 +92,11 @@ setup-build.stamp:
 	            destdir=`dirname $(abs_builddir)/$$file` ;\
 	            test -d "$$destdir" || mkdir -p "$$destdir"; \
 	            test -f $(abs_srcdir)/$$file && \
-	                cp -pu $(abs_srcdir)/$$file $(abs_builddir)/$$file || true; \
+	                cp -pf $(abs_srcdir)/$$file $(abs_builddir)/$$file || true; \
 	        done; \
 	    fi; \
 	    test -d $(abs_srcdir)/tmpl && \
-	        { cp -rp $(abs_srcdir)/tmpl $(abs_builddir)/; \
+	        { cp -pR $(abs_srcdir)/tmpl $(abs_builddir)/; \
 	        chmod -R u+w $(abs_builddir)/tmpl; } \
 	fi
 	$(AM_V_at)touch setup-build.stamp
@@ -147,7 +147,7 @@ tmpl-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DO
 	$(GTK_DOC_V_TMPL)gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
 	$(AM_V_at)if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	  if test -w $(abs_srcdir) ; then \
-	    cp -rp $(abs_builddir)/tmpl $(abs_srcdir)/; \
+	    cp -pR $(abs_builddir)/tmpl $(abs_srcdir)/; \
 	  fi \
 	fi
 	$(AM_V_at)touch tmpl-build.stamp

@@ -74,11 +74,11 @@ setup-build.stamp: ts
 	    if test "x$$files" != "x" ; then \
 	        for file in $$files ; do \
 	            test -f $(abs_srcdir)/$$file && \
-	                cp -pu $(abs_srcdir)/$$file $(abs_builddir)/ || true; \
+	                cp -pf $(abs_srcdir)/$$file $(abs_builddir)/ || true; \
 	        done; \
 	    fi; \
 	    test -d $(abs_srcdir)/tmpl && \
-	       { cp $(abs_builddir)/$$file $(abs_builddir)/html; \
+	       { cp -pR $(abs_srcdir)/tmpl $(abs_builddir)/; \
 	       chmod -R u+w $(abs_builddir)/tmpl; } \
 	fi
 	@touch setup-build.stamp
@@ -126,7 +126,7 @@ tmpl-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DO
 	gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS) 2>&1 | tee -a gtkdoc-mktmpl.log
 	@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	  if test -w $(abs_srcdir) ; then \
-	    cp -rp $(abs_builddir)/tmpl $(abs_srcdir)/; \
+	    cp -pR $(abs_builddir)/tmpl $(abs_srcdir)/; \
 	  fi \
 	fi
 	@touch tmpl-build.stamp
