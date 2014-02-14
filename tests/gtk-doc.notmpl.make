@@ -74,7 +74,7 @@ setup-build.stamp: ts
 	    if test "x$$files" != "x" ; then \
 	        for file in $$files ; do \
 	            test -f $(abs_srcdir)/$$file && \
-	                cp -pu $(abs_srcdir)/$$file $(abs_builddir)/ || true; \
+	                cp -pf $(abs_srcdir)/$$file $(abs_builddir)/ || true; \
 	        done; \
 	    fi; \
 	fi
