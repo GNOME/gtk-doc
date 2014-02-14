@@ -191,13 +191,15 @@ div.informaltable table td, div.informaltable table th
 }
 
 .function_type,
+.variable_type,
 .property_type,
 .signal_type,
 .parameter_name,
 .struct_member_name,
 .union_member_name,
 .define_keyword,
-.datatype_keyword
+.datatype_keyword,
+.typedef_keyword
 {
   text-align: right;
 }
@@ -205,10 +207,12 @@ div.informaltable table td, div.informaltable table th
 /* dim non-primary columns */
 .c_punctuation,
 .function_type,
+.variable_type,
 .property_type,
 .signal_type,
 .define_keyword,
 .datatype_keyword,
+.typedef_keyword,
 .property_flags,
 .signal_flags,
 .parameter_annotations,
