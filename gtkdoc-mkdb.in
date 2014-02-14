@@ -914,30 +914,22 @@ EOF
 
         } elsif (m/^(\S+)/) {
             my $symbol = $1;
-            #print "  Symbol: $symbol\n";
+            @TRACE@("  Symbol: $symbol in subsection: $subsection\n");
 
             # check for duplicate entries
             if (! defined $symbol_def_line{$symbol}) {
                 my $declaration = $Declarations{$symbol};
                 if (defined ($declaration)) {
+                    if (&CheckIsObject ($symbol)) {
+                        push @file_objects, $symbol;
+                    }
                     # We don't want standard macros/functions of GObjects,
                     # or private declarations.
                     if ($subsection ne "Standard" && $subsection ne "Private") {
-                        if (&CheckIsObject ($symbol)) {
-                            push @file_objects, $symbol;
-                        }
                         my ($synop, $desc) = &OutputDeclaration ($symbol,
                                                                  $declaration);
-                        my ($sig_synop, $sig_desc) = &GetSignals ($symbol);
-                        my ($arg_synop, $child_arg_synop, $style_arg_synop,
-                            $arg_desc, $child_arg_desc, $style_arg_desc) = &GetArgs ($symbol);
-                        my $hier = &GetHierarchy ($symbol);
-                        my $ifaces = &GetInterfaces ($symbol);
-                        my $impls = &GetImplementations ($symbol);
-                        my $prereqs = &GetPrerequisites ($symbol);
-                        my $der = &GetDerived ($symbol);
                         my $type = $DeclarationTypes {$symbol};
-
+        
                         if ($type eq 'FUNCTION' || $type eq 'USER_FUNCTION') {
                           $functions_synop .= $synop;
                           $functions_details .= $desc;
@@ -948,20 +940,29 @@ EOF
                           $other_synop .= $synop;
                           $other_details .= $desc;
                         }
-                        $signals_synop .= $sig_synop;
-                        $signals_desc .= $sig_desc;
-                        $args_synop .= $arg_synop;
-                        $child_args_synop .= $child_arg_synop;
-                        $style_args_synop .= $style_arg_synop;
-                        $args_desc .= $arg_desc;
-                        $child_args_desc .= $child_arg_desc;
-                        $style_args_desc .= $style_arg_desc;
-                        $hierarchy .= $hier;
-                        $interfaces .= $ifaces;
-                        $implementations .= $impls;
-                        $prerequisites .= $prereqs;
-                        $derived .= $der;
                     }
+                    my ($sig_synop, $sig_desc) = &GetSignals ($symbol);
+                    my ($arg_synop, $child_arg_synop, $style_arg_synop,
+                        $arg_desc, $child_arg_desc, $style_arg_desc) = &GetArgs ($symbol);
+                    my $hier = &GetHierarchy ($symbol);
+                    my $ifaces = &GetInterfaces ($symbol);
+                    my $impls = &GetImplementations ($symbol);
+                    my $prereqs = &GetPrerequisites ($symbol);
+                    my $der = &GetDerived ($symbol);
+
+                    $signals_synop .= $sig_synop;
+                    $signals_desc .= $sig_desc;
+                    $args_synop .= $arg_synop;
+                    $child_args_synop .= $child_arg_synop;
+                    $style_args_synop .= $style_arg_synop;
+                    $args_desc .= $arg_desc;
+                    $child_args_desc .= $child_arg_desc;
+                    $style_args_desc .= $style_arg_desc;
+                    $hierarchy .= $hier;
+                    $interfaces .= $ifaces;
+                    $implementations .= $impls;
+                    $prerequisites .= $prereqs;
+                    $derived .= $der;
 
                     # Note that the declaration has been output.
                     $DeclarationOutput{$symbol} = 1;
@@ -5837,7 +5838,7 @@ sub ReadObjectHierarchy {
             push (@pending_objects, $object);
             push (@pending_levels, $level);
 
-            if (exists($KnownSymbols{$object}) && $KnownSymbols{$object} == 1) {
+            if (exists($KnownSymbols{$object})) {
                 while ($#pending_levels >= 0) {
                     $object = shift @pending_objects;
                     $level = shift @pending_levels;
