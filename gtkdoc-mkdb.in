@@ -792,7 +792,7 @@ EOF
                     $hierarchy = <<EOF;
 <refsect1 id="$section_id.object-hierarchy" role="object_hierarchy">
 <title role="object_hierarchy.title">Object Hierarchy</title>
-<synopsis>$hierarchy</synopsis>
+<screen>$hierarchy</screen>
 </refsect1>
 EOF
                 }
@@ -958,6 +958,7 @@ EOF
                     $args_desc .= $arg_desc;
                     $child_args_desc .= $child_arg_desc;
                     $style_args_desc .= $style_arg_desc;
+                    # FIXME: we'd like to merge e.g. multiple enums
                     $hierarchy .= $hier;
                     $interfaces .= $ifaces;
                     $implementations .= $impls;
@@ -3257,9 +3258,9 @@ sub GetHierarchy {
         }
     }
 
-    # Output the ancestors list, indented and with links.
-    my $hierarchy = "<!-- -->"; # prevent trimming of initial indent
-    $level = 0;
+    # Output the ancestors, indented and with links.
+    my @tree = ();
+    $level = 1;
     for ($i = $#ancestors; $i >= 0; $i--) {
         my $link_text;
         # Don't add a link to the current object, i.e. when i == 0.
@@ -3269,25 +3270,18 @@ sub GetHierarchy {
         } else {
             $link_text = "$ancestors[$i]";
         }
-        if ($level == 0) {
-            $hierarchy .= " $link_text\n";
-        } else {
-            # Unicode chars for: ╰───
-            $hierarchy .= ' ' x ($level * 4 - 3) . "<phrase role=\"lineart\">&#9584;&#9472;&#9472;</phrase> $link_text\n";
-        }
+        push (@tree, ' ' x ($level * 4) . $link_text);
         $level++;
     }
+    # Output the children, indented and with links.
     for ($i = 0; $i <= $#children; $i++) {
       my $id = &CreateValidSGMLID ($children[$i]);
       my $link_text = "<link linkend=\"$id\">$children[$i]</link>";
-      my $junction = "&#9500;"; # unicde for ├
-      if ($i == $#children) {
-        $junction = "&#9584;"; # unicode for ╰
-      }
-      $hierarchy .= ' ' x ($level * 4 - 3) . "<phrase role=\"lineart\">" . $junction . "&#9472;&#9472;</phrase> $link_text\n";
+      push (@tree, ' ' x ($level * 4) . $link_text);
     }
 
-    return $hierarchy;
+    # prevent trimming of initial indent
+    return "<!-- -->" . &AddTreeLineArt(\@tree) . "\n"; 
 }
 
 
@@ -5761,10 +5755,7 @@ sub ReadTemplateFile {
 #               in the object hierarchy in the @ObjectLevels array, at the
 #               same index. GtkObject, the root object, has a level of 1.
 #
-#               FIXME: This also generates tree_index.sgml as it goes along. The
-#               function GetHierarchy() formats trees with unicode lineart. This
-#               would be nice to have here too. On the otehr hand, the 
-#               GetHierarchy() lacks merging of trees.
+#               This also generates tree_index.sgml as it goes along.
 #
 # Arguments   : none
 #############################################################################
@@ -5781,22 +5772,6 @@ sub ReadObjectHierarchy {
         return;
     }
 
-    # FIXME: use $OUTPUT_FORMAT
-    # my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.$OUTPUT_FORMAT";
-    my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.sgml";
-    my $new_tree_index = "$SGML_OUTPUT_DIR/tree_index.new";
-
-    open (OUTPUT, ">$new_tree_index")
-        || die "Can't create $new_tree_index: $!";
-
-    if ($OUTPUT_FORMAT eq "xml") {
-        my $tree_header = $doctype_header;
-
-        $tree_header =~ s/<!DOCTYPE \w+/<!DOCTYPE screen/;
-        print (OUTPUT "$tree_header");
-    }
-    print (OUTPUT "<screen>\n");
-
     # Only emit objects if they are supposed to be documented, or if
     # they have documented children. To implement this, we maintain a
     # stack of pending objects which will be emitted if a documented
@@ -5804,6 +5779,7 @@ sub ReadObjectHierarchy {
     my @pending_objects = ();
     my @pending_levels = ();
     my $root;
+    my @tree = ();
     while (<INPUT>) {
         if (m/\S+/) {
             my $object = $&;
@@ -5828,7 +5804,7 @@ sub ReadObjectHierarchy {
                     $level = shift @pending_levels;
                     $xref = &MakeXRef ($object);
 
-                    print (OUTPUT ' ' x ($level * 4), "$xref\n");
+                    push (@tree, ' ' x ($level * 4) . "$xref");
                     push (@Objects, $object);
                     push (@ObjectLevels, $level);
                     $ObjectRoots{$object} = $root;
@@ -5839,9 +5815,23 @@ sub ReadObjectHierarchy {
             #}
         }
     }
-    print (OUTPUT "</screen>\n");
-
     close (INPUT);
+
+    # FIXME: use $OUTPUT_FORMAT
+    # my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.$OUTPUT_FORMAT";
+    my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.sgml";
+    my $new_tree_index = "$SGML_OUTPUT_DIR/tree_index.new";
+
+    open (OUTPUT, ">$new_tree_index")
+        || die "Can't create $new_tree_index: $!";
+
+    if ($OUTPUT_FORMAT eq "xml") {
+        my $tree_header = $doctype_header;
+
+        $tree_header =~ s/<!DOCTYPE \w+/<!DOCTYPE screen/;
+        print (OUTPUT "$tree_header");
+    }
+    print (OUTPUT "<screen>\n" . &AddTreeLineArt(\@tree) . "\n</screen>\n");
     close (OUTPUT);
 
     &UpdateFileIfChanged ($old_tree_index, $new_tree_index, 0);
@@ -6016,6 +6006,49 @@ sub ReadArgsFile {
         }
     }
     close (INPUT);
+}
+
+#############################################################################
+# Function    : AddTreeLineArt
+# Description : Add unicode lineart to a pre-indented string array and returns
+#               it as as multiline string.
+# Arguments   : @tree - array of indented strings.
+#############################################################################
+
+sub AddTreeLineArt {
+  my @tree = @{$_[0]};
+  my $i;
+  my $j;
+  my $indent;
+  
+  # iterate bottom up over the tree 
+  for ($i = $#tree; $i >= 0; $i--) {
+    # count leading spaces
+    $tree[$i] =~ /^([^<A-Za-z]*)/;
+    $indent = length( $1 );
+    # replace with ╰───, if place of ╰ is not space insert ├
+    if ($indent > 4) {
+      if (substr($tree[$i],$indent-4,1) eq " ") {
+        substr($tree[$i],$indent-4,4) = "--- ";
+      } else {
+        substr($tree[$i],$indent-4,4) = "+-- ";
+      }
+      # go lines up while space and insert |
+      for ($j = $i - 1; ($j >= 0 && substr($tree[$j],$indent-4,1) eq ' '); $j--) {
+        substr($tree[$j],$indent-4,1) = '|';
+      }
+    }
+  }
+  
+  my $res = join("\n", @tree);
+  # unicode chars for: ╰──
+  $res =~ s%---%<phrase role=\"lineart\">&#9584;&#9472;&#9472;</phrase>%g;
+  # unicde chars for: ├──
+  $res =~ s%\+--%<phrase role=\"lineart\">&#9500;&#9472;&#9472;</phrase>%g;
+  # unicode char for: │
+  $res =~ s%\|%<phrase role=\"lineart\">&#9474;</phrase>%g;
+  
+  return $res;
 }
 
 
