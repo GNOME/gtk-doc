@@ -210,16 +210,30 @@ fi
 AC_SUBST(TRACE)
 
 dnl check what date format we can use for the makefile tracing in tests
+AC_MSG_CHECKING(whether date can output nanoseconds)
 date +%s.%N | grep -q '%N'
 if test "$?" == "1"; then
   TS_FMT="+%s.%N"
   ELAPSED_FMT="+%H:%M:%S.%N"
+  AC_MSG_RESULT(yes)
 else
   TS_FMT="+%s.0"
   ELAPSED_FMT="+%H:%M:%S"
+  AC_MSG_RESULT(no)
 fi
 AC_SUBST(TS_FMT)
 AC_SUBST(ELAPSED_FMT)
+
+AC_MSG_CHECKING(whether date can format dates)
+date >/dev/null 2>&1 --utc --date @1.1 $ELAPSED_FMT
+if test "$?" == "0"; then
+  DATE_FMT_CMD="date --utc $ELAPSED_FMT --date @0"
+  AC_MSG_RESULT(yes)
+else
+  DATE_FMT_CMD="echo "
+  AC_MSG_RESULT(no)
+fi
+AC_SUBST(DATE_FMT_CMD)
 
 dnl
 dnl Documentation
