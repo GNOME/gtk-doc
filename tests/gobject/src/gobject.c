@@ -152,6 +152,14 @@
  * - single item list
  */
 
+/**
+ * SECTION:object3
+ * @title: GtkdocObject3
+ * @short_description: class that is mostly undocuemnted
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */
+
 #include <glib.h>
 #include <glib-object.h>
 
@@ -420,6 +428,26 @@ GType gtkdoc_object2_get_type (void) {
     };
     type = g_type_register_static(G_TYPE_OBJECT,"GtkdocObject2",&info,0);
     g_type_add_interface_static(type, GTKDOC_TYPE_IFACE, &interface_info);
+  }
+  return type;
+}
+
+GType gtkdoc_object3_get_type (void) {
+  static GType type = 0;
+  if (type == 0) {
+    static const GTypeInfo info = {
+      (guint16)sizeof(GtkdocObject3Class),
+      NULL, // base_init
+      NULL, // base_finalize
+      NULL, // class_init
+      NULL, // class_finalize
+      NULL, // class_data
+      (guint16)sizeof(GtkdocObject3),
+      0,    // n_preallocs
+      NULL, // instance_init
+      NULL  // value_table
+    };
+    type = g_type_register_static(G_TYPE_OBJECT,"GtkdocObject3",&info,0);
   }
   return type;
 }
