@@ -63,12 +63,15 @@ gtkdoc_iface2_get_type
 <SECTION>
 <FILE>types</FILE>
 GtkdocEnum
+GtkdocEnum2
 GtkdocPlainOldData
 GtkdocBoxedPlainOldData
 <SUBSECTION Standard>
 GTKDOC_TYPE_ENUM
+GTKDOC_TYPE_ENUM2
 GTKDOC_TYPE_BOXED
 gtkdoc_enum_get_type
+gtkdoc_enum2_get_type
 gtkdoc_boxed_get_type
 GTKDOC_TYPE_BOXED_PLAIN_OLD_DATA
 gtkdoc_boxed_plain_old_data_get_type

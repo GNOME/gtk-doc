@@ -28,6 +28,19 @@ GType gtkdoc_enum_get_type (void) {
   return type;
 }
 
+GType gtkdoc_enum2_get_type (void) {
+  static GType type = 0;
+  if(type==0) {
+    static const GEnumValue values[] = {
+      { GTKDOC_ENUM2_V1,          "GTKDOC_ENUM2_V1",          "first" },
+      { GTKDOC_ENUM2_V2,          "GTKDOC_ENUM2_V2",          "second" },
+      { 0, NULL, NULL},
+    };
+    type = g_enum_register_static ("GtkdocEnum2", values);
+  }
+  return type;
+}
+
 /* boxed: class internals */
 
 static gpointer gtkdoc_boxed_copy (gpointer boxed) {
