@@ -590,7 +590,8 @@ sub OutputSGML {
     my $args_desc = "";
     my $child_args_desc = "";
     my $style_args_desc = "";
-    my $hierarchy = "";
+    my $hierarchy_str = "";
+    my @hierarchy = ();
     my $interfaces = "";
     my $implementations = "";
     my $prerequisites = "";
@@ -787,12 +788,12 @@ $style_args_desc
 EOF
                 }
 
-                $hierarchy = TrimTextBlock($hierarchy);
-                if ($hierarchy ne "") {
-                    $hierarchy = <<EOF;
+                $hierarchy_str = &AddTreeLineArt(\@hierarchy) . "\n"; 
+                if ($hierarchy_str ne "") {
+                    $hierarchy_str = <<EOF;
 <refsect1 id="$section_id.object-hierarchy" role="object_hierarchy">
 <title role="object_hierarchy.title">Object Hierarchy</title>
-<screen>$hierarchy</screen>
+<screen>$hierarchy_str</screen>
 </refsect1>
 EOF
                 }
@@ -881,7 +882,7 @@ EOF
                                                     \$functions_details, \$other_details,
                                                     \$signals_synop, \$signals_desc,
                                                     \$args_synop, \$args_desc,
-                                                    \$hierarchy, \$interfaces,
+                                                    \$hierarchy_str, \$interfaces,
                                                     \$implementations,
                                                     \$prerequisites, \$derived,
                                                     \@file_objects);
@@ -906,7 +907,8 @@ EOF
             $args_desc = "";
             $child_args_desc = "";
             $style_args_desc = "";
-            $hierarchy = "";
+            $hierarchy_str = "";
+            @hierarchy = ();
             $interfaces = "";
             $implementations = "";
             $prerequisites = "";
@@ -944,11 +946,11 @@ EOF
                     my ($sig_synop, $sig_desc) = &GetSignals ($symbol);
                     my ($arg_synop, $child_arg_synop, $style_arg_synop,
                         $arg_desc, $child_arg_desc, $style_arg_desc) = &GetArgs ($symbol);
-                    my $hier = &GetHierarchy ($symbol);
                     my $ifaces = &GetInterfaces ($symbol);
                     my $impls = &GetImplementations ($symbol);
                     my $prereqs = &GetPrerequisites ($symbol);
                     my $der = &GetDerived ($symbol);
+                    @hierarchy = &GetHierarchy ($symbol, \@hierarchy);
 
                     $signals_synop .= $sig_synop;
                     $signals_desc .= $sig_desc;
@@ -958,8 +960,6 @@ EOF
                     $args_desc .= $arg_desc;
                     $child_args_desc .= $child_arg_desc;
                     $style_args_desc .= $style_arg_desc;
-                    # FIXME: we'd like to merge e.g. multiple enums
-                    $hierarchy .= $hier;
                     $interfaces .= $ifaces;
                     $implementations .= $impls;
                     $prerequisites .= $prereqs;
@@ -3212,14 +3212,14 @@ sub MakeConditionDescription {
 #               immediate children of a GObject subclass. It uses the
 #               global @Objects and @ObjectLevels arrays to walk the tree.
 #
-#               FIXME: See ReadObjectHierarchy() for some overlap
-#
 # Arguments   : $object - the GtkObject subclass.
+#               @hierarchy - previous hierarchy
 #############################################################################
 
 sub GetHierarchy {
-    my ($object) = @_;
-
+    my ($object,$hierarchy_ref) = @_;
+    my @hierarchy = @{$hierarchy_ref};
+    
     # Find object in the objects array.
     my $found = 0;
     my @children = ();
@@ -3242,7 +3242,7 @@ sub GetHierarchy {
         }
     }
     if (!$found) {
-        return "";
+        return @hierarchy;
     }
 
     # Walk up the hierarchy, pushing ancestors onto the ancestors array.
@@ -3259,7 +3259,7 @@ sub GetHierarchy {
     }
 
     # Output the ancestors, indented and with links.
-    my @tree = ();
+    my $last_index = 0;
     $level = 1;
     for ($i = $#ancestors; $i >= 0; $i--) {
         my $link_text;
@@ -3270,20 +3270,58 @@ sub GetHierarchy {
         } else {
             $link_text = "$ancestors[$i]";
         }
-        push (@tree, ' ' x ($level * 4) . $link_text);
+        my $indented_text = ' ' x ($level * 4) . $link_text;
+        # Check if we already have this object
+        my $index = -1;
+        for ($j = 0; $j <= $#hierarchy; $j++) {
+            if ($hierarchy[$j] eq $indented_text) {
+                $index = $j;
+                last;
+            }
+        }
+        if ($index == -1) {
+            # We have a new entry, find insert position in alphabetical order
+            my $indent = ' ' x ($level * 4);
+            my $found = 0;
+            for ($j = $last_index; $j <= $#hierarchy; $j++) {
+                if ($hierarchy[$j] !~ m/^${indent}/) {
+                    $last_index = $j;
+                    $found = 1;
+                    last;
+                } elsif ($hierarchy[$j] =~ m/^${indent}[^ ]/) {
+                    my $stripped_text = $hierarchy[$j];
+                    if ($indented_text !~ m/<link linkend/) {
+                        $stripped_text =~ s%<link linkend="[A-Za-z]*">%%;
+                        $stripped_text =~ s%</link>%%;
+                    }
+                    if ($indented_text lt $stripped_text) {
+                        $last_index = $j;
+                        $found = 1;
+                        last;
+                    } 
+                }
+            }
+            if (!$found) {
+              $last_index = 1 + $#hierarchy;
+            }
+            splice @hierarchy, $last_index, 0, ($indented_text);
+            $last_index++;
+        } else {
+            # Already have this one, remmeber index as base insert point
+            $last_index = $index + 1;
+        }
         $level++;
     }
     # Output the children, indented and with links.
     for ($i = 0; $i <= $#children; $i++) {
-      my $id = &CreateValidSGMLID ($children[$i]);
-      my $link_text = "<link linkend=\"$id\">$children[$i]</link>";
-      push (@tree, ' ' x ($level * 4) . $link_text);
-    }
+        my $id = &CreateValidSGMLID ($children[$i]);
+        my $indented_text = ' ' x ($level * 4) . "<link linkend=\"$id\">$children[$i]</link>";
+        splice @hierarchy, $last_index, 0, ($indented_text);
+        $last_index++;
+    }    
 
-    # prevent trimming of initial indent
-    return "<!-- -->" . &AddTreeLineArt(\@tree) . "\n"; 
+    return @hierarchy; 
 }
-
 
 #############################################################################
 # Function    : GetInterfaces
