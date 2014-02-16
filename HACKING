@@ -28,7 +28,7 @@ http://live.gnome.org/MaintainersCorner/Releasing
   git push
 
 - dist
-  make dist
+  make distcheck
 
 - tag
   git tag -a GTK_DOC_1_12 -m"release: 1.12"
@@ -45,9 +45,10 @@ http://live.gnome.org/MaintainersCorner/Releasing
 - bump versions in:
   configure.ac
   help/manual/C/index.docbook
+  NEWS
 
 - commit
-  git add configure.ac help/manual/C/index.docbook
+  git add configure.ac NEWS help/manual/C/index.docbook
   git commit -m"release: bump versions and back to development"
   git push
 
