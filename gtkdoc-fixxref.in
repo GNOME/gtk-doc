@@ -113,11 +113,12 @@ $dir = $dir . "/share/gtk-doc/html";
 if (-d $dir && $dir ne $HTML_DIR) {
     @TRACE@("Scanning GLib directory: $dir");
 
-    # some predefined link targets to get links into type hierarchies as these
-    # have no targets
+    # Some predefined link targets to get links into type hierarchies as these
+    # have no targets. These are always absolute for now.
     $Links{'GBoxed'} = "$dir/gobject/gobject-Boxed-Types.html";
     $Links{'GEnum'} = "$dir/gobject/gobject-Enumeration-and-Flag-Types.html";
     $Links{'GFlags'} = "$dir/gobject/gobject-Enumeration-and-Flag-Types.html";
+    $Links{'GInterface'} = "$dir/gobject/GTypeModule.html";
 
     if ($dir !~ m%^\Q$path_prefix\E/%) {
         &ScanIndices ($dir, 1);
