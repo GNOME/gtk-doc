@@ -14,22 +14,24 @@ struct _GtkdocAnnotation {
   gpointer that;
 };
 
-extern void annotation_array_length (GObject *list, gint n_columns, GType *types);
+void annotation_array_length (GObject *list, gint n_columns, GType *types);
 
-extern gchar * annotation_nullable (const gchar *uri, const gchar *label);
+gchar * annotation_nullable (const gchar *uri, const gchar *label);
 
-extern gboolean annotation_elementtype (const GList *list);
-extern gboolean annotation_elementtype_transfer (const GList *list);
-extern GList *annotation_elementtype_returns (void);
+gboolean annotation_elementtype (const GList *list);
+gboolean annotation_elementtype_transfer (const GList *list);
+GList *annotation_elementtype_returns (void);
 
-extern gboolean annotation_outparams (GList **list);
+gboolean annotation_outparams (GList **list);
 
-extern void annotation_skip (GList *list);
-extern gboolean annotation_skip_return (GList *list);
+void annotation_skip (GList *list);
+gboolean annotation_skip_return (GList *list);
 
-extern void annotation_scope (GCallback *callback, gpointer user_data);
+void annotation_scope (GCallback *callback, gpointer user_data);
 
-extern void annotation_rename_to (void);
+void annotation_rename_to (void);
+
+void stability_unstable(void);
 
 #endif // GTKDOC_TESTER_H
 

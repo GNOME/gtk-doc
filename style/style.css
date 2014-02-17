@@ -404,6 +404,11 @@ h2 .extralinks, h3 .extralinks
   font-weight: normal;
 }
 
+acronym,abbr 
+{
+  border-bottom: 1px dotted gray;
+}
+
 /* code listings */
 
 .listing_code .programlisting .cbracket   { color: #a40000; } /* tango: scarlet red 3 */

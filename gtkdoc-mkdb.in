@@ -300,9 +300,9 @@ $PreProcessorDirectives{"warning"} = 1;
 # remember used annotation (to write minimal glossary)
 my %AnnotationsUsed;
 
-# the annotations are defined at:
-# https://live.gnome.org/GObjectIntrospection/Annotations
 my %AnnotationDefinition = (
+    # the GObjectIntrospection annotations are defined at:
+    # https://live.gnome.org/GObjectIntrospection/Annotations
     'allow-none' => "NULL is ok, both for passing and for returning.",
     'array' => "Parameter points to an array of items.",
     'attribute' => "Deprecated free-form custom annotation, replaced by (attributes) annotation.",
@@ -337,7 +337,37 @@ my %AnnotationDefinition = (
     'type' => "Override the parsed C type with given type.",
     'unref-func' => "The specified function is used to unref a struct, must be a GTypeInstance.",
     'virtual' => "This is the invoker for a virtual method.",
-    'value' => "The specified value overrides the evaluated value of the constant."
+    'value' => "The specified value overrides the evaluated value of the constant.",
+    # Stability Level definition
+    # https://bugzilla.gnome.org/show_bug.cgi?id=170860
+    'Stable' => <<EOF,
+The intention of a Stable interface is to enable arbitrary third parties to
+develop applications to these interfaces, release them, and have confidence that
+they will run on all minor releases of the product (after the one in which the
+interface was introduced, and within the same major release). Even at a major
+release, incompatible changes are expected to be rare, and to have strong
+justifications.
+EOF
+    'Unstable' => <<EOF,
+Unstable interfaces are experimental or transitional. They are typically used to
+give outside developers early access to new or rapidly changing technology, or
+to provide an interim solution to a problem where a more general solution is
+anticipated. No claims are made about either source or binary compatibility from
+one minor release to the next.
+
+The Unstable interface level is a warning that these interfaces are  subject to
+change without warning and should not be used in unbundled products.
+
+Given such caveats, customer impact need not be a factor when considering
+incompatible changes to an Unstable interface in a major or minor release.
+Nonetheless, when such changes are introduced, the changes should still be
+mentioned in the release notes for the affected release.
+EOF
+    'Private' => <<EOF
+An interface that can be used within the GNOME stack itself, but that is not
+documented for end-users.  Such functions should only be used in specified and
+documented ways.
+EOF
 );
 
 # Elements to consider non-block items in MarkDown parsing
@@ -1239,7 +1269,7 @@ $header
   <title>Annotation Glossary</title>
 EOF
 
-    foreach my $annotation (sort(keys(%AnnotationsUsed))) {
+    foreach my $annotation (sort({lc $a cmp lc $b} keys(%AnnotationsUsed))) {
         if(defined($AnnotationDefinition{$annotation})) {
             my $def = $AnnotationDefinition{$annotation};
             my $curletter = uc(substr($annotation,0,1));
@@ -1381,7 +1411,9 @@ sub OutputSymbolTraits {
         $desc .= "<para role=\"since\">Since $Since{$symbol}</para>";
     }
     if (exists $StabilityLevel{$symbol}) {
-        $desc .= "<para role=\"stability\">Stability Level: $StabilityLevel{$symbol}</para>";
+        my $stability = $StabilityLevel{$symbol};
+        $AnnotationsUsed{$stability} = 1;
+        $desc .= "<para role=\"stability\">Stability Level: <acronym>$stability</acronym></para>";
     }
     return $desc;
 }
@@ -2447,9 +2479,11 @@ sub OutputSGMLFile {
         #print "Found stability: $stability";
     }
     if ($stability) {
-        $stability = "<refsect1 id=\"$section_id.stability-level\">\n<title>Stability Level</title>\n$stability, unless otherwise indicated\n</refsect1>\n";
+        $AnnotationsUsed{$stability} = 1;
+        $stability = "<refsect1 id=\"$section_id.stability-level\">\n<title>Stability Level</title>\n<acronym>$stability</acronym>, unless otherwise indicated\n</refsect1>\n";
     } elsif ($DEFAULT_STABILITY) {
-        $stability = "<refsect1 id=\"$section_id.stability-level\">\n<title>Stability Level</title>\n$DEFAULT_STABILITY, unless otherwise indicated\n</refsect1>\n";
+        $AnnotationsUsed{$DEFAULT_STABILITY} = 1;
+        $stability = "<refsect1 id=\"$section_id.stability-level\">\n<title>Stability Level</title>\n<acronym>$DEFAULT_STABILITY</acronym>, unless otherwise indicated\n</refsect1>\n";
     }
 
     my $image = $SymbolDocs{"$TMPL_DIR/$file:Image"};

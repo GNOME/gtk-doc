@@ -1,6 +1,7 @@
 /**
  * SECTION:tester
  * @short_description: module for gtk-doc unit test
+ * @stability: stable
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
  */
@@ -145,3 +146,16 @@ void
 annotation_rename_to (void)
 {
 }
+
+/**
+ * stability_unstable:
+ *
+ * An experimental function.
+ *
+ * Stability: unstable
+ */
+void
+stability_unstable(void)
+{
+}
+
