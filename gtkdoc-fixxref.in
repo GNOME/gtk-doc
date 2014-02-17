@@ -74,8 +74,6 @@ EOF
 
 # This contains all the entities and their relative URLs.
 my %Links;
-# This hold the path entries we already scanned
-my @VisitedPaths;
 
 # failing link targets we don't warn about even once
 my %NoLinks = (
@@ -119,7 +117,6 @@ if (-d $dir && $dir ne $HTML_DIR) {
     } else {
         &ScanIndices ($dir, 0);
     }
-    push (@VisitedPaths, $dir);
 }
 
 if (defined ($ENV{"GNOME2_PATH"})) {
@@ -132,7 +129,6 @@ if (defined ($ENV{"GNOME2_PATH"})) {
             } else {
                 &ScanIndices ($dir, 0);
             }
-            push (@VisitedPaths, $dir);
         }
         # ubuntu started to compress this as index.sgml.gz :/
         # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
@@ -141,25 +137,13 @@ if (defined ($ENV{"GNOME2_PATH"})) {
 
 @TRACE@("Scanning HTML_DIR directory: $HTML_DIR");
 &ScanIndices ($HTML_DIR, 0);
-push (@VisitedPaths, $HTML_DIR);
 @TRACE@("Scanning HTML_DIR directory: $MODULE_DIR");
 &ScanIndices ($MODULE_DIR, 0);
-push (@VisitedPaths, $MODULE_DIR);
 
 # check all extra dirs, but skip already scanned dirs or subdirs of those
 foreach my $dir (@EXTRA_DIRS) {
     my $vdir;
-    my $skip = 0;
-
-    foreach $vdir (@VisitedPaths) {
-        if ($dir eq $vdir || $dir =~ m%^\Q$vdir\E/%) {
-            @TRACE@("Skipping EXTRA_DIR directory: $dir");
-            $skip=1;
-        }
-    }
-    next if $skip;
     @TRACE@("Scanning EXTRA_DIR directory: $dir");
-    push (@VisitedPaths, $dir);
 
     # If the --extra-dir option is not relative and is not sharing the same
     # prefix as the target directory of the docs, we need to use absolute
@@ -208,7 +192,7 @@ if (defined($MODULE)) {
 
 sub ScanIndices {
     my ($scan_dir, $use_absolute_links) = @_;
-
+    
     @TRACE@("Scanning source directory: $scan_dir absolute: $use_absolute_links");
 
     # This array holds any subdirectories found.
@@ -231,7 +215,7 @@ sub ScanIndices {
 
     # Now recursively scan the subdirectories.
     my $dir;
-    foreach $dir (@subdirs) {
+    foreach $dir (sort(@subdirs)) {
         &ScanIndices ("$scan_dir/$dir", $use_absolute_links);
     }
 }
