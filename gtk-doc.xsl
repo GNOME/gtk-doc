@@ -467,7 +467,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
 
     <xsl:if test="$suppress.navigation = '0' and $home != .">
       <table class="navigation" id="top" width="100%"
-             summary = "Navigation header" cellpadding="2" cellspacing="10">
+             summary = "Navigation header" cellpadding="2" cellspacing="5">
         <tr valign="middle">
           <td width="100%" align="left" class="shortcuts">
             <!--<xsl:if test="name()='refentry'"-->
