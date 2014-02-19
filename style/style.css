@@ -100,6 +100,12 @@ body
   {
     color: #babdb6;
   }
+  .navigation .title
+  {
+    font-size: 80%;
+    max-width: none;
+  }
+
 }
 @media screen and (min-width: 60em) {
   /* screen larger than 60em */
@@ -149,11 +155,6 @@ body
     left: 0;
     height: 3em;
   }
-}
-
-.navigation .title
-{
-  font-size: 120%;
 }
 
 div.gallery-float
