@@ -210,8 +210,10 @@ fi
 AC_SUBST(TRACE)
 
 dnl check what date format we can use for the makefile tracing in tests
+dnl this is mostly to detect the date command on macosx that is quite cripled
+dnl  and broken too
 AC_MSG_CHECKING(whether date can output nanoseconds)
-date +%s.%N | grep -q '%N'
+date +%s.%N | grep -q 'N'
 if test "$?" == "1"; then
   TS_FMT="+%s.%N"
   ELAPSED_FMT="+%H:%M:%S.%N"
