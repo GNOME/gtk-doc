@@ -818,12 +818,13 @@ $style_args_desc
 EOF
                 }
 
-                $hierarchy_str = &AddTreeLineArt(\@hierarchy) . "\n"; 
+                $hierarchy_str = &AddTreeLineArt(\@hierarchy);
                 if ($hierarchy_str ne "") {
                     $hierarchy_str = <<EOF;
 <refsect1 id="$section_id.object-hierarchy" role="object_hierarchy">
 <title role="object_hierarchy.title">Object Hierarchy</title>
-<screen>$hierarchy_str</screen>
+<screen>$hierarchy_str
+</screen>
 </refsect1>
 EOF
                 }
