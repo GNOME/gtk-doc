@@ -33,7 +33,7 @@
       </author>
       <author>
         <firstname>Stefan</firstname>
-        <surname>Kost</surname>
+        <surname>Sauer (Kost)</surname>
         <affiliation>
           <address>
             <email>ensonic@users.sf.net</email>
@@ -304,71 +304,22 @@
           <guilabel>Perl v5</guilabel> - the main scripts are in Perl.
         </para>
         <para>
-          <guilabel>DocBook DTD v3.0</guilabel> - This is the DocBook SGML DTD.
-          <ulink url="http://www.ora.com/davenport" type="http">http://www.ora.com/davenport</ulink>
+          <guilabel>xsltproc</guilabel> - the xslt processor from libxslt
+          <ulink url="http://xmlsoft.org/XSLT/" type="http">xmlsoft.org/XSLT/</ulink>
         </para>
         <para>
-          <guilabel>Jade v1.1</guilabel> - This is a DSSSL processor for converting SGML to various formats.
-          <ulink url="http://www.jclark.com/jade" type="http">http://www.jclark.com/jade</ulink>
+          <guilabel>docbook-xsl</guilabel> - the docbook xsl stylesheets
+          <ulink url="http://sourceforge.net/projects/docbook/files/docbook-xsl/" type="http">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>
         </para>
         <para>
-          <guilabel>Modular DocBook Stylesheets</guilabel>
-          This is the DSSSL code to convert DocBook to HTML (and a few other
-          formats). It's used together with jade.
-          I've customized the DSSSL code slightly, in gtk-doc.dsl, to colour
-          the program code listings/declarations, and to support global
-          cross-reference indices in the generated HTML.
-          <ulink url="http://nwalsh.com/docbook/dsssl" type="http">http://nwalsh.com/docbook/dsssl</ulink>
+          <guilabel>Python</guilabel> - optional - for gtkdoc-depscan
         </para>
         <para>
-          <guilabel>docbook-to-man</guilabel> - if you want to create man pages from the DocBook.
-          I've customized the 'translation spec' slightly, to capitalise section
-          headings and add the 'GTK Library' title at the top of the pages and the
-          revision date at the bottom.
-          There is a link to this on <ulink url="http://www.ora.com/davenport" type="http">http://www.ora.com/davenport</ulink>
-          NOTE: This does not work yet.
+          One of <guilabel>source-highlight</guilabel>, <guilabel>highlight</guilabel> or
+          <guilabel>vim</guilabel> - optional - used for syntax highlighting of examples
         </para>
       </sect2>
-
-      <sect2 id="installation">
-        <title>Installation</title>
-        <para>
-          There is no standard place where the DocBook Modular Stylesheets are installed.
-        </para>
-        <para>
-          GTK-Doc's configure script searches these 3 directories automatically:
-        </para>
-        <para>
-          <filename> /usr/lib/sgml/stylesheets/nwalsh-modular   </filename>     (used by RedHat)
-        </para>
-        <para>
-          <filename>  /usr/lib/dsssl/stylesheets/docbook         </filename>     (used by Debian)
-        </para>
-        <para>
-          <filename>  /usr/share/sgml/docbkdsl                   </filename>     (used by SuSE)
-        </para>
-        <para>
-          If you have the stylesheets installed somewhere else, you need to configure
-          GTK-Doc using the option:
-          <command> --with-dsssl-dir=&lt;PATH_TO_TOPLEVEL_STYLESHEETS_DIR&gt; </command>
-        </para>
-      </sect2>
-
     </sect1>
-
-    <!-- not realy worth a section
-    <sect1 id="whentousegtkdoc">
-      <title>When to Use GTK-Doc</title>
-
-      <para>
-        (What things GTK-Doc should, and shouldn't, be used for.)
-        (- ???)
-        (- non C-based projects)
-        (+ Tutorials)
-      </para>
-
-    </sect1>
-    -->
 
     <sect1 id="aboutgtkdoc">
       <title>About GTK-Doc</title>
@@ -378,7 +329,7 @@
       </para>
 
       <para>
-        (History, authors, web pages, license, future plans,
+        (History, authors, web pages, mailing list, license, future plans,
         comparison with other similar systems.)
       </para>
 
@@ -425,8 +376,7 @@
       <para>
         This can then look as shown below:
         <example><title>Example directory structure</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 meep/
   docs/
     reference/
@@ -435,8 +385,7 @@ meep/
   src/
     libmeep/
     meeper/
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
     </sect1>
@@ -450,12 +399,10 @@ meep/
 
       <para>
         <example><title>Integration with autoconf</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 # check for gtk-doc
 GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
 
@@ -465,16 +412,14 @@ GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
         solve this as below. Keep it as is, as gtkdocize is looking for
         <function>GTK_DOC_CHECK</function>  at the start of a line.
         <example><title>Keep gtk-doc optional</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 # check for gtk-doc
 m4_ifdef([GTK_DOC_CHECK], [
 GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
 ],[
 AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 ])
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
 
@@ -508,12 +453,15 @@ AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 
       <para>
         <example><title>Preparation for gtkdocize</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 AC_CONFIG_MACRO_DIR(m4)
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
+      </para>
+      <para>
+        After all changes to <filename>configure.ac</filename> are made, update
+        the <filename>configure</filename> file. This can be done by re-running
+        <code>autoreconf -i</code> or <code>autogen.sh</code>.
       </para>
     </sect1>
 
@@ -557,11 +505,9 @@ AC_CONFIG_MACRO_DIR(m4)
 
       <para>
         <example><title>Running gtkdocize from autogen.sh</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 gtkdocize || exit 1
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
 
@@ -609,12 +555,10 @@ gtkdocize || exit 1
       </para>
       <para>
         <example><title>Running the doc build</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 ./autogen.sh --enable-gtk-doc
 make
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
       <para>
@@ -648,8 +592,7 @@ make
 
       <para>
         <example><title>Documentation build steps</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 DOC_MODULE=meep
 // sources have changed
 gtkdoc-scan --module=$(DOC_MODULE) --source-dir=...
@@ -659,8 +602,7 @@ gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml
 mkdir html
 cd html && gtkdoc-mkhtml $(DOC_MODULE) ../meep-docs.xml
 gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
 
@@ -686,14 +628,14 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
       <title>Documentation placement</title>
       <para>
         In the past most documentation had to be filled into files residing
-	inside the <filename>tmpl</filename> directory. This has the
-	disadvantages that the information is often not updated and also that
-	the file tend to cause conflicts with version control systems.
+        inside the <filename>tmpl</filename> directory. This has the
+        disadvantages that the information is often not updated and also that
+        the file tend to cause conflicts with version control systems.
       </para>
       <para>
         The avoid the aforementioned problems we suggest putting the
-	documentation inside the sources. This manual will only describe this
-	way of documenting code.
+        documentation inside the sources. This manual will only describe this
+        way of documenting code.
       </para>
     </note>
 
@@ -702,13 +644,11 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
       receiving warnings from the scanner that look like a special case, one can
       hint GTK-Doc to skip over them.
       <example><title>GTK-Doc comment block</title>
-        <programlisting>
-<![CDATA[
+        <programlisting><![CDATA[
 #ifndef __GTK_DOC_IGNORE__
 /* unparseable code here */
 #endif
-]]>
-        </programlisting>
+]]></programlisting>
       </example>
     </para>
 
@@ -721,14 +661,12 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
         A multiline comment that starts with an additional '*' marks a
         documentation block that will be processed by the GTK-Doc tools.
         <example><title>GTK-Doc comment block</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 /**
  * identifier:
  * documentation ...
  */
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
 
@@ -848,8 +786,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
 
       <para>
         <example><title>GTK-Doc comment block using Markdown</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 /**
  * identifier:
  *
@@ -884,8 +821,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
  * GtkWidget *label = gtk_label_new ("Gorgeous!");
  * ]|
  */
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
 
@@ -920,8 +856,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
 
       <para>
         <example><title>Section comment block</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 /**
  * SECTION:meepapp
  * @short_description: the application class
@@ -934,8 +869,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
  *
  * The application class handles ...
  */
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
 
@@ -1113,8 +1047,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
           </para>
 
         <example><title>General tags</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 /**
  * foo_get_bar:
  * @foo: some foo
@@ -1130,8 +1063,7 @@ Bar *
 foo_get_bar(Foo *foo)
 {
 ...
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </sect2>
 
@@ -1172,8 +1104,7 @@ foo_get_bar(Foo *foo)
         </para>
 
         <example><title>Function comment block</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 /**
  * function_name:
  * @par1:  description of parameter 1. These can extend over more than
@@ -1191,8 +1122,7 @@ foo_get_bar(Foo *foo)
  * Since: 2.2
  * Deprecated: 2.18: Use other_function() instead.
  */
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
 
         <variablelist><title>Function tags</title>
@@ -1218,16 +1148,14 @@ foo_get_bar(Foo *foo)
       <sect2><title>Property comment block</title>
 
         <example><title>Property comment block</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 /**
  * SomeWidget:some-property:
  *
  * Here you can document a property.
  */
 g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
 
       </sect2>
@@ -1252,8 +1180,7 @@ g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);
         </para>
 
         <example><title>Signal comment block</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 /**
  * FooWidget::foobarized:
  * @widget: the widget that received the signal
@@ -1265,16 +1192,14 @@ g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);
 foo_signals[FOOBARIZE] =
   g_signal_new ("foobarize",
                 ...
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
 
       </sect2>
 
       <sect2><title>Struct comment block</title>
         <example><title>Struct comment block</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 /**
  * FooWidget:
  * @bar: some #gboolean
@@ -1288,8 +1213,7 @@ typedef struct _FooWidget {
   /*< public >*/
   gboolean bar;
 } FooWidget;
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
 
         <para>
@@ -1312,8 +1236,7 @@ typedef struct _FooWidget {
 
       <sect2><title>Enum comment block</title>
         <example><title>Enum comment block</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 /**
  * Something:
  * @SOMETHING_FOO: something foo
@@ -1327,8 +1250,7 @@ typedef enum {
   /*< private >*/
   SOMETHING_COUNT
 } Something;
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
 
         <para>
@@ -1352,11 +1274,9 @@ typedef enum {
         To link to another section in the GTK docs:
 
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <link linkend="glib-Hash-Tables">Hash Tables</link>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
         The linkend is the SGML/XML id on the top item of the page you want to link to.
         For most pages this is currently the part ("gtk", "gdk", "glib") and then
@@ -1367,39 +1287,33 @@ typedef enum {
       <para>
         To refer to an external function, e.g. a standard C function:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <function>...</function>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
       </para>
 
       <para>
         To include example code:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <example>
   <title>Using a GHashTable.</title>
   <programlisting>
       ...
   </programlisting>
 </example>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
         or possibly this, for very short code fragments which don't need a title:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <informalexample>
   <programlisting>
   ...
   </programlisting>
 </informalexample>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
         For the latter GTK-Doc also supports an abbreviation:
 <![CDATA[
@@ -1412,8 +1326,7 @@ typedef enum {
       <para>
         To include bulleted lists:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <itemizedlist>
   <listitem>
     <para>
@@ -1426,67 +1339,56 @@ typedef enum {
     </para>
   </listitem>
 </itemizedlist>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
       </para>
 
       <para>
         To include a note which stands out from the text:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <note>
   <para>
     Make sure you free the data after use.
   </para>
 </note>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
       </para>
 
       <para>
         To refer to a type:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <type>unsigned char</type>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
       </para>
 
       <para>
         To refer to an external structure (not one described in the GTK docs):
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <structname>XFontStruct</structname>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
       </para>
 
       <para>
         To refer to a field of a structure:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <structfield>len</structfield>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
       </para>
 
       <para>
         To refer to a class name, we could possibly use:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <classname>GtkWidget</classname>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
         but you'll probably be using #GtkWidget instead (to automatically create
         a link to the GtkWidget page - see <link linkend="documenting_syntax">the abbreviations</link>).
@@ -1495,33 +1397,27 @@ typedef enum {
       <para>
         To emphasize text:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <emphasis>This is important</emphasis>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
       </para>
 
       <para>
         For filenames use:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <filename>/home/user/documents</filename>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
       </para>
 
       <para>
         To refer to keys use:
         <informalexample>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>
-]]>
-          </programlisting>
+]]></programlisting>
         </informalexample>
       </para>
 
@@ -1552,16 +1448,14 @@ typedef enum {
 
       <para>
         <example><title>Example types file snippet</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 #include <gtk/gtk.h>
 
 gtk_accel_label_get_type
 gtk_adjustment_get_type
 gtk_alignment_get_type
 gtk_arrow_get_type
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
 
@@ -1610,8 +1504,7 @@ gtk_arrow_get_type
 
       <para>
         <example><title>Master document header</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 <bookinfo>
   <title>MODULENAME Reference Manual</title>
   <releaseinfo>
@@ -1623,8 +1516,7 @@ gtk_arrow_get_type
 
 <chapter>
   <title>[Insert title here]</title>
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
 
@@ -1819,16 +1711,14 @@ gtk_arrow_get_type
         a set of sanity checks on your documentation. It is enabled by adding
         these lines to the end of <filename>Makefile.am</filename>.
         <example><title>Enable gtkdoc-check</title>
-          <programlisting>
-<![CDATA[
+          <programlisting><![CDATA[
 if ENABLE_GTK_DOC
 TESTS_ENVIRONMENT = \
   DOC_MODULE=$(DOC_MODULE) DOC_MAIN_SGML_FILE=$(DOC_MAIN_SGML_FILE) \
   SRCDIR=$(abs_srcdir) BUILDDIR=$(abs_builddir)
 TESTS = $(GTKDOC_CHECK)
 endif
-]]>
-          </programlisting>
+]]></programlisting>
         </example>
       </para>
     </sect1>
@@ -1881,8 +1771,7 @@ endif
 
         <para>
           <example><title>Extra configure checks</title>
-            <programlisting>
-<![CDATA[
+            <programlisting><![CDATA[
 AC_ARG_ENABLE(man,
               [AC_HELP_STRING([--enable-man],
                               [regenerate man pages from Docbook [default=no]])],enable_man=yes,
@@ -1890,8 +1779,7 @@ AC_ARG_ENABLE(man,
 
 AC_PATH_PROG([XSLTPROC], [xsltproc])
 AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)
-]]>
-            </programlisting>
+]]></programlisting>
           </example>
         </para>
       </sect2>
@@ -1901,8 +1789,7 @@ AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)
 
         <para>
           <example><title>Extra configure checks</title>
-            <programlisting>
-<![CDATA[
+            <programlisting><![CDATA[
 man_MANS = \
        meeper.1
 
@@ -1917,8 +1804,7 @@ endif
 
 BUILT_EXTRA_DIST = $(man_MANS)
 EXTRA_DIST += meep.xml
-]]>
-            </programlisting>
+]]></programlisting>
           </example>
         </para>
       </sect2>
