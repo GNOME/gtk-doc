@@ -5,9 +5,11 @@ endif
 HELP_ID = gtk-doc-manual
 
 HELP_FILES = \
-        index.docbook \
-	fdl-appendix.xml
+    index.docbook \
+    fdl-appendix.xml
 
 HELP_LINGUAS = bn_IN de el en_GB es fr gu pt_BR sl sv ta te zh_CN
+
+CLEANFILES = $(_HELP_LC_FILES) $(_HELP_LC_STAMPS) $(_HELP_MOFILES)
 
 -include $(top_srcdir)/git.mk

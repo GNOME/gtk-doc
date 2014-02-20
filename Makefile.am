@@ -83,7 +83,12 @@ EXTRA_DIST = \
 	tools/gtk-doc.el \
 	COPYING-DOCS
 
+CLEANFILES = \
+  gtk-doc.flat.make \
+  gtk-doc.notmpl-flat.make
+
 MAINTAINERCLEANFILES = \
+  build-aux \
 	$(srcdir)/INSTALL \
 	$(srcdir)/COPYING \
 	$(srcdir)/aclocal.m4 \
@@ -104,7 +109,8 @@ MAINTAINERCLEANFILES = \
 
 GITIGNOREFILES = \
 	RELNOTES.txt \
-	ChangeLog-?.??
+	ChangeLog-?.?? \
+	gtk-doc-*.tar.xz
 
 -include $(top_srcdir)/git.mk
 
