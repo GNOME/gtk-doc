@@ -555,7 +555,7 @@ sub ScanHeader {
 
             # VARIABLES (extern'ed variables)
 
-            } elsif (m/^\s*(extern|[A-Za-z_]+VAR|${IGNORE_DECORATORS})\s+((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*;/) {
+            } elsif (m/^\s*(extern|[A-Za-z_]+VAR|${IGNORE_DECORATORS})\s+((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*;/o) {
                 $symbol = $6;
                 s/^\s*([A-Za-z_]+VAR)\b/extern/;
                 $decl = $_;
