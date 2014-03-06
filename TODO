@@ -133,13 +133,6 @@ libs can benefit from the extensions too.
   * need to check if we can pass the style-sheet class as a parameter (--stringparam gtkdoc.stylesheet=(chunk|docbook))
   * we might also need to reflow some things, as gtk-doc.xsl also runs the devhelp/devhelp2 generation
     - but then the urls in the devhelp file, refer to the chunked html anyway
-* rtf
- ~/download/fop-0.94/fop -fo tester-docs.fo -rtf tester-docs.rtf
- * unrtf
-   unrtf -t ps tester-docs.rtf >tester-docs.ps
-   unrtf -t latex tester-docs.rtf >tester-docs.tex
-   - bad output
-
 
 = Warnings =
 Bugzilla has some requests for extra warnings. We should support a common
@@ -166,14 +159,6 @@ more warnings:
   - 'dummy-docs' check if symbol docs are very short and repeat mainly words
     from the symbol.
   - possible xrefs (e.g. adding a # or () would make it a successful xref)
-
-
-= Markup =
-* protected scope
-  * we can have /* < protected > */ in classes
-  * we can have <SUBSECTION Protected> in -section.txt
-  * ideally we have Scope: {Public, Protected, Private} supported in doc comments
-  * there is a bg for gir, https://bugzilla.gnome.org/show_bug.cgi?id=594125
 
 = GIR =
 == scanning ==
@@ -207,16 +192,13 @@ more warnings:
   * need to get existing python/~mm docs to use it, gtk-doc could output
     language=C for own docs
 
-== installation ==
+=== installation ===
 * need to install each book with a prefix
 * would be good to have a language attribute in book tag to allow filter by language
 * look at /usr/share/gtk-doc/html/pygobject/index.html
 
 
-= docbook xml =
-Its tedious to write large amounts of docbook.
-
-== more macros ==
+= external processors =
 We need parametric, user definable macros.
 |[ ... ]| - programlistings
 |macro(arg1,arg2,...)[ ... ]| - call macro
@@ -227,7 +209,7 @@ We need parametric, user definable macros.
   - get output on stdout or file
   - and replace the macro with it
 The changes could be made in gtkdoc-mkdb::ExpandAbbreviations()
-=== example macros ===
+== example macros ==
 |highlight(c)[...]| - highlight source code for a specific language (c)
   - what will this output? preformatted html to be xincluded?
   - we could have macros for each format, the docbook xml macro would leave
@@ -236,48 +218,14 @@ The changes could be made in gtkdoc-mkdb::ExpandAbbreviations()
 |ditta(svg)[...]| - parse ascii art and include result as mediaobject (in svg format)
   - we need to generate a filename for the image or use anoter parameter
 
-=== where to define macros ===
+== where to define macros ==
 * system wide and with the package, <prefix>/share/gtk-doc/macros, $(srcdir)
 * prefix for custom macros?
 * we could require stdin for input and stdout for output, the wrapper for the
   actual tool can ensure the convention
 
-== asciidoc as a frontend ==
-Can we offer integration with asciidoc (http://www.methods.co.nz/asciidoc/)?
-This way the master document could be written much easier. It would be cool if
-we could use the asciidoc markup in source-comments also.
-
-== extract other bits and pieces ==
-=== library api ==
-gtkdoc-scan could be obsoleted and gtkdoc-mkdb would build docbook fragemnts for
-api docs and their indexes
-=== DBUs Interfaces ===
-http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html
-http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus
-=== GConf schemas ===
-
-=== Wiki imports ===
-
-
 
 = styling =
-== source code examples==
-http://bugzilla.gnome.org/show_bug.cgi?id=536928
-We could also run a postprocessing script in gtkdoc-mkhtml/gtkdoc-fixxref
-
-tools:
-  source-highlight (/usr/bin/source-highlight)
-  source-highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc
-  source-highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.html -n -t4 -sc -cstyle.css --no-doc
-  source-highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -n -t4 -sc -f docbook
-
-  highlight -itests/gobject/examples/gobject.c -o$HOME/temp/gobject.xml -l -X -f -j2
-
-some tips about styling code listings in html
-http://www.tjkdesign.com/articles/how_to_style_a_code_listing.asp
-
-=== process docbook ===
-if we highlight to docbook, we just get emphasis (bold)
 === process html ===
 if we highlight to html we get colors, we need to check what tags we should process though:
 <pre class="programlisting"> is used for all code boxes.
@@ -302,9 +250,20 @@ could we write small html files for each object for methods, signals and propert
 could we do that using javascript and some other magic?
 
 
-= syntax =
+= Markup =
+== tags ==
+* to document the api-life cycle we have: since, deprecated and stability:
+* other things we might want to specify:
+  * multi-threading safety: mt-safe, use-with-lock <lock>
+
+== protected scope ==
+* we can have /* < protected > */ in classes
+* we can have <SUBSECTION Protected> in -section.txt
+* ideally we have Scope: {Public, Protected, Private} supported in doc comments
+* there is a bug for gir, https://bugzilla.gnome.org/show_bug.cgi?id=594125
+
 == wildcards in symbol names ==
-Somtimes one defines a set of function and macros with very simillar purpose, e.g.
+Sometimes one defines a set of function and macros with very similar purpose, e.g.
 READ_INT8, READ_INT16, READ_INT32. It would be great to allow documenting a symbol
 READ_INT* instead of 3 docs which are copy'n'pasted anyway. In the output we will have
 all matching declarations in one source listing. Multiple wildcards are okay.
@@ -315,7 +274,7 @@ all matching declarations in one source listing. Multiple wildcards are okay.
   * structure
   * docbook markup (part/chapter structure)
 * structure
-  Sugested structure for api-docs.
+  Suggested structure for api-docs.
   Idea is to have more content that api reference. It would be good to have a
   gnome-platform document in devhelp, so that we could xref that instead of
   explaining 100 times how to use pkg-config.
