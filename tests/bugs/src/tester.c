@@ -77,7 +77,7 @@ int bug_380824 (int arg) {
  *
  * Returns: result
  */
-struct bug *
+struct bug_411739_rettype *
 bug_411739 (void) {
   return NULL;
 }
