@@ -2765,9 +2765,13 @@ sub ConvertSGMLChars {
                                    \&ConvertSGMLCharsCallback);
     } else {
         # For the simple non-sgml mode, convert to entities everywhere.
-        $text =~ s/&/&amp;/g;        # Do this first, or the others get messed up.
+
+	# First, convert freestanding & to &amp;
+        $text =~ s/&(?![a-zA-Z#]+;)/&amp;/g;
         $text =~ s/</&lt;/g;
-        $text =~ s/>/&gt;/g;
+        # Allow ">" at beginning of string for blockquote markdown
+        $text =~ s/(?<=[^\w\n"'\/-])>/&gt;/g;
+
         return $text;
     }
 }
@@ -4943,7 +4947,6 @@ sub MarkDownParseBlocks {
     }
 
     # indentation insensitive types
-
     if ($line =~ /^[ ]*<!DOCTYPE/) {
       push @md_blocks, $md_block;
 
