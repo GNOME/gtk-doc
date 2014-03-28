@@ -91,6 +91,12 @@ void bug_379466 (int
 int bug_380824 (int arg);
 
 
+/**
+ * bug_411739_rettype:
+ * @test: field
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=411739
+ */
 struct bug_411739_rettype {
   int test;
 };

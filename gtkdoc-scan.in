@@ -484,7 +484,7 @@ sub ScanHeader {
 
             # ENUMS
 
-            } elsif (s/^\s*enum\s+_(\w+)\s+\{/enum $1 {/) {
+            } elsif (s/^\s*enum\s+_?(\w+)\s+\{/enum $1 {/) {
                 # We assume that 'enum _<enum_name> {' is really the
                 # declaration of enum <enum_name>.
                 $symbol = $1;
@@ -682,11 +682,11 @@ sub ScanHeader {
 
             # STRUCTS
 
-            } elsif (m/^\s*struct\s+_(\w+)\s*\*/) {
+            } elsif (m/^\s*struct\s+_?(\w+)\s*\*/) {
                 # Skip 'struct _<struct_name> *', since it could be a
                 # return type on its own line.
 
-            } elsif (m/^\s*struct\s+_(\w+)/) {
+            } elsif (m/^\s*struct\s+_?(\w+)/) {
                 # We assume that 'struct _<struct_name>' is really the
                 # declaration of struct <struct_name>.
                 $symbol = $1;

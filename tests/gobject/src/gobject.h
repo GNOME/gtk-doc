@@ -95,10 +95,23 @@ struct _GtkdocObject3Class {
 };
 
 
+/**
+ * GtkdocHelperStruct:
+ * @a: field
+ *
+ * GtkdocHelperStruct
+ */
 struct GtkdocHelperStruct {
   int a;
 };
 
+/**
+ * GtkdocHelperEnum:
+ * @GTKDOC_HELPER_ENUM_A: enum a
+ * @GTKDOC_HELPER_ENUM_B: enum b
+ *
+ * GtkdocHelperEnum
+ */
 enum GtkdocHelperEnum {
   GTKDOC_HELPER_ENUM_A,
   GTKDOC_HELPER_ENUM_B
