@@ -138,7 +138,7 @@ if (! defined($OUTPUT_FORMAT) || ($OUTPUT_FORMAT eq "")) {
     $OUTPUT_FORMAT = lc($OUTPUT_FORMAT);
 }
 
-#print "DEBUG: output-format: [$OUTPUT_FORMAT]\n";
+@TRACE@(" output-format: [$OUTPUT_FORMAT]\n");
 
 if ($OUTPUT_FORMAT eq "xml") {
     if (!$MAIN_SGML_FILE) {
@@ -594,7 +594,7 @@ sub TrimTextBlock {
 sub OutputSGML {
     my ($file) = @_;
 
-    #print "Reading: $file\n";
+    @TRACE@("Reading: $file\n");
     open (INPUT, $file)
         || die "Can't open $file: $!";
     my $filename = "";
@@ -652,7 +652,7 @@ sub OutputSGML {
 
         } elsif (m/^<TITLE>(.*)<\/TITLE>/) {
             $title = $1;
-            #print "Section: $title\n";
+            @TRACE@("Section: $title\n");
 
             # We don't want warnings if object & class structs aren't used.
             $DeclarationOutput{$title} = 1;
@@ -690,7 +690,7 @@ sub OutputSGML {
             }
 
         } elsif (m/^<\/SECTION>/) {
-            #print "End of section: $title\n";
+            @TRACE@("End of section: $title\n");
             if ($num_symbols > 0) {
                 # collect documents
                 if ($OUTPUT_FORMAT eq "xml") {
@@ -1087,7 +1087,7 @@ sub OutputIndex {
 
     print (OUTPUT "$header<indexdiv>\n");
 
-    #print "generate $basename index (".%apiindex." entries)\n";
+    @TRACE@("generate $basename index (".%apiindex." entries)\n");
 
     # do a case insensitive sort while chopping off the prefix
     foreach my $hash (
@@ -1111,12 +1111,12 @@ sub OutputIndex {
           $symbol_type = lc($DeclarationTypes{$symbol});
         }
         if ($symbol_type eq "") {
-            #print "trying symbol $symbol\n";
+            @TRACE@("trying symbol $symbol\n");
             if ($symbol =~ m/(.*)::(.*)/) {
                 my $oname = $1;
                 my $osym = $2;
                 my $i;
-                #print "  trying object signal ${oname}:$osym in ".$#SignalNames." signals\n";
+                @TRACE@("  trying object signal ${oname}:$osym in ".$#SignalNames." signals\n");
                 for ($i = 0; $i <= $#SignalNames; $i++) {
                     if ($SignalNames[$i] eq $osym) {
                         $symbol_type = "object signal";
@@ -1131,9 +1131,9 @@ sub OutputIndex {
                 my $oname = $1;
                 my $osym = $2;
                 my $i;
-                #print "  trying object property ${oname}::$osym in ".$#ArgNames." properties\n";
+                @TRACE@("  trying object property ${oname}::$osym in ".$#ArgNames." properties\n");
                 for ($i = 0; $i <= $#ArgNames; $i++) {
-                    #print "    ".$ArgNames[$i]."\n";
+                    @TRACE@("    ".$ArgNames[$i]."\n");
                     if ($ArgNames[$i] eq $osym) {
                         $symbol_type = "object property";
                         if (defined($SymbolSection{$oname})) {
@@ -1161,7 +1161,7 @@ sub OutputIndex {
         my $curletter = uc(substr($short_symbol,0,1));
         my $id = $apiindex{$symbol};
 
-        #print "  add symbol $symbol with $id to index in section $curletter\n";
+        @TRACE@("  add symbol $symbol with $id to index in section $curletter\n");
 
         if ($curletter ne $lastletter) {
             $lastletter = $curletter;
@@ -1220,7 +1220,7 @@ sub OutputSinceIndexes {
     my @sinces = keys %{{ map { $_ => 1 } values %Since }};
 
     foreach my $version (@sinces) {
-        #print "Since : [$version]\n";
+        @TRACE@("Since : [$version]\n");
         # TODO make filtered hash
         #my %index = grep { $Since{$_} eq $version } %IndexEntriesSince;
         my %index = map { $_ => $IndexEntriesSince{$_} } grep { $Since{$_} eq $version } keys %IndexEntriesSince;
@@ -1318,7 +1318,7 @@ sub ReadKnownSymbols {
 
     my $subsection = "";
 
-    #print "Reading: $file\n";
+    @TRACE@("Reading: $file\n");
     open (INPUT, $file)
         || die "Can't open $file: $!";
 
@@ -1598,7 +1598,7 @@ sub OutputStruct {
     my $is_gtype = 0;
     my $default_to_public = 1;
     if (&CheckIsObject ($symbol)) {
-        #print "Found struct gtype: $symbol\n";
+        @TRACE@("Found struct gtype: $symbol\n");
         $is_gtype = 1;
         $default_to_public = $ObjectRoots{$symbol} eq 'GBoxed';
     }
@@ -1639,10 +1639,10 @@ sub OutputStruct {
 
     my $decl_out = "";
     if ($declaration =~ m/^\s*$/) {
-        #print "Found opaque struct: $symbol\n";
+        @TRACE@("Found opaque struct: $symbol\n");
         $decl_out = "typedef struct _$symbol $symbol;";
     } elsif ($declaration =~ m/^\s*struct\s+\w+\s*;\s*$/) {
-        #print "Found opaque struct: $symbol\n";
+        @TRACE@("Found opaque struct: $symbol\n");
         $decl_out = "struct $symbol;";
     } else {
         my $public = $default_to_public;
@@ -1654,7 +1654,7 @@ sub OutputStruct {
             my $struct_contents = $2;
 
             foreach $decl_line (split (/\n/, $struct_contents)) {
-                #print "Struct line: $decl_line\n";
+                @TRACE@("Struct line: $decl_line\n");
                 if ($decl_line =~ m%/\*\s*<\s*public\s*>\s*\*/%) {
                     $public = 1;
                 } elsif ($decl_line =~ m%/\*\s*<\s*(private|protected)\s*>\s*\*/%) {
@@ -1975,7 +1975,7 @@ sub OutputEnum {
 
     my $is_gtype = 0;
     if (&CheckIsObject ($symbol)) {
-        #print "Found enum gtype: $symbol\n";
+        @TRACE@("Found enum gtype: $symbol\n");
         $is_gtype = 1;
     }
 
@@ -2301,7 +2301,8 @@ sub OutputParamDescriptions {
             if ($param_name eq "Returns") {
                 $returns = "$param_desc\n<para>$param_annotations</para>";
             } elsif ($param_name eq "void") {
-                #print "!!!! void in params for $symbol?\n";
+                # FIXME: &LogWarning()?
+                @TRACE@("!!!! void in params for $symbol?\n");
             } else {
                 if (@fields) {
                     if (!defined $field_descrs{$param_name}) {
@@ -2437,13 +2438,13 @@ sub ParseStabilityLevel {
 sub OutputSGMLFile {
     my ($file, $title, $section_id, $includes, $functions_synop, $other_synop, $functions_details, $other_details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $implementations, $prerequisites, $derived, $file_objects) = @_;
 
-    #print "Output sgml for file $file with title '$title'\n";
+    @TRACE@("Output sgml for file $file with title '$title'\n");
 
     # The edited title overrides the one from the sections file.
     my $new_title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
     if (defined ($new_title) && $new_title !~ m/^\s*$/) {
         $title = $new_title;
-        #print "Found title: $title\n";
+        @TRACE@("Found title: $title\n");
     }
     my $short_desc = $SymbolDocs{"$TMPL_DIR/$file:Short_Description"};
     if (!defined ($short_desc) || $short_desc =~ m/^\s*$/) {
@@ -2452,7 +2453,7 @@ sub OutputSGMLFile {
         # Don't use ConvertMarkDown here for now since we don't want blocks
         $short_desc = &ExpandAbbreviations("$title:Short_description",
                                            $short_desc);
-        #print "Found short_desc: $short_desc";
+        @TRACE@("Found short_desc: $short_desc");
     }
     my $long_desc = $SymbolDocs{"$TMPL_DIR/$file:Long_Description"};
     if (!defined ($long_desc) || $long_desc =~ m/^\s*$/) {
@@ -2460,14 +2461,14 @@ sub OutputSGMLFile {
     } else {
         $long_desc = &ConvertMarkDown("$title:Long_description",
                                           $long_desc);
-        #print "Found long_desc: $long_desc";
+        @TRACE@("Found long_desc: $long_desc");
     }
     my $see_also = $SymbolDocs{"$TMPL_DIR/$file:See_Also"};
     if (!defined ($see_also) || $see_also =~ m%^\s*(<para>)?\s*(</para>)?\s*$%) {
         $see_also = "";
     } else {
         $see_also = &ConvertMarkDown("$title:See_Also", $see_also);
-        #print "Found see_also: $see_also";
+        @TRACE@("Found see_also: $see_also");
     }
     if ($see_also) {
         $see_also = "<refsect1 id=\"$section_id.see-also\">\n<title>See Also</title>\n$see_also\n</refsect1>\n";
@@ -2477,7 +2478,7 @@ sub OutputSGMLFile {
         $stability = "";
     } else {
         $stability = &ParseStabilityLevel($stability, $file, $., "Section stability level");
-        #print "Found stability: $stability";
+        @TRACE@("Found stability: $stability");
     }
     if ($stability) {
         $AnnotationsUsed{$stability} = 1;
@@ -2542,7 +2543,7 @@ sub OutputSGMLFile {
     foreach my $object (@$file_objects) {
         next if ($object eq $section_id);
         my $id = CreateValidSGMLID($object);
-        #print "Debug: Adding anchor for $object\n";
+        @TRACE@("Adding anchor for $object\n");
         $object_anchors .= "<anchor id=\"$id\"$empty_element_end";
     }
 
@@ -3114,7 +3115,7 @@ sub MakeXRef {
         return "$text";
     }
 
-    #print "Getting type link for $symbol -> $text\n";
+    @TRACE@("Getting type link for $symbol -> $text\n");
 
     my $symbol_id = &CreateValidSGMLID ($symbol);
     return "<link linkend=\"$symbol_id\">$text</link>";
@@ -3240,7 +3241,7 @@ sub MakeConditionDescription {
         my $cond = $desc;
         $cond =~ s/\"/&quot;/g;
         $desc=" condition=\"".$cond."\"";
-        #print "condition for '$symbol' = '$desc'\n";
+        @TRACE@("condition for '$symbol' = '$desc'\n");
     }
     return $desc;
 }
@@ -3287,13 +3288,13 @@ sub GetHierarchy {
     # Walk up the hierarchy, pushing ancestors onto the ancestors array.
     my @ancestors = ();
     push (@ancestors, $object);
-    #print "Level: $level\n";
+    @TRACE@("Level: $level\n");
     while ($level > 1) {
         $j--;
         if ($ObjectLevels[$j] < $level) {
             push (@ancestors, $Objects[$j]);
             $level = $ObjectLevels[$j];
-            #print "Level: $level\n";
+            @TRACE@("Level: $level\n");
         }
     }
 
@@ -3544,7 +3545,7 @@ sub GetSignals {
     my $i;
     for ($i = 0; $i <= $#SignalObjects; $i++) {
         if ($SignalObjects[$i] eq $object) {
-            #print "Found signal: $SignalNames[$i]\n";
+            @TRACE@("Found signal: $SignalNames[$i]\n");
             my $name = $SignalNames[$i];
             my $symbol = "${object}::${name}";
             my $id = &CreateValidSGMLID ("$object-$name");
@@ -3704,7 +3705,7 @@ sub GetArgs {
     my $i;
     for ($i = 0; $i <= $#ArgObjects; $i++) {
         if ($ArgObjects[$i] eq $object) {
-            #print "Found arg: $ArgNames[$i]\n";
+            @TRACE@("Found arg: $ArgNames[$i]\n");
             my $name = $ArgNames[$i];
             my $flags = $ArgFlags[$i];
             my $flags_string = "";
@@ -3769,7 +3770,7 @@ sub GetArgs {
             if (defined($SymbolDocs{$symbol}) &&
                 !IsEmptyDoc($SymbolDocs{$symbol})) {
                 $blurb = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
-                #print ".. [$SymbolDocs{$symbol}][$blurb]\n";
+                @TRACE@(".. [$SymbolDocs{$symbol}][$blurb]\n");
                 $AllDocumentedSymbols{$symbol} = 1;
             }
             else {
@@ -3777,7 +3778,7 @@ sub GetArgs {
                     $AllDocumentedSymbols{$symbol} = 1;
                 } else {
                     # FIXME: print a warning?
-                    #print ".. no description\n";
+                    @TRACE@(".. no description\n");
                 }
                 $blurb = "<para>" . &CreateValidSGML ($ArgBlurbs[$i]) . "</para>";
             }
@@ -3941,7 +3942,7 @@ sub ScanSourceFile {
             if (m%^\s*/\*.*\*/%) {
                 #one-line comment - not gtkdoc
             } elsif (m%^\s*/\*\*\s%) {
-                #print "Found comment block start\n";
+                @TRACE@("Found comment block start\n");
 
                 $in_comment_block = 1;
 
@@ -3993,10 +3994,10 @@ sub ScanSourceFile {
                         }
                     }
 
-                    #print "SECTION DOCS found in source for : '$real_symbol'\n";
+                    @TRACE@("SECTION DOCS found in source for : '$real_symbol'\n");
                     $ignore_broken_returns = 1;
                     for ($k = 0; $k <= $#params; $k += $PARAM_FIELD_COUNT) {
-                        #print "   '".$params[$k]."'\n";
+                        @TRACE@("   '".$params[$k]."'\n");
                         $params[$k] = "\L$params[$k]";
                         undef $key;
                         if ($params[$k] eq "short_description") {
@@ -4025,7 +4026,7 @@ sub ScanSourceFile {
                     $SourceSymbolSourceLine{"$TMPL_DIR/$real_symbol:Long_Description"} = $.;
                     #$SourceSymbolTypes{$symbol} = "SECTION";
                 } else {
-                    #print "SYMBOL DOCS found in source for : '$symbol' ",length($description), "\n";
+                    @TRACE@("SYMBOL DOCS found in source for : '$symbol' ",length($description), "\n");
                     $SourceSymbolDocs{$symbol} = $description;
                     $SourceSymbolParams{$symbol} = [ @params ];
                     # FIXME $SourceSymbolTypes{$symbol} = "STRUCT,SIGNAL,ARG,FUNCTION,MACRO";
@@ -4040,7 +4041,7 @@ sub ScanSourceFile {
                      ($since_desc, my @extra_lines) = split ("\n", $since_desc);
                      $since_desc =~ s/^\s+//;
                      $since_desc =~ s/\s+$//;
-                     #print "Since($symbol) : [$since_desc]\n";
+                     @TRACE@("Since($symbol) : [$since_desc]\n");
                      $Since{$symbol} = &ConvertSGMLChars ($symbol, $since_desc);
                      if(scalar @extra_lines) {
                          &LogWarning ($file, $., "multi-line since docs found");
@@ -4076,17 +4077,17 @@ sub ScanSourceFile {
         if (!$_) {
             $_ = "\n";
         }
-        #print "DEBUG: scanning :$_";
+        @TRACE@("scanning :$_");
 
         # If we haven't found the symbol name yet, look for it.
         if (!$symbol) {
             if (m%^\s*(SECTION:\s*\S+)%) {
                 $symbol = $1;
-                #print "SECTION DOCS found in source for : '$symbol'\n";
+                @TRACE@("SECTION DOCS found in source for : '$symbol'\n");
                 $ignore_broken_returns = 1;
             } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([-a-z0-9_ ]+\)\s*)*$%) {
                 $symbol = $1;
-                #print "SYMBOL DOCS found in source for : '$symbol'\n";
+                @TRACE@("SYMBOL DOCS found in source for : '$symbol'\n");
             }
             next;
         }
@@ -4163,7 +4164,7 @@ sub ScanSourceFile {
             my $param_name = $1;
             my $param_desc = $';
 
-            #print "Found parameter: $param_name\n";
+            @TRACE@("Found parameter: $param_name\n");
             # Allow varargs variations
             if ($param_name =~ m/^\.\.\.$/) {
                 $param_name = "...";
@@ -4252,9 +4253,6 @@ sub OutputMissingDocumentation {
             }
         } elsif ($symbol =~ /:(Long_Description|Short_Description)/) {
             $total++;
-            #my $len1=(exists($SymbolDocs{$symbol}))?length($SymbolDocs{$symbol}):-1;
-            #my $len2=(exists($AllDocumentedSymbols{$symbol}))?length($AllDocumentedSymbols{$symbol}):-1;
-            #print "%%%% $symbol : $len1,$len2\n";
             if (((exists ($SymbolDocs{$symbol})) && (length ($SymbolDocs{$symbol}) > 0))
             || ((exists ($AllDocumentedSymbols{$symbol})) && (length ($AllDocumentedSymbols{$symbol}) > 0))) {
               $n_documented++;
@@ -4420,8 +4418,7 @@ sub MergeSourceDocumentation {
 
     if (scalar %SymbolDocs) {
         @Symbols=keys (%SymbolDocs);
-        #print "num existing entries: ".(scalar @Symbols)."\n";
-        #print "  ",$Symbols[0], " ",$Symbols[1],"\n";
+        @TRACE@("num existing entries: ".(scalar @Symbols)."\n");
     }
     else {
         # filter scanned declarations, with what we suppress from -sections.txt
@@ -4442,7 +4439,7 @@ sub MergeSourceDocumentation {
             $tmp{$symbol}=1;
         }
         @Symbols = keys (%tmp);
-        #print "num source entries: ".(scalar @Symbols)."\n";
+        @TRACE@("num source entries: ".(scalar @Symbols)."\n");
     }
     foreach $symbol (@Symbols) {
         $AllSymbols{$symbol} = 1;
@@ -4458,7 +4455,6 @@ sub MergeSourceDocumentation {
         # anything left ?
         if ($check_tmpl_doc ne "") {
             $have_tmpl_docs = 1;
-            #print "## [$check_tmpl_doc]\n";
         } else {
             # if the docs have just an empty para, don't merge that.
             $check_tmpl_doc = $tmpl_doc;
@@ -4471,7 +4467,7 @@ sub MergeSourceDocumentation {
         if (exists ($SourceSymbolDocs{$symbol})) {
             my $type = $DeclarationTypes {$symbol};
 
-            #print "merging [$symbol] from source\n";
+            @TRACE@("merging [$symbol] from source\n");
 
             my $item = "Parameter";
             if (defined ($type)) {
@@ -4539,7 +4535,7 @@ sub MergeSourceDocumentation {
                 # so we will not change that. We only override the actual text.
                 my $tmpl_params = $SymbolParams{$symbol};
                 if (!defined ($tmpl_params)) {
-                    #print "No merge needed for $symbol\n";
+                    @TRACE@("No merge needed for $symbol\n");
                     $SymbolParams{$symbol} = $SourceSymbolParams{$symbol};
                     #  FIXME: we still like to get the number of params and merge
                     #  1) we would noticed that params have been removed/renamed
@@ -4549,19 +4545,19 @@ sub MergeSourceDocumentation {
                 } else {
                     my $params = $SourceSymbolParams{$symbol};
                     my $j;
-                    #print "Merge needed for $symbol, tmpl_params: ",$#$tmpl_params,", source_params: ",$#$params," \n";
+                    @TRACE@("Merge needed for $symbol, tmpl_params: ",$#$tmpl_params,", source_params: ",$#$params," \n");
                     for ($j = 0; $j <= $#$tmpl_params; $j += $PARAM_FIELD_COUNT) {
                         my $tmpl_param_name = $$tmpl_params[$j];
 
                         # Try to find the param in the source comment documentation.
                         my $found = 0;
                         my $k;
-                        #print "  try merge param $tmpl_param_name\n";
+                        @TRACE@("  try merge param $tmpl_param_name\n");
                         for ($k = 0; $k <= $#$params; $k += $PARAM_FIELD_COUNT) {
                             my $param_name = $$params[$k];
                             my $param_desc = $$params[$k + 1];
 
-                            #print "    test param  $param_name\n";
+                            @TRACE@("    test param  $param_name\n");
                             # We accept changes in case, since the Gnome source
                             # docs contain a lot of these.
                             if ("\L$param_name" eq "\L$tmpl_param_name") {
@@ -4594,7 +4590,7 @@ sub MergeSourceDocumentation {
                             if(($type eq "MACRO") && ($param_name eq "Returns")) {
                                 # FIXME: do we need to add it then to tmpl_params[] ?
                                 my $num=$#$tmpl_params;
-                                #print "  adding Returns: to macro docs for $symbol.\n";
+                                @TRACE@("  adding Returns: to macro docs for $symbol.\n");
                                 $$tmpl_params[$num+1]="Returns";
                                 $$tmpl_params[$num+2]=$$params[$j+1];
                                 next;
@@ -4608,10 +4604,10 @@ sub MergeSourceDocumentation {
         } else {
             if ($have_tmpl_docs) {
                 $AllDocumentedSymbols{$symbol} = 1;
-                #print "merging [$symbol] from template\n";
+                @TRACE@("merging [$symbol] from template\n");
             }
             else {
-                #print "[$symbol] undocumented\n";
+                @TRACE@("[$symbol] undocumented\n");
             }
         }
 
@@ -4638,7 +4634,7 @@ sub MergeSourceDocumentation {
                     $type="SIGNAL";
                 }
 
-                #print "Check param docs for $symbol, tmpl_params: ",$#$tmpl_params," entries, type=$type\n";
+                @TRACE@("Check param docs for $symbol, tmpl_params: ",$#$tmpl_params," entries, type=$type\n");
 
                 if ($#$tmpl_params > 0) {
                     my $j;
@@ -4670,7 +4666,7 @@ sub MergeSourceDocumentation {
             }
         }
    }
-   #print "num doc entries: ".(scalar %SymbolDocs)."\n";
+   @TRACE@("num doc entries: ".(scalar %SymbolDocs)."\n");
 }
 
 #############################################################################
@@ -5479,7 +5475,7 @@ sub ReadDeclarationsFile {
             if (m/^<([^>]+)>/) {
                 $declaration_type = $1;
                 $declaration_name = "";
-                #print "Found declaration: $declaration_type\n";
+                @TRACE@("Found declaration: $declaration_type\n");
                 $declaration = "";
             }
         } else {
@@ -5488,17 +5484,17 @@ sub ReadDeclarationsFile {
             } elsif (m%^<DEPRECATED/>%) {
                 $is_deprecated = 1;
             } elsif (m%^</$declaration_type>%) {
-                #print "Found end of declaration: $declaration_name\n";
+                @TRACE@("Found end of declaration: $declaration_name\n");
                 # Check that the declaration has a name
                 if ($declaration_name eq "") {
-                    print "ERROR: $declaration_type has no name $file:$.\n";
+                    &LogWarning ($file, $., "$declaration_type has no name.\n");
                 }
 
                 # If the declaration is an empty typedef struct _XXX XXX
                 # set the flag to indicate the struct has a typedef.
                 if ($declaration_type eq 'STRUCT'
                     && $declaration =~ m/^\s*$/) {
-                    #print "Struct has typedef: $declaration_name\n";
+                    @TRACE@("Struct has typedef: $declaration_name\n");
                     $StructHasTypedef{$declaration_name} = 1;
                 }
 
@@ -5608,7 +5604,7 @@ sub ReadSignalsFile {
                 if ($signal_name =~ m/^(.*)::(.*)$/) {
                     $signal_object = $1;
                     ($signal_name = $2) =~ s/_/-/g;
-                    #print "Found signal: $signal_name\n";
+                    @TRACE@("Found signal: $signal_name\n");
                 } else {
                     &LogWarning ($file, $., "Invalid signal name: $signal_name.");
                 }
@@ -5617,7 +5613,7 @@ sub ReadSignalsFile {
             } elsif (m/^<FLAGS>(.*)<\/FLAGS>/) {
                 $signal_flags = $1;
             } elsif (m%^</SIGNAL>%) {
-                #print "Found end of signal: ${signal_object}::${signal_name}\nReturns: ${signal_returns}\n${signal_prototype}";
+                @TRACE@("Found end of signal: ${signal_object}::${signal_name}\nReturns: ${signal_returns}\n${signal_prototype}");
                 push (@SignalObjects, $signal_object);
                 push (@SignalNames, $signal_name);
                 push (@SignalReturns, $signal_returns);
@@ -5652,7 +5648,7 @@ sub ReadTemplateFile {
 
     my $template = "$docsfile.sgml";
     if (! -f $template) {
-        #print "File doesn't exist: $template\n";
+        @TRACE@("File doesn't exist: $template\n");
         return 0;
     }
 
@@ -5695,7 +5691,7 @@ sub ReadTemplateFile {
                 $symbol = $docsfile . ":" . $symbol;
             }
 
-            #print "Found symbol: $symbol\n";
+            @TRACE@("Found symbol: $symbol\n");
             # Remember file and line for the symbol
             $SymbolSourceFile{$symbol} = $template;
             $SymbolSourceLine{$symbol} = $.;
@@ -5730,13 +5726,13 @@ sub ReadTemplateFile {
             @params = ();
 
         } elsif (m/^<!-- # Unused Parameters # -->/) {
-            #print "DEBUG: Found unused parameters\n";
+            @TRACE@("Found unused parameters\n");
             $in_unused_params = 1;
             next;
 
         } elsif ($in_unused_params && $skip_unused_params) {
             # When outputting the DocBook we skip unused parameters.
-            #print "DEBUG: Skipping unused param: $_";
+            @TRACE@("Skipping unused param: $_");
             next;
 
         } else {
@@ -6047,7 +6043,7 @@ sub ReadArgsFile {
                 if ($arg_name =~ m/^(.*)::(.*)$/) {
                     $arg_object = $1;
                     ($arg_name = $2) =~ s/_/-/g;
-                    #print "Found arg: $arg_name\n";
+                    @TRACE@("Found arg: $arg_name\n");
                 } else {
                     &LogWarning ($file, $., "Invalid argument name: $arg_name");
                 }
@@ -6068,7 +6064,7 @@ sub ReadArgsFile {
             } elsif (m/^<DEFAULT>(.*)<\/DEFAULT>/) {
                 $arg_default = $1;
             } elsif (m%^</ARG>%) {
-                #print "Found end of arg: ${arg_object}::${arg_name}\n${arg_type} : ${arg_flags}\n";
+                @TRACE@("Found end of arg: ${arg_object}::${arg_name}\n${arg_type} : ${arg_flags}\n");
                 push (@ArgObjects, $arg_object);
                 push (@ArgNames, $arg_name);
                 push (@ArgTypes, $arg_type);
