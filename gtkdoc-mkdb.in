@@ -1523,23 +1523,13 @@ sub OutputMacro {
     $desc .= &MakeDeprecationNote($symbol);
 
     my $parameters = &OutputParamDescriptions ("MACRO", $symbol, @fields);
-    my $parameters_output = 0;
 
     if (defined ($SymbolDocs{$symbol})) {
         my $symbol_docs = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
-
-        # Try to insert the parameter table at the author's desired position.
-        # Otherwise we need to tag it onto the end.
-        if ($symbol_docs =~ s/<!--PARAMETERS-->/$parameters/) {
-          $parameters_output = 1;
-        }
         $desc .= $symbol_docs;
     }
 
-    if ($parameters_output == 0) {
-        $desc .= $parameters;
-    }
-
+    $desc .= $parameters;
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
@@ -2232,25 +2222,13 @@ sub OutputFunction {
     $desc .= &MakeDeprecationNote($symbol);
 
     my $parameters = &OutputParamDescriptions ("FUNCTION", $symbol, @fields);
-    my $parameters_output = 0;
 
     if (defined ($SymbolDocs{$symbol})) {
         my $symbol_docs = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
-
-        # Try to insert the parameter table at the author's desired position.
-        # Otherwise we need to tag it onto the end.
-        # FIXME: document that in the user manual and make it useable for other
-        # types too
-        if ($symbol_docs =~ s/<!--PARAMETERS-->/$parameters/) {
-          $parameters_output = 1;
-        }
         $desc .= $symbol_docs;
     }
 
-    if ($parameters_output == 0) {
-        $desc .= $parameters;
-    }
-
+    $desc .= $parameters;
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
@@ -3653,17 +3631,11 @@ sub GetSignals {
             $synop .= "<row><entry role=\"signal_type\">${ret_type_output}</entry><entry role=\"signal_name\"><link linkend=\"$id\">${name}</link></entry><entry role=\"signal_flags\">${flags_string}</entry></row>\n";
 
             my $parameters = &OutputParamDescriptions ("SIGNAL", $symbol);
-            my $parameters_output = 0;
 
             $AllSymbols{$symbol} = 1;
             if (defined ($SymbolDocs{$symbol})) {
                 my $symbol_docs = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
 
-                # Try to insert the parameter table at the author's desired
-                # position. Otherwise we need to tag it onto the end.
-                if ($symbol_docs =~ s/<!--PARAMETERS-->/$parameters/) {
-                  $parameters_output = 1;
-                }
                 $desc .= $symbol_docs;
 
                 if (!IsEmptyDoc($SymbolDocs{$symbol})) {
@@ -3672,9 +3644,7 @@ sub GetSignals {
             }
             $desc .= &MakeDeprecationNote($symbol);
 
-            if ($parameters_output == 0) {
-                $desc .= $parameters;
-            }
+	    $desc .= $parameters;
             if ($flags_string) {
                 $desc  .= "<para>Flags: $flags_string</para>\n";
             }
@@ -4502,10 +4472,6 @@ sub MergeSourceDocumentation {
             if ($src_doc ne "") {
                  $AllDocumentedSymbols{$symbol} = 1;
             }
-
-            # Convert <!--PARAMETERS--> with any blank lines around it to
-            # a </para> followed by <!--PARAMETERS--> followed by <para>.
-            $src_doc =~ s%\n+\s*<!--PARAMETERS-->\s*\n+%\n</para>\n<!--PARAMETERS-->\n<para>\n%g;
 
             # Do not add <para> to nothing, it breaks missing docs checks.
             my $src_doc_para = "";
