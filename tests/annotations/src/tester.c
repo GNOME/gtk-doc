@@ -28,7 +28,7 @@ annotation_array_length (GObject *list,
 
 
 /**
- * annotation_nullable:
+ * annotation_allow_none:
  * @uri: a uri
  * @label: (allow-none): an optional string, which is used in ways too
  *  complicated to describe in a single line, making it necessary to wrap it
@@ -36,6 +36,24 @@ annotation_array_length (GObject *list,
  * Document optional parameters.
  *
  * Returns: (transfer full) (allow-none): Returns stuff which you have to
+ *  free after use, whose description is also rather long
+ */
+gchar *
+annotation_allow_none (const gchar *uri,
+                       const gchar *label)
+{
+  return NULL;
+}
+
+/**
+ * annotation_nullable:
+ * @uri: a uri
+ * @label: (nullable): an optional string, which is used in ways too
+ *  complicated to describe in a single line, making it necessary to wrap it
+ *
+ * Document optional parameters.
+ *
+ * Returns: (transfer full) (nullable): Returns stuff which you have to
  *  free after use, whose description is also rather long
  */
 gchar *
@@ -96,6 +114,50 @@ annotation_elementtype_returns (void)
  */
 gboolean
 annotation_outparams (GList **list)
+{
+  return TRUE;
+}
+
+/**
+ * annotation_outparams_optional:
+ * @list: (out) (transfer none) (optional): a pointer to take a list, or %NULL
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_outparams_optional (GList **list)
+{
+  return TRUE;
+}
+
+/**
+ * annotation_outparams_nullable:
+ * @list: (out) (transfer none) (nullable): a pointer to take a list; but %NULL
+ * may also be returned
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_outparams_nullable (GList **list)
+{
+  return TRUE;
+}
+
+/**
+ * annotation_outparams_optional_nullable:
+ * @list: (out) (transfer none) (optional) (nullable): a pointer to take a
+ * list, or %NULL; but %NULL may also be returned in @list — isn’t that cool?
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_outparams_optional_nullable (GList **list)
 {
   return TRUE;
 }
