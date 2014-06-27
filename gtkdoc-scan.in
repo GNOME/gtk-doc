@@ -381,9 +381,11 @@ sub ScanHeader {
 
         # If we find a line containing _DEPRECATED, we hope that this is
         # attribute based deprecation and also treat this as a deprecation
-        # guard.
+        # guard, unless it's a macro definition.
         if ($deprecated_conditional_nest == 0 and m/_DEPRECATED/) {
-            $deprecated_conditional_nest += 0.1;
+            unless (m/^\s*#\s*(if*|define)/) {
+                $deprecated_conditional_nest += 0.1;
+            }
         }
 
         # set global that is used later when we do AddSymbolToList
