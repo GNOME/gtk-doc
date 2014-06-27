@@ -383,7 +383,8 @@ sub ScanHeader {
         # attribute based deprecation and also treat this as a deprecation
         # guard, unless it's a macro definition.
         if ($deprecated_conditional_nest == 0 and m/_DEPRECATED/) {
-            unless (m/^\s*#\s*(if*|define)/) {
+            unless (m/^\s*#\s*(if*|define)/ or $in_declaration eq "enum") {
+                @TRACE@("Found deprecation annotation (decl: '$in_declaration'): $_");
                 $deprecated_conditional_nest += 0.1;
             }
         }
