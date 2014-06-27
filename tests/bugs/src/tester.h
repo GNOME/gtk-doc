@@ -505,4 +505,19 @@ void deprecation_notice(void);
  */
 #define BUG_731417_DEPRECATED   1
 
+/**
+ * Bug730658:
+ * @BUG_730658_CAN_READ: Can read
+ * @BUG_730658_CAN_WRITE: Can write
+ * @BUG_730658_IS_DEPRECATED: Is deprecated
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=730658
+ */
+typedef enum
+{
+  BUG_730658_CAN_READ = 1 << 0,
+  BUG_730658_CAN_WRITE = 1 << 1,
+  BUG_730658_IS_DEPRECATED = 1 << 2
+} Bug730658;
+
 #endif // GTKDOC_TESTER_H
