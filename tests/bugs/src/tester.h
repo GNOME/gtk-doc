@@ -498,4 +498,11 @@ void bug_711598(void);
 void deprecation_notice(void);
 #endif
 
+/**
+ * BUG_731417_DEPRECATED:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=731417
+ */
+#define BUG_731417_DEPRECATED   1
+
 #endif // GTKDOC_TESTER_H
