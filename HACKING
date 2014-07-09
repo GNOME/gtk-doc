@@ -28,7 +28,7 @@ http://live.gnome.org/MaintainersCorner/Releasing
   git push
 
 - dist
-  make distcheck
+   TAR_OPTIONS="--owner=root --group=root" make distcheck
 
 - tag
   git tag -a GTK_DOC_1_12 -m"release: 1.12"
