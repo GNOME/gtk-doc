@@ -3903,10 +3903,9 @@ sub ScanSourceFile {
     my $in_comment_block = 0;
     my $symbol;
     my $in_part = "";
-    my ($description, $return_desc, $return_start, $return_style);
+    my ($description, $return_desc);
     my ($since_desc, $stability_desc, $deprecated_desc);
     my $current_param;
-    my $ignore_broken_returns;
     my @params;
     while (<SRCFILE>) {
         # Look for the start of a comment block.
@@ -3923,12 +3922,10 @@ sub ScanSourceFile {
                 $in_part = "";
                 $description = "";
                 $return_desc = "";
-                $return_style = "";
                 $since_desc = "";
                 $deprecated_desc = "";
                 $stability_desc = "";
                 $current_param = -1;
-                $ignore_broken_returns = 0;
                 @params = ();
             }
             next;
@@ -3942,11 +3939,10 @@ sub ScanSourceFile {
             } else {
                 # Add the return value description onto the end of the params.
                 if ($return_desc) {
+                    # TODO(ensonic): check for duplicated Return docs
+                    # &LogWarning ($file, $., "Multiple Returns for $symbol.");
                     push (@params, "Returns");
                     push (@params, $return_desc);
-                    if ($return_style eq 'broken') {
-                        &LogWarning ($file, $., "Free-form return value description in $symbol. Use `Returns:' to avoid ambiguities.");
-                    }
                 }
                 # Convert special SGML characters
                 $description = &ConvertSGMLChars ($symbol, $description);
@@ -3967,7 +3963,6 @@ sub ScanSourceFile {
                     }
 
                     @TRACE@("SECTION DOCS found in source for : '$real_symbol'\n");
-                    $ignore_broken_returns = 1;
                     for ($k = 0; $k <= $#params; $k += $PARAM_FIELD_COUNT) {
                         @TRACE@("   '".$params[$k]."'\n");
                         $params[$k] = "\L$params[$k]";
@@ -4056,7 +4051,6 @@ sub ScanSourceFile {
             if (m%^\s*(SECTION:\s*\S+)%) {
                 $symbol = $1;
                 @TRACE@("SECTION DOCS found in source for : '$symbol'\n");
-                $ignore_broken_returns = 1;
             } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([-a-z0-9_ ]+\)\s*)*$%) {
                 $symbol = $1;
                 @TRACE@("SYMBOL DOCS found in source for : '$symbol'\n");
@@ -4069,25 +4063,13 @@ sub ScanSourceFile {
             s%^\s*Description:%%;
         }
 
-        if (m/^\s*(returns:|return\s+value:)/i) {
-            if ($return_style eq 'broken') {
-                $description .= $return_start . $return_desc;
+        if (m%^\s*(returns|return\s+value):%i) {
+            # we're in param section and have not seen the blank line
+            if($in_part ne "") {
+              $return_desc = $';
+              $in_part = "return";
+              next;
             }
-            $return_start = $1;
-            if ($return_style eq 'sane') {
-                &LogWarning ($file, $., "Multiple Returns for $symbol.");
-            }
-            $return_style = 'sane';
-            $ignore_broken_returns = 1;
-            $return_desc = $';
-            $in_part = "return";
-            next;
-        } elsif (!$ignore_broken_returns && m/^\s*(returns\b\s*)/i) {
-            $return_start = $1;
-            $return_style = 'broken';
-            $return_desc = $';
-            $in_part = "return";
-            next;
         } elsif (m%^\s*since:%i) {
             # we're in param section and have not seen the blank line
             if($in_part ne "") {
@@ -4140,10 +4122,6 @@ sub ScanSourceFile {
             # Allow varargs variations
             if ($param_name =~ m/^\.\.\.$/) {
                 $param_name = "...";
-            }
-            if ("\L$param_name" eq "returns") {
-                $return_style = 'sane';
-                $ignore_broken_returns = 1;
             }
             @TRACE@("Found param for symbol $symbol : '$param_name'= '$_'");
 
