@@ -14,7 +14,6 @@ bin_SCRIPTS = \
 	gtkdoc-rebase   \
 	gtkdoc-scan     \
 	gtkdoc-scangobj \
-	gtkdoc-scanobj  \
 	gtkdocize
 
 if HAVE_PYTHON
