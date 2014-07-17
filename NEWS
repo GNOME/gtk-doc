@@ -1,7 +1,41 @@
-GTK-Doc 1.20.1    (... .. 2014)
-==============
+GTK-Doc 1.21    (Jul 17 2014)
+============
 
-Develoment version
+ Important notice - starting with the next release these long deprecated
+ features will be removed, please write to gtk-doc-list@gnome.org and tell us
+ your concerns:
+ o gtkdoc-mktmpl - please move all the comments into the sources.
+ o generating html via sgml tools (jade/openjade), using xsltproc and
+   docbook-xslt is pretty common and preferred since version 1.6
+
+ Changes
+
+ o 170860 : gtk-doc should have definitions for stability
+ o 644111 : one cannot specify against which libs gtkdoc-fixxref should resolve links (problematic with multiple versions)
+ o 657444 :  &quot; enum foo { ... } &quot; ; not recognized
+ o 671519 : Self-test relies on nonportable (GNU enhanced) 'date' command
+ o 678094 : the word &quot; returns &quot; in a function description can be parsed as the &quot; Returns: &quot; section
+ o 722621 : gtk-doc tarball was created with 32bit uid/gid, unusable with mingw/msys tar
+ o 724739 : Self-test fail: gtkdoc-mkdb misusing perl datatype
+ o 725505 : new syntax highlighting for code is weird
+ o 725663 : configure: non POSIX test usage
+ o 730658 : Deprecation warning for non-deprecated type GParamFlags
+ o 730777 : Add support for nullable and optional annotations
+
+ Contributors
+
+ Christophe Fergeau
+ Damon Chaplin
+ Daniel Macks
+ Daniel Mustieles
+ Emmanuele Bassi
+ maria thukididu
+ Naohiro Aota
+ Philip Withnall
+ Rafael Ferreira
+ Stefan Sauer
+ Thomas Wood
+ William Jon McCann
 
 GTK-Doc 1.20    (Feb 16 2014)
 ============
