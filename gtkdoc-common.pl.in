@@ -277,6 +277,12 @@ sub ParseEnumDeclaration {
 
     $declaration =~ s/\([^)\n]+\)//g;
 
+    # Remove apostrophed characters (e.g. '}' or ',') values to avoid getting
+    # confused with end of enumeration.
+    # See https://bugzilla.gnome.org/show_bug.cgi?id=741305
+
+    $declaration =~ s/\'.\'//g;
+
     # Remove comma from comma - possible whitespace - closing brace sequence
     # since it is legal in GNU C and C99 to have a trailing comma but doesn't
     # result in an actual enum member
