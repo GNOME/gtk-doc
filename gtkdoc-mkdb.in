@@ -384,6 +384,8 @@ EOF
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
 [
   <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+  <!ENTITY % gtkdocentities SYSTEM "../xml/gtkdocentities.ent">
+  %gtkdocentities;
 ]>
 EOF
     }
@@ -2648,11 +2650,11 @@ sub OutputBook {
 ${\( MakeDocHeader ("book") )}
 <book id="index">
   <bookinfo>
-    <title>$MODULE Reference Manual</title>
+    <title>&package_name; Reference Manual</title>
     <releaseinfo>
-      for $MODULE [VERSION].
+      for &package_string;.
       The latest version of this documentation can be found on-line at
-      <ulink role="online-location" url="http://[SERVER]/$MODULE/index.html">http://[SERVER]/$MODULE/</ulink>.
+      <ulink role="online-location" url="http://[SERVER]/&package_name;/index.html">http://[SERVER]/&package_name;/</ulink>.
     </releaseinfo>
   </bookinfo>
 
@@ -3079,6 +3081,12 @@ sub MakeDocHeader {
     my ($tag) = @_;
     my $header = $doctype_header;
     $header =~ s/<!DOCTYPE \w+/<!DOCTYPE $tag/;
+
+    # fix the path for book since this is one level up
+    if ($tag eq "book") {
+        $header =~ s#<!ENTITY % gtkdocentities SYSTEM \"../([a-zA-Z./]+)\">#<!ENTITY % gtkdocentities SYSTEM \"$1\">#;
+    }
+
     return $header;
 }
 

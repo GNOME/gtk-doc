@@ -127,7 +127,7 @@ $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)
 
 #### xml ####
 
-sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt $(expand_content_files)
+sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt $(expand_content_files) xml/gtkdocentities.ent
 	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `$(DATE_FMT_CMD)$$tsd`: Building XML"
 	@_source_dir='' ; \
@@ -141,6 +141,17 @@ sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DO
 
 sgml.stamp: sgml-build.stamp
 	@true
+
+xml/gtkdocentities.ent: Makefile
+	$(GTK_DOC_V_XML)$(MKDIR_P) $(@D) && ( \
+		echo "<!ENTITY package \"$(PACKAGE)\">"; \
+		echo "<!ENTITY package_bugreport \"$(PACKAGE_BUGREPORT)\">"; \
+		echo "<!ENTITY package_name \"$(PACKAGE_NAME)\">"; \
+		echo "<!ENTITY package_string \"$(PACKAGE_STRING)\">"; \
+		echo "<!ENTITY package_tarname \"$(PACKAGE_TARNAME)\">"; \
+		echo "<!ENTITY package_url \"$(PACKAGE_URL)\">"; \
+		echo "<!ENTITY package_version \"$(PACKAGE_VERSION)\">"; \
+	) > $@
 
 #### html ####
 
