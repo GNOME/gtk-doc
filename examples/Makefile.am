@@ -1,8 +1,3 @@
-## Process this file with automake to produce Makefile.in
-
-# We require automake 1.6 at least.
-AUTOMAKE_OPTIONS = 1.6
-
 # This is a blank Makefile.am for using gtk-doc.
 # Copy this to your project's API docs directory and modify the variables to
 # suit your project. See the GTK+ Makefiles in gtk+/docs/reference for examples
@@ -13,7 +8,6 @@ DOC_MODULE=
 
 # Uncomment for versioned docs and specify the version of the module, e.g. '2'.
 #DOC_MODULE_VERSION=2
-
 
 # The top-level XML file (SGML in the past). You can change this if you want to.
 DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.xml
@@ -83,10 +77,6 @@ GTKDOC_LIBS=
 
 # This includes the standard gtk-doc make rules, copied by gtkdocize.
 include $(top_srcdir)/gtk-doc.make
-
-# Other files to distribute
-# e.g. EXTRA_DIST += version.xml.in
-EXTRA_DIST +=
 
 # Files not to distribute
 # for --rebuild-types in $(SCAN_OPTIONS), e.g. $(DOC_MODULE).types
