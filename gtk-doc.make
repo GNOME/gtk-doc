@@ -246,6 +246,9 @@ clean-local:
 	@if echo $(SCAN_OPTIONS) | grep -q "\-\-rebuild-types" ; then \
 	  rm -f $(DOC_MODULE).types; \
 	fi
+	@if echo $(SCAN_OPTIONS) | grep -q "\-\-rebuild-sections" ; then \
+	  rm -f $(DOC_MODULE)-sections.txt; \
+	fi
 
 distclean-local:
 	@rm -rf xml html $(REPORT_FILES) $(DOC_MODULE).pdf \
