@@ -578,12 +578,17 @@ make
       <title>Integration with version control systems</title>
 
       <para>
-        As a rule of the thumb, it's those files you edit, that should go under
+        As a rule of thumb, it's the files you edit which should go under
         version control. For typical projects it's these files:
         <filename>&lt;package&gt;.types</filename>,
         <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml),
         <filename>&lt;package&gt;-sections.txt</filename>,
-        <filename>Makefile.am</filename>
+        <filename>Makefile.am</filename>.
+      </para>
+      <para>
+        Files in the <filename>xml/</filename> and <filename>html/</filename>
+        directories should not go under version control. Neither should any of
+        the <filename>.stamp</filename> files.
       </para>
     </sect1>
 
