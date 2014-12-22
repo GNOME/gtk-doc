@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2014-07-18 07:42+0000\n"
-"PO-Revision-Date: 2014-07-22 11:43+0200\n"
+"POT-Creation-Date: 2014-12-20 17:38+0000\n"
+"PO-Revision-Date: 2014-12-22 12:27+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -124,10 +124,6 @@ msgstr ""
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:83
-#| msgid ""
-#| "<revnumber>1.20.1</revnumber> <date>16 Feb 2014</date> "
-#| "<authorinitials>ss</authorinitials> <revremark>development version</"
-#| "revremark>"
 msgid ""
 "<revnumber>1.21.1</revnumber> <date>18 Jul 2014</date> <authorinitials>ss</"
 "authorinitials> <revremark>development version</revremark>"
@@ -138,9 +134,6 @@ msgstr ""
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:89
-#| msgid ""
-#| "<revnumber>1.19</revnumber> <date>05 Jun 2013</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>bug fixes</revremark>"
 msgid ""
 "<revnumber>1.21</revnumber> <date>17 Jul 2014</date> <authorinitials>ss</"
 "authorinitials> <revremark>bug fixes, dropping deprecated features</"
@@ -999,26 +992,43 @@ msgstr "Integración con los sistemas de control de versiones"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:580
+#| msgid ""
+#| "As a rule of the thumb, it's those files you edit, that should go under "
+#| "version control. For typical projects it's these files: <filename>&lt;"
+#| "package&gt;.types</filename>, <filename>&lt;package&gt;-docs.xml</"
+#| "filename> (in the past .sgml), <filename>&lt;package&gt;-sections.txt</"
+#| "filename>, <filename>Makefile.am</filename>"
 msgid ""
-"As a rule of the thumb, it's those files you edit, that should go under "
-"version control. For typical projects it's these files: <filename>&lt;"
-"package&gt;.types</filename>, <filename>&lt;package&gt;-docs.xml</filename> "
-"(in the past .sgml), <filename>&lt;package&gt;-sections.txt</filename>, "
-"<filename>Makefile.am</filename>"
+"As a rule of thumb, it's the files you edit which should go under version "
+"control. For typical projects it's these files: <filename>&lt;package&gt;."
+"types</filename>, <filename>&lt;package&gt;-docs.xml</filename> (in the "
+"past .sgml), <filename>&lt;package&gt;-sections.txt</filename>, "
+"<filename>Makefile.am</filename>."
 msgstr ""
 "Como regla principal, son los archivos que edita los que deberían estar bajo "
 "el control de versiones. Para proyectos típicos son los archivos: "
 "<filename>&lt;paquete&gt;.types</filename>, <filename>&lt;paquete&gt;-docs."
-"xml</filename> (.sgml en el pasado), <filename>&lt;paquete&gt;-sections.txt</"
-"filename> y <filename>Makefile.am</filename>."
+"xml</filename> (anteriormente .sgml), <filename>&lt;paquete&gt;-sections."
+"txt</filename>, <filename>Makefile.am</filename>."
+
+#. (itstool) path: sect1/para
+#: C/index.docbook:588
+msgid ""
+"Files in the <filename>xml/</filename> and <filename>html/</filename> "
+"directories should not go under version control. Neither should any of the "
+"<filename>.stamp</filename> files."
+msgstr ""
+"Los archivos de las carpetas <filename>xml/</filename> y <filename>html/</"
+"filename> No deberían estar bajo control de versiones. Tampoco ninguno de "
+"los archivos <filename>.stamp</filename>."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:591
+#: C/index.docbook:596
 msgid "Integration with plain makefiles or other build systems"
 msgstr "Integración con makefiles u otros sistemas de construcción"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:593
+#: C/index.docbook:598
 msgid ""
 "In the case one does not want to use automake and therefore <filename>gtk-"
 "doc.mak</filename> one will need to call the gtkdoc tools in the right order "
@@ -1029,12 +1039,12 @@ msgstr ""
 "makefiles propios (o en otras herramientas de construcción)."
 
 #. (itstool) path: example/title
-#: C/index.docbook:600
+#: C/index.docbook:605
 msgid "Documentation build steps"
 msgstr "Pasos de construcción de la documentación"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:601
+#: C/index.docbook:606
 #, no-wrap
 msgid ""
 "\n"
@@ -1060,7 +1070,7 @@ msgstr ""
 "gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:615
+#: C/index.docbook:620
 msgid ""
 "One will need to look at the <filename>Makefile.am</filename> and "
 "<filename>gtk-doc.mak</filename> to pick the extra options needed."
@@ -1069,12 +1079,12 @@ msgstr ""
 "doc.mak</filename> para elegir las opciones adicionales necesarias."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:624
+#: C/index.docbook:629
 msgid "Documenting the code"
 msgstr "Documentar el código"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:626
+#: C/index.docbook:631
 msgid ""
 "GTK-Doc uses source code comment with a special syntax for code "
 "documentation. Further it retrieves information about your project structure "
@@ -1087,12 +1097,12 @@ msgstr ""
 "acerca de la sintaxis de los comentarios."
 
 #. (itstool) path: note/title
-#: C/index.docbook:634
+#: C/index.docbook:639
 msgid "Documentation placement"
 msgstr "Ubicación de la documentación"
 
 #. (itstool) path: note/para
-#: C/index.docbook:635
+#: C/index.docbook:640
 msgid ""
 "In the past most documentation had to be filled into files residing inside "
 "the <filename>tmpl</filename> directory. This has the disadvantages that the "
@@ -1106,7 +1116,7 @@ msgstr ""
 "conflictos con los sistemas de control de versiones."
 
 #. (itstool) path: note/para
-#: C/index.docbook:641
+#: C/index.docbook:646
 msgid ""
 "The avoid the aforementioned problems we suggest putting the documentation "
 "inside the sources. This manual will only describe this way of documenting "
@@ -1117,12 +1127,12 @@ msgstr ""
 "documentar el código."
 
 #. (itstool) path: example/title
-#: C/index.docbook:652 C/index.docbook:669
+#: C/index.docbook:657 C/index.docbook:674
 msgid "GTK-Doc comment block"
 msgstr "Bloque de comentario de GTK-Doc"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:653
+#: C/index.docbook:658
 #, no-wrap
 msgid ""
 "\n"
@@ -1136,7 +1146,7 @@ msgstr ""
 "#endif\n"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:648
+#: C/index.docbook:653
 msgid ""
 "The scanner can handle the majority of C headers fine. In the case of "
 "receiving warnings from the scanner that look like a special case, one can "
@@ -1147,12 +1157,12 @@ msgstr ""
 "GTK-Doc que los omita. <_:example-1/>"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:664
+#: C/index.docbook:669
 msgid "Documentation comments"
 msgstr "Comentarios de la documentación"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:670
+#: C/index.docbook:675
 #, no-wrap
 msgid ""
 "\n"
@@ -1168,7 +1178,7 @@ msgstr ""
 " */\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:666
+#: C/index.docbook:671
 msgid ""
 "A multiline comment that starts with an additional '*' marks a documentation "
 "block that will be processed by the GTK-Doc tools. <_:example-1/>"
@@ -1177,7 +1187,7 @@ msgstr ""
 "bloque de documentación que GTK-Doc tools procesarán. <_:example-1/>"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:679
+#: C/index.docbook:684
 msgid ""
 "The 'identifier' is one line with the name of the item the comment is "
 "related to. The syntax differs a little depending on the item. (TODO add "
@@ -1188,7 +1198,7 @@ msgstr ""
 "hacer: añadir una tabla mostrando los identificadores)"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:685
+#: C/index.docbook:690
 msgid ""
 "The 'documentation' block is also different for each symbol type. Symbol "
 "types that get parameters such as functions or macros have the parameter "
@@ -1208,7 +1218,7 @@ msgstr ""
 "espacio). Esto es útil para texto preformateado (listados de código)."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:702
+#: C/index.docbook:707
 msgid ""
 "What it is: The name for a class or function can sometimes be misleading for "
 "people coming from a different background."
@@ -1217,24 +1227,24 @@ msgstr ""
 "personas que provengan de otros entornos."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:708
+#: C/index.docbook:713
 msgid ""
 "What it does: Tell about common uses. Put it in relation with the other API."
 msgstr "Qué hace: indique los usos comunes, en relación con las otras API."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:698
+#: C/index.docbook:703
 msgid "When documenting code, describe two aspects: <_:itemizedlist-1/>"
 msgstr "Al documentar código, describa dos aspectos: <_:itemizedlist-1/>"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:723
+#: C/index.docbook:728
 msgid "Use function() to refer to functions or macros which take arguments."
 msgstr ""
 "Use función() para referirse a funciones o macros que toman argumentos."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:728
+#: C/index.docbook:733
 msgid ""
 "Use @param to refer to parameters. Also use this when referring to "
 "parameters of other functions, related to the one being described."
@@ -1243,12 +1253,12 @@ msgstr ""
 "parámetros de otras funciones, relacionados al que se describe."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:734
+#: C/index.docbook:739
 msgid "Use %constant to refer to a constant, e.g. %G_TRAVERSE_LEAFS."
 msgstr "Use %constant para referirse a una constante, ej: %G_TRAVERSE_LEAFS."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:739
+#: C/index.docbook:744
 msgid ""
 "Use #symbol to refer to other types of symbol, e.g. structs and enums and "
 "macros which don't take arguments."
@@ -1257,17 +1267,17 @@ msgstr ""
 "estructuras, enumeraciones y macros que no toman argumentos."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:745
+#: C/index.docbook:750
 msgid "Use #Object::signal to refer to a GObject signal."
 msgstr "Use #Object::signal para referirse a una señal de GObject."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:750
+#: C/index.docbook:755
 msgid "Use #Object:property to refer to a GObject property."
 msgstr "Use #Object:property para referirse a una propiedad de GObject."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:755
+#: C/index.docbook:760
 msgid ""
 "Use #Struct.field to refer to a field inside a structure and #GObjectClass."
 "foo_bar() to refer to a vmethod."
@@ -1276,7 +1286,7 @@ msgstr ""
 "#GObjectClass.foo_bar() para referirse a un vmethod."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:717
+#: C/index.docbook:722
 msgid ""
 "One advantage of hyper-text over plain-text is the ability to have links in "
 "the document. Writing the correct markup for a link can be tedious though. "
@@ -1289,7 +1299,7 @@ msgstr ""
 "itemizedlist-1/>"
 
 #. (itstool) path: tip/para
-#: C/index.docbook:764
+#: C/index.docbook:769
 msgid ""
 "If you need to use the special characters '&lt;', '&gt;', '()', '@', '%', or "
 "'#' in your documentation without GTK-Doc changing them you can use the XML "
@@ -1304,7 +1314,7 @@ msgstr ""
 "doble «\\»."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:773
+#: C/index.docbook:778
 msgid ""
 "DocBook can do more than just links. One can also have lists, examples, "
 "headings, and images. As of version 1.20, the preferred way is to use a "
@@ -1322,7 +1332,7 @@ msgstr ""
 "elementos de una lista aparecerán como líneas que empiezan con un guión."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:784
+#: C/index.docbook:789
 msgid ""
 "In older GTK-Doc releases, if you need support for additional formatting, "
 "you would need to enable the usage of docbook SGML/XML tags inside doc-"
@@ -1337,12 +1347,12 @@ msgstr ""
 "dentro de <filename>Makefile.am</filename>."
 
 #. (itstool) path: example/title
-#: C/index.docbook:794
+#: C/index.docbook:799
 msgid "GTK-Doc comment block using Markdown"
 msgstr "Bloque de comentario de GTK-Doc usando marcado"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:795
+#: C/index.docbook:800
 #, no-wrap
 msgid ""
 "\n"
@@ -1418,7 +1428,7 @@ msgstr ""
 " */\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:834
+#: C/index.docbook:839
 msgid ""
 "More examples of what markdown tags are supported can be found in the <ulink "
 "url=\"https://wiki.gnome.org/Projects/GTK%2B/DocumentationSyntax/Markdown"
@@ -1430,7 +1440,7 @@ msgstr ""
 "GTK+</ulink>."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:840
+#: C/index.docbook:845
 msgid ""
 "As already mentioned earlier GTK-Doc is for documenting public API. Thus one "
 "cannot write documentation for static symbols. Nevertheless it is good to "
@@ -1451,12 +1461,12 @@ msgstr ""
 "secciones."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:854
+#: C/index.docbook:859
 msgid "Documenting sections"
 msgstr "Documentar secciones"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:856
+#: C/index.docbook:861
 msgid ""
 "Each section of the documentation contains information about one class or "
 "module. To introduce the component one can write a section block. The short "
@@ -1469,12 +1479,12 @@ msgstr ""
 "los campos @ son opcionales."
 
 #. (itstool) path: example/title
-#: C/index.docbook:864
+#: C/index.docbook:869
 msgid "Section comment block"
 msgstr "Bloque de comentarios en una sección"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:865
+#: C/index.docbook:870
 #, no-wrap
 msgid ""
 "\n"
@@ -1506,12 +1516,12 @@ msgstr ""
 " */\n"
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:884
+#: C/index.docbook:889
 msgid "SECTION:&lt;name&gt;"
 msgstr "SECCIÓN &lt;nombre&gt;"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:886
+#: C/index.docbook:891
 msgid ""
 "The name links the section documentation to the respective part in the "
 "<filename>&lt;package&gt;-sections.txt</filename> file. The name give here "
@@ -1524,12 +1534,12 @@ msgstr ""
 "archivo <filename>&lt;paquete&gt;-sections.txt</filename>."
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:895
+#: C/index.docbook:900
 msgid "@short_description"
 msgstr "@short_description"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:897
+#: C/index.docbook:902
 msgid ""
 "A one line description of the section, that later will appear after the "
 "links in the TOC and at the top of the section page."
@@ -1538,12 +1548,12 @@ msgstr ""
 "TOC y en la página de la sección."
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:904
+#: C/index.docbook:909
 msgid "@title"
 msgstr "@title"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:906
+#: C/index.docbook:911
 msgid ""
 "The section title defaults to &lt;name&gt; from the SECTION declaration. It "
 "can be overridden with the @title field."
@@ -1552,12 +1562,12 @@ msgstr ""
 "declaración SECTION. Se puede sobrescribir con el campo @title."
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:913
+#: C/index.docbook:918
 msgid "@section_id"
 msgstr "@section_id"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:915
+#: C/index.docbook:920
 msgid ""
 "Overrides the use of title as a section identifier. For GObjects the &lt;"
 "title&gt; is used as a section_id and for other sections it is &lt;"
@@ -1568,22 +1578,22 @@ msgstr ""
 "para otra sección es &lt;MÓDULO&gt;-&lt;title&gt;."
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:923
+#: C/index.docbook:928
 msgid "@see_also"
 msgstr "@see_also"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:925
+#: C/index.docbook:930
 msgid "A list of symbols that are related to this section."
 msgstr "Una lista de símbolos relacionados con esta sección."
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:931
+#: C/index.docbook:936
 msgid "@stability"
 msgstr "@stability"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:938
+#: C/index.docbook:943
 msgid ""
 "Stable - The intention of a Stable interface is to enable arbitrary third "
 "parties to develop applications to these interfaces, release them, and have "
@@ -1601,7 +1611,7 @@ msgstr ""
 "de haberlos habrá buenas razones para ello."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:950
+#: C/index.docbook:955
 msgid ""
 "Unstable - Unstable interfaces are experimental or transitional. They are "
 "typically used to give outside developers early access to new or rapidly "
@@ -1617,7 +1627,7 @@ msgstr ""
 "publicación menor a la siguiente."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:962
+#: C/index.docbook:967
 msgid ""
 "Private - An interface that can be used within the GNOME stack itself, but "
 "that is not documented for end-users. Such functions should only be used in "
@@ -1628,7 +1638,7 @@ msgstr ""
 "deberían usar de formas especificadas y documentadas."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:971
+#: C/index.docbook:976
 msgid ""
 "Internal - An interface that is internal to a module and does not require "
 "end-user documentation. Functions that are undocumented are assumed to be "
@@ -1639,7 +1649,7 @@ msgstr ""
 "son internas."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:933
+#: C/index.docbook:938
 msgid ""
 "An informal description of the stability level this API has. We recommend "
 "the use of one of these terms: <_:itemizedlist-1/>"
@@ -1648,12 +1658,12 @@ msgstr ""
 "recomienda el uso de uno de estos términos: <_:itemizedlist-1/>"
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:983
+#: C/index.docbook:988
 msgid "@include"
 msgstr "@include"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:985
+#: C/index.docbook:990
 msgid ""
 "The <literal>#include</literal> files to show in the section synopsis (a "
 "comma separated list), overriding the global value from the <link linkend="
@@ -1666,12 +1676,12 @@ msgstr ""
 "línea de comandos. Este elemento es opcional."
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:994
+#: C/index.docbook:999
 msgid "@image"
 msgstr "@image"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:996
+#: C/index.docbook:1001
 msgid ""
 "The image to display at the top of the reference page for this section. This "
 "will often be some sort of a diagram to illustrate the visual appearance of "
@@ -1684,7 +1694,7 @@ msgstr ""
 "Este elemento es opcional."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:1007
+#: C/index.docbook:1012
 msgid ""
 "To avoid unnecessary recompilation after doc-changes put the section docs "
 "into the c-source where possible."
@@ -1694,12 +1704,12 @@ msgstr ""
 "sea posible."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1016
+#: C/index.docbook:1021
 msgid "Documenting symbols"
 msgstr "Documentar símbolos"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1018
+#: C/index.docbook:1023
 msgid ""
 "Each symbol (function, macro, struct, enum, signal and property) is "
 "documented in a separate block. The block is best placed close to the "
@@ -1715,12 +1725,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1026 C/index.docbook:1055
+#: C/index.docbook:1031 C/index.docbook:1060
 msgid "General tags"
 msgstr "Etiquetas generales"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1028
+#: C/index.docbook:1033
 msgid ""
 "You can add versioning information to all documentation elements to tell "
 "when an API was introduced, or when it was deprecated."
@@ -1730,27 +1740,27 @@ msgstr ""
 "obsoleta."
 
 #. (itstool) path: variablelist/title
-#: C/index.docbook:1033
+#: C/index.docbook:1038
 msgid "Versioning Tags"
 msgstr "Versionado de etiquetas"
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:1034
+#: C/index.docbook:1039
 msgid "Since:"
 msgstr "Desde:"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1036
+#: C/index.docbook:1041
 msgid "Description since which version of the code the API is available."
 msgstr "Descripción desde qué versión del código está disponible la API."
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:1041
+#: C/index.docbook:1046
 msgid "Deprecated:"
 msgstr "Obsoleto:"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1043
+#: C/index.docbook:1048
 msgid ""
 "Paragraph denoting that this function should no be used anymore. The "
 "description should point the reader to the new API."
@@ -1759,12 +1769,12 @@ msgstr ""
 "debería informar al lector de la nueva API."
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1051
+#: C/index.docbook:1056
 msgid "(FIXME : Stability information)"
 msgstr "(ARREGLAR: estabilidad de la información)"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1056
+#: C/index.docbook:1061
 #, no-wrap
 msgid ""
 "\n"
@@ -1803,12 +1813,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1076 C/index.docbook:1112
+#: C/index.docbook:1081 C/index.docbook:1117
 msgid "Function comment block"
 msgstr "Bloque de comentario de función"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1082
+#: C/index.docbook:1087
 msgid ""
 "Document whether returned objects, lists, strings, etc, should be freed/"
 "unrefed/released."
@@ -1817,26 +1827,26 @@ msgstr ""
 "debería liberarse/desreferenciarse/etc."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1088
+#: C/index.docbook:1093
 msgid "Document whether parameters can be NULL, and what happens if they are."
 msgstr ""
 "El documento, dependiendo de si sus parámetros pueden ser nulos, y qué "
 "sucede si lo son."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1093
+#: C/index.docbook:1098
 msgid ""
 "Mention interesting pre-conditions and post-conditions where appropriate."
 msgstr ""
 "Mencionar precondiciones y postcondiciones interesantes donde sea apropiado."
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1078 C/index.docbook:1171
+#: C/index.docbook:1083 C/index.docbook:1176
 msgid "Please remember to: <_:itemizedlist-1/>"
 msgstr "Recuerde: <_:itemizedlist-1/>"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1100
+#: C/index.docbook:1105
 msgid ""
 "Gtk-doc assumes all symbols (macros, functions) starting with '_' are "
 "private. They are treated like static functions."
@@ -1845,7 +1855,7 @@ msgstr ""
 "«_» son privados. Se tratan como funciones estáticas."
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1105
+#: C/index.docbook:1110
 msgid ""
 "Also, take a look at GObject Introspection annotation tags: http://live."
 "gnome.org/GObjectIntrospection/Annotations"
@@ -1854,7 +1864,7 @@ msgstr ""
 "GObject: http://live.gnome.org/GObjectIntrospection/Annotations"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1113
+#: C/index.docbook:1118
 #, no-wrap
 msgid ""
 "\n"
@@ -1896,27 +1906,27 @@ msgstr ""
 " */\n"
 
 #. (itstool) path: variablelist/title
-#: C/index.docbook:1134
+#: C/index.docbook:1139
 msgid "Function tags"
 msgstr "Etiquetas de funciones"
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:1135
+#: C/index.docbook:1140
 msgid "Returns:"
 msgstr "Devuelve:"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1137
+#: C/index.docbook:1142
 msgid "Paragraph describing the returned result."
 msgstr "Párrafo que describe el resultado devuelto."
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:1142
+#: C/index.docbook:1147
 msgid "@...:"
 msgstr "@...:"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1144
+#: C/index.docbook:1149
 msgid ""
 "In case the function has variadic arguments, you should use this tag "
 "(@Varargs: does also work for historic reasons)."
@@ -1926,12 +1936,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1154 C/index.docbook:1156
+#: C/index.docbook:1159 C/index.docbook:1161
 msgid "Property comment block"
 msgstr "Bloque de comentario de propiedad"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1157
+#: C/index.docbook:1162
 #, no-wrap
 msgid ""
 "\n"
@@ -1952,12 +1962,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1169 C/index.docbook:1188
+#: C/index.docbook:1174 C/index.docbook:1193
 msgid "Signal comment block"
 msgstr "Bloque de comentario de señal"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1175
+#: C/index.docbook:1180
 msgid ""
 "Document when the signal is emitted and whether it is emitted before or "
 "after other signals."
@@ -1966,12 +1976,12 @@ msgstr ""
 "otras señales."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1181
+#: C/index.docbook:1186
 msgid "Document what an application might do in the signal handler."
 msgstr "Documentar qué aplicación debe gestionar las señales."
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1189
+#: C/index.docbook:1194
 #, no-wrap
 msgid ""
 "\n"
@@ -2002,12 +2012,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1206 C/index.docbook:1207
+#: C/index.docbook:1211 C/index.docbook:1212
 msgid "Struct comment block"
 msgstr "Bloque de comentario de estructura"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1208
+#: C/index.docbook:1213
 #, no-wrap
 msgid ""
 "\n"
@@ -2041,7 +2051,7 @@ msgstr ""
 "} FooWidget;\n"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1225
+#: C/index.docbook:1230
 msgid ""
 "Use <code>/*&lt; private &gt;*/</code> before the private struct fields you "
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
@@ -2052,7 +2062,7 @@ msgstr ""
 "revertir el comportamiento anterior."
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1231
+#: C/index.docbook:1236
 msgid ""
 "Struct comment blocks can also be used for GObjects and GObjectClasses. It "
 "is usually a good idea to add a comment block for a class, if it has "
@@ -2072,12 +2082,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1243 C/index.docbook:1244
+#: C/index.docbook:1248 C/index.docbook:1249
 msgid "Enum comment block"
 msgstr "Enumerar bloques de comentarios"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1245
+#: C/index.docbook:1250
 #, no-wrap
 msgid ""
 "\n"
@@ -2111,7 +2121,7 @@ msgstr ""
 "} Something;\n"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1262
+#: C/index.docbook:1267
 msgid ""
 "Use <code>/*&lt; private &gt;*/</code> before the private enum values you "
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
@@ -2122,19 +2132,19 @@ msgstr ""
 "comportamiento anterior."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1272
+#: C/index.docbook:1277
 msgid "Useful DocBook tags"
 msgstr "Etiquetas DocBook útiles"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1274
+#: C/index.docbook:1279
 msgid ""
 "Here are some DocBook tags which are most useful when documenting the code."
 msgstr ""
 "Aquí están varias etiquetas de DocBook muy útiles al documentar código."
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1283
+#: C/index.docbook:1288
 #, no-wrap
 msgid ""
 "\n"
@@ -2144,7 +2154,7 @@ msgstr ""
 "&lt;link linkend=\"glib-Hash-Tables\"&gt;Hash Tables&lt;/link&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1279
+#: C/index.docbook:1284
 msgid ""
 "To link to another section in the GTK docs: <_:informalexample-1/> The "
 "linkend is the SGML/XML id on the top item of the page you want to link to. "
@@ -2160,7 +2170,7 @@ msgstr ""
 "ajustarse a SGML/XML."
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1296
+#: C/index.docbook:1301
 #, no-wrap
 msgid ""
 "\n"
@@ -2170,7 +2180,7 @@ msgstr ""
 "&lt;function&gt;...&lt;/function&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1293
+#: C/index.docbook:1298
 msgid ""
 "To refer to an external function, e.g. a standard C function: <_:"
 "informalexample-1/>"
@@ -2179,7 +2189,7 @@ msgstr ""
 "informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1305
+#: C/index.docbook:1310
 #, no-wrap
 msgid ""
 "\n"
@@ -2199,7 +2209,7 @@ msgstr ""
 "&lt;/example&gt;\n"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1316
+#: C/index.docbook:1321
 #, no-wrap
 msgid ""
 "\n"
@@ -2217,7 +2227,7 @@ msgstr ""
 "&lt;/informalexample&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1302
+#: C/index.docbook:1307
 msgid ""
 "To include example code: <_:informalexample-1/> or possibly this, for very "
 "short code fragments which don't need a title: <_:informalexample-2/> For "
@@ -2228,7 +2238,7 @@ msgstr ""
 "informalexample-2/>. El último GTK-Doc también soporta abreviación: |[ ... ]|"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1335
+#: C/index.docbook:1340
 #, no-wrap
 msgid ""
 "\n"
@@ -2260,12 +2270,12 @@ msgstr ""
 "&lt;/itemizedlist&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1332
+#: C/index.docbook:1337
 msgid "To include bulleted lists: <_:informalexample-1/>"
 msgstr "Para incluir listas de topos: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1355
+#: C/index.docbook:1360
 #, no-wrap
 msgid ""
 "\n"
@@ -2283,13 +2293,13 @@ msgstr ""
 "&lt;/note&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1352
+#: C/index.docbook:1357
 msgid ""
 "To include a note which stands out from the text: <_:informalexample-1/>"
 msgstr "Para incluir una nota que sobresale del texto: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1368
+#: C/index.docbook:1373
 #, no-wrap
 msgid ""
 "\n"
@@ -2299,12 +2309,12 @@ msgstr ""
 "&lt;type&gt;unsigned char&lt;/type&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1365
+#: C/index.docbook:1370
 msgid "To refer to a type: <_:informalexample-1/>"
 msgstr "Para referirse a un tipo: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1377
+#: C/index.docbook:1382
 #, no-wrap
 msgid ""
 "\n"
@@ -2314,7 +2324,7 @@ msgstr ""
 "&lt;structname&gt;XFontStruct&lt;/structname&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1374
+#: C/index.docbook:1379
 msgid ""
 "To refer to an external structure (not one described in the GTK docs): <_:"
 "informalexample-1/>"
@@ -2323,7 +2333,7 @@ msgstr ""
 "de GTK): <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1386
+#: C/index.docbook:1391
 #, no-wrap
 msgid ""
 "\n"
@@ -2333,12 +2343,12 @@ msgstr ""
 "&lt;structfield&gt;len&lt;/structfield&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1383
+#: C/index.docbook:1388
 msgid "To refer to a field of a structure: <_:informalexample-1/>"
 msgstr "Para referirse a un campo o a una estructura: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1395
+#: C/index.docbook:1400
 #, no-wrap
 msgid ""
 "\n"
@@ -2348,7 +2358,7 @@ msgstr ""
 "&lt;classname&gt;GtkWidget&lt;/classname&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1392
+#: C/index.docbook:1397
 msgid ""
 "To refer to a class name, we could possibly use: <_:informalexample-1/> but "
 "you'll probably be using #GtkWidget instead (to automatically create a link "
@@ -2361,7 +2371,7 @@ msgstr ""
 "\"documenting_syntax\">abreviaciones</link>)."
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1406
+#: C/index.docbook:1411
 #, no-wrap
 msgid ""
 "\n"
@@ -2371,12 +2381,12 @@ msgstr ""
 "&lt;emphasis&gt;This is important&lt;/emphasis&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1403
+#: C/index.docbook:1408
 msgid "To emphasize text: <_:informalexample-1/>"
 msgstr "Para enfatizar un texto: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1415
+#: C/index.docbook:1420
 #, no-wrap
 msgid ""
 "\n"
@@ -2386,12 +2396,12 @@ msgstr ""
 "&lt;filename&gt;/home/user/documents&lt;/filename&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1412
+#: C/index.docbook:1417
 msgid "For filenames use: <_:informalexample-1/>"
 msgstr "Para uso de nombres de archivo: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1424
+#: C/index.docbook:1429
 #, no-wrap
 msgid ""
 "\n"
@@ -2401,17 +2411,17 @@ msgstr ""
 "&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap&gt;&lt;/keycombo&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1421
+#: C/index.docbook:1426
 msgid "To refer to keys use: <_:informalexample-1/>"
 msgstr "Para referirse a claves: <_:informalexample-1/>"
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1434
+#: C/index.docbook:1439
 msgid "Filling the extra files"
 msgstr "Rellenar campos adicionales"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1436
+#: C/index.docbook:1441
 msgid ""
 "There are a couple of extra files, that need to be maintained along with the "
 "inline source code comments: <filename>&lt;package&gt;.types</filename>, "
@@ -2424,12 +2434,12 @@ msgstr ""
 "pasado) y <filename>&lt;paquete&gt;-sections.txt</filename>."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1445
+#: C/index.docbook:1450
 msgid "Editing the types file"
 msgstr "Editar los tipos de archivo"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1447
+#: C/index.docbook:1452
 msgid ""
 "If your library or application includes GObjects, you want their signals, "
 "arguments/parameters and position in the hierarchy to be shown in the "
@@ -2444,12 +2454,12 @@ msgstr ""
 "<filename>&lt;paquete&gt;.types</filename>."
 
 #. (itstool) path: example/title
-#: C/index.docbook:1456
+#: C/index.docbook:1461
 msgid "Example types file snippet"
 msgstr "Fragmento de ejemplo de tipos de archivo"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1457
+#: C/index.docbook:1462
 #, no-wrap
 msgid ""
 "\n"
@@ -2469,7 +2479,7 @@ msgstr ""
 "gtk_arrow_get_type\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1468
+#: C/index.docbook:1473
 msgid ""
 "Since GTK-Doc 1.8 <application>gtkdoc-scan</application> can generate this "
 "list for you. Just add \"--rebuild-types\" to SCAN_OPTIONS in "
@@ -2482,12 +2492,12 @@ msgstr ""
 "los tipos de archivo ni tenerlos bajo el control de versiones."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1477
+#: C/index.docbook:1482
 msgid "Editing the master document"
 msgstr "Editar la sección maestra del documento"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1479
+#: C/index.docbook:1484
 msgid ""
 "GTK-Doc produces documentation in DocBook SGML/XML. When processing the "
 "inline source comments, the GTK-Doc tools generate one documentation page "
@@ -2500,7 +2510,7 @@ msgstr ""
 "documento maestro las incluye y ordena."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1486
+#: C/index.docbook:1491
 msgid ""
 "While GTK-Doc creates a template master document for you, later run will not "
 "touch it again. This means that one can freely structure the documentation. "
@@ -2517,7 +2527,7 @@ msgstr ""
 "vez en cuando para ver si se han introducido algunas mejoras."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:1496
+#: C/index.docbook:1501
 msgid ""
 "Do not create tutorials as extra documents. Just write extra chapters. The "
 "benefit of directly embedding the tutorial for your library into the API "
@@ -2532,7 +2542,7 @@ msgstr ""
 "el tutorial junto con la biblioteca son mayores."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1505
+#: C/index.docbook:1510
 msgid ""
 "So what are the things to change inside the master document? For a start is "
 "only a little. There are some placeholders (text in square brackets) there "
@@ -2543,12 +2553,12 @@ msgstr ""
 "que habría que encargarse."
 
 #. (itstool) path: example/title
-#: C/index.docbook:1512
+#: C/index.docbook:1517
 msgid "Master document header"
 msgstr "Cabecera del documento maestro"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1513
+#: C/index.docbook:1518
 #, no-wrap
 msgid ""
 "\n"
@@ -2578,12 +2588,12 @@ msgstr ""
 "  &lt;title&gt;[Insert title here]&lt;/title&gt;\n"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1532
+#: C/index.docbook:1537
 msgid "Editing the section file"
 msgstr "Editar el archivo de sección"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1534
+#: C/index.docbook:1539
 msgid ""
 "The section file is used to organise the documentation output by GTK-Doc. "
 "Here one specifies which symbol belongs to which module or class and control "
@@ -2594,7 +2604,7 @@ msgstr ""
 "y el control de la visibilidad (pública o privada)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1540
+#: C/index.docbook:1545
 msgid ""
 "The section file is a plain text file with XML-like syntax (using tags). "
 "Blank lines are ignored and lines starting with a '#' are treated as comment "
@@ -2605,7 +2615,7 @@ msgstr ""
 "comiencen con «#» se tratan como comentarios."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1546
+#: C/index.docbook:1551
 msgid ""
 "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
 "without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
@@ -2628,7 +2638,7 @@ msgstr ""
 "clase de GObject convertido a minúscula.)"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1558
+#: C/index.docbook:1563
 msgid ""
 "The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of the "
 "section. It is only useful before the templates (if used) are initially "
@@ -2642,7 +2652,7 @@ msgstr ""
 "obsoleto."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1565
+#: C/index.docbook:1570
 msgid ""
 "You can group items in the section by using the &lt;SUBSECTION&gt; tag. "
 "Currently it outputs a blank line between subsections in the synopsis "
@@ -2672,7 +2682,7 @@ msgstr ""
 "públicas (variables, vmethods)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1584
+#: C/index.docbook:1589
 msgid ""
 "You can also use &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; to specify the "
 "#include files which are shown in the synopsis sections. It contains a comma-"
@@ -2688,12 +2698,12 @@ msgstr ""
 "a esa sección."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1598
+#: C/index.docbook:1603
 msgid "Controlling the result"
 msgstr "Controlar el resultado"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1600
+#: C/index.docbook:1605
 msgid ""
 "A GTK-Doc run generates report files inside the documentation directory. The "
 "generated files are named: <filename>&lt;package&gt;-undocumented.txt</"
@@ -2708,7 +2718,7 @@ msgstr ""
 "archivos de texto plano y se pueden ver y posprocesar fácilmente."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1609
+#: C/index.docbook:1614
 msgid ""
 "The <filename>&lt;package&gt;-undocumented.txt</filename> file starts with "
 "the documentation coverage summary. Below are two sections divided by blank "
@@ -2724,7 +2734,7 @@ msgstr ""
 "documentación pero dónde; p.e. se ha añadido un parámetro nuevo."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1618
+#: C/index.docbook:1623
 msgid ""
 "The <filename>&lt;package&gt;-undeclared.txt</filename> file lists symbols "
 "given in the <filename>&lt;package&gt;-sections.txt</filename> but not found "
@@ -2736,7 +2746,7 @@ msgstr ""
 "eliminado o no se han escrito correctamente."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1625
+#: C/index.docbook:1630
 msgid ""
 "The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol names, "
 "where the GTK-Doc scanner has found documentation, but does not know where "
@@ -2749,7 +2759,7 @@ msgstr ""
 "todavía al archivo <filename>&lt;paquete&gt;-sections.txt</filename>."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:1633
+#: C/index.docbook:1638
 msgid ""
 "Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
 "am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during "
@@ -2760,7 +2770,7 @@ msgstr ""
 "de integridad durante la ejecución de make check."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1640
+#: C/index.docbook:1645
 msgid ""
 "One can also look at the files produced by the source code scanner: "
 "<filename>&lt;package&gt;-decl-list.txt</filename> and <filename>&lt;"
@@ -2777,7 +2787,7 @@ msgstr ""
 "si este archivo lo contiene."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1649
+#: C/index.docbook:1654
 msgid ""
 "If the project is GObject based, one can also look into the files produced "
 "by the object scanner: <filename>&lt;package&gt;.args.txt</filename>, "
@@ -2798,12 +2808,12 @@ msgstr ""
 "ejecutándolo como <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1664
+#: C/index.docbook:1669
 msgid "Modernizing the documentation"
 msgstr "Modernizar la documentación"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1666
+#: C/index.docbook:1671
 msgid ""
 "GTK-Doc has been around for quite some time. In this section we list new "
 "features together with the version since when it is available."
@@ -2812,12 +2822,12 @@ msgstr ""
 "características nuevas junto con la versión desde la que están disponibles."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1672
+#: C/index.docbook:1677
 msgid "GTK-Doc 1.9"
 msgstr "GTK-Doc 1.9"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1674
+#: C/index.docbook:1679
 msgid ""
 "When using xml instead of sgml, one can actually name the master document "
 "<filename>&lt;package&gt;-docs.xml</filename>."
@@ -2826,7 +2836,7 @@ msgstr ""
 "maestro <filename>&lt;paquete&gt;-docs.xml</filename>."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1679
+#: C/index.docbook:1684
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-sections</option> in "
 "<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
@@ -2847,7 +2857,7 @@ msgstr ""
 "paquete&gt;-decl-list.txt &lt;paquete&gt;-sections.txt</code>."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1690
+#: C/index.docbook:1695
 msgid ""
 "Version 1.8 already introduced the syntax for documenting sections in the "
 "sources instead of the separate files under <filename class=\"directory"
@@ -2863,12 +2873,12 @@ msgstr ""
 "<filename>configure.ac</filename>."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1700
+#: C/index.docbook:1705
 msgid "GTK-Doc 1.10"
 msgstr "GTK-Doc 1.10"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1702
+#: C/index.docbook:1707
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-types</option> in "
 "<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
@@ -2886,17 +2896,17 @@ msgstr ""
 "condicional."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1713
+#: C/index.docbook:1718
 msgid "GTK-Doc 1.16"
 msgstr "GTK-Doc 1.16"
 
 #. (itstool) path: example/title
-#: C/index.docbook:1719
+#: C/index.docbook:1724
 msgid "Enable gtkdoc-check"
 msgstr "Activar gtkdoc-check"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1720
+#: C/index.docbook:1725
 #, no-wrap
 msgid ""
 "\n"
@@ -2916,7 +2926,7 @@ msgstr ""
 "endif\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1715
+#: C/index.docbook:1720
 msgid ""
 "This version includes a new tool called gtkdoc-check. This tool can run a "
 "set of sanity checks on your documentation. It is enabled by adding these "
@@ -2928,12 +2938,12 @@ msgstr ""
 "archivo <filename>Makefile.am</filename>. <_:example-1/>"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1733
+#: C/index.docbook:1738
 msgid "GTK-Doc 1.20"
 msgstr "GTK-Doc 1.20"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1735
+#: C/index.docbook:1740
 msgid ""
 "Version 1.18 brought some initial markdown support. Using markdown in doc "
 "comments is less intrusive than writing docbook xml. This version improves a "
@@ -2947,12 +2957,12 @@ msgstr ""
 "comentarios</link> contiene todos los detalles."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1746
+#: C/index.docbook:1751
 msgid "Documenting other interfaces"
 msgstr "Documentar otras interfaces"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1748
+#: C/index.docbook:1753
 msgid ""
 "So far we have been using GTK-Doc to document the API of code. The next "
 "sections contain suggestions how the tools can be used to document other "
@@ -2963,12 +2973,12 @@ msgstr ""
 "herramientas para documentar otras interfaces."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1755
+#: C/index.docbook:1760
 msgid "Command line options and man pages"
 msgstr "Opciones de la línea de comandos y páginas man"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1757
+#: C/index.docbook:1762
 msgid ""
 "As one can generate man pages for a docbook refentry as well, it sounds like "
 "a good idea to use it for that purpose. This way the interface is part of "
@@ -2979,12 +2989,12 @@ msgstr ""
 "interfaz es parte de la referencia y se obtienen las páginas man sin trabajo."
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:1764
+#: C/index.docbook:1769
 msgid "Document the tool"
 msgstr "Documentar la herramienta"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1766
+#: C/index.docbook:1771
 msgid ""
 "Create one refentry file per tool. Following <link linkend="
 "\"settingup_docfiles\">our example</link> we would call it <filename>meep/"
@@ -2999,17 +3009,17 @@ msgstr ""
 "así como los ejemplos en, por ejemplo, glib."
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:1776
+#: C/index.docbook:1781
 msgid "Adding the extra configure check"
 msgstr "Añadir la comprobación de configuración adicional"
 
 #. (itstool) path: example/title
-#: C/index.docbook:1779 C/index.docbook:1797
+#: C/index.docbook:1784 C/index.docbook:1802
 msgid "Extra configure checks"
 msgstr "Comprobaciones de configuración adicionales"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1780
+#: C/index.docbook:1785
 #, no-wrap
 msgid ""
 "\n"
@@ -3031,12 +3041,12 @@ msgstr ""
 "AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)\n"
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:1794
+#: C/index.docbook:1799
 msgid "Adding the extra makefile rules"
 msgstr "Añadir reglas de makefile adicionales"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1798
+#: C/index.docbook:1803
 #, no-wrap
 msgid ""
 "\n"
@@ -3072,12 +3082,12 @@ msgstr ""
 "EXTRA_DIST += meep.xml\n"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1820
+#: C/index.docbook:1825
 msgid "DBus interfaces"
 msgstr "Interfaces de DBus"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1822
+#: C/index.docbook:1827
 msgid ""
 "(FIXME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://"
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
@@ -3086,27 +3096,27 @@ msgstr ""
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1831
+#: C/index.docbook:1836
 msgid "Frequently asked questions"
 msgstr "Preguntas más frecuentes"
 
 #. (itstool) path: segmentedlist/segtitle
-#: C/index.docbook:1835
+#: C/index.docbook:1840
 msgid "Question"
 msgstr "Pregunta"
 
 #. (itstool) path: segmentedlist/segtitle
-#: C/index.docbook:1836
+#: C/index.docbook:1841
 msgid "Answer"
 msgstr "Respuesta"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1838
+#: C/index.docbook:1843
 msgid "No class hierarchy."
 msgstr "Sin jerarquía de clases."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1839
+#: C/index.docbook:1844
 msgid ""
 "The objects <function>xxx_get_type()</function> function has not been "
 "entered into the <filename>&lt;package&gt;.types</filename> file."
@@ -3115,12 +3125,12 @@ msgstr ""
 "introducido en el archivo <filename>&lt;package&gt;.types</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1845
+#: C/index.docbook:1850
 msgid "Still no class hierarchy."
 msgstr "Aún sin jerarquía de clases."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1846
+#: C/index.docbook:1851
 msgid ""
 "Missing or wrong naming in <filename>&lt;package&gt;-sections.txt</filename> "
 "file (see <ulink url=\"http://mail.gnome.org/archives/gtk-doc-list/2003-"
@@ -3131,12 +3141,12 @@ msgstr ""
 "doc-list/2003-October/msg00006.html\">explicación</ulink>)."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1852
+#: C/index.docbook:1857
 msgid "Damn, I have still no class hierarchy."
 msgstr "Maldición, aún no hay una jerarquía de clases."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1853
+#: C/index.docbook:1858
 msgid ""
 "Is the object name (name of the instance struct, e.g. <type>GtkWidget</"
 "type>) part of the normal section (don't put this into Standard or Private "
@@ -3147,12 +3157,12 @@ msgstr ""
 "Estándar o Privado)."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1860
+#: C/index.docbook:1865
 msgid "No symbol index."
 msgstr "Sin índice de símbolos."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1861
+#: C/index.docbook:1866
 msgid ""
 "Does the <filename>&lt;package&gt;-docs.{xml,sgml}</filename> contain a "
 "index that xi:includes the generated index?"
@@ -3161,12 +3171,12 @@ msgstr ""
 "«xi:includes» el índice generado?"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1867
+#: C/index.docbook:1872
 msgid "Symbols are not linked to their doc-section."
 msgstr "Los símbolos no se enlazan con su sección en el documento."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1868
+#: C/index.docbook:1873
 msgid ""
 "Is the doc-comment using the correct markup (added #,% or ())? Check if the "
 "gtkdoc-fixxref warns about unresolvable xrefs."
@@ -3175,12 +3185,12 @@ msgstr ""
 "si gtk-doc-fixxref avisa de alguna referencia xref sin resolver."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1874
+#: C/index.docbook:1879
 msgid "A new class does not appear in the docs."
 msgstr "Una clase nueva no aparece en la documentación."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1875
+#: C/index.docbook:1880
 msgid ""
 "Is the new page xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</"
 "filename>."
@@ -3189,12 +3199,12 @@ msgstr ""
 "sgml}</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1881
+#: C/index.docbook:1886
 msgid "A new symbol does not appear in the docs."
 msgstr "Un símbolo nuevo no aparece en la documentación."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1882
+#: C/index.docbook:1887
 msgid ""
 "Is the doc-comment properly formatted. Check for spelling mistakes in the "
 "begin of the comment. Check if the gtkdoc-fixxref warns about unresolvable "
@@ -3208,12 +3218,12 @@ msgstr ""
 "txt</filename> en una subsección pública."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1890
+#: C/index.docbook:1895
 msgid "A type is missing from the class hierarchy."
 msgstr "Falta un tipo en la clase de jerarquías"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1891
+#: C/index.docbook:1896
 msgid ""
 "If the type is listed in <filename>&lt;package&gt;.hierarchy</filename> but "
 "not in <filename>xml/tree_index.sgml</filename> then double check that the "
@@ -3229,14 +3239,14 @@ msgstr ""
 "privada."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1900
+#: C/index.docbook:1905
 msgid "I get foldoc links for all gobject annotations."
 msgstr ""
 "Obtengo enlaces de seguimiento de documentos para todas las anotaciones "
 "gobject."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1901
+#: C/index.docbook:1906
 msgid ""
 "Check that <filename>xml/annotation-glossary.xml</filename> is xi:included "
 "from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
@@ -3245,14 +3255,14 @@ msgstr ""
 "included» desde <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1909
+#: C/index.docbook:1914
 msgid "Parameter described in source code comment block but does not exist"
 msgstr ""
 "Parámetro descrito en el bloque de comentarios del código fuente pero no "
 "existe"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1910
+#: C/index.docbook:1915
 msgid ""
 "Check if the prototype in the header has different parameter names as in the "
 "source."
@@ -3261,12 +3271,12 @@ msgstr ""
 "diferentes de la fuente."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1915
+#: C/index.docbook:1920
 msgid "multiple \"IDs\" for constraint linkend: XYZ"
 msgstr "múltiples «ID» para la restricción enlazada: XYZ"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1916
+#: C/index.docbook:1921
 msgid ""
 "Symbol XYZ appears twice in <filename>&lt;package&gt;-sections.txt</"
 "filename> file."
@@ -3275,7 +3285,7 @@ msgstr ""
 "sections.txt</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1919
+#: C/index.docbook:1924
 msgid ""
 "Element typename in namespace '' encountered in para, but no template "
 "matches."
@@ -3284,12 +3294,12 @@ msgstr ""
 "coincide."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1926
+#: C/index.docbook:1931
 msgid "Tools related to gtk-doc"
 msgstr "Herramientas relacionadas con GTK-Doc"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1928
+#: C/index.docbook:1933
 msgid ""
 "GtkDocPlugin - a <ulink url=\"http://trac-hacks.org/wiki/GtkDocPlugin\">Trac "
 "GTK-Doc</ulink> integration plugin, that adds API docs to a trac site and "
@@ -3300,7 +3310,7 @@ msgstr ""
 "a un sitio «trac» y se integra con la búsqueda de «trac»."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1933
+#: C/index.docbook:1938
 msgid ""
 "Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since "
 "tags in the API to determine the minimum required version."
