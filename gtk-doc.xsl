@@ -399,7 +399,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
    <xsl:param name="title"/>
    <xsl:variable name="home" select="/*[1]"/>
    <title>
-     <xsl:apply-templates select="$home" mode="object.title.markup"/>: <xsl:copy-of select="$title"/>
+     <xsl:copy-of select="$title"/>: <xsl:apply-templates select="$home" mode="object.title.markup"/>
    </title>
   </xsl:template>
 
