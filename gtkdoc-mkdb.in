@@ -101,7 +101,6 @@ gtkdoc-mkdb version @VERSION@ - generate docbook files
 --source-dir=DIRNAME       Directories which contain inline reference material
 --source-suffixes=SUFFIXES Suffixes of source files to scan, comma-separated
 --ignore-files=FILES       Files or directories which should not be scanned
-                           May be used more than once for multiple directories
 --output-dir=DIRNAME       Directory to put the generated DocBook files in
 --tmpl-dir=DIRNAME         Directory in which template files may be found
 --main-sgml-file=FILE      File containing the toplevel DocBook file.
@@ -117,6 +116,8 @@ gtkdoc-mkdb version @VERSION@ - generate docbook files
 EOF
     exit 0;
 }
+
+@TRACE@(" ignore files: [$IGNORE_FILES]\n");
 
 my ($empty_element_end, $doctype_header);
 
@@ -3823,6 +3824,8 @@ sub ReadSourceDocumentation {
         if ($source_dir =~ m%^\Q$dir\E/(.*)$% and $IGNORE_FILES =~ m/(\s|^)\Q$1\E(\s|$)/) {
             @TRACE@("Skipping source directory: $source_dir");
             return;
+        } else {
+            @TRACE@("No match for: $1");
         }
     }
 
