@@ -3826,7 +3826,7 @@ sub ReadSourceDocumentation {
             @TRACE@("Skipping source directory: $source_dir");
             return;
         } else {
-            @TRACE@("No match for: $1");
+            @TRACE@("No match for: ".($1 || $source_dir));
         }
     }
 
