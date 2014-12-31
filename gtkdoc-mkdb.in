@@ -5893,6 +5893,9 @@ sub ReadInterfaces {
              }
 
            $Interfaces{$object} = join(' ', @knownIfaces);
+           @TRACE@("Interfaces for $object: $Interfaces{$object}\n");
+       } else {
+         @TRACE@("skipping interfaces for unknown symbol: $object\n");
        }
     }
     close (INPUT);
