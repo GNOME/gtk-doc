@@ -334,7 +334,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
 	-->
 	<xsl:apply-templates select="//*[name()='anchor' or name()='refentry' or name()='refsect1' or
 				         name() = 'refsect2' or name()='refsynopsisdiv' or
-					 name()='varlistentry']"
+					 name()='varlistentry' or name()='para']"
                              mode="generate.index.mode"/>
       </xsl:with-param>
       <xsl:with-param name="default.encoding" select="'UTF-8'"/>
