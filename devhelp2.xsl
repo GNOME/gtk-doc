@@ -57,7 +57,7 @@
       <functions>
         <xsl:apply-templates select="$gtkdoc.refsect2"
                              mode="generate.devhelp2.index.mode"/>
-        <xsl:apply-templates select="$gtkdoc.refsect2/variablelist[@role='enum']/varlistentry"
+        <xsl:apply-templates select="$gtkdoc.refsect2/refsect3[@role='enum_members']/informaltable/tgroup/tbody/row[@role='constant']"
                              mode="generate.devhelp2.index.mode"/>
       </functions>
     </book>
@@ -90,8 +90,8 @@
   </xsl:template>
 
   <xsl:template match="*" mode="generate.devhelp2.index.mode">
-    <xsl:variable name="title" select="title|term/literal"/>
-    <xsl:variable name="anchor" select="title/anchor"/>
+    <xsl:variable name="title" select="title|term/literal|entry[@role='enum_member_name']/para"/>
+    <xsl:variable name="anchor" select="title/anchor|entry[@role='enum_member_name']/para"/>
     <xsl:variable name="type" select="@role"/>
     <xsl:variable name="condition" select="@condition"/>
     <xsl:variable name="target">
