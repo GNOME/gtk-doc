@@ -426,3 +426,13 @@ void deprecation_notice(void)
 {
 }
 
+/**
+ * bug_741941:
+ * @object: the object
+ * @par: parameter
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=741941
+ */
+void bug_741941(void *object, void *par)
+{
+}
