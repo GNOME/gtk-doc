@@ -117,6 +117,9 @@ if $is_xml; then
             "$@" -o $module.fo $gtkdocdir/gtk-doc-fo.xsl $document || cleanexit $?
         # fop dies too easily :(
         # @FOP@ $module.fo $module.pdf
+    else
+      echo "dblatex or fop must be installed to use gtkdoc-mkpdf." >&2
+      cleanexit 1
     fi
   fi
 else
