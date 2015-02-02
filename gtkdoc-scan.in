@@ -578,6 +578,12 @@ sub ScanHeader {
                     print DECL "<VARIABLE>\n<NAME>$symbol</NAME>\n$deprecated$decl</VARIABLE>\n";
                 }
 
+            # G_DECLARE_*
+
+            } elsif (m/.*G_DECLARE_(FINAL_TYPE|DERIVABLE_TYPE|INTERFACE)\s*\(/) {
+                $in_declaration = "g-declare";
+                $symbol = "G_DECLARE_$1";
+                $decl = $';
 
             # FUNCTIONS
 
@@ -746,6 +752,24 @@ sub ScanHeader {
         #if ($in_declaration ne '') {
         #    print "$in_declaration = $decl\n";
         #}
+
+        if ($in_declaration eq "g-declare") {
+            if ($decl =~ s/\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\).*$//) {
+                my $ModuleObjName = $1;
+                my $module_obj_name = $2;
+                if ($REBUILD_TYPES) {
+                    push (@get_types, "${module_obj_name}_get_type");
+                }
+                $forward_decls{$ModuleObjName} = "<STRUCT>\n<NAME>$ModuleObjName</NAME>\n$deprecated</STRUCT>\n";
+                if ($symbol =~ /^G_DECLARE_DERIVABLE/) {
+                    $forward_decls{"${ModuleObjName}Class"} = "<STRUCT>\n<NAME>${ModuleObjName}Class</NAME>\n$deprecated</STRUCT>\n";
+                }
+                if ($symbol =~ /^G_DECLARE_INTERFACE/) {
+                    $forward_decls{"${ModuleObjName}Interface"} = "<STRUCT>\n<NAME>${ModuleObjName}Interface</NAME>\n$deprecated</STRUCT>\n";
+                }
+                $in_declaration = "";
+            }
+        }
 
         # Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);' or
         # ') __attribute__ (...);'.
