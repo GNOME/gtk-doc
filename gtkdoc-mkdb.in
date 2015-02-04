@@ -1095,7 +1095,7 @@ sub OutputIndex {
 
     # do a case insensitive sort while chopping off the prefix
     foreach my $hash (
-        sort { $$a{criteria} cmp $$b{criteria} }
+        sort { $$a{criteria} cmp $$b{criteria} or $$a{original} cmp $$b{original} }
         map { my $x = uc($_); $x =~ s/^$NAME_SPACE\_?(.*)/$1/i; { criteria => $x, original => $_, short => $1 } }
         keys %apiindex) {
 
