@@ -1766,6 +1766,11 @@ EOF
         }
         $desc .= "</tbody></tgroup></informaltable>\n</refsect3>\n";
         foreach my $field_name (keys %field_descrs) {
+            # Documenting those standard fields is not required anymore, but
+            # we don't want to warn if they are documented anyway.
+            if ($field_name =~ /(g_iface|parent_instance|parent_class)/) {
+                next;
+            }
             &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
                 "Field description for $symbol"."::"."$field_name is not used from source code comment block.");
             if ($unused_parameters ne "") {
