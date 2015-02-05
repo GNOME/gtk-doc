@@ -120,6 +120,9 @@ sub ParseStructDeclaration {
     $declaration =~ s@\n\s*//.*?\n@\n@msg;
     $declaration =~ s@//.*@@g;
 
+    # Remove g_iface, parent_instance and parent_class if they are first member
+    $declaration =~ s/(\{)\s*(\w)+\s+(g_iface|parent_instance|parent_class)\s*;/$1/g;
+
     my @result = ();
 
     if ($declaration =~ /^\s*$/) {
