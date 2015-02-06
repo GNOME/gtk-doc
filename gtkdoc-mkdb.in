@@ -5442,7 +5442,7 @@ sub ReadDeclarationsFile {
 
                 # If the declaration is an empty typedef struct _XXX XXX
                 # set the flag to indicate the struct has a typedef.
-                if ($declaration_type eq 'STRUCT'
+                if (($declaration_type eq 'STRUCT' || $declaration_type eq 'UNION')
                     && $declaration =~ m/^\s*$/) {
                     @TRACE@("Struct has typedef: $declaration_name\n");
                     $StructHasTypedef{$declaration_name} = 1;
@@ -5464,13 +5464,13 @@ sub ReadDeclarationsFile {
                               eq $declaration_type) {
                         # If the existing declaration is empty, or is just a
                         # forward declaration of a struct, override it.
-                        if ($declaration_type eq 'STRUCT') {
-                            if ($Declarations{$declaration_name} =~ m/^\s*(struct\s+\w+\s*;)?\s*$/) {
+                        if ($declaration_type eq 'STRUCT' || $declaration_type eq 'UNION') {
+                            if ($Declarations{$declaration_name} =~ m/^\s*((struct|union)\s+\w+\s*;)?\s*$/) {
                                 if ($is_deprecated) {
                                     $Deprecated{$declaration_name} = "";
                                 }
                                 $Declarations{$declaration_name} = $declaration;
-                            } elsif ($declaration =~ m/^\s*(struct\s+\w+\s*;)?\s*$/) {
+                            } elsif ($declaration =~ m/^\s*((struct|union)\s+\w+\s*;)?\s*$/) {
                                 # Ignore an empty or forward declaration.
                             } else {
                                 &LogWarning ($file, $., "Structure $declaration_name has multiple definitions.");
