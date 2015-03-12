@@ -5240,19 +5240,7 @@ sub ReplaceEntities {
   # Expand entities in <programlisting> even inside CDATA since
   # we changed the definition of |[ to add CDATA
   for ($i = 0; $i <= $#entities; $i++) {
-    if ($text =~ s/$entities[$i][0]/$entities[$i][1]/g) {
-      # don't warn about &ast; since it is expected to be present
-      # for C-style comments
-      if ($entities[$i][0] ne "&ast;") {
-        $warn .= "$entities[$i][0] ";
-      }
-    }
-  }
-
-  if ($warn ne "") {
-    chomp $warn;
-    &LogWarning (&GetSymbolSourceFile ($symbol), &GetSymbolSourceLine($symbol),
-                 "Deprecated entities found in documentation for $symbol: $warn");
+    $text =~ s/$entities[$i][0]/$entities[$i][1]/g;
   }
 
   return $text;
