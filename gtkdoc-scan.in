@@ -774,7 +774,7 @@ sub ScanHeader {
         # Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);' or
         # ') __attribute__ (...);'.
         if ($in_declaration eq 'function') {
-            if ($decl =~ s/\)\s*(G_GNUC_.*|.*DEPRECATED.*|${IGNORE_DECORATORS}\s*|__attribute__\s*\(.*\)\s*)*;.*$//) {
+            if ($decl =~ s/\)\s*(G_GNUC_.*|.*DEPRECATED.*|${IGNORE_DECORATORS}\s*|__attribute__\s*\(.*\)\s*)*;.*$//s) {
                 if ($internal == 0) {
                      $decl =~ s%/\*.*?\*/%%gs;        # remove comments.
                      #$decl =~ s/^\s+//;                # remove leading whitespace.
@@ -786,7 +786,7 @@ sub ScanHeader {
                          print DECL "<FUNCTION>\n<NAME>$symbol</NAME>\n$deprecated<RETURNS>$ret_type</RETURNS>\n$decl\n</FUNCTION>\n";
                          if ($REBUILD_TYPES) {
                              # check if this looks like a get_type function and if so remember
-                             if (($symbol =~ m/_get_type$/) && ($ret_type =~ m/GType/) && ($decl =~ m/(void|)/)) {
+                             if (($symbol =~ m/_get_type$/) && ($ret_type =~ m/GType/) && ($decl =~ m/^(void|)$/)) {
                                  @TRACE@("Adding get-type: [$ret_type] [$symbol] [$decl]\tfrom $input_file");
                                  push (@get_types, $symbol);
                              }
