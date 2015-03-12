@@ -4055,7 +4055,7 @@ sub ScanSourceFile {
             if (m%^\s*(SECTION:\s*\S+)%) {
                 $symbol = $1;
                 @TRACE@("SECTION DOCS found in source for : '$symbol'\n");
-            } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([-a-z0-9_ ]+\)\s*)*$%) {
+            } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([-A-Za-z0-9._ ]+\)\s*)*$%) {
                 $symbol = $1;
                 @TRACE@("SYMBOL DOCS found in source for : '$symbol'\n");
             }
