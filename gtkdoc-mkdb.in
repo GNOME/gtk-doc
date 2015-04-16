@@ -245,6 +245,7 @@ my %SymbolTypes;
 my %SymbolParams;
 my %SymbolSourceFile;
 my %SymbolSourceLine;
+my %SymbolAnnotations;
 
 # These global hashes store documentation scanned from the source files.
 my %SourceSymbolDocs;
@@ -2225,14 +2226,20 @@ sub OutputFunction {
 
     $desc .= &MakeDeprecationNote($symbol);
 
-    my $parameters = &OutputParamDescriptions ("FUNCTION", $symbol, @fields);
-
     if (defined ($SymbolDocs{$symbol})) {
         my $symbol_docs = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
         $desc .= $symbol_docs;
     }
+    if (defined ($SymbolAnnotations{$symbol})) {
+      my $param_desc = $SymbolAnnotations{$symbol};
+      my $param_annotations = "";
+      ($param_desc,$param_annotations) = &ExpandAnnotation($symbol, $param_desc);
+      if ($param_annotations ne "") {
+         $desc .= "\n<para>$param_annotations</para>";
+      }
+    }
 
-    $desc .= $parameters;
+    $desc .= &OutputParamDescriptions ("FUNCTION", $symbol, @fields);
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
@@ -2275,13 +2282,16 @@ sub OutputParamDescriptions {
             my $param_desc = $$params[$j + 1];
             my $param_annotations = "";
 
-            ($param_desc,$param_annotations) = & ExpandAnnotation($symbol, $param_desc);
+            ($param_desc,$param_annotations) = &ExpandAnnotation($symbol, $param_desc);
             $param_desc = &ConvertMarkDown($symbol, $param_desc);
             # trim
             $param_desc =~ s/^(\s|\n)+//msg;
             $param_desc =~ s/(\s|\n)+$//msg;
             if ($param_name eq "Returns") {
-                $returns = "$param_desc\n<para>$param_annotations</para>";
+                $returns = $param_desc;
+                if ($param_annotations ne "") {
+                    $returns .= "\n<para>$param_annotations</para>";
+                }
             } elsif ($param_name eq "void") {
                 # FIXME: &LogWarning()?
                 @TRACE@("!!!! void in params for $symbol?\n");
@@ -2820,7 +2830,8 @@ sub ExpandAnnotation {
     my $param_annotations = "";
 
     # look for annotations at the start of the comment part
-    if ($param_desc =~ m%^\s*\((.*?)\):%) {
+    # function level annotations don't end with a colon ':'
+    if ($param_desc =~ m%^\s*\((.*?)\):?%) {
         my @annotations;
         my $annotation;
         $param_desc = $';
@@ -4006,7 +4017,7 @@ sub ScanSourceFile {
                     #}
                     $SourceSymbolSourceFile{$symbol} = $file;
                     $SourceSymbolSourceLine{$symbol} = $.;
-                }
+                }                
 
                 if ($since_desc) {
                      ($since_desc, my @extra_lines) = split ("\n", $since_desc);
@@ -4057,7 +4068,15 @@ sub ScanSourceFile {
                 @TRACE@("SECTION DOCS found in source for : '$symbol'\n");
             } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([-A-Za-z0-9._ ]+\)\s*)*$%) {
                 $symbol = $1;
+                my $annotation = $2;
                 @TRACE@("SYMBOL DOCS found in source for : '$symbol'\n");
+                if (defined($annotation)) {
+                    chomp($annotation);
+                    if ($annotation ne "") {
+                        $SymbolAnnotations{$symbol} = $annotation;
+                        @TRACE@("remaining text for $symbol: '$annotation'\n");
+                    }
+                }
             }
             next;
         }
