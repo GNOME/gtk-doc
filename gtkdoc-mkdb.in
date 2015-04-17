@@ -2233,7 +2233,9 @@ sub OutputFunction {
     if (defined ($SymbolAnnotations{$symbol})) {
       my $param_desc = $SymbolAnnotations{$symbol};
       my $param_annotations = "";
+      @TRACE@("expand annotation for $symbol: $param_desc");
       ($param_desc,$param_annotations) = &ExpandAnnotation($symbol, $param_desc);
+      @TRACE@("expanded annotation for $symbol: $param_desc | $param_annotations");
       if ($param_annotations ne "") {
          $desc .= "\n<para>$param_annotations</para>";
       }
@@ -2831,7 +2833,7 @@ sub ExpandAnnotation {
 
     # look for annotations at the start of the comment part
     # function level annotations don't end with a colon ':'
-    if ($param_desc =~ m%^\s*\((.*?)\):?%) {
+    if ($param_desc =~ m%^\s*\((.*?)\)(:|$)%) {
         my @annotations;
         my $annotation;
         $param_desc = $';
@@ -4151,7 +4153,13 @@ sub ScanSourceFile {
             push (@params, $param_name);
             push (@params, $param_desc);
             $current_param += $PARAM_FIELD_COUNT;
+            $in_part = "param";
             next;
+        } elsif ($in_part eq "") {
+            @TRACE@("continuation for $symbol annotation '$_'");
+            my $annotation = $_;
+            $annotation =~ s/^\s+|\s+$//g ; 
+            $SymbolAnnotations{$symbol} .= $annotation;
         }
 
         # We must be in the middle of a parameter description, so add it on

@@ -37,5 +37,8 @@ void annotation_rename_to (void);
 
 void stability_unstable(void);
 
+void annotation_multiline_on_function (void);
+void annotation_multiline_on_function2 (void);
+
 #endif // GTKDOC_TESTER_H
 

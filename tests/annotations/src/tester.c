@@ -221,3 +221,22 @@ stability_unstable(void)
 {
 }
 
+/**
+ * annotation_multiline_on_function: (rename-to annotation_scope)
+ *                                   (skip)
+ *
+ * Documentation for this function.
+ */
+void annotation_multiline_on_function (void)
+{
+}
+
+/**
+ * annotation_multiline_on_function2:
+ * (rename-to annotation_scope)(skip)
+ *
+ * Documentation for this function.
+ */
+void annotation_multiline_on_function2 (void)
+{
+}
