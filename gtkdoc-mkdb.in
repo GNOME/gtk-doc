@@ -4097,14 +4097,14 @@ sub ScanSourceFile {
             }
         } elsif (m%^\s*since:%i) {
             # we're in param section and have not seen the blank line
-            if($in_part ne "") {
+            if($in_part ne "param") {
               $since_desc = $';
               $in_part = "since";
               next;
             }
         } elsif (m%^\s*deprecated:%i) {
             # we're in param section and have not seen the blank line
-            if($in_part ne "") {
+            if($in_part ne "param") {
               $deprecated_desc = $';
               $in_part = "deprecated";
               next;
