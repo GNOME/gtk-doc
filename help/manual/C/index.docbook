@@ -1053,10 +1053,10 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
           </varlistentry>
         </variablelist>
 
-          <para>
-            (FIXME : Stability information)
-          </para>
-
+        <para>
+          (FIXME : Stability information)
+        </para>
+        
         <example><title>General tags</title>
           <programlisting><![CDATA[
 /**
@@ -1074,6 +1074,38 @@ Bar *
 foo_get_bar(Foo *foo)
 {
 ...
+]]></programlisting>
+        </example>
+      </sect2>
+
+      <sect2><title>Annotations</title>
+
+        <para>
+          Documentation blocks can contain annotation-tags. These tags will be
+          rendered with tooltips describing their meaning. The tags are used by
+          gobject-introspection to generate language bingings. A detailed list
+          of the supported tags can be found on 
+          <ulink url="http://live.gnome.org/GObjectIntrospection/Annotations" type="http">the wiki</ulink>.
+        </para>
+
+        <example><title>Annotations</title>
+          <programlisting><![CDATA[
+/**
+ * foo_get_bar: (annotation)
+ * @foo: (annotation): some foo
+ *
+ * Retrieves @foo's bar.
+ *
+ * Returns: (annotation): @foo's bar
+ */
+...
+/**
+ * foo_set_bar_using_the_frobnicator: (annotation) (another annotation)
+ *                                    (and another annotation)
+ * @foo: (annotation) (another annotation): some foo
+ *
+ * Sets bar on @foo.
+ */
 ]]></programlisting>
         </example>
       </sect2>
@@ -1105,13 +1137,6 @@ foo_get_bar(Foo *foo)
         <para>
           Gtk-doc assumes all symbols (macros, functions) starting with '_' are
           private. They are treated like static functions.
-        </para>
-
-        <para>
-          <!-- FIXME: we should ideally link/describe the gobject introspection
-          annotation tag -->
-          Also, take a look at GObject Introspection annotation tags:
-          http://live.gnome.org/GObjectIntrospection/Annotations
         </para>
 
         <example><title>Function comment block</title>
