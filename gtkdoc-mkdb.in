@@ -2560,9 +2560,7 @@ sub OutputSGMLFile {
 <refmeta>
 <refentrytitle role="top_of_page" id="$section_id.top_of_page">$title</refentrytitle>
 <manvolnum>3</manvolnum>
-<refmiscinfo>
-  \U$MODULE\E Library
-$image</refmiscinfo>
+<refmiscinfo>\U$MODULE\E Library$image</refmiscinfo>
 </refmeta>
 <refnamediv>
 <refname>$title</refname>
