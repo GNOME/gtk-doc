@@ -2135,6 +2135,15 @@ sub OutputVariable {
     if (defined ($SymbolDocs{$symbol})) {
         $desc .= &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
     }
+    if (defined ($SymbolAnnotations{$symbol})) {
+        my $param_desc = $SymbolAnnotations{$symbol};
+        my $param_annotations = "";
+        ($param_desc,$param_annotations) = &ExpandAnnotation($symbol, $param_desc);
+        if ($param_annotations ne "") {
+            $desc .= "\n<para>$param_annotations</para>";
+        }
+    }
+
     $desc .= OutputSymbolTraits ($symbol);
     $desc .= "</refsect2>\n";
     return ($synop, $desc);
@@ -2227,18 +2236,15 @@ sub OutputFunction {
     $desc .= &MakeDeprecationNote($symbol);
 
     if (defined ($SymbolDocs{$symbol})) {
-        my $symbol_docs = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
-        $desc .= $symbol_docs;
+        $desc .= &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
     }
     if (defined ($SymbolAnnotations{$symbol})) {
-      my $param_desc = $SymbolAnnotations{$symbol};
-      my $param_annotations = "";
-      @TRACE@("expand annotation for $symbol: $param_desc");
-      ($param_desc,$param_annotations) = &ExpandAnnotation($symbol, $param_desc);
-      @TRACE@("expanded annotation for $symbol: $param_desc | $param_annotations");
-      if ($param_annotations ne "") {
-         $desc .= "\n<para>$param_annotations</para>";
-      }
+        my $param_desc = $SymbolAnnotations{$symbol};
+        my $param_annotations = "";
+        ($param_desc,$param_annotations) = &ExpandAnnotation($symbol, $param_desc);
+        if ($param_annotations ne "") {
+            $desc .= "\n<para>$param_annotations</para>";
+        }
     }
 
     $desc .= &OutputParamDescriptions ("FUNCTION", $symbol, @fields);
@@ -2839,6 +2845,7 @@ sub ExpandAnnotation {
         $param_desc = $';
 
         @annotations = split(/\)\s*\(/,$1);
+        @TRACE@("annotations for $symbol: '$1'\n");
         foreach $annotation (@annotations) {
             # need to search for the longest key-match in %AnnotationDefinition
             my $match_length=0;
@@ -3659,9 +3666,17 @@ sub GetSignals {
                     $AllDocumentedSymbols{$symbol} = 1;
                 }
             }
+            if (defined ($SymbolAnnotations{$symbol})) {
+                my $param_desc = $SymbolAnnotations{$symbol};
+                my $param_annotations = "";
+                ($param_desc,$param_annotations) = &ExpandAnnotation($symbol, $param_desc);
+                if ($param_annotations ne "") {
+                    $desc .= "\n<para>$param_annotations</para>";
+                }
+            }
             $desc .= &MakeDeprecationNote($symbol);
 
-	    $desc .= $parameters;
+            $desc .= $parameters;
             if ($flags_string) {
                 $desc  .= "<para>Flags: $flags_string</para>\n";
             }
@@ -3780,6 +3795,14 @@ sub GetArgs {
 
             $arg_desc .= "<programlisting>  “$name”$pad1 $type_output</programlisting>\n";
             $arg_desc .= $blurb;
+            if (defined ($SymbolAnnotations{$symbol})) {
+                my $param_desc = $SymbolAnnotations{$symbol};
+                my $param_annotations = "";
+                ($param_desc,$param_annotations) = &ExpandAnnotation($symbol, $param_desc);
+                if ($param_annotations ne "") {
+                    $arg_desc .= "\n<para>$param_annotations</para>";
+                }
+            }
             $arg_desc .= &MakeDeprecationNote($symbol);
 
             if ($flags_string) {

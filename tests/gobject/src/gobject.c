@@ -352,7 +352,7 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
 #endif
 
   /**
-   * GtkdocObject:otest: (type GList(GtkdocObject2j))
+   * GtkdocObject:otest: (type GList(GtkdocObject2))
    *
    * Since: 0.1
    */
