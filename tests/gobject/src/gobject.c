@@ -352,15 +352,14 @@ static void gtkdoc_object_class_init (GtkdocObjectClass *klass) {
 #endif
 
   /**
-   * GtkdocObject:otest:
+   * GtkdocObject:otest: (type GList(GtkdocObject2j))
    *
    * Since: 0.1
    */
   g_object_class_install_property (gobject_class,GTKDOC_OBJECT_TEST,
-                                  g_param_spec_string ("otest",
+                                  g_param_spec_pointer ("otest",
                                      "otest prop",
                                      "dummy property for object",
-                                     "dummy", /* default value */
                                      G_PARAM_READWRITE));
 
   /**

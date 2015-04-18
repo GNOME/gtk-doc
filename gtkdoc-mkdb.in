@@ -3753,7 +3753,7 @@ sub GetArgs {
             }
 
             $AllSymbols{$symbol} = 1;
-            my $blurb;
+            my $blurb = "";
             if (defined($SymbolDocs{$symbol}) &&
                 !IsEmptyDoc($SymbolDocs{$symbol})) {
                 $blurb = &ConvertMarkDown($symbol, $SymbolDocs{$symbol});
@@ -3761,13 +3761,13 @@ sub GetArgs {
                 $AllDocumentedSymbols{$symbol} = 1;
             }
             else {
-                if (!($ArgBlurbs[$i] eq "")) {
+                if ($ArgBlurbs[$i] ne "") {
+                    $blurb = "<para>" . &CreateValidSGML ($ArgBlurbs[$i]) . "</para>";
                     $AllDocumentedSymbols{$symbol} = 1;
                 } else {
                     # FIXME: print a warning?
                     @TRACE@(".. no description\n");
                 }
-                $blurb = "<para>" . &CreateValidSGML ($ArgBlurbs[$i]) . "</para>";
             }
 
             my $pad1 = " " x (24 - length ($name));
@@ -4068,7 +4068,7 @@ sub ScanSourceFile {
             if (m%^\s*(SECTION:\s*\S+)%) {
                 $symbol = $1;
                 @TRACE@("SECTION DOCS found in source for : '$symbol'\n");
-            } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([-A-Za-z0-9._ ]+\)\s*)*$%) {
+            } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([-A-Za-z0-9._() ]+?\)\s*)*$%) {
                 $symbol = $1;
                 my $annotation = $2;
                 @TRACE@("SYMBOL DOCS found in source for : '$symbol'\n");
