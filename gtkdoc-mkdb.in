@@ -4772,6 +4772,8 @@ sub MarkDownParseBlocks {
     my $first_char = substr ($line, 0, 1);
     my $deindented_line;
 
+    @TRACE@("in '".$md_block->{"type"}."' state, parsing '$line'");
+
     if ($md_block->{"type"} eq "markup") {
       if (!$md_block->{"closed"}) {
         if (index ($line, $md_block->{"start"}) != -1) {
@@ -4781,7 +4783,9 @@ sub MarkDownParseBlocks {
           if ($md_block->{"depth"} > 0) {
             $md_block->{"depth"}--;
           } else {
+            @TRACE@("closing tag '$line'");
             $md_block->{"closed"} = 1;
+            # TODO(ensonic): reparse inner text with MarkDownParseLines?
           }
         }
         $md_block->{"text"} .= "\n" . $line;
@@ -4919,6 +4923,7 @@ sub MarkDownParseBlocks {
     }
 
     # indentation sensitive types
+    @TRACE@("parsing '$line'");
 
     if ($line =~ /^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$/) {
       # atx heading (#)

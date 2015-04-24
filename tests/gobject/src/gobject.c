@@ -95,7 +95,7 @@
  *
  * - A list
  *
- * - Inside markup
+ * - that is not recognised as markdown
  *
  * </refsect3>
  *
