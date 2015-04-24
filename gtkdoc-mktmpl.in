@@ -98,6 +98,14 @@ EOF
     exit 0;
 }
 
+print <<EOF;
+###############################################################################
+gtkdoc-mktmpl is deprecated and will be removed from one of the next gtk-doc 
+release.
+Please refer to the documentation "Modernizing the documentation"/"GTK-Doc 1.9".
+###############################################################################
+EOF
+
 my $ROOT_DIR = ".";
 
 # The directory containing the template files.

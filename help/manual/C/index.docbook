@@ -1722,7 +1722,9 @@ gtk_arrow_get_type
         the sources instead of the separate files under <filename class='directory'>tmpl</filename>.
         This version adds options to switch the whole doc module to not use the
         extra tmpl build step at all, by using <option>--flavour no-tmpl</option>
-        in <filename>configure.ac</filename>.
+        in <filename>configure.ac</filename>. If you don't have a <filename class='directory'>tmpl</filename>
+        checked into you source control system and haven't yet switched, just
+        add the flag to <filename>configure.ac</filename> and you are done.
       </para>
     </sect1>
     
