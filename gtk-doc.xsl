@@ -731,28 +731,28 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
       <table width="100%">
         <tr><td valign="top">
           <xsl:call-template name="anchor"/>
-            <xsl:choose>
-              <xsl:when test="$refentry.generate.name != 0">
-                <h2>
-                <xsl:call-template name="gentext">
-                    <xsl:with-param name="key" select="'RefName'"/>
-                  </xsl:call-template>
-                </h2>
-              </xsl:when>
-              <xsl:when test="$refentry.generate.title != 0">
-                <h2>
-                  <xsl:choose>
-                    <xsl:when test="../refmeta/refentrytitle">
-                      <xsl:apply-templates select="../refmeta/refentrytitle"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:apply-templates select="refname[1]"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </h2>
-              </xsl:when>
-            </xsl:choose>
-            <p>
+          <xsl:choose>
+            <xsl:when test="$refentry.generate.name != 0">
+              <h2>
+              <xsl:call-template name="gentext">
+                  <xsl:with-param name="key" select="'RefName'"/>
+                </xsl:call-template>
+              </h2>
+            </xsl:when>
+            <xsl:when test="$refentry.generate.title != 0">
+              <h2>
+                <xsl:choose>
+                  <xsl:when test="../refmeta/refentrytitle">
+                    <xsl:apply-templates select="../refmeta/refentrytitle"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:apply-templates select="refname[1]"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </h2>
+            </xsl:when>
+          </xsl:choose>
+          <p>
             <xsl:apply-templates/>
           </p>
         </td>
@@ -768,7 +768,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                    - use it here
                 -->
               <xsl:variable name="refentryid" select="../@id"/>
-	      <xsl:apply-templates select="key('gallery.key', $refentryid)/inlinegraphic"/>
+              <xsl:apply-templates select="key('gallery.key', $refentryid)/inlinegraphic"/>
             </xsl:otherwise>
           </xsl:choose>
         </td></tr>
