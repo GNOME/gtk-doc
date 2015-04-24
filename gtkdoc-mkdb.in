@@ -1750,7 +1750,6 @@ EOF
                 # trim
                 $field_descr =~ s/^(\s|\n)+//msg;
                 $field_descr =~ s/(\s|\n)+$//msg;
-                $desc .= "<listitem>$field_descr</listitem>\n";
                 $desc .= "<entry role=\"struct_member_description\">$field_descr</entry>\n<entry role=\"struct_member_annotations\">$param_annotations</entry>\n";
                 delete $field_descrs{$field_name};
             } else {
