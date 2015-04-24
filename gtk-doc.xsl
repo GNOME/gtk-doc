@@ -776,6 +776,20 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
      </div>
   </xsl:template>
 
+  <!-- a copy from refentry.xsl to add the missing mode attribute,
+       see bug/729911, https://sourceforge.net/p/docbook/bugs/1358/
+  -->
+  <xsl:template match="refpurpose" mode="no.anchor.mode">
+    <xsl:if test="node()">
+      <xsl:text> </xsl:text>
+      <xsl:call-template name="dingbat">
+        <xsl:with-param name="dingbat">em-dash</xsl:with-param>
+      </xsl:call-template>
+      <xsl:text> </xsl:text>
+      <xsl:apply-templates />
+    </xsl:if>
+  </xsl:template>
+
   <!-- add anchors for index sections -->
   <xsl:template match="indexdiv">
     <a><xsl:attribute name="name">idx<xsl:value-of select="./title"/></xsl:attribute></a>
