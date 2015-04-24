@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = . src docs docs-tmpl
+SUBDIRS = . src docs
 
 if BUILD_TESTS
 

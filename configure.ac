@@ -264,7 +264,6 @@ tests/Makefile
 tests/gobject/Makefile
 tests/gobject/src/Makefile
 tests/gobject/docs/Makefile
-tests/gobject/docs-tmpl/Makefile
 tests/bugs/Makefile
 tests/bugs/src/Makefile
 tests/bugs/docs/Makefile
