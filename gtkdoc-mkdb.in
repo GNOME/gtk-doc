@@ -2547,6 +2547,9 @@ sub OutputSGMLFile {
         $object_anchors .= "<anchor id=\"$id\"$empty_element_end";
     }
 
+    # Make sure we produce valid docbook
+    $$functions_details ||= "<para />";
+
     # We used to output this, but is messes up our UpdateFileIfChanged code
     # since it changes every day (and it is only used in the man pages):
     # "<refentry id="$section_id" revision="$mday $month $year">"
