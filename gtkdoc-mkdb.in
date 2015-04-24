@@ -4183,12 +4183,13 @@ sub ScanSourceFile {
             my $annotation = $_;
             $annotation =~ s/^\s+|\s+$//g ; 
             $SymbolAnnotations{$symbol} .= $annotation;
+            next;
         }
 
         # We must be in the middle of a parameter description, so add it on
         # to the last element in @params.
         if ($current_param == -1) {
-            &LogWarning ($file, $., "Parsing comment block file : parameter expected.");
+            &LogWarning ($file, $., "Parsing comment block file : parameter expected, but got '$_'");
         } else {
             $params[$#params] .= $_;
         }
