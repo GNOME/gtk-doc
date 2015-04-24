@@ -155,7 +155,7 @@
 /**
  * SECTION:object3
  * @title: GtkdocObject3
- * @short_description: class that is mostly undocuemnted
+ * @short_description: class that is mostly undocumented
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
  */
