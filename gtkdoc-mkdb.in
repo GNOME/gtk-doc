@@ -2704,8 +2704,17 @@ EOF
     print OUTPUT <<EOF;
   <chapter id="object-tree">
     <title>Object Hierarchy</title>
-     <xi:include href="xml/tree_index.sgml"/>
+    <xi:include href="xml/tree_index.sgml"/>
   </chapter>
+EOF
+  } else {
+    print OUTPUT <<EOF;
+  <!-- enable this when you use gobject types
+  <chapter id="object-tree">
+    <title>Object Hierarchy</title>
+    <xi:include href="xml/tree_index.sgml"/>
+  </chapter>
+  -->
 EOF
   }
 
@@ -2718,8 +2727,19 @@ print OUTPUT <<EOF;
     <title>Index of deprecated API</title>
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
   </index>
-
+EOF
+  if (keys(%AnnotationsUsed)) {
+    print OUTPUT <<EOF;
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+EOF
+  } else {
+    print OUTPUT <<EOF;
+  <!-- enable this when you use gobject introspection annotations
+  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+  -->
+EOF
+  }
+  print OUTPUT <<EOF;
 </book>
 EOF
 
