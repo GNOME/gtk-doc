@@ -21,6 +21,7 @@
     part	toc
     reference toc
   </xsl:param>
+  <xsl:param name="process.empty.source.toc">1</xsl:param>
 
   <xsl:param name="default.encoding" select="'UTF-8'"/>
   <xsl:param name="chapter.autolabel" select="0"/>

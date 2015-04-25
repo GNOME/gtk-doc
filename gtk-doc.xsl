@@ -30,6 +30,7 @@
     part	toc
     reference toc
   </xsl:param>
+  <xsl:param name="process.empty.source.toc">1</xsl:param>
 
   <xsl:param name="chunker.output.encoding" select="'UTF-8'"/>
   <xsl:param name="chunker.output.indent" select="'yes'"/>
