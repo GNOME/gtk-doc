@@ -9,7 +9,7 @@ DOC_MODULE=
 # Uncomment for versioned docs and specify the version of the module, e.g. '2'.
 #DOC_MODULE_VERSION=2
 
-# The top-level XML file (SGML in the past). You can change this if you want to.
+# The top-level XML file.
 DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.xml
 
 # Directories containing the source code.
@@ -18,25 +18,21 @@ DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.xml
 # e.g. DOC_SOURCE_DIR=$(top_srcdir)/gtk $(top_srcdir)/gdk
 DOC_SOURCE_DIR=
 
-# Extra options to pass to gtkdoc-scangobj. Not normally needed.
+# Extra options to pass to gtkdoc-scangobj. Normally not needed.
 SCANGOBJ_OPTIONS=
 
 # Extra options to supply to gtkdoc-scan.
 # e.g. SCAN_OPTIONS=--deprecated-guards="GTK_DISABLE_DEPRECATED"
 SCAN_OPTIONS=
 
-# Extra options to supply to gtkdoc-mkdb.
+# Extra options to supply to gtkdoc-mkdb
 # e.g. MKDB_OPTIONS=--xml-mode --output-format=xml
 MKDB_OPTIONS=--xml-mode --output-format=xml
-
-# Extra options to supply to gtkdoc-mktmpl
-# e.g. MKTMPL_OPTIONS=--only-section-tmpl
-MKTMPL_OPTIONS=
 
 # Extra options to supply to gtkdoc-mkhtml
 MKHTML_OPTIONS=
 
-# Extra options to supply to gtkdoc-fixref. Not normally needed.
+# Extra options to supply to gtkdoc-fixref. Normally not needed.
 # e.g. FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html
 FIXXREF_OPTIONS=
 
@@ -58,12 +54,12 @@ IGNORE_HFILES=
 # e.g. HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/stock_about_24.png
 HTML_IMAGES=
 
-# Extra SGML files that are included by $(DOC_MAIN_SGML_FILE).
-# e.g. content_files=running.sgml building.sgml changes-2.0.sgml
+# Extra files that are included by $(DOC_MAIN_SGML_FILE).
+# e.g. content_files=running.xml building.xml changes-2.0.xml
 content_files=
 
-# SGML files where gtk-doc abbrevations (#GtkWidget) are expanded
-# e.g. expand_content_files=running.sgml
+# Files where gtk-doc abbrevations (#GtkWidget) are expanded
+# e.g. expand_content_files=running.xml
 expand_content_files=
 
 # CFLAGS and LDFLAGS for compiling gtkdoc-scangobj with your library.
