@@ -102,6 +102,14 @@ if $is_xml; then
         --stringparam chunker.output.quiet $quiet \
         "$@" $gtkdocdir/gtk-doc.xsl $document || exit $?
 else
+    echo <<EOF;
+###############################################################################
+sgml support in gtk-doc is deprecated and will be removed from one of the next
+gtk-doc release.
+Please refer to the documentation "Modernizing the documentation"/"GTK-Doc 1.9".
+###############################################################################
+EOF
+
     @JADE@ $path_arg -t @SGML_FORMAT_TYPE@ -w no-idref -d $gtkdocdir/gtk-doc.dsl \
         -V "gtkdoc-bookname=$module" -V "gtkdoc-version=@VERSION@" \
         "$@" $gtkdocdir/gtk-doc.dcl $document || exit $?
