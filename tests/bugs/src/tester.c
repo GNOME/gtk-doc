@@ -436,3 +436,16 @@ void deprecation_notice(void)
 void bug_741941(void *object, void *par)
 {
 }
+
+/**
+ * bug_732689:
+ * @spec: the string specifying the color.
+ *
+ * Parses a textual specification of a color and fill in the
+ * <structfield>red</structfield>, <structfield>green</structfield>,
+ * and <structfield>blue</structfield> fields of a color.
+ **/
+void
+bug_732689 (const gchar *spec)
+{
+}
