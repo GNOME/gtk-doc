@@ -3335,26 +3335,30 @@ sub GetHierarchy {
     my $last_index = 0;
     $level = 1;
     for ($i = $#ancestors; $i >= 0; $i--) {
-        my $link_text;
+        my $entry_text;
+        my $alt_text;
+        my $ancestor = $ancestors[$i];
+        my $ancestor_id = &CreateValidSGMLID ($ancestor);
+        my $indent = ' ' x ($level * 4);
         # Don't add a link to the current object, i.e. when i == 0.
         if ($i > 0) {
-            my $ancestor_id = &CreateValidSGMLID ($ancestors[$i]);
-            $link_text = "<link linkend=\"$ancestor_id\">$ancestors[$i]</link>";
+            $entry_text = $indent . "<link linkend=\"$ancestor_id\">$ancestor</link>";
+            $alt_text = $indent . $ancestor;
         } else {
-            $link_text = "$ancestors[$i]";
+            $entry_text = $indent . $ancestor;
+            $alt_text = $indent . "<link linkend=\"$ancestor_id\">$ancestor</link>";
         }
-        my $indented_text = ' ' x ($level * 4) . $link_text;
+        @TRACE@("Checking for '$entry_text' or '$alt_text'"); 
         # Check if we already have this object
         my $index = -1;
         for ($j = 0; $j <= $#hierarchy; $j++) {
-            if ($hierarchy[$j] eq $indented_text) {
+            if (($hierarchy[$j] eq $entry_text) or ($hierarchy[$j] eq $alt_text)) {
                 $index = $j;
                 last;
             }
         }
         if ($index == -1) {
             # We have a new entry, find insert position in alphabetical order
-            my $indent = ' ' x ($level * 4);
             my $found = 0;
             for ($j = $last_index; $j <= $#hierarchy; $j++) {
                 if ($hierarchy[$j] !~ m/^${indent}/) {
@@ -3363,24 +3367,29 @@ sub GetHierarchy {
                     last;
                 } elsif ($hierarchy[$j] =~ m/^${indent}[^ ]/) {
                     my $stripped_text = $hierarchy[$j];
-                    if ($indented_text !~ m/<link linkend/) {
+                    if ($entry_text !~ m/<link linkend/) {
                         $stripped_text =~ s%<link linkend="[A-Za-z]*">%%;
                         $stripped_text =~ s%</link>%%;
                     }
-                    if ($indented_text lt $stripped_text) {
+                    if ($entry_text lt $stripped_text) {
                         $last_index = $j;
                         $found = 1;
                         last;
                     } 
                 }
             }
+            # Append to bottom
             if (!$found) {
               $last_index = 1 + $#hierarchy;
             }
-            splice @hierarchy, $last_index, 0, ($indented_text);
+            splice @hierarchy, $last_index, 0, ($entry_text);
             $last_index++;
         } else {
-            # Already have this one, remmeber index as base insert point
+            # Already have this one, make sure we use the not linked version
+            if ($entry_text !~ m/<link linkend=/) {
+              $hierarchy[$j] = $entry_text;
+            }
+            # Remember index as base insert point
             $last_index = $index + 1;
         }
         $level++;
