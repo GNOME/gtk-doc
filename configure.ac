@@ -318,9 +318,6 @@ test "x$build_tests" != "xno" \
 test "x$enable_debug" != "xno" \
     && AC_MSG_NOTICE([** Debug tracing enabled]) \
     || AC_MSG_NOTICE([   Debug tracing disabled])
-test "x$enable_debug" != "xno" \
-    && AC_MSG_NOTICE([** Debug tracing enabled]) \
-    || AC_MSG_NOTICE([   Debug tracing disabled])
 test "x$have_yelp_tools" != "xno" \
     && AC_MSG_NOTICE([** Documentation enabled]) \
     || AC_MSG_NOTICE([   Documentation disabled])
