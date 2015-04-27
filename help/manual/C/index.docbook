@@ -653,7 +653,7 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
     <para>
       The scanner can handle the majority of C headers fine. In the case of
       receiving warnings from the scanner that look like a special case, one can
-      hint GTK-Doc to skip over them.
+      hint GTK-Doc to skip over them. 
       <example><title>GTK-Doc comment block</title>
         <programlisting><![CDATA[
 #ifndef __GTK_DOC_IGNORE__
@@ -662,6 +662,15 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
 ]]></programlisting>
       </example>
     </para>
+
+    <note>
+      <title>Limitations</title>
+      <para>
+        Note, that GTK-Doc's supports
+        <code>#ifndef(__GTK_DOC_IGNORE__)</code> but not 
+        <code>#if !defined(__GTK_DOC_IGNORE__)</code> or other combinations.
+      </para>
+    </note>
 
     <!--  -->
 
