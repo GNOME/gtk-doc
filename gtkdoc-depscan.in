@@ -14,6 +14,8 @@ default_books = ['atk', 'gdk', 'gdk-pixbuf', 'glib', 'gio', 'gobject', 'gtk', 'p
 __comment_regex = re.compile(r'/\*.*?\*/', re.DOTALL)
 __word_regex = re.compile(r'\b[A-Za-z_][A-Za-z0-9_]*\b')
 
+u2a_table = { 0x2018:0x27, 0x2019:0x27, 0x201C:0x22, 0x201D:0x22 }
+
 class Book(object):
     def __init__(self, name, folders, version=None):
         self.__catalog   = None
@@ -181,7 +183,7 @@ class Symbol(object):
     def from_xml(cls, book, attrs):
         name, type, link, deprecated, since = map(attrs.get, Symbol.known_attributes)
 
-        name = name.strip()
+        name = name.strip().translate(u2a_table)
 
         if name.endswith('()'):
             if not type in ('function', 'macro'):
