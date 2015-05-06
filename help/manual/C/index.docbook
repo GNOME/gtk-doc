@@ -796,11 +796,16 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
       </para>
 
       <para>
+        While markdown is now preferred one can mix both. One limitation here is
+        that one can use docbook xml within markdown, but markdown within
+        docbook xml is not supported.
+      </para>
+
+      <para>
         In older GTK-Doc releases, if you need support for additional
         formatting, you would need to enable the usage of docbook
-        SGML/XML tags inside doc-comments by
-        putting <option>--xml-mode</option> or
-        <option>--sgml-mode</option> in the variable
+        SGML/XML tags inside doc-comments by putting <option>--xml-mode</option> 
+        or <option>--sgml-mode</option> in the variable
         <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</filename>.
       </para>
 
@@ -851,16 +856,16 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
       </para>
 
       <tip>
-	<para>
-	  As already mentioned earlier GTK-Doc is for documenting public API. Thus
-	  one cannot write documentation for static symbols. Nevertheless it is good
-	  to comment those symbols too. This helps other to understand you code.
-	  Therefore we recommend to comment these using normal comments (without the
-	  2nd '*' in the first line).
-	  If later the function needs to be made public, all one needs to do is to
-	  add another '*' in the comment block and insert the symbol name at the
-	  right place inside the sections file.
-	</para>
+        <para>
+          As already mentioned earlier GTK-Doc is for documenting public API. Thus
+          one cannot write documentation for static symbols. Nevertheless it is good
+          to comment those symbols too. This helps other to understand you code.
+          Therefore we recommend to comment these using normal comments (without the
+          2nd '*' in the first line).
+          If later the function needs to be made public, all one needs to do is to
+          add another '*' in the comment block and insert the symbol name at the
+          right place inside the sections file.
+        </para>
       </tip>
     </sect1>
 
