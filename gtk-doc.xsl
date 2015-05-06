@@ -779,6 +779,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
 
   <!-- a copy from refentry.xsl to add the missing mode attribute,
        see bug/729911, https://sourceforge.net/p/docbook/bugs/1358/
+       fixed in: https://sourceforge.net/p/docbook/code/9962/
   -->
   <xsl:template match="refpurpose" mode="no.anchor.mode">
     <xsl:if test="node()">
@@ -787,7 +788,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         <xsl:with-param name="dingbat">em-dash</xsl:with-param>
       </xsl:call-template>
       <xsl:text> </xsl:text>
-      <xsl:apply-templates />
+      <xsl:apply-templates mode="no.anchor.mode"/>
     </xsl:if>
   </xsl:template>
 
