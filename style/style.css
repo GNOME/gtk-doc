@@ -347,7 +347,9 @@ acronym,abbr
 }
 
 @media screen {
-  sup a.footnote
+  /* these have a <sup> as a first child, but since there are no parent selectors
+   * we can't use that. */
+  a.footnote
   {
     position: relative;
     top: 0em ! important;
