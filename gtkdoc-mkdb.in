@@ -37,7 +37,7 @@ require "gtkdoc-common.pl";
 # name of documentation module
 my $MODULE;
 my $TMPL_DIR;
-my $SGML_OUTPUT_DIR;
+my $DB_OUTPUT_DIR;
 my @SOURCE_DIRS;
 my $SOURCE_SUFFIXES = "";
 my $IGNORE_FILES = "";
@@ -57,7 +57,7 @@ my %optctl = ('module' => \$MODULE,
               'source-dir' => \@SOURCE_DIRS,
               'source-suffixes' => \$SOURCE_SUFFIXES,
               'ignore-files' => \$IGNORE_FILES,
-              'output-dir' => \$SGML_OUTPUT_DIR,
+              'output-dir' => \$DB_OUTPUT_DIR,
               'tmpl-dir' => \$TMPL_DIR,
               'version' => \$PRINT_VERSION,
               'help' => \$PRINT_HELP,
@@ -204,7 +204,7 @@ my $ROOT_DIR = ".";
 $TMPL_DIR = $TMPL_DIR ? $TMPL_DIR : "$ROOT_DIR/tmpl";
 
 # This is where we put all the DocBook output.
-$SGML_OUTPUT_DIR = $SGML_OUTPUT_DIR ? $SGML_OUTPUT_DIR : "$ROOT_DIR/$OUTPUT_FORMAT";
+$DB_OUTPUT_DIR = $DB_OUTPUT_DIR ? $DB_OUTPUT_DIR : "$ROOT_DIR/$OUTPUT_FORMAT";
 
 # This file contains the object hierarchy.
 my $OBJECT_TREE_FILE = "$ROOT_DIR/$MODULE.hierarchy";
@@ -420,9 +420,9 @@ my %MD_GTK_ESCAPABLE_CHARS = ( "@" => 1,
                                "%" => 1 );
 
 # Create the root DocBook output directory if it doens't exist.
-if (! -e $SGML_OUTPUT_DIR) {
-    mkdir ("$SGML_OUTPUT_DIR", 0777)
-        || die "Can't create directory: $SGML_OUTPUT_DIR";
+if (! -e $DB_OUTPUT_DIR) {
+    mkdir ("$DB_OUTPUT_DIR", 0777)
+        || die "Can't create directory: $DB_OUTPUT_DIR";
 }
 
 # Function and other declaration output settings.
@@ -448,9 +448,9 @@ for my $dir (@SOURCE_DIRS) {
     &ReadSourceDocumentation ($dir);
 }
 
-my $changed = &OutputSGML ("$ROOT_DIR/$MODULE-sections.txt");
+my $changed = &OutputDB ("$ROOT_DIR/$MODULE-sections.txt");
 
-# If any of the DocBook SGML files have changed, update the timestamp file (so
+# If any of the DocBook files have changed, update the timestamp file (so
 # it can be used for Makefile dependencies).
 if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
 
@@ -530,9 +530,9 @@ sub OutputObjectList {
     my $cols = 3;
 
     # FIXME: use $OUTPUT_FORMAT
-    # my $old_object_index = "$SGML_OUTPUT_DIR/object_index.$OUTPUT_FORMAT";
-    my $old_object_index = "$SGML_OUTPUT_DIR/object_index.sgml";
-    my $new_object_index = "$SGML_OUTPUT_DIR/object_index.new";
+    # my $old_object_index = "$DB_OUTPUT_DIR/object_index.$OUTPUT_FORMAT";
+    my $old_object_index = "$DB_OUTPUT_DIR/object_index.sgml";
+    my $new_object_index = "$DB_OUTPUT_DIR/object_index.new";
 
     open (OUTPUT, ">$new_object_index")
         || die "Can't create $new_object_index: $!";
@@ -600,7 +600,7 @@ sub TrimTextBlock {
 
 
 #############################################################################
-# Function    : OutputSGML
+# Function    : OutputDB
 # Description : This collects the output for each section of the docs, and
 #                outputs each file when the end of the section is found.
 # Arguments   : $file - the $MODULE-sections.txt file which contains all of
@@ -608,7 +608,7 @@ sub TrimTextBlock {
 #                into sections and subsections.
 #############################################################################
 
-sub OutputSGML {
+sub OutputDB {
     my ($file) = @_;
 
     @TRACE@("Reading: $file\n");
@@ -924,7 +924,7 @@ ${other_synop}
 EOF
                 }
 
-                my $file_changed = &OutputSGMLFile ($filename, $title, $section_id,
+                my $file_changed = &OutputDBFile ($filename, $title, $section_id,
                                                     $section_includes,
                                                     \$functions_synop, \$other_synop,
                                                     \$functions_details, \$other_details,
@@ -1089,8 +1089,8 @@ EOF
 sub OutputIndex {
     my ($basename, $apiindexref ) = @_;
     my %apiindex = %{$apiindexref};
-    my $old_index = "$SGML_OUTPUT_DIR/$basename.xml";
-    my $new_index = "$SGML_OUTPUT_DIR/$basename.new";
+    my $old_index = "$DB_OUTPUT_DIR/$basename.xml";
+    my $new_index = "$DB_OUTPUT_DIR/$basename.new";
     my $lastletter = " ";
     my $divopen = 0;
     my $symbol;
@@ -1254,8 +1254,8 @@ sub OutputSinceIndexes {
 #############################################################################
 
 sub OutputAnnotationGlossary {
-    my $old_glossary = "$SGML_OUTPUT_DIR/annotation-glossary.xml";
-    my $new_glossary = "$SGML_OUTPUT_DIR/annotation-glossary.new";
+    my $old_glossary = "$DB_OUTPUT_DIR/annotation-glossary.xml";
+    my $new_glossary = "$DB_OUTPUT_DIR/annotation-glossary.new";
     my $lastletter = " ";
     my $divopen = 0;
 
@@ -1594,7 +1594,7 @@ sub OutputTypedef {
 # Description : Returns the synopsis and detailed description of a struct.
 #                We check if it is a object struct, and if so we only output
 #                parts of it that are noted as public fields.
-#                We also use a different SGML ID for object structs, since the
+#                We also use a different IDs for object structs, since the
 #                original ID is used for the entire RefEntry.
 # Arguments   : $symbol - the struct.
 #                $declaration - the declaration of the struct.
@@ -2423,12 +2423,12 @@ sub ParseStabilityLevel {
 
 
 #############################################################################
-# Function    : OutputSGMLFile
+# Function    : OutputDBFile
 # Description : Outputs the final DocBook file for one section.
 # Arguments   : $file - the name of the file.
 #               $title - the title from the $MODULE-sections.txt file, which
 #                 will be overridden by the title in the template file.
-#               $section_id - the SGML id to use for the toplevel tag.
+#               $section_id - the id to use for the toplevel tag.
 #               $includes - comma-separates list of include files added at top of
 #                 synopsis, with '<' '>' around them (if not already enclosed in "").
 #               $functions_synop - reference to the DocBook for the Functions Synopsis part.
@@ -2447,10 +2447,10 @@ sub ParseStabilityLevel {
 #               $file_objects - reference to an array of objects in this file
 #############################################################################
 
-sub OutputSGMLFile {
+sub OutputDBFile {
     my ($file, $title, $section_id, $includes, $functions_synop, $other_synop, $functions_details, $other_details, $signals_synop, $signals_desc, $args_synop, $args_desc, $hierarchy, $interfaces, $implementations, $prerequisites, $derived, $file_objects) = @_;
 
-    @TRACE@("Output sgml for file $file with title '$title'\n");
+    @TRACE@("Output docbook for file $file with title '$title'\n");
 
     # The edited title overrides the one from the sections file.
     my $new_title = $SymbolDocs{"$TMPL_DIR/$file:Title"};
@@ -2545,11 +2545,11 @@ sub OutputSGMLFile {
 
     my $extralinks = OutputSectionExtraLinks($title,"Section:$file");
 
-    my $old_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT";
-    my $new_sgml_file = "$SGML_OUTPUT_DIR/$file.$OUTPUT_FORMAT.new";
+    my $old_db_file = "$DB_OUTPUT_DIR/$file.$OUTPUT_FORMAT";
+    my $new_db_file = "$DB_OUTPUT_DIR/$file.$OUTPUT_FORMAT.new";
 
-    open (OUTPUT, ">$new_sgml_file")
-        || die "Can't create $new_sgml_file: $!";
+    open (OUTPUT, ">$new_db_file")
+        || die "Can't create $new_db_file: $!";
 
     my $object_anchors = "";
     foreach my $object (@$file_objects) {
@@ -2601,7 +2601,7 @@ $$args_desc$$signals_desc$see_also
 EOF
     close (OUTPUT);
 
-    return &UpdateFileIfChanged ($old_sgml_file, $new_sgml_file, 0);
+    return &UpdateFileIfChanged ($old_db_file, $new_db_file, 0);
 }
 
 
@@ -2618,8 +2618,8 @@ sub OutputExtraFile {
 
     ($basename = $file) =~ s!^.*/!!;
 
-    my $old_sgml_file = "$SGML_OUTPUT_DIR/$basename";
-    my $new_sgml_file = "$SGML_OUTPUT_DIR/$basename.new";
+    my $old_db_file = "$DB_OUTPUT_DIR/$basename";
+    my $new_db_file = "$DB_OUTPUT_DIR/$basename.new";
 
     my $contents;
 
@@ -2630,29 +2630,29 @@ sub OutputExtraFile {
         $contents = <EXTRA_FILE>;
     }
 
-    open (OUTPUT, ">$new_sgml_file")
-        || die "Can't create $new_sgml_file: $!";
+    open (OUTPUT, ">$new_db_file")
+        || die "Can't create $new_db_file: $!";
 
     print OUTPUT &ExpandAbbreviations ("$basename file", $contents);
     close (OUTPUT);
 
-    return &UpdateFileIfChanged ($old_sgml_file, $new_sgml_file, 0);
+    return &UpdateFileIfChanged ($old_db_file, $new_db_file, 0);
 }
 #############################################################################
 # Function    : OutputBook
-# Description : Outputs the SGML entities that need to be included into the
-#                main SGML file for the module.
+# Description : Outputs the entities that need to be included into the
+#                main docbook file for the module.
 # Arguments   : $book_top - the declarations of the entities, which are added
-#                  at the top of the main SGML file.
+#                  at the top of the main docbook file.
 #                $book_bottom - the references to the entities, which are
-#                  added in the main SGML file at the desired position.
+#                  added in the main docbook file at the desired position.
 #############################################################################
 
 sub OutputBook {
     my ($book_top, $book_bottom) = @_;
 
-    my $old_file = "$SGML_OUTPUT_DIR/$MODULE-doc.top";
-    my $new_file = "$SGML_OUTPUT_DIR/$MODULE-doc.top.new";
+    my $old_file = "$DB_OUTPUT_DIR/$MODULE-doc.top";
+    my $new_file = "$DB_OUTPUT_DIR/$MODULE-doc.top.new";
 
     open (OUTPUT, ">$new_file")
         || die "Can't create $new_file: $!";
@@ -2662,8 +2662,8 @@ sub OutputBook {
     &UpdateFileIfChanged ($old_file, $new_file, 0);
 
 
-    $old_file = "$SGML_OUTPUT_DIR/$MODULE-doc.bottom";
-    $new_file = "$SGML_OUTPUT_DIR/$MODULE-doc.bottom.new";
+    $old_file = "$DB_OUTPUT_DIR/$MODULE-doc.bottom";
+    $new_file = "$DB_OUTPUT_DIR/$MODULE-doc.bottom.new";
 
     open (OUTPUT, ">$new_file")
         || die "Can't create $new_file: $!";
@@ -2673,7 +2673,7 @@ sub OutputBook {
     &UpdateFileIfChanged ($old_file, $new_file, 0);
 
 
-    # If the main SGML/XML file hasn't been created yet, we create it here.
+    # If the main docbook file hasn't been created yet, we create it here.
     # The user can tweak it later.
     if ($MAIN_SGML_FILE && ! -e $MAIN_SGML_FILE) {
       open (OUTPUT, ">$MAIN_SGML_FILE")
@@ -4026,7 +4026,7 @@ sub ScanSourceFile {
                     push (@params, "Returns");
                     push (@params, $return_desc);
                 }
-                # Convert special SGML characters
+                # Convert special characters
                 $description = &ConvertSGMLChars ($symbol, $description);
                 my $k;
                 for ($k = 1; $k <= $#params; $k += $PARAM_FIELD_COUNT) {
@@ -5940,9 +5940,9 @@ sub ReadObjectHierarchy {
     close (INPUT);
 
     # FIXME: use $OUTPUT_FORMAT
-    # my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.$OUTPUT_FORMAT";
-    my $old_tree_index = "$SGML_OUTPUT_DIR/tree_index.sgml";
-    my $new_tree_index = "$SGML_OUTPUT_DIR/tree_index.new";
+    # my $old_tree_index = "$DB_OUTPUT_DIR/tree_index.$OUTPUT_FORMAT";
+    my $old_tree_index = "$DB_OUTPUT_DIR/tree_index.sgml";
+    my $new_tree_index = "$DB_OUTPUT_DIR/tree_index.new";
 
     open (OUTPUT, ">$new_tree_index")
         || die "Can't create $new_tree_index: $!";
