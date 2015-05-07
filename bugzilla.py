@@ -53,7 +53,7 @@ default_product = "gtk-doc"
 TD_ID = 1
 TD_SUMMARY = 7
 # after Olav's changes, it's now number 8
-TD_SUMMARY = 8
+#TD_SUMMARY = 8
 
 # Horrible, don't look here
 class HP(HTMLParser.HTMLParser):
@@ -85,29 +85,29 @@ class HP(HTMLParser.HTMLParser):
         if not data:
             return
         
-        # print self.td, self.tr, repr(data)
-
-        # clear self.descr if we're not in the correct td
-        if self.td != TD_SUMMARY:
-            self.descr = ""
+        #print self.td, self.tr, repr(data)
 
         # check what td it is in
         if self.td == TD_ID:
             try:
                 self.bugno = int(data)
+                #print "got id: ", self.bugno
             except ValueError:
                 self.bugno = 0
         elif self.td == TD_SUMMARY:
             # the summary td
             self.descr += data
+            #print "got descr: ", self.descr
         
     def handle_endtag(self, tag):
         if tag == 'tr':
             self.tr = 0
             self.td = 0
+            #print "end tag: ", self.bugno, self.descr
             if self.bugno != 0:
                 self.bugs.append((self.bugno, self.descr))
                 self.bugno = 0
+                self.descr = ""
 
 def main(args):
     if len(args) < 3:
