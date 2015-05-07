@@ -1,7 +1,54 @@
-GTK-Doc 1.21.1    (... .. 2014)
-==============
+GTK-Doc 1.22    (May 07 2014)
+============
 
-Development version
+ Important notice - starting with the next release these long deprecated
+ features will be removed - you'll now see a warning if you actually use these
+ features. Please write to gtk-doc-list@gnome.org and tell us your concerns:
+ o gtkdoc-mktmpl - please move all the comments into the sources.
+ o generating html via sgml tools (jade/openjade), using xsltproc and
+   docbook-xslt is pretty common and preferred since version 1.6
+
+ Changes
+
+ o 727778 :  &ndash;  &nbsp; gtk-doc doesn't understand annotations for GList-contained types
+ o 729911 : Using #TypeName inshort_description makes &quot; - &quot; in HTML index disappear
+ o 732689 : strange result on a generated html page
+ o 734689 :  &quot; Specific - &gt; General &quot; document title format
+ o 736073 : Regression: problems with enum constants
+ o 736725 : Documentation consists mostly of empty space
+ o 741305 : Scanner issue with enum containing value ='{'
+ o 741763 : Example Makefile.am improvements
+ o 741941 : Last function argument missing in docs (possibly due to macro in code)
+ o 743879 : special case G_DECLARE_*_TYPE
+ o 743967 : Make build results reproducible
+ o 744075 : Missing struct members if forward declared in another header
+ o 744368 : gtkdoc-depscan doesn't handle unicode in .devhelp2 files correctly
+ o 746118 : gtkdoc-scan: fix regex for get_type() functions
+ o 746120 : Expand annotation recognition on symbol lines
+ o 746121 : gtkdoc-mkdb: don't warn on 'deprecated entities'
+ o 747207 : Typos in documentation
+ o 747298 : Test still tries to check gtkdoc-scanobj
+ o 748456 : xsl: Enable ToC generation on empty &lt; toc/ &gt; elements
+
+ Contributors
+
+ Anders Jonsson
+ Andre Klapper
+ Daniel Mustieles
+ David King
+ Dominique Leuenberger
+ Efstathios Iosifidis
+ Emanuele Aina
+ Fran Diéguez
+ Maria  Mavridou
+ Marvin Schmidt
+ Olav Vitters
+ Philip Withnall
+ Rafael Ferreira
+ Ryan Lortie
+ Stefan Sauer
+ Tom Tryfonidis
+ Xavier Claessens
 
 GTK-Doc 1.21    (Jul 17 2014)
 ============
