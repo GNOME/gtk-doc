@@ -391,6 +391,7 @@ my %MD_TEXT_LEVEL_ELEMENTS = ( "literal" => 1,
                                "envar" => 1,
                                "filename" => 1,
                                "firstterm" => 1,
+                               "footnote" => 1,
                                "function" => 1,
                                "manvolnum" => 1,
                                "option" => 1,
@@ -5005,16 +5006,18 @@ sub MarkDownParseBlocks {
       my $is_self_closing = defined($2);
       # FIXME: why do we need to skip https? here, if we generalize this to all
       # uri schemes we get parsing errors
-      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag !~ /^https?/) {
+      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag !~ /^https?/ && !defined($md_block->{"start"})) {
         push @md_blocks, $md_block;
 
         if ($is_self_closing) {
+          @TRACE@("self-closing docbook '$tag'");
           $md_block = { type => "self-closing tag",
                         text => $deindented_line };
           $is_self_closing = 0;
           next OUTER;
         }
 
+        @TRACE@("new markup '$tag'");
         $md_block = { type   => "markup",
                       text   => $deindented_line,
                       start  => "<" . $tag . ">",
@@ -5025,6 +5028,18 @@ sub MarkDownParseBlocks {
           $md_block->{"closed"} = 1;
         }
         next OUTER;
+      } else {
+        @TRACE@("text level docbook '$tag'");
+        if (!defined($md_block->{"start"}) && $MD_TEXT_LEVEL_ELEMENTS{$tag}) {
+          $md_block->{"start"} = "<" . $tag . ">";
+          $md_block->{"end"} = "</" . $tag . ">";
+          $md_block->{"closed"} = 0;
+          @TRACE@("scanning for end of '$tag'");
+        }
+        if (defined($md_block->{"start"}) && $deindented_line =~ /$md_block->{"end"}/) {
+          $md_block->{"closed"} = 1;
+          @TRACE@("found end of '$tag'");
+        }
       }
     } elsif ($line =~ /^([ ]*)[*+-][ ](.*)/) {
       # li
