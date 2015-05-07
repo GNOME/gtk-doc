@@ -1102,7 +1102,7 @@ sub OutputIndex {
     my $header = $doctype_header;
     $header =~ s/<!DOCTYPE \w+/<!DOCTYPE indexdiv/;
 
-    print (OUTPUT "$header<indexdiv>\n");
+    print (OUTPUT "$header<indexdiv id=\"$basename\">\n");
 
     @TRACE@("generate $basename index (".%apiindex." entries)\n");
 
@@ -1426,7 +1426,8 @@ sub OutputSymbolTraits {
     my $desc = "";
 
     if (exists $Since{$symbol}) {
-        $desc .= "<para role=\"since\">Since $Since{$symbol}</para>";
+        my $link_id = "api-index-".$Since{$symbol};
+        $desc .= "<para role=\"since\">Since: <link linkend=\"$link_id\">$Since{$symbol}</link></para>";
     }
     if (exists $StabilityLevel{$symbol}) {
         my $stability = $StabilityLevel{$symbol};
