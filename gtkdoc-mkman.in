@@ -83,7 +83,8 @@ if $is_xml; then
         --stringparam gtkdoc.version "@VERSION@" \
         --stringparam chunk.quietly $quiet \
         --stringparam chunker.output.quiet $quiet \
-        manpages/docbook.xsl $document || exit $?
+        http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl \
+        $document || exit $?
 else
     for i in `cd sgml;ls *.sgml`; do
         j=`echo $i | sed 's/.sgml/.man/'`
