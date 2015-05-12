@@ -449,3 +449,23 @@ void
 bug_732689 (const gchar *spec)
 {
 }
+
+/**
+ * bug_749142:
+ *
+ * The message's structure contains one field:
+ * <itemizedlist>
+ * <listitem><para>int timeout: the timeout.</para></listitem>
+ * </itemizedlist>
+ *
+ * <refsect3>
+ * <title>Example usage</title>
+ * |[
+ * echo "Hello" | foo
+ * ]|
+ * </refsect3>
+ **/
+void
+bug_749142 (void)
+{
+}

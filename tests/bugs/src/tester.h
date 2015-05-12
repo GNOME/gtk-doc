@@ -504,6 +504,8 @@ void deprecation_notice(void);
 void bug_741941(void *object, void *par) G_GNUC_NONNULL(1) G_GNUC_NONNULL(2);
 
 void bug_732689 (const gchar *spec);
+void bug_749142 (void);
+
 
 /**
  * BUG_731417_DEPRECATED:

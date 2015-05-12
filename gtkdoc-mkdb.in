@@ -4811,6 +4811,7 @@ sub MarkDownParseBlocks {
           }
         }
         $md_block->{"text"} .= "\n" . $line;
+        @TRACE@("add to markup");
         next OUTER;
       }
     }
@@ -5005,41 +5006,60 @@ sub MarkDownParseBlocks {
       # markup, including <?xml version="1.0"?>
       my $tag = $1;
       my $is_self_closing = defined($2);
-      # FIXME: why do we need to skip https? here, if we generalize this to all
-      # uri schemes we get parsing errors
-      if (! $MD_TEXT_LEVEL_ELEMENTS{$tag} && $tag !~ /^https?/ && !defined($md_block->{"start"})) {
-        push @md_blocks, $md_block;
-
-        if ($is_self_closing) {
-          @TRACE@("self-closing docbook '$tag'");
-          $md_block = { type => "self-closing tag",
-                        text => $deindented_line };
-          $is_self_closing = 0;
-          next OUTER;
-        }
-
-        @TRACE@("new markup '$tag'");
-        $md_block = { type   => "markup",
-                      text   => $deindented_line,
-                      start  => "<" . $tag . ">",
-                      end    => "</" . $tag . ">",
-                      closed => 0,
-                      depth  => 0 };
-        if ($deindented_line =~ /<\/$tag>/) {
-          $md_block->{"closed"} = 1;
-        }
-        next OUTER;
+      
+      # skip link markdown
+      # TODO(ensonic): consider adding more uri schemes (ftp, ...)
+      if ($tag =~ /^https?/) {
+        @TRACE@("skipping link '$tag'");
       } else {
-        @TRACE@("text level docbook '$tag'");
-        if (!defined($md_block->{"start"}) && $MD_TEXT_LEVEL_ELEMENTS{$tag}) {
-          $md_block->{"start"} = "<" . $tag . ">";
-          $md_block->{"end"} = "</" . $tag . ">";
-          $md_block->{"closed"} = 0;
-          @TRACE@("scanning for end of '$tag'");
-        }
-        if (defined($md_block->{"start"}) && $deindented_line =~ /$md_block->{"end"}/) {
-          $md_block->{"closed"} = 1;
-          @TRACE@("found end of '$tag'");
+        # for TEXT_LEVEL_ELEMENTS, we want to keep them as-is in the paragraph
+        # instead of creation a markdown block.
+        my $scanning_for_end_of_text_level_tag = (
+            $md_block->{"type"} eq "paragraph" && 
+            defined($md_block->{"start"}) &&
+            !$md_block->{"closed"}); 
+        @TRACE@("markup found '$tag', scanning $scanning_for_end_of_text_level_tag ?");
+        if (!$MD_TEXT_LEVEL_ELEMENTS{$tag} && !$scanning_for_end_of_text_level_tag) {
+          push @md_blocks, $md_block;
+  
+          if ($is_self_closing) {
+            @TRACE@("self-closing docbook '$tag'");
+            $md_block = { type => "self-closing tag",
+                          text => $deindented_line };
+            $is_self_closing = 0;
+            next OUTER;
+          }
+  
+          @TRACE@("new markup '$tag'");
+          $md_block = { type   => "markup",
+                        text   => $deindented_line,
+                        start  => "<" . $tag . ">",
+                        end    => "</" . $tag . ">",
+                        closed => 0,
+                        depth  => 0 };
+          if ($deindented_line =~ /<\/$tag>/) {
+            $md_block->{"closed"} = 1;
+          }
+          next OUTER;
+        } else {
+          if ($MD_TEXT_LEVEL_ELEMENTS{$tag}) {
+            @TRACE@("text level docbook '$tag' in '".$md_block->{"type"}."' state");
+            # TODO(ensonic): handle nesting
+            if (!$scanning_for_end_of_text_level_tag) {
+              if ($deindented_line !~ /<\/$tag>/) {
+                @TRACE@("new text level markup '$tag'");
+                $md_block->{"start"} = "<" . $tag . ">";
+                $md_block->{"end"} = "</" . $tag . ">";
+                $md_block->{"closed"} = 0;
+                @TRACE@("scanning for end of '$tag'");
+              }
+            } else {
+              if ($deindented_line =~ /$md_block->{"end"}/) {
+                $md_block->{"closed"} = 1;
+                @TRACE@("found end of '$tag'");
+              }
+            }
+          }
         }
       }
     } elsif ($line =~ /^([ ]*)[*+-][ ](.*)/) {
@@ -5064,7 +5084,6 @@ sub MarkDownParseBlocks {
     }
 
     # list item
-
     if ($line =~ /^([ ]{0,4})\d+[.][ ]+(.*)/) {
       push @md_blocks, $md_block;
       my $lines = $2;
@@ -5089,13 +5108,16 @@ sub MarkDownParseBlocks {
         $md_block = { type => "paragraph",
                       interrupted => 0,
                       text => $line };
+        @TRACE@("new paragraph due to interrupted");
       } else {
         $md_block->{"text"} .= "\n" . $line;
+        @TRACE@("add to paragraph");
       }
     } else {
       push @md_blocks, $md_block;
       $md_block = { type => "paragraph",
                     text => $line };
+      @TRACE@("new paragraph due to different block type");
     }
   }
 
