@@ -5368,19 +5368,21 @@ sub MarkDownOutputDocBook {
     my $text;
     my $title;
 
+    #$output .= "\n<!-- beg type='" . $block->{"type"} . "'-->\n";
+
     if ($block->{"type"} eq "paragraph") {
       $text = &MarkDownParseSpanElements ($block->{"text"});
       if ($context eq "li" && $output eq "") {
         if ($block->{"interrupted"}) {
-          $output .= "\n"."<para>".$text."</para>"."\n";
+          $output .= "\n<para>$text</para>\n";
         } else {
-          $output .= "<para>".$text."</para>";
+          $output .= "<para>$text</para>";
           if ($#blocks > 0) {
             $output .= "\n";
           }
         }
       } else {
-        $output .= "<para>".$text."</para>"."\n";
+        $output .= "<para>$text</para>\n";
       }
 
     } elsif ($block->{"type"} eq "heading") {
@@ -5396,12 +5398,12 @@ sub MarkDownOutputDocBook {
 
       $text = &MarkDownParseLines ($block->{"lines"}, $symbol, "heading");
       if (defined ($block->{"id"})) {
-        $output .= "<" . $tag . " id=\"" . $block->{"id"} . "\">";
+        $output .= "<$tag id=\"" . $block->{"id"} . "\">";
       } else {
-        $output .= "<" . $tag . ">";
+        $output .= "<$tag>";
       }
 
-      $output .= "<title>" . $title . "</title>" . $text . "</" . $tag . ">\n";
+      $output .= "<title>$title</title>$text</$tag>\n";
     } elsif ($block->{"type"} eq "li") {
       my $tag = "itemizedlist";
 
@@ -5409,7 +5411,7 @@ sub MarkDownOutputDocBook {
         if ($block->{"ordered"}) {
           $tag = "orderedlist";
         }
-        $output .= "<".$tag.">\n";
+        $output .= "<$tag>\n";
       }
 
       if ($block->{"interrupted"}) {
@@ -5422,11 +5424,11 @@ sub MarkDownOutputDocBook {
         if ($block->{"ordered"}) {
           $tag = "orderedlist";
         }
-        $output .= "</".$tag.">\n";
+        $output .= "</$tag>\n";
       }
     } elsif ($block->{"type"} eq "quote") {
       $text = &MarkDownParseLines ($block->{"lines"}, $symbol, "quote");
-      $output .= "<blockquote>\n" . $text . "</blockquote>\n";
+      $output .= "<blockquote>\n$text</blockquote>\n";
     } elsif ($block->{"type"} eq "code") {
       if ($block->{"language"}) {
         $output .= "<informalexample><programlisting language=\"" . $block->{"language"} . "\"><![CDATA[\n";
@@ -5443,6 +5445,7 @@ sub MarkDownOutputDocBook {
     } else {
       $output .= $block->{"text"}."\n";
     }
+    #$output .= "\n<!-- end type='" . $block->{"type"} . "'-->\n";
   }
 
   return $output;
