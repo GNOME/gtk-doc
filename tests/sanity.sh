@@ -78,6 +78,21 @@ if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
 tested=`expr $tested + 1`
 
 
+# check stability of generated html
+nok=0
+for path in $dir/*/docs*/html; do
+  if test -d $path/html.ref; then
+    diff $path/html.ref $path/html
+    if test $? = 1 ; then
+      echo 1>&2 "difference in generated html for $path"
+      nok=`expr $nok + 1`; break;
+    fi
+  fi
+done
+if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
+tested=`expr $tested + 1`
+
+
 # summary
 successes=`expr $tested - $failed`
 rate=`expr 100 \* $successes / $tested`;
