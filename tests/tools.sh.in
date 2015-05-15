@@ -32,6 +32,13 @@ for file in $ABS_TOP_SRCDIR/*.xsl; do
   tested=`expr $tested + 1`
 done
 
+
+# test python scripts
+@PYTHON@ -m py_compile `which gtkdoc-depscan`
+if test $? != 0 ; then failed=`expr $failed + 1`; fi
+tested=`expr $tested + 1`
+
+
 # summary
 successes=`expr $tested - $failed`
 
