@@ -1,7 +1,7 @@
 <?xml version='1.0'?> <!--*- mode: xml -*-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version='1.0'
-                xmlns="urn:devhelp"
+                xmlns=""
                 xmlns:str="http://exslt.org/strings"
                 exclude-result-prefixes="str">
 

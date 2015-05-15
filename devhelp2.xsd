@@ -4,11 +4,7 @@ get http://xml.fiforms.org/xs3p/ and generate docs
 xsltproc -o devhelp2.xsd.html $HOME/download/xs3p-1.1.3/xs3p.xsl devhelp2.xsd
 -->
 <xsd:schema
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  targetNamespace="urn:devhelp"
-  xmlns="urn:devhelp"
-  elementFormDefault="qualified"
-  attributeFormDefault="qualified">
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
   <xsd:annotation>
     <xsd:documentation>
