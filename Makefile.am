@@ -28,6 +28,7 @@ gtkdocdata_DATA = \
 	gtk-doc.dcl		\
 	gtk-doc.xsl		\
 	version-greater-or-equal.xsl \
+	devhelp2.xsd		\
 	devhelp2.xsl		\
 	gtk-doc.make		\
 	gtk-doc.notmpl.make	\
