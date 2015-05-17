@@ -85,7 +85,8 @@ EXTRA_DIST = \
 
 CLEANFILES = \
   gtk-doc.flat.make \
-  gtk-doc.notmpl-flat.make
+  gtk-doc.notmpl-flat.make \
+  gtkdoc-depscanc
 
 MAINTAINERCLEANFILES = \
   build-aux \
