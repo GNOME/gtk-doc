@@ -90,9 +90,16 @@ if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
 tested=`expr $tested + 1`
 
 
-# check stability of generated html
+# check stability of generated xml/html
 nok=0
 for path in $dir/*/docs*; do
+  if test -d $path/xml.ref; then
+    diff -u $path/xml.ref $path/xml
+    if test $? = 1 ; then
+      echo 1>&2 "difference in generated xml for $path"
+      nok=`expr $nok + 1`;
+    fi
+  fi
   if test -d $path/html.ref; then
     diff -u $path/html.ref $path/html
     if test $? = 1 ; then

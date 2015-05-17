@@ -6,6 +6,13 @@ grep "gtkdoc-* line" build.log
 
 jhbuild buildone --no-net glib
 
+Since 1.23 we do have a snapshot feature to check the stability of the generated
+xml/html. Simply run "make snapshot" under tests. Then make changes and run
+"make check". The tests/sanity.sh will check for delta. If you want to inspect
+what delta a change created, you can git checkout a revision before the change,
+"make snapshot", go back to head and "make check", the sanity.sh test will now
+fail and show the delta.
+
 Releasing
 =========
 

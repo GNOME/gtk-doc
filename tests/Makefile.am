@@ -25,9 +25,13 @@ EXTRA_DIST = gtkdoctest.sh tools.sh sanity.sh \
 
 snapshot:
 	@for dir in $(SUBDIRS); do \
+    rm -rf $$dir/docs/html.ref; \
 	  if test -d $$dir/docs/html; then \
-      rm -rf $$dir/docs/html.ref; \
       cp -r $$dir/docs/html $$dir/docs/html.ref; \
+    fi; \
+    rm -rf $$dir/docs/xml.ref; \
+	  if test -d $$dir/docs/xml; then \
+      cp -r $$dir/docs/xml $$dir/docs/xml.ref; \
     fi; \
 	done
 
