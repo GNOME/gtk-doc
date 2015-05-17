@@ -80,7 +80,7 @@ tested=`expr $tested + 1`
 # check validity of devhelp2 files
 nok=0
 for file in $dir/*/docs*/html/*.devhelp2; do
-  xmllint --noout --nonet --schema $SRCDIR/../devhelp2.xsd $file
+  xmllint --noout --nonet --schema $ABS_TOP_SRCDIR/devhelp2.xsd $file
   if test $? != 0 ; then
     echo 1>&2 "devhelp2 xml validity check failed for $file"
     nok=`expr $nok + 1`;
