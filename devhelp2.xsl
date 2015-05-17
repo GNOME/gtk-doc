@@ -56,7 +56,7 @@
         </chapters>
       </xsl:if>
       <functions>
-        <xsl:apply-templates select="$gtkdoc.refsect2"
+        <xsl:apply-templates select="$gtkdoc.refsect2[@role]"
                              mode="generate.devhelp2.index.mode"/>
         <xsl:apply-templates select="$gtkdoc.refsect2/refsect3[@role='enum_members']/informaltable/tgroup/tbody/row[@role='constant']"
                              mode="generate.devhelp2.index.mode"/>
