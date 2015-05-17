@@ -92,12 +92,12 @@ tested=`expr $tested + 1`
 
 # check stability of generated html
 nok=0
-for path in $dir/*/docs*/html; do
+for path in $dir/*/docs*; do
   if test -d $path/html.ref; then
-    diff $path/html.ref $path/html
+    diff -u $path/html.ref $path/html
     if test $? = 1 ; then
       echo 1>&2 "difference in generated html for $path"
-      nok=`expr $nok + 1`; break;
+      nok=`expr $nok + 1`;
     fi
   fi
 done
