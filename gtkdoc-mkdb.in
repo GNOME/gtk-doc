@@ -4885,10 +4885,10 @@ sub MarkDownParseBlocks {
         }
       }
     } elsif ($md_block->{"type"} eq "code") {
-      if ($line =~ /^[ \t]*\]\|/) {
+      if ($line =~ /^[ \t]*\]\|(.*)/) {
         push @md_blocks, $md_block;
         $md_block = { type => "paragraph",
-                      text => "",
+                      text => "$1",
                       lines => [] };
       } else {
         push @{$md_block->{"lines"}}, $line;
