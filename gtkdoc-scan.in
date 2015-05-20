@@ -877,7 +877,7 @@ sub ScanHeader {
     close(INPUT);
 
     # print remaining forward declarations
-    foreach $symbol (keys %forward_decls) {
+    foreach $symbol (sort(keys %forward_decls)) {
         if (defined($forward_decls{$symbol})) {
             &AddSymbolToList (\$list, $symbol);
             print DECL $forward_decls{$symbol};
