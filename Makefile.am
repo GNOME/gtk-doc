@@ -87,31 +87,36 @@ CLEANFILES = \
   gtk-doc.flat.make \
   gtk-doc.notmpl-flat.make \
   gtkdoc-depscanc
+  
+DISTCLEANFILES = \
+  gtk-doc.cat \
+  gtkdoc-check \
+  gtkdoc-common.pl \
+  gtkdoc-depscan \
+  gtk-doc.dsl \
+  gtkdoc-fixxref \
+  gtkdocize \
+  gtkdoc-mkdb \
+  gtkdoc-mkhtml \
+  gtkdoc-mkman \
+  gtkdoc-mkpdf \
+  gtkdoc-mktmpl \
+  gtk-doc.pc \
+  gtkdoc-rebase \
+  gtkdoc-scangobj \
+  gtkdoc-scan \
+  gtk-doc.spec
+
 
 MAINTAINERCLEANFILES = \
-  build-aux \
-	$(srcdir)/INSTALL \
-	$(srcdir)/COPYING \
-	$(srcdir)/aclocal.m4 \
-	$(srcdir)/autoregen.sh \
-	$(srcdir)/compile \
-	$(srcdir)/config.guess \
-	$(srcdir)/config.h.in \
-	$(srcdir)/config.sub \
-	$(srcdir)/configure.scan \
-	$(srcdir)/depcomp \
-	$(srcdir)/install-sh \
-	$(srcdir)/ltmain.sh \
-	$(srcdir)/m4 \
-	$(srcdir)/missing \
-	$(srcdir)/mkinstalldirs \
-	$(srcdir)/gtk-doc-utils.make \
-	$(srcdir)/ChangeLog
-
-GITIGNOREFILES = \
+	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \
+	$(GITIGNORE_MAINTAINERCLEANFILES_MAKEFILE_IN) \
+	$(GITIGNORE_MAINTAINERCLEANFILES_M4_LIBTOOL) \
+	INSTALL \
 	RELNOTES.txt \
 	ChangeLog-?.?? \
-	gtk-doc-*.tar.xz
+	gtk-doc-*.tar.xz \
+	build-aux
 
 -include $(top_srcdir)/git.mk
 

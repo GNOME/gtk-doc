@@ -8,5 +8,4 @@ check-local: clean
 
 endif
 
-
 -include $(top_srcdir)/git.mk

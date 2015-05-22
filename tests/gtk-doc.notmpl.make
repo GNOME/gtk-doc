@@ -50,7 +50,19 @@ REPORT_FILES = \
 	$(DOC_MODULE)-undeclared.txt \
 	$(DOC_MODULE)-unused.txt
 
-CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
+CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS) \
+  $(DOC_MODULE).pdf \
+  ts \
+	gtkdoc-scan.log \
+	gtkdoc-scangobj.log \
+	gtkdoc-mktmpl.log \
+	gtkdoc-mkdb.log \
+	gtkdoc-mkhtml.log \
+	gtkdoc-mkpdf.log \
+	gtkdoc-fixxref.log
+
+GITIGNOREFILES = \
+  html.ref xml.ref
 
 check-local: html-build.stamp pdf-build.stamp
 	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \

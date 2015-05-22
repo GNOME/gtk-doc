@@ -67,13 +67,8 @@ include $(top_srcdir)/tests/gtk-doc.notmpl.make
 # e.g. EXTRA_DIST += version.xml.in
 EXTRA_DIST +=
 
-DISTCLEANFILES = \
-	gtkdoc-scan.log \
-	gtkdoc-scangobj.log \
-	gtkdoc-mktmpl.log \
-	gtkdoc-mkdb.log \
-	gtkdoc-mkhtml.log \
-	gtkdoc-fixxref.log
+CLEANFILES += \
+  $(DOC_MODULE)-overrides.txt
 
 if BUILD_TESTS
 TESTS_ENVIRONMENT = \
