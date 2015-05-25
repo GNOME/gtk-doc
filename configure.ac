@@ -110,11 +110,11 @@ HIGHLIGHT_OPTIONS=""
 if test "$with_highlight" = "auto"; then
 	AC_PATH_PROG([HIGHLIGHT], [source-highlight])
 	if test -n "$HIGHLIGHT"; then
-		HIGHLIGHT_OPTIONS="-t4 -sc -cstyle.css --no-doc -i"
+		HIGHLIGHT_OPTIONS="-t4 -s\$SRC_LANG -cstyle.css --no-doc -i"
 	else
 		AC_PATH_PROG([HIGHLIGHT], [highlight])
 		if test -n "$HIGHLIGHT"; then
-			HIGHLIGHT_OPTIONS="--out-format=xhtml -f --class-name=gtkdoc "
+			HIGHLIGHT_OPTIONS="--syntax=\$SRC_LANG --out-format=xhtml -f --class-name=gtkdoc "
 		else
 			AC_PATH_PROG([HIGHLIGHT], [vim])
 			if test -n "$HIGHLIGHT"; then
@@ -135,8 +135,8 @@ else
 	fi
 
 	case $with_highlight in
-		source-highlight) HIGHLIGHT_OPTIONS="-t4 -sc -cstyle.css --no-doc -i";;
-		highlight) HIGHLIGHT_OPTIONS="--out-format=xhtml -f --class-name=gtkdoc ";;
+		source-highlight) HIGHLIGHT_OPTIONS="-t4 -s\$SRC_LANG -cstyle.css --no-doc -i";;
+		highlight) HIGHLIGHT_OPTIONS="--syntax=\$SRC_LANG --out-format=xhtml -f --class-name=gtkdoc ";;
 		vim)
 			AC_MSG_CHECKING([whether vim has +syntax feature])
 			if $HIGHLIGHT --version | grep '+syntax' >/dev/null; then

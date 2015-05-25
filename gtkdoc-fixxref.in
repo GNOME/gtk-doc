@@ -40,15 +40,17 @@ my $HTML_DIR = "";
 my @EXTRA_DIRS;
 my $PRINT_VERSION;
 my $PRINT_HELP;
+my $SRC_LANG;
 
 my %optctl = ('module' => \$MODULE,
               'module-dir' => \$MODULE_DIR,
               'html-dir' => \$HTML_DIR,
               'extra-dir' => \@EXTRA_DIRS,
               'version' => \$PRINT_VERSION,
-              'help' => \$PRINT_HELP);
+              'help' => \$PRINT_HELP,
+              'src-lang' => \$SRC_LANG);
 GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir:s", "extra-dir=s@",
-        "version", "help");
+        "src-lang=s", "version", "help");
 
 if ($PRINT_VERSION) {
     print "@VERSION@\n";
@@ -66,10 +68,17 @@ gtkdoc-fixxref version @VERSION@ - fix cross references in html files
 --extra-dir=EXTRA_DIR   Directories to recursively scan for indices (index.sgml)
                         in addition to HTML_DIR
                         May be used more than once for multiple directories
+--src-lang=SRC_LANG     Programing language used for syntax highlighting. The
+                        available languages depend on the source source
+                        highlighter you use.
 --version               Print the version of this program
 --help                  Print this help
 EOF
     exit 0;
+}
+
+if (!$SRC_LANG) {
+    $SRC_LANG="c"
 }
 
 # This contains all the entities and their relative URLs.
@@ -467,7 +476,7 @@ sub HighlightSourceVim {
     close (NEWFILE);
 
     # format source
-    system "echo 'let html_number_lines=0|let html_use_css=1|let html_use_xhtml=1|syn on|e $temp_source_file|run! syntax/2html.vim|w! $temp_source_file.html|qa!' | @HIGHLIGHT@ -n -e -u NONE -T xterm >/dev/null";
+    system "echo 'let html_number_lines=0|let html_use_css=1|let html_use_xhtml=1|e $temp_source_file|syn on|set syntax=$SRC_LANG|run! syntax/2html.vim|w! $temp_source_file.html|qa!' | @HIGHLIGHT@ -n -e -u NONE -T xterm >/dev/null";
 
     my $highlighted_source;
     {
