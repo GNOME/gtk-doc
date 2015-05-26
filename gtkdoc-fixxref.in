@@ -450,8 +450,11 @@ sub HighlightSourceVim {
     my ($type, $source) = @_;
 
     # chop of leading and trailing empty lines
-    $source =~ s/^[\s\n]+//gs;
+    $source =~ s/^\s*\n+//gs;
     $source =~ s/[\s\n]+$//gs;
+    # cut common indent
+    $source =~ m/^(\s*)/;
+    $source =~ s/^$1//gms;
     # avoid double entity replacement
     $source =~ s/&lt;/</g;
     $source =~ s/&gt;/>/g;
