@@ -1,6 +1,22 @@
-GTK-Doc 1.23.1  (... .. ....)
-==============
+GTK-Doc 1.24  (May 29 2015)
+============
 
+ This is another quick bugfix release for a regression, see bug #749591
+
+ Changes
+
+ o 749591 : gtk-doc 1.23 no longer includes xml namespace in .devhelp2 files
+ o 749706 : .gitignore files should not be under version control
+ o 749816 : Support syntax highlighting of different languages (patch included)
+ o 749901 : Strip common indent when highlighting with vim
+
+ Contributors
+
+ Daniel Mustieles
+ Dexter Chua
+ Michael Catanzaro
+ Peter De Wachter
+ Stefan Sauer
 
 GTK-Doc 1.23  (May 17 2015)
 ============
