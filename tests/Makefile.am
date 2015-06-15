@@ -4,7 +4,9 @@ SUBDIRS = gobject bugs annotations fail empty .
 
 if BUILD_TESTS
 
-TESTS = tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh
+TESTS = \
+  gtkdoc-common.t \
+  tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh
 TESTS_ENVIRONMENT = \
 	BUILDDIR=$(abs_builddir) \
 	SRCDIR=$(abs_srcdir) \
