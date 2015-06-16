@@ -42,46 +42,6 @@ my $PRINT_VERSION;
 my $PRINT_HELP;
 my $SRC_LANG;
 
-my %optctl = ('module' => \$MODULE,
-              'module-dir' => \$MODULE_DIR,
-              'html-dir' => \$HTML_DIR,
-              'extra-dir' => \@EXTRA_DIRS,
-              'version' => \$PRINT_VERSION,
-              'help' => \$PRINT_HELP,
-              'src-lang' => \$SRC_LANG);
-
-GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir:s", "extra-dir=s@",
-        "src-lang=s", "version", "help");
-
-if ($PRINT_VERSION) {
-    print "@VERSION@\n";
-    exit 0;
-}
-
-if ($PRINT_HELP) {
-        print <<EOF;
-gtkdoc-fixxref version @VERSION@ - fix cross references in html files
-
---module=MODULE_NAME    Name of the doc module being parsed
---module-dir=MODULE_DIR The directory which contains the generated HTML
---html-dir=HTML_DIR     The directory where gtk-doc generated documentation is
-                        installed
---extra-dir=EXTRA_DIR   Directories to recursively scan for indices (index.sgml)
-                        in addition to HTML_DIR
-                        May be used more than once for multiple directories
---src-lang=SRC_LANG     Programing language used for syntax highlighting. The
-                        available languages depend on the source source
-                        highlighter you use.
---version               Print the version of this program
---help                  Print this help
-EOF
-    exit 0;
-}
-
-if (!$SRC_LANG) {
-    $SRC_LANG="c"
-}
-
 # This contains all the entities and their relative URLs.
 my %Links;
 
@@ -103,80 +63,126 @@ my %NoLinks = (
     'GInterface' => 1
     );
 
-my $path_prefix="";
-if ($HTML_DIR =~ m%(.*?)/share/gtk-doc/html%) {
-    $path_prefix=$1;
-    @TRACE@("Path prefix: $path_prefix");
+
+run() unless caller; # Run program unless loaded as a module
+
+
+sub run {
+  my %optctl = ('module' => \$MODULE,
+                'module-dir' => \$MODULE_DIR,
+                'html-dir' => \$HTML_DIR,
+                'extra-dir' => \@EXTRA_DIRS,
+                'version' => \$PRINT_VERSION,
+                'help' => \$PRINT_HELP,
+                'src-lang' => \$SRC_LANG);
+  
+  GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir:s", "extra-dir=s@",
+          "src-lang=s", "version", "help");
+  
+  if ($PRINT_VERSION) {
+      print "@VERSION@\n";
+      exit 0;
+  }
+  
+  if ($PRINT_HELP) {
+          print <<EOF;
+gtkdoc-fixxref version @VERSION@ - fix cross references in html files
+
+--module=MODULE_NAME    Name of the doc module being parsed
+--module-dir=MODULE_DIR The directory which contains the generated HTML
+--html-dir=HTML_DIR     The directory where gtk-doc generated documentation is
+                        installed
+--extra-dir=EXTRA_DIR   Directories to recursively scan for indices (index.sgml)
+                        in addition to HTML_DIR
+                        May be used more than once for multiple directories
+--src-lang=SRC_LANG     Programing language used for syntax highlighting. The
+                        available languages depend on the source source
+                        highlighter you use.
+--version               Print the version of this program
+--help                  Print this help
+EOF
+      exit 0;
+  }
+  
+  if (!$SRC_LANG) {
+      $SRC_LANG="c"
+  }
+    
+  my $path_prefix="";
+  if ($HTML_DIR =~ m%(.*?)/share/gtk-doc/html%) {
+      $path_prefix=$1;
+      @TRACE@("Path prefix: $path_prefix");
+  }
+  
+  if (!defined $MODULE_DIR) {
+    $MODULE_DIR="$HTML_DIR/$MODULE";
+  }
+  
+  my $dir;
+  
+  # We scan the directory containing GLib and any directories in GNOME2_PATH
+  # first, but these will be overriden by any later scans.
+  $dir = `pkg-config --variable=prefix glib-2.0`;
+  $dir =~ s/\s+$//;
+  $dir = $dir . "/share/gtk-doc/html";
+  if (-d $dir) {
+      # Some predefined link targets to get links into type hierarchies as these
+      # have no targets. These are always absolute for now.
+      $Links{'GBoxed'} = "$dir/gobject/gobject-Boxed-Types.html";
+      $Links{'GEnum'} = "$dir/gobject/gobject-Enumeration-and-Flag-Types.html";
+      $Links{'GFlags'} = "$dir/gobject/gobject-Enumeration-and-Flag-Types.html";
+      $Links{'GInterface'} = "$dir/gobject/GTypeModule.html";
+  
+      if ($dir ne $HTML_DIR) {
+      @TRACE@("Scanning GLib directory: $dir");
+          if ($dir !~ m%^\Q$path_prefix\E/%) {
+              &ScanIndices ($dir, 1);
+          } else {
+              &ScanIndices ($dir, 0);
+          }
+      }
+  }
+  
+  if (defined ($ENV{"GNOME2_PATH"})) {
+      foreach $dir (split (/:/, $ENV{"GNOME2_PATH"})) {
+          $dir = $dir . "/share/gtk-doc/html";
+          if (-d $dir && $dir ne $HTML_DIR) {
+              @TRACE@("Scanning GNOME2_PATH directory: $dir");
+              if ($dir !~ m%^\Q$path_prefix\E/%) {
+                  &ScanIndices ($dir, 1);
+              } else {
+                  &ScanIndices ($dir, 0);
+              }
+          }
+          # ubuntu started to compress this as index.sgml.gz :/
+          # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
+      }
+  }
+  
+  @TRACE@("Scanning HTML_DIR directory: $HTML_DIR");
+  &ScanIndices ($HTML_DIR, 0);
+  @TRACE@("Scanning HTML_DIR directory: $MODULE_DIR");
+  &ScanIndices ($MODULE_DIR, 0);
+  
+  # check all extra dirs, but skip already scanned dirs or subdirs of those
+  foreach my $dir (@EXTRA_DIRS) {
+      my $vdir;
+      @TRACE@("Scanning EXTRA_DIR directory: $dir");
+  
+      # If the --extra-dir option is not relative and is not sharing the same
+      # prefix as the target directory of the docs, we need to use absolute
+      # directories for the links
+      if ($dir !~m/^\.\./ &&  $dir !~ m%\Q$path_prefix\E/%) {
+          &ScanIndices ($dir, 1);
+      } else {
+          &ScanIndices ($dir, 0);
+      }
+  }
+  
+  &ReadSections ();
+  
+  &FixCrossReferences ($MODULE_DIR);
 }
-
-if (!defined $MODULE_DIR) {
-  $MODULE_DIR="$HTML_DIR/$MODULE";
-}
-
-my $dir;
-
-# We scan the directory containing GLib and any directories in GNOME2_PATH
-# first, but these will be overriden by any later scans.
-$dir = `pkg-config --variable=prefix glib-2.0`;
-$dir =~ s/\s+$//;
-$dir = $dir . "/share/gtk-doc/html";
-if (-d $dir) {
-    # Some predefined link targets to get links into type hierarchies as these
-    # have no targets. These are always absolute for now.
-    $Links{'GBoxed'} = "$dir/gobject/gobject-Boxed-Types.html";
-    $Links{'GEnum'} = "$dir/gobject/gobject-Enumeration-and-Flag-Types.html";
-    $Links{'GFlags'} = "$dir/gobject/gobject-Enumeration-and-Flag-Types.html";
-    $Links{'GInterface'} = "$dir/gobject/GTypeModule.html";
-
-    if ($dir ne $HTML_DIR) {
-    @TRACE@("Scanning GLib directory: $dir");
-        if ($dir !~ m%^\Q$path_prefix\E/%) {
-            &ScanIndices ($dir, 1);
-        } else {
-            &ScanIndices ($dir, 0);
-        }
-    }
-}
-
-if (defined ($ENV{"GNOME2_PATH"})) {
-    foreach $dir (split (/:/, $ENV{"GNOME2_PATH"})) {
-        $dir = $dir . "/share/gtk-doc/html";
-        if (-d $dir && $dir ne $HTML_DIR) {
-            @TRACE@("Scanning GNOME2_PATH directory: $dir");
-            if ($dir !~ m%^\Q$path_prefix\E/%) {
-                &ScanIndices ($dir, 1);
-            } else {
-                &ScanIndices ($dir, 0);
-            }
-        }
-        # ubuntu started to compress this as index.sgml.gz :/
-        # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
-    }
-}
-
-@TRACE@("Scanning HTML_DIR directory: $HTML_DIR");
-&ScanIndices ($HTML_DIR, 0);
-@TRACE@("Scanning HTML_DIR directory: $MODULE_DIR");
-&ScanIndices ($MODULE_DIR, 0);
-
-# check all extra dirs, but skip already scanned dirs or subdirs of those
-foreach my $dir (@EXTRA_DIRS) {
-    my $vdir;
-    @TRACE@("Scanning EXTRA_DIR directory: $dir");
-
-    # If the --extra-dir option is not relative and is not sharing the same
-    # prefix as the target directory of the docs, we need to use absolute
-    # directories for the links
-    if ($dir !~m/^\.\./ &&  $dir !~ m%\Q$path_prefix\E/%) {
-        &ScanIndices ($dir, 1);
-    } else {
-        &ScanIndices ($dir, 0);
-    }
-}
-
-&ReadSections ();
-
-&FixCrossReferences ($MODULE_DIR);
 
 
 sub ScanIndices {
