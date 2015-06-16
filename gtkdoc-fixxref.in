@@ -77,7 +77,7 @@ sub run {
                 'src-lang' => \$SRC_LANG);
   
   GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir:s", "extra-dir=s@",
-          "src-lang=s", "version", "help");
+            "src-lang=s", "version", "help");
   
   if ($PRINT_VERSION) {
       print "@VERSION@\n";
@@ -115,7 +115,7 @@ EOF
   }
   
   if (!defined $MODULE_DIR) {
-    $MODULE_DIR="$HTML_DIR/$MODULE";
+      $MODULE_DIR="$HTML_DIR/$MODULE";
   }
   
   my $dir;
@@ -134,7 +134,7 @@ EOF
       $Links{'GInterface'} = "$dir/gobject/GTypeModule.html";
   
       if ($dir ne $HTML_DIR) {
-      @TRACE@("Scanning GLib directory: $dir");
+          @TRACE@("Scanning GLib directory: $dir");
           if ($dir !~ m%^\Q$path_prefix\E/%) {
               &ScanIndices ($dir, 1);
           } else {
