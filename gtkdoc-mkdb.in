@@ -52,174 +52,12 @@ my $OUTPUT_FORMAT;
 my $NAME_SPACE = "";
 my $OUTPUT_ALL_SYMBOLS;
 my $OUTPUT_SYMBOLS_WITHOUT_SINCE;
-
-my %optctl = ('module' => \$MODULE,
-              'source-dir' => \@SOURCE_DIRS,
-              'source-suffixes' => \$SOURCE_SUFFIXES,
-              'ignore-files' => \$IGNORE_FILES,
-              'output-dir' => \$DB_OUTPUT_DIR,
-              'tmpl-dir' => \$TMPL_DIR,
-              'version' => \$PRINT_VERSION,
-              'help' => \$PRINT_HELP,
-              'main-sgml-file' => \$MAIN_SGML_FILE,
-              'expand-content-files' => \$EXPAND_CONTENT_FILES,
-              'sgml-mode' => \$INLINE_MARKUP_MODE,
-              'xml-mode' => \$INLINE_MARKUP_MODE,
-              'default-stability' => \$DEFAULT_STABILITY,
-              'default-includes' => \$DEFAULT_INCLUDES,
-              'output-format' => \$OUTPUT_FORMAT,
-              'name-space' => \$NAME_SPACE,
-              'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
-              'outputsymbolswithoutsince' => \$OUTPUT_SYMBOLS_WITHOUT_SINCE
-              );
-GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s",
-    "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", "outputallsymbols",
-    "outputsymbolswithoutsince",
-    "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help",
-    "sgml-mode", "xml-mode", "default-stability:s", "default-includes:s",
-    "output-format:s", "name-space:s");
-
-if ($PRINT_VERSION) {
-    print "@VERSION@\n";
-    exit 0;
-}
-
-if (!$MODULE) {
-    $PRINT_HELP = 1;
-}
-
-if ($DEFAULT_STABILITY && $DEFAULT_STABILITY ne "Stable"
-    && $DEFAULT_STABILITY ne "Private" && $DEFAULT_STABILITY ne "Unstable") {
-    $PRINT_HELP = 1;
-}
-
-if ($PRINT_HELP) {
-    print <<EOF;
-gtkdoc-mkdb version @VERSION@ - generate docbook files
-
---module=MODULE_NAME       Name of the doc module being parsed
---source-dir=DIRNAME       Directories which contain inline reference material
---source-suffixes=SUFFIXES Suffixes of source files to scan, comma-separated
---ignore-files=FILES       A space-separated list of header files/dirs not to
-                           scan
---output-dir=DIRNAME       Directory to put the generated DocBook files in
---tmpl-dir=DIRNAME         Directory in which template files may be found
---main-sgml-file=FILE      File containing the toplevel DocBook file.
---expand-content-files=FILES Extra DocBook files to expand abbreviations in.
---output-format=FORMAT     Format to use for the generated docbook, XML or SGML.
---{xml,sgml}-mode          Allow DocBook markup in inline documentation.
---default-stability=LEVEL  Specify default stability Level. Valid values are
-                           Stable, Unstable, or Private.
---default-includes=FILENAMES Specify default includes for section Synopsis
---name-space=NS            Omit namespace in index.
---version                  Print the version of this program
---help                     Print this help
-EOF
-    exit 0;
-}
-
-@TRACE@(" ignore files: [$IGNORE_FILES]\n");
-
-my ($empty_element_end, $doctype_header);
-
-# autodetect output format
-if (! defined($OUTPUT_FORMAT) || ($OUTPUT_FORMAT eq "")) {
-    if (!$MAIN_SGML_FILE) {
-        if (-e "${MODULE}-docs.xml") {
-            $OUTPUT_FORMAT = "xml";
-        } else {
-            $OUTPUT_FORMAT = "sgml";
-        }
-    } else {
-        if ($MAIN_SGML_FILE =~ m/.*\.(.*ml)$/i) {
-            $OUTPUT_FORMAT = lc($1);
-        }
-    }
-
-} else {
-    $OUTPUT_FORMAT = lc($OUTPUT_FORMAT);
-}
-
-if ($OUTPUT_FORMAT eq "sgml") {
-print <<EOF;
-###############################################################################
-sgml support in gtk-doc is deprecated and will be removed from one of the next
-gtk-doc release.
-Please refer to the documentation "Modernizing the documentation"/"GTK-Doc 1.9".
-###############################################################################
-EOF
-}
-
-@TRACE@(" output-format: [$OUTPUT_FORMAT]\n");
-
-if ($OUTPUT_FORMAT eq "xml") {
-    if (!$MAIN_SGML_FILE) {
-        # backwards compatibility
-        if (-e "${MODULE}-docs.sgml") {
-            $MAIN_SGML_FILE = "${MODULE}-docs.sgml";
-        } else {
-            $MAIN_SGML_FILE = "${MODULE}-docs.xml";
-        }
-    }
-    $empty_element_end = "/>";
-
-    if (-e $MAIN_SGML_FILE) {
-        open(INPUT, "<$MAIN_SGML_FILE") || die "Can't open $MAIN_SGML_FILE";
-        $doctype_header = "";
-        while (<INPUT>) {
-            if (/^\s*<(book|chapter|article)/) {
-                # check that the top-level tag or the doctype decl contain the xinclude namespace decl
-                if (($_ !~ m/http:\/\/www.w3.org\/200[13]\/XInclude/) && ($doctype_header !~ m/http:\/\/www.w3.org\/200[13]\/XInclude/m)) {
-                    $doctype_header = "";
-                }
-                last;
-            }
-            $doctype_header .= $_;
-        }
-        close(INPUT);
-        $doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
-        # if there are SYSTEM ENTITIES here, we should prepend "../" to the path
-        # FIXME: not sure if we can do this now, as people already work-around the problem
-        # $doctype_header =~ s#<!ENTITY % ([a-zA-Z-]+) SYSTEM \"([^/][a-zA-Z./]+)\">#<!ENTITY % $1 SYSTEM \"../$2\">#g;
-    } else {
-        $doctype_header =
-"<?xml version=\"1.0\"?>\n" .
-"<!DOCTYPE refentry PUBLIC \"-//OASIS//DTD DocBook XML V4.3//EN\"\n" .
-"               \"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd\"\n" .
-"[\n" .
-"  <!ENTITY % local.common.attrib \"xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'\">\n" .
-"]>\n";
-    }
-} else {
-    if (!$MAIN_SGML_FILE) {
-        $MAIN_SGML_FILE = "${MODULE}-docs.sgml";
-    }
-    $empty_element_end = ">";
-    $doctype_header = "";
-}
-
 my $ROOT_DIR = ".";
-
-# All the files are written in subdirectories beneath here.
-$TMPL_DIR = $TMPL_DIR ? $TMPL_DIR : "$ROOT_DIR/tmpl";
-
-# This is where we put all the DocBook output.
-$DB_OUTPUT_DIR = $DB_OUTPUT_DIR ? $DB_OUTPUT_DIR : "$ROOT_DIR/$OUTPUT_FORMAT";
-
-# This file contains the object hierarchy.
-my $OBJECT_TREE_FILE = "$ROOT_DIR/$MODULE.hierarchy";
-
-# This file contains the interfaces.
-my $INTERFACES_FILE = "$ROOT_DIR/$MODULE.interfaces";
-
-# This file contains the prerequisites.
-my $PREREQUISITES_FILE = "$ROOT_DIR/$MODULE.prerequisites";
-
-# This file contains signal arguments and names.
-my $SIGNALS_FILE = "$ROOT_DIR/$MODULE.signals";
-
-# The file containing Arg information.
-my $ARGS_FILE = "$ROOT_DIR/$MODULE.args";
+my $OBJECT_TREE_FILE;
+my $INTERFACES_FILE;
+my $PREREQUISITES_FILE;
+my $SIGNALS_FILE;
+my $ARGS_FILE;
 
 # These global arrays store information on signals. Each signal has an entry
 # in each of these arrays at the same index, like a multi-dimensional array.
@@ -293,22 +131,23 @@ my %IndexEntriesSince;
 my %IndexEntriesDeprecated;
 
 # Standard C preprocessor directives, which we ignore for '#' abbreviations.
-my %PreProcessorDirectives;
-$PreProcessorDirectives{"assert"} = 1;
-$PreProcessorDirectives{"define"} = 1;
-$PreProcessorDirectives{"elif"} = 1;
-$PreProcessorDirectives{"else"} = 1;
-$PreProcessorDirectives{"endif"} = 1;
-$PreProcessorDirectives{"error"} = 1;
-$PreProcessorDirectives{"if"} = 1;
-$PreProcessorDirectives{"ifdef"} = 1;
-$PreProcessorDirectives{"ifndef"} = 1;
-$PreProcessorDirectives{"include"} = 1;
-$PreProcessorDirectives{"line"} = 1;
-$PreProcessorDirectives{"pragma"} = 1;
-$PreProcessorDirectives{"unassert"} = 1;
-$PreProcessorDirectives{"undef"} = 1;
-$PreProcessorDirectives{"warning"} = 1;
+my %PreProcessorDirectives = (
+    'assert' => 1,
+    'define' => 1,
+    'elif' => 1,
+    'else' => 1,
+    'endif' => 1,
+    'error' => 1,
+    'if' => 1,
+    'ifdef' => 1,
+    'ifndef' => 1,
+    'include' => 1,
+    'line' => 1,
+    'pragma' => 1,
+    'unassert' => 1,
+    'undef' => 1,
+    'warning' => 1
+);
 
 # remember used annotation (to write minimal glossary)
 my %AnnotationsUsed;
@@ -419,12 +258,6 @@ my %MD_ESCAPABLE_CHARS = ( "\\" => 1,
 my %MD_GTK_ESCAPABLE_CHARS = ( "@" => 1,
                                "%" => 1 );
 
-# Create the root DocBook output directory if it doens't exist.
-if (! -e $DB_OUTPUT_DIR) {
-    mkdir ("$DB_OUTPUT_DIR", 0777)
-        || die "Can't create directory: $DB_OUTPUT_DIR";
-}
-
 # Function and other declaration output settings.
 my $RETURN_TYPE_FIELD_WIDTH = 20;
 my $SYMBOL_FIELD_WIDTH = 36;
@@ -432,89 +265,268 @@ my $MAX_SYMBOL_FIELD_WIDTH = 40;
 my $SIGNAL_FIELD_WIDTH = 16;
 my $PARAM_FIELD_COUNT = 2;
 
-&ReadKnownSymbols ("$ROOT_DIR/$MODULE-sections.txt");
-&ReadSignalsFile ($SIGNALS_FILE);
-&ReadArgsFile ($ARGS_FILE);
-&ReadObjectHierarchy;
-&ReadInterfaces;
-&ReadPrerequisites;
+# XML, SGML formatting helper
+my ($empty_element_end, $doctype_header);
 
-&ReadDeclarationsFile ("$ROOT_DIR/$MODULE-decl.txt", 0);
-if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
-    &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
-}
 
-for my $dir (@SOURCE_DIRS) {
-    &ReadSourceDocumentation ($dir);
-}
+run() unless caller; # Run program unless loaded as a module
 
-my $changed = &OutputDB ("$ROOT_DIR/$MODULE-sections.txt");
 
-# If any of the DocBook files have changed, update the timestamp file (so
-# it can be used for Makefile dependencies).
-if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
-
-    # try to detect the common prefix
-    # GtkWidget, GTK_WIDGET, gtk_widget -> gtk
-    if ($NAME_SPACE eq "") {
-        $NAME_SPACE="";
-        my $pos=0;
-        my $ratio=0.0;
-        do {
-            my %prefix;
-            my $letter="";
-            foreach my $symbol (keys(%IndexEntriesFull)) {
-                if(($NAME_SPACE eq "") || $symbol =~ /^$NAME_SPACE/i) {
-                    if (length($symbol)>$pos) {
-                        $letter=substr($symbol,$pos,1);
-                        # stop prefix scanning
-                        if ($letter eq "_") {
-                            # stop on "_"
-                            last;
-                        }
-                        # Should we also stop on a uppercase char, if last was lowercase
-                        #   GtkWidget, if we have the 'W' and had the 't' before
-                        # or should we count upper and lowercase, and stop one 2nd uppercase, if we already had a lowercase
-                        #   GtkWidget, the 'W' would be the 2nd uppercase and with 't','k' we had lowercase chars before
-                        # need to recound each time as this is per symbol
-                        $prefix{uc($letter)}++;
-                    }
-                }
-            }
-            if ($letter ne "" && $letter ne "_") {
-                my $maxletter="";
-                my $maxsymbols=0;
-                foreach $letter (keys(%prefix)) {
-                    #print "$letter: $prefix{$letter}.\n";
-                    if ($prefix{$letter}>$maxsymbols) {
-                        $maxletter=$letter;
-                        $maxsymbols=$prefix{$letter};
-                    }
-                }
-                $ratio = scalar(keys(%IndexEntriesFull)) / $prefix{$maxletter};
-                #print "most symbols start with $maxletter, that is ". (100 * $ratio) ." %\n";
-                if ($ratio > 0.9) {
-                    # do another round
-                    $NAME_SPACE .= $maxletter;
-                }
-                $pos++;
-            }
-            else {
-                $ratio=0.0;
-            }
-        } while ($ratio > 0.9);
-        #print "most symbols start with $NAME_SPACE\n";
+sub run {
+    my %optctl = ('module' => \$MODULE,
+                  'source-dir' => \@SOURCE_DIRS,
+                  'source-suffixes' => \$SOURCE_SUFFIXES,
+                  'ignore-files' => \$IGNORE_FILES,
+                  'output-dir' => \$DB_OUTPUT_DIR,
+                  'tmpl-dir' => \$TMPL_DIR,
+                  'version' => \$PRINT_VERSION,
+                  'help' => \$PRINT_HELP,
+                  'main-sgml-file' => \$MAIN_SGML_FILE,
+                  'expand-content-files' => \$EXPAND_CONTENT_FILES,
+                  'sgml-mode' => \$INLINE_MARKUP_MODE,
+                  'xml-mode' => \$INLINE_MARKUP_MODE,
+                  'default-stability' => \$DEFAULT_STABILITY,
+                  'default-includes' => \$DEFAULT_INCLUDES,
+                  'output-format' => \$OUTPUT_FORMAT,
+                  'name-space' => \$NAME_SPACE,
+                  'outputallsymbols' => \$OUTPUT_ALL_SYMBOLS,
+                  'outputsymbolswithoutsince' => \$OUTPUT_SYMBOLS_WITHOUT_SINCE
+                  );
+    GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s",
+        "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", 
+        "outputallsymbols", "outputsymbolswithoutsince",
+        "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help",
+        "sgml-mode", "xml-mode", "default-stability:s", "default-includes:s",
+        "output-format:s", "name-space:s");
+    
+    if ($PRINT_VERSION) {
+        print "@VERSION@\n";
+        exit 0;
     }
+    
+    if (!$MODULE) {
+        $PRINT_HELP = 1;
+    }
+    
+    if ($DEFAULT_STABILITY && $DEFAULT_STABILITY ne "Stable"
+        && $DEFAULT_STABILITY ne "Private" && $DEFAULT_STABILITY ne "Unstable") {
+        $PRINT_HELP = 1;
+    }
+    
+    if ($PRINT_HELP) {
+        print <<EOF;
+gtkdoc-mkdb version @VERSION@ - generate docbook files
 
-    &OutputIndexFull;
-    &OutputDeprecatedIndex;
-    &OutputSinceIndexes;
-    &OutputAnnotationGlossary;
-
-    open (TIMESTAMP, ">$ROOT_DIR/sgml.stamp")
-        || die "Can't create $ROOT_DIR/sgml.stamp: $!";
-    print (TIMESTAMP "timestamp");
-    close (TIMESTAMP);
+--module=MODULE_NAME       Name of the doc module being parsed
+--source-dir=DIRNAME       Directories which contain inline reference material
+--source-suffixes=SUFFIXES Suffixes of source files to scan, comma-separated
+--ignore-files=FILES       A space-separated list of header files/dirs not to
+                           scan
+--output-dir=DIRNAME       Directory to put the generated DocBook files in
+--tmpl-dir=DIRNAME         Directory in which template files may be found
+--main-sgml-file=FILE      File containing the toplevel DocBook file.
+--expand-content-files=FILES Extra DocBook files to expand abbreviations in.
+--output-format=FORMAT     Format to use for the generated docbook, XML or SGML.
+--{xml,sgml}-mode          Allow DocBook markup in inline documentation.
+--default-stability=LEVEL  Specify default stability Level. Valid values are
+                           Stable, Unstable, or Private.
+--default-includes=FILENAMES Specify default includes for section Synopsis
+--name-space=NS            Omit namespace in index.
+--version                  Print the version of this program
+--help                     Print this help
+EOF
+        exit 0;
+    }
+  
+    @TRACE@(" ignore files: [$IGNORE_FILES]\n");
+        
+    # autodetect output format
+    if (! defined($OUTPUT_FORMAT) || ($OUTPUT_FORMAT eq "")) {
+        if (!$MAIN_SGML_FILE) {
+            if (-e "${MODULE}-docs.xml") {
+                $OUTPUT_FORMAT = "xml";
+            } else {
+                $OUTPUT_FORMAT = "sgml";
+            }
+        } else {
+            if ($MAIN_SGML_FILE =~ m/.*\.(.*ml)$/i) {
+                $OUTPUT_FORMAT = lc($1);
+            }
+        }
+    
+    } else {
+        $OUTPUT_FORMAT = lc($OUTPUT_FORMAT);
+    }
+  
+    if ($OUTPUT_FORMAT eq "sgml") {
+        print <<EOF;
+###############################################################################
+sgml support in gtk-doc is deprecated and will be removed from one of the next
+gtk-doc release.
+Please refer to the documentation "Modernizing the documentation"/"GTK-Doc 1.9".
+###############################################################################
+EOF
+    }
+    
+    @TRACE@(" output-format: [$OUTPUT_FORMAT]\n");
+  
+    if ($OUTPUT_FORMAT eq "xml") {
+        if (!$MAIN_SGML_FILE) {
+            # backwards compatibility
+            if (-e "${MODULE}-docs.sgml") {
+                $MAIN_SGML_FILE = "${MODULE}-docs.sgml";
+            } else {
+                $MAIN_SGML_FILE = "${MODULE}-docs.xml";
+            }
+        }
+        $empty_element_end = "/>";
+    
+        if (-e $MAIN_SGML_FILE) {
+            open(INPUT, "<$MAIN_SGML_FILE") || die "Can't open $MAIN_SGML_FILE";
+            $doctype_header = "";
+            while (<INPUT>) {
+                if (/^\s*<(book|chapter|article)/) {
+                    # check that the top-level tag or the doctype decl contain the xinclude namespace decl
+                    if (($_ !~ m/http:\/\/www.w3.org\/200[13]\/XInclude/) && ($doctype_header !~ m/http:\/\/www.w3.org\/200[13]\/XInclude/m)) {
+                        $doctype_header = "";
+                    }
+                    last;
+                }
+                $doctype_header .= $_;
+            }
+            close(INPUT);
+            $doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
+            # if there are SYSTEM ENTITIES here, we should prepend "../" to the path
+            # FIXME: not sure if we can do this now, as people already work-around the problem
+            # $doctype_header =~ s#<!ENTITY % ([a-zA-Z-]+) SYSTEM \"([^/][a-zA-Z./]+)\">#<!ENTITY % $1 SYSTEM \"../$2\">#g;
+        } else {
+            $doctype_header =
+    "<?xml version=\"1.0\"?>\n" .
+    "<!DOCTYPE refentry PUBLIC \"-//OASIS//DTD DocBook XML V4.3//EN\"\n" .
+    "               \"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd\"\n" .
+    "[\n" .
+    "  <!ENTITY % local.common.attrib \"xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'\">\n" .
+    "]>\n";
+        }
+    } else {
+        if (!$MAIN_SGML_FILE) {
+            $MAIN_SGML_FILE = "${MODULE}-docs.sgml";
+        }
+        $empty_element_end = ">";
+        $doctype_header = "";
+    } 
+    
+    # All the files are written in subdirectories beneath here.
+    $TMPL_DIR = $TMPL_DIR ? $TMPL_DIR : "$ROOT_DIR/tmpl";
+    
+    # This is where we put all the DocBook output.
+    $DB_OUTPUT_DIR = $DB_OUTPUT_DIR ? $DB_OUTPUT_DIR : "$ROOT_DIR/$OUTPUT_FORMAT";
+  
+    # This file contains the object hierarchy.
+    $OBJECT_TREE_FILE = "$ROOT_DIR/$MODULE.hierarchy";
+  
+    # This file contains the interfaces.
+    $INTERFACES_FILE = "$ROOT_DIR/$MODULE.interfaces";
+    
+    # This file contains the prerequisites.
+    $PREREQUISITES_FILE = "$ROOT_DIR/$MODULE.prerequisites";
+    
+    # This file contains signal arguments and names.
+    $SIGNALS_FILE = "$ROOT_DIR/$MODULE.signals";
+    
+    # The file containing Arg information.
+    $ARGS_FILE = "$ROOT_DIR/$MODULE.args";
+  
+    # Create the root DocBook output directory if it doens't exist.
+    if (! -e $DB_OUTPUT_DIR) {
+        mkdir ("$DB_OUTPUT_DIR", 0777)
+            || die "Can't create directory: $DB_OUTPUT_DIR";
+    }
+    
+    &ReadKnownSymbols ("$ROOT_DIR/$MODULE-sections.txt");
+    &ReadSignalsFile ($SIGNALS_FILE);
+    &ReadArgsFile ($ARGS_FILE);
+    &ReadObjectHierarchy;
+    &ReadInterfaces;
+    &ReadPrerequisites;
+    
+    &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-decl.txt", 0);
+    if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
+        &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
+    }
+    
+    for my $dir (@SOURCE_DIRS) {
+        &ReadSourceDocumentation ($dir);
+    }
+    
+    my $changed = &OutputDB ("$ROOT_DIR/$MODULE-sections.txt");
+    
+    # If any of the DocBook files have changed, update the timestamp file (so
+    # it can be used for Makefile dependencies).
+    if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
+    
+        # try to detect the common prefix
+        # GtkWidget, GTK_WIDGET, gtk_widget -> gtk
+        if ($NAME_SPACE eq "") {
+            $NAME_SPACE="";
+            my $pos=0;
+            my $ratio=0.0;
+            do {
+                my %prefix;
+                my $letter="";
+                foreach my $symbol (keys(%IndexEntriesFull)) {
+                    if(($NAME_SPACE eq "") || $symbol =~ /^$NAME_SPACE/i) {
+                        if (length($symbol)>$pos) {
+                            $letter=substr($symbol,$pos,1);
+                            # stop prefix scanning
+                            if ($letter eq "_") {
+                                # stop on "_"
+                                last;
+                            }
+                            # Should we also stop on a uppercase char, if last was lowercase
+                            #   GtkWidget, if we have the 'W' and had the 't' before
+                            # or should we count upper and lowercase, and stop one 2nd uppercase, if we already had a lowercase
+                            #   GtkWidget, the 'W' would be the 2nd uppercase and with 't','k' we had lowercase chars before
+                            # need to recound each time as this is per symbol
+                            $prefix{uc($letter)}++;
+                        }
+                    }
+                }
+                if ($letter ne "" && $letter ne "_") {
+                    my $maxletter="";
+                    my $maxsymbols=0;
+                    foreach $letter (keys(%prefix)) {
+                        #print "$letter: $prefix{$letter}.\n";
+                        if ($prefix{$letter}>$maxsymbols) {
+                            $maxletter=$letter;
+                            $maxsymbols=$prefix{$letter};
+                        }
+                    }
+                    $ratio = scalar(keys(%IndexEntriesFull)) / $prefix{$maxletter};
+                    #print "most symbols start with $maxletter, that is ". (100 * $ratio) ." %\n";
+                    if ($ratio > 0.9) {
+                        # do another round
+                        $NAME_SPACE .= $maxletter;
+                    }
+                    $pos++;
+                }
+                else {
+                    $ratio=0.0;
+                }
+            } while ($ratio > 0.9);
+            #print "most symbols start with $NAME_SPACE\n";
+        }
+    
+        &OutputIndexFull;
+        &OutputDeprecatedIndex;
+        &OutputSinceIndexes;
+        &OutputAnnotationGlossary;
+    
+        open (TIMESTAMP, ">$ROOT_DIR/sgml.stamp")
+            || die "Can't create $ROOT_DIR/sgml.stamp: $!";
+        print (TIMESTAMP "timestamp");
+        close (TIMESTAMP);
+    }
 }
 
 #############################################################################

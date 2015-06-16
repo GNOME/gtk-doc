@@ -5,7 +5,7 @@ SUBDIRS = gobject bugs annotations fail empty .
 if BUILD_TESTS
 
 TESTS = \
-  gtkdoc-common.t gtkdoc-fixxref.t \
+  gtkdoc-common.t gtkdoc-fixxref.t gtkdoc-mkdb.t \
   tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh
 TESTS_ENVIRONMENT = \
 	BUILDDIR=$(abs_builddir) \
