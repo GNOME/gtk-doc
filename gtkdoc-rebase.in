@@ -155,21 +155,50 @@ sub ScanDirectory {
     }
 
     my $file;
+    my $onlinedir;
+    my $have_index = 0;
     foreach $file (readdir(HTMLDIR)) {
         if ($file eq '.' or $file eq '..') {
             next;
         }
         elsif (-d "$dir/$file") {
             push @subdirs, $file;
+            next;
         }
-        elsif ($file eq "index.sgml") {
-            &AddMap($dir);
+        if ($file =~ m/\.devhelp2$/) {
+            print "Reading index from $file\n" if $VERBOSE;
+            my $o = &ReadDevhelp($dir, $file);
+            # Prefer this location over possibly stale index.sgml
+            if ($o) {
+                $onlinedir = $o;
+            }
+            $have_index = 1;
+        }
+        if (!$onlinedir and ($file eq "index.sgml")) {
+            print "Reading index from index.sgml\n" if $VERBOSE;
+            $onlinedir = &ReadIndex($dir, $file);
+            $have_index = 1;
         }
         elsif ($file eq "index.sgml.gz") {
-            print "Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138\n";
+            # debian/ubuntu started to compress this as index.sgml.gz :/
+            print <<EOF;
+Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
+gunzip $file
+EOF
         }
+        elsif ($file =~ m/\.devhelp2.gz$/) {
+            # debian/ubuntu started to compress this as *devhelp2.gz :/
+            print <<EOF;
+Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
+gunzip $file
+EOF
+        }
+        # we could consider supporting: use IO::Zlib;
     }
     closedir (HTMLDIR);
+    if ($have_index) {
+        &AddMap($dir, $onlinedir);
+    }
 
     # Now recursively scan the subdirectories.
     my $d;
@@ -179,12 +208,30 @@ sub ScanDirectory {
 }
 
 
-sub AddMap {
-    my ($dir) = @_;
-    my $file = "$dir/index.sgml";
-    my ($onlinedir, $package);
+sub ReadDevhelp {
+    my ($dir, $file) = @_;
+    my $onlinedir;
 
-    open(INDEXFILE, $file) || die "Can't open $file: $!";
+    open(INDEXFILE, "$dir/$file") || die "Can't open $dir/$file: $!";
+    while (<INDEXFILE>) {
+        # online must come before chapter/functions
+        last if m/<(chapters|functions)/;
+        if (m/ online="([^"]*)"/) {
+            $onlinedir = $1;
+            # Remove trailing non-directory component.
+            $onlinedir =~ s#(.*/).*#$1#;
+        }
+    }
+    close (INDEXFILE);
+    return $onlinedir;
+}
+
+
+sub ReadIndex {
+    my ($dir, $file) = @_;
+    my $onlinedir;
+
+    open(INDEXFILE, "$dir/$file") || die "Can't open $dir/$file: $!";
     while (<INDEXFILE>) {
         # ONLINE must come before any ANCHORs
         last if m/^<ANCHOR/;
@@ -195,6 +242,13 @@ sub AddMap {
         }
     }
     close (INDEXFILE);
+    return $onlinedir;
+}
+
+
+sub AddMap {
+    my ($dir, $onlinedir) = @_;
+    my $package;
 
     $dir =~ s#/?$#/#;
     ($package = $dir) =~ s#.*/([^/]+)/#$1#;
@@ -205,6 +259,8 @@ sub AddMap {
         print "On-line location of $package: $onlinedir\n" if $VERBOSE;
         $OnlineMap{ $package } = $onlinedir;
         $RevMap{ $onlinedir } = $package;
+    } else {
+        print "No On-line location for $package found\n" if $VERBOSE;
     }
     print "Local location of $package: $dir\n" if $VERBOSE;
     $LocalMap{ $package } = $dir;

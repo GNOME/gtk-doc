@@ -16,10 +16,6 @@ for path in $dir/*/docs*/html; do
     echo 1>&2 "no or empty $path/index.html"
     nok=`expr $nok + 1`; break;
   fi
-  if test ! -s $path/index.sgml ; then
-    echo 1>&2 "no or empty $path/index.sgml"
-    nok=`expr $nok + 1`; break;
-  fi
   if test ! -s $path/home.png ; then
     echo 1>&2 "no or empty $path/home.png"
     nok=`expr $nok + 1`; break;
@@ -27,24 +23,6 @@ for path in $dir/*/docs*/html; do
   file=`echo $path/*.devhelp2`
   if test ! -s $file ; then
     echo 1>&2 "no or empty $file"
-    nok=`expr $nok + 1`; break;
-  fi
-done
-if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
-tested=`expr $tested + 1`
-
-
-# check online/anchor tags
-nok=0
-for file in $dir/*/docs*/html/index.sgml; do
-  grep >/dev/null "<ONLINE href=" $file
-  if test $? = 1 ; then
-    echo 1>&2 "missing ONLINE reference in $file"
-    nok=`expr $nok + 1`; break;
-  fi
-  grep >/dev/null "<ANCHOR id=" $file
-  if test $? = 1 ; then
-    echo 1>&2 "missing ANCHOR reference in $file"
     nok=`expr $nok + 1`; break;
   fi
 done

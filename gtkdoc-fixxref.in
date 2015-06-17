@@ -200,11 +200,27 @@ sub ScanIndices {
             next;
         } elsif (-d "$scan_dir/$file") {
             push (@subdirs, $file);
-        } elsif ($file eq "index.sgml") {
-            &ScanIndex ("$scan_dir/$file", $use_absolute_links);
+            next;
         }
-        # ubuntu started to compress this as index.sgml.gz :/
-        # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
+        if ($file =~ m/\.devhelp2$/) {
+            # if devhelp-file is good don't read index.sgml
+            &ReadDevhelp ("$scan_dir/$file", $use_absolute_links);
+        }
+        elsif ($file eq "index.sgml.gz") {
+            # debian/ubuntu started to compress this as index.sgml.gz :/
+            print <<EOF;
+Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
+gunzip $file
+EOF
+        }
+        elsif ($file =~ m/\.devhelp2.gz$/) {
+            # debian/ubuntu started to compress this as *devhelp2.gz :/
+            print <<EOF;
+Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
+gunzip $file
+EOF
+        }
+        # we could consider supporting: use IO::Zlib;
     }
     closedir (HTMLDIR);
 
@@ -216,31 +232,38 @@ sub ScanIndices {
 }
 
 
-sub ScanIndex {
+sub ReadDevhelp {
     my ($file, $use_absolute_links) = @_;
 
-    # Determine the absolute directory, to be added to links in index.sgml
+    # Determine the absolute directory, to be added to links in $file
     # if we need to use an absolute link.
-    # $file will be something like /opt/gnome/share/gtk-doc/html/gtk/index.sgml
-    # We want the part up to 'html' since the links in index.sgml include
+    # $file will be something like /prefix/gnome/share/gtk-doc/html/gtk/$file
+    # We want the part up to 'html/.*' since the links in $file include
     # the rest.
     my $dir = "../";
     if ($use_absolute_links) {
         # For uninstalled index.sgml files we'd need to map the path to where it
         # will be installed to
         if ($file !~ /\.\//) {
-          $file =~ /(.*\/)(.*?)\/index\.sgml/;
-          $dir = $1;
+            $file =~ /(.*\/)(.*?)\/.*?\.devhelp2/;
+            $dir = "$1$2";
+        }
+    } else {
+        if ($file =~ /(.*\/)(.*?)\/.*?\.devhelp2/) {
+            $dir .= "$2/";
+        } else {
+            $dir = "";
         }
     }
+
     @TRACE@("Scanning index file=$file, absolute=$use_absolute_links, dir=$dir");
 
     open (INDEXFILE, $file)
         || die "Can't open $file: $!";
     while (<INDEXFILE>) {
-        if (m/^<ANCHOR\s+id\s*=\s*"([^"]*)"\s+href\s*=\s*"([^"]*)"\s*>/) {
-            @TRACE@("Found id: $1 href: $2");
-            $Links{$1} = "$dir$2";
+        if (m/ link="([^#]*)#([^"]*)"/) {
+            @TRACE@("Found id: $2 href: $1#$2");
+            $Links{$2} = "$dir$1#$2";
         }
     }
     close (INDEXFILE);
@@ -369,6 +392,12 @@ sub MakeXRef {
         my $tid = $id;
         $tid =~ s/s$//g;
         $href = $Links{$tid};
+        if (!$href && defined $Links{"$tid-struct"}) {
+            $href = $Links{"$tid-struct"};
+        }
+    }
+    if (!$href && defined $Links{"$id-struct"}) {
+        $href = $Links{"$id-struct"};
     }
 
     if ($href) {

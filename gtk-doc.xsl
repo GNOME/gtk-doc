@@ -315,54 +315,8 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     </xsl:if>
     <xsl:apply-imports/>
 
-    <!-- generate the index.sgml href index -->
-    <xsl:call-template name="generate.index"/>
     <!-- generate $book.devhelp2 -->
     <xsl:call-template name="generate.devhelp2"/>
-  </xsl:template>
-
-  <xsl:template name="generate.index">
-    <xsl:call-template name="write.text.chunk">
-      <xsl:with-param name="filename" select="'index.sgml'"/>
-      <xsl:with-param name="content">
-        <xsl:apply-templates select="/book/bookinfo/releaseinfo/ulink"
-                             mode="generate.index.mode"/>
-        <!-- check all anchor and refentry elements -->
-	<!--
-	    The obvious way to write this is //anchor|//refentry|etc...
-	    The obvious way is slow because it causes multiple traversals
-	    in libxslt. This take about half the time.
-	-->
-	<xsl:apply-templates select="//*[name()='anchor' or name()='refentry' or name()='refsect1' or
-				         name() = 'refsect2' or name()='refsynopsisdiv' or
-					 name()='varlistentry' or name()='para']"
-                             mode="generate.index.mode"/>
-      </xsl:with-param>
-      <xsl:with-param name="default.encoding" select="'UTF-8'"/>
-      <xsl:with-param name="chunker.output.indent" select="'no'"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template match="*" mode="generate.index.mode">
-    <xsl:if test="not(@href) and count(@id) > 0">
-      <xsl:text>&lt;ANCHOR id=&quot;</xsl:text>
-      <xsl:value-of select="@id"/>
-      <xsl:text>&quot; href=&quot;</xsl:text>
-        <xsl:if test="$gtkdoc.bookname">
-          <xsl:value-of select="$gtkdoc.bookname"/>
-          <xsl:text>/</xsl:text>
-        </xsl:if>
-        <xsl:call-template name="href.target"/>
-        <xsl:text>&quot;&gt;&#10;</xsl:text>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="/book/bookinfo/releaseinfo/ulink" mode="generate.index.mode">
-    <xsl:if test="@role='online-location'">
-      <xsl:text>&lt;ONLINE href=&quot;</xsl:text>
-      <xsl:value-of select="@url"/>
-      <xsl:text>&quot;&gt;&#10;</xsl:text>
-    </xsl:if>
   </xsl:template>
 
   <!-- ========================================================= -->
@@ -867,7 +821,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
         <a>
           <xsl:attribute name="href">
             <xsl:text>http://foldoc.org/</xsl:text>
-	        <xsl:value-of select="$acronym"/>
+	          <xsl:value-of select="$acronym"/>
           </xsl:attribute>
           <xsl:call-template name="inline.charseq"/>
         </a>

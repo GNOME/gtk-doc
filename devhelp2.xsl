@@ -43,14 +43,20 @@
                              select="articleinfo|bookinfo"/>
       </xsl:if>
     </xsl:variable>
+    <xsl:variable name="online">
+      <xsl:value-of select="/book/bookinfo/releaseinfo/ulink[@role='online-location']/@url"/>
+    </xsl:variable>
     <xsl:variable name="toc.nodes" select="part|reference|preface|chapter|
                                            appendix|article|bibliography|
                                            glossary|index|refentry|
                                            bridgehead|sect1"/>
 
     <book title="{$title}" link="{$link}" author="{$author}" name="{$gtkdoc.bookname}" version="2" language="c">
+      <xsl:if test="$online != ''">
+        <xsl:attribute name="online"><xsl:value-of select="$online"/></xsl:attribute>
+      </xsl:if>
       <xsl:if test="$toc.nodes">
-        <chapters>
+        <chapters>                                    
           <xsl:apply-templates select="$toc.nodes"
                                mode="generate.devhelp2.toc.mode"/>
         </chapters>
