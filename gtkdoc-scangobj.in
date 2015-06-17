@@ -25,6 +25,7 @@
 # set appropriately before running this script.
 #
 
+use strict;
 use Getopt::Long;
 
 push @INC, '@PACKAGE_DATA_DIR@';
@@ -34,6 +35,8 @@ require "gtkdoc-common.pl";
 
 # name of documentation module
 my $MODULE;
+my $TYPES_FILE;
+my $NO_GTK_INIT;
 my $OUTPUT_DIR;
 my $VERBOSE;
 my $PRINT_VERSION;
@@ -48,7 +51,7 @@ my $LDFLAGS;
 my $RUN;
 
 # --nogtkinit is deprecated, as it is the default now anyway.
-%optctl = (module => \$MODULE,
+my %optctl = (module => \$MODULE,
            types => \$TYPES_FILE,
            nogtkinit => \$NO_GTK_INIT,
            'type-init-func' => \$TYPE_INIT_FUNC,
@@ -119,10 +122,10 @@ my $new_prerequisites_filename = "$OUTPUT_DIR/$MODULE.prerequisites.new";
 my $old_args_filename = "$OUTPUT_DIR/$MODULE.args";
 my $new_args_filename = "$OUTPUT_DIR/$MODULE.args.new";
 
-# write a C program to scan the types
+# generate a C program to scan the types
 
-$includes = "";
-@types = ();
+my $includes = "";
+my @types = ();
 
 for (<TYPES>) {
     if (/^#include/) {
@@ -140,7 +143,7 @@ for (<TYPES>) {
     }
 }
 
-$ntypes = @types + 1;
+my $ntypes = @types + 1;
 
 print OUTPUT <<EOT;
 #include <string.h>
@@ -1381,12 +1384,7 @@ unless ($RUN) {
     $RUN = $ENV{RUN} ? $ENV{RUN} : "";
 }
 
-my $o_file;
-if ($CC =~ /libtool/) {
-  $o_file  = "$MODULE-scan.lo"
-} else {
-  $o_file = "$MODULE-scan.o"
-}
+my $o_file = $CC =~ /libtool/ ? "$MODULE-scan.lo" :"$MODULE-scan.o";
 
 my $stdout="";
 if (!defined($VERBOSE) or $VERBOSE eq "0") {
@@ -1394,7 +1392,7 @@ if (!defined($VERBOSE) or $VERBOSE eq "0") {
 }
 
 # Compiling scanner
-$command = "$CC $stdout $CFLAGS -c -o $o_file $MODULE-scan.c";
+my $command = "$CC $stdout $CFLAGS -c -o $o_file $MODULE-scan.c";
 system("($command)") == 0 or die "Compilation of scanner failed: $!\n";
 
 # Linking scanner
@@ -1416,5 +1414,3 @@ if (!defined($ENV{"GTK_DOC_KEEP_INTERMEDIATE"})) {
 &UpdateFileIfChanged ($old_interfaces_filename, $new_interfaces_filename, 0);
 &UpdateFileIfChanged ($old_prerequisites_filename, $new_prerequisites_filename, 0);
 &UpdateFileIfChanged ($old_args_filename, $new_args_filename, 0);
-
-
