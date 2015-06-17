@@ -359,6 +359,7 @@ EOF
         }
     }
 
+    # extract docbook header or define default
     if (-e $MAIN_SGML_FILE) {
         open(INPUT, "<$MAIN_SGML_FILE") || die "Can't open $MAIN_SGML_FILE";
         $doctype_header = "";
@@ -373,7 +374,6 @@ EOF
             $doctype_header .= $_;
         }
         close(INPUT);
-        $doctype_header =~ s/<!DOCTYPE \w+/<!DOCTYPE refentry/;
         # if there are SYSTEM ENTITIES here, we should prepend "../" to the path
         # FIXME: not sure if we can do this now, as people already work-around the problem
         # $doctype_header =~ s#<!ENTITY % ([a-zA-Z-]+) SYSTEM \"([^/][a-zA-Z./]+)\">#<!ENTITY % $1 SYSTEM \"../$2\">#g;
@@ -522,11 +522,8 @@ sub OutputObjectList {
     open (OUTPUT, ">$new_object_index")
         || die "Can't create $new_object_index: $!";
 
-    my $header = $doctype_header;
-    $header =~ s/<!DOCTYPE \w+/<!DOCTYPE informaltable/;
-
     print (OUTPUT <<EOF);
-$header
+${\( MakeDocHeader ("informaltable") )}
 <informaltable pgwide="1" frame="none">
 <tgroup cols="$cols">
 <colspec colwidth="1*"/>
@@ -1076,10 +1073,7 @@ sub OutputIndex {
     open (OUTPUT, ">$new_index")
         || die "Can't create $new_index";
 
-    my $header = $doctype_header;
-    $header =~ s/<!DOCTYPE \w+/<!DOCTYPE indexdiv/;
-
-    print (OUTPUT "$header\n<indexdiv id=\"$basename\">\n");
+    print (OUTPUT &MakeDocHeader ("indexdiv")."\n<indexdiv id=\"$basename\">\n");
 
     @TRACE@("generate $basename index (".%apiindex." entries)\n");
 
@@ -1255,11 +1249,8 @@ rerun:
     open (OUTPUT, ">$new_glossary")
         || die "Can't create $new_glossary";
 
-    my $header = $doctype_header;
-    $header =~ s/<!DOCTYPE \w+/<!DOCTYPE glossary/;
-
     print (OUTPUT  <<EOF);
-$header
+${\( MakeDocHeader ("glossary") )}
 <glossary id="annotation-glossary">
   <title>Annotation Glossary</title>
 EOF
@@ -2544,7 +2535,7 @@ sub OutputDBFile {
     # "<refentry id="$section_id" revision="$mday $month $year">"
 
     print OUTPUT <<EOF;
-$doctype_header
+${\( MakeDocHeader ("refentry") )}
 <refentry id="$section_id">
 <refmeta>
 <refentrytitle role="top_of_page" id="$section_id.top_of_page">$title</refentrytitle>
@@ -2653,11 +2644,8 @@ sub OutputBook {
         open (OUTPUT, ">$MAIN_SGML_FILE")
           || die "Can't create $MAIN_SGML_FILE: $!";
           
-        my $header = $doctype_header;
-        $header =~ s/<!DOCTYPE \w+/<!DOCTYPE book/;
-  
         print OUTPUT <<EOF;
-$header
+${\( MakeDocHeader ("book") )}
 <book id="index">
   <bookinfo>
     <title>$MODULE Reference Manual</title>
@@ -3079,6 +3067,19 @@ sub noop {
 sub tagify {
    my ($text, $elem) = @_;
    return "<" . $elem . ">" . $text . "</" . $elem . ">";
+}
+
+#############################################################################
+# Function    : MakeDocHeader
+# Description : Builds a docbook header for the given tag
+# Arguments   : $tag - doctype tag
+#############################################################################
+
+sub MakeDocHeader {
+    my ($tag) = @_;
+    my $header = $doctype_header;
+    $header =~ s/<!DOCTYPE \w+/<!DOCTYPE $tag/;
+    return $header;
 }
 
 
@@ -5931,9 +5932,7 @@ sub ReadObjectHierarchy {
     open (OUTPUT, ">$new_tree_index")
         || die "Can't create $new_tree_index: $!";
 
-    my $header = $doctype_header;
-    $header =~ s/<!DOCTYPE \w+/<!DOCTYPE screen/;
-    print (OUTPUT "$header\n<screen>\n" . &AddTreeLineArt(\@tree) . "\n</screen>\n");
+    print (OUTPUT &MakeDocHeader ("screen")."\n<screen>\n".&AddTreeLineArt(\@tree)."\n</screen>\n");
     close (OUTPUT);
 
     &UpdateFileIfChanged ($old_tree_index, $new_tree_index, 0);
