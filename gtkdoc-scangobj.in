@@ -125,7 +125,9 @@ my $new_args_filename = "$OUTPUT_DIR/$MODULE.args.new";
 # generate a C program to scan the types
 
 my $includes = "";
-my @types = ();
+my $forward_decls = "";
+my $get_types = "";
+my $ntypes = 1;
 
 for (<TYPES>) {
     if (/^#include/) {
@@ -139,11 +141,11 @@ for (<TYPES>) {
         next;
     } else {
         chomp;
-        push @types, $_;
+        $get_types .= "    object_types[i++] = $_ ();\n";
+        $forward_decls .= "extern GType $_ (void);\n";
+        $ntypes++;
     }
 }
-
-my $ntypes = @types + 1;
 
 print OUTPUT <<EOT;
 #include <string.h>
@@ -157,9 +159,7 @@ EOT
 if ($includes) {
     print OUTPUT $includes;
 } else {
-    for (@types) {
-        print OUTPUT "extern GType $_ (void);\n";
-    }
+    print OUTPUT $forward_decls;
 }
 
 if ($QUERY_CHILD_PROPERTIES) {
@@ -173,21 +173,16 @@ print OUTPUT <<EOT;
 #ifdef GTK_IS_WIDGET_CLASS
 #include <gtk/gtk.h>
 #endif
-GType object_types[$ntypes];
+static GType object_types[$ntypes];
 
 static GType *
 get_object_types (void)
 {
     gpointer g_object_class;
     gint i = 0;
-EOT
-
-for (@types) {
-    print OUTPUT "    object_types[i++] = $_ ();\n";
-}
-
-print OUTPUT <<EOT;
-    object_types[i] = 0;
+    
+${get_types}
+    object_types[i] = G_TYPE_INVALID;
 
     /* reference the GObjectClass to initialize the param spec pool
      * potentially needed by interfaces. See http://bugs.gnome.org/571820 */
@@ -220,7 +215,6 @@ const gchar *hierarchy_filename = "$new_hierarchy_filename";
 const gchar *interfaces_filename = "$new_interfaces_filename";
 const gchar *prerequisites_filename = "$new_prerequisites_filename";
 const gchar *args_filename = "$new_args_filename";
-
 
 static void output_signals (void);
 static void output_object_signals (FILE *fp,
@@ -261,7 +255,6 @@ main (int argc, char *argv[])
 
   return 0;
 }
-
 
 static void
 output_signals (void)
@@ -315,7 +308,6 @@ output_object_signals (FILE *fp, GType object_type)
       g_free (signals);
    }
 }
-
 
 /* This outputs one signal. */
 static void
