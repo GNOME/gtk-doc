@@ -61,31 +61,42 @@ my $DEPRECATED_GUARDS;
 # regexp matching decorators that should be ignored
 my $IGNORE_DECORATORS;
 
-my %optctl = (module => \$MODULE,
-              'source-dir' => \@SOURCE_DIRS,
-              'ignore-headers' => \$IGNORE_HEADERS,
-              'output-dir' => \$OUTPUT_DIR,
-              'rebuild-types' => \$REBUILD_TYPES,
-              'rebuild-sections' => \$REBUILD_SECTIONS,
-              'version' => \$PRINT_VERSION,
-              'help' => \$PRINT_HELP,
-              'deprecated-guards' => \$DEPRECATED_GUARDS,
-              'ignore-decorators' => \$IGNORE_DECORATORS);
-GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
-           "output-dir:s", "rebuild-types", "rebuild-sections", "version",
-           "help", "deprecated-guards:s", "ignore-decorators:s");
+my @get_types = ();
 
-if ($PRINT_VERSION) {
-    print "@VERSION@\n";
-    exit 0;
-}
+# do not read files twice; checking it here permits to give both srcdir and
+# builddir as --source-dir without fear of duplicities
+my %seen_headers;
 
-if (!$MODULE) {
-    $PRINT_HELP = 1;
-}
 
-if ($PRINT_HELP) {
-    print <<EOF;
+run() unless caller; # Run program unless loaded as a module
+
+
+sub run {
+    my %optctl = (module => \$MODULE,
+                  'source-dir' => \@SOURCE_DIRS,
+                  'ignore-headers' => \$IGNORE_HEADERS,
+                  'output-dir' => \$OUTPUT_DIR,
+                  'rebuild-types' => \$REBUILD_TYPES,
+                  'rebuild-sections' => \$REBUILD_SECTIONS,
+                  'version' => \$PRINT_VERSION,
+                  'help' => \$PRINT_HELP,
+                  'deprecated-guards' => \$DEPRECATED_GUARDS,
+                  'ignore-decorators' => \$IGNORE_DECORATORS);
+    GetOptions(\%optctl, "module=s", "source-dir:s", "ignore-headers:s",
+               "output-dir:s", "rebuild-types", "rebuild-sections", "version",
+               "help", "deprecated-guards:s", "ignore-decorators:s");
+    
+    if ($PRINT_VERSION) {
+        print "@VERSION@\n";
+        exit 0;
+    }
+    
+    if (!$MODULE) {
+        $PRINT_HELP = 1;
+    }
+    
+    if ($PRINT_HELP) {
+        print <<EOF;
 gtkdoc-scan version @VERSION@ - scan header files for public symbols
 
 --module=MODULE_NAME       Name of the doc module being parsed
@@ -103,102 +114,95 @@ gtkdoc-scan version @VERSION@ - scan header files for public symbols
 --version                  Print the version of this program
 --help                     Print this help
 EOF
-    exit 0;
-}
-
-$DEPRECATED_GUARDS = $DEPRECATED_GUARDS ? $DEPRECATED_GUARDS : "does_not_match_any_cpp_symbols_at_all_nope";
-
-$IGNORE_DECORATORS = $IGNORE_DECORATORS || "(?=no)match";
-
-$OUTPUT_DIR = $OUTPUT_DIR ? $OUTPUT_DIR : ".";
-
-if (!-d ${OUTPUT_DIR}) {
-    mkdir($OUTPUT_DIR, 0755) || die "Cannot create $OUTPUT_DIR: $!";
-}
-
-my $old_decl_list = "${OUTPUT_DIR}/$MODULE-decl-list.txt";
-my $new_decl_list = "${OUTPUT_DIR}/$MODULE-decl-list.new";
-my $old_decl = "${OUTPUT_DIR}/$MODULE-decl.txt";
-my $new_decl = "${OUTPUT_DIR}/$MODULE-decl.new";
-my $old_types = "${OUTPUT_DIR}/$MODULE.types";
-my $new_types = "${OUTPUT_DIR}/$MODULE.types.new";
-my $sections_file = "${OUTPUT_DIR}/$MODULE-sections.txt";
-
-# If this is the very first run then we create the .types file automatically.
-if (! -e $sections_file && ! -e $old_types) {
-    $REBUILD_TYPES = 1;
-}
-
-open (DECLLIST, ">$new_decl_list")
-    || die "Can't open $new_decl_list";
-open (DECL, ">$new_decl")
-    || die "Can't open $new_decl";
-if ($REBUILD_TYPES) {
-    open (TYPES, ">$new_types")
-        || die "Can't open $new_types";
-}
-
-my %section_list = ();
-my $file;
-
-my @get_types = ();
-
-
-# do not read files twice; checking it here permits to give both srcdir and
-# builddir as --source-dir without fear of duplicities
-my %seen_headers;
-
-# The header files to scan are passed in as command-line args.
-for $file (@ARGV) {
-    &ScanHeader ($file, \%section_list);
-}
-
-for my $dir (@SOURCE_DIRS) {
-    &ScanHeaders ($dir, \%section_list);
-}
-
-## FIXME: sort by key and output
-#print DECLLIST $section_list;
-my $section;
-foreach $section (sort(keys %section_list)) {
-    print DECLLIST "$section_list{$section}";
-}
-
-close (DECLLIST);
-close (DECL);
-
-if ($REBUILD_TYPES) {
-    my $func;
-
-    foreach $func (sort(@get_types)) {
-       print TYPES "$func\n";
+        exit 0;
     }
-    close (TYPES);
-    &UpdateFileIfChanged ($old_types, $new_types, 1);
-
-    # remove the file if empty
-    if (scalar (@get_types) == 0) {
-        unlink ("$new_types");
+    
+    $DEPRECATED_GUARDS = $DEPRECATED_GUARDS ? $DEPRECATED_GUARDS : "does_not_match_any_cpp_symbols_at_all_nope";
+    
+    $IGNORE_DECORATORS = $IGNORE_DECORATORS || "(?=no)match";
+    
+    $OUTPUT_DIR = $OUTPUT_DIR ? $OUTPUT_DIR : ".";
+    
+    if (!-d ${OUTPUT_DIR}) {
+        mkdir($OUTPUT_DIR, 0755) || die "Cannot create $OUTPUT_DIR: $!";
+    }
+    
+    my $old_decl_list = "${OUTPUT_DIR}/$MODULE-decl-list.txt";
+    my $new_decl_list = "${OUTPUT_DIR}/$MODULE-decl-list.new";
+    my $old_decl = "${OUTPUT_DIR}/$MODULE-decl.txt";
+    my $new_decl = "${OUTPUT_DIR}/$MODULE-decl.new";
+    my $old_types = "${OUTPUT_DIR}/$MODULE.types";
+    my $new_types = "${OUTPUT_DIR}/$MODULE.types.new";
+    my $sections_file = "${OUTPUT_DIR}/$MODULE-sections.txt";
+    
+    # If this is the very first run then we create the .types file automatically.
+    if (! -e $sections_file && ! -e $old_types) {
+        $REBUILD_TYPES = 1;
+    }
+    
+    open (DECLLIST, ">$new_decl_list")
+        || die "Can't open $new_decl_list";
+    open (DECL, ">$new_decl")
+        || die "Can't open $new_decl";
+    if ($REBUILD_TYPES) {
+        open (TYPES, ">$new_types")
+            || die "Can't open $new_types";
+    }
+    
+    my %section_list = ();
+    my $file;
+   
+    # The header files to scan are passed in as command-line args.
+    for $file (@ARGV) {
+        &ScanHeader ($file, \%section_list);
+    }
+    
+    for my $dir (@SOURCE_DIRS) {
+        &ScanHeaders ($dir, \%section_list);
+    }
+    
+    ## FIXME: sort by key and output
+    #print DECLLIST $section_list;
+    my $section;
+    foreach $section (sort(keys %section_list)) {
+        print DECLLIST "$section_list{$section}";
+    }
+    
+    close (DECLLIST);
+    close (DECL);
+    
+    if ($REBUILD_TYPES) {
+        my $func;
+    
+        foreach $func (sort(@get_types)) {
+           print TYPES "$func\n";
+        }
+        close (TYPES);
+        &UpdateFileIfChanged ($old_types, $new_types, 1);
+    
+        # remove the file if empty
+        if (scalar (@get_types) == 0) {
+            unlink ("$new_types");
+        }
+    }
+    
+    &UpdateFileIfChanged ($old_decl_list, $new_decl_list, 1);
+    &UpdateFileIfChanged ($old_decl, $new_decl, 1);
+    
+    # If there is no MODULE-sections.txt file yet or we are asked to rebuild it,
+    # we copy the MODULE-decl-list.txt file into its place. The user can tweak it
+    # later if they want.
+    if ($REBUILD_SECTIONS || ! -e $sections_file) {
+      `cp $old_decl_list $sections_file`;
+    }
+    
+    # If there is no MODULE-overrides.txt file we create an empty one
+    # because EXTRA_DIST in gtk-doc.make requires it.
+    my $overrides_file = "${OUTPUT_DIR}/$MODULE-overrides.txt";
+    if (! -e $overrides_file) {
+      `touch $overrides_file`;
     }
 }
-
-&UpdateFileIfChanged ($old_decl_list, $new_decl_list, 1);
-&UpdateFileIfChanged ($old_decl, $new_decl, 1);
-
-# If there is no MODULE-sections.txt file yet or we are asked to rebuild it,
-# we copy the MODULE-decl-list.txt file into its place. The user can tweak it
-# later if they want.
-if ($REBUILD_SECTIONS || ! -e $sections_file) {
-  `cp $old_decl_list $sections_file`;
-}
-
-# If there is no MODULE-overrides.txt file we create an empty one
-# because EXTRA_DIST in gtk-doc.make requires it.
-my $overrides_file = "${OUTPUT_DIR}/$MODULE-overrides.txt";
-if (! -e $overrides_file) {
-  `touch $overrides_file`;
-}
-
 
 
 #############################################################################
