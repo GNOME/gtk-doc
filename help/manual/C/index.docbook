@@ -278,26 +278,24 @@
 
         <listitem>
           <para>
-            <guilabel>Generating the SGML/XML and HTML/PDF.</guilabel>
+            <guilabel>Generating the XML and HTML/PDF.</guilabel>
 
             <application>gtkdoc-mkdb</application> turns the template files into
-            SGML or XML files in the <filename class='directory'>sgml/</filename>
-            or <filename class='directory'>xml/</filename> subdirectory.
+            XML files in the <filename class='directory'>xml/</filename> subdirectory.
             If the source code contains documentation on functions, using the
             special comment blocks, it gets merged in here. If there are no tmpl files used
-            it only reads docs from sources and introspection data. We recommend
-            to use Docbook XML.
+            it only reads docs from sources and introspection data.
           </para>
           <para>
-            <application>gtkdoc-mkhtml</application> turns the SGML/XML files into HTML
+            <application>gtkdoc-mkhtml</application> turns the XML files into HTML
             files in the <filename class='directory'>html/</filename> subdirectory.
-            Likewise <application>gtkdoc-mkpdf</application> turns the SGML/XML files into a PDF
+            Likewise <application>gtkdoc-mkpdf</application> turns the XML files into a PDF
             document called <filename>&lt;package&gt;.pdf</filename>.
           </para>
           <para>
-            Files in <filename class='directory'>sgml/</filename> or
-            <filename class='directory'>xml/</filename> and <filename class='directory'>html/</filename>
-            directories are always overwritten. One should never edit them directly.
+            Files in <filename class='directory'>xml/</filename> and 
+            <filename class='directory'>html/</filename> directories are always
+            overwritten. One should never edit them directly.
           </para>
         </listitem>
 
@@ -822,8 +820,8 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
       <para>
         In older GTK-Doc releases, if you need support for additional
         formatting, you would need to enable the usage of docbook
-        SGML/XML tags inside doc-comments by putting <option>--xml-mode</option> 
-        or <option>--sgml-mode</option> in the variable
+        XML tags inside doc-comments by putting <option>--xml-mode</option> 
+        (or <option>--sgml-mode</option>) in the variable
         <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</filename>.
       </para>
 
@@ -1610,7 +1608,7 @@ gtk_arrow_get_type
         without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/FILE&gt;'
         will result in the section declarations being output in the template
         file <filename>tmpl/gnome-config.sgml</filename>, which will be
-        converted into the DocBook SGML/XML file <filename>sgml/gnome-config.sgml</filename>
+        converted into the DocBook XML file <filename>xml/gnome-config.sgml</filename>
         or the DocBook XML file <filename>xml/gnome-config.xml</filename>.
         (The name of the HTML file is based on the module name and the section
         title, or for GObjects it is based on the GObjects class name converted

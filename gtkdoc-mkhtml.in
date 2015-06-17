@@ -68,21 +68,13 @@ else
     styledir=$gtkdocdir
 fi
 
-if head -n 1 $document | grep "<?xml" > /dev/null; then
-    is_xml=true
-    path_option='--path'
-else
-    is_xml=false
-    path_option='--directory'
-fi
-
 # we could do "$path_option $PWD "
 # to avoid needing rewriting entities that are copied from the header
 # into docs under xml
 if test "X$searchpath" = "X"; then
     path_arg=
 else
-    path_arg="$path_option $searchpath"
+    path_arg="--path $searchpath"
 fi
 
 # Delete the old index.sgml file, if it exists.
@@ -90,30 +82,16 @@ if test -f index.sgml; then
   rm -f index.sgml
 fi
 
-if $is_xml; then
-    #echo @XSLTPROC@ $path_arg --nonet --xinclude \
-    #    --stringparam gtkdoc.bookname $module \
-    #    --stringparam gtkdoc.version "@VERSION@" \
-    #    "$@" $gtkdocdir/gtk-doc.xsl $document
-    @XSLTPROC@ $path_arg --nonet --xinclude \
-        --stringparam gtkdoc.bookname $module \
-        --stringparam gtkdoc.version "@VERSION@" \
-        --stringparam chunk.quietly $quiet \
-        --stringparam chunker.output.quiet $quiet \
-        "$@" $gtkdocdir/gtk-doc.xsl $document || exit $?
-else
-    echo <<EOF;
-###############################################################################
-sgml support in gtk-doc is deprecated and will be removed from one of the next
-gtk-doc release.
-Please refer to the documentation "Modernizing the documentation"/"GTK-Doc 1.9".
-###############################################################################
-EOF
-
-    @JADE@ $path_arg -t @SGML_FORMAT_TYPE@ -w no-idref -d $gtkdocdir/gtk-doc.dsl \
-        -V "gtkdoc-bookname=$module" -V "gtkdoc-version=@VERSION@" \
-        "$@" $gtkdocdir/gtk-doc.dcl $document || exit $?
-fi
+#echo @XSLTPROC@ $path_arg --nonet --xinclude \
+#    --stringparam gtkdoc.bookname $module \
+#    --stringparam gtkdoc.version "@VERSION@" \
+#    "$@" $gtkdocdir/gtk-doc.xsl $document
+@XSLTPROC@ $path_arg --nonet --xinclude \
+    --stringparam gtkdoc.bookname $module \
+    --stringparam gtkdoc.version "@VERSION@" \
+    --stringparam chunk.quietly $quiet \
+    --stringparam chunker.output.quiet $quiet \
+    "$@" $gtkdocdir/gtk-doc.xsl $document || exit $?
 
 # copy navigation images and stylesheets to html directory ...
 cp -f $styledir/*.png $styledir/*.css ./

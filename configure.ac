@@ -54,24 +54,6 @@ AM_PATH_PYTHON([2.3],,[:])
 AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != :])
 
 dnl
-dnl Check for jade or openjade.
-dnl
-dnl We prefer to use openjade with the '-t sgml-raw' option, since '-t sgml'
-dnl adds a newline before the closing '>' of HTML tags. lynx can't parse
-dnl that, which is bad for accessibility.
-dnl
-SGML_FORMAT_TYPE=sgml-raw
-AC_PATH_PROG([JADE], [openjade])
-if test -z "$JADE"; then
-	SGML_FORMAT_TYPE=sgml
-	AC_PATH_PROG([JADE], [jade])
-	if test -z "$JADE"; then
-		AC_MSG_WARN([Could not find openjade or jade, so SGML is not supported])
-	fi
-fi
-AC_SUBST([SGML_FORMAT_TYPE])
-
-dnl
 dnl Check for xsltproc
 dnl
 AC_PATH_PROG([XSLTPROC], [xsltproc])
@@ -303,9 +285,6 @@ gtk-doc was configured with the following options:
 test "$PYTHON" != : \
     && AC_MSG_NOTICE([** Python based tools enabled, using $PYTHON]) \
     || AC_MSG_NOTICE([   Python based tools disabled])
-test -n "$JADE" \
-    && AC_MSG_NOTICE([** SGML support enabled, using $JADE]) \
-    || AC_MSG_NOTICE([   SGML support disabled, no jade processor available])
 test -n "$DBLATEX$FOP" \
     && AC_MSG_NOTICE([** XML PDF support enabled, using $DBLATEX$FOP]) \
     || AC_MSG_NOTICE([   XML PDF support disabled, no dblatex or fop available])
