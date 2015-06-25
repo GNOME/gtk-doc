@@ -1084,9 +1084,46 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
         </variablelist>
 
         <para>
-          (FIXME : Stability information)
+          You can also add stability information to all documentation elements
+          to indicate whether API stability is guaranteed for them for all
+          future minor releases of the project.
         </para>
-        
+
+        <para>
+          The default stability level for all documentation elements can be set
+          by passing the <option>--default-stability</option> argument to
+          <application>gtkdoc-mkdb</application> with one of the values below.
+        </para>
+
+        <variablelist><title>Stability Tags</title>
+          <varlistentry><term>Stability: Stable</term>
+            <listitem>
+              <para>
+                Mark the element as stable. This is for public APIs which are
+                guaranteed to remain stable for all future minor releases of the
+                project.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry><term>Stability: Unstable</term>
+            <listitem>
+              <para>
+                Mark the element as unstable. This is for public APIs which are
+                released as a preview before being stabilised.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry><term>Stability: Private</term>
+            <listitem>
+              <para>
+                Mark the element as private. This is for interfaces which can be
+                used by tightly coupled modules, but not by arbitrary third
+                parties.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
         <example><title>General tags</title>
           <programlisting><![CDATA[
 /**
