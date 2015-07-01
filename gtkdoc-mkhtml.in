@@ -77,21 +77,29 @@ else
     path_arg="--path $searchpath"
 fi
 
-# Delete the old index.sgml file, if it exists.
-if test -f index.sgml; then
-  rm -f index.sgml
+# profiling
+profile_args=""
+if test "$GTKDOC_PROFILE" != ""; then
+  profile_args="--profile"
 fi
 
 #echo @XSLTPROC@ $path_arg --nonet --xinclude \
 #    --stringparam gtkdoc.bookname $module \
 #    --stringparam gtkdoc.version "@VERSION@" \
 #    "$@" $gtkdocdir/gtk-doc.xsl $document
-@XSLTPROC@ $path_arg --nonet --xinclude \
+@XSLTPROC@ 2>profile.txt $profile_args $path_arg --nonet --xinclude \
     --stringparam gtkdoc.bookname $module \
     --stringparam gtkdoc.version "@VERSION@" \
     --stringparam chunk.quietly $quiet \
     --stringparam chunker.output.quiet $quiet \
     "$@" $gtkdocdir/gtk-doc.xsl $document || exit $?
+
+# profiling
+if test "$GTKDOC_PROFILE" != ""; then
+  cat profile.txt | gprof2dot.py -e 0.01 -n 0.01 | dot -Tpng -o profile.png
+else
+  rm profile.txt
+fi
 
 # copy navigation images and stylesheets to html directory ...
 cp -f $styledir/*.png $styledir/*.css ./

@@ -77,6 +77,17 @@ time xsltproc --nonet --xinclude --stringparam gtkdoc.bookname "tester" --string
 time saxon ../tester-docs.xml ../../../../gtk-doc.xsl gtkdoc.bookname="tester" gtkdoc.version="1.12"
 ~ 53 sec.
 
+xsltproc --profile data.xsl data.xml 2>report.txt
+cat report.txt | gprof2dot.py -e 0.01 -n 0.01 | dot -Tpng -o report.png
+
+one can now use "GTKDOC_PROFILE=1 make" to run this during gtkdoc-mkhtml. It
+still needs a change in gprof2dot.py
+https://bugzilla.gnome.org/show_bug.cgi?id=612186#c3
+
+Performance tips:
+* uses keys when we have slow xpath selects
+  http://www.xml.com/pub/a/2002/02/06/key-lookups.html
+
 Troubles with parsing regexps
 =============================
 Test regexps online:
