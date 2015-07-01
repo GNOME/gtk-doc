@@ -1581,12 +1581,12 @@ gtk_arrow_get_type
       </para>
 
       <para>
-        While GTK-Doc creates a template master document for you, later run will
+        While GTK-Doc creates a template master document for you, later runs will
         not touch it again. This means that one can freely structure the
         documentation. That includes grouping pages and adding extra pages.
         GTK-Doc has now a test suite, where also the master-document is recreated from scratch.
-        Its a good idea to look at this from time to time to see if there are some new goodies
-        introduced there.
+        Its a good idea to look at this from time to time to see if there are
+        some new goodies introduced there.
       </para>
 
       <tip>
@@ -1619,6 +1619,39 @@ gtk_arrow_get_type
 
 <chapter>
   <title>[Insert title here]</title>
+]]></programlisting>
+        </example>
+      </para>
+
+      <para>
+        In addition a few option elements are created in commented form. You can
+        review these and enable them as you like.
+      </para>
+      
+      <para>
+        <example><title>Optional part in the master document</title>
+          <programlisting><![CDATA[
+  <!-- enable this when you use gobject introspection annotations
+  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+  -->          
+]]></programlisting>
+        </example>
+      </para>
+      
+      <para>
+        Finally you need to add new section whenever you introduce one. The
+        <link linkend="modernizing-gtk-doc-1-16">gtkdoc-check</link> tool will
+        remind you of newly generated xml files that are not yet included into
+        the doc.
+      </para>
+
+      <para>
+        <example><title>Including generated sections</title>
+          <programlisting><![CDATA[
+  <chapter>
+    <title>my library</title>
+      <xi:include href="xml/object.xml"/>
+      ...
 ]]></programlisting>
         </example>
       </para>
