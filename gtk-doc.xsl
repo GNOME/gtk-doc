@@ -11,12 +11,8 @@
   <xsl:include href="devhelp2.xsl"/>
   <xsl:include href="version-greater-or-equal.xsl"/>
 
-  <xsl:key name="acronym.key"
-	   match="glossentry/glossterm"
-	   use="."/>
-  <xsl:key name="gallery.key"
-	   match="para[@role='gallery']/link"
-	   use="@linkend"/>
+  <xsl:key name="acronym.key" match="glossentry/glossterm" use="."/>
+  <xsl:key name="gallery.key" match="para[@role='gallery']/link" use="@linkend"/>
 
   <!-- change some parameters -->
   <!-- http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html -->
@@ -74,12 +70,8 @@
 
   <xsl:param name="gtkdoc.l10n.xml" select="document('http://docbook.sourceforge.net/release/xsl/current/common/en.xml')"/>
 
-  <xsl:key name="gtkdoc.gentext.key"
-	   match="l:gentext[@key]"
-	   use="@key"/>
-  <xsl:key name="gtkdoc.context.key"
-	   match="l:context[@name]"
-	   use="@name"/>
+  <xsl:key name="gtkdoc.gentext.key" match="l:gentext[@key]" use="@key"/>
+  <xsl:key name="gtkdoc.context.key" match="l:context[@name]" use="@name"/>
 
   <xsl:template name="gentext">
     <xsl:param name="key" select="local-name(.)"/>
@@ -256,7 +248,6 @@
         </xsl:if>
       </xsl:variable>
 
-
       <xsl:variable name="is.title-unnumbered">
         <xsl:if test="$is.title = 0 and $is.title-numbered = 0">
           <xsl:call-template name="gentext.template.exists">
@@ -349,7 +340,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:apply-imports/>
   </xsl:template>
 
- <xsl:template name="user.head.title">
+  <xsl:template name="user.head.title">
    <xsl:param name="node" select="."/>
    <xsl:param name="title"/>
    <xsl:variable name="home" select="/*[1]"/>
@@ -804,11 +795,6 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:param name="acronym">
       <xsl:apply-templates/>
     </xsl:param>
-    <!--
-      We use for-each to change context to the database document because key()
-      only locates elements in the same document as the context node!
-    -->
-
     <xsl:param name="value" >
       <xsl:value-of select="key('acronym.key', $acronym)/../glossdef/para[1]" />
     </xsl:param>
