@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2015-06-17 11:55+0000\n"
-"PO-Revision-Date: 2015-06-22 10:54+0300\n"
+"POT-Creation-Date: 2015-07-05 21:47+0000\n"
+"PO-Revision-Date: 2015-07-06 10:01+0300\n"
 "Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
@@ -92,7 +92,6 @@ msgstr "<year>2000, 2005</year> <holder>Dan Mueth και Chris Lyttle</holder>"
 
 #. (itstool) path: bookinfo/copyright
 #: C/index.docbook:52
-#| msgid "<year>2007-2014</year> <holder>Stefan Sauer (Kost)</holder>"
 msgid "<year>2007-2015</year> <holder>Stefan Sauer (Kost)</holder>"
 msgstr "<year>2007-2015</year> <holder>Stefan Sauer (Kost)</holder>"
 
@@ -130,57 +129,41 @@ msgstr ""
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:83
-#| msgid ""
-#| "<revnumber>1.21.1</revnumber> <date>18 Jul 2014</date> "
-#| "<authorinitials>ss</authorinitials> <revremark>development version</"
-#| "revremark>"
 msgid ""
 "<revnumber>1.24.1</revnumber> <date>30 May 2015</date> <authorinitials>ss</"
 "authorinitials> <revremark>development version</revremark>"
 msgstr ""
-"<revnumber>1.24.1</revnumber> <date>30 Μαΐου 2015</date> "
-"<authorinitials>ss</authorinitials> <revremark>έκδοση ανάπτυξης</revremark>"
+"<revnumber>1.24.1</revnumber> <date>30 Μαΐου 2015</date> <authorinitials>ss</"
+"authorinitials> <revremark>έκδοση ανάπτυξης</revremark>"
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:89
-#| msgid ""
-#| "<revnumber>1.19</revnumber> <date>05 Jun 2013</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>bug fixes</revremark>"
 msgid ""
 "<revnumber>1.24</revnumber> <date>29 May 2015</date> <authorinitials>ss</"
 "authorinitials> <revremark>bug fix</revremark>"
 msgstr ""
-"<revnumber>1.24</revnumber> <date>29 Μαΐου 2015</date> "
-"<authorinitials>ss</authorinitials> <revremark>διόρθωση "
-"σφαλμάτων</revremark>"
+"<revnumber>1.24</revnumber> <date>29 Μαΐου 2015</date> <authorinitials>ss</"
+"authorinitials> <revremark>διόρθωση σφαλμάτων</revremark>"
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:95
-#| msgid ""
-#| "<revnumber>1.19</revnumber> <date>05 Jun 2013</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>bug fixes</revremark>"
 msgid ""
 "<revnumber>1.23</revnumber> <date>17 May 2015</date> <authorinitials>ss</"
 "authorinitials> <revremark>bug fix</revremark>"
 msgstr ""
-"<revnumber>1.23</revnumber> <date>17 Μαΐου 2015</date> "
-"<authorinitials>ss</authorinitials> <revremark>διόρθωση "
-"σφαλμάτων</revremark>"
+"<revnumber>1.23</revnumber> <date>17 Μαΐου 2015</date> <authorinitials>ss</"
+"authorinitials> <revremark>διόρθωση σφαλμάτων</revremark>"
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:101
-#| msgid ""
-#| "<revnumber>1.21</revnumber> <date>17 Jul 2014</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>bug fixes, dropping deprecated features</"
-#| "revremark>"
 msgid ""
 "<revnumber>1.22</revnumber> <date>07 May 2015</date> <authorinitials>ss</"
 "authorinitials> <revremark>bug fixes, dropping deprecated features</"
 "revremark>"
 msgstr ""
-"<revnumber>1.22</revnumber> <date>07 Μαΐου 2015</date> "
-"<authorinitials>ss</authorinitials> <revremark>διορθώσεις σφαλμάτων, "
-"απόρριψη παρωχημένων λειτουργιών</revremark>"
+"<revnumber>1.22</revnumber> <date>07 Μαΐου 2015</date> <authorinitials>ss</"
+"authorinitials> <revremark>διορθώσεις σφαλμάτων, απόρριψη παρωχημένων "
+"λειτουργιών</revremark>"
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:107
@@ -467,15 +450,6 @@ msgstr ""
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:280
-#| msgid ""
-#| "<guilabel>Generating the SGML/XML and HTML/PDF.</guilabel> "
-#| "<application>gtkdoc-mkdb</application> turns the template files into SGML "
-#| "or XML files in the <filename class=\"directory\">sgml/</filename> or "
-#| "<filename class=\"directory\">xml/</filename> subdirectory. If the source "
-#| "code contains documentation on functions, using the special comment "
-#| "blocks, it gets merged in here. If there are no tmpl files used it only "
-#| "reads docs from sources and introspection data. We recommend to use "
-#| "Docbook XML."
 msgid ""
 "<guilabel>Generating the XML and HTML/PDF.</guilabel> <application>gtkdoc-"
 "mkdb</application> turns the template files into XML files in the <filename "
@@ -484,21 +458,15 @@ msgid ""
 "gets merged in here. If there are no tmpl files used it only reads docs from "
 "sources and introspection data."
 msgstr ""
-"<guilabel>Δημιουργία του XML και του HTML/PDF</guilabel>. Το <application"
-">gtkdoc-mkdb</application> μετατρέπει τα αρχεία προτύπων σε αρχεία XML στον "
-"υποκατάλογο <filename class=\"directory\">xml/</filename>. Αν ο πηγαίος "
-"κώδικας περιέχει τεκμηρίωση συναρτήσεων, χρησιμοποιώντας τις ειδικές ομάδες "
-"σχολίων, συγχωνεύεται εδώ. Αν δεν υπάρχουν χρησιμοποιούμενα αρχεία tmpl, "
-"διαβάζει μόνο έγγραφα από τα δεδομένα πηγών και αυτοελέγχου."
+"<guilabel>Δημιουργία του XML και του HTML/PDF</guilabel>. Το "
+"<application>gtkdoc-mkdb</application> μετατρέπει τα αρχεία προτύπων σε "
+"αρχεία XML στον υποκατάλογο <filename class=\"directory\">xml/</filename>. "
+"Αν ο πηγαίος κώδικας περιέχει τεκμηρίωση συναρτήσεων, χρησιμοποιώντας τις "
+"ειδικές ομάδες σχολίων, συγχωνεύεται εδώ. Αν δεν υπάρχουν χρησιμοποιούμενα "
+"αρχεία tmpl, διαβάζει μόνο έγγραφα από τα δεδομένα πηγών και αυτοελέγχου."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:289
-#| msgid ""
-#| "<application>gtkdoc-mkhtml</application> turns the SGML/XML files into "
-#| "HTML files in the <filename class=\"directory\">html/</filename> "
-#| "subdirectory. Likewise <application>gtkdoc-mkpdf</application> turns the "
-#| "SGML/XML files into a PDF document called <filename>&lt;package&gt;.pdf</"
-#| "filename>."
 msgid ""
 "<application>gtkdoc-mkhtml</application> turns the XML files into HTML files "
 "in the <filename class=\"directory\">html/</filename> subdirectory. Likewise "
@@ -512,11 +480,6 @@ msgstr ""
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:295
-#| msgid ""
-#| "Files in <filename class=\"directory\">sgml/</filename> or <filename "
-#| "class=\"directory\">xml/</filename> and <filename class=\"directory"
-#| "\">html/</filename> directories are always overwritten. One should never "
-#| "edit them directly."
 msgid ""
 "Files in <filename class=\"directory\">xml/</filename> and <filename class="
 "\"directory\">html/</filename> directories are always overwritten. One "
@@ -1219,7 +1182,6 @@ msgstr ""
 
 #. (itstool) path: note/title
 #: C/index.docbook:683
-#| msgid "Dedications"
 msgid "Limitations"
 msgstr "Περιορισμοί"
 
@@ -1229,9 +1191,9 @@ msgid ""
 "Note, that GTK-Doc's supports <code>#ifndef(__GTK_DOC_IGNORE__)</code> but "
 "not <code>#if !defined(__GTK_DOC_IGNORE__)</code> or other combinations."
 msgstr ""
-"Σημειώστε, ότι το GTK-Doc υποστηρίζει το "
-"<code>#ifndef(__GTK_DOC_IGNORE__)</code>, αλλά όχι το <code>#if "
-"!defined(__GTK_DOC_IGNORE__)</code> ή άλλους συνδυασμούς."
+"Σημειώστε, ότι το GTK-Doc υποστηρίζει το <code>#ifndef(__GTK_DOC_IGNORE__)</"
+"code>, αλλά όχι το <code>#if !defined(__GTK_DOC_IGNORE__)</code> ή άλλους "
+"συνδυασμούς."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:694
@@ -1435,12 +1397,6 @@ msgstr ""
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:820
-#| msgid ""
-#| "In older GTK-Doc releases, if you need support for additional formatting, "
-#| "you would need to enable the usage of docbook SGML/XML tags inside doc-"
-#| "comments by putting <option>--xml-mode</option> or <option>--sgml-mode</"
-#| "option> in the variable <symbol>MKDB_OPTIONS</symbol> inside "
-#| "<filename>Makefile.am</filename>."
 msgid ""
 "In older GTK-Doc releases, if you need support for additional formatting, "
 "you would need to enable the usage of docbook XML tags inside doc-comments "
@@ -1450,9 +1406,9 @@ msgid ""
 msgstr ""
 "Σε παλιότερες εκδόσεις του GTK-Doc, αν χρειάζεστε υποστήριξη για πρόσθετη "
 "μορφοποίηση, θα πρέπει να ενεργοποιήσετε τη χρήση των ετικετών docbook XML "
-"μέσα στα doc-comments θέτοντας το <option>--xml-mode</option> (ή το <option"
-">--sgml-mode</option>) στη μεταβλητή <symbol>MKDB_OPTIONS</symbol> μέσα στο "
-"<filename>Makefile.am</filename>."
+"μέσα στα doc-comments θέτοντας το <option>--xml-mode</option> (ή το "
+"<option>--sgml-mode</option>) στη μεταβλητή <symbol>MKDB_OPTIONS</symbol> "
+"μέσα στο <filename>Makefile.am</filename>."
 
 #. (itstool) path: example/title
 #: C/index.docbook:829
@@ -1462,6 +1418,42 @@ msgstr "Μπλοκ σχολίου GTK-Doc χρησιμοποιώντας Markdow
 #. (itstool) path: example/programlisting
 #: C/index.docbook:830
 #, no-wrap
+#| msgid ""
+#| "\n"
+#| "/**\n"
+#| " * identifier:\n"
+#| " *\n"
+#| " * documentation paragraph ...\n"
+#| " *\n"
+#| " * # Sub Heading #\n"
+#| " *\n"
+#| " * ## Second Sub Heading\n"
+#| " *\n"
+#| " * # Sub Heading With a Link Anchor # {#heading-two}\n"
+#| " *\n"
+#| " * more documentation:\n"
+#| " *\n"
+#| " * - list item 1\n"
+#| " *\n"
+#| " *   Paragraph inside a list item.\n"
+#| " *\n"
+#| " * - list item 2\n"
+#| " *\n"
+#| " * 1. numbered list item\n"
+#| " *\n"
+#| " * 2. another numbered list item\n"
+#| " *\n"
+#| " * Another paragraph. [A Link to the GNOME Website](http://www.gnome.org/)\n"
+#| " *\n"
+#| " * ![an inline image][plot-result.png]\n"
+#| " *\n"
+#| " * [A link to the heading anchor above][heading-two]\n"
+#| " *\n"
+#| " * A C-language example:\n"
+#| " * |[&lt;!-- language=\"C\" --&gt;\n"
+#| " * GtkWidget *label = gtk_label_new (\"Gorgeous!\");\n"
+#| " * ]|\n"
+#| " */\n"
 msgid ""
 "\n"
 "/**\n"
@@ -1501,35 +1493,36 @@ msgid ""
 msgstr ""
 "\n"
 "/**\n"
-" * identifier:\n"
+" * ταυτοποιητής:\n"
 " *\n"
-" * documentation paragraph ...\n"
+" * παράγραφος τεκμηρίωσης ...\n"
 " *\n"
-" * # Sub Heading #\n"
+" * # Δευτερεύουσα επικεφαλίδα #\n"
 " *\n"
-" * ## Second Sub Heading\n"
+" * ## Δεύτερη δευτερεύουσα επικεφαλίδα\n"
 " *\n"
-" * # Sub Heading With a Link Anchor # {#heading-two}\n"
+" * # Δευτερεύουσα επικεφαλίδα με μια άγκυρα συνδέσμου # {#επικεφαλίδα-δύο}\n"
 " *\n"
-" * more documentation:\n"
+" * περισσότερη τεκμηρίωση:\n"
 " *\n"
-" * - list item 1\n"
+" * - στοιχείο 1 καταλόγου\n"
 " *\n"
-" *   Paragraph inside a list item.\n"
+" *   Παράγραφος μέσα σε ένα στοιχείο καταλόγου.\n"
 " *\n"
-" * - list item 2\n"
+" * - στοιχείο καταλόγου 2\n"
 " *\n"
-" * 1. numbered list item\n"
+" * 1. αριθμημένο στοιχείο καταλόγου\n"
 " *\n"
-" * 2. another numbered list item\n"
+" * 2. άλλο αριθμημένο στοιχείο καταλόγου\n"
 " *\n"
-" * Another paragraph. [A Link to the GNOME Website](http://www.gnome.org/)\n"
+" * Μια άλλη παράγραφος. [Ένας σύνδεσμος στην ιστοσελίδα "
+"GNOME](http://www.gnome.org/)\n"
 " *\n"
-" * ![an inline image](plot-result.png)\n"
+" * ![μια ενσωματωμένη εικόνα ][plot-result.png]\n"
 " *\n"
-" * [A link to the heading anchor above][heading-two]\n"
+" * [Ένας σύνδεσμος στην από πάνω άγκυρα επικεφαλίδας][επικεφαλίδα-δύο]\n"
 " *\n"
-" * A C-language example:\n"
+" * Ένα παράδειγμα γλώσσας C:\n"
 " * |[&lt;!-- language=\"C\" --&gt;\n"
 " * GtkWidget *label = gtk_label_new (\"Gorgeous!\");\n"
 " * ]|\n"
@@ -1834,7 +1827,7 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1061 C/index.docbook:1090
+#: C/index.docbook:1061 C/index.docbook:1127
 msgid "General tags"
 msgstr "Γενικές ετικέτες"
 
@@ -1878,11 +1871,78 @@ msgstr ""
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1086
-msgid "(FIXME : Stability information)"
-msgstr "(FIXME : Πληροφορίες σταθερότητας)"
+msgid ""
+"You can also add stability information to all documentation elements to "
+"indicate whether API stability is guaranteed for them for all future minor "
+"releases of the project."
+msgstr ""
+"Μπορείτε επίσης να προσθέσετε πληροφορίες σταθερότητας σε όλα τα στοιχεία "
+"της τεκμηρίωσης για να δείξετε αν η σταθερότητα API είναι εγγυημένη για αυτά "
+"για όλες τις μελλοντικές δευτερεύουσες εκδόσεις του έργου."
+
+#. (itstool) path: sect2/para
+#: C/index.docbook:1092
+msgid ""
+"The default stability level for all documentation elements can be set by "
+"passing the <option>--default-stability</option> argument to "
+"<application>gtkdoc-mkdb</application> with one of the values below."
+msgstr ""
+"Το επίπεδο προεπιλεγμένης σταθερότητας για όλα τα στοιχεία τεκμηρίωσης "
+"μπορούν να οριστούν μεταφέροντας το όρισμα <option>--default-stability</"
+"option> στην <application>gtkdoc-mkdb</application> με μια άπω τις παρακάτω "
+"τιμές."
+
+#. (itstool) path: variablelist/title
+#: C/index.docbook:1098
+msgid "Stability Tags"
+msgstr "Ετικέτες σταθερότητας"
+
+#. (itstool) path: varlistentry/term
+#: C/index.docbook:1099
+msgid "Stability: Stable"
+msgstr "Σταθερότητα: σταθερό"
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1101
+msgid ""
+"Mark the element as stable. This is for public APIs which are guaranteed to "
+"remain stable for all future minor releases of the project."
+msgstr ""
+"Σημείωση του στοιχείου ως σταθερού. Αυτό είναι για δημόσια APIs που είναι "
+"βέβαια ότι παραμένουν σταθερά για όλες τις μελλοντικές δευτερεύουσες "
+"εκδόσεις του έργου."
+
+#. (itstool) path: varlistentry/term
+#: C/index.docbook:1108
+msgid "Stability: Unstable"
+msgstr "Σταθερότητα: ασταθές"
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1110
+msgid ""
+"Mark the element as unstable. This is for public APIs which are released as "
+"a preview before being stabilised."
+msgstr ""
+"Σημείωση του στοιχείου ως ασταθούς. Αυτό είναι για τα δημόσια APIs που "
+"εκδίδονται ως μια προεπισκόπηση πριν να σταθεροποιηθούν."
+
+#. (itstool) path: varlistentry/term
+#: C/index.docbook:1116
+msgid "Stability: Private"
+msgstr "Σταθερότητα: προσωπική"
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1118
+msgid ""
+"Mark the element as private. This is for interfaces which can be used by "
+"tightly coupled modules, but not by arbitrary third parties."
+msgstr ""
+"Σημείωση του στοιχείου ως προσωπικό. Αυτό είναι για διεπαφές που μπορούν να "
+"χρησιμοποιηθούν με σφικτά συνδυασμένες ενότητες, αλλά όχι από ελεύθερα τρίτα "
+"μέρη."
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1091
+#: C/index.docbook:1128
 #, no-wrap
 msgid ""
 "\n"
@@ -1921,13 +1981,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1111 C/index.docbook:1121
-#| msgid "Installation"
+#: C/index.docbook:1148 C/index.docbook:1158
 msgid "Annotations"
 msgstr "Σχόλια"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1113
+#: C/index.docbook:1150
 msgid ""
 "Documentation blocks can contain annotation-tags. These tags will be "
 "rendered with tooltips describing their meaning. The tags are used by "
@@ -1939,12 +1998,11 @@ msgstr ""
 "ετικέτες θα αποδοθούν με συμβουλές οθόνης που περιγράφουν το νόημά τους. Οι "
 "ετικέτες χρησιμοποιούνται από το gobject-introspection για τη δημιουργία των "
 "συνδέσεων γλώσσας. Ένας λεπτομερής κατάλογος των υποστηριζόμενων ετικετών "
-"μπορεί να βρεθεί στο <ulink "
-"url=\"http://live.gnome.org/GObjectIntrospection/Annotations\" type=\"http\">η "
-"βίκι</ulink>."
+"μπορεί να βρεθεί στο <ulink url=\"http://live.gnome.org/GObjectIntrospection/"
+"Annotations\" type=\"http\">η βίκι</ulink>."
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1122
+#: C/index.docbook:1159
 #, no-wrap
 msgid ""
 "\n"
@@ -1985,12 +2043,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1143 C/index.docbook:1172
+#: C/index.docbook:1180 C/index.docbook:1209
 msgid "Function comment block"
 msgstr "Ομάδα σχολίων συνάρτησης"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1149
+#: C/index.docbook:1186
 msgid ""
 "Document whether returned objects, lists, strings, etc, should be freed/"
 "unrefed/released."
@@ -1999,26 +2057,26 @@ msgstr ""
 "λπ, θα πρέπει να ελευθερώνονται, να μην ελευθερώνονται ή να απορρίπτονται."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1155
+#: C/index.docbook:1192
 msgid "Document whether parameters can be NULL, and what happens if they are."
 msgstr ""
 "Τεκμηριώσετε κατά πόσο οι παράμετροι μπορούν να είναι μηδενικές (NULL) και "
 "τι συμβαίνει αν είναι."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1160
+#: C/index.docbook:1197
 msgid ""
 "Mention interesting pre-conditions and post-conditions where appropriate."
 msgstr ""
 "Αναφέρετε ενδιαφέρουσες προ-καταστάσεις και μετα-καταστάσεις όπου χρειάζεται."
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1145 C/index.docbook:1231
+#: C/index.docbook:1182 C/index.docbook:1268
 msgid "Please remember to: <_:itemizedlist-1/>"
 msgstr "Παρακαλούμε να θυμηθείτε να: <_:itemizedlist-1/>"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1167
+#: C/index.docbook:1204
 msgid ""
 "Gtk-doc assumes all symbols (macros, functions) starting with '_' are "
 "private. They are treated like static functions."
@@ -2028,7 +2086,7 @@ msgstr ""
 "συναρτήσεις."
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1173
+#: C/index.docbook:1210
 #, no-wrap
 msgid ""
 "\n"
@@ -2070,27 +2128,27 @@ msgstr ""
 " */\n"
 
 #. (itstool) path: variablelist/title
-#: C/index.docbook:1194
+#: C/index.docbook:1231
 msgid "Function tags"
 msgstr "Ετικέτες συναρτήσεων"
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:1195
+#: C/index.docbook:1232
 msgid "Returns:"
 msgstr "Επιστροφές:"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1197
+#: C/index.docbook:1234
 msgid "Paragraph describing the returned result."
 msgstr "Παράγραφος που περιγράφει το επιστρεφόμενο αποτέλεσμα."
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:1202
+#: C/index.docbook:1239
 msgid "@...:"
 msgstr "@...:"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1204
+#: C/index.docbook:1241
 msgid ""
 "In case the function has variadic arguments, you should use this tag "
 "(@Varargs: does also work for historic reasons)."
@@ -2101,12 +2159,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1214 C/index.docbook:1216
+#: C/index.docbook:1251 C/index.docbook:1253
 msgid "Property comment block"
 msgstr "Ομάδα σχολίων ιδιότητας"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1217
+#: C/index.docbook:1254
 #, no-wrap
 msgid ""
 "\n"
@@ -2127,12 +2185,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1229 C/index.docbook:1248
+#: C/index.docbook:1266 C/index.docbook:1285
 msgid "Signal comment block"
 msgstr "Ομάδα σχολίων σήματος"
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1235
+#: C/index.docbook:1272
 msgid ""
 "Document when the signal is emitted and whether it is emitted before or "
 "after other signals."
@@ -2141,12 +2199,12 @@ msgstr ""
 "άλλα σήματα."
 
 #. (itstool) path: listitem/para
-#: C/index.docbook:1241
+#: C/index.docbook:1278
 msgid "Document what an application might do in the signal handler."
 msgstr "Τεκμηριώστε τι μπορεί να κάνει μια εφαρμογή στον διαχειριστή σημάτων."
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1249
+#: C/index.docbook:1286
 #, no-wrap
 msgid ""
 "\n"
@@ -2177,12 +2235,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1266 C/index.docbook:1267
+#: C/index.docbook:1303 C/index.docbook:1304
 msgid "Struct comment block"
 msgstr "Ομάδα σχολίων δομής"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1268
+#: C/index.docbook:1305
 #, no-wrap
 msgid ""
 "\n"
@@ -2216,7 +2274,7 @@ msgstr ""
 "} FooWidget;\n"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1285
+#: C/index.docbook:1322
 msgid ""
 "Use <code>/*&lt; private &gt;*/</code> before the private struct fields you "
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
@@ -2227,7 +2285,7 @@ msgstr ""
 "public &gt;*/</code>για την αντίστροφη συμπεριφορά."
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1291
+#: C/index.docbook:1328
 msgid ""
 "Struct comment blocks can also be used for GObjects and GObjectClasses. It "
 "is usually a good idea to add a comment block for a class, if it has "
@@ -2248,12 +2306,12 @@ msgstr ""
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
-#: C/index.docbook:1303 C/index.docbook:1304
+#: C/index.docbook:1340 C/index.docbook:1341
 msgid "Enum comment block"
 msgstr "Ομάδα σχολίων Enum"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1305
+#: C/index.docbook:1342
 #, no-wrap
 msgid ""
 "\n"
@@ -2287,7 +2345,7 @@ msgstr ""
 "} Something;\n"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1322
+#: C/index.docbook:1359
 msgid ""
 "Use <code>/*&lt; private &gt;*/</code> before the private enum values you "
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
@@ -2298,12 +2356,12 @@ msgstr ""
 "&gt;*/</code> για την αντίστροφη συμπεριφορά."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1332
+#: C/index.docbook:1369
 msgid "Useful DocBook tags"
 msgstr "Χρήσιμες ετικέτες DocBook"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1334
+#: C/index.docbook:1371
 msgid ""
 "Here are some DocBook tags which are most useful when documenting the code."
 msgstr ""
@@ -2311,7 +2369,7 @@ msgstr ""
 "του κώδικα."
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1343
+#: C/index.docbook:1380
 #, no-wrap
 msgid ""
 "\n"
@@ -2321,7 +2379,7 @@ msgstr ""
 "&lt;link linkend=\"glib-Hash-Tables\"&gt;Hash Tables&lt;/link&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1339
+#: C/index.docbook:1376
 msgid ""
 "To link to another section in the GTK docs: <_:informalexample-1/> The "
 "linkend is the SGML/XML id on the top item of the page you want to link to. "
@@ -2338,7 +2396,7 @@ msgstr ""
 "υπάρχει συμμόρφωση με το SGML/XML."
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1356
+#: C/index.docbook:1393
 #, no-wrap
 msgid ""
 "\n"
@@ -2348,7 +2406,7 @@ msgstr ""
 "&lt;function&gt;...&lt;/function&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1353
+#: C/index.docbook:1390
 msgid ""
 "To refer to an external function, e.g. a standard C function: <_:"
 "informalexample-1/>"
@@ -2357,7 +2415,7 @@ msgstr ""
 "informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1365
+#: C/index.docbook:1402
 #, no-wrap
 msgid ""
 "\n"
@@ -2377,7 +2435,7 @@ msgstr ""
 "&lt;/example&gt;\n"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1376
+#: C/index.docbook:1413
 #, no-wrap
 msgid ""
 "\n"
@@ -2395,7 +2453,7 @@ msgstr ""
 "&lt;/informalexample&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1362
+#: C/index.docbook:1399
 msgid ""
 "To include example code: <_:informalexample-1/> or possibly this, for very "
 "short code fragments which don't need a title: <_:informalexample-2/> For "
@@ -2406,7 +2464,7 @@ msgstr ""
 "τελευταία περίπτωση το GTK-Doc υποστηρίζει επίσης μια συντόμευση: |[ ... ]|"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1395
+#: C/index.docbook:1432
 #, no-wrap
 msgid ""
 "\n"
@@ -2438,12 +2496,12 @@ msgstr ""
 "&lt;/itemizedlist&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1392
+#: C/index.docbook:1429
 msgid "To include bulleted lists: <_:informalexample-1/>"
 msgstr "Συμπερίληψη λιστών με κουκκίδες: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1415
+#: C/index.docbook:1452
 #, no-wrap
 msgid ""
 "\n"
@@ -2461,7 +2519,7 @@ msgstr ""
 "&lt;/note&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1412
+#: C/index.docbook:1449
 msgid ""
 "To include a note which stands out from the text: <_:informalexample-1/>"
 msgstr ""
@@ -2469,7 +2527,7 @@ msgstr ""
 "informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1428
+#: C/index.docbook:1465
 #, no-wrap
 msgid ""
 "\n"
@@ -2479,12 +2537,12 @@ msgstr ""
 "&lt;type&gt;unsigned char&lt;/type&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1425
+#: C/index.docbook:1462
 msgid "To refer to a type: <_:informalexample-1/>"
 msgstr "Για να αναφερθείτε σε έναν τύπο: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1437
+#: C/index.docbook:1474
 #, no-wrap
 msgid ""
 "\n"
@@ -2494,7 +2552,7 @@ msgstr ""
 "&lt;structname&gt;XFontStruct&lt;/structname&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1434
+#: C/index.docbook:1471
 msgid ""
 "To refer to an external structure (not one described in the GTK docs): <_:"
 "informalexample-1/>"
@@ -2503,7 +2561,7 @@ msgstr ""
 "τεκμηρίωση GTK): <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1446
+#: C/index.docbook:1483
 #, no-wrap
 msgid ""
 "\n"
@@ -2513,12 +2571,12 @@ msgstr ""
 "&lt;structfield&gt;len&lt;/structfield&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1443
+#: C/index.docbook:1480
 msgid "To refer to a field of a structure: <_:informalexample-1/>"
 msgstr "Για να αναφερθείτε σε ένα πεδίο μιας δομής: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1455
+#: C/index.docbook:1492
 #, no-wrap
 msgid ""
 "\n"
@@ -2528,7 +2586,7 @@ msgstr ""
 "&lt;classname&gt;GtkWidget&lt;/classname&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1452
+#: C/index.docbook:1489
 msgid ""
 "To refer to a class name, we could possibly use: <_:informalexample-1/> but "
 "you'll probably be using #GtkWidget instead (to automatically create a link "
@@ -2541,7 +2599,7 @@ msgstr ""
 "linkend=\"documenting_syntax\">τις συντομεύσεις</link>)."
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1466
+#: C/index.docbook:1503
 #, no-wrap
 msgid ""
 "\n"
@@ -2551,12 +2609,12 @@ msgstr ""
 "&lt;emphasis&gt;This is important&lt;/emphasis&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1463
+#: C/index.docbook:1500
 msgid "To emphasize text: <_:informalexample-1/>"
 msgstr "Χρήση έντονων χαρακτήρων: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1475
+#: C/index.docbook:1512
 #, no-wrap
 msgid ""
 "\n"
@@ -2566,12 +2624,12 @@ msgstr ""
 "&lt;filename&gt;/home/user/documents&lt;/filename&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1472
+#: C/index.docbook:1509
 msgid "For filenames use: <_:informalexample-1/>"
 msgstr "Για ονόματα αρχείων χρησιμοποιήστε: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1484
+#: C/index.docbook:1521
 #, no-wrap
 msgid ""
 "\n"
@@ -2581,17 +2639,17 @@ msgstr ""
 "&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap&gt;&lt;/keycombo&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1481
+#: C/index.docbook:1518
 msgid "To refer to keys use: <_:informalexample-1/>"
 msgstr "Για να αναφερθείτε σε κλειδιά χρησιμοποιήστε: <_:informalexample-1/>"
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1494
+#: C/index.docbook:1531
 msgid "Filling the extra files"
 msgstr "Συμπλήρωση των επιπλέον αρχείων"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1496
+#: C/index.docbook:1533
 msgid ""
 "There are a couple of extra files, that need to be maintained along with the "
 "inline source code comments: <filename>&lt;package&gt;.types</filename>, "
@@ -2604,12 +2662,12 @@ msgstr ""
 "sgml), <filename>&lt;package&gt;-sections.txt</filename>."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1505
+#: C/index.docbook:1542
 msgid "Editing the types file"
 msgstr "Επεξεργασία του αρχείου types"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1507
+#: C/index.docbook:1544
 msgid ""
 "If your library or application includes GObjects, you want their signals, "
 "arguments/parameters and position in the hierarchy to be shown in the "
@@ -2624,12 +2682,12 @@ msgstr ""
 "<filename>&lt;package&gt;.types</filename>."
 
 #. (itstool) path: example/title
-#: C/index.docbook:1516
+#: C/index.docbook:1553
 msgid "Example types file snippet"
 msgstr "Υπόδειγμα αποσπάσματος αρχείου types"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1517
+#: C/index.docbook:1554
 #, no-wrap
 msgid ""
 "\n"
@@ -2649,7 +2707,7 @@ msgstr ""
 "gtk_arrow_get_type\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1528
+#: C/index.docbook:1565
 msgid ""
 "Since GTK-Doc 1.8 <application>gtkdoc-scan</application> can generate this "
 "list for you. Just add \"--rebuild-types\" to SCAN_OPTIONS in "
@@ -2663,12 +2721,12 @@ msgstr ""
 "types ούτε στη διανομή ούτε στον έλεγχο εκδόσεων."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1537
+#: C/index.docbook:1574
 msgid "Editing the master document"
 msgstr "Επεξεργασία κύριου εγγράφου (master)"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1539
+#: C/index.docbook:1576
 msgid ""
 "GTK-Doc produces documentation in DocBook SGML/XML. When processing the "
 "inline source comments, the GTK-Doc tools generate one documentation page "
@@ -2682,25 +2740,25 @@ msgstr ""
 "ταξινομεί."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1546
+#: C/index.docbook:1583
 msgid ""
-"While GTK-Doc creates a template master document for you, later run will not "
-"touch it again. This means that one can freely structure the documentation. "
-"That includes grouping pages and adding extra pages. GTK-Doc has now a test "
-"suite, where also the master-document is recreated from scratch. Its a good "
-"idea to look at this from time to time to see if there are some new goodies "
-"introduced there."
+"While GTK-Doc creates a template master document for you, later runs will "
+"not touch it again. This means that one can freely structure the "
+"documentation. That includes grouping pages and adding extra pages. GTK-Doc "
+"has now a test suite, where also the master-document is recreated from "
+"scratch. Its a good idea to look at this from time to time to see if there "
+"are some new goodies introduced there."
 msgstr ""
-"Αν και το GTK-Doc παράγει αυτόματα ένα πρότυπο κύριο έγγραφο, δεν το "
-"τροποποιεί κατά τις επόμενες εκτελέσεις. Αυτό σημαίνει ότι έχετε τη "
-"δυνατότητα να αλλάξετε τη δομή της τεκμηρίωσης. Μπορείτε να ομαδοποιήσετε "
-"κάποιες σελίδες ή να προσθέσετε νέες. Το GTK-Doc διαθέτει πλέον μια σουίτα "
-"για δοκιμές, στην οποία το κύριο έγγραφο παράγεται εκ νέου. Συνιστάται να "
-"επαναλαμβάνετε τακτικά αυτή τη διαδικασία, για να διαπιστώνετε αν έχουν "
-"προστεθεί νέα στοιχεία."
+"Αν και το GTK-Doc παράγει αυτόματα ένα πρότυπο κύριο έγγραφο για σας, οι "
+"επόμενες εκτελέσεις δεν θα το ξαναθίξουν. Αυτό σημαίνει ότι μπορείτε να "
+"δομήσετε την τεκμηρίωση ελεύθερα. Αυτό περιλαμβάνει την ομαδοποίηση των "
+"σελίδων και την προσθήκη πρόσθετων σελίδων. Το GTK-Doc διαθέτει πλέον μια "
+"σουίτα για δοκιμές, στην οποία το κύριο έγγραφο αναδημιουργείται από την "
+"αρχή. Είναι καλό να το κοιτάτε κάπου-κάπου για να δείτε αν υπάρχουν κάποια "
+"νέα καλούδια που εισήχθησαν εκεί."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:1556
+#: C/index.docbook:1593
 msgid ""
 "Do not create tutorials as extra documents. Just write extra chapters. The "
 "benefit of directly embedding the tutorial for your library into the API "
@@ -2715,7 +2773,7 @@ msgstr ""
 "καθίσταται πιθανότερη η ενημέρωση του εγχειριδίου μαζί με τη βιβλιοθήκη."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1565
+#: C/index.docbook:1602
 msgid ""
 "So what are the things to change inside the master document? For a start is "
 "only a little. There are some placeholders (text in square brackets) there "
@@ -2726,12 +2784,12 @@ msgstr ""
 "αγκυλών) που πρέπει να διευκρινήσετε."
 
 #. (itstool) path: example/title
-#: C/index.docbook:1572
+#: C/index.docbook:1609
 msgid "Master document header"
 msgstr "Κεφαλίδα κύριου εγγράφου"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1573
+#: C/index.docbook:1610
 #, no-wrap
 msgid ""
 "\n"
@@ -2760,13 +2818,74 @@ msgstr ""
 "&lt;chapter&gt;\n"
 "  &lt;title&gt;[Insert title here]&lt;/title&gt;\n"
 
+#. (itstool) path: sect1/para
+#: C/index.docbook:1626
+msgid ""
+"In addition a few option elements are created in commented form. You can "
+"review these and enable them as you like."
+msgstr ""
+"Επιπλέον κάποια στοιχεία επιλογής δημιουργούνται με μορφή σχολίου. Μπορείτε "
+"να τα ελέγξετε και να τα ενεργοποιήσετε όπως θέλετε."
+
+#. (itstool) path: example/title
+#: C/index.docbook:1632
+msgid "Optional part in the master document"
+msgstr "Προαιρετικό τμήμα στο κύριο έγγραφο"
+
+#. (itstool) path: example/programlisting
+#: C/index.docbook:1633
+#, no-wrap
+msgid ""
+"\n"
+"  &lt;!-- enable this when you use gobject introspection annotations\n"
+"  &lt;xi:include href=\"xml/annotation-glossary.xml\"&gt;&lt;xi:fallback /&gt;&lt;/xi:include&gt;\n"
+"  --&gt;          \n"
+msgstr ""
+"\n"
+"  &lt;!-- ενεργοποιήστε το όταν χρησιμοποιείτε σχόλια αυτοελέγχου gobject\n"
+"  &lt;xi:include href=\"xml/annotation-glossary.xml\"&gt;&lt;xi:fallback /&gt;&lt;/xi:include&gt;\n"
+"  --&gt;          \n"
+
+#. (itstool) path: sect1/para
+#: C/index.docbook:1641
+msgid ""
+"Finally you need to add new section whenever you introduce one. The <link "
+"linkend=\"modernizing-gtk-doc-1-16\">gtkdoc-check</link> tool will remind "
+"you of newly generated xml files that are not yet included into the doc."
+msgstr ""
+"Τέλος, χρειάζεται να προσθέσετε νέα ενότητα όποτε εισάγετε μία. Το εργαλείο "
+"<link linkend=\"modernizing-gtk-doc-1-16\">gtkdoc-check</link> θα σας "
+"θυμίσει τα νεοδημιουργούμενα αρχεία xml που δεν περιλαμβάνονται ακόμα στο "
+"έγγραφο."
+
+#. (itstool) path: example/title
+#: C/index.docbook:1649
+msgid "Including generated sections"
+msgstr "Συμπερίληψη των δημιουργούμενων ενοτήτων"
+
+#. (itstool) path: example/programlisting
+#: C/index.docbook:1650
+#, no-wrap
+msgid ""
+"\n"
+"  &lt;chapter&gt;\n"
+"    &lt;title&gt;my library&lt;/title&gt;\n"
+"      &lt;xi:include href=\"xml/object.xml\"/&gt;\n"
+"      ...\n"
+msgstr ""
+"\n"
+"  &lt;chapter&gt;\n"
+"    &lt;title&gt;my library&lt;/title&gt;\n"
+"      &lt;xi:include href=\"xml/object.xml\"/&gt;\n"
+"      ...\n"
+
 #. (itstool) path: sect1/title
-#: C/index.docbook:1592
+#: C/index.docbook:1662
 msgid "Editing the section file"
 msgstr "Επεξεργασία αρχείου ενοτήτων"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1594
+#: C/index.docbook:1664
 msgid ""
 "The section file is used to organise the documentation output by GTK-Doc. "
 "Here one specifies which symbol belongs to which module or class and control "
@@ -2777,7 +2896,7 @@ msgstr ""
 "σύμβολο και αποφασίζεται η ορατότητά του (αν θα είναι δημόσιο ή ιδιωτικό)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1600
+#: C/index.docbook:1670
 msgid ""
 "The section file is a plain text file with XML-like syntax (using tags). "
 "Blank lines are ignored and lines starting with a '#' are treated as comment "
@@ -2788,17 +2907,7 @@ msgstr ""
 "που ξεκινούν με '#' αντιμετωπίζονται ως γραμμές σχολίων."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1606
-#| msgid ""
-#| "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
-#| "without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
-#| "FILE&gt;' will result in the section declarations being output in the "
-#| "template file <filename>tmpl/gnome-config.sgml</filename>, which will be "
-#| "converted into the DocBook SGML/XML file <filename>sgml/gnome-config."
-#| "sgml</filename> or the DocBook XML file <filename>xml/gnome-config.xml</"
-#| "filename>. (The name of the HTML file is based on the module name and the "
-#| "section title, or for GObjects it is based on the GObjects class name "
-#| "converted to lower case)."
+#: C/index.docbook:1676
 msgid ""
 "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
 "without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
@@ -2813,16 +2922,15 @@ msgstr ""
 "Η ετικέτα &lt;FILE&gt; ... &lt;/FILE&gt; χρησιμοποιείται για να δηλώσει το "
 "όνομα του αρχείου, χωρίς οποιοδήποτε επίθημα. Παραδείγματος χάρη, η χρήση "
 "του '&lt;FILE&gt;gnome-config&lt;/FILE&gt;' θα καταλήξει στην ενότητα "
-"δηλώσεων που εξάγονται στο αρχείο προτύπου <filename>tmpl/gnome-"
-"config.sgml</filename>, το οποίο θα μετατραπεί στο αρχείο DocBook XML "
-"<filename>xml/gnome-config.sgml</filename> ή στο αρχείο DocBook XML "
-"<filename>xml/gnome-config.xml</filename>. (Το όνομα του αρχείου HTML "
-"βασίζεται στο όνομα του αρθρώματος και τον τίτλο της ενότητας, ή για τα "
-"GObjects βασίζεται στο όνομα κλάσης GObjects που μετατράπηκε σε πεζά "
-"γράμματα)."
+"δηλώσεων που εξάγονται στο αρχείο προτύπου <filename>tmpl/gnome-config.sgml</"
+"filename>, το οποίο θα μετατραπεί στο αρχείο DocBook XML <filename>xml/gnome-"
+"config.sgml</filename> ή στο αρχείο DocBook XML <filename>xml/gnome-config."
+"xml</filename>. (Το όνομα του αρχείου HTML βασίζεται στο όνομα του "
+"αρθρώματος και τον τίτλο της ενότητας, ή για τα GObjects βασίζεται στο όνομα "
+"κλάσης GObjects που μετατράπηκε σε πεζά γράμματα)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1618
+#: C/index.docbook:1688
 msgid ""
 "The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of the "
 "section. It is only useful before the templates (if used) are initially "
@@ -2836,7 +2944,7 @@ msgstr ""
 "αυτό είναι παρωχημένο."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1625
+#: C/index.docbook:1695
 msgid ""
 "You can group items in the section by using the &lt;SUBSECTION&gt; tag. "
 "Currently it outputs a blank line between subsections in the synopsis "
@@ -2868,7 +2976,7 @@ msgstr ""
 "(μεταβλητές,vmethods)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1644
+#: C/index.docbook:1714
 msgid ""
 "You can also use &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; to specify the "
 "#include files which are shown in the synopsis sections. It contains a comma-"
@@ -2885,12 +2993,12 @@ msgstr ""
 "μόνο τη συγκεκριμένη ενότητα. "
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1658
+#: C/index.docbook:1728
 msgid "Controlling the result"
 msgstr "Έλεγχος αποτελέσματος"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1660
+#: C/index.docbook:1730
 msgid ""
 "A GTK-Doc run generates report files inside the documentation directory. The "
 "generated files are named: <filename>&lt;package&gt;-undocumented.txt</"
@@ -2905,7 +3013,7 @@ msgstr ""
 "filename>. Είναι αρχεία απλού κειμένου, εύκολα στην ανάγνωση και επεξεργασία."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1669
+#: C/index.docbook:1739
 msgid ""
 "The <filename>&lt;package&gt;-undocumented.txt</filename> file starts with "
 "the documentation coverage summary. Below are two sections divided by blank "
@@ -2922,7 +3030,7 @@ msgstr ""
 "προστέθηκε μια νέα παράμετρος."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1678
+#: C/index.docbook:1748
 msgid ""
 "The <filename>&lt;package&gt;-undeclared.txt</filename> file lists symbols "
 "given in the <filename>&lt;package&gt;-sections.txt</filename> but not found "
@@ -2934,7 +3042,7 @@ msgstr ""
 "έχουν αφαιρεθεί ή αν περιέχουν συντακτικά λάθη."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1685
+#: C/index.docbook:1755
 msgid ""
 "The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol names, "
 "where the GTK-Doc scanner has found documentation, but does not know where "
@@ -2947,7 +3055,7 @@ msgstr ""
 "προστεθεί ακόμη στο αρχείο <filename>&lt;package&gt;-sections.txt</filename>."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:1693
+#: C/index.docbook:1763
 msgid ""
 "Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
 "am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during "
@@ -2959,7 +3067,7 @@ msgstr ""
 "<command>make check</command>."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1700
+#: C/index.docbook:1770
 msgid ""
 "One can also look at the files produced by the source code scanner: "
 "<filename>&lt;package&gt;-decl-list.txt</filename> and <filename>&lt;"
@@ -2976,7 +3084,7 @@ msgstr ""
 "περιέχεται σε αυτό το αρχείο."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1709
+#: C/index.docbook:1779
 msgid ""
 "If the project is GObject based, one can also look into the files produced "
 "by the object scanner: <filename>&lt;package&gt;.args.txt</filename>, "
@@ -2998,12 +3106,12 @@ msgstr ""
 "<command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1724
+#: C/index.docbook:1794
 msgid "Modernizing the documentation"
 msgstr "Εκσυγχρονίζοντας την τεκμηρίωση"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1726
+#: C/index.docbook:1796
 msgid ""
 "GTK-Doc has been around for quite some time. In this section we list new "
 "features together with the version since when it is available."
@@ -3013,12 +3121,12 @@ msgstr ""
 "διαθέσιμες."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1732
+#: C/index.docbook:1802
 msgid "GTK-Doc 1.9"
 msgstr "GTK-Doc 1.9"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1734
+#: C/index.docbook:1804
 msgid ""
 "When using xml instead of sgml, one can actually name the master document "
 "<filename>&lt;package&gt;-docs.xml</filename>."
@@ -3027,7 +3135,7 @@ msgstr ""
 "το κύριο έγγραφο <filename>&lt;package&gt;-docs.xml</filename>."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1739
+#: C/index.docbook:1809
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-sections</option> in "
 "<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
@@ -3049,13 +3157,7 @@ msgstr ""
 "sections.txt</code>."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1750
-#| msgid ""
-#| "Version 1.8 already introduced the syntax for documenting sections in the "
-#| "sources instead of the separate files under <filename class=\"directory"
-#| "\">tmpl</filename>. This version adds options to switch the whole doc "
-#| "module to not use the extra tmpl build step at all, by using <option>--"
-#| "flavour no-tmpl</option> in <filename>configure.ac</filename>."
+#: C/index.docbook:1820
 msgid ""
 "Version 1.8 already introduced the syntax for documenting sections in the "
 "sources instead of the separate files under <filename class=\"directory"
@@ -3067,22 +3169,22 @@ msgid ""
 "<filename>configure.ac</filename> and you are done."
 msgstr ""
 "Η εκδοση 1.8 εισήγαγε ήδη τη σύνταξη για τις ενότητες τεκμηρίωσης στις "
-"πηγές, αντί για τα ξεχωριστά αρχεία, κάτω από το <filename "
-"class=\"directory\">tmpl</filename>. Αυτή η έκδοση προσθέτει επιλογές για τη "
-"μετατροπή ολόκληρου του αρθρώματος doc ώστε να μη χρησιμοποιεί καθόλου το "
-"επιπλέον στάδιο δόμησης tmpl, με τη χρήση του <option>--flavour no-"
-"tmpl</option> στο <filename>configure.ac</filename>. Εάν δεν έχετε ένα "
-"<filename class=\"directory\">tmpl</filename> σημειωμένο στο σύστημα ελέγχου "
-"πηγής και δεν έχετε ακόμα αλλάξει, προσθέστε απλά τη σημαία στο "
-"<filename>configure.ac</filename> και τελειώσατε."
+"πηγές, αντί για τα ξεχωριστά αρχεία, κάτω από το <filename class=\"directory"
+"\">tmpl</filename>. Αυτή η έκδοση προσθέτει επιλογές για τη μετατροπή "
+"ολόκληρου του αρθρώματος doc ώστε να μη χρησιμοποιεί καθόλου το επιπλέον "
+"στάδιο δόμησης tmpl, με τη χρήση του <option>--flavour no-tmpl</option> στο "
+"<filename>configure.ac</filename>. Εάν δεν έχετε ένα <filename class="
+"\"directory\">tmpl</filename> σημειωμένο στο σύστημα ελέγχου πηγής και δεν "
+"έχετε ακόμα αλλάξει, προσθέστε απλά τη σημαία στο <filename>configure.ac</"
+"filename> και τελειώσατε."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1762
+#: C/index.docbook:1832
 msgid "GTK-Doc 1.10"
 msgstr "GTK-Doc 1.10"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1764
+#: C/index.docbook:1834
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-types</option> in "
 "<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
@@ -3099,17 +3201,17 @@ msgstr ""
 "am</filename> για τον κώδικα που δομείται υπό όρους."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1775
+#: C/index.docbook:1845
 msgid "GTK-Doc 1.16"
 msgstr "GTK-Doc 1.16"
 
 #. (itstool) path: example/title
-#: C/index.docbook:1781
+#: C/index.docbook:1851
 msgid "Enable gtkdoc-check"
 msgstr "Ενεργοποίηση του gtkdoc-check"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1782
+#: C/index.docbook:1852
 #, no-wrap
 msgid ""
 "\n"
@@ -3129,7 +3231,7 @@ msgstr ""
 "endif\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1777
+#: C/index.docbook:1847
 msgid ""
 "This version includes a new tool called gtkdoc-check. This tool can run a "
 "set of sanity checks on your documentation. It is enabled by adding these "
@@ -3141,12 +3243,12 @@ msgstr ""
 "<filename>Makefile.am</filename>. <_:example-1/>"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1795
+#: C/index.docbook:1865
 msgid "GTK-Doc 1.20"
 msgstr "GTK-Doc 1.20"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1797
+#: C/index.docbook:1867
 msgid ""
 "Version 1.18 brought some initial markdown support. Using markdown in doc "
 "comments is less intrusive than writing docbook xml. This version improves a "
@@ -3160,12 +3262,12 @@ msgstr ""
 "\">σύνταξη σχολίων</link> έχει όλες τις λεπτομέρειες."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1808
+#: C/index.docbook:1878
 msgid "Documenting other interfaces"
 msgstr "Τεκμηρίωση άλλων διεπαφών"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1810
+#: C/index.docbook:1880
 msgid ""
 "So far we have been using GTK-Doc to document the API of code. The next "
 "sections contain suggestions how the tools can be used to document other "
@@ -3176,12 +3278,12 @@ msgstr ""
 "μπορούν να χρησιμοποιηθούν για να καταγράφετε και άλλες διεπαφές."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1817
+#: C/index.docbook:1887
 msgid "Command line options and man pages"
 msgstr "Επιλογές γραμμής εντολών και σελίδες τεκμηρίωσης man"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1819
+#: C/index.docbook:1889
 msgid ""
 "As one can generate man pages for a docbook refentry as well, it sounds like "
 "a good idea to use it for that purpose. This way the interface is part of "
@@ -3193,12 +3295,12 @@ msgstr ""
 "δωρεάν την σελίδα-man."
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:1826
+#: C/index.docbook:1896
 msgid "Document the tool"
 msgstr "Τεκμηρίωση του εργαλείου"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1828
+#: C/index.docbook:1898
 msgid ""
 "Create one refentry file per tool. Following <link linkend="
 "\"settingup_docfiles\">our example</link> we would call it <filename>meep/"
@@ -3213,17 +3315,17 @@ msgstr ""
 "αρχείο στον υποκατάλογο xml καθώς επίσης και τα παραδείγματα π.χ. στο glib."
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:1838
+#: C/index.docbook:1908
 msgid "Adding the extra configure check"
 msgstr "Προσθήκη του έξτρα ελέγχου διαμόρφωσης"
 
 #. (itstool) path: example/title
-#: C/index.docbook:1841 C/index.docbook:1859
+#: C/index.docbook:1911 C/index.docbook:1929
 msgid "Extra configure checks"
 msgstr "Επιπλέον έλεγχοι ρυθμίσεων"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1842
+#: C/index.docbook:1912
 #, no-wrap
 msgid ""
 "\n"
@@ -3245,12 +3347,12 @@ msgstr ""
 "AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)\n"
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:1856
+#: C/index.docbook:1926
 msgid "Adding the extra makefile rules"
 msgstr "Προσθήκη των επιπλέον κανόνων makefile"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1860
+#: C/index.docbook:1930
 #, no-wrap
 msgid ""
 "\n"
@@ -3286,12 +3388,12 @@ msgstr ""
 "EXTRA_DIST += meep.xml\n"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1882
+#: C/index.docbook:1952
 msgid "DBus interfaces"
 msgstr "Διεπαφές DBus"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1884
+#: C/index.docbook:1954
 msgid ""
 "(FIXME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://"
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
@@ -3300,27 +3402,27 @@ msgstr ""
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1893
+#: C/index.docbook:1963
 msgid "Frequently asked questions"
 msgstr "Συχνές ερωτήσεις"
 
 #. (itstool) path: segmentedlist/segtitle
-#: C/index.docbook:1897
+#: C/index.docbook:1967
 msgid "Question"
 msgstr "Ερώτηση"
 
 #. (itstool) path: segmentedlist/segtitle
-#: C/index.docbook:1898
+#: C/index.docbook:1968
 msgid "Answer"
 msgstr "Απάντηση"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1900
+#: C/index.docbook:1970
 msgid "No class hierarchy."
 msgstr "Δεν υπάρχει ιεραρχία κλάσεων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1901
+#: C/index.docbook:1971
 msgid ""
 "The objects <function>xxx_get_type()</function> function has not been "
 "entered into the <filename>&lt;package&gt;.types</filename> file."
@@ -3329,12 +3431,12 @@ msgstr ""
 "εισαχθεί στο αρχείο <filename>&lt;package&gt;.types</filename>"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1907
+#: C/index.docbook:1977
 msgid "Still no class hierarchy."
 msgstr "Εξακολουθεί να μην υπάρχει ιεραρχία κλάσεων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1908
+#: C/index.docbook:1978
 msgid ""
 "Missing or wrong naming in <filename>&lt;package&gt;-sections.txt</filename> "
 "file (see <ulink url=\"http://mail.gnome.org/archives/gtk-doc-list/2003-"
@@ -3345,12 +3447,12 @@ msgstr ""
 "doc-list/2003-October/msg00006.html\">αιτιολόγηση</ulink>)."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1914
+#: C/index.docbook:1984
 msgid "Damn, I have still no class hierarchy."
 msgstr "Στο καλό του, πάλι δεν έχω ιεραρχία κλάσεων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1915
+#: C/index.docbook:1985
 msgid ""
 "Is the object name (name of the instance struct, e.g. <type>GtkWidget</"
 "type>) part of the normal section (don't put this into Standard or Private "
@@ -3362,12 +3464,12 @@ msgstr ""
 "Private)."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1922
+#: C/index.docbook:1992
 msgid "No symbol index."
 msgstr "Δεν υπάρχει ευρετήριο συμβόλων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1923
+#: C/index.docbook:1993
 msgid ""
 "Does the <filename>&lt;package&gt;-docs.{xml,sgml}</filename> contain a "
 "index that xi:includes the generated index?"
@@ -3376,14 +3478,14 @@ msgstr ""
 "ευρετήριο το οποίο περιλαμβάνει με xi:includes το παραγόμενο ευρετήριο;"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1929
+#: C/index.docbook:1999
 msgid "Symbols are not linked to their doc-section."
 msgstr ""
 "Δεν υπάρχουν σύνδεσμοι μεταξύ των συμβόλων και των κατάλληλων ενοτήτων της "
 "τεκμηρίωσης."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1930
+#: C/index.docbook:2000
 msgid ""
 "Is the doc-comment using the correct markup (added #,% or ())? Check if the "
 "gtkdoc-fixxref warns about unresolvable xrefs."
@@ -3392,12 +3494,12 @@ msgstr ""
 "()); Ελέγξτε αν το gtkdoc-fixxref προειδοποιεί για ανεπίλυτα xrefs."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1936
+#: C/index.docbook:2006
 msgid "A new class does not appear in the docs."
 msgstr "Μια νέα κλάση δεν εμφανίζεται στην τεκμηρίωση."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1937
+#: C/index.docbook:2007
 msgid ""
 "Is the new page xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</"
 "filename>."
@@ -3406,12 +3508,12 @@ msgstr ""
 "docs.{xml,sgml}</filename>;"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1943
+#: C/index.docbook:2013
 msgid "A new symbol does not appear in the docs."
 msgstr "Ένα νέο σύμβολο δεν εμφανίζεται στην τεκμηρίωση."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1944
+#: C/index.docbook:2014
 msgid ""
 "Is the doc-comment properly formatted. Check for spelling mistakes in the "
 "begin of the comment. Check if the gtkdoc-fixxref warns about unresolvable "
@@ -3424,12 +3526,12 @@ msgstr ""
 "<filename>&lt;package&gt;-sections.txt</filename> σε μια δημόσια υποενότητα."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1952
+#: C/index.docbook:2022
 msgid "A type is missing from the class hierarchy."
 msgstr "Λείπει ένας τύπος από την ιεραρχία κλάσεων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1953
+#: C/index.docbook:2023
 msgid ""
 "If the type is listed in <filename>&lt;package&gt;.hierarchy</filename> but "
 "not in <filename>xml/tree_index.sgml</filename> then double check that the "
@@ -3445,12 +3547,12 @@ msgstr ""
 "εμφανιστεί."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1962
+#: C/index.docbook:2032
 msgid "I get foldoc links for all gobject annotations."
 msgstr "Λαμβάνω συνδέσμους foldoc για όλες τις σημειώσεις gobject."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1963
+#: C/index.docbook:2033
 msgid ""
 "Check that <filename>xml/annotation-glossary.xml</filename> is xi:included "
 "from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
@@ -3459,13 +3561,13 @@ msgstr ""
 "included από το <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1971
+#: C/index.docbook:2041
 msgid "Parameter described in source code comment block but does not exist"
 msgstr ""
 "Μια παράμετρος περιγράφεται σε σχόλιο του πηγαίου κώδικα, αλλά δεν υπάρχει"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1972
+#: C/index.docbook:2042
 msgid ""
 "Check if the prototype in the header has different parameter names as in the "
 "source."
@@ -3474,12 +3576,12 @@ msgstr ""
 "παράμετρο από αυτό που αναφέρεται στον κώδικα."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1977
+#: C/index.docbook:2047
 msgid "multiple \"IDs\" for constraint linkend: XYZ"
 msgstr "Πολλαπλά \"Αναγνωριστικά\" για τον προορισμό συνδέσμου: XYZ"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1978
+#: C/index.docbook:2048
 msgid ""
 "Symbol XYZ appears twice in <filename>&lt;package&gt;-sections.txt</"
 "filename> file."
@@ -3488,7 +3590,7 @@ msgstr ""
 "sections.txt</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:1981
+#: C/index.docbook:2051
 msgid ""
 "Element typename in namespace '' encountered in para, but no template "
 "matches."
@@ -3497,12 +3599,12 @@ msgstr ""
 "αντιστοιχεί σε κανένα πρότυπο."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1988
+#: C/index.docbook:2058
 msgid "Tools related to gtk-doc"
 msgstr "Εργαλεία σχετικά με το gtk-doc"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1990
+#: C/index.docbook:2060
 msgid ""
 "GtkDocPlugin - a <ulink url=\"http://trac-hacks.org/wiki/GtkDocPlugin\">Trac "
 "GTK-Doc</ulink> integration plugin, that adds API docs to a trac site and "
@@ -3513,7 +3615,7 @@ msgstr ""
 "ιστοσελίδες trac και ενσωματώνεται με την αναζήτηση trac."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1995
+#: C/index.docbook:2065
 msgid ""
 "Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since "
 "tags in the API to determine the minimum required version."
@@ -5525,6 +5627,9 @@ msgstr ""
 "συνιστούμε την παράλληλη δημοσίευσή τους, υπό τους όρους της άδειας "
 "ελεύθερου λογισμικού της αρεσκείας σας,όπως η <_:ulink-1/>, ώστε να "
 "επιτρέψετε τη χρήση τους σε ελεύθερο λογισμικό. "
+
+#~ msgid "(FIXME : Stability information)"
+#~ msgstr "(FIXME : Πληροφορίες σταθερότητας)"
 
 #~ msgid "1.20"
 #~ msgstr "1.20"
