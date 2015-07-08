@@ -1,12 +1,13 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = gobject bugs annotations fail empty .
+SUBDIRS = gobject bugs annotations fail empty program .
 
 if BUILD_TESTS
 
 TESTS = \
   gtkdoc-common.t gtkdoc-fixxref.t gtkdoc-mkdb.t gtkdoc-rebase.t gtkdoc-scan.t \
-  tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh
+  tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh \
+  program.sh
 TESTS_ENVIRONMENT = \
 	BUILDDIR=$(abs_builddir) \
 	SRCDIR=$(abs_srcdir) \

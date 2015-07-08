@@ -261,6 +261,9 @@ tests/fail/docs/Makefile
 tests/empty/Makefile
 tests/empty/src/Makefile
 tests/empty/docs/Makefile
+tests/program/Makefile
+tests/program/src/Makefile
+tests/program/docs/Makefile
 ])
 
 dnl run chmod on these after parsing them.

@@ -2585,6 +2585,160 @@ EOF
     return &UpdateFileIfChanged ($old_db_file, $new_db_file, 0);
 }
 
+#############################################################################
+# Function    : OutputProgramDBFile
+# Description : Outputs the final DocBook file for one program.
+# Arguments   : $file - the name of the file.
+#               $section_id - the id to use for the toplevel tag.
+#############################################################################
+
+sub OutputProgramDBFile {
+    my ($program, $section_id) = @_;
+
+    @TRACE@("Output program docbook for $program\n");
+
+    my $short_desc = $SourceSymbolDocs{"$TMPL_DIR/$program:Short_Description"};
+    if (!defined ($short_desc) || $short_desc =~ m/^\s*$/) {
+        $short_desc = "";
+    } else {
+        # Don't use ConvertMarkDown here for now since we don't want blocks
+        $short_desc = &ExpandAbbreviations("$program", $short_desc);
+        @TRACE@("Found short_desc: $short_desc");
+    }
+
+    my $synopsis = $SourceSymbolDocs{"$TMPL_DIR/$program:Synopsis"};
+    if (defined ($synopsis) && $synopsis !~ m/^\s*$/) {
+        my $i;
+        my @items = split(' ', $synopsis);
+        for ($i = 0; $i <= $#items; $i++) {
+            my $parameter = $items[$i];
+            my $choice = "plain";
+            my $rep = "";
+
+            # first parameter is the command name
+            if ($i == 0) {
+                $synopsis = "<command>$parameter</command>\n";
+                next;
+            }
+
+            # square brackets indicate optional parameters, curly brackets
+            # indicate required parameters ("plain" parameters are also
+            # mandatory, but do not get extra decoration)
+            if ($parameter =~ s/^\[(.+?)\]$/$1/) {
+                $choice = "opt";
+            } elsif ($parameter =~ s/^\{(.+?)\}$/$1/) {
+                $choice = "req";
+            }
+
+            # parameters ending in "..." are repeatable
+            if ($parameter =~ s/\.\.\.$//) {
+                $rep = " rep=\"repeat\"";
+            }
+
+            # italic parameters are replaceable parameters
+            if ($parameter =~ s/\*(.+?)\*/$1/) {
+                $parameter = "<replaceable>$parameter</replaceable>";
+            }
+
+            $synopsis .= "<arg choice=\"$choice\"$rep>";
+            $synopsis .= $parameter;
+            $synopsis .= "</arg>\n";
+        }
+
+        @TRACE@("Found synopsis: $synopsis");
+    } else {
+        $synopsis = "<command>$program</command>";
+    }
+
+    my $long_desc = $SourceSymbolDocs{"$TMPL_DIR/$program:Long_Description"};
+    if (!defined ($long_desc) || $long_desc =~ m/^\s*$/) {
+        $long_desc = "";
+    } else {
+        $long_desc = &ConvertMarkDown("$program:Long_description", $long_desc);
+        @TRACE@("Found long_desc: $long_desc");
+    }
+
+    my $options = "";
+    if (defined ($SourceSymbolDocs{"$TMPL_DIR/$program:Options"})) {
+        my @opts = @{ $SourceSymbolDocs{"$TMPL_DIR/$program:Options"} };
+        my $k;
+
+        $options = "<refsect1>\n<title>Options</title>\n<variablelist>\n";
+        for ($k = 0; $k <= $#opts; $k += 2) {
+            my $opt_desc = $opts[$k+1];
+            my @opt_names;
+            my $i;
+
+            $opt_desc =~ s/\*(.+?)\*/<replaceable>$1<\/replaceable>/g;
+
+            $options .= "<varlistentry>\n<term>";
+            @opt_names = split (',', $opts[$k]);
+            for ($i = 0; $i <= $#opt_names; $i++) {
+                my $prefix = ($i > 0) ? ", " : "";
+                $opt_names[$i] =~ s/\*(.+?)\*/<replaceable>$1<\/replaceable>/g;
+
+                $options .= "$prefix<option>$opt_names[$i]</option>\n";
+            }
+            $options .= "</term>\n";
+            $options .= "<listitem><para>$opt_desc</para></listitem>\n";
+            $options .= "</varlistentry>\n";
+        }
+        $options .= "</variablelist></refsect1>\n";
+    }
+
+    my $exit_status = $SourceSymbolDocs{"$TMPL_DIR/$program:Returns"};
+    if (defined ($exit_status) && $exit_status ne "") {
+        $exit_status = &ConvertMarkDown("$program:Returns", $exit_status);
+        $exit_status = "<refsect1 id=\"$section_id.exit-status\">\n<title>Exit Status</title>\n$exit_status\n</refsect1>\n";
+    } else {
+        $exit_status = "";
+    }
+
+    my $see_also = $SourceSymbolDocs{"$TMPL_DIR/$program:See_Also"};
+    if (!defined ($see_also) || $see_also =~ m%^\s*(<para>)?\s*(</para>)?\s*$%) {
+        $see_also = "";
+    } else {
+        $see_also = &ConvertMarkDown("$program:See_Also", $see_also);
+        @TRACE@("Found see_also: $see_also");
+    }
+    if ($see_also) {
+        $see_also = "<refsect1 id=\"$section_id.see-also\">\n<title>See Also</title>\n$see_also\n</refsect1>\n";
+    }
+
+    my $old_db_file = "$DB_OUTPUT_DIR/$program.xml";
+    my $new_db_file = "$DB_OUTPUT_DIR/$program.xml.new";
+
+    open (OUTPUT, ">$new_db_file")
+        || die "Can't create $new_db_file: $!";
+
+    print OUTPUT <<EOF;
+${\( MakeDocHeader ("refentry") )}
+<refentry id="$section_id">
+<refmeta>
+<refentrytitle role="top_of_page" id="$section_id.top_of_page">$program</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo>User Commands</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>$program</refname>
+<refpurpose>$short_desc</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<cmdsynopsis>$synopsis</cmdsynopsis>
+</refsynopsisdiv>
+<refsect1 id="$section_id.description" role="desc">
+<title role="desc.title">Description</title>
+$long_desc
+</refsect1>
+$options$exit_status$see_also
+</refentry>
+EOF
+    close (OUTPUT);
+
+    return &UpdateFileIfChanged ($old_db_file, $new_db_file, 0);
+}
+
+
 
 #############################################################################
 # Function    : OutputExtraFile
@@ -4056,6 +4210,61 @@ sub ScanSourceFile {
                     $SourceSymbolSourceFile{"$TMPL_DIR/$real_symbol:Long_Description"} = $file;
                     $SourceSymbolSourceLine{"$TMPL_DIR/$real_symbol:Long_Description"} = $.;
                     #$SourceSymbolTypes{$symbol} = "SECTION";
+                } elsif ($symbol =~ m/PROGRAM:\s*(.*)/) {
+                    my $real_symbol = $1;
+                    my $key;
+                    my $section_id;
+
+                    @TRACE@("PROGRAM DOCS found in source for '$real_symbol'\n");
+                    for ($k = 0; $k <= $#params; $k += $PARAM_FIELD_COUNT) {
+                        @TRACE@("   '".$params[$k]."'\n");
+                        $params[$k] = "\L$params[$k]";
+                        undef $key;
+
+                        if ($params[$k] eq "short_description") {
+                            $key = "$TMPL_DIR/$real_symbol:Short_Description";
+                        } elsif ($params[$k] eq "see_also") {
+                            $key = "$TMPL_DIR/$real_symbol:See_Also";
+                        } elsif ($params[$k] eq "section_id") {
+                            $key = "$TMPL_DIR/$real_symbol:Section_Id";
+                        } elsif ($params[$k] eq "synopsis") {
+                            $key = "$TMPL_DIR/$real_symbol:Synopsis";
+                        } elsif ($params[$k] eq "returns") {
+                            $key = "$TMPL_DIR/$real_symbol:Returns";
+                        } elsif ($params[$k] =~ m/^(-.*)/) {
+                            $key = "$TMPL_DIR/$real_symbol:Options";
+                            my $opts;
+                            if (defined($SourceSymbolDocs{$key})) {
+                                $opts = $SourceSymbolDocs{$key};
+                            } else {
+                                $opts = [];
+                            }
+                            push (@{ $opts }, $1);
+                            push (@{ $opts }, $params[$k+1]);
+
+                            $SourceSymbolDocs{$key} = $opts;
+                            next;
+                        }
+                        if (defined($key)) {
+                            $SourceSymbolDocs{$key}=$params[$k+1];
+                            $SourceSymbolSourceFile{$key} = $file;
+                            $SourceSymbolSourceLine{$key} = $.;
+                        }
+                    }
+                    $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Long_Description"}=$description;
+                    $SourceSymbolSourceFile{"$TMPL_DIR/$real_symbol:Long_Description"} = $file;
+                    $SourceSymbolSourceLine{"$TMPL_DIR/$real_symbol:Long_Description"} = $.;
+
+                    $section_id = $SourceSymbolDocs{"$TMPL_DIR/$real_symbol:Section_Id"};
+                    if (defined ($section_id) && $section_id !~ m/^\s*$/) {
+                        # Remove trailing blanks and use as is
+                        $section_id =~ s/\s+$//;
+                    } else {
+                        $section_id = &CreateValidSGMLID ("$MODULE-$real_symbol");
+                    }
+
+                    &OutputProgramDBFile ($real_symbol, $section_id);
+
                 } else {
                     @TRACE@("SYMBOL DOCS found in source for : '$symbol' ",length($description), "\n");
                     $SourceSymbolDocs{$symbol} = $description;
@@ -4115,6 +4324,9 @@ sub ScanSourceFile {
             if (m%^\s*(SECTION:\s*\S+)%) {
                 $symbol = $1;
                 @TRACE@("SECTION DOCS found in source for : '$symbol'\n");
+            } elsif (m%^\s*(PROGRAM:\s*\S+)%) {
+                $symbol = $1;
+                @TRACE@("PROGRAM DOCS found in source for : '$symbol'\n");
             } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([-A-Za-z0-9._() ]+?\)\s*)*$%) {
                 $symbol = $1;
                 my $annotation = $2;
@@ -4186,7 +4398,7 @@ sub ScanSourceFile {
         }
 
         # Look for a parameter name.
-        if (m%^\s*@(\S+)\s*:\s*%) {
+        if (m%^\s*@(.+?)\s*:\s*%) {
             my $param_name = $1;
             my $param_desc = $';
 
