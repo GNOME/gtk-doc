@@ -183,14 +183,14 @@ sub ScanDirectory {
             # debian/ubuntu started to compress this as index.sgml.gz :/
             print <<EOF;
 Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
-gunzip $file
+gunzip $dir/$file
 EOF
         }
         elsif ($file =~ m/\.devhelp2.gz$/) {
             # debian/ubuntu started to compress this as *devhelp2.gz :/
             print <<EOF;
 Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
-gunzip $file
+gunzip $dir/$file
 EOF
         }
         # we could consider supporting: use IO::Zlib;
