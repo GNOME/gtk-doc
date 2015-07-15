@@ -1872,6 +1872,41 @@ endif
         has all the details.
       </para>
     </sect1>
+
+    <sect1 id="modernizing-gtk-doc-1-25">
+      <title>GTK-Doc 1.25</title>
+
+      <para>
+        The makefiles shipped with this version generate an entity file at <filename>xml/gtkdocentities.ent</filename>,
+        containing entities for e.g. package_name and package_version. You can
+        use this e.g. in the main xml file to avoid hardcoding the version
+        number. Below is any example that shows how the entity file is included
+        and how the entities are used. The entities can also be used in all
+        generated files, GTK-Doc will use the same xml header in generated xml
+        files.
+        <example><title>Use pre-generated entities</title>
+          <programlisting><![CDATA[
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+  <!ENTITY % gtkdocentities SYSTEM "xml/gtkdocentities.ent">
+  %gtkdocentities;
+]>
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <bookinfo>
+    <title>&package_name; Reference Manual</title>
+    <releaseinfo>
+      for &package_string;.
+      The latest version of this documentation can be found on-line at
+      <ulink role="online-location" url="http://[SERVER]/&package_name;/index.html">http://[SERVER]/&package_name;/</ulink>.
+    </releaseinfo>
+  </bookinfo>
+]]></programlisting>
+        </example>
+      </para>
+    </sect1>
   </chapter>
 
   <chapter id="documenting-others">
