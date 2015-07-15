@@ -143,7 +143,7 @@ sgml.stamp: sgml-build.stamp
 	@true
 
 xml/gtkdocentities.ent: Makefile
-	$(GTK_DOC_V_XML)$(MKDIR_P) $(@D) && ( \
+	@$(MKDIR_P) $(@D) && ( \
 		echo "<!ENTITY package \"$(PACKAGE)\">"; \
 		echo "<!ENTITY package_bugreport \"$(PACKAGE_BUGREPORT)\">"; \
 		echo "<!ENTITY package_name \"$(PACKAGE_NAME)\">"; \
