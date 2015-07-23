@@ -144,7 +144,7 @@ GTK_DOC_V_TMPL=$(GTK_DOC_V_TMPL_$(V))
 GTK_DOC_V_TMPL_=$(GTK_DOC_V_TMPL_$(AM_DEFAULT_VERBOSITY))
 GTK_DOC_V_TMPL_0=@echo "  DOC   Rebuilding template files";
 
-tmpl-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
+tmpl-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(HFILE_GLOB) $(CFILE_GLOB) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
 	$(GTK_DOC_V_TMPL)gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
 	$(AM_V_at)if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	  if test -w $(abs_srcdir) ; then \
