@@ -365,18 +365,19 @@ EOF
         $doctype_header = "";
         while (<INPUT>) {
             if (/^\s*<(book|chapter|article)/) {
-                # check that the top-level tag or the doctype decl contain the xinclude namespace decl
+                # check that the top-level tagSYSTEM or the doctype decl contain the xinclude namespace decl
                 if (($_ !~ m/http:\/\/www.w3.org\/200[13]\/XInclude/) && ($doctype_header !~ m/http:\/\/www.w3.org\/200[13]\/XInclude/m)) {
                     $doctype_header = "";
                 }
                 last;
             }
+            # if there are SYSTEM ENTITIES here, we should prepend "../" to the path
+            # FIXME: not sure if we can do this now, as people already work-around the problem
+            # s#<!ENTITY % ([a-zA-Z-]+) SYSTEM \"([^/][a-zA-Z./]+)\">#<!ENTITY % $1 SYSTEM \"../$2\">#;
+            s#<!ENTITY % gtkdocentities SYSTEM \"([^"]*)\">#<!ENTITY % gtkdocentities SYSTEM \"../$1\">#;
             $doctype_header .= $_;
         }
         close(INPUT);
-        # if there are SYSTEM ENTITIES here, we should prepend "../" to the path
-        # FIXME: not sure if we can do this now, as people already work-around the problem
-        # $doctype_header =~ s#<!ENTITY % ([a-zA-Z-]+) SYSTEM \"([^/][a-zA-Z./]+)\">#<!ENTITY % $1 SYSTEM \"../$2\">#g;
     } else {
         $doctype_header = <<EOF;
 <?xml version="1.0"?>
