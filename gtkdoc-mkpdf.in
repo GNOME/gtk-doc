@@ -19,7 +19,7 @@ EOF
 
 cleanexit() {
     rm -f $module.fo
-    exit $1
+    exit 1
 }
 
 # parse options, ignore unknown options for future extensions
@@ -34,8 +34,8 @@ while true; do
         X--help) usage; exit 0;;
         X--uninstalled) uninstalled=yes; shift;;
         X--verbose) verbose="1"; shift;;
-        X--path=*) searchpath=`echo $1 | sed s/.*=//`; shift;;
-        X--imgdir=*) imgdirs="$imgdirs -I `echo $1 | sed s/.*=//`"; shift;;
+        X--path=*) searchpath=`echo "$1" | sed s/.*=//`; shift;;
+        X--imgdir=*) imgdirs="$imgdirs -I `echo "$1" | sed s/.*=//`"; shift;;
         X--*) shift;;
         X*) break;;
     esac
@@ -46,9 +46,9 @@ if test $# -lt 2; then
     exit 1
 fi
 
-module=$1
+module="$1"
 shift
-document=$1
+document="$1"
 shift
 
 quiet="1"
@@ -96,7 +96,7 @@ if $is_xml; then
       # -P abc.def=$quiet : once the stylesheets have a quiet mode
       # xsltproc is already called with --xinclude
       # does not work: --xslt-opts "$path_arg --nonet $@"
-      dblatex_options="-o $module.pdf $imgdirs $document"
+      dblatex_options="-o $module.pdf $imgdirs \"$document\""
       #echo "calling: @DBLATEX@ $dblatex_options"
       if test $verbose = "0"; then
           @DBLATEX@ 2>&1 --help | grep  >/dev/null "\-\-quiet"
@@ -114,7 +114,7 @@ if $is_xml; then
             --stringparam gtkdoc.version "@VERSION@" \
             --stringparam chunk.quietly $quiet \
             --stringparam chunker.output.quiet $quiet \
-            "$@" -o $module.fo $gtkdocdir/gtk-doc-fo.xsl $document || cleanexit $?
+            "$@" -o $module.fo $gtkdocdir/gtk-doc-fo.xsl "$document" || cleanexit $?
         # fop dies too easily :(
         # @FOP@ $module.fo $module.pdf
     else
@@ -125,7 +125,7 @@ if $is_xml; then
 else
     # not very good output
     # also for xxx-docs.sgml it will produce xxx-docs.pdf
-    docbook2pdf -e no-valid $document
+    docbook2pdf -e no-valid "$document"
 fi
 
 echo "timestamp" > pdf.stamp

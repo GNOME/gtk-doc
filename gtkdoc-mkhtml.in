@@ -27,7 +27,7 @@ while true; do
         X--help) usage; exit 0;;
         X--uninstalled) uninstalled=yes; shift;;
         X--verbose) verbose="1"; shift;;
-        X--path=*) searchpath=`echo $1 | sed s/.*=//`; shift;;
+        X--path=*) searchpath=`echo "$1" | sed s/.*=//`; shift;;
         X--*) shift;;
         X*) break;;
     esac
@@ -38,9 +38,9 @@ if test $# -lt 2; then
     exit 1
 fi
 
-module=$1
+module="$1"
 shift
-document=$1
+document="$1"
 shift
 
 quiet="1"
@@ -86,13 +86,13 @@ fi
 #echo @XSLTPROC@ $path_arg --nonet --xinclude \
 #    --stringparam gtkdoc.bookname $module \
 #    --stringparam gtkdoc.version "@VERSION@" \
-#    "$@" $gtkdocdir/gtk-doc.xsl $document
+#    "$@" $gtkdocdir/gtk-doc.xsl "$document"
 @XSLTPROC@ 2>profile.txt $profile_args $path_arg --nonet --xinclude \
     --stringparam gtkdoc.bookname $module \
     --stringparam gtkdoc.version "@VERSION@" \
     --stringparam chunk.quietly $quiet \
     --stringparam chunker.output.quiet $quiet \
-    "$@" $gtkdocdir/gtk-doc.xsl $document || exit $?
+    "$@" $gtkdocdir/gtk-doc.xsl "$document" || exit $?
 
 # profiling
 if test "$GTKDOC_PROFILE" != ""; then
