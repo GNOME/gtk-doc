@@ -4280,8 +4280,6 @@ sub OutputMissingDocumentation {
         }
     }
 
-    $buffer .= "\n" . $buffer_deprecated . "\n" . $buffer_descriptions;
-
     if ($total == 0) {
       $percent = 100;
     } else {
@@ -4291,9 +4289,17 @@ sub OutputMissingDocumentation {
     printf UNDOCUMENTED "%.0f%% symbol docs coverage.\n", $percent;
     print UNDOCUMENTED "$n_documented symbols documented.\n";
     print UNDOCUMENTED "$n_incomplete symbols incomplete.\n";
-    print UNDOCUMENTED ($total - $n_documented) . " not documented.\n\n\n";
+    print UNDOCUMENTED ($total - $n_documented) . " not documented.\n";
 
-    print UNDOCUMENTED $buffer;
+    if ($buffer_deprecated ne "") {
+      $buffer .= "\n" . $buffer_deprecated;
+    }
+    if ($buffer_descriptions ne "") {
+      $buffer .= "\n" . $buffer_descriptions;
+    }
+    if ($buffer ne "") {
+      print UNDOCUMENTED "\n\n$buffer";
+    }
     close (UNDOCUMENTED);
 
     return &UpdateFileIfChanged ($old_undocumented_file, $new_undocumented_file, 0);
