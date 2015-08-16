@@ -1727,7 +1727,7 @@ EOF
             my $field_descr = $field_descrs{$field_name};
             my $param_annotations = "";
 
-            $desc .= "<row><entry role=\"struct_member_name\"><para>$text</para></entry>\n";
+            $desc .= "<row role=\"member\"><entry role=\"struct_member_name\"><para>$text</para></entry>\n";
             if (defined $field_descr) {
                 ($field_descr,$param_annotations) = &ExpandAnnotation($symbol, $field_descr);
                 $field_descr = &ConvertMarkDown($symbol, $field_descr);
