@@ -63,6 +63,8 @@ my %NoLinks = (
     'GInterface' => 1
 );
 
+# Cache of dirs we already scanned for index files
+my %DirCache;
 
 run() unless caller; # Run program unless loaded as a module
 
@@ -167,6 +169,8 @@ EOF
     # check all extra dirs, but skip already scanned dirs or subdirs of those
     foreach my $dir (@EXTRA_DIRS) {
         my $vdir;
+
+        $dir =~ s#/$##;
         @TRACE@("Scanning EXTRA_DIR directory: $dir");
     
         # If the --extra-dir option is not relative and is not sharing the same
@@ -188,6 +192,11 @@ EOF
 sub ScanIndices {
     my ($scan_dir, $use_absolute_links) = @_;
     
+    if (exists $DirCache{$scan_dir}) {
+        return;
+    }
+    $DirCache{$scan_dir} = 1;
+
     @TRACE@("Scanning source directory: $scan_dir absolute: $use_absolute_links");
 
     # This array holds any subdirectories found.
