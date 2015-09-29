@@ -1672,9 +1672,35 @@ gtk_arrow_get_type
       </para>
 
       <para>
-        The section file is a plain text file with XML-like syntax (using tags).
+        The section file is a plain text file with tags delimiting sections.
         Blank lines are ignored and lines starting with a '#' are treated as
         comment lines.
+      </para>
+      
+      <note>
+        <para>
+          While the tags make the file look like xml, it is not. Please do not
+          close tags like &lt;SUBSECTION&gt;.
+        </para>
+      </note>
+
+      <para>
+        <example><title>Including generated sections</title>
+          <programlisting><![CDATA[
+<INCLUDE>libmeep/meep.h</INCLUDE>
+
+<SECTION>
+<FILE>meepapp</FILE>
+<TITLE>MeepApp</TITLE>
+MeepApp
+<SUBSECTION Standard>
+MEEP_APP
+...
+MeepAppClass
+meep_app_get_type
+</SECTION>
+]]></programlisting>
+        </example>
       </para>
 
       <para>
