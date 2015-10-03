@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2015-09-23 13:04+0300\n"
-"PO-Revision-Date: 2015-09-23 13:13+0300\n"
+"POT-Creation-Date: 2015-09-29 20:05+0000\n"
+"PO-Revision-Date: 2015-10-03 13:52+0300\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.5\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
@@ -2829,7 +2829,7 @@ msgstr ""
 "έγγραφο."
 
 #. (itstool) path: example/title
-#: C/index.docbook:1653
+#: C/index.docbook:1653 C/index.docbook:1688
 msgid "Including generated sections"
 msgstr "Συμπερίληψη των δημιουργούμενων ενοτήτων"
 
@@ -2868,16 +2868,56 @@ msgstr ""
 #. (itstool) path: sect1/para
 #: C/index.docbook:1674
 msgid ""
-"The section file is a plain text file with XML-like syntax (using tags). "
-"Blank lines are ignored and lines starting with a '#' are treated as comment "
-"lines."
+"The section file is a plain text file with tags delimiting sections. Blank "
+"lines are ignored and lines starting with a '#' are treated as comment lines."
 msgstr ""
-"Το αρχείο ενοτήτων είναι ένα αρχείο απλού κειμένου με σύνταξη παρόμοια με "
-"XML (χρησιμοποιώντας ετικέτες). Οι κενές γραμμές αγνοούνται, ενώ οι γραμμές "
-"που ξεκινούν με '#' αντιμετωπίζονται ως γραμμές σχολίων."
+"Το αρχείο ενοτήτων είναι ένα αρχείο απλού κειμένου με ετικέτες οριοθετημένων "
+"περιοχών. Οι κενές γραμμές αγνοούνται, ενώ οι γραμμές που ξεκινούν με '#' "
+"αντιμετωπίζονται ως γραμμές σχολίων."
+
+#. (itstool) path: note/para
+#: C/index.docbook:1681
+msgid ""
+"While the tags make the file look like xml, it is not. Please do not close "
+"tags like &lt;SUBSECTION&gt;."
+msgstr ""
+"Ενώ οι ετικέτες δείχνουν πως είναι ένα αρχείο xml, στην πραγματικότητα δεν "
+"είναι. Παρακαλούμε μην κλείνετε τις ετικέτες όπως &lt;SUBSECTION&gt;."
+
+#. (itstool) path: example/programlisting
+#: C/index.docbook:1689
+#, no-wrap
+msgid ""
+"\n"
+"&lt;INCLUDE&gt;libmeep/meep.h&lt;/INCLUDE&gt;\n"
+"\n"
+"&lt;SECTION&gt;\n"
+"&lt;FILE&gt;meepapp&lt;/FILE&gt;\n"
+"&lt;TITLE&gt;MeepApp&lt;/TITLE&gt;\n"
+"MeepApp\n"
+"&lt;SUBSECTION Standard&gt;\n"
+"MEEP_APP\n"
+"...\n"
+"MeepAppClass\n"
+"meep_app_get_type\n"
+"&lt;/SECTION&gt;\n"
+msgstr ""
+"\n"
+"&lt;INCLUDE&gt;libmeep/meep.h&lt;/INCLUDE&gt;\n"
+"\n"
+"&lt;SECTION&gt;\n"
+"&lt;FILE&gt;meepapp&lt;/FILE&gt;\n"
+"&lt;TITLE&gt;MeepApp&lt;/TITLE&gt;\n"
+"MeepApp\n"
+"&lt;SUBSECTION Standard&gt;\n"
+"MEEP_APP\n"
+"...\n"
+"MeepAppClass\n"
+"meep_app_get_type\n"
+"&lt;/SECTION&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1680
+#: C/index.docbook:1706
 msgid ""
 "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
 "without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
@@ -2900,7 +2940,7 @@ msgstr ""
 "κλάσης GObjects που μετατράπηκε σε πεζά γράμματα)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1692
+#: C/index.docbook:1718
 msgid ""
 "The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of the "
 "section. It is only useful before the templates (if used) are initially "
@@ -2914,7 +2954,7 @@ msgstr ""
 "αυτό είναι παρωχημένο."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1699
+#: C/index.docbook:1725
 msgid ""
 "You can group items in the section by using the &lt;SUBSECTION&gt; tag. "
 "Currently it outputs a blank line between subsections in the synopsis "
@@ -2946,7 +2986,7 @@ msgstr ""
 "(μεταβλητές,vmethods)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1718
+#: C/index.docbook:1744
 msgid ""
 "You can also use &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; to specify the "
 "#include files which are shown in the synopsis sections. It contains a comma-"
@@ -2963,12 +3003,12 @@ msgstr ""
 "μόνο τη συγκεκριμένη ενότητα. "
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1732
+#: C/index.docbook:1758
 msgid "Controlling the result"
 msgstr "Έλεγχος αποτελέσματος"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1734
+#: C/index.docbook:1760
 msgid ""
 "A GTK-Doc run generates report files inside the documentation directory. The "
 "generated files are named: <filename>&lt;package&gt;-undocumented.txt</"
@@ -2983,7 +3023,7 @@ msgstr ""
 "filename>. Είναι αρχεία απλού κειμένου, εύκολα στην ανάγνωση και επεξεργασία."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1743
+#: C/index.docbook:1769
 msgid ""
 "The <filename>&lt;package&gt;-undocumented.txt</filename> file starts with "
 "the documentation coverage summary. Below are two sections divided by blank "
@@ -3000,7 +3040,7 @@ msgstr ""
 "προστέθηκε μια νέα παράμετρος."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1752
+#: C/index.docbook:1778
 msgid ""
 "The <filename>&lt;package&gt;-undeclared.txt</filename> file lists symbols "
 "given in the <filename>&lt;package&gt;-sections.txt</filename> but not found "
@@ -3012,7 +3052,7 @@ msgstr ""
 "έχουν αφαιρεθεί ή αν περιέχουν συντακτικά λάθη."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1759
+#: C/index.docbook:1785
 msgid ""
 "The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol names, "
 "where the GTK-Doc scanner has found documentation, but does not know where "
@@ -3025,7 +3065,7 @@ msgstr ""
 "προστεθεί ακόμη στο αρχείο <filename>&lt;package&gt;-sections.txt</filename>."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:1767
+#: C/index.docbook:1793
 msgid ""
 "Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
 "am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during "
@@ -3037,7 +3077,7 @@ msgstr ""
 "<command>make check</command>."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1774
+#: C/index.docbook:1800
 msgid ""
 "One can also look at the files produced by the source code scanner: "
 "<filename>&lt;package&gt;-decl-list.txt</filename> and <filename>&lt;"
@@ -3054,7 +3094,7 @@ msgstr ""
 "περιέχεται σε αυτό το αρχείο."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1783
+#: C/index.docbook:1809
 msgid ""
 "If the project is GObject based, one can also look into the files produced "
 "by the object scanner: <filename>&lt;package&gt;.args.txt</filename>, "
@@ -3076,12 +3116,12 @@ msgstr ""
 "<command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1798
+#: C/index.docbook:1824
 msgid "Modernizing the documentation"
 msgstr "Εκσυγχρονίζοντας την τεκμηρίωση"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1800
+#: C/index.docbook:1826
 msgid ""
 "GTK-Doc has been around for quite some time. In this section we list new "
 "features together with the version since when it is available."
@@ -3091,12 +3131,12 @@ msgstr ""
 "διαθέσιμες."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1806
+#: C/index.docbook:1832
 msgid "GTK-Doc 1.9"
 msgstr "GTK-Doc 1.9"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1808
+#: C/index.docbook:1834
 msgid ""
 "When using xml instead of sgml, one can actually name the master document "
 "<filename>&lt;package&gt;-docs.xml</filename>."
@@ -3105,7 +3145,7 @@ msgstr ""
 "το κύριο έγγραφο <filename>&lt;package&gt;-docs.xml</filename>."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1813
+#: C/index.docbook:1839
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-sections</option> in "
 "<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
@@ -3127,7 +3167,7 @@ msgstr ""
 "sections.txt</code>."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1824
+#: C/index.docbook:1850
 msgid ""
 "Version 1.8 already introduced the syntax for documenting sections in the "
 "sources instead of the separate files under <filename class=\"directory"
@@ -3149,12 +3189,12 @@ msgstr ""
 "filename> και τελειώσατε."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1836
+#: C/index.docbook:1862
 msgid "GTK-Doc 1.10"
 msgstr "GTK-Doc 1.10"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1838
+#: C/index.docbook:1864
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-types</option> in "
 "<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
@@ -3171,17 +3211,17 @@ msgstr ""
 "am</filename> για τον κώδικα που δομείται υπό όρους."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1849
+#: C/index.docbook:1875
 msgid "GTK-Doc 1.16"
 msgstr "GTK-Doc 1.16"
 
 #. (itstool) path: example/title
-#: C/index.docbook:1855
+#: C/index.docbook:1881
 msgid "Enable gtkdoc-check"
 msgstr "Ενεργοποίηση του gtkdoc-check"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1856
+#: C/index.docbook:1882
 #, no-wrap
 msgid ""
 "\n"
@@ -3201,7 +3241,7 @@ msgstr ""
 "endif\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1851
+#: C/index.docbook:1877
 msgid ""
 "This version includes a new tool called gtkdoc-check. This tool can run a "
 "set of sanity checks on your documentation. It is enabled by adding these "
@@ -3213,12 +3253,12 @@ msgstr ""
 "<filename>Makefile.am</filename>. <_:example-1/>"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1869
+#: C/index.docbook:1895
 msgid "GTK-Doc 1.20"
 msgstr "GTK-Doc 1.20"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1871
+#: C/index.docbook:1897
 msgid ""
 "Version 1.18 brought some initial markdown support. Using markdown in doc "
 "comments is less intrusive than writing docbook xml. This version improves a "
@@ -3232,17 +3272,17 @@ msgstr ""
 "\">σύνταξη σχολίων</link> έχει όλες τις λεπτομέρειες."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1881
+#: C/index.docbook:1907
 msgid "GTK-Doc 1.25"
 msgstr "GTK-Doc 1.25"
 
 #. (itstool) path: example/title
-#: C/index.docbook:1891
+#: C/index.docbook:1917
 msgid "Use pre-generated entities"
 msgstr "Χρήση προδημιουργημένων οντοτήτων"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1892
+#: C/index.docbook:1918
 #, no-wrap
 msgid ""
 "\n"
@@ -3284,7 +3324,7 @@ msgstr ""
 "  &lt;/bookinfo&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1883
+#: C/index.docbook:1909
 msgid ""
 "The makefiles shipped with this version generate an entity file at "
 "<filename>xml/gtkdocentities.ent</filename>, containing entities for e.g. "
@@ -3305,12 +3345,12 @@ msgstr ""
 "xml σε όλα τα δημιουργημένα αρχεία xml. <_:example-1/>"
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1917
+#: C/index.docbook:1943
 msgid "Documenting other interfaces"
 msgstr "Τεκμηρίωση άλλων διεπαφών"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1919
+#: C/index.docbook:1945
 msgid ""
 "So far we have been using GTK-Doc to document the API of code. The next "
 "sections contain suggestions how the tools can be used to document other "
@@ -3321,12 +3361,12 @@ msgstr ""
 "μπορούν να χρησιμοποιηθούν για να καταγράφετε και άλλες διεπαφές."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1926
+#: C/index.docbook:1952
 msgid "Command line options and man pages"
 msgstr "Επιλογές γραμμής εντολών και σελίδες τεκμηρίωσης man"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1928
+#: C/index.docbook:1954
 msgid ""
 "As one can generate man pages for a docbook refentry as well, it sounds like "
 "a good idea to use it for that purpose. This way the interface is part of "
@@ -3338,12 +3378,12 @@ msgstr ""
 "δωρεάν την σελίδα-man."
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:1935
+#: C/index.docbook:1961
 msgid "Document the tool"
 msgstr "Τεκμηρίωση του εργαλείου"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:1937
+#: C/index.docbook:1963
 msgid ""
 "Create one refentry file per tool. Following <link linkend="
 "\"settingup_docfiles\">our example</link> we would call it <filename>meep/"
@@ -3358,17 +3398,17 @@ msgstr ""
 "αρχείο στον υποκατάλογο xml καθώς επίσης και τα παραδείγματα π.χ. στο glib."
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:1947
+#: C/index.docbook:1973
 msgid "Adding the extra configure check"
 msgstr "Προσθήκη του έξτρα ελέγχου διαμόρφωσης"
 
 #. (itstool) path: example/title
-#: C/index.docbook:1950 C/index.docbook:1968
+#: C/index.docbook:1976 C/index.docbook:1994
 msgid "Extra configure checks"
 msgstr "Επιπλέον έλεγχοι ρυθμίσεων"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1951
+#: C/index.docbook:1977
 #, no-wrap
 msgid ""
 "\n"
@@ -3390,12 +3430,12 @@ msgstr ""
 "AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)\n"
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:1965
+#: C/index.docbook:1991
 msgid "Adding the extra makefile rules"
 msgstr "Προσθήκη των επιπλέον κανόνων makefile"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1969
+#: C/index.docbook:1995
 #, no-wrap
 msgid ""
 "\n"
@@ -3431,12 +3471,12 @@ msgstr ""
 "EXTRA_DIST += meep.xml\n"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1991
+#: C/index.docbook:2017
 msgid "DBus interfaces"
 msgstr "Διεπαφές DBus"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1993
+#: C/index.docbook:2019
 msgid ""
 "(FIXME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://"
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
@@ -3445,27 +3485,27 @@ msgstr ""
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:2002
+#: C/index.docbook:2028
 msgid "Frequently asked questions"
 msgstr "Συχνές ερωτήσεις"
 
 #. (itstool) path: segmentedlist/segtitle
-#: C/index.docbook:2006
+#: C/index.docbook:2032
 msgid "Question"
 msgstr "Ερώτηση"
 
 #. (itstool) path: segmentedlist/segtitle
-#: C/index.docbook:2007
+#: C/index.docbook:2033
 msgid "Answer"
 msgstr "Απάντηση"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2009
+#: C/index.docbook:2035
 msgid "No class hierarchy."
 msgstr "Δεν υπάρχει ιεραρχία κλάσεων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2010
+#: C/index.docbook:2036
 msgid ""
 "The objects <function>xxx_get_type()</function> function has not been "
 "entered into the <filename>&lt;package&gt;.types</filename> file."
@@ -3474,12 +3514,12 @@ msgstr ""
 "εισαχθεί στο αρχείο <filename>&lt;package&gt;.types</filename>"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2016
+#: C/index.docbook:2042
 msgid "Still no class hierarchy."
 msgstr "Εξακολουθεί να μην υπάρχει ιεραρχία κλάσεων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2017
+#: C/index.docbook:2043
 msgid ""
 "Missing or wrong naming in <filename>&lt;package&gt;-sections.txt</filename> "
 "file (see <ulink url=\"http://mail.gnome.org/archives/gtk-doc-list/2003-"
@@ -3490,12 +3530,12 @@ msgstr ""
 "doc-list/2003-October/msg00006.html\">αιτιολόγηση</ulink>)."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2023
+#: C/index.docbook:2049
 msgid "Damn, I have still no class hierarchy."
 msgstr "Στο καλό του, πάλι δεν έχω ιεραρχία κλάσεων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2024
+#: C/index.docbook:2050
 msgid ""
 "Is the object name (name of the instance struct, e.g. <type>GtkWidget</"
 "type>) part of the normal section (don't put this into Standard or Private "
@@ -3507,12 +3547,12 @@ msgstr ""
 "Private)."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2031
+#: C/index.docbook:2057
 msgid "No symbol index."
 msgstr "Δεν υπάρχει ευρετήριο συμβόλων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2032
+#: C/index.docbook:2058
 msgid ""
 "Does the <filename>&lt;package&gt;-docs.{xml,sgml}</filename> contain a "
 "index that xi:includes the generated index?"
@@ -3521,14 +3561,14 @@ msgstr ""
 "ευρετήριο το οποίο περιλαμβάνει με xi:includes το παραγόμενο ευρετήριο;"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2038
+#: C/index.docbook:2064
 msgid "Symbols are not linked to their doc-section."
 msgstr ""
 "Δεν υπάρχουν σύνδεσμοι μεταξύ των συμβόλων και των κατάλληλων ενοτήτων της "
 "τεκμηρίωσης."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2039
+#: C/index.docbook:2065
 msgid ""
 "Is the doc-comment using the correct markup (added #,% or ())? Check if the "
 "gtkdoc-fixxref warns about unresolvable xrefs."
@@ -3537,12 +3577,12 @@ msgstr ""
 "()); Ελέγξτε αν το gtkdoc-fixxref προειδοποιεί για ανεπίλυτα xrefs."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2045
+#: C/index.docbook:2071
 msgid "A new class does not appear in the docs."
 msgstr "Μια νέα κλάση δεν εμφανίζεται στην τεκμηρίωση."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2046
+#: C/index.docbook:2072
 msgid ""
 "Is the new page xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</"
 "filename>."
@@ -3551,12 +3591,12 @@ msgstr ""
 "docs.{xml,sgml}</filename>;"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2052
+#: C/index.docbook:2078
 msgid "A new symbol does not appear in the docs."
 msgstr "Ένα νέο σύμβολο δεν εμφανίζεται στην τεκμηρίωση."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2053
+#: C/index.docbook:2079
 msgid ""
 "Is the doc-comment properly formatted. Check for spelling mistakes in the "
 "begin of the comment. Check if the gtkdoc-fixxref warns about unresolvable "
@@ -3569,12 +3609,12 @@ msgstr ""
 "<filename>&lt;package&gt;-sections.txt</filename> σε μια δημόσια υποενότητα."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2061
+#: C/index.docbook:2087
 msgid "A type is missing from the class hierarchy."
 msgstr "Λείπει ένας τύπος από την ιεραρχία κλάσεων."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2062
+#: C/index.docbook:2088
 msgid ""
 "If the type is listed in <filename>&lt;package&gt;.hierarchy</filename> but "
 "not in <filename>xml/tree_index.sgml</filename> then double check that the "
@@ -3590,12 +3630,12 @@ msgstr ""
 "εμφανιστεί."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2071
+#: C/index.docbook:2097
 msgid "I get foldoc links for all gobject annotations."
 msgstr "Λαμβάνω συνδέσμους foldoc για όλες τις σημειώσεις gobject."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2072
+#: C/index.docbook:2098
 msgid ""
 "Check that <filename>xml/annotation-glossary.xml</filename> is xi:included "
 "from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
@@ -3604,13 +3644,13 @@ msgstr ""
 "included από το <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2080
+#: C/index.docbook:2106
 msgid "Parameter described in source code comment block but does not exist"
 msgstr ""
 "Μια παράμετρος περιγράφεται σε σχόλιο του πηγαίου κώδικα, αλλά δεν υπάρχει"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2081
+#: C/index.docbook:2107
 msgid ""
 "Check if the prototype in the header has different parameter names as in the "
 "source."
@@ -3619,12 +3659,12 @@ msgstr ""
 "παράμετρο από αυτό που αναφέρεται στον κώδικα."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2086
+#: C/index.docbook:2112
 msgid "multiple \"IDs\" for constraint linkend: XYZ"
 msgstr "Πολλαπλά \"Αναγνωριστικά\" για τον προορισμό συνδέσμου: XYZ"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2087
+#: C/index.docbook:2113
 msgid ""
 "Symbol XYZ appears twice in <filename>&lt;package&gt;-sections.txt</"
 "filename> file."
@@ -3633,7 +3673,7 @@ msgstr ""
 "sections.txt</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2090
+#: C/index.docbook:2116
 msgid ""
 "Element typename in namespace '' encountered in para, but no template "
 "matches."
@@ -3642,12 +3682,12 @@ msgstr ""
 "αντιστοιχεί σε κανένα πρότυπο."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:2097
+#: C/index.docbook:2123
 msgid "Tools related to gtk-doc"
 msgstr "Εργαλεία σχετικά με το gtk-doc"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:2099
+#: C/index.docbook:2125
 msgid ""
 "GtkDocPlugin - a <ulink url=\"http://trac-hacks.org/wiki/GtkDocPlugin\">Trac "
 "GTK-Doc</ulink> integration plugin, that adds API docs to a trac site and "
@@ -3658,7 +3698,7 @@ msgstr ""
 "ιστοσελίδες trac και ενσωματώνεται με την αναζήτηση trac."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:2104
+#: C/index.docbook:2130
 msgid ""
 "Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since "
 "tags in the API to determine the minimum required version."
