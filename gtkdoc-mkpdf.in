@@ -96,7 +96,7 @@ if $is_xml; then
       # -P abc.def=$quiet : once the stylesheets have a quiet mode
       # xsltproc is already called with --xinclude
       # does not work: --xslt-opts "$path_arg --nonet $@"
-      dblatex_options="-o $module.pdf $imgdirs \"$document\""
+      dblatex_options="-o $module.pdf $imgdirs $document"
       #echo "calling: @DBLATEX@ $dblatex_options"
       if test $verbose = "0"; then
           @DBLATEX@ 2>&1 --help | grep  >/dev/null "\-\-quiet"
