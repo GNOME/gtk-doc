@@ -33,9 +33,11 @@ tested=`expr $tested + 1`
 nok=0
 for path in $dir/*/docs; do
   if test ! -s $path/tester.pdf ; then
-    if ! grep "must be installed to use gtkdoc-mkpdf" $path/gtkdoc-mkpdf.log; then
-      echo 1>&2 "no or empty $path/tester.pdf"
-      nok=`expr $nok + 1`; break;
+    if test -s $path/gtkdoc-mkpdf.log; then
+      if ! grep >/dev/null 2>&1 "must be installed to use gtkdoc-mkpdf" $path/gtkdoc-mkpdf.log; then
+        echo 1>&2 "no or empty $path/tester.pdf"
+        nok=`expr $nok + 1`; break;
+      fi
     fi
   fi
 done
