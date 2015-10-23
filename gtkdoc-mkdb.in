@@ -5432,15 +5432,22 @@ sub MarkDownOutputDocBook {
       $text = &MarkDownParseLines ($block->{"lines"}, $symbol, "quote");
       $output .= "<blockquote>\n$text</blockquote>\n";
     } elsif ($block->{"type"} eq "code") {
+      my $tag = "programlisting";
+
       if ($block->{"language"}) {
-        $output .= "<informalexample><programlisting language=\"" . $block->{"language"} . "\"><![CDATA[\n";
+        if ($block->{"language"} eq "plain") {
+          $output .= "<informalexample><screen><![CDATA[\n";
+          $tag = "screen";
+        } else {
+          $output .= "<informalexample><programlisting language=\"" . $block->{"language"} . "\"><![CDATA[\n";
+        }
       } else {
         $output .= "<informalexample><programlisting><![CDATA[\n";
       }
       foreach (@{$block->{"lines"}}) {
         $output .= &ReplaceEntities ($_, $symbol) . "\n";
       }
-      $output .= "]]></programlisting></informalexample>\n";
+      $output .= "]]></$tag></informalexample>\n";
     } elsif ($block->{"type"} eq "markup") {
       $text = &ExpandAbbreviations($symbol, $block->{"text"});
       $output .= $text."\n";

@@ -134,6 +134,11 @@
  *
  * <http://www.gnome.org/>
  *
+ * |[<!-- language="plain" -->
+ * switch
+ *  │
+ *  ╰── slider
+ * ]|
  */
 
 /**
