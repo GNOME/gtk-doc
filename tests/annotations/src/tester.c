@@ -64,6 +64,24 @@ annotation_nullable (const gchar *uri,
 }
 
 /**
+ * annotation_not_nullable:
+ * @uri: a uri
+ * @label: (not nullable): a non-optional string, which is used in ways too
+ *  complicated to describe in a single line, making it necessary to wrap it
+ *
+ * Document non-nullable parameters.
+ *
+ * Returns: (transfer full) (not nullable): Returns stuff which you have to
+ *  free after use, whose description is also rather long
+ */
+gchar *
+annotation_not_nullable (const gchar *uri,
+                         const gchar *label)
+{
+  return NULL;
+}
+
+/**
  * annotation_elementtype:
  * @list: (element-type GObject): list of #GObject instances to search
  *
@@ -148,16 +166,46 @@ annotation_outparams_nullable (GList **list)
 }
 
 /**
- * annotation_outparams_optional_nullable:
- * @list: (out) (transfer none) (optional) (nullable): a pointer to take a
- * list, or %NULL; but %NULL may also be returned in @list — isn’t that cool?
+ * annotation_outparams_not_nullable:
+ * @list: (out) (transfer none) (not nullable): a pointer to take a list; %NULL
+ *    must not be returned
  *
  * Document optional parameters.
  *
  * Returns: %TRUE for success
  */
 gboolean
+annotation_outparams_not_nullable (GList **list)
+{
+  return TRUE;
+}
+
+/**
+ * annotation_outparams_optional_nullable:
+ * @list: (out) (transfer none) (optional) (nullable): a pointer to take a
+ * list, or %NULL; but %NULL may also be returned in @list — isn’t that cool?
+ *
+ * Document non-optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
 annotation_outparams_optional_nullable (GList **list)
+{
+  return TRUE;
+}
+
+/**
+ * annotation_outparams_optional_not_nullable:
+ * @list: (out) (transfer none) (optional) (not nullable): a pointer to take a
+ * list, not %NULL; and %NULL must not be returned in @list — isn’t that cool?
+ *
+ * Document non-optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_outparams_optional_not_nullable (GList **list)
 {
   return TRUE;
 }

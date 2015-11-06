@@ -18,6 +18,7 @@ void annotation_array_length (GObject *list, gint n_columns, GType *types);
 
 gchar * annotation_allow_none (const gchar *uri, const gchar *label);
 gchar * annotation_nullable (const gchar *uri, const gchar *label);
+gchar * annotation_not_nullable (const gchar *uri, const gchar *label);
 
 gboolean annotation_elementtype (const GList *list);
 gboolean annotation_elementtype_transfer (const GList *list);
@@ -26,7 +27,9 @@ GList *annotation_elementtype_returns (void);
 gboolean annotation_outparams (GList **list);
 gboolean annotation_outparams_optional (GList **list);
 gboolean annotation_outparams_nullable (GList **list);
+gboolean annotation_outparams_not_nullable (GList **list);
 gboolean annotation_outparams_optional_nullable (GList **list);
+gboolean annotation_outparams_optional_not_nullable (GList **list);
 
 void annotation_skip (GList *list);
 gboolean annotation_skip_return (GList *list);
