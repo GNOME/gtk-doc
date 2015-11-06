@@ -240,6 +240,9 @@ gtk-doc.dsl
 gtk-doc.spec
 gtk-doc.cat
 gtkdoc-common.pl
+cmake/Makefile
+cmake/GtkDocConfig.cmake
+cmake/GtkDocConfigVersion.cmake
 help/Makefile
 help/manual/Makefile
 tests/Makefile

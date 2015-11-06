@@ -639,6 +639,42 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
       </para>
     </sect1>
 
+    <sect1 id="cmake">
+       <title>Integration with CMake build systems</title>
+
+       <para>
+          GTK-Doc now provides a <filename>GtkDocConfig.cmake</filename> module
+          (and the corresponding <filename>GtkDocConfigVersion.cmake</filename>
+          module). This provides a <literal>gtk_doc_add_module</literal>
+          command that you can set in your <filename>CMakeLists.txt</filename>
+          file.
+       </para>
+
+       <para>
+          The following example shows how to use this command.
+          <example><title>Example of using GTK-Doc from CMake</title>
+             <programlisting><![CDATA[
+find_package(GtkDoc 1.25 REQUIRED)
+
+# Create the doc-libmeep target.
+gtk_doc_add_module(
+   libmeep ${CMAKE_SOURCE_DIR}/libmeep
+      XML meep-docs.xml
+      LIBRARIES libmeep
+)
+
+# Build doc-libmeep as part of the default target. Without this, you would
+# have to explicitly run something like `make doc-libmeep` to build the docs.
+add_custom_target(documentation ALL DEPENDS doc-libmeep)
+
+# Install the docs. (This assumes you're using the GNUInstallDirs CMake module
+# to set the CMAKE_INSTALL_DOCDIR variable correctly).
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html
+        DESTINATION ${CMAKE_INSTALL_DOCDIR})
+]]></programlisting>
+         </example>
+       </para>
+     </sect1>
   </chapter>
 
   <chapter id="documenting">
