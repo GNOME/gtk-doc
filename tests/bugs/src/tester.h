@@ -529,4 +529,19 @@ typedef enum
   BUG_730658_IS_DEPRECATED = 1 << 2
 } Bug730658;
 
+/**
+ * MACRO_VALUE:
+ *
+ * This should be listed in the types and values section.
+ */
+#define MACRO_VALUE (1 << 1)
+
+/**
+ * MACRO_FUNCTION:
+ * @x: a value
+ *
+ * This should be listed in the functions section.
+ */
+#define MACRO_FUNCTION(x) (x << 1)
+
 #endif // GTKDOC_TESTER_H

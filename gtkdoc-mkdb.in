@@ -961,7 +961,7 @@ EOF
                         if ($type eq 'FUNCTION' || $type eq 'USER_FUNCTION') {
                           $functions_synop .= $synop;
                           $functions_details .= $desc;
-                        } elsif ($type eq 'MACRO' && $declaration =~ /$symbol[ ]*\(/) {
+                        } elsif ($type eq 'MACRO' && $declaration =~ /$symbol\(/) {
                           $functions_synop .= $synop;
                           $functions_details .= $desc;
                         } else {
