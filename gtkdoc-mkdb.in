@@ -1711,9 +1711,10 @@ sub OutputStruct {
         my %field_descrs = @$params;
         my $missing_parameters = "";
         my $unused_parameters = "";
+        my $id = &CreateValidSGMLID ("$symbol".".members");
 
         $desc .= <<EOF;
-<refsect3 role="struct_members">\n<title>Members</title>
+<refsect3 id="$id" role="struct_members">\n<title>Members</title>
 <informaltable role="struct_members_table" pgwide="1" frame="none">
 <tgroup cols="3">
 <colspec colname="struct_members_name" colwidth="300px"/>
@@ -1872,9 +1873,10 @@ sub OutputUnion {
         my %field_descrs = @$params;
         my $missing_parameters = "";
         my $unused_parameters = "";
+        my $id = &CreateValidSGMLID ("$symbol".".members");
 
         $desc .= <<EOF;
-<refsect3 role="union_members">\n<title>Members</title>
+<refsect3 id="$id" role="union_members">\n<title>Members</title>
 <informaltable role="union_members_table" pgwide="1" frame="none">
 <tgroup cols="3">
 <colspec colname="union_members_name" colwidth="300px"/>
@@ -2006,9 +2008,10 @@ sub OutputEnum {
     my %field_descrs = (defined $params ? @$params : ());
     my $missing_parameters = "";
     my $unused_parameters = "";
+    my $id = &CreateValidSGMLID ("$symbol".".members");
 
     $desc .= <<EOF;
-<refsect3 role="enum_members">\n<title>Members</title>
+<refsect3 id="$id" role="enum_members">\n<title>Members</title>
 <informaltable role="enum_members_table" pgwide="1" frame="none">
 <tgroup cols="3">
 <colspec colname="enum_members_name" colwidth="300px"/>
@@ -2329,8 +2332,10 @@ sub OutputParamDescriptions {
 
         # Start a table if we need one.
         if ($params_desc ne "") {
+          my $id = &CreateValidSGMLID ("$symbol".".parameters");
+
           $output .= <<EOF;
-<refsect3 role="parameters">\n<title>Parameters</title>
+<refsect3 id="$id" role="parameters">\n<title>Parameters</title>
 <informaltable role="parameters_table" pgwide="1" frame="none">
 <tgroup cols="3">
 <colspec colname="parameters_name" colwidth="150px"/>
@@ -2344,8 +2349,10 @@ EOF
 
         # Output the returns info last
         if ($returns ne "") {
+          my $id = &CreateValidSGMLID ("$symbol".".returns");
+
           $output .= <<EOF;
-<refsect3 role=\"returns\">\n<title>Returns</title>
+<refsect3 id="$id" role=\"returns\">\n<title>Returns</title>
 EOF
           $output .= $returns;
           $output .= "\n</refsect3>";
