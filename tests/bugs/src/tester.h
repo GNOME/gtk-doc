@@ -494,7 +494,7 @@ void bug_624001e (void);
 BUG_711598_DEPRECATED_FOR(bug_711598b)
 void bug_711598(void);
 
-#ifdef GTKDOC_DISABLE_DEPRECATED
+#ifdef GTKDOC_TESTER_DISABLE_DEPRECATED
 void deprecation_notice(void);
 #endif
 
