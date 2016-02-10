@@ -2008,8 +2008,8 @@ sub OutputEnum {
     my %field_descrs = (defined $params ? @$params : ());
     my $missing_parameters = "";
     my $unused_parameters = "";
-    my $id = &CreateValidSGMLID ("$symbol".".members");
 
+    $id = &CreateValidSGMLID ("$symbol".".members");
     $desc .= <<EOF;
 <refsect3 id="$id" role="enum_members">\n<title>Members</title>
 <informaltable role="enum_members_table" pgwide="1" frame="none">
