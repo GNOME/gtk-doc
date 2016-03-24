@@ -81,6 +81,26 @@ done
 if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
 tested=`expr $tested + 1`
 
+# check that log files have only one lien (the command)
+nok=0
+for file in $dir/*/docs/gtkdoc-*.log; do
+  expected_lines="1"
+  # adjust for known files
+  if test $file == "$dir/fail/docs/gtkdoc-mkdb.log"; then
+    expected_lines="16"
+  fi
+  if test $file == "$dir/gobject/docs/gtkdoc-fixxref.log"; then
+    expected_lines="2"
+  fi
+
+  lines=`wc -l $file | cut -d' ' -f1`
+  if test $lines -gt $expected_lines; then
+    echo 1>&2 "expected no more than $expected_lines log line in $file, but got $lines"
+    nok=`expr $nok + 1`;
+  fi
+done
+if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
+tested=`expr $tested + 1`
 
 # check stability of generated xml/html
 nok=0
