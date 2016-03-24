@@ -77,15 +77,15 @@ sub run {
                   'version' => \$PRINT_VERSION,
                   'help' => \$PRINT_HELP,
                   'src-lang' => \$SRC_LANG);
-    
+
     GetOptions(\%optctl, "module=s", "module-dir=s", "html-dir:s", "extra-dir=s@",
               "src-lang=s", "version", "help");
-    
+
     if ($PRINT_VERSION) {
         print "@VERSION@\n";
         exit 0;
     }
-    
+
     if ($PRINT_HELP) {
             print <<EOF;
 gtkdoc-fixxref version @VERSION@ - fix cross references in html files
@@ -105,23 +105,23 @@ gtkdoc-fixxref version @VERSION@ - fix cross references in html files
 EOF
         exit 0;
     }
-    
+
     if (!$SRC_LANG) {
         $SRC_LANG="c"
     }
-      
+
     my $path_prefix="";
     if ($HTML_DIR =~ m%(.*?)/share/gtk-doc/html%) {
         $path_prefix=$1;
         @TRACE@("Path prefix: $path_prefix");
     }
-    
+
     if (!defined $MODULE_DIR) {
         $MODULE_DIR="$HTML_DIR/$MODULE";
     }
-    
+
     my $dir;
-    
+
     # We scan the directory containing GLib and any directories in GNOME2_PATH
     # first, but these will be overriden by any later scans.
     $dir = `pkg-config --variable=prefix glib-2.0`;
@@ -134,7 +134,7 @@ EOF
         $Links{'GEnum'} = "$dir/gobject/gobject-Enumeration-and-Flag-Types.html";
         $Links{'GFlags'} = "$dir/gobject/gobject-Enumeration-and-Flag-Types.html";
         $Links{'GInterface'} = "$dir/gobject/GTypeModule.html";
-    
+
         if ($dir ne $HTML_DIR) {
             @TRACE@("Scanning GLib directory: $dir");
             if ($dir !~ m%^\Q$path_prefix\E/%) {
@@ -144,7 +144,7 @@ EOF
             }
         }
     }
-    
+
     if (defined ($ENV{"GNOME2_PATH"})) {
         foreach $dir (split (/:/, $ENV{"GNOME2_PATH"})) {
             $dir = $dir . "/share/gtk-doc/html";
@@ -160,19 +160,19 @@ EOF
             # https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138
         }
     }
-    
+
     @TRACE@("Scanning HTML_DIR directory: $HTML_DIR");
     &ScanIndices ($HTML_DIR, 0);
     @TRACE@("Scanning HTML_DIR directory: $MODULE_DIR");
     &ScanIndices ($MODULE_DIR, 0);
-    
+
     # check all extra dirs, but skip already scanned dirs or subdirs of those
     foreach my $dir (@EXTRA_DIRS) {
         my $vdir;
 
         $dir =~ s#/$##;
         @TRACE@("Scanning EXTRA_DIR directory: $dir");
-    
+
         # If the --extra-dir option is not relative and is not sharing the same
         # prefix as the target directory of the docs, we need to use absolute
         # directories for the links
@@ -182,16 +182,16 @@ EOF
             &ScanIndices ($dir, 0);
         }
     }
-    
+
     &ReadSections ();
-    
+
     &FixCrossReferences ($MODULE_DIR);
 }
 
 
 sub ScanIndices {
     my ($scan_dir, $use_absolute_links) = @_;
-    
+
     if (exists $DirCache{$scan_dir}) {
         return;
     }
@@ -215,14 +215,14 @@ sub ScanIndices {
             # if devhelp-file is good don't read index.sgml
             &ReadDevhelp ("$scan_dir/$file", $use_absolute_links);
         }
-        elsif ($file eq "index.sgml.gz") {
+        elsif (($file eq "index.sgml.gz") && ! (-e "$scan_dir/index.sgml")) {
             # debian/ubuntu started to compress this as index.sgml.gz :/
             print <<EOF;
 Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
 gunzip $scan_dir/$file
 EOF
         }
-        elsif ($file =~ m/\.devhelp2.gz$/) {
+        elsif (($file =~ m/(.*?)\.devhelp2.gz$/) && ! (-e "$scan_dir/$1.devhelp2")) {
             # debian/ubuntu started to compress this as *devhelp2.gz :/
             print <<EOF;
 Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
