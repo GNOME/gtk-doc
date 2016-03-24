@@ -294,26 +294,26 @@ sub run {
                   'outputsymbolswithoutsince' => \$OUTPUT_SYMBOLS_WITHOUT_SINCE
                   );
     GetOptions(\%optctl, "module=s", "source-dir:s", "source-suffixes:s",
-        "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version", 
+        "ignore-files:s", "output-dir:s", "tmpl-dir:s", "version",
         "outputallsymbols", "outputsymbolswithoutsince",
         "expand-content-files:s", "main-sgml-file:s", "extra-db-files:s", "help",
         "sgml-mode", "xml-mode", "default-stability:s", "default-includes:s",
         "output-format:s", "name-space:s");
-    
+
     if ($PRINT_VERSION) {
         print "@VERSION@\n";
         exit 0;
     }
-    
+
     if (!$MODULE) {
         $PRINT_HELP = 1;
     }
-    
+
     if ($DEFAULT_STABILITY && $DEFAULT_STABILITY ne "Stable"
         && $DEFAULT_STABILITY ne "Private" && $DEFAULT_STABILITY ne "Unstable") {
         $PRINT_HELP = 1;
     }
-    
+
     if ($PRINT_HELP) {
         print <<EOF;
 gtkdoc-mkdb version @VERSION@ - generate docbook files
@@ -338,19 +338,19 @@ gtkdoc-mkdb version @VERSION@ - generate docbook files
 EOF
         exit 0;
     }
-  
+
     @TRACE@(" ignore files: [$IGNORE_FILES]\n");
-        
+
     # check output format
     if (! defined($OUTPUT_FORMAT) || ($OUTPUT_FORMAT eq "")) {
-        $OUTPUT_FORMAT = "xml";    
+        $OUTPUT_FORMAT = "xml";
     } else {
         $OUTPUT_FORMAT = lc($OUTPUT_FORMAT);
     }
     if ($OUTPUT_FORMAT ne "xml") {
         die "Invalid format '$OUTPUT_FORMAT' passed to --output.format"
     }
-    
+
     if (!$MAIN_SGML_FILE) {
         # backwards compatibility
         if (-e "${MODULE}-docs.sgml") {
@@ -392,56 +392,56 @@ EOF
 EOF
     }
     chomp($doctype_header);
-    
+
     # All the files are written in subdirectories beneath here.
     $TMPL_DIR = $TMPL_DIR ? $TMPL_DIR : "$ROOT_DIR/tmpl";
-    
+
     # This is where we put all the DocBook output.
     $DB_OUTPUT_DIR = $DB_OUTPUT_DIR ? $DB_OUTPUT_DIR : "$ROOT_DIR/xml";
-  
+
     # This file contains the object hierarchy.
     $OBJECT_TREE_FILE = "$ROOT_DIR/$MODULE.hierarchy";
-  
+
     # This file contains the interfaces.
     $INTERFACES_FILE = "$ROOT_DIR/$MODULE.interfaces";
-    
+
     # This file contains the prerequisites.
     $PREREQUISITES_FILE = "$ROOT_DIR/$MODULE.prerequisites";
-    
+
     # This file contains signal arguments and names.
     $SIGNALS_FILE = "$ROOT_DIR/$MODULE.signals";
-    
+
     # The file containing Arg information.
     $ARGS_FILE = "$ROOT_DIR/$MODULE.args";
-  
+
     # Create the root DocBook output directory if it doens't exist.
     if (! -e $DB_OUTPUT_DIR) {
         mkdir ("$DB_OUTPUT_DIR", 0777)
             || die "Can't create directory: $DB_OUTPUT_DIR";
     }
-    
+
     &ReadKnownSymbols ("$ROOT_DIR/$MODULE-sections.txt");
     &ReadSignalsFile ($SIGNALS_FILE);
     &ReadArgsFile ($ARGS_FILE);
     &ReadObjectHierarchy;
     &ReadInterfaces;
     &ReadPrerequisites;
-    
+
     &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-decl.txt", 0);
     if (-f "$ROOT_DIR/$MODULE-overrides.txt") {
         &ReadDeclarationsFile ("$ROOT_DIR/$MODULE-overrides.txt", 1);
     }
-    
+
     for my $dir (@SOURCE_DIRS) {
         &ReadSourceDocumentation ($dir);
     }
-    
+
     my $changed = &OutputDB ("$ROOT_DIR/$MODULE-sections.txt");
-    
+
     # If any of the DocBook files have changed, update the timestamp file (so
     # it can be used for Makefile dependencies).
     if ($changed || ! -e "$ROOT_DIR/sgml.stamp") {
-    
+
         # try to detect the common prefix
         # GtkWidget, GTK_WIDGET, gtk_widget -> gtk
         if ($NAME_SPACE eq "") {
@@ -493,12 +493,12 @@ EOF
             } while ($ratio > 0.9);
             #print "most symbols start with $NAME_SPACE\n";
         }
-    
+
         &OutputIndexFull;
         &OutputDeprecatedIndex;
         &OutputSinceIndexes;
         &OutputAnnotationGlossary;
-    
+
         open (TIMESTAMP, ">$ROOT_DIR/sgml.stamp")
             || die "Can't create $ROOT_DIR/sgml.stamp: $!";
         print (TIMESTAMP "timestamp");
@@ -572,12 +572,12 @@ EOF
 
 sub TrimTextBlock {
   my ($desc) = @_;
-  
+
   # strip leading spaces on the block
   $desc =~ s/^\s+//s;
   # strip trailing spaces on every line
   $desc =~ s/\s+$/\n/mg;
-  
+
   return $desc;
 }
 
@@ -957,7 +957,7 @@ EOF
                         my ($synop, $desc) = &OutputDeclaration ($symbol,
                                                                  $declaration);
                         my $type = $DeclarationTypes {$symbol};
-        
+
                         if ($type eq 'FUNCTION' || $type eq 'USER_FUNCTION') {
                           $functions_synop .= $synop;
                           $functions_details .= $desc;
@@ -1088,7 +1088,7 @@ sub OutputIndex {
         keys %apiindex) {
 
         $symbol = $$hash{original};
-        if (defined($$hash{short})) {
+        if (defined($$hash{short}) && $$hash{short} ne "") {
             $short_symbol = $$hash{short};
         } else {
             $short_symbol = $symbol;
@@ -1153,7 +1153,7 @@ sub OutputIndex {
         my $curletter = uc(substr($short_symbol,0,1));
         my $id = $apiindex{$symbol};
 
-        @TRACE@("  add symbol $symbol with $id to index in section $curletter\n");
+        @TRACE@("  add symbol $symbol with $id to index in section '$curletter' (derived from $short_symbol)\n");
 
         if ($curletter ne $lastletter) {
             $lastletter = $curletter;
@@ -2092,7 +2092,7 @@ sub OutputVariable {
     my ($symbol, $declaration) = @_;
     my $id = &CreateValidSGMLID ($symbol);
     my $condition = &MakeConditionDescription ($symbol);
-    
+
     @TRACE@("ouputing variable: '$symbol' '$declaration'");
 
     my $type_output;
@@ -2813,7 +2813,7 @@ sub OutputBook {
     if ($MAIN_SGML_FILE && ! -e $MAIN_SGML_FILE) {
         open (OUTPUT, ">$MAIN_SGML_FILE")
           || die "Can't create $MAIN_SGML_FILE: $!";
-          
+
         print OUTPUT <<EOF;
 ${\( MakeDocHeader ("book") )}
 <book id="index">
@@ -3430,7 +3430,7 @@ sub MakeConditionDescription {
 sub GetHierarchy {
     my ($object,$hierarchy_ref) = @_;
     my @hierarchy = @{$hierarchy_ref};
-    
+
     # Find object in the objects array.
     my $found = 0;
     my @children = ();
@@ -3486,7 +3486,7 @@ sub GetHierarchy {
             $entry_text = $indent . $ancestor;
             $alt_text = $indent . "<link linkend=\"$ancestor_id\">$ancestor</link>";
         }
-        @TRACE@("Checking for '$entry_text' or '$alt_text'"); 
+        @TRACE@("Checking for '$entry_text' or '$alt_text'");
         # Check if we already have this object
         my $index = -1;
         for ($j = 0; $j <= $#hierarchy; $j++) {
@@ -3513,7 +3513,7 @@ sub GetHierarchy {
                         $last_index = $j;
                         $found = 1;
                         last;
-                    } 
+                    }
                 }
             }
             # Append to bottom
@@ -3538,9 +3538,9 @@ sub GetHierarchy {
         my $indented_text = ' ' x ($level * 4) . "<link linkend=\"$id\">$children[$i]</link>";
         splice @hierarchy, $last_index, 0, ($indented_text);
         $last_index++;
-    }    
+    }
 
-    return @hierarchy; 
+    return @hierarchy;
 }
 
 #############################################################################
@@ -4275,7 +4275,7 @@ sub ScanSourceFile {
                     #}
                     $SourceSymbolSourceFile{$symbol} = $file;
                     $SourceSymbolSourceLine{$symbol} = $.;
-                }                
+                }
 
                 if ($since_desc) {
                      ($since_desc, my @extra_lines) = split ("\n", $since_desc);
@@ -4417,7 +4417,7 @@ sub ScanSourceFile {
         } elsif ($in_part eq "") {
             @TRACE@("continuation for $symbol annotation '$_'");
             my $annotation = $_;
-            $annotation =~ s/^\s+|\s+$//g ; 
+            $annotation =~ s/^\s+|\s+$//g ;
             $SymbolAnnotations{$symbol} .= $annotation;
             next;
         }
@@ -5206,7 +5206,7 @@ sub MarkDownParseBlocks {
       # markup, including <?xml version="1.0"?>
       my $tag = $1;
       my $is_self_closing = defined($2);
-      
+
       # skip link markdown
       # TODO(ensonic): consider adding more uri schemes (ftp, ...)
       if ($tag =~ /^https?/) {
@@ -5215,13 +5215,13 @@ sub MarkDownParseBlocks {
         # for TEXT_LEVEL_ELEMENTS, we want to keep them as-is in the paragraph
         # instead of creation a markdown block.
         my $scanning_for_end_of_text_level_tag = (
-            $md_block->{"type"} eq "paragraph" && 
+            $md_block->{"type"} eq "paragraph" &&
             defined($md_block->{"start"}) &&
-            !$md_block->{"closed"}); 
+            !$md_block->{"closed"});
         @TRACE@("markup found '$tag', scanning $scanning_for_end_of_text_level_tag ?");
         if (!$MD_TEXT_LEVEL_ELEMENTS{$tag} && !$scanning_for_end_of_text_level_tag) {
           push @md_blocks, $md_block;
-  
+
           if ($is_self_closing) {
             @TRACE@("self-closing docbook '$tag'");
             $md_block = { type => "self-closing tag",
@@ -5229,7 +5229,7 @@ sub MarkDownParseBlocks {
             $is_self_closing = 0;
             next OUTER;
           }
-  
+
           @TRACE@("new markup '$tag'");
           $md_block = { type   => "markup",
                         text   => $deindented_line,
@@ -6371,8 +6371,8 @@ sub AddTreeLineArt {
   my $i;
   my $j;
   my $indent;
-  
-  # iterate bottom up over the tree 
+
+  # iterate bottom up over the tree
   for ($i = $#tree; $i >= 0; $i--) {
     # count leading spaces
     $tree[$i] =~ /^([^<A-Za-z]*)/;
@@ -6390,7 +6390,7 @@ sub AddTreeLineArt {
       }
     }
   }
-  
+
   my $res = join("\n", @tree);
   # unicode chars for: ╰──
   $res =~ s%---%<phrase role=\"lineart\">&#9584;&#9472;&#9472;</phrase>%g;
@@ -6398,7 +6398,7 @@ sub AddTreeLineArt {
   $res =~ s%\+--%<phrase role=\"lineart\">&#9500;&#9472;&#9472;</phrase>%g;
   # unicode char for: │
   $res =~ s%\|%<phrase role=\"lineart\">&#9474;</phrase>%g;
-  
+
   return $res;
 }
 

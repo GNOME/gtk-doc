@@ -544,4 +544,12 @@ typedef enum
  */
 #define MACRO_FUNCTION(x) (x << 1)
 
+/**
+ * _:
+ * @str: a string
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=753052
+ */
+#define _(str) str
+
 #endif // GTKDOC_TESTER_H
