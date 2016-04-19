@@ -19,7 +19,7 @@ EOF
 
 cleanexit() {
     rm -f $module.fo
-    exit 1
+    exit $1
 }
 
 # parse options, ignore unknown options for future extensions
