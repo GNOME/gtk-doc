@@ -1411,6 +1411,111 @@ typedef enum {
       </sect2>
     </sect1>
 
+
+    <sect1 id="documenting_inline_program">
+      <title>Inline program documentation</title>
+      <para>
+         You can document programs and their commandline interface using inline
+         documentation.
+      </para>
+
+      <variablelist>
+      <title>Tags</title>
+
+      <varlistentry><term>PROGRAM</term>
+
+      <listitem>
+      <para>
+         Defines the start of a program documentation.
+      </para>
+      </listitem>
+      </varlistentry>
+
+      <varlistentry>
+      <term>@short_description:</term>
+      <listitem>
+      <para>
+         Defines a short description of the program. (Optional)
+      </para>
+      </listitem>
+      </varlistentry>
+
+      <varlistentry>
+      <term>@synopsis:</term>
+      <listitem>
+      <para>
+         Defines the arguments, or list of arguments that the program can take.
+         (Optional)
+      </para>
+      </listitem>
+      </varlistentry>
+
+      <varlistentry>
+      <term>@see_also:</term>
+      <listitem>
+      <para>
+          See Also manual page section. (Optional)
+      </para>
+      </listitem>
+      </varlistentry>
+
+      <varlistentry>
+      <term>@arg:</term>
+      <listitem>
+      <para>
+          Argument(s) passed to the program and their description. (Optional)
+      </para>
+      </listitem>
+      </varlistentry>
+
+      <varlistentry>
+      <term>Description:</term>
+      <listitem>
+      <para>
+          A longer description of the program.
+      </para>
+      </listitem>
+      </varlistentry>
+
+      <varlistentry>
+      <term>Returns:</term>
+      <listitem>
+      <para>
+          Specificy what value(s) the program returns. (Optional)
+      </para>
+      </listitem>
+      </varlistentry>
+
+      </variablelist>
+
+      <sect2>
+        <title>Example of program documentation.</title>
+        <example><title>Program documentation block</title>
+        <programlisting><![CDATA[
+/**
+ * PROGRAM:test-program
+ * @short_description: A test program
+ * @synopsis: test-program [*OPTIONS*...] --arg1 *arg* *FILE*
+ * @see_also: test(1)
+ * @--arg1 *arg*: set arg1 to *arg*
+ * @--arg2 *arg*: set arg2 to *arg*
+ * @-v, --version: Print the version number
+ * @-h, --help: Print the help message
+ *
+ * Long description of program.
+ *
+ * Returns: Zero on success, non-zero on failure
+ */
+int main(int argc, char *argv[])
+{
+	return 0;
+}
+]]></programlisting>
+        </example>
+
+      </sect2>
+    </sect1>
+
     <sect1 id="documenting_docbook">
       <title>Useful DocBook tags</title>
 
