@@ -179,14 +179,14 @@ sub ScanDirectory {
             $onlinedir = &ReadIndex($dir, $file);
             $have_index = 1;
         }
-        elsif (($file eq "index.sgml.gz") && ! (-e "$scan_dir/index.sgml")) {
+        elsif (($file eq "index.sgml.gz") && ! (-e "$dir/index.sgml")) {
             # debian/ubuntu started to compress this as index.sgml.gz :/
             print <<EOF;
 Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
 gunzip $dir/$file
 EOF
         }
-        elsif (($file =~ m/\.devhelp2.gz$/) && ! (-e "$scan_dir/$1.devhelp2")) {
+        elsif (($file =~ m/\.devhelp2.gz$/) && ! (-e "$dir/$1.devhelp2")) {
             # debian/ubuntu started to compress this as *devhelp2.gz :/
             print <<EOF;
 Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
