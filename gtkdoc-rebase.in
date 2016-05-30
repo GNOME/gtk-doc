@@ -69,12 +69,12 @@ sub run {
     GetOptions(\%optctl, 'html-dir=s', 'other-dir=s@', 'dest-dir:s',
              'online', 'relative', 'aggressive', 'verbose',
              'version', 'help');
-    
+
     if ($PRINT_VERSION) {
         print "@VERSION@\n";
         exit 0;
     }
-    
+
     if ($PRINT_HELP) {
         print <<EOF;
 gtkdoc-rebase version @VERSION@ - rewrite the base url of html files
@@ -94,13 +94,13 @@ gtkdoc-rebase version @VERSION@ - rewrite the base url of html files
 EOF
         exit 0;
     }
-    
+
     if (!$HTML_DIR) {
         die "No HTML directory (--html-dir) given.\n";
     }
-       
+
     my $dir;
-    
+
     # We scan the directory containing GLib and any directories in GNOME2_PATH
     # first, but these will be overriden by any later scans.
     if (defined ($ENV{"GNOME2_PATH"})) {
@@ -112,27 +112,27 @@ EOF
             }
         }
     }
-    
+
     $dir = `pkg-config --variable=prefix glib-2.0`;
     $dir =~ s/^\s*(\S*)\s*$/$1/;
     $dir = $dir . "/share/gtk-doc/html";
     print "Prepending GLib directory $dir\n" if $VERBOSE;
     unshift @OTHER_DIRS, $dir;
-    
+
     # Check all other dirs, but skip already scanned dirs ord subdirs of those
     if ($DEST_DIR) {
         $DEST_DIR =~ s#/?$#/#;
     }
     $HTML_DIR =~ s#/?$#/#;
-    
+
     foreach $dir (@OTHER_DIRS) {
         &ScanDirectory($dir, $HTML_DIR);
     }
-    
+
     if ($RELATIVE) {
         &RelativizeLocalMap($HTML_DIR);
     }
-    
+
     &RebaseReferences($HTML_DIR);
     &PrintWhatWeHaveDone();
 }
@@ -179,14 +179,14 @@ sub ScanDirectory {
             $onlinedir = &ReadIndex($dir, $file);
             $have_index = 1;
         }
-        elsif ($file eq "index.sgml.gz") {
+        elsif (($file eq "index.sgml.gz") && ! (-e "$scan_dir/index.sgml")) {
             # debian/ubuntu started to compress this as index.sgml.gz :/
             print <<EOF;
 Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
 gunzip $dir/$file
 EOF
         }
-        elsif ($file =~ m/\.devhelp2.gz$/) {
+        elsif (($file =~ m/\.devhelp2.gz$/) && ! (-e "$scan_dir/$1.devhelp2")) {
             # debian/ubuntu started to compress this as *devhelp2.gz :/
             print <<EOF;
 Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
@@ -338,7 +338,7 @@ sub RebaseLink {
             $dir =~ m#([^/]+)/$#;
             $package = $1;
         }
-      
+
         if ($package) {
             if ($ONLINE && $OnlineMap{ $package }) {
               $dir = $OnlineMap{ $package };
