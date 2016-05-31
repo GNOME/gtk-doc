@@ -255,7 +255,7 @@ sub ReadDevhelp {
         # will be installed to
         if ($file !~ /\.\//) {
             $file =~ /(.*\/)(.*?)\/.*?\.devhelp2/;
-            $dir = "$1$2";
+            $dir = "$1$2/";
         }
     } else {
         if ($file =~ /(.*\/)(.*?)\/.*?\.devhelp2/) {
