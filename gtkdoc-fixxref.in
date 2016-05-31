@@ -368,9 +368,9 @@ sub FixHTMLFile {
     my @lines = split(/\n/, $entire_file);
     for (my $i=0; $i<$#lines; $i++) {
         $lines[$i] =~ s%<GTKDOCLINK\s+HREF="([^"]*)"\s*>(.*?)</GTKDOCLINK\s*>% &MakeXRef($file,$i+1,$1,$2); %ge;
-        #if ($lines[$i] =~ m/GTKDOCLINK/) {
-        #    print "make xref failed for line: ",$lines[$i], "\n";
-        #}
+        if ($lines[$i] =~ m/GTKDOCLINK/) {
+            @TRACE@("make xref failed for line: ".$lines[$i]);
+        }
     }
     $entire_file = join("\n",@lines);
 
