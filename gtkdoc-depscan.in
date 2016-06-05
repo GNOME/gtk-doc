@@ -264,7 +264,7 @@ def merge_gnome_path(options):
     path = path and path.split(':') or []
 
     prefix = popen(
-        'pkg-config --variable=prefix glib-2.0'
+        '@PKG_CONFIG@ --variable=prefix glib-2.0'
         ).readline().rstrip()
 
     path.insert(0, prefix)
