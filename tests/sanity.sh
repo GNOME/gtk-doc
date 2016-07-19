@@ -81,7 +81,7 @@ done
 if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
 tested=`expr $tested + 1`
 
-# check that log files have only one lien (the command)
+# check that log files have only one line (the command)
 nok=0
 for file in $dir/*/docs/gtkdoc-*.log; do
   expected_lines="1"
@@ -92,6 +92,14 @@ for file in $dir/*/docs/gtkdoc-*.log; do
   if test $file == "$dir/gobject/docs/gtkdoc-fixxref.log"; then
     expected_lines="2"
   fi
+  case $file in
+  *gtkdoc-fixxref.log)
+    # if there is no /usr/share/gtk-doc/html/gobject we should skip fixxref logs
+    if test ! -d "$GLIB_PREFIX/share/gtk-doc/html/gobject"; then
+      continue
+    fi
+    ;;
+  esac
 
   lines=`wc -l $file | cut -d' ' -f1`
   if test $lines -gt $expected_lines; then
