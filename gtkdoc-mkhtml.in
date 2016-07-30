@@ -52,9 +52,9 @@ if test $uninstalled = yes; then
     # this does not work from buiddir!=srcdir
     gtkdocdir=`dirname $0`
 	  # traditional Bourne shells may not support -e here, use -f
-    if test ! -f $gtkdocdir/gtk-doc.xsl; then
+    if test ! -f "$gtkdocdir/gtk-doc.xsl"; then
         # try to src dir (set from makefiles) too
-        if test -f $ABS_TOP_SRCDIR/gtk-doc.xsl; then
+        if test -f "$ABS_TOP_SRCDIR/gtk-doc.xsl"; then
             gtkdocdir=$ABS_TOP_SRCDIR
         fi
     fi
@@ -68,31 +68,31 @@ else
     styledir=$gtkdocdir
 fi
 
-# we could do "$path_option $PWD "
-# to avoid needing rewriting entities that are copied from the header
-# into docs under xml
-if test "X$searchpath" = "X"; then
-    path_arg=
-else
-    path_arg="--path $searchpath"
-fi
-
 # profiling
 profile_args=""
 if test "$GTKDOC_PROFILE" != ""; then
   profile_args="--profile"
 fi
 
-#echo @XSLTPROC@ $path_arg --nonet --xinclude \
-#    --stringparam gtkdoc.bookname $module \
-#    --stringparam gtkdoc.version "@VERSION@" \
-#    "$@" $gtkdocdir/gtk-doc.xsl "$document"
-@XSLTPROC@ 2>profile.txt $profile_args $path_arg --nonet --xinclude \
-    --stringparam gtkdoc.bookname $module \
+# We need to use a wrapper because there's no other way to conditionally pass
+# a `--path $searchpath` argument with proper quoting for the path
+run_xsltproc() {
+    # we could do "$path_option $PWD "
+    # to avoid needing rewriting entities that are copied from the header
+    # into docs under xml
+    if test "X$searchpath" = "X"; then
+        @XSLTPROC@ 2>profile.txt $profile_args "$@"
+    else
+        @XSLTPROC@ 2>profile.txt $profile_args --path "$searchpath" "$@"
+    fi
+}
+
+run_xsltproc --nonet --xinclude \
+    --stringparam gtkdoc.bookname "$module" \
     --stringparam gtkdoc.version "@VERSION@" \
     --stringparam chunk.quietly $quiet \
     --stringparam chunker.output.quiet $quiet \
-    "$@" $gtkdocdir/gtk-doc.xsl "$document" || exit $?
+    "$@" "$gtkdocdir/gtk-doc.xsl" "$document" || exit $?
 
 # profiling
 if test "$GTKDOC_PROFILE" != ""; then
@@ -102,7 +102,7 @@ else
 fi
 
 # copy navigation images and stylesheets to html directory ...
-cp -f $styledir/*.png $styledir/*.css ./
+cp -f "$styledir"/*.png "$styledir"/*.css ./
 
 
 echo "timestamp" > ../html.stamp

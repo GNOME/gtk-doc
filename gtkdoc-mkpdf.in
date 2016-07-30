@@ -77,14 +77,18 @@ else
     path_option='--directory'
 fi
 
-# we could do "$path_option $PWD "
-# to avoid needing rewriting entities that are copied from the header
-# into docs under xml
-if test "X$searchpath" = "X"; then
-    path_arg=
-else
-    path_arg="$path_option $searchpath"
-fi
+# We need to use a wrapper because there's no other way to conditionally pass
+# a `--path $searchpath` argument with proper quoting for the path
+run_xsltproc() {
+    # we could do "$path_option $PWD "
+    # to avoid needing rewriting entities that are copied from the header
+    # into docs under xml
+    if test "X$searchpath" = "X"; then
+        @XSLTPROC@ 2>profile.txt "$@"
+    else
+        @XSLTPROC@ 2>profile.txt "$path_option" "$searchpath" "$@"
+    fi
+}
 
 if $is_xml; then
   if test -n "@DBLATEX@"; then
@@ -95,7 +99,7 @@ if $is_xml; then
       # -d : keep transient files (for debugging)
       # -P abc.def=$quiet : once the stylesheets have a quiet mode
       # xsltproc is already called with --xinclude
-      # does not work: --xslt-opts "$path_arg --nonet $@"
+      # does not work: --xslt-opts "$path_option $searchpath --nonet $@"
       dblatex_options="-o $module.pdf $imgdirs $document"
       #echo "calling: @DBLATEX@ $dblatex_options"
       if test $verbose = "0"; then
@@ -109,12 +113,12 @@ if $is_xml; then
       fi
   else
     if test -n "@FOP@"; then
-        @XSLTPROC@ $path_arg --nonet --xinclude \
-            --stringparam gtkdoc.bookname $module \
+        run_xsltproc --nonet --xinclude \
+            --stringparam gtkdoc.bookname "$module" \
             --stringparam gtkdoc.version "@VERSION@" \
             --stringparam chunk.quietly $quiet \
             --stringparam chunker.output.quiet $quiet \
-            "$@" -o $module.fo $gtkdocdir/gtk-doc-fo.xsl "$document" || cleanexit $?
+            "$@" -o "$module.fo" "$gtkdocdir/gtk-doc-fo.xsl" "$document" || cleanexit $?
         # fop dies too easily :(
         # @FOP@ $module.fo $module.pdf
     else
