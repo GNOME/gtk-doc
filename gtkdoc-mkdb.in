@@ -3963,7 +3963,10 @@ sub GetArgs {
                 }
             }
 
-            my $pad1 = " " x (24 - length ($name));
+            my $pad1 = "";
+            if (length ($name) < 24) {
+              $pad1 = " " x (24 - length ($name));
+            }
 
             my $arg_synop = "<row><entry role=\"property_type\">$type_output</entry><entry role=\"property_name\"><link linkend=\"$id\">$name</link></entry><entry role=\"property_flags\">$flags_string</entry></row>\n";
             my $arg_desc = "<refsect2 id=\"$id\" role=\"property\"><title>The <literal>“$name”</literal> $kind</title>\n";
