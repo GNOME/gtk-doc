@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gtk-doc help\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-"
 "doc&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-21 21:32+0000\n"
-"PO-Revision-Date: 2016-04-08 09:50-0200\n"
+"POT-Creation-Date: 2016-05-12 06:17+0000\n"
+"PO-Revision-Date: 2016-09-06 01:40-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -125,30 +125,21 @@ msgstr ""
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:83
-#| msgid ""
-#| "<revnumber>1.24.1</revnumber> <date>30 May 2015</date> "
-#| "<authorinitials>ss</authorinitials> <revremark>development version</"
-#| "revremark>"
 msgid ""
 "<revnumber>1.25.1</revnumber> <date>21 March 2016</date> <authorinitials>ss</"
 "authorinitials> <revremark>development version</revremark>"
 msgstr ""
-"<revnumber>1.25.1</revnumber> <date>21 Março 2016</date> "
-"<authorinitials>ss</authorinitials> <revremark>versão de "
-"desenvolvimento</revremark>"
+"<revnumber>1.25.1</revnumber> <date>21 Março 2016</date> <authorinitials>ss</"
+"authorinitials> <revremark>versão de desenvolvimento</revremark>"
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:89
-#| msgid ""
-#| "<revnumber>1.24</revnumber> <date>29 May 2015</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>bug fix</revremark>"
 msgid ""
 "<revnumber>1.25</revnumber> <date>21 March 2016</date> <authorinitials>ss</"
 "authorinitials> <revremark>bug fixes, test cleanups</revremark>"
 msgstr ""
-"<revnumber>1.25</revnumber> <date>21 Março 2016</date> "
-"<authorinitials>ss</authorinitials> <revremark>correção de erros, limpezas "
-"de testes</revremark>"
+"<revnumber>1.25</revnumber> <date>21 Março 2016</date> <authorinitials>ss</"
+"authorinitials> <revremark>correção de erros, limpezas de testes</revremark>"
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:95
@@ -1030,9 +1021,10 @@ msgid ""
 msgstr ""
 "Como uma regra de ouro, são aqueles arquivos que você edita que deveriam "
 "entrar no controle de versão. Para projetos normais, esses são os arquivos: "
-"<filename>&lt;pacote&gt;.types</filename>, <filename>&lt;pacote&gt;-docs."
-"xml</filename> (no passado, .sgml), <filename>&lt;pacote&gt;-sections.txt</"
-"filename>, <filename>Makefile.am</filename>"
+"<filename>&lt;pacote&gt;.types</filename>, "
+"<filename>&lt;pacote&gt;-docs.xml</filename> (no passado, .sgml), "
+"<filename>&lt;pacote&gt;-sections.txt</filename>, "
+"<filename>Makefile.am</filename>."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:610
@@ -2126,9 +2118,12 @@ msgstr ""
 " * @par2:  descrição do parâmetro 2\n"
 " * @...: uma lista de bars terminada em %NULL\n"
 " *\n"
-" * A descrição da função vai aqui. Você pode usar @par1 para se referir a parâmetros\n"
-" * de forma que eles ficam em destaque na saída. Você também pode usar %constant\n"
-" * para constantes, nome_da_função2() para funções e #GtkWidget para links para\n"
+" * A descrição da função vai aqui. Você pode usar @par1 para se referir a "
+"parâmetros\n"
+" * de forma que eles ficam em destaque na saída. Você também pode usar %"
+"constant\n"
+" * para constantes, nome_da_função2() para funções e #GtkWidget para links "
+"para\n"
 " * outras declarações (que pode ser documentada em outro lugar).\n"
 " *\n"
 " * Returns: um inteiro.\n"
@@ -2143,7 +2138,7 @@ msgid "Function tags"
 msgstr "Tags de função"
 
 #. (itstool) path: varlistentry/term
-#: C/index.docbook:1274
+#: C/index.docbook:1274 C/index.docbook:1481
 msgid "Returns:"
 msgstr "Returns:"
 
@@ -2296,8 +2291,8 @@ msgid ""
 "it will be considered private automatically and doesn't need to be mentioned "
 "in the comment block."
 msgstr ""
-"Se o primeiro campo for \"g_iface\", \"parent_instance\" ou \"parent_class"
-"\", ele será automaticamente considerado como privado e não precisará ser "
+"Se o primeiro campo for \"g_iface\", \"parent_instance\" ou \"parent_class\""
+", ele será automaticamente considerado como privado e não precisará ser "
 "mencionado no bloco de comentário."
 
 #. (itstool) path: sect2/para
@@ -2371,12 +2366,159 @@ msgstr ""
 "comportamento inverso."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1415
+#: C/index.docbook:1416
+#| msgid "Modernizing the documentation"
+msgid "Inline program documentation"
+msgstr "Documentação de programa em-linha"
+
+#. (itstool) path: sect1/para
+#: C/index.docbook:1417
+msgid ""
+"You can document programs and their commandline interface using inline "
+"documentation."
+msgstr ""
+"Você pode documentar programas e sua interface de linha de comando usando "
+"documentação em-linha."
+
+#. (itstool) path: variablelist/title
+#: C/index.docbook:1423
+msgid "Tags"
+msgstr "Tags"
+
+#. (itstool) path: varlistentry/term
+#: C/index.docbook:1425
+msgid "PROGRAM"
+msgstr "PROGRAM"
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1428
+msgid "Defines the start of a program documentation."
+msgstr "Define o início da documentação de um programa."
+
+#. (itstool) path: varlistentry/term
+#: C/index.docbook:1435
+#| msgid "@short_description"
+msgid "@short_description:"
+msgstr "@short_description:"
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1437
+msgid "Defines a short description of the program. (Optional)"
+msgstr "Define uma descrição breve do programa. (Opcional)"
+
+#. (itstool) path: varlistentry/term
+#: C/index.docbook:1444
+msgid "@synopsis:"
+msgstr "@synopsis:"
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1446
+msgid ""
+"Defines the arguments, or list of arguments that the program can take. "
+"(Optional)"
+msgstr ""
+"Define os argumentos, ou lista de argumentos, que o programa pode receber. "
+"(Opcional)"
+
+#. (itstool) path: varlistentry/term
+#: C/index.docbook:1454
+#| msgid "@see_also"
+msgid "@see_also:"
+msgstr "@see_also:"
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1456
+msgid "See Also manual page section. (Optional)"
+msgstr "A seção \"Veja Também\" (See Also) de páginas de manual. (Opcional)"
+
+#. (itstool) path: varlistentry/term
+#: C/index.docbook:1463
+msgid "@arg:"
+msgstr "@arg:"
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1465
+msgid "Argument(s) passed to the program and their description. (Optional)"
+msgstr "Argumento(s) passado(s) para o programa e sua descrição. (Opcional)"
+
+#. (itstool) path: varlistentry/term
+#: C/index.docbook:1472
+#| msgid "@short_description"
+msgid "Description:"
+msgstr "Description:"
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1474
+msgid "A longer description of the program."
+msgstr "Um descrição mais longa do programa."
+
+#. (itstool) path: listitem/para
+#: C/index.docbook:1483
+msgid "Specificy what value(s) the program returns. (Optional)"
+msgstr "Especifique quais valor(es) o programa retorna. (Opcional)"
+
+#. (itstool) path: sect2/title
+#: C/index.docbook:1492
+msgid "Example of program documentation."
+msgstr "Exemplo de documentação de programa."
+
+#. (itstool) path: example/title
+#: C/index.docbook:1493
+#| msgid "Property comment block"
+msgid "Program documentation block"
+msgstr "Bloco de documentação de programa"
+
+#. (itstool) path: example/programlisting
+#: C/index.docbook:1494
+#, no-wrap
+msgid ""
+"\n"
+"/**\n"
+" * PROGRAM:test-program\n"
+" * @short_description: A test program\n"
+" * @synopsis: test-program [*OPTIONS*...] --arg1 *arg* *FILE*\n"
+" * @see_also: test(1)\n"
+" * @--arg1 *arg*: set arg1 to *arg*\n"
+" * @--arg2 *arg*: set arg2 to *arg*\n"
+" * @-v, --version: Print the version number\n"
+" * @-h, --help: Print the help message\n"
+" *\n"
+" * Long description of program.\n"
+" *\n"
+" * Returns: Zero on success, non-zero on failure\n"
+" */\n"
+"int main(int argc, char *argv[])\n"
+"{\n"
+"\treturn 0;\n"
+"}\n"
+msgstr ""
+"\n"
+"/**\n"
+" * PROGRAM:programa-teste\n"
+" * @short_description: Um programa teste\n"
+" * @synopsis: programa-teste [*OPÇÕES*...] --arg1 *arg* *ARQUIVO*\n"
+" * @see_also: teste(1)\n"
+" * @--arg1 *arg*: define arg1 para *arg*\n"
+" * @--arg2 *arg*: define arg2 para *arg*\n"
+" * @-v, --version: Exibe o número da versão\n"
+" * @-h, --help: Exibe a mensagem de ajuda\n"
+" *\n"
+" * Descrição longa do programa.\n"
+" *\n"
+" * Returns: Zero no caso de sucesso, não-zero no caso de falha\n"
+" */\n"
+"int main(int argc, char *argv[])\n"
+"{\n"
+"\treturn 0;\n"
+"}\n"
+
+#. (itstool) path: sect1/title
+#: C/index.docbook:1520
 msgid "Useful DocBook tags"
 msgstr "Tags úteis do DocBook"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1417
+#: C/index.docbook:1522
 msgid ""
 "Here are some DocBook tags which are most useful when documenting the code."
 msgstr ""
@@ -2384,7 +2526,7 @@ msgstr ""
 "documentado o código."
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1426
+#: C/index.docbook:1531
 #, no-wrap
 msgid ""
 "\n"
@@ -2394,7 +2536,7 @@ msgstr ""
 "&lt;link linkend=\"glib-Hash-Tables\"&gt;Tabela de hashes&lt;/link&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1422
+#: C/index.docbook:1527
 msgid ""
 "To link to another section in the GTK docs: <_:informalexample-1/> The "
 "linkend is the SGML/XML id on the top item of the page you want to link to. "
@@ -2403,14 +2545,14 @@ msgid ""
 "name. Spaces and underscores are converted to '-' to conform to SGML/XML."
 msgstr ""
 "Para vincular a outra seção nas documentações do GTK: <_:informalexample-1/> "
-"O fim do link é o ID do SGML/XML no item superior da páginao a qual você "
-"deseja vincular. Para a maioria das páginas isto é atualmente a parte (\"gtk"
-"\", \"gdk\", \"glib\") e, então, o título da página (\"Hash Tables\"). Para "
-"os widgets isso é apenas o nome da classe. Espaços e sublinhados são "
+"O fim do link é o ID do SGML/XML no item superior da página a qual você "
+"deseja vincular. Para a maioria das páginas isto é atualmente a parte (\""
+"gtk\", \"gdk\", \"glib\") e, então, o título da página (\"Hash Tables\"). "
+"Para os widgets isso é apenas o nome da classe. Espaços e sublinhados são "
 "convertidos em '-' para estar em conformidade com SGML/XML."
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1439
+#: C/index.docbook:1544
 #, no-wrap
 msgid ""
 "\n"
@@ -2420,7 +2562,7 @@ msgstr ""
 "&lt;function&gt;...&lt;/function&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1436
+#: C/index.docbook:1541
 msgid ""
 "To refer to an external function, e.g. a standard C function: <_:"
 "informalexample-1/>"
@@ -2429,7 +2571,7 @@ msgstr ""
 "do C: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1448
+#: C/index.docbook:1553
 #, no-wrap
 msgid ""
 "\n"
@@ -2449,7 +2591,7 @@ msgstr ""
 "&lt;/example&gt;\n"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1459
+#: C/index.docbook:1564
 #, no-wrap
 msgid ""
 "\n"
@@ -2467,19 +2609,19 @@ msgstr ""
 "&lt;/informalexample&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1445
+#: C/index.docbook:1550
 msgid ""
 "To include example code: <_:informalexample-1/> or possibly this, for very "
 "short code fragments which don't need a title: <_:informalexample-2/> For "
 "the latter GTK-Doc also supports an abbreviation: |[ ... ]|"
 msgstr ""
 "Para incluir um código de exemplo: <_:informalexample-1/> ou possivelmente "
-"este, para fragmentos de código bem curtos que não precisam de um título: <_:"
-"informalexample-2/> Para este último, GTK-Doc também possui suporte a uma "
+"este, para fragmentos de código bem curtos que não precisam de um título: "
+"<_:informalexample-2/> Para este último, GTK-Doc também possui suporte a uma "
 "abreviação: |[ ... ]|"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1478
+#: C/index.docbook:1583
 #, no-wrap
 msgid ""
 "\n"
@@ -2511,12 +2653,12 @@ msgstr ""
 "&lt;/itemizedlist&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1475
+#: C/index.docbook:1580
 msgid "To include bulleted lists: <_:informalexample-1/>"
 msgstr "Para incluir listas com marcadores: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1498
+#: C/index.docbook:1603
 #, no-wrap
 msgid ""
 "\n"
@@ -2534,13 +2676,13 @@ msgstr ""
 "&lt;/note&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1495
+#: C/index.docbook:1600
 msgid ""
 "To include a note which stands out from the text: <_:informalexample-1/>"
 msgstr "Para incluir uma nota que fique fora do texto: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1511
+#: C/index.docbook:1616
 #, no-wrap
 msgid ""
 "\n"
@@ -2550,12 +2692,12 @@ msgstr ""
 "&lt;type&gt;unsigned char&lt;/type&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1508
+#: C/index.docbook:1613
 msgid "To refer to a type: <_:informalexample-1/>"
 msgstr "Para se referir a um tipo: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1520
+#: C/index.docbook:1625
 #, no-wrap
 msgid ""
 "\n"
@@ -2565,7 +2707,7 @@ msgstr ""
 "&lt;structname&gt;XFontStruct&lt;/structname&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1517
+#: C/index.docbook:1622
 msgid ""
 "To refer to an external structure (not one described in the GTK docs): <_:"
 "informalexample-1/>"
@@ -2574,7 +2716,7 @@ msgstr ""
 "GTK): <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1529
+#: C/index.docbook:1634
 #, no-wrap
 msgid ""
 "\n"
@@ -2584,12 +2726,12 @@ msgstr ""
 "&lt;structfield&gt;len&lt;/structfield&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1526
+#: C/index.docbook:1631
 msgid "To refer to a field of a structure: <_:informalexample-1/>"
 msgstr "Para se referir a um campo de uma estrutura: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1538
+#: C/index.docbook:1643
 #, no-wrap
 msgid ""
 "\n"
@@ -2599,20 +2741,20 @@ msgstr ""
 "&lt;classname&gt;GtkWidget&lt;/classname&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1535
+#: C/index.docbook:1640
 msgid ""
 "To refer to a class name, we could possibly use: <_:informalexample-1/> but "
 "you'll probably be using #GtkWidget instead (to automatically create a link "
 "to the GtkWidget page - see <link linkend=\"documenting_syntax\">the "
 "abbreviations</link>)."
 msgstr ""
-"Para se referir a um nome de classe, nós possivelmente poderíamos usar: <_:"
-"informalexample-1/> mas você provavelmente vai estar usando #GtkWidget em "
+"Para se referir a um nome de classe, nós possivelmente poderíamos usar: "
+"<_:informalexample-1/> mas você provavelmente vai estar usando #GtkWidget em "
 "vez disso (para criar automaticamente um link para a página do GtkWidget - "
 "veja <link linkend=\"documenting_syntax\">as abreviações</link>)."
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1549
+#: C/index.docbook:1654
 #, no-wrap
 msgid ""
 "\n"
@@ -2622,12 +2764,12 @@ msgstr ""
 "&lt;emphasis&gt;Isso é importante&lt;/emphasis&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1546
+#: C/index.docbook:1651
 msgid "To emphasize text: <_:informalexample-1/>"
 msgstr "Para enfatizar um texto: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1558
+#: C/index.docbook:1663
 #, no-wrap
 msgid ""
 "\n"
@@ -2637,32 +2779,33 @@ msgstr ""
 "&lt;filename&gt;/home/usuario/documentos&lt;/filename&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1555
+#: C/index.docbook:1660
 msgid "For filenames use: <_:informalexample-1/>"
 msgstr "Para nome de arquivos use: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
-#: C/index.docbook:1567
+#: C/index.docbook:1672
 #, no-wrap
 msgid ""
 "\n"
 "&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap&gt;&lt;/keycombo&gt;\n"
 msgstr ""
 "\n"
-"&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap&gt;&lt;/keycombo&gt;\n"
+"&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keyca"
+"p&gt;&lt;/keycombo&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1564
+#: C/index.docbook:1669
 msgid "To refer to keys use: <_:informalexample-1/>"
 msgstr "Para se referir a chaves use: <_:informalexample-1/>"
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1577
+#: C/index.docbook:1682
 msgid "Filling the extra files"
 msgstr "Preenchendo os arquivos extras"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1579
+#: C/index.docbook:1684
 msgid ""
 "There are a couple of extra files, that need to be maintained along with the "
 "inline source code comments: <filename>&lt;package&gt;.types</filename>, "
@@ -2670,17 +2813,18 @@ msgid ""
 "<filename>&lt;package&gt;-sections.txt</filename>."
 msgstr ""
 "Há alguns poucos arquivos extras, que precisam ser mantidos junto com os "
-"comentários inseridos no código fonte: <filename>&lt;pacote&gt;.types</"
-"filename>, <filename>&lt;pacote&gt;-docs.xml</filename> (no passado, .sgml), "
+"comentários inseridos no código fonte: "
+"<filename>&lt;pacote&gt;.types</filename>, "
+"<filename>&lt;pacote&gt;-docs.xml</filename> (no passado, .sgml), "
 "<filename>&lt;pacote&gt;-sections.txt</filename>."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1588
+#: C/index.docbook:1693
 msgid "Editing the types file"
 msgstr "Editando o arquivo de tipos"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1590
+#: C/index.docbook:1695
 msgid ""
 "If your library or application includes GObjects, you want their signals, "
 "arguments/parameters and position in the hierarchy to be shown in the "
@@ -2695,12 +2839,12 @@ msgstr ""
 "<filename>&lt;pacote&gt;.types</filename>."
 
 #. (itstool) path: example/title
-#: C/index.docbook:1599
+#: C/index.docbook:1704
 msgid "Example types file snippet"
 msgstr "Trecho de exemplo de arquivo de tipos"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1600
+#: C/index.docbook:1705
 #, no-wrap
 msgid ""
 "\n"
@@ -2720,7 +2864,7 @@ msgstr ""
 "gtk_arrow_get_type\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1611
+#: C/index.docbook:1716
 msgid ""
 "Since GTK-Doc 1.8 <application>gtkdoc-scan</application> can generate this "
 "list for you. Just add \"--rebuild-types\" to SCAN_OPTIONS in "
@@ -2733,12 +2877,12 @@ msgstr ""
 "deveria distribuir o arquivo de tipos nem tê-lo sob um controle de versão."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1620
+#: C/index.docbook:1725
 msgid "Editing the master document"
 msgstr "Editando o documento mestre"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1622
+#: C/index.docbook:1727
 msgid ""
 "GTK-Doc produces documentation in DocBook SGML/XML. When processing the "
 "inline source comments, the GTK-Doc tools generate one documentation page "
@@ -2751,7 +2895,7 @@ msgstr ""
 "mestre os inclui e os coloca em uma ordem."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1629
+#: C/index.docbook:1734
 msgid ""
 "While GTK-Doc creates a template master document for you, later runs will "
 "not touch it again. This means that one can freely structure the "
@@ -2768,7 +2912,7 @@ msgstr ""
 "em tempo para ver se há itens a serem introduzidos lá."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:1639
+#: C/index.docbook:1744
 msgid ""
 "Do not create tutorials as extra documents. Just write extra chapters. The "
 "benefit of directly embedding the tutorial for your library into the API "
@@ -2783,7 +2927,7 @@ msgstr ""
 "atualizações junto com a biblioteca."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1648
+#: C/index.docbook:1753
 msgid ""
 "So what are the things to change inside the master document? For a start is "
 "only a little. There are some placeholders (text in square brackets) there "
@@ -2794,12 +2938,12 @@ msgstr ""
 "colchetes) que você deve cuidar."
 
 #. (itstool) path: example/title
-#: C/index.docbook:1655
+#: C/index.docbook:1760
 msgid "Master document header"
 msgstr "Cabeçalho do documento mestre"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1656
+#: C/index.docbook:1761
 #, no-wrap
 msgid ""
 "\n"
@@ -2820,8 +2964,11 @@ msgstr ""
 "  &lt;title&gt;Manual de referência do NOMEDOMÓDULO&lt;/title&gt;\n"
 "  &lt;releaseinfo&gt;\n"
 "    for NOMEDOMÓDULO [VERSÃO]\n"
-"    A última versão desta documentação também pode ser encontrada on-line em\n"
-"    &lt;ulink role=\"online-location\" url=\"http://[SERVIDOR]/NOMEDOMÓDULO/index.html\"&gt;http://[SERVIDOR]/NOMEDOMÓDULO/&lt;/ulink&gt;.\n"
+"    A última versão desta documentação também pode ser encontrada on-line "
+"em\n"
+"    &lt;ulink role=\"online-location\" url=\""
+"http://[SERVIDOR]/NOMEDOMÓDULO/index.html\""
+"&gt;http://[SERVIDOR]/NOMEDOMÓDULO/&lt;/ulink&gt;.\n"
 "  &lt;/releaseinfo&gt;\n"
 "&lt;/bookinfo&gt;\n"
 "\n"
@@ -2829,7 +2976,7 @@ msgstr ""
 "  &lt;title&gt;[Insira o título aqui]&lt;/title&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1672
+#: C/index.docbook:1777
 msgid ""
 "In addition a few option elements are created in commented form. You can "
 "review these and enable them as you like."
@@ -2838,12 +2985,12 @@ msgstr ""
 "pode revisá-los e habilitá-los como preferir."
 
 #. (itstool) path: example/title
-#: C/index.docbook:1678
+#: C/index.docbook:1783
 msgid "Optional part in the master document"
 msgstr "Parte opcional do documento mestre"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1679
+#: C/index.docbook:1784
 #, no-wrap
 msgid ""
 "\n"
@@ -2853,11 +3000,12 @@ msgid ""
 msgstr ""
 "\n"
 "  &lt;!-- habilite isso se você usa anotações do gobject introspection\n"
-"  &lt;xi:include href=\"xml/annotation-glossary.xml\"&gt;&lt;xi:fallback /&gt;&lt;/xi:include&gt;\n"
+"  &lt;xi:include href=\"xml/annotation-glossary.xml\"&gt;&lt;xi:fallback "
+"/&gt;&lt;/xi:include&gt;\n"
 "  --&gt;          \n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1687
+#: C/index.docbook:1792
 msgid ""
 "Finally you need to add new section whenever you introduce one. The <link "
 "linkend=\"modernizing-gtk-doc-1-16\">gtkdoc-check</link> tool will remind "
@@ -2869,12 +3017,12 @@ msgstr ""
 "incluídos na documentação."
 
 #. (itstool) path: example/title
-#: C/index.docbook:1695 C/index.docbook:1730
+#: C/index.docbook:1800 C/index.docbook:1835
 msgid "Including generated sections"
 msgstr "Incluindo seções geradas"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1696
+#: C/index.docbook:1801
 #, no-wrap
 msgid ""
 "\n"
@@ -2890,12 +3038,12 @@ msgstr ""
 "      ...\n"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1708
+#: C/index.docbook:1813
 msgid "Editing the section file"
 msgstr "Editando o arquivo de seção"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1710
+#: C/index.docbook:1815
 msgid ""
 "The section file is used to organise the documentation output by GTK-Doc. "
 "Here one specifies which symbol belongs to which module or class and control "
@@ -2906,7 +3054,7 @@ msgstr ""
 "e controla a visibilidade (pública ou privada)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1716
+#: C/index.docbook:1821
 msgid ""
 "The section file is a plain text file with tags delimiting sections. Blank "
 "lines are ignored and lines starting with a '#' are treated as comment lines."
@@ -2916,7 +3064,7 @@ msgstr ""
 "tratadas como linhas de comentários."
 
 #. (itstool) path: note/para
-#: C/index.docbook:1723
+#: C/index.docbook:1828
 msgid ""
 "While the tags make the file look like xml, it is not. Please do not close "
 "tags like &lt;SUBSECTION&gt;."
@@ -2925,7 +3073,7 @@ msgstr ""
 "feche tags como &lt;SUBSECTION&gt;."
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1731
+#: C/index.docbook:1836
 #, no-wrap
 msgid ""
 "\n"
@@ -2957,7 +3105,7 @@ msgstr ""
 "&lt;/SECTION&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1748
+#: C/index.docbook:1853
 msgid ""
 "The &lt;FILE&gt; ... &lt;/FILE&gt; tag is used to specify the file name, "
 "without any suffix. For example, using '&lt;FILE&gt;gnome-config&lt;/"
@@ -2980,7 +3128,7 @@ msgstr ""
 "para minúsculos)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1760
+#: C/index.docbook:1865
 msgid ""
 "The &lt;TITLE&gt; ... &lt;/TITLE&gt; tag is used to specify the title of the "
 "section. It is only useful before the templates (if used) are initially "
@@ -2994,7 +3142,7 @@ msgstr ""
 "obsoleto."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1767
+#: C/index.docbook:1872
 msgid ""
 "You can group items in the section by using the &lt;SUBSECTION&gt; tag. "
 "Currently it outputs a blank line between subsections in the synopsis "
@@ -3023,7 +3171,7 @@ msgstr ""
 "padrão ou pública depende se há entradas públicas (variáveis, vmethods)."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1786
+#: C/index.docbook:1891
 msgid ""
 "You can also use &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; to specify the "
 "#include files which are shown in the synopsis sections. It contains a comma-"
@@ -3032,19 +3180,19 @@ msgid ""
 "If you set it within a section, it only applies to that section."
 msgstr ""
 "Você também pode usar &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; para especificar "
-"os arquivos #include que são mostrados nas seções de sinópse. Ela contém uma "
+"os arquivos #include que são mostrados nas seções de sinopse. Ela contém uma "
 "lista separada por vírgula de arquivos #include, sem os sinais de maior que "
 "e menor que. Se você define-a fora de quaisquer seções, ela age para todas "
 "as seções até o fim do arquivo. Se você define-a em uma seção, ela só vai se "
 "aplicar àquela seção."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1800
+#: C/index.docbook:1905
 msgid "Controlling the result"
 msgstr "Controlando o resultado"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1802
+#: C/index.docbook:1907
 msgid ""
 "A GTK-Doc run generates report files inside the documentation directory. The "
 "generated files are named: <filename>&lt;package&gt;-undocumented.txt</"
@@ -3053,14 +3201,14 @@ msgid ""
 "files that can be viewed and postprocessed easily."
 msgstr ""
 "Uma execução do GTK-Doc gera arquivos de relatórios dentro do diretório de "
-"documentação. Os arquivos gerados são chamados: <filename>&lt;pacote&gt;-"
-"undocumented.txt</filename>, <filename>&lt;pacote&gt;-undeclared.txt</"
-"filename> e <filename>&lt;pacote&gt;-unused.txt</filename>. Todos eles são "
-"arquivos texto simples que podem ser facilmente visualizados e pós-"
-"processados."
+"documentação. Os arquivos gerados são chamados: "
+"<filename>&lt;pacote&gt;-undocumented.txt</filename>, "
+"<filename>&lt;pacote&gt;-undeclared.txt</filename> e "
+"<filename>&lt;pacote&gt;-unused.txt</filename>. Todos eles são arquivos "
+"texto simples que podem ser facilmente visualizados e pós-processados."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1811
+#: C/index.docbook:1916
 msgid ""
 "The <filename>&lt;package&gt;-undocumented.txt</filename> file starts with "
 "the documentation coverage summary. Below are two sections divided by blank "
@@ -3076,7 +3224,7 @@ msgstr ""
 "exemplo, um novo parâmetro foi adicionado."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1820
+#: C/index.docbook:1925
 msgid ""
 "The <filename>&lt;package&gt;-undeclared.txt</filename> file lists symbols "
 "given in the <filename>&lt;package&gt;-sections.txt</filename> but not found "
@@ -3088,7 +3236,7 @@ msgstr ""
 "escritos incorretamente."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1827
+#: C/index.docbook:1932
 msgid ""
 "The <filename>&lt;package&gt;-unused.txt</filename> file lists symbol names, "
 "where the GTK-Doc scanner has found documentation, but does not know where "
@@ -3101,7 +3249,7 @@ msgstr ""
 "ainda ao arquivo <filename>&lt;pacote&gt;-sections.txt</filename>."
 
 #. (itstool) path: tip/para
-#: C/index.docbook:1835
+#: C/index.docbook:1940
 msgid ""
 "Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
 "am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during "
@@ -3112,7 +3260,7 @@ msgstr ""
 "verificações de sanidade durante a execução de <command>make check</command>."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1842
+#: C/index.docbook:1947
 msgid ""
 "One can also look at the files produced by the source code scanner: "
 "<filename>&lt;package&gt;-decl-list.txt</filename> and <filename>&lt;"
@@ -3122,14 +3270,14 @@ msgid ""
 "this file contains it."
 msgstr ""
 "Também pode-se buscar nos arquivos produzidos pela varredura do código "
-"aberto: <filename>&lt;pacote&gt;-decl-list.txt</filename> e <filename>&lt;"
-"pacote&gt;-decl.txt</filename>. O primeiro pode ser comparado com o arquivo "
-"de seção, se ele for mantido manualmente. O segundo lista todas as "
-"declarações de cabeçalhos. Se um símbolo está faltando, pode-se verificar se "
-"este arquivo o contém."
+"aberto: <filename>&lt;pacote&gt;-decl-list.txt</filename> e "
+"<filename>&lt;pacote&gt;-decl.txt</filename>. O primeiro pode ser comparado "
+"com o arquivo de seção, se ele for mantido manualmente. O segundo lista "
+"todas as declarações de cabeçalhos. Se um símbolo está faltando, pode-se "
+"verificar se este arquivo o contém."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1851
+#: C/index.docbook:1956
 msgid ""
 "If the project is GObject based, one can also look into the files produced "
 "by the object scanner: <filename>&lt;package&gt;.args.txt</filename>, "
@@ -3141,21 +3289,23 @@ msgid ""
 "<command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 msgstr ""
 "Se o projeto é baseado em GObject, pode-se também procurar nos arquivos "
-"produzidos pela varredura de objetos: <filename>&lt;pacote&gt;.args.txt</"
-"filename>, <filename>&lt;pacote&gt;.hierarchy.txt</filename>, <filename>&lt;"
-"pacote&gt;.interfaces.txt</filename>, <filename>&lt;pacote&gt;.prerequisites."
-"txt</filename> e <filename>&lt;pacote&gt;.signals.txt</filename>. Se há "
-"símbolos faltando em qualquer um deles, pode-se exigir que o GTK-Doc "
-"mantenha o arquivo intermediário de varredura para análise posterior, "
-"executando <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
+"produzidos pela varredura de objetos: "
+"<filename>&lt;pacote&gt;.args.txt</filename>, "
+"<filename>&lt;pacote&gt;.hierarchy.txt</filename>, "
+"<filename>&lt;pacote&gt;.interfaces.txt</filename>, "
+"<filename>&lt;pacote&gt;.prerequisites.txt</filename> e "
+"<filename>&lt;pacote&gt;.signals.txt</filename>. Se há símbolos faltando em "
+"qualquer um deles, pode-se exigir que o GTK-Doc mantenha o arquivo "
+"intermediário de varredura para análise posterior, executando "
+"<command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1866
+#: C/index.docbook:1971
 msgid "Modernizing the documentation"
 msgstr "Modernizando a documentação"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1868
+#: C/index.docbook:1973
 msgid ""
 "GTK-Doc has been around for quite some time. In this section we list new "
 "features together with the version since when it is available."
@@ -3164,12 +3314,12 @@ msgstr ""
 "funcionalidades juntamente da versão desde a qual está disponível."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1874
+#: C/index.docbook:1979
 msgid "GTK-Doc 1.9"
 msgstr "GTK-Doc 1.9"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1876
+#: C/index.docbook:1981
 msgid ""
 "When using xml instead of sgml, one can actually name the master document "
 "<filename>&lt;package&gt;-docs.xml</filename>."
@@ -3178,7 +3328,7 @@ msgstr ""
 "<filename>&lt;pacote&gt;-docs.xml</filename>."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1881
+#: C/index.docbook:1986
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-sections</option> in "
 "<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
@@ -3199,7 +3349,7 @@ msgstr ""
 "<code>meld &lt;package&gt;-decl-list.txt &lt;package&gt;-sections.txt</code>."
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1892
+#: C/index.docbook:1997
 msgid ""
 "Version 1.8 already introduced the syntax for documenting sections in the "
 "sources instead of the separate files under <filename class=\"directory"
@@ -3211,21 +3361,21 @@ msgid ""
 "<filename>configure.ac</filename> and you are done."
 msgstr ""
 "A versão 1.8 já introduziu a sintaxe para documentação seções nos fontes em "
-"vez dos arquivos separados sob <filename class=\"directory\">tmpl</"
-"filename>. Essa versão adiciona opções para alternar todo o módulo de "
-"documentação para não usar a etapa de compilação extra do tmpl, usando "
-"<option>--flavour no-tmpl</option> no <filename>configure.ac</filename>. Se "
-"você não possui um <filename class=\"directory\">tmpl</filename> no seu "
-"sistema de controle de versão e ainda não trocou, basta adicionar uma opção "
-"ao <filename>configure.ac</filename> e está resolvido."
+"vez dos arquivos separados sob <filename class=\"directory\">tmpl</filename>"
+". Essa versão adiciona opções para alternar todo o módulo de documentação "
+"para não usar a etapa de compilação extra do tmpl, usando <option>--flavour "
+"no-tmpl</option> no <filename>configure.ac</filename>. Se você não possui um "
+"<filename class=\"directory\">tmpl</filename> no seu sistema de controle de "
+"versão e ainda não trocou, basta adicionar uma opção ao "
+"<filename>configure.ac</filename> e está resolvido."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1904
+#: C/index.docbook:2009
 msgid "GTK-Doc 1.10"
 msgstr "GTK-Doc 1.10"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1906
+#: C/index.docbook:2011
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-types</option> in "
 "<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
@@ -3242,17 +3392,17 @@ msgstr ""
 "código que é compilado condicionalmente."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1917
+#: C/index.docbook:2022
 msgid "GTK-Doc 1.16"
 msgstr "GTK-Doc 1.16"
 
 #. (itstool) path: example/title
-#: C/index.docbook:1923
+#: C/index.docbook:2028
 msgid "Enable gtkdoc-check"
 msgstr "Habilitar gtkdoc-check"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1924
+#: C/index.docbook:2029
 #, no-wrap
 msgid ""
 "\n"
@@ -3272,7 +3422,7 @@ msgstr ""
 "endif\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1919
+#: C/index.docbook:2024
 msgid ""
 "This version includes a new tool called gtkdoc-check. This tool can run a "
 "set of sanity checks on your documentation. It is enabled by adding these "
@@ -3280,16 +3430,16 @@ msgid ""
 msgstr ""
 "Essa versão inclui uma nova ferramenta chamada gtkdoc-check. Essa ferramenta "
 "pode executar um conjunto de verificações de sanidade na sua documentação. "
-"Ela é habilitada adicionando essas linhas ao final do <filename>Makefile.am</"
-"filename>. <_:example-1/>"
+"Ela é habilitada adicionando essas linhas ao final do "
+"<filename>Makefile.am</filename>. <_:example-1/>"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1937
+#: C/index.docbook:2042
 msgid "GTK-Doc 1.20"
 msgstr "GTK-Doc 1.20"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1939
+#: C/index.docbook:2044
 msgid ""
 "Version 1.18 brought some initial markdown support. Using markdown in doc "
 "comments is less intrusive than writing docbook xml. This version improves a "
@@ -3303,17 +3453,17 @@ msgstr ""
 "comentário</link> tem todos os detalhes."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1949
+#: C/index.docbook:2054
 msgid "GTK-Doc 1.25"
 msgstr "GTK-Doc 1.25"
 
 #. (itstool) path: example/title
-#: C/index.docbook:1959
+#: C/index.docbook:2064
 msgid "Use pre-generated entities"
 msgstr "Usando entradas geradas previamente"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:1960
+#: C/index.docbook:2065
 #, no-wrap
 msgid ""
 "\n"
@@ -3340,7 +3490,8 @@ msgstr ""
 "&lt;!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.3//EN\"\n"
 "               \"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd\"\n"
 "[\n"
-"  &lt;!ENTITY % local.common.attrib \"xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'\"&gt;\n"
+"  &lt;!ENTITY % local.common.attrib \"xmlns:xi  CDATA  #FIXED "
+"'http://www.w3.org/2003/XInclude'\"&gt;\n"
 "  &lt;!ENTITY % gtkdocentities SYSTEM \"xml/gtkdocentities.ent\"&gt;\n"
 "  %gtkdocentities;\n"
 "]&gt;\n"
@@ -3350,12 +3501,13 @@ msgstr ""
 "    &lt;releaseinfo&gt;\n"
 "      para &amp;versão-pacote;.\n"
 "      A última versão desta documentação pode ser encontra on-line em\n"
-"      &lt;ulink role=\"online-location\" url=\"http://[SERVIDOR]/&amp;nome-pacote;/index.html\"&gt;http://[SERVIDOR]/&amp;nome-pacote;/&lt;/ulink&gt;.\n"
+"      &lt;ulink role=\"online-location\" url=\"http://[SERVIDOR]/&amp;nome-"
+"pacote;/index.html\"&gt;http://[SERVIDOR]/&amp;nome-pacote;/&lt;/ulink&gt;.\n"
 "    &lt;/releaseinfo&gt;\n"
 "  &lt;/bookinfo&gt;\n"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:1951
+#: C/index.docbook:2056
 msgid ""
 "The makefiles shipped with this version generate an entity file at "
 "<filename>xml/gtkdocentities.ent</filename>, containing entities for e.g. "
@@ -3375,12 +3527,12 @@ msgstr ""
 "xml nos arquivos xml gerados. <_:example-1/>"
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:1985
+#: C/index.docbook:2090
 msgid "Documenting other interfaces"
 msgstr "Documentando outras interfaces"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:1987
+#: C/index.docbook:2092
 msgid ""
 "So far we have been using GTK-Doc to document the API of code. The next "
 "sections contain suggestions how the tools can be used to document other "
@@ -3391,13 +3543,13 @@ msgstr ""
 "para documentar outras interfaces, também."
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:1994
+#: C/index.docbook:2099
 msgid "Command line options and man pages"
 msgstr "Opções de linha de comando e de páginas man"
 
 # RefEntry é uma página de referência do DocBook (http://www.docbook.org/tdg/en/html/refentry.html)
 #. (itstool) path: sect1/para
-#: C/index.docbook:1996
+#: C/index.docbook:2101
 msgid ""
 "As one can generate man pages for a docbook refentry as well, it sounds like "
 "a good idea to use it for that purpose. This way the interface is part of "
@@ -3408,12 +3560,12 @@ msgstr ""
 "parte da referência e é possível obter a página man de graça."
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:2003
+#: C/index.docbook:2108
 msgid "Document the tool"
 msgstr "Documentar a ferramenta"
 
 #. (itstool) path: sect2/para
-#: C/index.docbook:2005
+#: C/index.docbook:2110
 msgid ""
 "Create one refentry file per tool. Following <link linkend="
 "\"settingup_docfiles\">our example</link> we would call it <filename>meep/"
@@ -3421,24 +3573,24 @@ msgid ""
 "used and can look at generated file in the xml subdirectory as well as "
 "examples e.g. in glib."
 msgstr ""
-"Crie um arquivo refentry por ferramenta. Segundo <link linkend="
-"\"settingup_docfiles\">nosso exemplo</link> nós chamaríamos ele de "
+"Crie um arquivo refentry por ferramenta. Segundo <link linkend=\""
+"settingup_docfiles\">nosso exemplo</link> nós chamaríamos ele de "
 "<filename>meep/docs/reference/meeper/meep.xml</filename>. Para as tags xml "
 "que devem ser usadas e podem parecer no arquivo gerado no subdiretório xml "
 "assim como exemplos, por exemplo, em glib."
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:2015
+#: C/index.docbook:2120
 msgid "Adding the extra configure check"
 msgstr "Adicionando a verificação extra ao configure"
 
 #. (itstool) path: example/title
-#: C/index.docbook:2018 C/index.docbook:2036
+#: C/index.docbook:2123 C/index.docbook:2141
 msgid "Extra configure checks"
 msgstr "Verificações extra no configure"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:2019
+#: C/index.docbook:2124
 #, no-wrap
 msgid ""
 "\n"
@@ -3453,19 +3605,20 @@ msgstr ""
 "\n"
 "AC_ARG_ENABLE(man,\n"
 "              [AC_HELP_STRING([--enable-man],\n"
-"                              [regenerate man pages from Docbook [default=no]])],enable_man=yes,\n"
+"                              [regenerate man pages from Docbook "
+"[default=no]])],enable_man=yes,\n"
 "              enable_man=no)\n"
 "\n"
 "AC_PATH_PROG([XSLTPROC], [xsltproc])\n"
 "AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)\n"
 
 #. (itstool) path: sect2/title
-#: C/index.docbook:2033
+#: C/index.docbook:2138
 msgid "Adding the extra makefile rules"
 msgstr "Adicionando as regras extras ao makefile"
 
 #. (itstool) path: example/programlisting
-#: C/index.docbook:2037
+#: C/index.docbook:2142
 #, no-wrap
 msgid ""
 "\n"
@@ -3492,7 +3645,9 @@ msgstr ""
 "if ENABLE_MAN\n"
 "\n"
 "%.1 : %.xml\n"
-"        @XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $&lt;\n"
+"        @XSLTPROC@ -nonet "
+"http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $&lt;"
+"\n"
 "\n"
 "endif\n"
 "endif\n"
@@ -3501,12 +3656,12 @@ msgstr ""
 "EXTRA_DIST += meep.xml\n"
 
 #. (itstool) path: sect1/title
-#: C/index.docbook:2059
+#: C/index.docbook:2164
 msgid "DBus interfaces"
 msgstr "Interfaces DBus"
 
 #. (itstool) path: sect1/para
-#: C/index.docbook:2061
+#: C/index.docbook:2166
 msgid ""
 "(FIXME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://"
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
@@ -3515,27 +3670,27 @@ msgstr ""
 "http://cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:2070
+#: C/index.docbook:2175
 msgid "Frequently asked questions"
 msgstr "Perguntas frequentes"
 
 #. (itstool) path: segmentedlist/segtitle
-#: C/index.docbook:2074
+#: C/index.docbook:2179
 msgid "Question"
 msgstr "Questão"
 
 #. (itstool) path: segmentedlist/segtitle
-#: C/index.docbook:2075
+#: C/index.docbook:2180
 msgid "Answer"
 msgstr "Resposta"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2077
+#: C/index.docbook:2182
 msgid "No class hierarchy."
 msgstr "Sem hierarquia de classe."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2078
+#: C/index.docbook:2183
 msgid ""
 "The objects <function>xxx_get_type()</function> function has not been "
 "entered into the <filename>&lt;package&gt;.types</filename> file."
@@ -3544,28 +3699,29 @@ msgstr ""
 "arquivo <filename>&lt;pacote&gt;.types</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2084
+#: C/index.docbook:2189
 msgid "Still no class hierarchy."
 msgstr "Ainda sem hierarquia."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2085
+#: C/index.docbook:2190
 msgid ""
 "Missing or wrong naming in <filename>&lt;package&gt;-sections.txt</filename> "
 "file (see <ulink url=\"http://mail.gnome.org/archives/gtk-doc-list/2003-"
 "October/msg00006.html\">explanation</ulink>)."
 msgstr ""
-"Nomenclatura faltando ou incorreta no arquivo <filename>&lt;pacote&gt;-"
-"sections.txt</filename> (veja a <ulink url=\"http://mail.gnome.org/archives/"
-"gtk-doc-list/2003-October/msg00006.html\">explicação</ulink>)."
+"Nomenclatura faltando ou incorreta no arquivo "
+"<filename>&lt;pacote&gt;-sections.txt</filename> (veja a <ulink url=\""
+"http://mail.gnome.org/archives/gtk-doc-list/2003-October/msg00006.html\""
+">explicação</ulink>)."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2091
+#: C/index.docbook:2196
 msgid "Damn, I have still no class hierarchy."
 msgstr "Droga. Eu ainda não tenho hierarquia de classes."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2092
+#: C/index.docbook:2197
 msgid ""
 "Is the object name (name of the instance struct, e.g. <type>GtkWidget</"
 "type>) part of the normal section (don't put this into Standard or Private "
@@ -3576,26 +3732,26 @@ msgstr ""
 "subseções Standard ou Private)?"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2099
+#: C/index.docbook:2204
 msgid "No symbol index."
 msgstr "Nenhum símbolo de índice."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2100
+#: C/index.docbook:2205
 msgid ""
 "Does the <filename>&lt;package&gt;-docs.{xml,sgml}</filename> contain a "
 "index that xi:includes the generated index?"
 msgstr ""
-"O <filename>&lt;pacote&gt;-docs.{xml,sgml}</filename> contém um índice que "
-"\"xi:inclui\" o índice gerado?"
+"O <filename>&lt;pacote&gt;-docs.{xml,sgml}</filename> contém um índice que \""
+"xi:inclui\" o índice gerado?"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2106
+#: C/index.docbook:2211
 msgid "Symbols are not linked to their doc-section."
 msgstr "Símbolos não estão vinculados ao seus doc-section."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2107
+#: C/index.docbook:2212
 msgid ""
 "Is the doc-comment using the correct markup (added #,% or ())? Check if the "
 "gtkdoc-fixxref warns about unresolvable xrefs."
@@ -3604,26 +3760,26 @@ msgstr ""
 "Verifique se o gtkdoc-fixxref avisa sobre xrefs não resolvidos."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2113
+#: C/index.docbook:2218
 msgid "A new class does not appear in the docs."
 msgstr "Uma nova classe não aparece nos documentos."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2114
+#: C/index.docbook:2219
 msgid ""
 "Is the new page xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</"
 "filename>."
 msgstr ""
-"A nova página foi \"xi:incluída\" do <filename>&lt;pacote&gt;-docs.{xml,sgml}"
-"</filename>?"
+"A nova página foi \"xi:incluída\" do "
+"<filename>&lt;pacote&gt;-docs.{xml,sgml}</filename>?"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2120
+#: C/index.docbook:2225
 msgid "A new symbol does not appear in the docs."
 msgstr "Um novo símbolo não aparece nos documentos."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2121
+#: C/index.docbook:2226
 msgid ""
 "Is the doc-comment properly formatted. Check for spelling mistakes in the "
 "begin of the comment. Check if the gtkdoc-fixxref warns about unresolvable "
@@ -3636,12 +3792,12 @@ msgstr ""
 "<filename>&lt;pacote&gt;-sections.txt</filename> em uma subseção pública."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2129
+#: C/index.docbook:2234
 msgid "A type is missing from the class hierarchy."
 msgstr "Um tipo está faltando da hierarquia de classe."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2130
+#: C/index.docbook:2235
 msgid ""
 "If the type is listed in <filename>&lt;package&gt;.hierarchy</filename> but "
 "not in <filename>xml/tree_index.sgml</filename> then double check that the "
@@ -3651,18 +3807,19 @@ msgid ""
 msgstr ""
 "Se o tipo está listado no <filename>&lt;pacote&gt;.hierarchy</filename>, mas "
 "não em <filename>xml/tree_index.sgml</filename>, então certifique-se de que "
-"o tipo está colocado corretamente no <filename>&lt;pacote&gt;-sections.txt</"
-"filename>. Se a instância do tipo (ex.: <type>GtkWidget</type>) não está "
-"listada ou incidentalmente marcada como privada, ela não será mostrada."
+"o tipo está colocado corretamente no "
+"<filename>&lt;pacote&gt;-sections.txt</filename>. Se a instância do tipo "
+"(ex.: <type>GtkWidget</type>) não está listada ou incidentalmente marcada "
+"como privada, ela não será mostrada."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2139
+#: C/index.docbook:2244
 msgid "I get foldoc links for all gobject annotations."
 msgstr ""
 "Obtenho links de seguimento de documentos para todas as anotações gobject."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2140
+#: C/index.docbook:2245
 msgid ""
 "Check that <filename>xml/annotation-glossary.xml</filename> is xi:included "
 "from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
@@ -3671,12 +3828,12 @@ msgstr ""
 "incluído\" de <filename>&lt;pacote&gt;-docs.{xml,sgml}</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2148
+#: C/index.docbook:2253
 msgid "Parameter described in source code comment block but does not exist"
 msgstr "Parâmetro descrito no bloco de comentário do código fonte não existe"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2149
+#: C/index.docbook:2254
 msgid ""
 "Check if the prototype in the header has different parameter names as in the "
 "source."
@@ -3685,21 +3842,21 @@ msgstr ""
 "fonte."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2154
+#: C/index.docbook:2259
 msgid "multiple \"IDs\" for constraint linkend: XYZ"
-msgstr "Múltiplos \"IDs\" para restrições do fim do link XYZ"
+msgstr "múltiplos \"IDs\" para restrições do fim do link XYZ"
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2155
+#: C/index.docbook:2260
 msgid ""
 "Symbol XYZ appears twice in <filename>&lt;package&gt;-sections.txt</"
 "filename> file."
 msgstr ""
-"O símbolo XYZ aparece duas vezes no arquivo <filename>&lt;pacote&gt;-"
-"sections.txt</filename>."
+"O símbolo XYZ aparece duas vezes no arquivo "
+"<filename>&lt;pacote&gt;-sections.txt</filename>."
 
 #. (itstool) path: seglistitem/seg
-#: C/index.docbook:2158
+#: C/index.docbook:2263
 msgid ""
 "Element typename in namespace '' encountered in para, but no template "
 "matches."
@@ -3708,23 +3865,23 @@ msgstr ""
 "correspondeu."
 
 #. (itstool) path: chapter/title
-#: C/index.docbook:2165
+#: C/index.docbook:2270
 msgid "Tools related to gtk-doc"
 msgstr "Ferramentas relacionadas ao gtk-doc"
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:2167
+#: C/index.docbook:2272
 msgid ""
 "GtkDocPlugin - a <ulink url=\"http://trac-hacks.org/wiki/GtkDocPlugin\">Trac "
 "GTK-Doc</ulink> integration plugin, that adds API docs to a trac site and "
 "integrates with the trac search."
 msgstr ""
-"GtkDocPlugin - um plug-in de integração com <ulink url=\"http://trac-hacks."
-"org/wiki/GtkDocPlugin\">Trac GTK-Doc</ulink>, que adiciona documentos de API "
-"a um site trac e integra com a pesquisa do trac."
+"GtkDocPlugin - um plug-in de integração com <ulink url=\"http://trac-"
+"hacks.org/wiki/GtkDocPlugin\">Trac GTK-Doc</ulink>, que adiciona documentos "
+"de API a um site trac e integra com a pesquisa do trac."
 
 #. (itstool) path: chapter/para
-#: C/index.docbook:2172
+#: C/index.docbook:2277
 msgid ""
 "Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since "
 "tags in the API to determine the minimum required version."
@@ -3887,10 +4044,10 @@ msgid ""
 "those of Invariant Sections, in the notice that says that the <link linkend="
 "\"fdl-document\">Document</link> is released under this License."
 msgstr ""
-"As <quote>Seções Invariantes</quote> são certas <link linkend=\"fdl-secondary"
-"\">Seções Secundárias</link> cujos títulos são designados como sendo de "
-"Seções Invariantes na nota que afirma que o <link linkend=\"fdl-document"
-"\">Documento</link> é publicado sob esta Licença."
+"As <quote>Seções Invariantes</quote> são certas <link linkend=\"fdl-"
+"secondary\">Seções Secundárias</link> cujos títulos são designados como "
+"sendo de Seções Invariantes na nota que afirma que o <link linkend=\"fdl-"
+"document\">Documento</link> é publicado sob esta Licença."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:103
@@ -3920,8 +4077,8 @@ msgid ""
 "modification by readers is not Transparent. A copy that is not "
 "<quote>Transparent</quote> is called <quote>Opaque</quote>."
 msgstr ""
-"Uma cópia <quote>Transparente</quote> do <link linkend=\"fdl-document"
-"\">Documento</link> significa uma cópia legível por máquina, representada em "
+"Uma cópia <quote>Transparente</quote> do <link linkend=\"fdl-document\""
+">Documento</link> significa uma cópia legível por máquina, representada em "
 "um formato cuja especificação esteja disponível ao público geral e que cujo "
 "conteúdo possa ser visualizado e editado de forma clara e direta por "
 "editores de texto genéricos ou programas genéricos de desenho (para imagens "
@@ -3931,8 +4088,8 @@ msgstr ""
 "formatos apropriados de entrada em formatadores de texto. Uma cópia feita em "
 "outro formato de arquivo Transparente cuja marcação, ou ausência desta, "
 "tenha sido manipulada para impedir ou desencorajar modificação subsequente "
-"pelos leitores não é Transparente. Uma cópia que não é <quote>Transparente</"
-"quote> é chamada <quote>Opaca</quote>."
+"pelos leitores não é Transparente. Uma cópia que não é "
+"<quote>Transparente</quote> é chamada <quote>Opaca</quote>."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:128 C/fdl-appendix.xml:128
@@ -3993,17 +4150,17 @@ msgid ""
 "must also follow the conditions in <link linkend=\"fdl-section3\">section 3</"
 "link>."
 msgstr ""
-"Você pode copiar e distribuir o <link linkend=\"fdl-document\">Documento</"
-"link> em qualquer meio, seja este de forma comercial ou não, desde que esta "
-"licença, as notas de direitos autorais (copyright), e a nota de licença "
-"afirmando que esta Licença se aplica ao Documento sejam reproduzidas em "
-"todas as cópias, e que você não inclua outras condições, quaisquer que "
-"sejam, às condições desta Licença. Você não pode usar de medidas técnicas "
-"para obstruir ou controlar a leitura ou cópia futura das cópias que você "
-"fizer ou distribuir. Contudo, você pode aceitar compensação em troca das "
-"cópias. Se você distribuir um número suficientemente grande de cópias, você "
-"deve também respeitar as condições descritas na <link linkend=\"fdl-"
-"section3\">seção 3</link>."
+"Você pode copiar e distribuir o <link linkend=\"fdl-document\""
+">Documento</link> em qualquer meio, seja este de forma comercial ou não, "
+"desde que esta licença, as notas de direitos autorais (copyright), e a nota "
+"de licença afirmando que esta Licença se aplica ao Documento sejam "
+"reproduzidas em todas as cópias, e que você não inclua outras condições, "
+"quaisquer que sejam, às condições desta Licença. Você não pode usar de "
+"medidas técnicas para obstruir ou controlar a leitura ou cópia futura das "
+"cópias que você fizer ou distribuir. Contudo, você pode aceitar compensação "
+"em troca das cópias. Se você distribuir um número suficientemente grande de "
+"cópias, você deve também respeitar as condições descritas na <link linkend"
+"=\"fdl-section3\">seção 3</link>."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:169 C/fdl-appendix.xml:169
@@ -4035,19 +4192,18 @@ msgid ""
 "document\">Document</link> and satisfy these conditions, can be treated as "
 "verbatim copying in other respects."
 msgstr ""
-"Se você publicar cópias impressas do <link linkend=\"fdl-document"
-"\">Documento</link>, em número maior que 100, e a nota de licença do "
-"Documento exigir <link linkend=\"fdl-cover-texts\">Textos de Capa</link>, "
-"você deve encadernar as cópias em capas que carreguem, de forma clara e "
-"legível, todos estes Textos de Capa: Textos de Capa Frontal na capa frontal "
-"e Textos de Contracapa na contracapa. Ambas as capas devem também "
-"identificar, de forma clara e legível, você como o editor das cópias. A capa "
-"frontal deve apresentar o título completo com todas as palavras deste "
-"igualmente proeminentes e visíveis. Além disso, você pode adicionar outro "
-"material nas capas. As cópias com mudanças limitadas às capas, desde que "
-"preservem o título do <link linkend=\"fdl-document\">Documento</link> e "
-"satisfaçam estas condições podem ser tratadas como cópias literais em outros "
-"aspectos."
+"Se você publicar cópias impressas do <link linkend=\"fdl-document\""
+">Documento</link>, em número maior que 100, e a nota de licença do Documento "
+"exigir <link linkend=\"fdl-cover-texts\">Textos de Capa</link>, você deve "
+"encadernar as cópias em capas que carreguem, de forma clara e legível, todos "
+"estes Textos de Capa: Textos de Capa Frontal na capa frontal e Textos de "
+"Contracapa na contracapa. Ambas as capas devem também identificar, de forma "
+"clara e legível, você como o editor das cópias. A capa frontal deve "
+"apresentar o título completo com todas as palavras deste igualmente "
+"proeminentes e visíveis. Além disso, você pode adicionar outro material nas "
+"capas. As cópias com mudanças limitadas às capas, desde que preservem o "
+"título do <link linkend=\"fdl-document\">Documento</link> e satisfaçam estas "
+"condições podem ser tratadas como cópias literais em outros aspectos."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:195 C/fdl-appendix.xml:195
@@ -4078,20 +4234,20 @@ msgid ""
 "year after the last time you distribute an Opaque copy (directly or through "
 "your agents or retailers) of that edition to the public."
 msgstr ""
-"Se você publicar ou distribuir cópias <link linkend=\"fdl-transparent"
-"\">Opacas</link> do <link linkend=\"fdl-document\">Documento</link> em "
-"número maior que 100, você deve incluir uma cópia <link linkend=\"fdl-"
-"transparent\">Transparente</link> legível por máquina juntamente com cada "
-"cópia Opaca, ou dizer em (ou juntamente com) cada cópia Opaca, um endereço "
-"de rede a partir do qual o público geral de usuários possam acessar e obter "
-"de forma anônima e sob nenhum custo, usando protocolos de rede públicos "
-"padrão, uma cópia Transparente completa do Documento, livre de materiais "
-"adicionados. Se você decidir pela segunda opção, você deve seguir passos com "
-"certa prudência ao começar a distribuir as cópias Opacas em quantidade, a "
-"fim de garantir que esta cópia transparente permanecerá acessível no local "
-"indicado por pelo menos um ano após a última vez que você distribuir uma "
-"cópia Opaca (diretamente ou através de seus agentes ou distribuidores) desta "
-"edição ao público."
+"Se você publicar ou distribuir cópias <link linkend=\"fdl-transparent\""
+">Opacas</link> do <link linkend=\"fdl-document\">Documento</link> em número "
+"maior que 100, você deve incluir uma cópia <link linkend=\"fdl-transparent\""
+">Transparente</link> legível por máquina juntamente com cada cópia Opaca, ou "
+"dizer em (ou juntamente com) cada cópia Opaca, um endereço de rede a partir "
+"do qual o público geral de usuários possam acessar e obter de forma anônima "
+"e sob nenhum custo, usando protocolos de rede públicos padrão, uma cópia "
+"Transparente completa do Documento, livre de materiais adicionados. Se você "
+"decidir pela segunda opção, você deve seguir passos com certa prudência ao "
+"começar a distribuir as cópias Opacas em quantidade, a fim de garantir que "
+"esta cópia transparente permanecerá acessível no local indicado por pelo "
+"menos um ano após a última vez que você distribuir uma cópia Opaca ("
+"diretamente ou através de seus agentes ou distribuidores) desta edição ao "
+"público."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:222
@@ -4101,8 +4257,8 @@ msgid ""
 "large number of copies, to give them a chance to provide you with an updated "
 "version of the Document."
 msgstr ""
-"É solicitado, mas não exigido, que você contate os autores do <link linkend="
-"\"fdl-document\">Documento</link> muito antes de redistribuir qualquer "
+"É solicitado, mas não exigido, que você contate os autores do <link linkend"
+"=\"fdl-document\">Documento</link> muito antes de redistribuir qualquer "
 "grande número de cópias, para dar a eles uma chance de lhe fornecer uma "
 "versão atualizada do Documento."
 
@@ -4125,8 +4281,8 @@ msgid ""
 msgstr ""
 "Você pode copiar e distribuir uma <link linkend=\"fdl-modified\">Versão "
 "Modificada</link> do <link linkend=\"fdl-document\">Documento</link> sob as "
-"condições das seções <link linkend=\"fdl-section2\">2</link> e <link linkend="
-"\"fdl-section3\">3</link> acima, desde que você forneça a Versão Modificada "
+"condições das seções <link linkend=\"fdl-section2\">2</link> e <link linkend"
+"=\"fdl-section3\">3</link> acima, desde que você forneça a Versão Modificada "
 "estritamente sob esta Licença, com a Versão Modificada preenchendo a função "
 "de Documento, permitindo assim a distribuição e modificação da Versão "
 "Modificada a quem quer que possua uma cópia desta. Além disso, você deve "
@@ -4203,8 +4359,8 @@ msgid ""
 "Preserve all the copyright notices of the <link linkend=\"fdl-document"
 "\">Document</link>."
 msgstr ""
-"Preservar todas as notas de direitos autorais (copyright) do <link linkend="
-"\"fdl-document\">Documento</link>."
+"Preservar todas as notas de direitos autorais (copyright) do <link linkend"
+"=\"fdl-document\">Documento</link>."
 
 #. (itstool) path: formalpara/title
 #: C/index.docbook:301 C/fdl-appendix.xml:301
@@ -4251,10 +4407,10 @@ msgid ""
 "cover-texts\">Cover Texts</link> given in the <link linkend=\"fdl-document"
 "\">Document's</link> license notice."
 msgstr ""
-"Preservar na referida nota de licença a lista completa de <link linkend="
-"\"fdl-invariant\">Seções Invariantes</link> e <link linkend=\"fdl-cover-texts"
-"\">Textos de Capa</link> obrigatórios, dados na nota de licença do <link "
-"linkend=\"fdl-document\">Documento</link>."
+"Preservar na referida nota de licença a lista completa de <link linkend"
+"=\"fdl-invariant\">Seções Invariantes</link> e <link linkend=\"fdl-cover-"
+"texts\">Textos de Capa</link> obrigatórios, dados na nota de licença do <"
+"link linkend=\"fdl-document\">Documento</link>."
 
 #. (itstool) path: formalpara/title
 #: C/index.docbook:337 C/fdl-appendix.xml:337
@@ -4285,11 +4441,11 @@ msgid ""
 msgstr ""
 "Preservar a seção intitulada <quote>Histórico</quote>, preservar seu título, "
 "e adicionar a esta um item declarando ao menos o título, o ano, novos "
-"autores, e o editor da <link linkend=\"fdl-modified\">Versão Modificada</"
-"link> conforme incluído na <link linkend=\"fdl-title-page\">Página de "
-"Título</link>. Se nenhuma seção intitulada <quote>Histórico</quote> estiver "
-"presente no <link linkend=\"fdl-document\">Documento</link>, crie uma "
-"informando o título, o ano, os autores e o editor do Documento como "
+"autores, e o editor da <link linkend=\"fdl-modified\">Versão "
+"Modificada</link> conforme incluído na <link linkend=\"fdl-title-page\">"
+"Página de Título</link>. Se nenhuma seção intitulada <quote>Histórico</quote>"
+" estiver presente no <link linkend=\"fdl-document\">Documento</link>, crie "
+"uma informando o título, o ano, os autores e o editor do Documento como "
 "evidenciado na Página de Título, em seguida adicione um item descrevendo a "
 "Versão Modificada como mencionado na sentença anterior."
 
@@ -4310,8 +4466,8 @@ msgid ""
 "the Document itself, or if the original publisher of the version it refers "
 "to gives permission."
 msgstr ""
-"Preservar o endereço de rede, se existir algum, informado pelo <link linkend="
-"\"fdl-document\">Documento</link> para acesso público a uma cópia <link "
+"Preservar o endereço de rede, se existir algum, informado pelo <link linkend"
+"=\"fdl-document\">Documento</link> para acesso público a uma cópia <link "
 "linkend=\"fdl-transparent\">Transparente</link> deste e, da mesma maneira, "
 "os endereços de rede dados no Documento para versões anteriores nas quais "
 "este se baseia. Estes podem ser colocados na seção <quote>Histórico</quote>. "
@@ -4401,8 +4557,8 @@ msgstr ""
 "seções iniciais ou apêndices que sejam qualificados como <link linkend=\"fdl-"
 "secondary\">Seções Secundárias</link>, e não contiver material copiado do "
 "Documento, você pode, a seu critério, tornar algumas dessas ou todas essas "
-"seções em invariantes. Para fazer isso, adicione seus títulos à lista de "
-"<link linkend=\"fdl-invariant\">Seções Invariantes</link> na nota de licença "
+"seções em invariantes. Para fazer isso, adicione seus títulos à lista de <"
+"link linkend=\"fdl-invariant\">Seções Invariantes</link> na nota de licença "
 "da Versão Modificada. Estes títulos devem ser distintos de quaisquer outros "
 "títulos de seções."
 
@@ -4416,10 +4572,10 @@ msgid ""
 "authoritative definition of a standard."
 msgstr ""
 "Você pode incluir uma seção intitulada <quote>Apoio</quote>, desde que esta "
-"contenha apenas apoios recebidos limitados a sua <link linkend=\"fdl-modified"
-"\">Versão Modificada</link> por várias fontes -- por exemplo, notas do "
-"revisor ou de que o texto foi aprovado por uma organização como a definição "
-"oficial de um padrão."
+"contenha apenas apoios recebidos limitados a sua <link linkend=\"fdl-"
+"modified\">Versão Modificada</link> por várias fontes -- por exemplo, notas "
+"do revisor ou de que o texto foi aprovado por uma organização como a "
+"definição oficial de um padrão."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:453
@@ -4436,8 +4592,8 @@ msgid ""
 "you may not add another; but you may replace the old one, on explicit "
 "permission from the previous publisher that added the old one."
 msgstr ""
-"Você pode adicionar uma passagem de até cinco palavras como <link linkend="
-"\"fdl-cover-texts\">Texto de Capa Frontal</link>, e uma passagem de até 25 "
+"Você pode adicionar uma passagem de até cinco palavras como <link linkend"
+"=\"fdl-cover-texts\">Texto de Capa Frontal</link>, e uma passagem de até 25 "
 "palavras como <link linkend=\"fdl-cover-texts\">Texto de Contracapa</link>, "
 "ao fim da lista de <link linkend=\"fdl-cover-texts\">Textos de Capa</link> "
 "na <link linkend=\"fdl-modified\">Versão Modificada</link>. Somente uma "
@@ -4457,10 +4613,11 @@ msgid ""
 "for publicity for or to assert or imply endorsement of any <link linkend="
 "\"fdl-modified\">Modified Version </link>."
 msgstr ""
-"O(s) autor(es) e editor(es) do <link linkend=\"fdl-document\">Documento</"
-"link>, por esta Licença, não concedem permissão para que seus nomes sejam "
-"usados a fins de publicidade, para defesa ou para apoio implícito de "
-"qualquer <link linkend=\"fdl-modified\">Versão Modificada</link>."
+"O(s) autor(es) e editor(es) do <link linkend=\"fdl-document\""
+">Documento</link>, por esta Licença, não concedem permissão para que seus "
+"nomes sejam usados a fins de publicidade, para defesa ou para apoio "
+"implícito de qualquer <link linkend=\"fdl-modified\">Versão "
+"Modificada</link>."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:480 C/fdl-appendix.xml:480
@@ -4479,12 +4636,12 @@ msgid ""
 "its license notice."
 msgstr ""
 "Você pode combinar o <link linkend=\"fdl-document\">Documento</link> com "
-"outros documentos publicados sob esta Licença, sob os termos definidos na "
-"<link linkend=\"fdl-section4\">seção 4</link> acima para versões "
-"modificadas, desde que você inclua na combinação todas as <link linkend="
-"\"fdl-invariant\">Seções Invariantes</link> de todos os documentos "
-"originais, sem modificações, e as liste como Seções Invariantes de seu "
-"trabalho combinado, na sua nota de licença."
+"outros documentos publicados sob esta Licença, sob os termos definidos na <"
+"link linkend=\"fdl-section4\">seção 4</link> acima para versões modificadas, "
+"desde que você inclua na combinação todas as <link linkend=\"fdl-invariant\">"
+"Seções Invariantes</link> de todos os documentos originais, sem "
+"modificações, e as liste como Seções Invariantes de seu trabalho combinado, "
+"na sua nota de licença."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:492
@@ -4539,8 +4696,8 @@ msgid ""
 "the rules of this License for verbatim copying of each of the documents in "
 "all other respects."
 msgstr ""
-"Você pode fazer uma coleção que consiste do <link linkend=\"fdl-document"
-"\">Documento</link> e outros documentos publicados sob esta Licença, e "
+"Você pode fazer uma coleção que consiste do <link linkend=\"fdl-document\""
+">Documento</link> e outros documentos publicados sob esta Licença, e "
 "substituir as cópias individuais desta Licença, nos vários documentos, por "
 "uma única cópia a ser incluída na coleção, desde que você siga as regras "
 "desta Licença para cópias literais de cada documento em todos os outros "
@@ -4590,11 +4747,11 @@ msgstr ""
 "compilação seja reivindicado para esta compilação. Tal compilação configura "
 "um <quote>agregado</quote> e esta Licença não se aplica aos outros trabalhos "
 "contidos na compilação do Documento, levando em conta serem compilados, caso "
-"eles mesmos não forem trabalhos derivados do Documento. Se o requisito de "
-"<link linkend=\"fdl-cover-texts\">Texto da Capa</link> da <link linkend="
-"\"fdl-section3\">seção 3</link> é aplicável a estas cópias do Documento, e "
-"ainda se o Documento é menor do que um quarto do agregado inteiro, os Textos "
-"de Capa do Documento podem ser inseridos nas capas que envolvem somente o "
+"eles mesmos não forem trabalhos derivados do Documento. Se o requisito de <"
+"link linkend=\"fdl-cover-texts\">Texto da Capa</link> da <link linkend=\"fdl-"
+"section3\">seção 3</link> é aplicável a estas cópias do Documento, e ainda "
+"se o Documento é menor do que um quarto do agregado inteiro, os Textos de "
+"Capa do Documento podem ser inseridos nas capas que envolvem somente o "
 "Documento no agregado. Caso contrário, eles devem aparecer em capas em volta "
 "do agregado como um todo."
 
@@ -4619,16 +4776,16 @@ msgid ""
 "prevail."
 msgstr ""
 "Uma tradução é considerada como sendo um tipo de modificação, desta forma "
-"você pode distribuir traduções do <link linkend=\"fdl-document\">Documento</"
-"link> sob os termos da <link linkend=\"fdl-section4\">seção 4</link>. A "
-"substituição das <link linkend=\"fdl-invariant\">Seções Invariantes</link> "
-"por traduções requer permissão especial dos detentores dos direitos "
-"autorais, embora você possa incluir traduções de algumas ou todas as Seções "
-"Invariantes juntamente às versões originais destas. Você pode incluir uma "
-"tradução desta Licença, desde que você também inclua a versão original em "
-"Inglês desta Licença. Em caso de discordância entre a tradução e a versão "
-"original desta Licença ou nota de licença, a versão original em inglês "
-"prevalecerá."
+"você pode distribuir traduções do <link linkend=\"fdl-document\""
+">Documento</link> sob os termos da <link linkend=\"fdl-section4\">seção "
+"4</link>. A substituição das <link linkend=\"fdl-invariant\">Seções "
+"Invariantes</link> por traduções requer permissão especial dos detentores "
+"dos direitos autorais, embora você possa incluir traduções de algumas ou "
+"todas as Seções Invariantes juntamente às versões originais destas. Você "
+"pode incluir uma tradução desta Licença, desde que você também inclua a "
+"versão original em Inglês desta Licença. Em caso de discordância entre a "
+"tradução e a versão original desta Licença ou nota de licença, a versão "
+"original em inglês prevalecerá."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:580 C/fdl-appendix.xml:580
@@ -4646,8 +4803,8 @@ msgid ""
 "under this License will not have their licenses terminated so long as such "
 "parties remain in full compliance."
 msgstr ""
-"Você não pode copiar, modificar, sublicenciar, ou distribuir o <link linkend="
-"\"fdl-document\">Documento</link> com exceção do que foi expressamente "
+"Você não pode copiar, modificar, sublicenciar, ou distribuir o <link linkend"
+"=\"fdl-document\">Documento</link> com exceção do que foi expressamente "
 "previsto sob esta Licença. Qualquer outra tentativa de cópia, modificação, "
 "sublicenciamento ou distribuição do Documento é nula, e implicará na "
 "rescisão automática de seus direitos sob esta Licença. Contudo, as partes "
@@ -4691,11 +4848,11 @@ msgid ""
 msgstr ""
 "É dado, a cada versão da Licença, um número de versão distinto. Se o <link "
 "linkend=\"fdl-document\">Documento</link> especificar que um número de "
-"versão em específico desta Licença <quote>ou qualquer versão posterior</"
-"quote> se aplica a ele, você tem a opção de seguir os termos e condições "
-"tanto da versão especificada quanto de qualquer versão posterior que tenha "
-"sido publicada (não como rascunho) pela Free Software Foundation. Se o "
-"documento não especificar um número de versão desta Licença, você pode "
+"versão em específico desta Licença <quote>ou qualquer versão "
+"posterior</quote> se aplica a ele, você tem a opção de seguir os termos e "
+"condições tanto da versão especificada quanto de qualquer versão posterior "
+"que tenha sido publicada (não como rascunho) pela Free Software Foundation. "
+"Se o documento não especificar um número de versão desta Licença, você pode "
 "escolher qualquer versão já publicada (não como rascunho) pela Free Software "
 "Foundation."
 
@@ -4752,13 +4909,13 @@ msgid ""
 "<quote>Front-Cover Texts being LIST</quote>; likewise for <link linkend="
 "\"fdl-cover-texts\">Back-Cover Texts</link>."
 msgstr ""
-"Se você não tiver qualquer <link linkend=\"fdl-invariant\">Seção Invariante</"
-"link>, escreva <quote>sem Seções Invariantes</quote> ao invés de afirmar "
-"quais são invariantes. Se você não tem <link linkend=\"fdl-cover-texts"
-"\">Textos de Capa Frontal</link>, escreva <quote>sem Textos de Capa Frontal</"
-"quote> ao invés de <quote>Textos de Capa Frontal sendo LISTADOS</quote>; O "
-"mesmo se aplica a <link linkend=\"fdl-cover-texts\">Textos de Contracapa</"
-"link>."
+"Se você não tiver qualquer <link linkend=\"fdl-invariant\">Seção "
+"Invariante</link>, escreva <quote>sem Seções Invariantes</quote> ao invés de "
+"afirmar quais são invariantes. Se você não tem <link linkend=\"fdl-cover-"
+"texts\">Textos de Capa Frontal</link>, escreva <quote>sem Textos de Capa "
+"Frontal</quote> ao invés de <quote>Textos de Capa Frontal sendo "
+"LISTADOS</quote>; O mesmo se aplica a <link linkend=\"fdl-cover-texts\">"
+"Textos de Contracapa</link>."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:657
@@ -4772,8 +4929,9 @@ msgstr ""
 "Se seu documento contiver exemplos não-triviais de código de programação, "
 "recomendamos publicar estes exemplos paralelamente, sob a licença de "
 "software livre que você escolher, como por exemplo a <ulink type=\"http\" "
-"url=\"http://www.gnu.org/copyleft/gpl.html\">Licença Pública Geral GNU</"
-"ulink> (GNU General Public License), para permitir seu uso em software livre."
+"url=\"http://www.gnu.org/copyleft/gpl.html\">Licença Pública Geral "
+"GNU</ulink> (GNU General Public License), para permitir seu uso em software "
+"livre."
 
 #. (itstool) path: copyright/year
 #: C/fdl-appendix.xml:16
@@ -4816,8 +4974,8 @@ msgid ""
 "Free Software Foundation, Inc. <_:street-1/>, <_:city-2/>, <_:state-3/> <_:"
 "postcode-4/> <_:country-5/>"
 msgstr ""
-"Free Software Foundation, Inc. <_:street-1/>, <_:city-2/>, <_:state-3/> <_:"
-"postcode-4/> <_:country-5/>"
+"Free Software Foundation, Inc. <_:street-1/>, <_:city-2/>, <_:state-3/> "
+"<_:postcode-4/> <_:country-5/>"
 
 #. (itstool) path: para/quote
 #: C/fdl-appendix.xml:34
@@ -5605,12 +5763,12 @@ msgid ""
 "Document does not specify a version number of this License, you may choose "
 "any version ever published (not as a draft) by the Free Software Foundation."
 msgstr ""
-"É dado, a cada versão da Licença, um número de versão distinto. Se o <_:"
-"link-1/> especificar que um número de versão em específico desta Licença <_:"
-"quote-2/> se aplica a ele, você tem a opção de seguir os termos e condições "
-"tanto da versão especificada quanto de qualquer versão posterior que tenha "
-"sido publicada (não como rascunho) pela Free Software Foundation. Se o "
-"documento não especificar um número de versão desta Licença, você pode "
+"É dado, a cada versão da Licença, um número de versão distinto. Se o "
+"<_:link-1/> especificar que um número de versão em específico desta Licença "
+"<_:quote-2/> se aplica a ele, você tem a opção de seguir os termos e "
+"condições tanto da versão especificada quanto de qualquer versão posterior "
+"que tenha sido publicada (não como rascunho) pela Free Software Foundation. "
+"Se o documento não especificar um número de versão desta Licença, você pode "
 "escolher qualquer versão já publicada (não como rascunho) pela Free Software "
 "Foundation."
 
@@ -5681,8 +5839,8 @@ msgid ""
 msgstr ""
 "Se seu documento contiver exemplos não-triviais de código de programação, "
 "recomendamos publicar estes exemplos paralelamente, sob a licença de "
-"software livre que você escolher, como por exemplo a <_:ulink-1/> (GNU "
-"General Public License), para permitir seu uso em software livre."
+"software livre que você escolher, como, por exemplo, a <_:ulink-1/>, para "
+"permitir seu uso em software livre."
 
 #~ msgid "1.20"
 #~ msgstr "1.20"
