@@ -39,6 +39,7 @@ void annotation_scope (GCallback *callback, gpointer user_data);
 void annotation_rename_to (void);
 
 void annotation_attributes_single (void);
+void annotation_attributes_single_eq (void);
 
 void stability_unstable(void);
 

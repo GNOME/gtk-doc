@@ -268,6 +268,16 @@ annotation_attributes_single (void)
 }
 
 /**
+ * annotation_attributes_single_eq: (attributes key=value)
+ *
+ * Documentation for this function.
+ */
+void
+annotation_attributes_single_eq (void)
+{
+}
+
+/**
  * stability_unstable:
  *
  * An experimental function.
