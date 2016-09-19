@@ -38,6 +38,8 @@ void annotation_scope (GCallback *callback, gpointer user_data);
 
 void annotation_rename_to (void);
 
+void annotation_attributes_single (void);
+
 void stability_unstable(void);
 
 void annotation_multiline_on_function (void);

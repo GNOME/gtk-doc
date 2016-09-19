@@ -258,6 +258,16 @@ annotation_rename_to (void)
 }
 
 /**
+ * annotation_attributes_single: (attributes key value)
+ *
+ * Documentation for this function.
+ */
+void
+annotation_attributes_single (void)
+{
+}
+
+/**
  * stability_unstable:
  *
  * An experimental function.
