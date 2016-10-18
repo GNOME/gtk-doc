@@ -39,12 +39,12 @@ if test -z "$PERL"; then
 	AC_MSG_ERROR([perl not found])
 fi
 
-AC_MSG_CHECKING([if Perl version >= 5.18.0])
-if "$PERL" -e "require v5.18.0"; then
+AC_MSG_CHECKING([if Perl version >= 5.16.0])
+if "$PERL" -e "require v5.16.0"; then
 	AC_MSG_RESULT([yes])
 else
 	AC_MSG_RESULT([no])
-	AC_MSG_ERROR([perl >= 5.18.0 is required for gtk-doc])
+	AC_MSG_ERROR([perl >= 5.16.0 is required for gtk-doc])
 fi
 
 dnl
