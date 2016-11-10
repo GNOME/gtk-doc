@@ -4331,7 +4331,7 @@ sub ScanSourceFile {
             } elsif (m%^\s*(PROGRAM:\s*\S+)%) {
                 $symbol = $1;
                 @TRACE@("PROGRAM DOCS found in source for : '$symbol'\n");
-            } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\([-A-Za-z0-9._()= ]+?\)\s*)*$%) {
+            } elsif (m%^\s*([\w:-]*\w)\s*:?\s*(\(.+?\)\s*)*$%) {
                 $symbol = $1;
                 my $annotation = $2;
                 @TRACE@("SYMBOL DOCS found in source for : '$symbol'\n");
