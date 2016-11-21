@@ -68,22 +68,24 @@ else
     styledir=$gtkdocdir
 fi
 
-# profiling
-profile_args=""
-if test "$GTKDOC_PROFILE" != ""; then
-  profile_args="--profile"
-fi
-
 # We need to use a wrapper because there's no other way to conditionally pass
 # a `--path $searchpath` argument with proper quoting for the path
 run_xsltproc() {
     # we could do "$path_option $PWD "
     # to avoid needing rewriting entities that are copied from the header
     # into docs under xml
-    if test "X$searchpath" = "X"; then
-        @XSLTPROC@ 2>profile.txt $profile_args "$@"
+    if test "$GTKDOC_PROFILE" == ""; then
+        if test "X$searchpath" = "X"; then
+            @XSLTPROC@ "$@"
+        else
+            @XSLTPROC@ --path "$searchpath" "$@"
+        fi
     else
-        @XSLTPROC@ 2>profile.txt $profile_args --path "$searchpath" "$@"
+        if test "X$searchpath" = "X"; then
+            @XSLTPROC@ 2>profile.txt --profile "$@"
+        else
+            @XSLTPROC@ 2>profile.txt --profile --path "$searchpath" "$@"
+        fi
     fi
 }
 
@@ -97,8 +99,6 @@ run_xsltproc --nonet --xinclude \
 # profiling
 if test "$GTKDOC_PROFILE" != ""; then
   cat profile.txt | gprof2dot.py -e 0.01 -n 0.01 | dot -Tpng -o profile.png
-else
-  rm profile.txt
 fi
 
 # copy navigation images and stylesheets to html directory ...
