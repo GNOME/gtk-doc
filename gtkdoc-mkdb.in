@@ -271,10 +271,10 @@ my $PARAM_FIELD_COUNT = 2;
 my $doctype_header;
 
 
-run() unless caller; # Run program unless loaded as a module
+Run() unless caller; # Run program unless loaded as a module
 
 
-sub run {
+sub Run {
     my %optctl = ('module' => \$MODULE,
                   'source-dir' => \@SOURCE_DIRS,
                   'source-suffixes' => \$SOURCE_SUFFIXES,

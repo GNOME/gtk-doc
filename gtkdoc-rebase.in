@@ -57,10 +57,10 @@ my (%OnlineMap, %LocalMap, %RevMap);
 my %Mapped;
 
 
-run() unless caller; # Run program unless loaded as a module
+Run() unless caller; # Run program unless loaded as a module
 
 
-sub run {
+sub Run {
     my %optctl = ('html-dir' => \$HTML_DIR,
             'other-dir' => \@OTHER_DIRS,
             'dest-dir' => \$DEST_DIR,

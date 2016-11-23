@@ -67,10 +67,10 @@ my %NoLinks = (
 # Cache of dirs we already scanned for index files
 my %DirCache;
 
-run() unless caller; # Run program unless loaded as a module
+Run() unless caller; # Run program unless loaded as a module
 
 
-sub run {
+sub Run {
     my %optctl = ('module' => \$MODULE,
                   'module-dir' => \$MODULE_DIR,
                   'html-dir' => \$HTML_DIR,
