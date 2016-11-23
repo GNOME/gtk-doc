@@ -3,6 +3,7 @@
 #
 # gtk-doc - GTK DocBook documentation generator.
 # Copyright (C) 1998  Damon Chaplin
+#               2007-2016  Stefan Sauer
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -180,7 +181,7 @@ get_object_types (void)
 {
   gpointer g_object_class;
   gint i = 0;
-  
+
 ${get_types}
   object_types[i] = G_TYPE_INVALID;
 
