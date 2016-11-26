@@ -189,12 +189,8 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files) $(expand_con
 	cd html && gtkdoc-mkhtml $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
 	-@test "x$(HTML_IMAGES)" = "x" || \
 	for file in $(HTML_IMAGES) ; do \
-	  if test -f $(abs_srcdir)/$$file ; then \
-	    cp $(abs_srcdir)/$$file $(abs_builddir)/html; \
-	  fi; \
-	  if test -f $(abs_builddir)/$$file ; then \
-	    cp $(abs_builddir)/$$file $(abs_builddir)/html; \
-	  fi; \
+	  test -f $(abs_srcdir)/$$file && cp $(abs_srcdir)/$$file $(abs_builddir)/html; \
+	  test -f $(abs_builddir)/$$file && cp $(abs_builddir)/$$file $(abs_builddir)/html; \
 	done;
 	$(GTK_DOC_V_XREF)gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	$(AM_V_at)touch html-build.stamp
