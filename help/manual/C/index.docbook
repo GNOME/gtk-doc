@@ -453,7 +453,7 @@ AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 
       <para>
         Furthermore it is recommended that you have the following line inside
-        you <filename>configure.ac</filename> script.
+        your <filename>configure.ac</filename> script.
         This allows <application>gtkdocize</application> to automatically copy the
         macro definition for <function>GTK_DOC_CHECK</function> to your project.
       </para>
@@ -942,7 +942,7 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html
             <para>
               The name links the section documentation to the respective part in
               the <filename>&lt;package&gt;-sections.txt</filename> file. The
-              name give here should match the &lt;FILE&gt; tag in the
+              name given here should match the &lt;FILE&gt; tag in the
               <filename>&lt;package&gt;-sections.txt</filename> file.
             </para>
           </listitem>
@@ -1979,7 +1979,7 @@ meep_app_get_type
         This version adds options to switch the whole doc module to not use the
         extra tmpl build step at all, by using <option>--flavour no-tmpl</option>
         in <filename>configure.ac</filename>. If you don't have a <filename class='directory'>tmpl</filename>
-        checked into you source control system and haven't yet switched, just
+        checked into your source control system and haven't yet switched, just
         add the flag to <filename>configure.ac</filename> and you are done.
       </para>
     </sect1>
@@ -2036,7 +2036,7 @@ endif
         The makefiles shipped with this version generate an entity file at <filename>xml/gtkdocentities.ent</filename>,
         containing entities for e.g. package_name and package_version. You can
         use this e.g. in the main xml file to avoid hardcoding the version
-        number. Below is any example that shows how the entity file is included
+        number. Below is an example that shows how the entity file is included
         and how the entities are used. The entities can also be used in all
         generated files, GTK-Doc will use the same xml header in generated xml
         files.
