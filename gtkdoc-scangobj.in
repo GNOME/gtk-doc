@@ -1270,7 +1270,7 @@ output_object_args (FILE *fp, GType object_type)
 #endif
 
 #ifdef GTK_IS_WIDGET_CLASS
-#if GTK_CHECK_VERSION(2,1,0)
+#if GTK_CHECK_VERSION(2,1,0) && !GTK_CHECK_VERSION(3,89,2)
     if (!style_prop && GTK_IS_WIDGET_CLASS (class)) {
       properties = gtk_widget_class_list_style_properties (GTK_WIDGET_CLASS (class), &n_properties);
       style_prop = TRUE;
