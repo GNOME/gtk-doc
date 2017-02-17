@@ -30,13 +30,13 @@ files:
   file
 * we need to check if this works well for all kind of _types (e.g. boxed)
   https://bugzilla.gnome.org/show_bug.cgi?id=605025
-  
+
 == -section.txt ==
 https://bugzilla.gnome.org/show_bug.cgi?id=646094
 
 * using SCAN_OPTION="--rebuild-sections" can be used to use the audogenerated
   sections file
-* when scanning a header file, everything of the header and the respective .c 
+* when scanning a header file, everything of the header and the respective .c
   file will be put to one section
 * symbols can be hidden using __GTK_DOC_IGNORE__
 
@@ -75,10 +75,19 @@ diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
 = Running =
 gtk-doc is using a makefile with several targets to get from sources to docs. It
 uses makefile variables for configuration.
-It might be easier to have a gtk-doc tool that can run the other gtk-doc tools
+It might be easier to have a gtkdoc tool that can run the other gtkdoc tools
 in the right order (ev. by importing them as modules). This could handle a few
 things nicer that the makefiles don't do well. This would also make it easy to
 run it manually or integrate into other build systems.
+
+= Intermediate files =
+Can we change the intermediate files into a perl-module? So that all we need to
+do is to import it. Ideally we have just one outfile for each tool:
+gtkdoc-scan     -> scan.pm (decl.txt, decl-list.txt, types.txt, sections.txt)
+gtkdoc-scangobj -> scanobj.pm (interfacs, prerequisites, ...)
+
+Can we drop the decl-list.txt file (or rename to make sure this is what a
+generated section.txt would look like)
 
 = Issues =
 * gtkdoc-fixxref makefile targets use $HTML_DIR
@@ -378,6 +387,26 @@ script:
 #!/bin/sh
 make ctags
 grep "gst_caps_is_always_compatible" tags
+
+
+= docbook -> markdown =
+The main performance culprit is the use of docbook (tools). Also writing docbook
+in source comments is cumbersome. We already support lots of markdown, so we'd
+like to have a pure markdown based workflow.
+
+For that we'd like to provide a migration path:
+- convert existing docbook files to markdown (pandoc)
+- convert/identify comments using docbook to markdown
+
+Next we need a replacement for gtkdoc-mkdb: gtkdoc-mkmd to create extract
+markdown from  sources and generate support files (index files). We also need to
+patch gtkdoc-{mkdb/pdf} to run respective tools (e.g. pandoc).
+
+We can enable such a toolchain via the configure flavours option.
+
+== open issues ==
+- markdown does not define a way to aggregate fragments into a large book
+  - we can only concat all the files in a stable order
 
 
 = performance =
