@@ -1,109 +1,101 @@
-#!/bin/sh
-#
+#!@PYTHON@
 
-usage() {
-cat <<EOF
-gtkdoc-mkhtml version @VERSION@ - generate documentation in html format
+# Support both Python 2 and 3
+from __future__ import print_function
 
---verbose               Print extra output while processing
---path=SEARCH_PATH      Extra source directories
-MODULE                  Name of the doc module being parsed
-DRIVER_FILE             File containing the toplevel DocBook file.
---version               Print the version of this program
---help                  Print this help
-EOF
-}
+import os, sys, argparse, subprocess, shutil
+from glob import glob
 
-# echo "args $*\n";
+version = '@VERSION@'
+xsltproc = '@XSLTPROC@'
 
-# parse options, ignore unknown options for future extensions
+parser = argparse.ArgumentParser(description='gtkdoc-mkhtml version %s - generate documentation in html format' % version)
 
-verbose="0"
-searchpath=
-uninstalled=no
-while true; do
-    case "X$1" in
-        X--version) echo "@VERSION@"; exit 0;;
-        X--help) usage; exit 0;;
-        X--uninstalled) uninstalled=yes; shift;;
-        X--verbose) verbose="1"; shift;;
-        X--path=*) searchpath=`echo "$1" | sed s/.*=//`; shift;;
-        X--*) shift;;
-        X*) break;;
-    esac
-done
+parser.add_argument('--verbose', default=False, action='store_true',
+                    help='Print extra output while processing')
+parser.add_argument('--path', default=[], action='append',
+                    help='Extra source directories')
+parser.add_argument('--version', default=False, action='store_true',
+                    help='Print the version of this program')
+parser.add_argument('args', nargs='*',
+                    help='MODULE DRIVER_FILE')
+parser.add_argument('--uninstalled', action='store_true', default=False,
+                    help='???')
 
-if test $# -lt 2; then
-    usage 1>&2
-    exit 1
-fi
+options = parser.parse_args()
+if options.version:
+    print(version)
+    sys.exit(0)
 
-module="$1"
-shift
-document="$1"
-shift
+if len(options.args) < 2:
+    sys.exit('Too few arguments')
 
-quiet="1"
-if test $verbose = "1"; then
-    quiet="0"
-fi
+module=options.args[0]
+document=options.args[1]
+if options.verbose:
+    quiet = '0'
+else:
+    quiet = '1'
+remaining_args = options.args[2:]
 
-if test $uninstalled = yes; then
+if options.uninstalled:
     # this does not work from buiddir!=srcdir
-    gtkdocdir=`dirname $0`
-	  # traditional Bourne shells may not support -e here, use -f
-    if test ! -f "$gtkdocdir/gtk-doc.xsl"; then
+    gtkdocdir = os.path.split(sys.argv[0])[0]
+    # traditional Bourne shells may not support -e here, use -f
+    if not os.path.exists(gtkdocdir + '/gtk-doc.xsl'):
         # try to src dir (set from makefiles) too
-        if test -f "$ABS_TOP_SRCDIR/gtk-doc.xsl"; then
-            gtkdocdir=$ABS_TOP_SRCDIR
-        fi
-    fi
-    styledir=$gtkdocdir/style
+        if os.path.exists(os.path.environ.get("ABS_TOP_SRCDIR", '') + '/gtk-doc.xsl'):
+            gtkdocdir=os.path.environ['ABS_TOP_SRCDIR']
+    styledir=gtkdocdir + '/style'
     #echo "uninstalled, gtkdocdir=$gtkdocdir, cwd=$PWD"
-else
+else:
     # the first two are needed to resolve datadir
-    prefix=@prefix@
-    datarootdir=@datarootdir@
-    gtkdocdir=@datadir@/gtk-doc/data
-    styledir=$gtkdocdir
-fi
+    prefix='@prefix@'
+    datarootdir='@datarootdir@'
+    gtkdocdir='@datadir@/gtk-doc/data'
+    styledir=gtkdocdir
 
 # We need to use a wrapper because there's no other way to conditionally pass
 # a `--path $searchpath` argument with proper quoting for the path
-run_xsltproc() {
+def run_xsltproc(args):
     # we could do "$path_option $PWD "
     # to avoid needing rewriting entities that are copied from the header
     # into docs under xml
-    if test "$GTKDOC_PROFILE" = ""; then
-        if test "X$searchpath" = "X"; then
-            @XSLTPROC@ "$@"
-        else
-            @XSLTPROC@ --path "$searchpath" "$@"
-        fi
-    else
-        if test "X$searchpath" = "X"; then
-            @XSLTPROC@ 2>profile.txt --profile "$@"
-        else
-            @XSLTPROC@ 2>profile.txt --profile --path "$searchpath" "$@"
-        fi
-    fi
-}
+    if os.environ.get("GTKDOC_PROFILE", '') == '':
+        if len(options.path):
+            subprocess.check_call([xsltproc] + args)
+        else:
+            subprocess.check_call([xsltproc, '--path'] + options.path + args)
+    else:
+        if len(options.path) == 0:
+            subprocess.check_call([xsltproc, '--profile'] + args, stderr=open('profile.txt', 'w'))
+        else:
+            subprocess.check_call([xsltproc ,'--profile', '--path'] + options.path + args, stderr=open('profile.txt', 'w'))
 
-run_xsltproc --nonet --xinclude \
-    --stringparam gtkdoc.bookname "$module" \
-    --stringparam gtkdoc.version "@VERSION@" \
-    --stringparam chunk.quietly $quiet \
-    --stringparam chunker.output.quiet $quiet \
-    "$@" "$gtkdocdir/gtk-doc.xsl" "$document" || exit $?
+run_xsltproc(['--nonet',
+              '--xinclude',
+              '--stringparam',
+              'gtkdoc.bookname',
+              module,
+              '--stringparam',
+              'gtkdoc.version',
+              version,
+              '--stringparam',
+              'chunk.quietly',
+              quiet,
+              '--stringparam',
+              'chunker.output.quiet',
+              quiet] + remaining_args + \
+             [gtkdocdir + '/gtk-doc.xsl',
+              document])
 
 # profiling
-if test "$GTKDOC_PROFILE" != ""; then
-  cat profile.txt | gprof2dot.py -e 0.01 -n 0.01 | dot -Tpng -o profile.png
-fi
+if os.environ.get("GTKDOC_PROFILE", '') != '':
+   subprocess.check_call('cat profile.txt | gprof2dot.py -e 0.01 -n 0.01 | dot -Tpng -o profile.png', shell=True)
 
 # copy navigation images and stylesheets to html directory ...
-cp -f "$styledir"/*.png "$styledir"/*.css ./
+for f in glob(styledir + '/*.png') + glob(styledir + '/*.css'):
+     shutil.copy(f, '.')
 
-
-echo "timestamp" > ../html.stamp
+open('../html.stamp', 'w').write('timestamp')
 

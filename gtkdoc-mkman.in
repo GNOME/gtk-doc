@@ -1,95 +1,91 @@
-#!/bin/sh
-#
+#!@PYTHON@
 
-usage() {
-cat <<EOF
-gtkdoc-mkman version @VERSION@ - generate documentation in man format
+# Support both Python 2 and 3
+from __future__ import print_function
 
---verbose               Print extra output while processing
---path=SEARCH_PATH      Extra source directories
-MODULE                  Name of the doc module being parsed
-DRIVER_FILE             File containing the toplevel DocBook file.
---version               Print the version of this program
---help                  Print this help
-EOF
-}
+import os, sys, argparse, subprocess
+from glob import glob
 
-# parse options, ignore unknown options for future extensions
+version = '@VERSION@'
+xsltproc = '@XSLTPROC@'
 
-verbose=0
-searchpath=
-uninstalled=no
-while true; do
-    case "X$1" in
-        X--version) echo "@VERSION@"; exit 0;;
-        X--help) usage; exit 0;;
-        X--uninstalled) uninstalled=yes; shift;;
-        X--verbose) verbose="1"; shift;;
-        X--path=*) searchpath=`echo $1 | sed s/.*=//`; shift;;
-        X--*) shift;;
-        X*) break;;
-    esac
-done
+parser = argparse.ArgumentParser(description='gtkdoc-mkman version %s - generate documentation in man format' % version)
 
-if test $# -ne 2; then
-    usage 1>&2
-    exit 1
-fi
+parser.add_argument('--verbose', default=False, action='store_true',
+                    help='Print extra output while processing')
+parser.add_argument('--path', default='',
+                    help='Extra source directories')
+parser.add_argument('version', default=False, action='store_true',
+                    help='Print the version of this program')
+parser.add_argument('args', nargs=2,
+                    help='MODULE DRIVER_FILE')
+parser.add_argument('--uninstalled', action='store_true', default=False,
+                    help='???')
 
-module=$1
-shift
-document=$1
-shift
+options = parser.parse_args()
+if options.version:
+    print(version)
+    sys.exit(0)
 
-quiet="1"
-if test $verbose = "1"; then
-    quiet="0"
-fi
+module=options.args[0]
+document=options.args[1]
+if options.verbose:
+    quiet = '0'
+else:
+    quiet = '1'
 
-if test $uninstalled = yes; then
+if options.uninstalled:
     # this does not work from buiddir!=srcdir
-    gtkdocdir=`dirname $0`
+    gtkdocdir=os.path.split(sys.argv[0])[0]
     #echo "uninstalled, gtkdocdir=$gtkdocdir"
-else
+else:
     # the first two are needed to resolve datadir
-    prefix=@prefix@
-    datarootdir=@datarootdir@
-    gtkdocdir=@datadir@/gtk-doc/data
-fi
+    prefix='@prefix@'
+    datarootdir='@datarootdir@'
+    gtkdocdir='@datadir@/gtk-doc/data'
 
-if head -n 1 $document | grep "<?xml" > /dev/null; then
-   is_xml=true
+if "<?xml" in open(document).readline():
+    is_xml=True
     path_option='--path'
-else
-    is_xml=false
+else:
+    is_xml=False
     path_option='--directory'
-fi
+
 
 # we could do "$path_option $PWD "
 # to avoid needing rewriting entities that are copied from the header
 # into docs under xml
-if test "X$searchpath" = "X"; then
-    path_arg=
-else
-    path_arg="$path_option $searchpath"
-fi
+if options.path == '':
+    path_arg=[]
+else:
+    path_arg=[path_option, options.path]
 
 # would it make sens to create man pages only for certain refentries
 # e.g. for tools
-if $is_xml; then
+if is_xml:
     # see http://bugzilla.gnome.org/show_bug.cgi?id=467488
-    @XSLTPROC@ $path_arg --nonet --xinclude \
-        --stringparam gtkdoc.bookname $module \
-        --stringparam gtkdoc.version "@VERSION@" \
-        --stringparam chunk.quietly $quiet \
-        --stringparam chunker.output.quiet $quiet \
-        http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl \
-        $document || exit $?
-else
-    for i in `cd sgml;ls *.sgml`; do
-        j=`echo $i | sed 's/.sgml/.man/'`
-        echo ": converting " $i $j
-        docbook-to-man sgml/$i > man/$j 2> man/$j.log
-    done
-fi
+    subprocess.check_call([xsltproc] + path_arg +[
+        '--nonet',
+        '--xinclude',
+        '--stringparam',
+        'gtkdoc.bookname',
+        module,
+        '--stringparam',
+        'gtkdoc.version',
+        version,
+        '--stringparam',
+        'chunk.quietly ',
+        'quiet',
+        '--stringparam',
+        'chunker.output.quiet',
+        quiet,
+        'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
+        document])
+else:
+    for i in glob('sgml/*.sgml'):
+        j = os.path.split(i)[1].replace('.sgml', '.man')
+        print("converting ", i, j)
+        subproject.check_call(['docbook-to-man', i],
+                               stdout=open('man'+j),
+                               stderr=open('man/%s.log' % j))
 

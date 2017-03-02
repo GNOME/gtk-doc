@@ -18,7 +18,7 @@ done
 
 
 # test shell scripts
-for file in gtkdoc-mkhtml gtkdoc-mkman gtkdoc-mkpdf gtkdocize; do
+for file in gtkdocize; do
   sh -n `which $file`
   if test $? != 0 ; then failed=`expr $failed + 1`; fi
   tested=`expr $tested + 1`
@@ -34,9 +34,12 @@ done
 
 
 # test python scripts
-@PYTHON@ -m py_compile `which gtkdoc-depscan`
-if test $? != 0 ; then failed=`expr $failed + 1`; fi
-tested=`expr $tested + 1`
+for file in gtkdoc-depscan gtkdoc-mkhtml gtkdoc-mkman gtkdoc-mkpdf; do
+    fullfile=`which $file`
+    @PYTHON@ -m py_compile $fullfile
+    if test $? != 0 ; then failed=`expr $failed + 1`; fi
+    tested=`expr $tested + 1`
+done
 
 
 # summary
