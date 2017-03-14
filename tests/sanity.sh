@@ -86,10 +86,10 @@ nok=0
 for file in $dir/*/docs/gtkdoc-*.log; do
   expected_lines="1"
   # adjust for known files
-  if test $file == "$dir/fail/docs/gtkdoc-mkdb.log"; then
+  if test $file = "$dir/fail/docs/gtkdoc-mkdb.log"; then
     expected_lines="16"
   fi
-  if test $file == "$dir/gobject/docs/gtkdoc-fixxref.log"; then
+  if test $file = "$dir/gobject/docs/gtkdoc-fixxref.log"; then
     expected_lines="2"
   fi
   case $file in

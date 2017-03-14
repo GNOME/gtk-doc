@@ -74,7 +74,7 @@ run_xsltproc() {
     # we could do "$path_option $PWD "
     # to avoid needing rewriting entities that are copied from the header
     # into docs under xml
-    if test "$GTKDOC_PROFILE" == ""; then
+    if test "$GTKDOC_PROFILE" = ""; then
         if test "X$searchpath" = "X"; then
             @XSLTPROC@ "$@"
         else
