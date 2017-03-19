@@ -9,7 +9,7 @@ bin_SCRIPTS = \
 	gtkdoc-mkdb     \
 	gtkdoc-mkhtml   \
 	gtkdoc-mkman    \
-	gtkdoc-mkpdf   \
+	gtkdoc-mkpdf    \
 	gtkdoc-mktmpl   \
 	gtkdoc-rebase   \
 	gtkdoc-scan     \
@@ -87,7 +87,7 @@ CLEANFILES = \
   gtk-doc.flat.make \
   gtk-doc.notmpl-flat.make \
   gtkdoc-depscanc
-  
+
 DISTCLEANFILES = \
   gtk-doc.cat \
   gtkdoc-check \
