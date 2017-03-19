@@ -270,8 +270,6 @@ dnl run chmod on these after parsing them.
 AC_CONFIG_FILES([gtkdoc-check],    [chmod +x gtkdoc-check])
 AC_CONFIG_FILES([gtkdoc-depscan],  [chmod +x gtkdoc-depscan])
 AC_CONFIG_FILES([gtkdoc-fixxref],  [chmod +x gtkdoc-fixxref])
-dnl that would be nice, but would fail if perl is in a non-std path
-dnl AC_CONFIG_FILES([gtkdoc-mkdb],     [chmod +x gtkdoc-mkdb && perl -cwT gtkdoc-mkdb])
 AC_CONFIG_FILES([gtkdoc-mkdb],     [chmod +x gtkdoc-mkdb])
 AC_CONFIG_FILES([gtkdoc-mkhtml],   [chmod +x gtkdoc-mkhtml])
 AC_CONFIG_FILES([gtkdoc-mkman],    [chmod +x gtkdoc-mkman])
