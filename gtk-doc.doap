@@ -6,11 +6,12 @@
 
   <name xml:lang="en">gtk-doc</name>
 
-  <shortdesc xml:lang="en">GTK-Doc is used to document C code.
+  <shortdesc xml:lang="en">Documentation generator for C code.</shortdesc>
+  <description>GTK-Doc is used to document C code.
 It is typically used to document the public
 API of libraries, such as the GTK+ and GNOME libraries, but it can also be
 used to document application code.
-</shortdesc>
+</description>
 
   <homepage rdf:resource="http://www.gtk.org/gtk-doc/" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-doc-devel-list" />
@@ -23,22 +24,9 @@ used to document application code.
 
   <maintainer>
     <foaf:Person>
-      <foaf:name>Stefan Kost</foaf:name>
+      <foaf:name>Stefan Sauer</foaf:name>
       <foaf:mbox rdf:resource="mailto:ensonic@users.sf.net" />
       <gnome:userid>stefkost</gnome:userid>
-    </foaf:Person>
-  </maintainer>
-  <maintainer>
-    <foaf:Person>
-      <foaf:name>Damon Chaplin</foaf:name>
-      <gnome:userid>damon</gnome:userid>
-    </foaf:Person>
-  </maintainer>
-  <maintainer>
-    <foaf:Person>
-      <foaf:name>Owen Taylor</foaf:name>
-      <foaf:mbox rdf:resource="mailto:otaylor@redhat.com" />
-      <gnome:userid>otaylor</gnome:userid>
     </foaf:Person>
   </maintainer>
   <maintainer>
