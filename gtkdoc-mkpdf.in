@@ -93,8 +93,14 @@ if dblatex != '':
     pc = subprocess.Popen(dbcmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     (stde, _) = pc.communicate()
     for line in stde.split('\n'):
-        if 'programlisting or screen' not in line and line.strip():
-            print(line)
+        if not line.strip():
+            continue
+        if 'programlisting or screen' in line:
+            continue
+        # This happens when dblatex has no support for some special chars
+        if 'Missing character' in line:
+            continue
+        print(line)
 elif fop != '':
     if options.verbose:
         quiet = '0'
