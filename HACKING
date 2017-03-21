@@ -73,9 +73,21 @@ Optimizing & Meassuring
 
 cd tests/gobject/docs/html
 time xsltproc --nonet --xinclude --stringparam gtkdoc.bookname "tester" --stringparam gtkdoc.version "1.12" ../../../../gtk-doc.xsl ../tester-docs.xml
-~ 3 sec.
+~ 1.1 sec.
 time saxon ../tester-docs.xml ../../../../gtk-doc.xsl gtkdoc.bookname="tester" gtkdoc.version="1.12"
 ~ 53 sec.
+time xsltproc --nonet --xinclude --stringparam gtkdoc.bookname "tester" --stringparam gtkdoc.version "1.12" /usr/share/yelp-xsl/xslt/docbook/html/db2html.xsl ../tester-docs.xml
+~ 0.7 sec
+
+cd /your/project/docs/html
+time xsltproc --nonet --xinclude --stringparam gtkdoc.bookname "foo" --stringparam gtkdoc.version "1.12" /usr/share/gtk-doc/data/gtk-doc.xsl ../buzztrax-core-docs.xml
+real  0m6.633s  user	0m6.464s  sys	0m0.128s
+real	0m6.459s  user	0m6.384s  sys	0m0.068s
+
+time xsltproc --nonet --xinclude --stringparam gtkdoc.bookname "buzztrax-core" --stringparam gtkdoc.version "1.12"  /usr/share/yelp-xsl/xslt/docbook/html/db2html.xsl ../buzztrax-core-docs.xml
+real	0m3.312s  user	0m3.224s  sys	0m0.076s
+real	0m3.549s  user	0m3.464s  sys	0m0.076s
+
 
 xsltproc --profile data.xsl data.xml 2>report.txt
 cat report.txt | gprof2dot.py -e 0.01 -n 0.01 | dot -Tpng -o report.png
