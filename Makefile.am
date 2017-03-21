@@ -68,9 +68,6 @@ EXTRA_DIST = \
 	doc/sections-file.txt \
 	doc/setting-up.txt    \
 	doc/style-guide.txt   \
-	db2man/README            \
-	db2man/docbook-to-man    \
-	db2man/docbook-to-man.ts \
 	examples/README       \
 	examples/Makefile.am  \
 	tools/docpercentages.pl \

@@ -54,88 +54,77 @@ else:
     datarootdir='@datarootdir@'
     gtkdocdir='@datadir@'/gtk-doc/data
 
-if "<?xml" in open(document).readline():
-    is_xml=True
-    path_option='--path'
-else:
-    is_xml=False
-    path_option='--directory'
-
 # We need to use a wrapper because there's no other way to conditionally pass
 # a `--path $searchpath` argument with proper quoting for the path
 def run_xsltproc(args):
     global options, xsltproc
-    # we could do "$path_option $PWD "
+    # we could do "--path $PWD "
     # to avoid needing rewriting entities that are copied from the header
     # into docs under xml
     if len(options.path) == 0:
         cmd = [xsltproc] + args
     else:
-        cmd = [xsltproc, path_option] + options.searchpath + args
+        cmd = [xsltproc, '--path'] + options.searchpath + args
     pc = subprocess.Popen(cmd, stderr=subprocess.PIPE)
     (o, stde) = pc.communicate()
     open('profile.txt', 'wb').write(stde)
     if pc.returncode != 0:
         cleanexit(pc.returncode)
 
-if is_xml:
-    if dblatex != '':
-        # extra options to consider
-        # -I FIG_PATH
-        # -V is useful for debugging
-        # -T db2latex : different style
-        # -d : keep transient files (for debugging)
-        # -P abc.def=$quiet : once the stylesheets have a quiet mode
-        # xsltproc is already called with --xinclude
-        # does not work: --xslt-opts "$path_option $searchpath --nonet $@"
-        dblatex_options=['-o', module + '.pdf']
-        for i in options.imgdir:
-            dblatex_options += ['-I', i]
-        dblatex_options.append(document)
-        #echo "calling: @DBLATEX@ $dblatex_options"
-        if not options.verbose:
-            pc = subprocess.Popen([dblatex, '--help'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            (stdo, stde) = pc.communicate()
-            if b'--quiet' in stdo or b'--quiet' in stde:
-                dblatex_options= ['--quiet'] + dblatex_options
-        dbcmd = [dblatex] + dblatex_options
-        pc = subprocess.Popen(dbcmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        (stde, _) = pc.communicate()
-        for line in stde.split('\n'):
-            if 'programlisting or screen' not in line and line.strip():
-                print(line)
+if dblatex != '':
+    # extra options to consider
+    # -I FIG_PATH
+    # -V is useful for debugging
+    # -T db2latex : different style
+    # -d : keep transient files (for debugging)
+    # -P abc.def=$quiet : once the stylesheets have a quiet mode
+    # xsltproc is already called with --xinclude
+    # does not work: --xslt-opts "--path $searchpath --nonet $@"
+    dblatex_options=['-o', module + '.pdf']
+    for i in options.imgdir:
+        dblatex_options += ['-I', i]
+    dblatex_options.append(document)
+    if not options.verbose:
+        pc = subprocess.Popen([dblatex, '--help'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        (stdo, stde) = pc.communicate()
+        if b'--quiet' in stdo or b'--quiet' in stde:
+            dblatex_options= ['--quiet'] + dblatex_options
+    dbcmd = [dblatex] + dblatex_options
+    pc = subprocess.Popen(dbcmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    (stde, _) = pc.communicate()
+    for line in stde.split('\n'):
+        if 'programlisting or screen' not in line and line.strip():
+            print(line)
+elif fop != '':
+    if options.verbose:
+        quiet = '0'
     else:
-        if fop != '':
-            run_xsltproc(['--nonet',
-                          '--xinclude',
-                          '--stringparam',
-                          'gtkdoc.bookname',
-                          module,
-                          '--stringparam',
-                          'gtkdoc.version',
-                          version,
-                          '--stringparam',
-                          'chunk.quietly',
-                          options.quiet,
-                          '--stringparam',
-                          'chunker.output.quiet',
-                          quiet,
-                          module,
-                          document,
-                          '-o',
-                          module + '.fo',
-                          gtkdocdir + '/gtk-doc-fo.xsl',
-                          document])
-            # fop dies too easily :(
-            # @FOP@ $module.fo $module.pdf
-        else:
-            print("dblatex or fop must be installed to use gtkdoc-mkpdf.")
-            cleanexit(1)
+        quiet = '1'
+    run_xsltproc(['--nonet',
+                  '--xinclude',
+                  '--stringparam',
+                  'gtkdoc.bookname',
+                  module,
+                  '--stringparam',
+                  'gtkdoc.version',
+                  version,
+                  '--stringparam',
+                  'chunk.quietly',
+                  quiet,
+                  '--stringparam',
+                  'chunker.output.quiet',
+                  quiet,
+                  module,
+                  document,
+                  '-o',
+                  module + '.fo',
+                  gtkdocdir + '/gtk-doc-fo.xsl',
+                  document])
+    # fop dies too easily :(
+    # @FOP@ $module.fo $module.pdf
 else:
-    # not very good output
-    # also for xxx-docs.sgml it will produce xxx-docs.pdf
-    subprocess.check_call(['docbook2pdf', '-e', 'no-valid', document])
+    print("dblatex or fop must be installed to use gtkdoc-mkpdf.")
+    cleanexit(1)
 
 open('pdf.stamp', 'w').write('timestamp')
 cleanexit(0)
-

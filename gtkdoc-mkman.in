@@ -44,14 +44,6 @@ else:
     datarootdir='@datarootdir@'
     gtkdocdir='@datadir@/gtk-doc/data'
 
-if "<?xml" in open(document).readline():
-    is_xml=True
-    path_option='--path'
-else:
-    is_xml=False
-    path_option='--directory'
-
-
 # we could do "$path_option $PWD "
 # to avoid needing rewriting entities that are copied from the header
 # into docs under xml
@@ -60,32 +52,23 @@ if options.path == '':
 else:
     path_arg=[path_option, options.path]
 
-# would it make sens to create man pages only for certain refentries
+# would it make sense to create man pages only for certain refentries
 # e.g. for tools
-if is_xml:
-    # see http://bugzilla.gnome.org/show_bug.cgi?id=467488
-    subprocess.check_call([xsltproc] + path_arg +[
-        '--nonet',
-        '--xinclude',
-        '--stringparam',
-        'gtkdoc.bookname',
-        module,
-        '--stringparam',
-        'gtkdoc.version',
-        version,
-        '--stringparam',
-        'chunk.quietly ',
-        'quiet',
-        '--stringparam',
-        'chunker.output.quiet',
-        quiet,
-        'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
-        document])
-else:
-    for i in glob('sgml/*.sgml'):
-        j = os.path.split(i)[1].replace('.sgml', '.man')
-        print("converting ", i, j)
-        subproject.check_call(['docbook-to-man', i],
-                               stdout=open('man'+j),
-                               stderr=open('man/%s.log' % j))
-
+# see http://bugzilla.gnome.org/show_bug.cgi?id=467488
+subprocess.check_call([xsltproc] + path_arg +[
+    '--nonet',
+    '--xinclude',
+    '--stringparam',
+    'gtkdoc.bookname',
+    module,
+    '--stringparam',
+    'gtkdoc.version',
+    version,
+    '--stringparam',
+    'chunk.quietly ',
+    quiet,
+    '--stringparam',
+    'chunker.output.quiet',
+    quiet,
+    'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
+    document])

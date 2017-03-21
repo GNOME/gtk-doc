@@ -7,7 +7,6 @@ Its not about Gtk. Its about C APIs with GObject support.
 g-doc, gapi-doc, gnome-api-doc, ...
 
 == remove and deprecate =
-- get rid of sgml, we will only use docbook xml
 - rename generated index.sgml to something like index.idx - it is not wellformed
   sgml
 - in the makefiles
@@ -64,9 +63,3 @@ If the ID contain a ':' xml processors belive it is using a namespace.
   (or an option to specifically name it)
 
 === markup ===
-- use a wiki syntax: http://www.wikicreole.org/
-  - we need a template syntax on top of that for the various boxes (function, macro, struct, ...)
-- perl module avaible: http://www.wikicreole.org/wiki/TextWikiCreole
-  http://search.cpan.org/~jburnett/Text-WikiCreole/
-  - we would need to extend it to return docbook xml
-
