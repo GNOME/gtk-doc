@@ -5712,12 +5712,6 @@ sub MarkDownParse {
 }
 
 #############################################################################
-# LIBRARY FUNCTIONS -        These functions are used in both gtkdoc-mkdb and
-#                        gtkdoc-mktmpl and should eventually be moved to a
-#                        separate library.
-#############################################################################
-
-#############################################################################
 # Function    : ReadDeclarationsFile
 # Description : This reads in a file containing the function/macro/enum etc.
 #                declarations.
@@ -5922,8 +5916,6 @@ sub ReadSignalsFile {
 #               insert the documentation at the appropriate places.
 #               It outputs %SymbolTypes, %SymbolDocs and %SymbolParams, which
 #               is a hash of arrays.
-#               NOTE: This function is duplicated in gtkdoc-mktmpl (but
-#               slightly different).
 # Arguments   : $docsfile - the template file to read in.
 #               $skip_unused_params - 1 if the unused parameters should be
 #                 skipped.

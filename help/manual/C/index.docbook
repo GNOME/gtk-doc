@@ -263,27 +263,6 @@
 
         <listitem>
           <para>
-            <guilabel>Generating the "template" files.</guilabel>
-
-            <application>gtkdoc-mktmpl</application> creates a number of files in
-            the <filename class='directory'>tmpl/</filename> subdirectory, using the
-            information gathered in the first step. (Note that this can be run
-            repeatedly. It will try to ensure that no documentation is ever lost.)
-          </para>
-          <note>
-            <para>
-              Since GTK-Doc 1.9 the templates can be avoided. We encourage people to keep
-              documentation in the code. <application>gtkdocize</application> supports now
-              a <option>--flavour no-tmpl</option> option that chooses a makefile that
-              skips tmpl usage totally.
-              If you have never changed file in tmpl by hand, please remove the directory
-              (e.g. from version control system).
-            </para>
-          </note>
-        </listitem>
-
-        <listitem>
-          <para>
             <guilabel>Generating the XML and HTML/PDF.</guilabel>
 
             <application>gtkdoc-mkdb</application> turns the template files into
@@ -299,7 +278,7 @@
             document called <filename>&lt;package&gt;.pdf</filename>.
           </para>
           <para>
-            Files in <filename class='directory'>xml/</filename> and 
+            Files in <filename class='directory'>xml/</filename> and
             <filename class='directory'>html/</filename> directories are always
             overwritten. One should never edit them directly.
           </para>
@@ -497,12 +476,12 @@ AC_CONFIG_MACRO_DIR(m4)
       <title>Integration with automake</title>
 
       <para>
-        First copy the <filename>Makefile.am</filename> from the 
+        First copy the <filename>Makefile.am</filename> from the
         <filename class='directory'>examples</filename> sub directory of the
         <ulink url="https://git.gnome.org/browse/gtk-doc/tree/examples/Makefile.am">gtkdoc-sources</ulink>
         to your project's API documentation directory (
         <filename class='directory'>./docs/reference/&lt;package&gt;</filename>).
-        A local copy should be available under e.g. 
+        A local copy should be available under e.g.
         <filename>/usr/share/doc/gtk-doc-tools/examples/Makefile.am</filename>.
         If you have multiple doc-packages repeat this for each one.
       </para>
@@ -711,7 +690,7 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html
     <para>
       The scanner can handle the majority of C headers fine. In the case of
       receiving warnings from the scanner that look like a special case, one can
-      hint GTK-Doc to skip over them. 
+      hint GTK-Doc to skip over them.
       <example><title>GTK-Doc comment block</title>
         <programlisting><![CDATA[
 #ifndef __GTK_DOC_IGNORE__
@@ -725,7 +704,7 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html
       <title>Limitations</title>
       <para>
         Note, that GTK-Doc's supports
-        <code>#ifndef(__GTK_DOC_IGNORE__)</code> but not 
+        <code>#ifndef(__GTK_DOC_IGNORE__)</code> but not
         <code>#if !defined(__GTK_DOC_IGNORE__)</code> or other combinations.
       </para>
     </note>
@@ -862,7 +841,7 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html
       <para>
         In older GTK-Doc releases, if you need support for additional
         formatting, you would need to enable the usage of docbook
-        XML tags inside doc-comments by putting <option>--xml-mode</option> 
+        XML tags inside doc-comments by putting <option>--xml-mode</option>
         (or <option>--sgml-mode</option>) in the variable
         <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</filename>.
       </para>
@@ -1193,7 +1172,7 @@ foo_get_bar(Foo *foo)
           Documentation blocks can contain annotation-tags. These tags will be
           rendered with tooltips describing their meaning. The tags are used by
           gobject-introspection to generate language bindings. A detailed list
-          of the supported tags can be found on 
+          of the supported tags can be found on
           <ulink url="http://live.gnome.org/GObjectIntrospection/Annotations" type="http">the wiki</ulink>.
         </para>
 
@@ -1778,17 +1757,17 @@ gtk_arrow_get_type
         In addition a few option elements are created in commented form. You can
         review these and enable them as you like.
       </para>
-      
+
       <para>
         <example><title>Optional part in the master document</title>
           <programlisting><![CDATA[
   <!-- enable this when you use gobject introspection annotations
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
-  -->          
+  -->
 ]]></programlisting>
         </example>
       </para>
-      
+
       <para>
         Finally you need to add new section whenever you introduce one. The
         <link linkend="modernizing-gtk-doc-1-16">gtkdoc-check</link> tool will
@@ -1823,7 +1802,7 @@ gtk_arrow_get_type
         Blank lines are ignored and lines starting with a '#' are treated as
         comment lines.
       </para>
-      
+
       <note>
         <para>
           While the tags make the file look like xml, it is not. Please do not
@@ -1966,15 +1945,15 @@ meep_app_get_type
       <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>.
     </para>
   </chapter>
-  
+
   <chapter id="modernizing">
     <title>Modernizing the documentation</title>
-    
+
     <para>
       GTK-Doc has been around for quite some time. In this section we list new
       features together with the version since when it is available.
     </para>
-    
+
     <sect1 id="modernizing-gtk-doc-1-9">
       <title>GTK-Doc 1.9</title>
 
@@ -1982,7 +1961,7 @@ meep_app_get_type
         When using xml instead of sgml, one can actually name the master
         document <filename>&lt;package&gt;-docs.xml</filename>.
       </para>
-      
+
       <para>
         This version supports <option>SCAN_OPTIONS=--rebuild-sections</option>
         in <filename>Makefile.am</filename>. When this is enabled, the
@@ -1990,10 +1969,10 @@ meep_app_get_type
         can be removed from the vcs. This only works nicely for projects that
         have a very regular structure (e.g. each .{c,h} pair will create new
         section). If one organize a project close to that updating a manually
-        maintained section file can be as simple as running 
+        maintained section file can be as simple as running
         <code>meld &lt;package&gt;-decl-list.txt &lt;package&gt;-sections.txt</code>.
       </para>
-      
+
       <para>
         Version 1.8 already introduced the syntax for documenting sections in
         the sources instead of the separate files under <filename class='directory'>tmpl</filename>.
@@ -2004,7 +1983,7 @@ meep_app_get_type
         add the flag to <filename>configure.ac</filename> and you are done.
       </para>
     </sect1>
-    
+
     <sect1 id="modernizing-gtk-doc-1-10">
       <title>GTK-Doc 1.10</title>
 

@@ -34,9 +34,9 @@ EXTRA_DIST = 				\
 	$(HTML_IMAGES)			\
 	$(SETUP_FILES)
 
-DOC_STAMPS=setup-build.stamp scan-build.stamp tmpl-build.stamp sgml-build.stamp \
+DOC_STAMPS=setup-build.stamp scan-build.stamp sgml-build.stamp \
 	html-build.stamp pdf-build.stamp \
-	tmpl.stamp sgml.stamp html.stamp pdf.stamp
+	sgml.stamp html.stamp pdf.stamp
 
 SCANOBJ_FILES = 		 \
 	$(DOC_MODULE).args 	 \
@@ -96,9 +96,6 @@ setup-build.stamp:
 	        cp -pf $(abs_srcdir)/$$file $(abs_builddir)/$$file || true; \
 	    done; \
 	  fi; \
-	  test -d $(abs_srcdir)/tmpl && \
-	    { cp -pR $(abs_srcdir)/tmpl $(abs_builddir)/; \
-	    chmod -R u+w $(abs_builddir)/tmpl; } \
 	fi
 	$(AM_V_at)touch setup-build.stamp
 
@@ -138,35 +135,14 @@ scan-build.stamp: setup-build.stamp $(HFILE_GLOB) $(CFILE_GLOB)
 $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt: scan-build.stamp
 	@true
 
-#### templates ####
-
-GTK_DOC_V_TMPL=$(GTK_DOC_V_TMPL_$(V))
-GTK_DOC_V_TMPL_=$(GTK_DOC_V_TMPL_$(AM_DEFAULT_VERBOSITY))
-GTK_DOC_V_TMPL_0=@echo "  DOC   Rebuilding template files";
-
-tmpl-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(HFILE_GLOB) $(CFILE_GLOB) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
-	$(GTK_DOC_V_TMPL)gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
-	$(AM_V_at)if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
-	  if test -w $(abs_srcdir) ; then \
-	    cp -pR $(abs_builddir)/tmpl $(abs_srcdir)/; \
-	  fi \
-	fi
-	$(AM_V_at)touch tmpl-build.stamp
-
-tmpl.stamp: tmpl-build.stamp
-	@true
-
-$(srcdir)/tmpl/*.sgml:
-	@true
-
 #### xml ####
 
 GTK_DOC_V_XML=$(GTK_DOC_V_XML_$(V))
 GTK_DOC_V_XML_=$(GTK_DOC_V_XML_$(AM_DEFAULT_VERBOSITY))
 GTK_DOC_V_XML_0=@echo "  DOC   Building XML";
 
-sgml-build.stamp: tmpl.stamp $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(expand_content_files) xml/gtkdocentities.ent
-	-$(GTK_DOC_V_XML)chmod -R u+w $(srcdir) && _source_dir='' ; \
+sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(HFILE_GLOB) $(CFILE_GLOB) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt $(expand_content_files) xml/gtkdocentities.ent
+	$(GTK_DOC_V_XML)_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
 	  _source_dir="$${_source_dir} --source-dir=$$i" ; \
 	done ; \
@@ -263,7 +239,6 @@ distclean-local:
 	    $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
 	@if test "$(abs_srcdir)" != "$(abs_builddir)" ; then \
 	    rm -f $(SETUP_FILES) $(DOC_MODULE).types; \
-	    rm -rf tmpl; \
 	fi
 
 maintainer-clean-local:
@@ -313,9 +288,7 @@ dist-check-gtkdoc:
 endif
 
 dist-hook: dist-check-gtkdoc all-gtk-doc dist-hook-local
-	@mkdir $(distdir)/tmpl
 	@mkdir $(distdir)/html
-	@-cp ./tmpl/*.sgml $(distdir)/tmpl
 	@cp ./html/* $(distdir)/html
 	@-cp ./$(DOC_MODULE).pdf $(distdir)/
 	@-cp ./$(DOC_MODULE).types $(distdir)/

@@ -115,16 +115,10 @@ while test $# -gt 0; do
 done
 
 case "$flavour" in
-  legacy-flat*)
+  legacy-flat|no-tmpl-flat)
     makefile=gtk-doc.flat.make
     ;;
-  legacy*)
-    ;;
-  no-tmpl-flat*)
-    makefile=gtk-doc.notmpl-flat.make
-    ;;
-  no-tmpl*)
-    makefile=gtk-doc.notmpl.make
+  legacy|no-tmpl)
     ;;
   *)
     echo "$progname: invalid value for --flavour" 1>&2

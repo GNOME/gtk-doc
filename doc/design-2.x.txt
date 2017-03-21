@@ -7,7 +7,6 @@ Its not about Gtk. Its about C APIs with GObject support.
 g-doc, gapi-doc, gnome-api-doc, ...
 
 == remove and deprecate =
-- get rid of anything related to tmpl (gtkdoc-mktmpl, the makefile rules, ..)
 - get rid of sgml, we will only use docbook xml
 - rename generated index.sgml to something like index.idx - it is not wellformed
   sgml
@@ -19,7 +18,7 @@ g-doc, gapi-doc, gnome-api-doc, ...
 === proper xml-id namesspaces ===
 We need proper xml-id namesspaces for document structure and symbols to avoid
 clashes e.g. between GtkWidget as a section and as a struct. Normal symbols
-should only be mangled to be a valid xml-id. Document structure ids should 
+should only be mangled to be a valid xml-id. Document structure ids should
 contain a prefix.
 
 These are the rules regarding id-attributes:
@@ -33,10 +32,10 @@ http://www.w3.org/TR/xml-id/#id-avn
 "Attributes of type ID are subject to additional normalization rules: removing
  leading and trailing space characters and replacing sequences of spaces with a
  single space."
- 
+
 http://www.w3.org/TR/xml11/#NT-Name
 http://www.w3.org/TR/REC-xml/#NT-Name
- 
+
 So we could easily use "DOC:" as a prefix for document structure ids.
 In 1.x we add :CAPS as a suffix to avoid clashes between lower and uppercase
 constructs. XML-IDs are not case insensitive, so we don't need that.
@@ -49,7 +48,7 @@ If the ID contain a ':' xml processors belive it is using a namespace.
   - we could have a "Section:" tag for non-section comments to add them to a non
     default section
   - we could have a "Private_Symbols:" tag in section to list symbols that
-    should be in private subsection 
+    should be in private subsection
 - the $module.types file need manual maintenance if one need special includes
   - can we make the scanner smarter?
 

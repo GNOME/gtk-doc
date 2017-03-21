@@ -10,7 +10,6 @@ bin_SCRIPTS = \
 	gtkdoc-mkhtml   \
 	gtkdoc-mkman    \
 	gtkdoc-mkpdf    \
-	gtkdoc-mktmpl   \
 	gtkdoc-rebase   \
 	gtkdoc-scan     \
 	gtkdoc-scangobj \
@@ -31,9 +30,7 @@ gtkdocdata_DATA = \
 	devhelp2.xsd		\
 	devhelp2.xsl		\
 	gtk-doc.make		\
-	gtk-doc.notmpl.make	\
 	gtk-doc.flat.make	\
-	gtk-doc.notmpl-flat.make	\
 	style/home.png			\
 	style/left.png			\
 	style/left-insensitive.png		\
@@ -53,9 +50,6 @@ sgmldir = $(datadir)/sgml/gtk-doc
 sgml_DATA = gtk-doc.cat
 
 gtk-doc.flat.make: gtk-doc.make
-	@$(SED) -e "s/EXTRA_DIST =/EXTRA_DIST +=/" $< >$@
-
-gtk-doc.notmpl-flat.make: gtk-doc.notmpl.make
 	@$(SED) -e "s/EXTRA_DIST =/EXTRA_DIST +=/" $< >$@
 
 EXTRA_DIST = \
@@ -85,7 +79,6 @@ EXTRA_DIST = \
 
 CLEANFILES = \
   gtk-doc.flat.make \
-  gtk-doc.notmpl-flat.make \
   gtkdoc-depscanc
 
 DISTCLEANFILES = \
@@ -100,7 +93,6 @@ DISTCLEANFILES = \
   gtkdoc-mkhtml \
   gtkdoc-mkman \
   gtkdoc-mkpdf \
-  gtkdoc-mktmpl \
   gtk-doc.pc \
   gtkdoc-rebase \
   gtkdoc-scangobj \

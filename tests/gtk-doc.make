@@ -55,7 +55,6 @@ CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS) \
   ts \
 	gtkdoc-scan.log \
 	gtkdoc-scangobj.log \
-	gtkdoc-mktmpl.log \
 	gtkdoc-mkdb.log \
 	gtkdoc-mkhtml.log \
 	gtkdoc-mkpdf.log \
