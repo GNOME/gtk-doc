@@ -53,8 +53,6 @@ EXTRA_DIST = \
 	gtk-doc.pc.in   \
 	gtk-doc.m4      \
 	gtk-doc.doap \
-	gtk-doc.spec.in \
-	gtk-doc.spec    \
 	gtk-doc-fo.xsl     \
 	doc/README            \
 	doc/authors.txt       \
@@ -88,8 +86,7 @@ DISTCLEANFILES = \
   gtk-doc.pc \
   gtkdoc-rebase \
   gtkdoc-scangobj \
-  gtkdoc-scan \
-  gtk-doc.spec
+  gtkdoc-scan
 
 
 MAINTAINERCLEANFILES = \
