@@ -10,7 +10,7 @@ echo "Running suite(s): gtk-doc-$suite";
 # we can use which here as we override the path in TEST_ENVIRONMENT
 
 # test perl scripts
-for file in gtkdoc-check gtkdoc-fixxref gtkdoc-mkdb gtkdoc-rebase gtkdoc-scan gtkdoc-scangobj ; do
+for file in gtkdoc-check gtkdoc-fixxref gtkdoc-mkdb gtkdoc-scan gtkdoc-scangobj ; do
   @PERL@ -cwT `which $file`
   if test $? = 1 ; then failed=`expr $failed + 1`; fi
   tested=`expr $tested + 1`
@@ -34,7 +34,7 @@ done
 
 
 # test python scripts
-for file in gtkdoc-depscan gtkdoc-mkhtml gtkdoc-mkman gtkdoc-mkpdf; do
+for file in gtkdoc-depscan gtkdoc-mkhtml gtkdoc-mkman gtkdoc-mkpdf gtkdoc-rebase; do
     fullfile=`which $file`
     @PYTHON@ -m py_compile $fullfile
     if test $? != 0 ; then failed=`expr $failed + 1`; fi

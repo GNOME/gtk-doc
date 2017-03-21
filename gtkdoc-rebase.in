@@ -1,5 +1,5 @@
-#!@PERL@ -w
-# -*- cperl -*-
+#!@PYTHON@
+# -*- python -*-
 #
 # gtk-doc - GTK DocBook documentation generator.
 # Copyright (C) 1998  Damon Chaplin
@@ -26,25 +26,11 @@
 # Description : Rebases URI references in installed HTML documentation.
 #############################################################################
 
-use strict;
-use bytes;
-use Getopt::Long qw(:config gnu_getopt);
-use Cwd qw(realpath);
+from __future__ import print_function
 
-push @INC, '@PACKAGE_DATA_DIR@';
-require "gtkdoc-common.pl";
+import os, sys, argparse, subprocess, re
 
-# Options
-
-my $HTML_DIR;
-my @OTHER_DIRS;
-my $DEST_DIR;
-my $PRINT_VERSION;
-my $PRINT_HELP;
-my $AGGRESSIVE;
-my $ONLINE;
-my $RELATIVE;
-my $VERBOSE;
+other_dirs = []
 
 # Maps.
 # These two point to the last seen URI of given type for a package:
@@ -52,325 +38,232 @@ my $VERBOSE;
 # LocalMap: package => local URI
 # This maps all seen URIs of a package to fix broken links in the process:
 # RevMap: URI => package
-my (%OnlineMap, %LocalMap, %RevMap);
+OnLineMap = {}
+LocalMap = {}
+RevMap = {}
 # Remember what mangling we did.
-my %Mapped;
+Mapped = {}
 
 
-Run() unless caller; # Run program unless loaded as a module
+parser = argparse.ArgumentParser()
 
+parser.add_argument('--version', action='version', version='@VERSION@')
+parser.add_argument('--html-dir', dest='html_dir', default='')
+parser.add_argument('--other-dir', dest='other_dir', default=[], action='append')
+parser.add_argument('--dest-dir', dest='dest_dir', default='')
+parser.add_argument('--aggressive', action='store_true', default=False)
+parser.add_argument('--verbose', action='store_true', default=False)
+group = parser.add_mutually_exclusive_group()
+group.add_argument('--online', action='store_true', default=False)
+group.add_argument('--relative', action='store_true', default=False)
 
-sub Run {
-    my %optctl = ('html-dir' => \$HTML_DIR,
-            'other-dir' => \@OTHER_DIRS,
-            'dest-dir' => \$DEST_DIR,
-            'online' => \$ONLINE,
-            'relative' => \$RELATIVE,
-            'aggressive' => \$AGGRESSIVE,
-            'verbose' => \$VERBOSE,
-            'version' => \$PRINT_VERSION,
-            'help' => \$PRINT_HELP);
-    GetOptions(\%optctl, 'html-dir=s', 'other-dir=s@', 'dest-dir:s',
-             'online', 'relative', 'aggressive', 'verbose',
-             'version', 'help');
+def log(options, *msg):
+    if options.verbose:
+        print(*msg)
 
-    if ($PRINT_VERSION) {
-        print "@VERSION@\n";
-        exit 0;
-    }
+def Run():
+    options = parser.parse_args()
 
-    if ($PRINT_HELP) {
-        print <<EOF;
-gtkdoc-rebase version @VERSION@ - rewrite the base url of html files
-
---html-dir=HTML_DIR     The directory which contains the installed HTML
---other-dir=OTHER_DIR   Directories to recursively scan for indices (index.sgml)
-                        May be used more than once for multiple directories
---online                Prefer cross-references to online documents
---relative              Prefer relative cross-references
---aggressive            Rebase links to all files that are under a directory
-                        matching a package name.
---dest-dir=ROOT_DIR     Staging area virtual root, this prefix will be removed
-                        from HTML_DIR fore relative link calculation.
---verbose               Be verbose
---version               Print the version of this program
---help                  Print this help
-EOF
-        exit 0;
-    }
-
-    if (!$HTML_DIR) {
-        die "No HTML directory (--html-dir) given.\n";
-    }
-
-    my $dir;
+    if (options.html_dir == ''):
+        sys.exit("No HTML directory (--html-dir) given.")
 
     # We scan the directory containing GLib and any directories in GNOME2_PATH
     # first, but these will be overriden by any later scans.
-    if (defined ($ENV{"GNOME2_PATH"})) {
-        foreach $dir (split(/:/, $ENV{"GNOME2_PATH"})) {
-            $dir = $dir . "/share/gtk-doc/html";
-            if ($dir && -d $dir) {
-                print "Prepending GNOME2_PATH directory: $dir\n" if $VERBOSE;
-                unshift @OTHER_DIRS, $dir;
-            }
-        }
-    }
+    if "GNOME2_PATH" in os.environ:
+        for dir in os.environ["GNOME2_PATH"].split(':'):
+            dir = os.path.join(dir, "/share/gtk-doc/html")
+            if os.path.isdir(dir):
+                log(options, "Prepending GNOME2_PATH directory:", dir)
+                other_dirs = [dir] + other_dirs
 
-    $dir = `@PKG_CONFIG@ --variable=prefix glib-2.0`;
-    $dir =~ s/^\s*(\S*)\s*$/$1/;
-    $dir = $dir . "/share/gtk-doc/html";
-    print "Prepending GLib directory $dir\n" if $VERBOSE;
-    unshift @OTHER_DIRS, $dir;
+    dir = subprocess.check_call(['@PKG_CONFIG@', '--variable=prefix', 'glib-2.0'], universal_newlines=True)
+    dir = dir.strip()
+    dir = os.path.join(dir, "/share/gtk-doc/html")
+    log(options, "Prepending GLib directory", dir)
+    other_dirs = [dir] + other_dirs
 
     # Check all other dirs, but skip already scanned dirs ord subdirs of those
-    if ($DEST_DIR) {
-        $DEST_DIR =~ s#/?$#/#;
-    }
-    $HTML_DIR =~ s#/?$#/#;
 
-    foreach $dir (@OTHER_DIRS) {
-        &ScanDirectory($dir, $HTML_DIR);
-    }
+    for dir in other_dirs:
+        ScanDirectory(dir, options);
 
-    if ($RELATIVE) {
-        &RelativizeLocalMap($HTML_DIR);
-    }
+    if options.relative:
+        RelativizeLocalMap(options.html_dir);
 
-    &RebaseReferences($HTML_DIR);
-    &PrintWhatWeHaveDone();
-}
+    RebaseReferences(options.html_dir)
+    PrintWhatWeHaveDone()
 
 
-sub ScanDirectory {
-    my ($dir, $self) = @_;
+def ScanDirectory(dir, options):
     # This array holds any subdirectories found.
-    my (@subdirs) = ();
+    subdirs = []
+    onlinedir = None
 
-    print "Scanning documentation directory $dir\n" if $VERBOSE;
+    log(options, "Scanning documentation directory " + dir)
 
-    if ("$dir/" eq $self) {
-        print "Excluding self\n" if $VERBOSE;
-        return;
-    }
-    if (not opendir(HTMLDIR, $dir)) {
-        print "Cannot open $dir: $!\n";
-        return;
-    }
+    if dir == options.html_dir:
+        log(options, "Excluding self")
+        return
 
-    my $file;
-    my $onlinedir;
-    my $have_index = 0;
-    foreach $file (readdir(HTMLDIR)) {
-        if ($file eq '.' or $file eq '..') {
-            next;
-        }
-        elsif (-d "$dir/$file") {
-            push @subdirs, $file;
-            next;
-        }
-        if ($file =~ m/\.devhelp2$/) {
-            print "Reading index from $file\n" if $VERBOSE;
-            my $o = &ReadDevhelp($dir, $file);
-            # Prefer this location over possibly stale index.sgml
-            if ($o) {
-                $onlinedir = $o;
-            }
-            $have_index = 1;
-        }
-        if (!$onlinedir and ($file eq "index.sgml")) {
-            print "Reading index from index.sgml\n" if $VERBOSE;
-            $onlinedir = &ReadIndex($dir, $file);
-            $have_index = 1;
-        }
-        elsif (($file eq "index.sgml.gz") && ! (-e "$dir/index.sgml")) {
-            # debian/ubuntu started to compress this as index.sgml.gz :/
-            print <<EOF;
-Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
-gunzip $dir/$file
-EOF
-        }
-        elsif (($file =~ m/\.devhelp2.gz$/) && ! (-e "$dir/$1.devhelp2")) {
-            # debian/ubuntu started to compress this as *devhelp2.gz :/
-            print <<EOF;
-Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
-gunzip $dir/$file
-EOF
-        }
-        # we could consider supporting: use IO::Zlib;
-    }
-    closedir (HTMLDIR);
-    if ($have_index) {
-        &AddMap($dir, $onlinedir);
-    }
+    have_index = False
+    with os.scandir(options.html_dir) as d:
+        for file in d:
+            if file.is_dir():
+                subdirs.push_back(file.name)
+                continue
+
+            if file.name.endswit('.devhelp2'):
+                log(options, "Reading index from " + file.name)
+                o = ReadDevhelp(dir, file.name);
+                # Prefer this location over possibly stale index.sgml
+                if o is not None:
+                    onlinedir = o
+                have_index = True
+
+            if onlinedir and file.name == "index.sgml":
+                log(options, "Reading index from index.sgml")
+                onlinedir = ReadIndex(dir, file.name);
+                have_index = True
+            elif file.name == "index.sgml.gz" and not os.path.exists(os.path.join(dir, 'index.sgml')):
+                # debian/ubuntu started to compress this as index.sgml.gz :/
+                print(''' Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
+gunzip %s/%s
+''' % (dir, file.name))
+            elif file.name.endswith('.devhelp2.gz') and not os.path.exists(os.path.join(dir, e.fname, 'devhelp2')):
+                # debian/ubuntu started to compress this as *devhelp2.gz :/
+                print('''Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
+gunzip %d/%s
+''' % (dir, file.name))
+
+            # we could consider supporting: gzip module
+    if have_index:
+        AddMap(dir, onlinedir);
 
     # Now recursively scan the subdirectories.
-    my $d;
-    foreach my $subdir (@subdirs) {
-        &ScanDirectory("$dir/$subdir", $self);
-    }
-}
+    for subdir in subdirs:
+        ScanDirectory(os.path.join(dir, subdir), options);
 
 
-sub ReadDevhelp {
-    my ($dir, $file) = @_;
-    my $onlinedir;
+def ReadDevhelp(dir, file):
+    onlinedir = None
 
-    open(INDEXFILE, "$dir/$file") || die "Can't open $dir/$file: $!";
-    while (<INDEXFILE>) {
+    for line in open(os.path.join(dir, file)):
         # online must come before chapter/functions
-        last if m/<(chapters|functions)/;
-        if (m/ online="([^"]*)"/) {
-            $onlinedir = $1;
+        if '<chapters' in line or '<functions' in line:
+            break
+        match = re.search(r'  online="([^"]*)"/')
+        if match:
             # Remove trailing non-directory component.
-            $onlinedir =~ s#(.*/).*#$1#;
-        }
-    }
-    close (INDEXFILE);
-    return $onlinedir;
-}
+            onlinedir = re.sub(r'(.*/).*', r'\1', match.groups(1))
+    return onlinedir
 
 
-sub ReadIndex {
-    my ($dir, $file) = @_;
-    my $onlinedir;
+def ReadIndex(dir, file):
+    onlinedir = None
 
-    open(INDEXFILE, "$dir/$file") || die "Can't open $dir/$file: $!";
-    while (<INDEXFILE>) {
+    for line in open(os.path.join(dir, file)):
         # ONLINE must come before any ANCHORs
-        last if m/^<ANCHOR/;
-        if (m/^<ONLINE\s+href\s*=\s*"([^"]+)"\s*>/) {
-            $onlinedir = $1;
+        if '<ANCHOR' in line:
+            break
+        match = re.match(r'''^<ONLINE\s+href\s*=\s*"([^"]+)"\s*>''', line)
+        if match:
             # Remove trailing non-directory component.
-            $onlinedir =~ s#(.*/).*#$1#;
-        }
-    }
-    close (INDEXFILE);
-    return $onlinedir;
-}
+            onlinedir = re.sub(r'''(.*/).*''', r'\1', match.groups(1))
+    return onlinedir
 
 
-sub AddMap {
-    my ($dir, $onlinedir) = @_;
-    my $package;
+def AddMap(dir, onlinerdir, options):
+    package = None
 
-    $dir =~ s#/?$#/#;
-    ($package = $dir) =~ s#.*/([^/]+)/#$1#;
-    if ($DEST_DIR and substr($dir, 0, length $DEST_DIR) eq $DEST_DIR) {
-        $dir = substr($dir, -1 + length $DEST_DIR);
-    }
-    if ($onlinedir) {
-        print "On-line location of $package: $onlinedir\n" if $VERBOSE;
-        $OnlineMap{ $package } = $onlinedir;
-        $RevMap{ $onlinedir } = $package;
-    } else {
-        print "No On-line location for $package found\n" if $VERBOSE;
-    }
-    print "Local location of $package: $dir\n" if $VERBOSE;
-    $LocalMap{ $package } = $dir;
-    $RevMap{ $dir } = $package;
-}
+    package = os.path.split(dir)[1]
+    if options.dest_dir != '' and dir.startswith(options.dest_dir):
+        dir = dir[len(options.dest_dir)-1:]
+
+    if onlinedir:
+        log(options, "On-line location of %s." % onlinedir)
+        OnlineMap[package] = onlinedir;
+        RevMap[onlinedir] = package;
+    else:
+        log(options, "No On-line location for %s found" % package)
+
+    log(options,  "Local location of $package: " + dir)
+    LocalMap[package] = dir;
+    RevMap[dir] = package;
 
 
-sub RelativizeLocalMap {
-    my ($self) = @_;
-    my $prefix;
-    my $dir;
+def RelativizeLocalMap(dirname, options):
+    prefix = None
+    dir = None
 
-    $self = realpath $self;
-    $self =~ s#/?$#/#;
-    ($prefix = $self) =~ s#[^/]+/$##;
-    foreach my $package (keys %LocalMap) {
-        $dir = $LocalMap{ $package };
-        if (substr($dir, 0, length $prefix) eq $prefix) {
-            $dir = "../" . substr($dir, length $prefix);
-            $LocalMap{ $package } = $dir;
-            print "Relativizing local location of $package to $dir\n" if $VERBOSE;
-        }
-    }
-}
+    dirname = os.path.realpath(dirname)
+    prefix = os.path.split(dir)
+    for package, dir in LocalMap.items():
+        if dir.startswith(prefix):
+            dir = os.path.join("..", dir[len(prefix):])
+            LocalMap[package] = dir
+            log(options, "Relativizing local location of $package to " + dir)
 
-
-sub RebaseReferences {
-    my ($dir) = @_;
-
-    opendir(HTMLDIR, $dir) || die "Can't open HTML directory $dir: $!";
-    foreach my $file (readdir(HTMLDIR)) {
-        if ($file =~ m/\.html?$/) {
-            &RebaseFile("$dir$file");
-        }
-    }
-    closedir (HTMLDIR);
-}
+def RebaseReferences(dirname, options):
+    for ifile in os.listdir(ifile):
+        if ifile.endswith('.html'):
+            RebaseFile(os.path.join(dirname, ifile), options)
 
 
-sub RebaseFile {
-    my ($file) = @_;
-    print "Fixing file: $file\n" if $VERBOSE;
+def RebaseFile(filename, options):
+    log(options, "Fixing file: " + filename)
+    regex = re.compile(r'''(<a(?:\s+\w+=(?:"[^"]*"|'[^']*'))*\s+href=")([^"]*)(")''')
 
-    open(HTMLFILE, $file) || die "Can't open $file: $!";
-    local $/;
-    undef $/;
-    my $text = <HTMLFILE>;
-    close(HTMLFILE);
+    def repl_func(match):
+        return match.group(1) + RebaseLink(match.group(2)) + match.group(3)
 
-    $text =~ s#(<a(?:\s+\w+=(?:"[^"]*"|'[^']*'))*\s+href=")([^"]*)(")#$1 . &RebaseLink($2) .$3#gse;
-
-    open(NEWFILE, ">$file.new") || die "Can't open $file: $!";
-    print NEWFILE $text;
-    close(NEWFILE);
-
-    unlink($file) || die "Can't delete $file: $!";
-    rename("$file.new", $file) || die "Can't rename $file.new: $!";
-}
+    contents = open(filename).read()
+    processed = re.sub(regex, repl_func, contents, flags=re.MULTILINE)
+    newfilename = filename + '.new'
+    open(newfilename, 'w').write(processed)
+    os.unlink(filename)
+    os.rename(newfilename, filename)
 
 
-sub RebaseLink {
-    my ($href) = @_;
-    my ($dir, $origdir, $file, $package);
+def RebaseLink(href, options):
+    match = re.fullmatch(r'(.*/)([^/]*)', href)
+    package = None
+    origdir = 'INVALID'
 
-    if ($href =~ m#^(.*/)([^/]*)$#) {
-        $dir = $origdir = $1;
-        $file = $2;
-        if ($RevMap{ $dir }) {
-            $package = $RevMap{ $dir };
-        }
-        elsif ($dir =~ m#^\.\./([^/]+)/#) {
-            $package = $1
-        }
-        elsif ($AGGRESSIVE) {
-            $dir =~ m#([^/]+)/$#;
-            $package = $1;
-        }
+    if match:
+        dir = origdir = match.group(1)
+        file = match.group(2)
+        if dir in RevMap:
+            package = RevMap[dir]
+        else:
+            match = re.match(r'\.\./([^/]+)', href)
+            if match is not None:
+                package = match.groups(1)
+            elif options.aggressive:
+                match = re.search(r'''([^/]+)/$''', href)
+                package = match.groups(1);
 
-        if ($package) {
-            if ($ONLINE && $OnlineMap{ $package }) {
-              $dir = $OnlineMap{ $package };
-            }
-            elsif ($LocalMap{ $package }) {
-              $dir = $LocalMap{ $package };
-            }
-            $href = $dir . $file;
-        } else {
-          @TRACE@("Can't determine package for '$href'");
-        }
-        if ($dir ne $origdir) {
-            if ($Mapped{ $origdir }) {
-              $Mapped{ $origdir }->[1]++;
-            }
-            else {
-              $Mapped{ $origdir } = [ $dir, 1 ];
-            }
-        }
-    }
-    return $href;
-}
+        if package:
+            if options.online and package in OnlineMap:
+              dir = OnlineMap[package]
+            elif package in LocalMap:
+              dir = LocalMap[package]
+            href = os.path.join(dir, file)
+        else:
+          log(options, "Can't determine package for '%s'" % href);
+
+        if dir != origdir:
+            if origdir in Mapped:
+                Mapped[origdir][1] += 1
+            else:
+                Mapped[origdir] = [dir, 1]
+    return href
 
 
-sub PrintWhatWeHaveDone {
-    my ($origdir, $info);
-    foreach $origdir (sort keys %Mapped) {
-        $info = $Mapped{$origdir};
-        print "$origdir -> ", $info->[0], " (", $info->[1], ")\n";
-    }
-}
+def PrintWhatWeHaveDone():
+    for origdir in sorted(Mapped.keys()):
+        info = Mapped[origdir]
+        print(origdir, "->", info[0], "(%s)" % info[1])
+
+if __name__== '__main__':
+        Run()
+
