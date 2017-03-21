@@ -23,8 +23,6 @@ endif
 gtkdocdatadir = $(datadir)/gtk-doc/data
 gtkdocdata_DATA = \
 	gtkdoc-common.pl	\
-	gtk-doc.dsl		\
-	gtk-doc.dcl		\
 	gtk-doc.xsl		\
 	version-greater-or-equal.xsl \
 	devhelp2.xsd		\
@@ -46,9 +44,6 @@ pkgconfig_DATA = gtk-doc.pc
 aclocaldir = $(datadir)/aclocal
 aclocal_DATA = gtk-doc.m4
 
-sgmldir = $(datadir)/sgml/gtk-doc
-sgml_DATA = gtk-doc.cat
-
 gtk-doc.flat.make: gtk-doc.make
 	@$(SED) -e "s/EXTRA_DIST =/EXTRA_DIST +=/" $< >$@
 
@@ -61,7 +56,6 @@ EXTRA_DIST = \
 	gtk-doc.spec.in \
 	gtk-doc.spec    \
 	gtk-doc-fo.xsl     \
-	gtk-doc.cat.in  \
 	doc/README            \
 	doc/authors.txt       \
 	doc/gnome.txt         \
@@ -82,11 +76,9 @@ CLEANFILES = \
   gtkdoc-mkpdfc
 
 DISTCLEANFILES = \
-  gtk-doc.cat \
   gtkdoc-check \
   gtkdoc-common.pl \
   gtkdoc-depscan \
-  gtk-doc.dsl \
   gtkdoc-fixxref \
   gtkdocize \
   gtkdoc-mkdb \

@@ -236,9 +236,7 @@ AM_CONDITIONAL([HAVE_YELP_TOOLS],[test x$have_yelp_tools = xyes])
 
 AC_CONFIG_FILES([Makefile
 gtk-doc.pc
-gtk-doc.dsl
 gtk-doc.spec
-gtk-doc.cat
 gtkdoc-common.pl
 cmake/Makefile
 cmake/GtkDocConfig.cmake
