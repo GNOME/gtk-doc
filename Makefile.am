@@ -79,7 +79,10 @@ EXTRA_DIST = \
 
 CLEANFILES = \
   gtk-doc.flat.make \
-  gtkdoc-depscanc
+  gtkdoc-depscanc \
+  gtkdoc-mkhtmlc \
+  gtkdoc-mkmanc \
+  gtkdoc-mkpdfc
 
 DISTCLEANFILES = \
   gtk-doc.cat \

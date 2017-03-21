@@ -8,3 +8,5 @@ cmake_DATA = \
 	GtkDocConfig.cmake \
 	GtkDocConfigVersion.cmake \
 	GtkDocScanGObjWrapper.cmake
+
+-include $(top_srcdir)/git.mk
