@@ -20,7 +20,7 @@ GTK-Doc allows your documentation to be written in 2 ways:
      the header files and parsing the declarations (deprecated now).
 
 From these source code comments and template files GTK-Doc generates a Docbook
-XML (or SGML) document, which is then transformed into HTML.
+XML document, which is then transformed into HTML and/or PDF.
 The generated HTML documentation can be browsed in an ordinary web browser or
 by using the special Devhelp API browser
 (see http://developer.imendio.com/wiki/Devhelp).
@@ -34,6 +34,8 @@ Requirements
 Perl v5 - the main scripts are in Perl.
     http://www.perl.com/
 
+Python 2.7, 3.x - the secondary scripts are written in Python
+    http:///www.python.org
 
 For XML output (recommended):
 

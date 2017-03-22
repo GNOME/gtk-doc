@@ -50,8 +50,7 @@ fi
 dnl
 dnl Check for Python.
 dnl
-AM_PATH_PYTHON([2.3],,[:])
-AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != :])
+AM_PATH_PYTHON([2.7])
 
 dnl
 dnl Check for xsltproc
@@ -282,12 +281,9 @@ AC_MSG_NOTICE([
 gtk-doc was configured with the following options:
 ==================================================])
 
-test "$PYTHON" != : \
-    && AC_MSG_NOTICE([** Python based tools enabled, using $PYTHON]) \
-    || AC_MSG_NOTICE([   Python based tools disabled])
 test -n "$DBLATEX$FOP" \
-    && AC_MSG_NOTICE([** XML PDF support enabled, using $DBLATEX$FOP]) \
-    || AC_MSG_NOTICE([   XML PDF support disabled, no dblatex or fop available])
+    && AC_MSG_NOTICE([** PDF support enabled, using $DBLATEX$FOP]) \
+    || AC_MSG_NOTICE([   PDF support disabled, no dblatex or fop available])
 test -n "$HIGHLIGHT" \
     && AC_MSG_NOTICE([** Syntax highlighting of examples enabled, using $HIGHLIGHT]) \
     || AC_MSG_NOTICE([   Syntax highlighting of examples disabled])
