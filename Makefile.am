@@ -5,7 +5,7 @@ SUBDIRS = cmake help tests
 
 bin_SCRIPTS = \
 	gtkdoc-check    \
-	gtkdoc-depscan
+	gtkdoc-depscan  \
 	gtkdoc-fixxref  \
 	gtkdoc-mkdb     \
 	gtkdoc-mkhtml   \
