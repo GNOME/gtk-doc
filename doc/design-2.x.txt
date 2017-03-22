@@ -7,8 +7,7 @@ Its not about Gtk. Its about C APIs with GObject support.
 g-doc, gapi-doc, gnome-api-doc, ...
 
 == remove and deprecate =
-- rename generated index.sgml to something like index.idx - it is not wellformed
-  sgml
+- tree_index and object_index are still named *.sgml
 - in the makefiles
   sgml-build.stamp -> db-build.stamp
   sgml.stamp -> db.stamp
