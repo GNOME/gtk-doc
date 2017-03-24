@@ -49,10 +49,11 @@ if options.uninstalled:
     gtkdocdir=os.path.split(sys.argv[0])[0]
     logging.debug("uninstalled, gtkdocdir=" + gtkdocdir)
 else:
-    # the first two are needed to resolve datadir
+    # the first vars are needed to resolve datadir
     prefix='@prefix@'
-    datarootdir='@datarootdir@'
-    gtkdocdir='@datadir@'/gtk-doc/data
+    datarootdir="@datarootdir@".replace('${prefix}', prefix)
+    datadir="@datadir@".replace('${datarootdir}', datarootdir)
+    gtkdocdir=os.path.join(datadir, 'gtk-doc/data')
 
 # We need to use a wrapper because there's no other way to conditionally pass
 # a `--path $searchpath` argument with proper quoting for the path
