@@ -1,10 +1,11 @@
-#!@PERL@ -w
-# -*- cperl -*-
+#!@PYTHON@
+# -*- python; coding: utf-8 -*-
 #
 # gtk-doc - GTK DocBook documentation generator.
 # Copyright (C) 2007  David Nečas
+#               2007-2017  Stefan Sauer
 #
-# This program is free software; you can redistribute it and/or modify
+# This program is free scperlonoftware; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
@@ -26,152 +27,100 @@
 #                documentations Makefile.am: TESTS = $(GTKDOC_CHECK)
 #############################################################################
 
-use strict;
-use Getopt::Long;
+# Support both Python 2 and 3
+from __future__ import print_function
 
-my $PRINT_VERSION;
-my $PRINT_HELP;
+import os, re, sys, argparse, subprocess
+from glob import glob
 
-my %optctl = ('version' => \$PRINT_VERSION,
-              'help' => \$PRINT_HELP);
-GetOptions(\%optctl, "version", "help");
 
-if ($PRINT_VERSION) {
-    print "@VERSION@\n";
-    exit 0;
-}
+def grep(regexp, filename, what):
+    pattern = re.compile(regexp)
+    with open(filename) as f:
+        for line in f:
+            for match in re.finditer(pattern, line):
+                return match.group(1)
+    sys.exit("Cannot find %s in %s" % (what, filename));
 
-if ($PRINT_HELP) {
-    print <<EOF;
-gtkdoc-check version @VERSION@ - run documentation unit tests
 
---version               Print the version of this program
---help                  Print this help
-EOF
-    exit 0;
-}
+def check_empty(filename, what):
+    with open(filename) as f:
+        count = sum(1 for line in f if line.strip())
+        if count:
+            print("%s:1:E: %d %st\n" % (filename, count, what))
+            return count
+    return 0
 
-my $checks = 4;
 
-# Get parameters from test env, if not there try to grab them from the makefile
-# We like Makefile.am more but builddir does not necessarily contain one.
-my $makefile = (-f 'Makefile.am') ? 'Makefile.am' : 'Makefile';
+def check_includes(filename):
+    # Check that each XML file in the xml directory is included in doc_main_file
+    with open(filename) as f:
+        lines = f.read().splitlines()
+        num_missing = 0;
+        for include in glob('xml/*.xml'):
+            try:
+                next(line for line in lines if include in line)
+            except StopIteration:
+                num_missing += 1;
+                print('% doesn\'t appear to include "%s"' % (filename, xml_file))
 
-# For historic reasons tests are launched in srcdir
-my $SRCDIR = $ENV{"SRCDIR"};
-my $BUILDDIR = $ENV{"BUILDDIR"};
-my $dir = ".";
-if (defined($BUILDDIR) and $BUILDDIR ne "") {
-    $dir=$BUILDDIR;
-}
+    return num_missing
 
-# debug
-#for my $key (sort(keys(%ENV))) { print "$key = ", $ENV{$key}, "\n"; }
-# debug
 
-my $DOC_MODULE = $ENV{"DOC_MODULE"};
-if (!defined($DOC_MODULE) or $DOC_MODULE eq "") {
-    $DOC_MODULE = &Grep('^\s*DOC_MODULE\s*=\s*(\S+)', $makefile, 'DOC_MODULE');
-}
-my $DOC_MAIN_SGML_FILE = $ENV{"DOC_MAIN_SGML_FILE"};
-if (!defined($DOC_MAIN_SGML_FILE) or $DOC_MAIN_SGML_FILE eq "") {
-    $DOC_MAIN_SGML_FILE = &Grep('^\s*DOC_MAIN_SGML_FILE\s*=\s*(\S+)', $makefile, 'DOC_MAIN_SGML_FILE');
-    $DOC_MAIN_SGML_FILE =~ s/\$\(DOC_MODULE\)/$DOC_MODULE/;
-}
+def run():
+    checks = 4
 
-print "Running suite(s): gtk-doc-$DOC_MODULE\n";
+    parser = argparse.ArgumentParser(description='gtkdoc-check version @VERSION@ - run documentation unit tests')
+    parser.add_argument('--version', action='version', version='@VERSION@')
+    parser.parse_args()
 
-my $undocumented = int &Grep('^(\d+)\s+not\s+documented\.\s*$',
-                             "$dir/$DOC_MODULE-undocumented.txt",
-                             'number of undocumented symbols');
-my $incomplete = int &Grep('^(\d+)\s+symbols?\s+incomplete\.\s*$',
-                           "$dir/$DOC_MODULE-undocumented.txt",
-                           'number of incomplete symbols');
-my $total = $undocumented + $incomplete;
-if ($total) {
-    print "$DOC_MODULE-undocumented.txt:1:E: $total undocumented or incomplete symbols\n";
-}
+    # Get parameters from test env, if not there try to grab them from the makefile
+    # We like Makefile.am more but builddir does not necessarily contain one.
+    makefile = 'Makefile.am'
+    if not os.path.exists(makefile):
+        makefile = 'Makefile'
 
-my $undeclared = &CheckEmpty("$dir/$DOC_MODULE-undeclared.txt",
-                             'undeclared symbols');
-my $unused = &CheckEmpty("$dir/$DOC_MODULE-unused.txt",
-                         'unused documentation entries');
+    # For historic reasons tests are launched in srcdir
+    srcdir = os.environ.get('SRCDIR', None)
+    builddir = os.environ.get('BUILDDIR', None)
+    workdir = '.'
+    if builddir:
+        workdir = builddir
 
-my $missing_includes = &CheckIncludes ("$dir/$DOC_MAIN_SGML_FILE");
+    doc_module = os.environ.get('DOC_MODULE', None)
+    if not doc_module:
+        doc_module = grep(r'^\s*DOC_MODULE\s*=\s*(\S+)', makefile, 'DOC_MODULE')
 
-my $failed = ($total > 0) + ($undeclared != 0) + ($unused != 0) + ($missing_includes != 0);
-my $rate = 100.0*($checks - $failed)/$checks;
-printf "%.1f%%: Checks %d, Failures: %d\n", $rate, $checks, $failed;
-exit ($failed != 0);
+    doc_main_file = os.environ.get('DOC_MAIN_SGML_FILE', None)
+    if not doc_main_file:
+        doc_main_file = grep(r'^\s*DOC_MAIN_SGML_FILE\s*=\s*(\S+)', makefile, 'DOC_MAIN_SGML_FILE')
+        doc_main_file = doc_main_file.replace('$(DOC_MODULE)', doc_module)
 
-sub Grep() {
-    my ($regexp, $filename, $what) = @_;
-    my $retval;
 
-    if (not open GFILE, "<$filename") {
-        die "Cannot open $filename: $!\n";
-    }
-    while (<GFILE>) {
-        next if not m/$regexp/;
-        $retval = $1;
-        last;
-    }
-    close GFILE;
-    if (not defined $retval) {
-        die "Cannot find $what in $filename\n";
-    }
-    return $retval;
-}
+    print('Running suite(s): gtk-doc-doc_module')
 
-sub CheckEmpty() {
-    my ($filename, $what) = @_;
-    my $count = 0;
+    undocumented = int(grep(r'^(\d+)\s+not\s+documented\.\s*$',
+                            os.path.join(workdir, doc_module + '-undocumented.txt'),
+                            'number of undocumented symbols'))
+    incomplete = int(grep(r'^(\d+)\s+symbols?\s+incomplete\.\s*$',
+                          os.path.join(workdir, doc_module + '-undocumented.txt'),
+                          'number of incomplete symbols'))
+    total = undocumented + incomplete
+    if total:
+        print('doc_module-undocumented.txt:1:E: %d undocumented or incomplete symbols' % total)
 
-    if (not open GFILE, "<$filename") {
-        return $count;
-    }
-    while (<GFILE>) {
-        if (m/\S/) {
-            $count++
-        }
-    }
-    close GFILE;
-    if ($count) {
-        print "$filename:1:E: $count $what\n"
-    }
-    return $count;
-}
+    undeclared = check_empty(os.path.join(workdir, doc_module + '-undeclared.txt'),
+                             'undeclared symbols')
+    unused = check_empty(os.path.join(workdir, doc_module + '-unused.txt'),
+                         'unused documentation entries')
 
-sub CheckIncludes() {
-    my ($main_sgml_file) = @_;
+    missing_includes = check_includes(os.path.join(workdir, doc_main_file))
 
-    if (not open GFILE, "<$main_sgml_file") {
-        die "Cannot open $main_sgml_file: $!\n";
-    }
+    failed = (total > 0) + (undeclared != 0) + (unused != 0) + (missing_includes != 0)
+    rate = 100.0 * (checks - failed) / checks
+    print("%.1f%%: Checks %d, Failures: %d" % (rate, checks, failed))
+    sys.exit(failed != 0)
 
-    # Check that each of the XML files in the xml directory are included in $DOC_MAIN_SGML_FILE
-    my @xml_files = <xml/*.xml>;
-    my $num_missing = 0;
 
-    foreach my $xml_file (@xml_files) {
-        my $regex = quotemeta ($xml_file);
-        my $found = 0;
-
-        while (<GFILE>) {
-            next if not m/"$regex"/;
-            $found = 1;
-            last;
-        }
-
-        if (!$found) {
-            $num_missing++;
-            print "$main_sgml_file doesn't appear to include \"$xml_file\"\n";
-        }
-
-        seek (GFILE, 0, 0);
-    }
-
-    close (GFILE);
-
-    return $num_missing;
-}
+if __name__== '__main__':
+    run()
