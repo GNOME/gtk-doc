@@ -30,8 +30,6 @@ from __future__ import print_function
 
 import os, sys, argparse, subprocess, re
 
-other_dirs = []
-
 # Maps.
 # These two point to the last seen URI of given type for a package:
 # OnlineMap: package => on-line URI
@@ -63,6 +61,7 @@ def log(options, *msg):
 
 def Run():
     options = parser.parse_args()
+    other_dirs = []
 
     if (options.html_dir == ''):
         sys.exit("No HTML directory (--html-dir) given.")
@@ -76,7 +75,7 @@ def Run():
                 log(options, "Prepending GNOME2_PATH directory:", dir)
                 other_dirs = [dir] + other_dirs
 
-    dir = subprocess.check_call(['@PKG_CONFIG@', '--variable=prefix', 'glib-2.0'], universal_newlines=True)
+    dir = subprocess.check_output(['@PKG_CONFIG@', '--variable=prefix', 'glib-2.0'], universal_newlines=True)
     dir = dir.strip()
     dir = os.path.join(dir, "/share/gtk-doc/html")
     log(options, "Prepending GLib directory", dir)
@@ -88,9 +87,9 @@ def Run():
         ScanDirectory(dir, options);
 
     if options.relative:
-        RelativizeLocalMap(options.html_dir);
+        RelativizeLocalMap(options.html_dir, options);
 
-    RebaseReferences(options.html_dir)
+    RebaseReferences(options.html_dir, options)
     PrintWhatWeHaveDone()
 
 
@@ -105,37 +104,40 @@ def ScanDirectory(dir, options):
         log(options, "Excluding self")
         return
 
+    if not os.path.isdir(dir):
+        print('Cannot open dir "%s"' % dir)
+        return
+
     have_index = False
-    with os.scandir(options.html_dir) as d:
-        for file in d:
-            if file.is_dir():
-                subdirs.push_back(file.name)
-                continue
+    for entry in os.listdir(dir):
+        if os.path.isdir(entry):
+            subdirs.push_back(entry)
+            continue
 
-            if file.name.endswit('.devhelp2'):
-                log(options, "Reading index from " + file.name)
-                o = ReadDevhelp(dir, file.name);
-                # Prefer this location over possibly stale index.sgml
-                if o is not None:
-                    onlinedir = o
-                have_index = True
+        if entry.endswith('.devhelp2'):
+            log(options, "Reading index from " + entry)
+            o = ReadDevhelp(dir, entry);
+            # Prefer this location over possibly stale index.sgml
+            if o is not None:
+                onlinedir = o
+            have_index = True
 
-            if onlinedir and file.name == "index.sgml":
-                log(options, "Reading index from index.sgml")
-                onlinedir = ReadIndex(dir, file.name);
-                have_index = True
-            elif file.name == "index.sgml.gz" and not os.path.exists(os.path.join(dir, 'index.sgml')):
-                # debian/ubuntu started to compress this as index.sgml.gz :/
-                print(''' Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
+        if onlinedir and entry == "index.sgml":
+            log(options, "Reading index from index.sgml")
+            onlinedir = ReadIndex(dir, entry);
+            have_index = True
+        elif entry == "index.sgml.gz" and not os.path.exists(os.path.join(dir, 'index.sgml')):
+            # debian/ubuntu started to compress this as index.sgml.gz :/
+            print(''' Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
 gunzip %s/%s
-''' % (dir, file.name))
-            elif file.name.endswith('.devhelp2.gz') and not os.path.exists(os.path.join(dir, e.fname, 'devhelp2')):
-                # debian/ubuntu started to compress this as *devhelp2.gz :/
-                print('''Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
+''' % (dir, entry))
+        elif entry.endswith('.devhelp2.gz') and not os.path.exists(os.path.join(dir, entry, 'devhelp2')):
+            # debian/ubuntu started to compress this as *devhelp2.gz :/
+            print('''Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
 gunzip %d/%s
-''' % (dir, file.name))
+''' % (dir, entry))
+        # we could consider supporting: gzip module
 
-            # we could consider supporting: gzip module
     if have_index:
         AddMap(dir, onlinedir);
 
@@ -196,7 +198,7 @@ def RelativizeLocalMap(dirname, options):
     dir = None
 
     dirname = os.path.realpath(dirname)
-    prefix = os.path.split(dir)
+    prefix = os.path.split(dirname)
     for package, dir in LocalMap.items():
         if dir.startswith(prefix):
             dir = os.path.join("..", dir[len(prefix):])
@@ -204,20 +206,21 @@ def RelativizeLocalMap(dirname, options):
             log(options, "Relativizing local location of $package to " + dir)
 
 def RebaseReferences(dirname, options):
-    for ifile in os.listdir(ifile):
+    for ifile in os.listdir(dirname):
         if ifile.endswith('.html'):
             RebaseFile(os.path.join(dirname, ifile), options)
 
 
 def RebaseFile(filename, options):
     log(options, "Fixing file: " + filename)
-    regex = re.compile(r'''(<a(?:\s+\w+=(?:"[^"]*"|'[^']*'))*\s+href=")([^"]*)(")''')
+    regex = re.compile(r'''(<a(?:\s+\w+=(?:"[^"]*"|'[^']*'))*\s+href=")([^"]*)(")''',
+                       flags=re.MULTILINE)
 
     def repl_func(match):
-        return match.group(1) + RebaseLink(match.group(2)) + match.group(3)
+        return match.group(1) + RebaseLink(match.group(2), options) + match.group(3)
 
     contents = open(filename).read()
-    processed = re.sub(regex, repl_func, contents, flags=re.MULTILINE)
+    processed = re.sub(regex, repl_func, contents)
     newfilename = filename + '.new'
     open(newfilename, 'w').write(processed)
     os.unlink(filename)
@@ -225,7 +228,7 @@ def RebaseFile(filename, options):
 
 
 def RebaseLink(href, options):
-    match = re.fullmatch(r'(.*/)([^/]*)', href)
+    match = re.match(r'^(.*/)([^/]*)$', href)
     package = None
     origdir = 'INVALID'
 
