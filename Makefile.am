@@ -64,10 +64,12 @@ EXTRA_DIST = \
 
 CLEANFILES = \
   gtk-doc.flat.make \
+  gtkdoc-checkc \
   gtkdoc-depscanc \
   gtkdoc-mkhtmlc \
   gtkdoc-mkmanc \
-  gtkdoc-mkpdfc
+  gtkdoc-mkpdfc \
+  gtkdoc-rebasec
 
 DISTCLEANFILES = \
   gtkdoc-check \
