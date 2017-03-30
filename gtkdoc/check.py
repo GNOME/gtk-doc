@@ -37,17 +37,16 @@ from . import config
 
 class FileFormatError(Exception):
 
-    def __init__(self, message):
-        self.message = message
+    def __init__(self, detail):
+        self.detail = detail
 
 
-def grep(regexp, filename, what):
+def grep(regexp, lines, what):
     pattern = re.compile(regexp)
-    with open(filename) as f:
-        for line in f:
-            for match in re.finditer(pattern, line):
-                return match.group(1)
-    raise FileFormatError("Cannot find %s in %s" % (what, filename))
+    for line in lines:
+        for match in re.finditer(pattern, line):
+            return match.group(1)
+    raise FileFormatError(what)
 
 
 def check_empty(filename, what):
@@ -74,10 +73,22 @@ def check_includes(filename):
     return num_missing
 
 
+def get_variable(env, lines, variable):
+    value = env.get(variable,
+        grep(r'^\s*' + variable + '\s*=\s*(\S+)', lines, variable))
+    return value
+
+
+def read_file(filename):
+    with open(filename) as f:
+        return f.read().splitlines()
+
+
 def run():
     """Runs the tests.
 
-    Returns a system exit code.
+    Returns:
+      int: a system exit code.
     """
     checks = 4
 
@@ -87,50 +98,51 @@ def run():
 
     # Get parameters from test env, if not there try to grab them from the makefile
     # We like Makefile.am more but builddir does not necessarily contain one.
-    makefile = 'Makefile.am'
-    if not os.path.exists(makefile):
-        makefile = 'Makefile'
+    makefilename = 'Makefile.am'
+    if not os.path.exists(makefilename):
+        makefilename = 'Makefile'
+    makefile = read_file(makefilename)
 
     # For historic reasons tests are launched in srcdir
-    srcdir = os.environ.get('SRCDIR', None)
-    builddir = os.environ.get('BUILDDIR', None)
-    workdir = '.'
-    if builddir:
-        workdir = builddir
+    workdir = os.environ.get('BUILDDIR', None)
+    if not workdir:
+        workdir = '.'
 
     try:
-        doc_module = os.environ.get('DOC_MODULE', None)
-        if not doc_module:
-            doc_module = grep(r'^\s*DOC_MODULE\s*=\s*(\S+)', makefile, 'DOC_MODULE')
-
-        doc_main_file = os.environ.get('DOC_MAIN_SGML_FILE', None)
-        if not doc_main_file:
-            doc_main_file = grep(r'^\s*DOC_MAIN_SGML_FILE\s*=\s*(\S+)', makefile, 'DOC_MAIN_SGML_FILE')
-            doc_main_file = doc_main_file.replace('$(DOC_MODULE)', doc_module)
-
-        print('Running suite(s): gtk-doc-doc_module')
-
-        undocumented = int(grep(r'^(\d+)\s+not\s+documented\.\s*$',
-                                os.path.join(workdir, doc_module + '-undocumented.txt'),
-                                'number of undocumented symbols'))
-        incomplete = int(grep(r'^(\d+)\s+symbols?\s+incomplete\.\s*$',
-                              os.path.join(workdir, doc_module + '-undocumented.txt'),
-                              'number of incomplete symbols'))
-        total = undocumented + incomplete
-        if total:
-            print('doc_module-undocumented.txt:1:E: %d undocumented or incomplete symbols' % total)
-
-        undeclared = check_empty(os.path.join(workdir, doc_module + '-undeclared.txt'),
-                                 'undeclared symbols')
-        unused = check_empty(os.path.join(workdir, doc_module + '-unused.txt'),
-                             'unused documentation entries')
-
-        missing_includes = check_includes(os.path.join(workdir, doc_main_file))
-
-        failed = (total > 0) + (undeclared != 0) + (unused != 0) + (missing_includes != 0)
-        rate = 100.0 * (checks - failed) / checks
-        print("%.1f%%: Checks %d, Failures: %d" % (rate, checks, failed))
-        return failed
+        doc_module = get_variable(os.environ, makefile, 'DOC_MODULE')
+        doc_main_file = get_variable(os.environ, makefile, 'DOC_MAIN_SGML_FILE')
     except FileFormatError as e:
-        print(e.message)
+        print('Cannot find %s in %s' % (e.detail, makefilename))
         return checks  # consider all failed
+
+    doc_main_file = doc_main_file.replace('$(DOC_MODULE)', doc_module)
+
+    print('Running suite(s): gtk-doc-' + doc_module)
+
+    statusfilename = os.path.join(workdir, doc_module + '-undocumented.txt')
+    statusfile = read_file(statusfilename)
+
+    try:
+        undocumented = int(grep(r'^(\d+)\s+not\s+documented\.\s*$',
+                                statusfile, 'number of undocumented symbols'))
+        incomplete = int(grep(r'^(\d+)\s+symbols?\s+incomplete\.\s*$',
+                              statusfile, 'number of incomplete symbols'))
+    except FileFormatError as e:
+        print('Cannot find %s in %s' % (e.detail, statusfilename))
+        return checks  # consider all failed
+
+    total = undocumented + incomplete
+    if total:
+        print('doc_module-undocumented.txt:1:E: %d undocumented or incomplete symbols' % total)
+
+    undeclared = check_empty(os.path.join(workdir, doc_module + '-undeclared.txt'),
+                             'undeclared symbols')
+    unused = check_empty(os.path.join(workdir, doc_module + '-unused.txt'),
+                         'unused documentation entries')
+
+    missing_includes = check_includes(os.path.join(workdir, doc_main_file))
+
+    failed = (total > 0) + (undeclared != 0) + (unused != 0) + (missing_includes != 0)
+    rate = 100.0 * (checks - failed) / checks
+    print("%.1f%%: Checks %d, Failures: %d" % (rate, checks, failed))
+    return failed
