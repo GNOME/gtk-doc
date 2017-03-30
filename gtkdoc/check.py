@@ -29,10 +29,16 @@
 # Support both Python 2 and 3
 from __future__ import print_function
 
-import os, re, sys, argparse, subprocess
+import os, re, argparse, subprocess
 from glob import glob
 
 from . import config
+
+
+class FileFormatError(Exception):
+
+    def __init__(self, message):
+        self.message = message
 
 
 def grep(regexp, filename, what):
@@ -41,7 +47,7 @@ def grep(regexp, filename, what):
         for line in f:
             for match in re.finditer(pattern, line):
                 return match.group(1)
-    sys.exit("Cannot find %s in %s" % (what, filename));
+    raise FileFormatError("Cannot find %s in %s" % (what, filename))
 
 
 def check_empty(filename, what):
@@ -57,7 +63,7 @@ def check_includes(filename):
     # Check that each XML file in the xml directory is included in doc_main_file
     with open(filename) as f:
         lines = f.read().splitlines()
-        num_missing = 0;
+        num_missing = 0
         for include in glob('xml/*.xml'):
             try:
                 next(line for line in lines if include in line)
@@ -69,6 +75,10 @@ def check_includes(filename):
 
 
 def run():
+    """Runs the tests.
+
+    Returns a system exit code.
+    """
     checks = 4
 
     parser = argparse.ArgumentParser(description='gtkdoc-check version %s - run documentation unit tests' % config.version)
@@ -88,35 +98,39 @@ def run():
     if builddir:
         workdir = builddir
 
-    doc_module = os.environ.get('DOC_MODULE', None)
-    if not doc_module:
-        doc_module = grep(r'^\s*DOC_MODULE\s*=\s*(\S+)', makefile, 'DOC_MODULE')
+    try:
+        doc_module = os.environ.get('DOC_MODULE', None)
+        if not doc_module:
+            doc_module = grep(r'^\s*DOC_MODULE\s*=\s*(\S+)', makefile, 'DOC_MODULE')
 
-    doc_main_file = os.environ.get('DOC_MAIN_SGML_FILE', None)
-    if not doc_main_file:
-        doc_main_file = grep(r'^\s*DOC_MAIN_SGML_FILE\s*=\s*(\S+)', makefile, 'DOC_MAIN_SGML_FILE')
-        doc_main_file = doc_main_file.replace('$(DOC_MODULE)', doc_module)
+        doc_main_file = os.environ.get('DOC_MAIN_SGML_FILE', None)
+        if not doc_main_file:
+            doc_main_file = grep(r'^\s*DOC_MAIN_SGML_FILE\s*=\s*(\S+)', makefile, 'DOC_MAIN_SGML_FILE')
+            doc_main_file = doc_main_file.replace('$(DOC_MODULE)', doc_module)
 
-    print('Running suite(s): gtk-doc-doc_module')
+        print('Running suite(s): gtk-doc-doc_module')
 
-    undocumented = int(grep(r'^(\d+)\s+not\s+documented\.\s*$',
-                            os.path.join(workdir, doc_module + '-undocumented.txt'),
-                            'number of undocumented symbols'))
-    incomplete = int(grep(r'^(\d+)\s+symbols?\s+incomplete\.\s*$',
-                          os.path.join(workdir, doc_module + '-undocumented.txt'),
-                          'number of incomplete symbols'))
-    total = undocumented + incomplete
-    if total:
-        print('doc_module-undocumented.txt:1:E: %d undocumented or incomplete symbols' % total)
+        undocumented = int(grep(r'^(\d+)\s+not\s+documented\.\s*$',
+                                os.path.join(workdir, doc_module + '-undocumented.txt'),
+                                'number of undocumented symbols'))
+        incomplete = int(grep(r'^(\d+)\s+symbols?\s+incomplete\.\s*$',
+                              os.path.join(workdir, doc_module + '-undocumented.txt'),
+                              'number of incomplete symbols'))
+        total = undocumented + incomplete
+        if total:
+            print('doc_module-undocumented.txt:1:E: %d undocumented or incomplete symbols' % total)
 
-    undeclared = check_empty(os.path.join(workdir, doc_module + '-undeclared.txt'),
-                             'undeclared symbols')
-    unused = check_empty(os.path.join(workdir, doc_module + '-unused.txt'),
-                         'unused documentation entries')
+        undeclared = check_empty(os.path.join(workdir, doc_module + '-undeclared.txt'),
+                                 'undeclared symbols')
+        unused = check_empty(os.path.join(workdir, doc_module + '-unused.txt'),
+                             'unused documentation entries')
 
-    missing_includes = check_includes(os.path.join(workdir, doc_main_file))
+        missing_includes = check_includes(os.path.join(workdir, doc_main_file))
 
-    failed = (total > 0) + (undeclared != 0) + (unused != 0) + (missing_includes != 0)
-    rate = 100.0 * (checks - failed) / checks
-    print("%.1f%%: Checks %d, Failures: %d" % (rate, checks, failed))
-    return failed
+        failed = (total > 0) + (undeclared != 0) + (unused != 0) + (missing_includes != 0)
+        rate = 100.0 * (checks - failed) / checks
+        print("%.1f%%: Checks %d, Failures: %d" % (rate, checks, failed))
+        return failed
+    except FileFormatError as e:
+        print(e.message)
+        return checks  # consider all failed

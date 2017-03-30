@@ -26,4 +26,4 @@ sys.path.append('@PYTHON_PACKAGE_DIR@')
 from gtkdoc import check
 
 if __name__== '__main__':
-    sys.exit(check.run() != 0)
+    sys.exit(check.run())
