@@ -136,7 +136,7 @@ fi
 AC_SUBST([HIGHLIGHT_OPTIONS])
 
 dnl
-dnl Set PACKAGE_DATA_DIR so we can find the script containing common routines.
+dnl Set runtime package dirs so we can find the script containing common routines.
 dnl
 dnl From Autoconf Macro Archive:
 m4_define([AC_DEFINE_DIR], [
@@ -152,6 +152,8 @@ m4_define([AC_DEFINE_DIR], [
 ])
 PACKAGE_DATA_DIR="${datadir}/${PACKAGE}/data"
 AC_DEFINE_DIR([PACKAGE_DATA_DIR], [PACKAGE_DATA_DIR])
+PYTHON_PACKAGE_DIR="${datadir}/${PACKAGE}/python"
+AC_DEFINE_DIR([PYTHON_PACKAGE_DIR], [PYTHON_PACKAGE_DIR])
 
 dnl Only use -Wall if we have gcc
 if test "x$GCC" = "xyes"; then
@@ -239,6 +241,7 @@ gtkdoc-common.pl
 cmake/Makefile
 cmake/GtkDocConfig.cmake
 cmake/GtkDocConfigVersion.cmake
+gtkdoc/config.py
 help/Makefile
 help/manual/Makefile
 tests/Makefile

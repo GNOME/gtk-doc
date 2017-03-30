@@ -15,6 +15,7 @@ TESTS_ENVIRONMENT = \
 	ABS_TOP_SRCDIR=$(abs_top_srcdir) \
 	PATH=$(abs_top_builddir):$(srcdir):$(PATH) \
 	PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	PYTHONPATH=$(abs_top_builddir):${PYTHONPATH} \
 	GLIB_PREFIX="$(glib_prefix)"
 
 endif

@@ -34,6 +34,12 @@ gtkdocdata_DATA = \
 	style/up-insensitive.png		\
 	style/style.css
 
+pylibdatadir = $(datadir)/gtk-doc/python/gtkdoc
+pylibdata_DATA = \
+  gtkdoc/__init__.py \
+  gtkdoc/check.py \
+  gtkdoc/config.py
+
 pkgconfigdir = $(datadir)/pkgconfig
 pkgconfig_DATA = gtk-doc.pc
 
@@ -69,7 +75,10 @@ CLEANFILES = \
   gtkdoc-mkhtmlc \
   gtkdoc-mkmanc \
   gtkdoc-mkpdfc \
-  gtkdoc-rebasec
+  gtkdoc-rebasec \
+  gtkdoc/__init__.pyc \
+  gtkdoc/check.pyc \
+  gtkdoc/config.pyc
 
 DISTCLEANFILES = \
   gtkdoc-check \
@@ -84,8 +93,8 @@ DISTCLEANFILES = \
   gtk-doc.pc \
   gtkdoc-rebase \
   gtkdoc-scangobj \
-  gtkdoc-scan
-
+  gtkdoc-scan \
+  gtkdoc/config.py
 
 MAINTAINERCLEANFILES = \
 	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \
