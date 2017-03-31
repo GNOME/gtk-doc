@@ -1,75 +1,46 @@
 #!@PYTHON@
+# -*- python; coding: utf-8 -*-
+#
+# gtk-doc - GTK DocBook documentation generator.
+# Copyright (C) 1998 Owen Taylor
+#               2001-2005 Damon Chaplin
+#               2009-2017  Stefan Sauer
+#               2017  Jussi Pakkanen
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+#
 
-# Support both Python 2 and 3
-from __future__ import print_function
+import argparse, sys
+sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-import os, sys, argparse, subprocess
-from glob import glob
+from gtkdoc import config, mkman
 
-version = '@VERSION@'
-xsltproc = '@XSLTPROC@'
+if __name__== '__main__':
+    parser = argparse.ArgumentParser(
+        description='gtkdoc-mkman version %s - generate documentation in man format' % config.version)
+    parser.add_argument('--version', action='version', version=config.version)
+    parser.add_argument('--verbose', default=False, action='store_true',
+                        help='Print extra output while processing')
+    parser.add_argument('--path', default='',
+                        help='Extra source directories')
+    parser.add_argument('args', nargs=2,
+                        help='MODULE DRIVER_FILE')
+    # TODO: only for testing, replace with env-var
+    parser.add_argument('--uninstalled', action='store_true', default=False,
+                        help='???')
 
-parser = argparse.ArgumentParser(description='gtkdoc-mkman version %s - generate documentation in man format' % version)
+    options = parser.parse_args()
 
-parser.add_argument('--verbose', default=False, action='store_true',
-                    help='Print extra output while processing')
-parser.add_argument('--path', default='',
-                    help='Extra source directories')
-parser.add_argument('version', default=False, action='store_true',
-                    help='Print the version of this program')
-parser.add_argument('args', nargs=2,
-                    help='MODULE DRIVER_FILE')
-parser.add_argument('--uninstalled', action='store_true', default=False,
-                    help='???')
-
-options = parser.parse_args()
-if options.version:
-    print(version)
-    sys.exit(0)
-
-module=options.args[0]
-document=options.args[1]
-if options.verbose:
-    quiet = '0'
-else:
-    quiet = '1'
-
-if options.uninstalled:
-    # this does not work from buiddir!=srcdir
-    gtkdocdir=os.path.split(sys.argv[0])[0]
-    #echo "uninstalled, gtkdocdir=$gtkdocdir"
-else:
-    # the first vars are needed to resolve datadir
-    prefix='@prefix@'
-    datarootdir="@datarootdir@".replace('${prefix}', prefix)
-    datadir="@datadir@".replace('${datarootdir}', datarootdir)
-    gtkdocdir=os.path.join(datadir, 'gtk-doc/data')
-
-# we could do "$path_option $PWD "
-# to avoid needing rewriting entities that are copied from the header
-# into docs under xml
-if options.path == '':
-    path_arg=[]
-else:
-    path_arg=[path_option, options.path]
-
-# would it make sense to create man pages only for certain refentries
-# e.g. for tools
-# see http://bugzilla.gnome.org/show_bug.cgi?id=467488
-subprocess.check_call([xsltproc] + path_arg +[
-    '--nonet',
-    '--xinclude',
-    '--stringparam',
-    'gtkdoc.bookname',
-    module,
-    '--stringparam',
-    'gtkdoc.version',
-    version,
-    '--stringparam',
-    'chunk.quietly ',
-    quiet,
-    '--stringparam',
-    'chunker.output.quiet',
-    quiet,
-    'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
-    document])
+    sys.exit(mkman.run(options))

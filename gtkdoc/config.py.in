@@ -1,1 +1,9 @@
 version = "@VERSION@"
+
+# tools
+xsltproc = '@XSLTPROC@'
+
+# configured directories
+prefix='@prefix@'
+datarootdir="@datarootdir@".replace('${prefix}', prefix)
+datadir="@datadir@".replace('${datarootdir}', datarootdir)
