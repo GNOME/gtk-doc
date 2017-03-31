@@ -3,7 +3,8 @@ This documents purpose is to collect what needs to be changed for a potential
 gtk-doc-2.X.
 
 == name ==
-Its not about Gtk. Its about C APIs with GObject support.
+Its not about Gtk. Its about C APIs with GObject support. But it is probably not
+worth it.
 g-doc, gapi-doc, gnome-api-doc, ...
 
 == remove and deprecate =
@@ -38,7 +39,7 @@ So we could easily use "DOC:" as a prefix for document structure ids.
 In 1.x we add :CAPS as a suffix to avoid clashes between lower and uppercase
 constructs. XML-IDs are not case insensitive, so we don't need that.
 
-If the ID contain a ':' xml processors belive it is using a namespace.
+If the ID contain a ':' xml processors believe it is using a namespace.
 
 === less files to maintain ===
 - one needs to maintain $module-docs.xml
@@ -51,14 +52,45 @@ If the ID contain a ':' xml processors belive it is using a namespace.
   - can we make the scanner smarter?
 
 === srcdir != builddir builds ===
+- all tools get a search path
+  - it contains builddir:srcdir if those are different or just one of them if
+    they are the same
+  - all files we read are checked through the path
+  - all files are written based on the first entry
 
 === build dependencies ===
 
-=== report files ===
+=== error/warning reporting ===
+- don't fail the build on doc-issues, instead fail the tests
+- all diagnostic output from the tools run during build in gcc style
 - instead of having -{undocumented,undeclared,unused}.txt have just one file
-- have sections in there for each type
-- have a summary at the top
-- have an option to disable generating the file
-  (or an option to specifically name it)
+  'doc-module.log'
+  - contains all the build diagnostics as well
+  - summary as 'INFO' level
+- gtkdoc-check will scan that file for 'ERROR'/'WARNING' lines
+  - depending on the CHECK_OPTIONS and the found lines if will fail certain
+    tests
 
-=== markup ===
+- TODO
+  - recheck all output and check whether we need Warnings/Errors or just
+    Warnings and flags to silence them
+  - Do we need a way to suppress false positives?
+
+=== docbook -> markdown ===
+The main performance culprit is the use of docbook (tools). Also writing docbook
+in source comments is cumbersome. We already support lots of markdown, so we'd
+like to have a pure markdown based workflow.
+
+For that we'd like to provide a migration path:
+- convert existing docbook files to markdown (e.g. pandoc)
+- convert/identify comments using docbook to markdown
+
+Next we need a replacement for gtkdoc-mkdb: gtkdoc-mkmd to create extract
+markdown from  sources and generate support files (index files). We also need to
+patch gtkdoc-{mkdb/pdf} to run respective tools (e.g. pandoc).
+
+We can enable such a toolchain via the configure flavors option.
+
+TODO:
+- markdown does not define a way to aggregate fragments into a large book
+  - we can only concat all the files in a stable order

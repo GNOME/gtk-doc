@@ -389,26 +389,6 @@ make ctags
 grep "gst_caps_is_always_compatible" tags
 
 
-= docbook -> markdown =
-The main performance culprit is the use of docbook (tools). Also writing docbook
-in source comments is cumbersome. We already support lots of markdown, so we'd
-like to have a pure markdown based workflow.
-
-For that we'd like to provide a migration path:
-- convert existing docbook files to markdown (pandoc)
-- convert/identify comments using docbook to markdown
-
-Next we need a replacement for gtkdoc-mkdb: gtkdoc-mkmd to create extract
-markdown from  sources and generate support files (index files). We also need to
-patch gtkdoc-{mkdb/pdf} to run respective tools (e.g. pandoc).
-
-We can enable such a toolchain via the configure flavours option.
-
-== open issues ==
-- markdown does not define a way to aggregate fragments into a large book
-  - we can only concat all the files in a stable order
-
-
 = performance =
 - timestamp each step
   make check >make.log
