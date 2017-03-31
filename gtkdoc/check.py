@@ -29,10 +29,8 @@
 # Support both Python 2 and 3
 from __future__ import print_function
 
-import os, re, argparse, subprocess
+import os, re, subprocess
 from glob import glob
-
-from . import config
 
 
 class FileFormatError(Exception):
@@ -84,17 +82,13 @@ def read_file(filename):
         return f.read().splitlines()
 
 
-def run():
+def run(options=None):
     """Runs the tests.
 
     Returns:
       int: a system exit code.
     """
     checks = 4
-
-    parser = argparse.ArgumentParser(description='gtkdoc-check version %s - run documentation unit tests' % config.version)
-    parser.add_argument('--version', action='version', version=config.version)
-    parser.parse_args()
 
     # Get parameters from test env, if not there try to grab them from the makefile
     # We like Makefile.am more but builddir does not necessarily contain one.

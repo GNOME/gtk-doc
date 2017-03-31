@@ -20,10 +20,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-import sys
+import argparse, sys
 sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-from gtkdoc import check
+from gtkdoc import check, config
 
 if __name__== '__main__':
-    sys.exit(check.run())
+    parser = argparse.ArgumentParser(
+        description='gtkdoc-check version %s - run documentation unit tests' % config.version)
+    parser.add_argument('--version', action='version', version=config.version)
+    options = parser.parse_args()
+
+    sys.exit(check.run(options))
