@@ -109,8 +109,8 @@ def run(options):
                            module + '.fo',
                            gtkdocdir + '/gtk-doc-fo.xsl',
                            document])
-        # fop dies too easily :(
-        # config.fop $module.fo $module.pdf
+        # TODO: fop dies too easily :(
+        # res = subprocess.call([config.fop, module + '.fo', module + '.pdf'))
         fname = module + '.fo'
         if os.path.exists(fname):
             os.unlink(fname)
