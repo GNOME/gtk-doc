@@ -39,6 +39,7 @@ pylibdata_DATA = \
   gtkdoc/__init__.py \
   gtkdoc/check.py \
   gtkdoc/config.py \
+  gtkdoc/mkhtml.py \
   gtkdoc/mkman.py
 
 pkgconfigdir = $(datadir)/pkgconfig
@@ -80,6 +81,7 @@ CLEANFILES = \
   gtkdoc/__init__.pyc \
   gtkdoc/check.pyc \
   gtkdoc/config.pyc \
+  gtkdoc/mkhtml.pyc \
   gtkdoc/mkman.pyc
 
 DISTCLEANFILES = \
