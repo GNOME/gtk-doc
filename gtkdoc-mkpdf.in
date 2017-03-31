@@ -1,137 +1,44 @@
 #!@PYTHON@
+# -*- python; coding: utf-8 -*-
+#
+# gtk-doc - GTK DocBook documentation generator.
+# Copyright (C) 2009-2017  Stefan Sauer
+#               2017  Jussi Pakkanen
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+#
 
-# Support both Python 2 and 3
-from __future__ import print_function
+import argparse, sys
+sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-import os, sys, argparse, subprocess
-import logging
+from gtkdoc import config, mkpdf
 
-version = '@VERSION@'
-xsltproc = '@XSLTPROC@'
-dblatex = '@DBLATEX@'
-fop = '@FOP@'
+if __name__== '__main__':
+    parser = argparse.ArgumentParser(
+        description='gtkdoc-mkpdf version %s - generate documentation in pdf format' % config.version)
+    parser.add_argument('--version', action='version', version=config.version)
+    parser.add_argument('--verbose', default=False, action='store_true',
+                help='Print extra output while processing.')
+    parser.add_argument('--path', default=[], action='append',
+                help='Extra source directories.')
+    parser.add_argument('--imgdir', default=[], action='append',
+                help='Extra image directories.')
+    parser.add_argument('--uninstalled', action='store_true', default=False,
+                        help='???')
+    parser.add_argument('args', nargs=2,
+                help='MODULE DRIVER_FILE')
 
-parser = argparse.ArgumentParser(description='gtkdoc-mkpdf version %s - generate documentation in pdf format' % version)
-
-parser.add_argument('--verbose', default=False, action='store_true',
-            help='Print extra output while processing.')
-parser.add_argument('--path', default=[], action='append',
-            help='Extra source directories.')
-parser.add_argument('--imgdir', default=[], action='append',
-            help='Extra image directories.')
-parser.add_argument('--version', default=False, action='store_true',
-            help='Print the version of this program')
-parser.add_argument('--uninstalled', action='store_true', default=False,
-                    help='???')
-parser.add_argument('args', nargs=2,
-            help='MODULE DRIVER_FILE')
-
-def cleanexit(exitval):
-    global module
-    fname = module + '.fo'
-    if os.path.exists(fname):
-        os.unlink(fname)
-    sys.exit(exitval)
-
-options = parser.parse_args()
-
-if options.version:
-    print(version)
-    sys.exit(0)
-
-module=options.args[0]
-document=options.args[1]
-
-if options.uninstalled:
-    # this does not work from buiddir!=srcdir
-    # we could try this
-    # MAKE_SCRDIR=$(abs_srcdir) MAKE_BUILDDIR=$(abs_builddir) gtkdoc-mkpdf ...
-    gtkdocdir=os.path.split(sys.argv[0])[0]
-    logging.debug("uninstalled, gtkdocdir=" + gtkdocdir)
-else:
-    # the first vars are needed to resolve datadir
-    prefix='@prefix@'
-    datarootdir="@datarootdir@".replace('${prefix}', prefix)
-    datadir="@datadir@".replace('${datarootdir}', datarootdir)
-    gtkdocdir=os.path.join(datadir, 'gtk-doc/data')
-
-# We need to use a wrapper because there's no other way to conditionally pass
-# a `--path $searchpath` argument with proper quoting for the path
-def run_xsltproc(args):
-    global options, xsltproc
-    # we could do "--path $PWD "
-    # to avoid needing rewriting entities that are copied from the header
-    # into docs under xml
-    if len(options.path) == 0:
-        cmd = [xsltproc] + args
-    else:
-        cmd = [xsltproc, '--path'] + options.searchpath + args
-    pc = subprocess.Popen(cmd, stderr=subprocess.PIPE)
-    (o, stde) = pc.communicate()
-    open('profile.txt', 'wb').write(stde)
-    if pc.returncode != 0:
-        cleanexit(pc.returncode)
-
-if dblatex != '':
-    # extra options to consider
-    # -I FIG_PATH
-    # -V is useful for debugging
-    # -T db2latex : different style
-    # -d : keep transient files (for debugging)
-    # -P abc.def=$quiet : once the stylesheets have a quiet mode
-    # xsltproc is already called with --xinclude
-    # does not work: --xslt-opts "--path $searchpath --nonet $@"
-    dblatex_options=['-o', module + '.pdf']
-    for i in options.imgdir:
-        dblatex_options += ['-I', i]
-    dblatex_options.append(document)
-    if not options.verbose:
-        pc = subprocess.Popen([dblatex, '--help'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        (stdo, stde) = pc.communicate()
-        if b'--quiet' in stdo or b'--quiet' in stde:
-            dblatex_options= ['--quiet'] + dblatex_options
-    dbcmd = [dblatex] + dblatex_options
-    pc = subprocess.Popen(dbcmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    (stde, _) = pc.communicate()
-    for line in stde.split('\n'):
-        if not line.strip():
-            continue
-        if 'programlisting or screen' in line:
-            continue
-        # This happens when dblatex has no support for some special chars
-        if 'Missing character' in line:
-            continue
-        print(line)
-elif fop != '':
-    if options.verbose:
-        quiet = '0'
-    else:
-        quiet = '1'
-    run_xsltproc(['--nonet',
-                  '--xinclude',
-                  '--stringparam',
-                  'gtkdoc.bookname',
-                  module,
-                  '--stringparam',
-                  'gtkdoc.version',
-                  version,
-                  '--stringparam',
-                  'chunk.quietly',
-                  quiet,
-                  '--stringparam',
-                  'chunker.output.quiet',
-                  quiet,
-                  module,
-                  document,
-                  '-o',
-                  module + '.fo',
-                  gtkdocdir + '/gtk-doc-fo.xsl',
-                  document])
-    # fop dies too easily :(
-    # @FOP@ $module.fo $module.pdf
-else:
-    print("dblatex or fop must be installed to use gtkdoc-mkpdf.")
-    cleanexit(1)
-
-open('pdf.stamp', 'w').write('timestamp')
-cleanexit(0)
+    options = parser.parse_args()
+    sys.exit(mkpdf.run(options))
