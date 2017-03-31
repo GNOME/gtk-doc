@@ -9,6 +9,11 @@ class TestCheck(unittest.TestCase):
         result = check.grep(r'^(foo)', ['foo'], 'foo')
         self.assertEqual('foo', result)
 
+    def test_grep_does_not_find_token(self):
+        with self.assertRaises(check.FileFormatError) as ctx:
+            check.grep(r'^(foo)', ['bar'], 'foo')
+        self.assertEqual(ctx.exception.detail, 'foo')
+
     def test_get_variable_prefers_env(self):
         result = check.get_variable({'foo':'bar'}, ['foo=baz'], 'foo')
         self.assertEqual('bar', result)

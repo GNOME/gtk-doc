@@ -47,13 +47,10 @@ def grep(regexp, lines, what):
     raise FileFormatError(what)
 
 
-def check_empty(filename, what):
+def check_empty(filename):
     with open(filename) as f:
         count = sum(1 for line in f if line.strip())
-        if count:
-            print("%s:1:E: %d %st\n" % (filename, count, what))
-            return count
-    return 0
+    return count
 
 
 def check_includes(filename):
@@ -66,7 +63,7 @@ def check_includes(filename):
                 next(line for line in lines if include in line)
             except StopIteration:
                 num_missing += 1;
-                print('% doesn\'t appear to include "%s"' % (filename, xml_file))
+                print('%s:1:E: doesn\'t appear to include "%s"' % (filename, xml_file))
 
     return num_missing
 
@@ -82,13 +79,53 @@ def read_file(filename):
         return f.read().splitlines()
 
 
+def run_tests(workdir, doc_module, doc_main_file):
+    checks = 4
+
+    print('Running suite(s): gtk-doc-' + doc_module)
+
+    # Test #1
+    statusfilename = os.path.join(workdir, doc_module + '-undocumented.txt')
+    statusfile = read_file(statusfilename)
+    try:
+        undocumented = int(grep(r'^(\d+)\s+not\s+documented\.\s*$',
+                                statusfile, 'number of undocumented symbols'))
+        incomplete = int(grep(r'^(\d+)\s+symbols?\s+incomplete\.\s*$',
+                              statusfile, 'number of incomplete symbols'))
+    except FileFormatError as e:
+        print('Cannot find %s in %s' % (e.detail, statusfilename))
+        return checks  # consider all failed
+
+    total = undocumented + incomplete
+    if total:
+        print(doc_module + '-undocumented.txt:1:E: %d undocumented or incomplete symbols' % total)
+
+    # Test #2
+    undeclared = check_empty(os.path.join(workdir, doc_module + '-undeclared.txt'))
+    if undeclared:
+        print(doc_module + '-undeclared.txt:1:E: %d undeclared symbols\n' % undeclared)
+
+    # Test #3
+    unused = check_empty(os.path.join(workdir, doc_module + '-unused.txt'))
+    if unused:
+        print(doc_module + '-unused.txt:1:E: %d unused documentation entries\n' % unused)
+
+    # Test #4
+    missing_includes = check_includes(os.path.join(workdir, doc_main_file))
+
+    # Test Summary
+    failed = (total > 0) + (undeclared != 0) + (unused != 0) + (missing_includes != 0)
+    rate = 100.0 * (checks - failed) / checks
+    print("%.1f%%: Checks %d, Failures: %d" % (rate, checks, failed))
+    return failed
+
+
 def run(options=None):
     """Runs the tests.
 
     Returns:
       int: a system exit code.
     """
-    checks = 4
 
     # Get parameters from test env, if not there try to grab them from the makefile
     # We like Makefile.am more but builddir does not necessarily contain one.
@@ -107,36 +144,8 @@ def run(options=None):
         doc_main_file = get_variable(os.environ, makefile, 'DOC_MAIN_SGML_FILE')
     except FileFormatError as e:
         print('Cannot find %s in %s' % (e.detail, makefilename))
-        return checks  # consider all failed
+        return 1
 
     doc_main_file = doc_main_file.replace('$(DOC_MODULE)', doc_module)
 
-    print('Running suite(s): gtk-doc-' + doc_module)
-
-    statusfilename = os.path.join(workdir, doc_module + '-undocumented.txt')
-    statusfile = read_file(statusfilename)
-
-    try:
-        undocumented = int(grep(r'^(\d+)\s+not\s+documented\.\s*$',
-                                statusfile, 'number of undocumented symbols'))
-        incomplete = int(grep(r'^(\d+)\s+symbols?\s+incomplete\.\s*$',
-                              statusfile, 'number of incomplete symbols'))
-    except FileFormatError as e:
-        print('Cannot find %s in %s' % (e.detail, statusfilename))
-        return checks  # consider all failed
-
-    total = undocumented + incomplete
-    if total:
-        print('doc_module-undocumented.txt:1:E: %d undocumented or incomplete symbols' % total)
-
-    undeclared = check_empty(os.path.join(workdir, doc_module + '-undeclared.txt'),
-                             'undeclared symbols')
-    unused = check_empty(os.path.join(workdir, doc_module + '-unused.txt'),
-                         'unused documentation entries')
-
-    missing_includes = check_includes(os.path.join(workdir, doc_main_file))
-
-    failed = (total > 0) + (undeclared != 0) + (unused != 0) + (missing_includes != 0)
-    rate = 100.0 * (checks - failed) / checks
-    print("%.1f%%: Checks %d, Failures: %d" % (rate, checks, failed))
-    return failed
+    return run_tests(workdir, doc_module, doc_main_file)
