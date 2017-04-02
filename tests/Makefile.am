@@ -6,7 +6,7 @@ if BUILD_TESTS
 
 TESTS = \
   gtkdoc-common.t gtkdoc-fixxref.t gtkdoc-mkdb.t gtkdoc-scan.t \
-  gtkdoc-check.py \
+  gtkdoc-check.py gtkdoc-common.py \
   tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh \
   program.sh
 TESTS_ENVIRONMENT = \

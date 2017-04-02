@@ -38,6 +38,7 @@ pylibdatadir = $(datadir)/gtk-doc/python/gtkdoc
 pylibdata_DATA = \
   gtkdoc/__init__.py \
   gtkdoc/check.py \
+  gtkdoc/common.py \
   gtkdoc/config.py \
   gtkdoc/mkhtml.py \
   gtkdoc/mkman.py \
@@ -81,6 +82,7 @@ CLEANFILES = \
   gtkdoc-rebasec \
   gtkdoc/__init__.pyc \
   gtkdoc/check.pyc \
+  gtkdoc/common.pyc \
   gtkdoc/config.pyc \
   gtkdoc/mkhtml.pyc \
   gtkdoc/mkman.pyc \
