@@ -28,7 +28,7 @@
 
 from __future__ import print_function
 
-import os, sys, argparse, subprocess, re
+import os, sys, subprocess, re
 
 from . import config
 
