@@ -7,6 +7,8 @@ pkg_config = '@PKG_CONFIG@'
 xsltproc = '@XSLTPROC@'
 
 # configured directories
-prefix='@prefix@'
-datarootdir="@datarootdir@".replace('${prefix}', prefix)
-datadir="@datadir@".replace('${datarootdir}', datarootdir)
+prefix = '@prefix@'
+datarootdir = "@datarootdir@".replace('${prefix}', prefix)
+datadir = "@datadir@".replace('${datarootdir}', datarootdir)
+
+exeext = '@EXEEXT@'
