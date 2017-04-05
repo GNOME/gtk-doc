@@ -27,10 +27,10 @@ sys.path.append('@PYTHON_PACKAGE_DIR@')
 from gtkdoc import config, rebase
 
 
-if __name__== '__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='gtkdoc-rebase version %s - rewrite links in html docs' % config.version)
-    parser.add_argument('--version', action='version', version='config.version')
+    parser.add_argument('--version', action='version', version=config.version)
     parser.add_argument('--html-dir', dest='html_dir', default='')
     parser.add_argument('--other-dir', dest='other_dir', default=[], action='append')
     parser.add_argument('--dest-dir', dest='dest_dir', default='')
@@ -41,5 +41,8 @@ if __name__== '__main__':
     group.add_argument('--relative', action='store_true', default=False)
 
     options = parser.parse_args()
+
+    if options.html_dir == '':
+        sys.exit("No HTML directory (--html-dir) given.")
 
     sys.exit(rebase.run(options))

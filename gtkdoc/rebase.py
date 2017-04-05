@@ -53,9 +53,6 @@ def log(options, *msg):
 def Run(options):
     other_dirs = []
 
-    if (options.html_dir == ''):
-        sys.exit("No HTML directory (--html-dir) given.")
-
     # We scan the directory containing GLib and any directories in GNOME2_PATH
     # first, but these will be overriden by any later scans.
     if "GNOME2_PATH" in os.environ:

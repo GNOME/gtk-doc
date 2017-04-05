@@ -27,7 +27,7 @@ sys.path.append('@PYTHON_PACKAGE_DIR@')
 
 from gtkdoc import config, mkhtml
 
-if __name__== '__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='gtkdoc-mkhtml version %s - generate documentation in html format' % config.version)
     parser.add_argument('--version', action='version', version=config.version)
     parser.add_argument('--verbose', default=False, action='store_true',

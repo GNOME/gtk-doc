@@ -25,7 +25,7 @@ sys.path.append('@PYTHON_PACKAGE_DIR@')
 
 from gtkdoc import check, config
 
-if __name__== '__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='gtkdoc-check version %s - run documentation unit tests' % config.version)
     parser.add_argument('--version', action='version', version=config.version)

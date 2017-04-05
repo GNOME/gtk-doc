@@ -27,7 +27,7 @@ sys.path.append('@PYTHON_PACKAGE_DIR@')
 
 from gtkdoc import config, mkman
 
-if __name__== '__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='gtkdoc-mkman version %s - generate documentation in man format' % config.version)
     parser.add_argument('--version', action='version', version=config.version)

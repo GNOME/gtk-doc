@@ -25,20 +25,20 @@ sys.path.append('@PYTHON_PACKAGE_DIR@')
 
 from gtkdoc import config, mkpdf
 
-if __name__== '__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='gtkdoc-mkpdf version %s - generate documentation in pdf format' % config.version)
     parser.add_argument('--version', action='version', version=config.version)
     parser.add_argument('--verbose', default=False, action='store_true',
-                help='Print extra output while processing.')
+                        help='Print extra output while processing.')
     parser.add_argument('--path', default=[], action='append',
-                help='Extra source directories.')
+                        help='Extra source directories.')
     parser.add_argument('--imgdir', default=[], action='append',
-                help='Extra image directories.')
+                        help='Extra image directories.')
     parser.add_argument('--uninstalled', action='store_true', default=False,
                         help='???')
     parser.add_argument('args', nargs=2,
-                help='MODULE DRIVER_FILE')
+                        help='MODULE DRIVER_FILE')
 
     options = parser.parse_args()
     sys.exit(mkpdf.run(options))
