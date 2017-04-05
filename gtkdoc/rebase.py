@@ -21,14 +21,17 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-#############################################################################
+#
 # Script      : gtkdoc-rebase
 # Description : Rebases URI references in installed HTML documentation.
-#############################################################################
+#
 
 from __future__ import print_function
 
-import os, sys, subprocess, re
+import os
+import sys
+import subprocess
+import re
 
 from . import config
 
@@ -71,10 +74,10 @@ def Run(options):
     # Check all other dirs, but skip already scanned dirs ord subdirs of those
 
     for dir in other_dirs:
-        ScanDirectory(dir, options);
+        ScanDirectory(dir, options)
 
     if options.relative:
-        RelativizeLocalMap(options.html_dir, options);
+        RelativizeLocalMap(options.html_dir, options)
 
     RebaseReferences(options.html_dir, options)
     PrintWhatWeHaveDone()
@@ -103,7 +106,7 @@ def ScanDirectory(dir, options):
 
         if entry.endswith('.devhelp2'):
             log(options, "Reading index from " + entry)
-            o = ReadDevhelp(dir, entry);
+            o = ReadDevhelp(dir, entry)
             # Prefer this location over possibly stale index.sgml
             if o is not None:
                 onlinedir = o
@@ -111,7 +114,7 @@ def ScanDirectory(dir, options):
 
         if onlinedir and entry == "index.sgml":
             log(options, "Reading index from index.sgml")
-            onlinedir = ReadIndex(dir, entry);
+            onlinedir = ReadIndex(dir, entry)
             have_index = True
         elif entry == "index.sgml.gz" and not os.path.exists(os.path.join(dir, 'index.sgml')):
             # debian/ubuntu started to compress this as index.sgml.gz :/
@@ -126,11 +129,11 @@ gunzip %d/%s
         # we could consider supporting: gzip module
 
     if have_index:
-        AddMap(dir, onlinedir);
+        AddMap(dir, onlinedir)
 
     # Now recursively scan the subdirectories.
     for subdir in subdirs:
-        ScanDirectory(os.path.join(dir, subdir), options);
+        ScanDirectory(os.path.join(dir, subdir), options)
 
 
 def ReadDevhelp(dir, file):
@@ -166,18 +169,18 @@ def AddMap(dir, onlinerdir, options):
 
     package = os.path.split(dir)[1]
     if options.dest_dir != '' and dir.startswith(options.dest_dir):
-        dir = dir[len(options.dest_dir)-1:]
+        dir = dir[len(options.dest_dir) - 1:]
 
     if onlinedir:
         log(options, "On-line location of %s." % onlinedir)
-        OnlineMap[package] = onlinedir;
-        RevMap[onlinedir] = package;
+        OnlineMap[package] = onlinedir
+        RevMap[onlinedir] = package
     else:
         log(options, "No On-line location for %s found" % package)
 
     log(options,  "Local location of $package: " + dir)
-    LocalMap[package] = dir;
-    RevMap[dir] = package;
+    LocalMap[package] = dir
+    RevMap[dir] = package
 
 
 def RelativizeLocalMap(dirname, options):
@@ -191,6 +194,7 @@ def RelativizeLocalMap(dirname, options):
             dir = os.path.join("..", dir[len(prefix):])
             LocalMap[package] = dir
             log(options, "Relativizing local location of $package to " + dir)
+
 
 def RebaseReferences(dirname, options):
     for ifile in os.listdir(dirname):
@@ -230,16 +234,16 @@ def RebaseLink(href, options):
                 package = match.groups(1)
             elif options.aggressive:
                 match = re.search(r'''([^/]+)/$''', href)
-                package = match.groups(1);
+                package = match.groups(1)
 
         if package:
             if options.online and package in OnlineMap:
-              dir = OnlineMap[package]
+                dir = OnlineMap[package]
             elif package in LocalMap:
-              dir = LocalMap[package]
+                dir = LocalMap[package]
             href = os.path.join(dir, file)
         else:
-          log(options, "Can't determine package for '%s'" % href);
+            log(options, "Can't determine package for '%s'" % href)
 
         if dir != origdir:
             if origdir in Mapped:

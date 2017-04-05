@@ -19,17 +19,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-#############################################################################
+#
 # Script      : gtkdoc-check
 # Description : Runs various checks on built documentation and outputs test
 #                results. Can be run druring make check, by adding this to the
 #                documentations Makefile.am: TESTS = $(GTKDOC_CHECK)
-#############################################################################
+#
 
 # Support both Python 2 and 3
 from __future__ import print_function
 
-import os, re, subprocess
+import os
+import re
+import subprocess
 from glob import glob
 
 
@@ -62,7 +64,7 @@ def check_includes(filename):
             try:
                 next(line for line in lines if include in line)
             except StopIteration:
-                num_missing += 1;
+                num_missing += 1
                 print('%s:1:E: doesn\'t appear to include "%s"' % (filename, xml_file))
 
     return num_missing
@@ -70,7 +72,7 @@ def check_includes(filename):
 
 def get_variable(env, lines, variable):
     value = env.get(variable,
-        grep(r'^\s*' + variable + '\s*=\s*(\S+)', lines, variable))
+                    grep(r'^\s*' + variable + '\s*=\s*(\S+)', lines, variable))
     return value
 
 

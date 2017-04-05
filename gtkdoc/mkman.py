@@ -25,7 +25,10 @@
 # Support both Python 2 and 3
 from __future__ import print_function
 
-import os, sys, argparse, subprocess
+import os
+import sys
+import argparse
+import subprocess
 from glob import glob
 
 from . import config

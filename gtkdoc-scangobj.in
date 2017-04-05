@@ -20,7 +20,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-import argparse, os, sys
+import argparse
+import os
+import sys
 sys.path.append('@PYTHON_PACKAGE_DIR@')
 
 from gtkdoc import config, scangobj

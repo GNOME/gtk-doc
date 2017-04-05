@@ -20,16 +20,21 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-#############################################################################
+#
 # This gets information about object hierarchies and signals
 # by compiling a small C program. CFLAGS and LDFLAGS must be
 # set appropriately before running this script.
-#############################################################################
+#
 
 
 from __future__ import print_function
 
-import logging, os, re, string, subprocess, sys
+import logging
+import os
+import re
+import string
+import subprocess
+import sys
 
 from . import common, config
 
@@ -1130,8 +1135,18 @@ output_object_args (FILE *fp, GType object_type)
       type_desc = describe_type (spec);
       default_value = describe_default (spec);
       type_name = get_type_name (spec->value_type, &is_pointer);
-      fprintf (fp, "<ARG>\\n<NAME>%s::%s</NAME>\\n<TYPE>%s%s</TYPE>\\n<RANGE>%s</RANGE>\\n<FLAGS>%s</FLAGS>\\n<NICK>%s</NICK>\\n<BLURB>%s%s</BLURB>\\n<DEFAULT>%s</DEFAULT>\\n</ARG>\\n\\n",
-               object_class_name, g_param_spec_get_name (spec), type_name, is_pointer ? "*" : "", type_desc, flags, nick ? nick : "(null)", blurb ? blurb : "(null)", dot, default_value);
+      fprintf (fp, "<ARG>\\n"
+                   "<NAME>%s::%s</NAME>\\n"
+                   "<TYPE>%s%s</TYPE>\\n"
+                   "<RANGE>%s</RANGE>\\n"
+                   "<FLAGS>%s</FLAGS>\\n"
+                   "<NICK>%s</NICK>\\n"
+                   "<BLURB>%s%s</BLURB>\\n"
+                   "<DEFAULT>%s</DEFAULT>\\n"
+                   "</ARG>\\n\\n",
+               object_class_name, g_param_spec_get_name (spec), type_name,
+               is_pointer ? "*" : "", type_desc, flags, nick ? nick : "(null)",
+               blurb ? blurb : "(null)", dot, default_value);
       g_free (type_desc);
       g_free (default_value);
     }

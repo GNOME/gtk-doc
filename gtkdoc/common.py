@@ -20,7 +20,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-import logging, os
+import logging
+import os
 
 
 def UpdateFileIfChanged(old_file, new_file, make_backup):
@@ -39,7 +40,7 @@ def UpdateFileIfChanged(old_file, new_file, make_backup):
         bool: It returns False if the file hasn't changed, and True if it has.
     """
 
-    logging.debug("Comparing %s with %s...", old_file, new_file);
+    logging.debug("Comparing %s with %s...", old_file, new_file)
 
     if os.path.exists(old_file):
         old_contents = open(old_file, 'rb').read()
