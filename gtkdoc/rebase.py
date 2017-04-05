@@ -21,10 +21,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-#
-# Script      : gtkdoc-rebase
-# Description : Rebases URI references in installed HTML documentation.
-#
+"""
+The rebase tool rewrites URI references in installed HTML documentation.
+"""
 
 from __future__ import print_function
 

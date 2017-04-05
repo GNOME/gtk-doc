@@ -19,12 +19,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-#
-# Script      : gtkdoc-check
-# Description : Runs various checks on built documentation and outputs test
-#                results. Can be run druring make check, by adding this to the
-#                documentations Makefile.am: TESTS = $(GTKDOC_CHECK)
-#
+"""
+The check tool runs various tests on built documentation and outputs test
+results. Can be run druring make check, by adding this to the documentations
+Makefile.am: TESTS = $(GTKDOC_CHECK).
+"""
 
 # Support both Python 2 and 3
 from __future__ import print_function

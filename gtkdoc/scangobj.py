@@ -20,12 +20,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-#
-# This gets information about object hierarchies and signals
-# by compiling a small C program. CFLAGS and LDFLAGS must be
-# set appropriately before running this script.
-#
-
+"""
+The scangobj tool gets information about object hierarchies and signals by
+compiling and running a small C program. CFLAGS and LDFLAGS must be set
+appropriately before running this script.
+"""
 
 from __future__ import print_function
 
