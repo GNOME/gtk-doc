@@ -52,7 +52,7 @@ def log(options, *msg):
         print(*msg)
 
 
-def Run(options):
+def run(options):
     other_dirs = []
 
     # We scan the directory containing GLib and any directories in GNOME2_PATH
