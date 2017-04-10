@@ -44,6 +44,7 @@ pylibdata_DATA = \
   gtkdoc/mkman.py \
   gtkdoc/mkpdf.py \
   gtkdoc/rebase.py \
+  gtkdoc/scan.py \
   gtkdoc/scangobj.py
 
 pkgconfigdir = $(datadir)/pkgconfig
@@ -90,6 +91,7 @@ CLEANFILES = \
   gtkdoc/mkman.pyc \
   gtkdoc/mkpdf.pyc \
   gtkdoc/rebase.pyc \
+  gtkdoc/scan.pyc \
   gtkdoc/scangobj.pyc
 
 DISTCLEANFILES = \
