@@ -37,9 +37,8 @@ import logging
 import os
 import re
 import sys
-sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-from gtkdoc import common
+from . import common
 
 # do not read files twice; checking it here permits to give both srcdir and
 # builddir as --source-dir without fear of duplicities
