@@ -44,11 +44,10 @@ if __name__ == '__main__':
                         help='Rebase links to all files that are under a directory matching a package name.')
     parser.add_argument('--verbose', action='store_true', default=False,
                         help='Print extra output while processing')
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('--online', action='store_true', default=False,
-                       help='Prefer cross-references to online documents')
-    group.add_argument('--relative', action='store_true', default=False,
-                       help='Prefer relative cross-references')
+    parser.add_argument('--online', action='store_true', default=False,
+                        help='Prefer cross-references to online documents')
+    parser.add_argument('--relative', action='store_true', default=False,
+                        help='Prefer relative cross-references')
 
     options = parser.parse_args()
 
