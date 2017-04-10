@@ -25,8 +25,6 @@ compiling and running a small C program. CFLAGS and LDFLAGS must be set
 appropriately before running this script.
 """
 
-from __future__ import print_function
-
 import logging
 import os
 import re
