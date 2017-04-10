@@ -1,4 +1,3 @@
-#!/usr/bin/python -w
 # -*- python -*-
 #
 # gtk-doc - GTK DocBook documentation generator.

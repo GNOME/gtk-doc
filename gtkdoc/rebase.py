@@ -1,4 +1,3 @@
-#!@PYTHON@
 # -*- python -*-
 #
 # gtk-doc - GTK DocBook documentation generator.

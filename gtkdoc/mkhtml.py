@@ -1,4 +1,3 @@
-#!@PYTHON@
 # -*- python; coding: utf-8 -*-
 #
 # gtk-doc - GTK DocBook documentation generator.
