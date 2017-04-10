@@ -31,7 +31,7 @@ import sys
 import subprocess
 import re
 
-from . import config
+from . import common
 
 # Maps.
 # These two point to the last seen URI of given type for a package:
@@ -63,9 +63,7 @@ def run(options):
                 log(options, "Prepending GNOME2_PATH directory:", dir)
                 other_dirs = [dir] + other_dirs
 
-    dir = subprocess.check_output([config.pkg_config, '--variable=prefix', 'glib-2.0'], universal_newlines=True)
-    dir = dir.strip()
-    dir = os.path.join(dir, "/share/gtk-doc/html")
+    dir = common.GetModuleDocDir('glib-2.0')
     log(options, "Prepending GLib directory", dir)
     other_dirs = [dir] + other_dirs
 

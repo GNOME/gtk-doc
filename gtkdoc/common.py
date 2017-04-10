@@ -22,6 +22,8 @@
 import logging
 import os
 
+from . import config
+
 
 def UpdateFileIfChanged(old_file, new_file, make_backup):
     """Compares the old version of the file with the new version and if the
@@ -57,3 +59,16 @@ def UpdateFileIfChanged(old_file, new_file, make_backup):
 
     os.rename(new_file, old_file)
     return True
+
+
+def GetModuleDocDir(module_name):
+    """Get the docdir for the given module via pkg-config
+
+    Args:
+      module_name: The module, e.g. 'glib-2.0'
+
+    Returns:
+      string: the doc directory
+    """
+    path = subprocess.check_output([config.pkg_config, '--variable=prefix', module_name], universal_newlines=True)
+    return os.path.join(path.strip(), "/share/gtk-doc/html")
