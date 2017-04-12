@@ -40,6 +40,7 @@ pylibdata_DATA = \
   gtkdoc/check.py \
   gtkdoc/common.py \
   gtkdoc/config.py \
+  gtkdoc/fixxref.py \
   gtkdoc/mkhtml.py \
   gtkdoc/mkman.py \
   gtkdoc/mkpdf.py \
@@ -87,6 +88,7 @@ CLEANFILES = \
   gtkdoc/check.pyc \
   gtkdoc/common.pyc \
   gtkdoc/config.pyc \
+  gtkdoc/fixxref.pyc \
   gtkdoc/mkhtml.pyc \
   gtkdoc/mkman.pyc \
   gtkdoc/mkpdf.pyc \
