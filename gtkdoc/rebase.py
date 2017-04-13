@@ -94,8 +94,9 @@ def ScanDirectory(dir, options):
 
     have_index = False
     for entry in os.listdir(dir):
-        if os.path.isdir(entry):
-            subdirs.push_back(entry)
+        full_entry = os.path.join(dir, entry)
+        if os.path.isdir(full_entry):
+            subdirs.append(full_entry)
             continue
 
         if entry.endswith('.devhelp2'):
@@ -115,7 +116,7 @@ def ScanDirectory(dir, options):
             print(''' Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
 gunzip %s/%s
 ''' % (dir, entry))
-        elif entry.endswith('.devhelp2.gz') and not os.path.exists(os.path.join(dir, entry, 'devhelp2')):
+        elif entry.endswith('.devhelp2.gz') and not os.path.exists(full_entry[:-3]):
             # debian/ubuntu started to compress this as *devhelp2.gz :/
             print('''Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
 gunzip %d/%s
@@ -127,7 +128,7 @@ gunzip %d/%s
 
     # Now recursively scan the subdirectories.
     for subdir in subdirs:
-        ScanDirectory(os.path.join(dir, subdir), options)
+        ScanDirectory(subdir, options)
 
 
 def ReadDevhelp(dir, file):
