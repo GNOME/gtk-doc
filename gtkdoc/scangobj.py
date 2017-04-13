@@ -27,10 +27,8 @@ appropriately before running this script.
 
 import logging
 import os
-import re
 import string
 import subprocess
-import sys
 
 from . import common, config
 

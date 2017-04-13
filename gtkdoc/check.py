@@ -30,7 +30,6 @@ from __future__ import print_function
 
 import os
 import re
-import subprocess
 from glob import glob
 
 
@@ -64,7 +63,7 @@ def check_includes(filename):
                 next(line for line in lines if include in line)
             except StopIteration:
                 num_missing += 1
-                print('%s:1:E: doesn\'t appear to include "%s"' % (filename, xml_file))
+                print('%s:1:E: doesn\'t appear to include "%s"' % (filename, include))
 
     return num_missing
 

@@ -27,7 +27,6 @@ The rebase tool rewrites URI references in installed HTML documentation.
 from __future__ import print_function
 
 import os
-import sys
 import re
 
 from . import common
@@ -38,7 +37,7 @@ from . import common
 # LocalMap: package => local URI
 # This maps all seen URIs of a package to fix broken links in the process:
 # RevMap: URI => package
-OnLineMap = {}
+OnlineMap = {}
 LocalMap = {}
 RevMap = {}
 # Remember what mangling we did.
@@ -159,7 +158,7 @@ def ReadIndex(dir, file):
     return onlinedir
 
 
-def AddMap(dir, onlinerdir, options):
+def AddMap(dir, onlinedir, options):
     package = None
 
     package = os.path.split(dir)[1]

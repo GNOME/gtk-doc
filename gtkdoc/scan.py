@@ -36,7 +36,6 @@ organized into sections ready to output the XML pages.
 import logging
 import os
 import re
-import sys
 
 from . import common
 

@@ -21,11 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-import os
-import sys
-import argparse
 import subprocess
-from glob import glob
 
 from . import config
 
@@ -38,18 +34,12 @@ def run(options):
     else:
         quiet = '1'
 
-    if options.uninstalled:
-        # TODO: this does not work from buiddir!=srcdir
-        gtkdocdir = os.path.split(sys.argv[0])[0]
-    else:
-        gtkdocdir = os.path.join(config.datadir, 'gtk-doc/data')
-
-    # we could do "$path_option $PWD " to avoid needing rewriting entities that
+    # we could do "--path $PWD " to avoid needing rewriting entities that
     # are copied from the header into docs under xml
     if options.path == '':
         path_arg = []
     else:
-        path_arg = [path_option, options.path]
+        path_arg = ['--path', options.path]
 
     # would it make sense to create man pages only for certain refentries
     # e.g. for tools
