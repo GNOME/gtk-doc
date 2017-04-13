@@ -3,6 +3,9 @@
 # cp tools/git-pre-commit .git/hooks/pre-commit
 
 which >/dev/null pep8 || (echo "please install pep8"; exit )
+which >/dev/null autopep8 || (echo "please install autopep8"; exit )
+which >/dev/null pyflakes || (echo "please install pyflakes"; exit )
+
 files=$(git diff --name-only --staged --diff-filter=ACMRTUXB | egrep "*.py$")
 
 if test -n "$files"; then
@@ -13,6 +16,9 @@ if test -n "$files"; then
     autopep8 --max-line-length=120 --diff $files
     echo
     echo "To fix run: autopep8 --max-line-length=120 -i $files"
+  else
+    pyflakes $files
+    res=$?
   fi
   exit $res
 fi
