@@ -21,6 +21,7 @@
 
 import logging
 import os
+import re
 import subprocess
 
 from . import config
@@ -35,7 +36,7 @@ def UpdateFileIfChanged(old_file, new_file, make_backup):
     Args:
         old_file (string): The pathname of the old file.
         new_file (string): The pathname of the new version of the file.
-        make_backup (bool) True if a backup of the old file should be kept.
+        make_backup (bool): True if a backup of the old file should be kept.
                            It will have the .bak suffix added to the file name.
 
     Returns:
@@ -66,10 +67,61 @@ def GetModuleDocDir(module_name):
     """Get the docdir for the given module via pkg-config
 
     Args:
-      module_name: The module, e.g. 'glib-2.0'
+      module_name (string): The module, e.g. 'glib-2.0'
 
     Returns:
       string: the doc directory
     """
     path = subprocess.check_output([config.pkg_config, '--variable=prefix', module_name], universal_newlines=True)
-    return os.path.join(path.strip(), "/share/gtk-doc/html")
+    return os.path.join(path.strip(), 'share/gtk-doc/html')
+
+
+def LogWarning(file, line, message):
+    """Log a warning in gcc style format
+
+    Args:
+      file (string): The file the error comes from
+      line (int): line number in the file
+      message (string): the error message to print
+    """
+    file = file or "unknown"
+
+    # TODO: write to stderr
+    print ("%s:%d: warning: %s" % (file, line, message))
+
+
+def CreateValidSGMLID(id):
+    """Creates a valid SGML 'id' from the given string.
+
+    According to http://www.w3.org/TR/html4/types.html#type-id "ID and NAME
+    tokens must begin with a letter ([A-Za-z]) and may be followed by any number
+    of letters, digits ([0-9]), hyphens ("-"), underscores ("_"), colons (":"),
+    and periods (".")."
+
+    When creating SGML IDS, we append ":CAPS" to all all-caps identifiers to
+    prevent name clashes (SGML ids are case-insensitive). (It basically never is
+    the case that mixed-case identifiers would collide.)
+
+    Args:
+      id (string): The text to be converted into a valid SGML id.
+
+    Returns:
+      string: The converted id.
+    """
+
+    # Special case, '_' would end up as '' so we use 'gettext-macro' instead.
+    if id is "_":
+        return "gettext-macro"
+
+    id = id.strip(',;')
+    id = re.sub(r'[_ ]', '-', id)
+    id = re.sub(r'^-+', '', id)
+    id = id.replace('::', '-')
+    id = id.replace(':', '--')
+
+    # Append ":CAPS" to all all-caps identifiers
+    # FIXME: there are some inconsistencies here, we have index files containing e.g. TRUE--CAPS
+    if id.isupper() and not id.endswith('-CAPS'):
+        id += ':CAPS'
+
+    return id
