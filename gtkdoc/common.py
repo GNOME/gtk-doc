@@ -113,7 +113,7 @@ def CreateValidSGMLID(id):
     if id is "_":
         return "gettext-macro"
 
-    id = id.strip(',;')
+    id = re.sub(r'[,;]', '', id)
     id = re.sub(r'[_ ]', '-', id)
     id = re.sub(r'^-+', '', id)
     id = id.replace('::', '-')
