@@ -17,6 +17,14 @@ class TestUpdateFileIfChanged(unittest.TestCase):
         self.assertTrue(res)
 
 
+class TestGetModuleDocDir(unittest.TestCase):
+
+    @mock.patch('subprocess.check_output')
+    def test_ReturnsPath(self, subprocess_check_output):
+        subprocess_check_output.return_value = '/usr'
+        self.assertEquals(common.GetModuleDocDir('glib-2.0'), '/usr/share/gtk-doc/html')
+
+
 class TestCreateValidSGMLID(unittest.TestCase):
 
     def test_AlreadyValid(self):
