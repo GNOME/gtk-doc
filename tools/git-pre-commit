@@ -1,6 +1,9 @@
 #!/bin/sh
 # git hook to ensure code style
 # cp tools/git-pre-commit .git/hooks/pre-commit
+#
+# TODO:
+# pylint -r n -f parseable $files
 
 which >/dev/null pep8 || (echo "please install pep8"; exit )
 which >/dev/null autopep8 || (echo "please install autopep8"; exit )
