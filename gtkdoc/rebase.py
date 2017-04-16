@@ -124,7 +124,7 @@ gunzip %d/%s
         # we could consider supporting: gzip module
 
     if have_index:
-        AddMap(dir, onlinedir)
+        AddMap(dir, onlinedir, options)
 
     # Now recursively scan the subdirectories.
     for subdir in subdirs:
@@ -138,7 +138,7 @@ def ReadDevhelp(dir, file):
         # online must come before chapter/functions
         if '<chapters' in line or '<functions' in line:
             break
-        match = re.search(r'  online="([^"]*)"/')
+        match = re.search(r'  online="([^"]*)"/', line)
         if match:
             # Remove trailing non-directory component.
             onlinedir = re.sub(r'(.*/).*', r'\1', match.groups(1))
