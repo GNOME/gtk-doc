@@ -19,6 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
+# Support both Python 2 and 3
+from __future__ import print_function
+
 import logging
 import os
 import re
@@ -76,7 +79,7 @@ def GetModuleDocDir(module_name):
     return os.path.join(path.strip(), 'share/gtk-doc/html')
 
 
-def LogWarning(file, line, message):
+def LogWarning(filename, line, message):
     """Log a warning in gcc style format
 
     Args:
@@ -84,13 +87,13 @@ def LogWarning(file, line, message):
       line (int): line number in the file
       message (string): the error message to print
     """
-    file = file or "unknown"
+    filename = filename or "unknown"
 
     # TODO: write to stderr
-    print ("%s:%d: warning: %s" % (file, line, message))
+    print ("%s:%d: warning: %s" % (filename, line, message))
 
 
-def CreateValidSGMLID(id):
+def CreateValidSGMLID(xml_id):
     """Creates a valid SGML 'id' from the given string.
 
     According to http://www.w3.org/TR/html4/types.html#type-id "ID and NAME
@@ -110,18 +113,18 @@ def CreateValidSGMLID(id):
     """
 
     # Special case, '_' would end up as '' so we use 'gettext-macro' instead.
-    if id is "_":
+    if xml_id is "_":
         return "gettext-macro"
 
-    id = re.sub(r'[,;]', '', id)
-    id = re.sub(r'[_ ]', '-', id)
-    id = re.sub(r'^-+', '', id)
-    id = id.replace('::', '-')
-    id = id.replace(':', '--')
+    xml_id = re.sub(r'[,;]', '', xml_id)
+    xml_id = re.sub(r'[_ ]', '-', xml_id)
+    xml_id = re.sub(r'^-+', '', xml_id)
+    xml_id = xml_id.replace('::', '-')
+    xml_id = xml_id.replace(':', '--')
 
     # Append ":CAPS" to all all-caps identifiers
     # FIXME: there are some inconsistencies here, we have index files containing e.g. TRUE--CAPS
-    if id.isupper() and not id.endswith('-CAPS'):
-        id += ':CAPS'
+    if xml_id.isupper() and not xml_id.endswith('-CAPS'):
+        xml_id += ':CAPS'
 
-    return id
+    return xml_id
