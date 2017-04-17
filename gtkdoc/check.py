@@ -34,9 +34,7 @@ from glob import glob
 
 
 class FileFormatError(Exception):
-
-    def __init__(self, detail):
-        self.detail = detail
+    pass
 
 
 def grep(regexp, lines, what):
@@ -93,7 +91,7 @@ def run_tests(workdir, doc_module, doc_main_file):
         incomplete = int(grep(r'^(\d+)\s+symbols?\s+incomplete\.\s*$',
                               statusfile, 'number of incomplete symbols'))
     except FileFormatError as e:
-        print('Cannot find %s in %s' % (e.detail, statusfilename))
+        print('Cannot find %s in %s' % (str(e), statusfilename))
         return checks  # consider all failed
 
     total = undocumented + incomplete
@@ -143,7 +141,7 @@ def run(options=None):
         doc_module = get_variable(os.environ, makefile, 'DOC_MODULE')
         doc_main_file = get_variable(os.environ, makefile, 'DOC_MAIN_SGML_FILE')
     except FileFormatError as e:
-        print('Cannot find %s in %s' % (e.detail, makefilename))
+        print('Cannot find %s in %s' % (str(e), makefilename))
         return 1
 
     doc_main_file = doc_main_file.replace('$(DOC_MODULE)', doc_module)
