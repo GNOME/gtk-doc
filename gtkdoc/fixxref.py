@@ -21,6 +21,9 @@
 
 ''"Fix cross-references in the HTML documentation.''"
 
+# Support both Python 2 and 3
+from __future__ import print_function
+
 import logging
 import os
 import re
@@ -56,7 +59,7 @@ DirCache = {}
 
 
 def Run(options):
-    #logging.basicConfig(level=logging.INFO)
+    # logging.basicConfig(level=logging.INFO)
 
     path_prefix = ''
     m = re.search(r'(.*?)/share/gtk-doc/html', options.html_dir)
@@ -179,14 +182,14 @@ def ReadDevhelp(file, use_absolute_links):
 
 def ReadSections(options):
     for line in open(options.module + '-sections.txt'):
-        m1 = re.search('^<SUBSECTION\s*(.*)>', line)
+        m1 = re.search(r'^<SUBSECTION\s*(.*)>', line)
         if line.startswith('#') or line.strip() == '':
             continue
         elif line.startswith('<SECTION>'):
             subsection = ''
         elif m1:
             subsection = m1.group(1)
-        elif line.startswith('<SUBSECTION>') or line.startswith('<\/SECTION>'):
+        elif line.startswith('<SUBSECTION>') or line.startswith('</SECTION>'):
             continue
         elif re.search(r'^<TITLE>(.*)<\/TITLE>', line):
             continue

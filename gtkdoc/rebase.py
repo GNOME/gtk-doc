@@ -173,7 +173,7 @@ def AddMap(dir, onlinedir, options):
     else:
         log(options, "No On-line location for %s found" % package)
 
-    log(options,  "Local location of $package: " + dir)
+    log(options, "Local location of $package: " + dir)
     LocalMap[package] = dir
     RevMap[dir] = package
 
