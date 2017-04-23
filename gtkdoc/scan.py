@@ -299,19 +299,32 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
 
             logging.info('no decl: %s', line.strip())
 
+            # Regular expression m17 below invokes pathological behaviour in
+            # Python's regex parser. In Perl it is fast. This hack makes the
+            # slowdown go away, but there has not been a thorough investigation
+            # why that is.
+            #
+            # https://bugzilla.gnome.org/show_bug.cgi?id=781569
+            line17 = line.replace('  ', ' ')
+
+            # avoid generating regex with |'' (matching no string)
+            ignore_decorators = ''
+            if options.ignore_decorators:
+                ignore_decorators = '|' + options.ignore_decorators
+
             m = re.search(r'^\s*#\s*define\s+(\w+)', line)
-            #                                $1                                $3            $4             $5
+            #                   $1                                $3            $4             $5
             m2 = re.search(
                 r'^\s*typedef\s+((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(', line)
-            #                      $1                                $3            $4             $5
+            #                    $1                                $3            $4             $5
             m3 = re.search(r'^\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(', line)
             #                    $1            $2
             m4 = re.search(r'^\s*(\**)\s*\(\*\s*(\w+)\)\s*\(', line)
             #                              $1                                $3
             m5 = re.search(r'^\s*typedef\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*', previous_line)
-            #                                                                           $1                                $3            $4             $5
+            #                                              $1                                $3            $4             $5
             m6 = re.search(
-                r'^\s*(?:\b(?:extern|G_INLINE_FUNC|%s)\s*)*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(' % options.ignore_decorators, line)
+                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(' % ignore_decorators, line)
             m7 = re.search(r'^\s*enum\s+_?(\w+)\s+\{', line)
             m8 = re.search(r'^\s*typedef\s+enum', line)
             m9 = re.search(r'^\s*typedef\s+(struct|union)\s+_(\w+)\s+\2\s*;', line)
@@ -320,16 +333,17 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
             m12 = re.search(r'^\s*typedef\s+(?:struct|union)\s+\w+[\s\*]+(\w+)\s*;', line)
             m13 = re.search(r'^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w+)(\s*\[[^\]]+\])*\s*;', line)
             m14 = re.search(
-                r'^\s*(extern|[A-Za-z_]+VAR|%s)\s+((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*;' % options.ignore_decorators, line)
+                r'^\s*(extern|[A-Za-z_]+VAR%s)\s+((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*;' % ignore_decorators, line)
             m15 = re.search(
                 r'^\s*((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*\=', line)
             m16 = re.search(r'.*G_DECLARE_(FINAL_TYPE|DERIVABLE_TYPE|INTERFACE)\s*\(', line)
-            #                                                          $1                                                                                                    $2                                                          $3
+            # private functions
+            #                                             $1                                                                                                    $2                                                          $3
             m17 = re.search(
-                r'^\s*(?:\b(?:extern|G_INLINE_FUNC|%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(' % options.ignore_decorators, line)
-            #                                                          $1                                                                                                    $2                                                          $3
+                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(' % ignore_decorators, line17)
+            #                                             $1                                                                                                    $2                                                          $3
             m18 = re.search(
-                r'^\s*(?:\b(?:extern|G_INLINE_FUNC|%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(' % options.ignore_decorators, line)
+                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(' % ignore_decorators, line)
             m19 = re.search(r'^\s*([A-Za-z]\w*)\s*\(', line)
             m20 = re.search(r'^\s*\(', line)
             m21 = re.search(r'^\s*struct\s+_?(\w+)', line)
@@ -532,8 +546,8 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                 if not previous_line.strip().startswith('G_INLINE_FUNC'):
                     if not previous_line_words or previous_line_words[0] != 'static':
                         #                                           $1                                                                                                   $2
-                        pm = re.search(r'^\s*(?:\b(?:extern|%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
-                                       options.ignore_decorators, previous_line)
+                        pm = re.search(r'^\s*(?:\b(?:extern%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
+                                       ignore_decorators, previous_line)
                         if pm:
                             ret_type = pm.group(1)
                             if pm.group(2):
@@ -544,9 +558,9 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                         logging.info('skip block after inline function')
                         # now we we need to skip a whole { } block
                         skip_block = 1
-                        #                                                                                  $1                                                                                                    $2
-                        pm = re.search(r'^\s*(?:\b(?:extern|static|inline|%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
-                                       options.ignore_decorators, previous_line)
+                        #                                                        $1                                                                                                    $2
+                        pm = re.search(r'^\s*(?:\b(?:extern|static|inline%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
+                                       ignore_decorators, previous_line)
                         if pm:
                             ret_type = pm.group(1)
                             if pm.group(2):
@@ -558,9 +572,9 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                         logging.info('skip block after inline function')
                         # now we we need to skip a whole { } block
                         skip_block = 1
-                        #                                                                                  $1                                                                                                    $2
-                        pm = re.search(r'^\s*(?:\b(?:extern|G_INLINE_FUNC|%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
-                                       options.ignore_decorators, previous_line)
+                        #                                                         $1                                                                                                    $2
+                        pm = re.search(r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
+                                       ignore_decorators, previous_line)
                         if pm:
                             ret_type = pm.group(1)
                             if pm.group(2):
@@ -573,9 +587,9 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
             elif m20:
                 decl = line[m20.end():]
                 pm = re.search(
-                    r'^\s*(?:\b(?:extern|G_INLINE_FUNC|%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$' % options.ignore_decorators, previous_line)
-                ppm = re.search(r'^\s*(?:\b(?:extern|G_INLINE_FUNC|%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$' %
-                                options.ignore_decorators, pre_previous_line)
+                    r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$' % ignore_decorators, previous_line)
+                ppm = re.search(r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$' %
+                                ignore_decorators, pre_previous_line)
                 if pm:
                     ret_type = pm.group(1) + ' ' + pm.group(2)
                     symbol = pm.group(3)
@@ -671,7 +685,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
         # Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);' or
         # ') __attribute__ (...);'.
         if in_declaration == 'function':
-            regex = r'\)\s*(G_GNUC_.*|.*DEPRECATED.*|%s\s*|__attribute__\s*\(.*\)\s*)*;.*$' % options.ignore_decorators
+            regex = r'\)\s*(G_GNUC_.*|.*DEPRECATED.*%s\s*|__attribute__\s*\(.*\)\s*)*;.*$' % ignore_decorators
             pm = re.search(regex, decl, flags=re.MULTILINE)
             if pm:
                 logging.info('scrubbing:[%s]', decl)
