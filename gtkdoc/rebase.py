@@ -26,6 +26,7 @@ The rebase tool rewrites URI references in installed HTML documentation.
 
 from __future__ import print_function
 
+import logging
 import os
 import re
 
@@ -77,31 +78,29 @@ def run(options):
     PrintWhatWeHaveDone()
 
 
-def ScanDirectory(dir, options):
-    # This array holds any subdirectories found.
-    subdirs = []
-    onlinedir = None
+def ScanDirectory(scan_dir, options):
+    log(options, "Scanning documentation directory %s", scan_dir)
 
-    log(options, "Scanning documentation directory " + dir)
-
-    if dir == options.html_dir:
+    if scan_dir == options.html_dir:
         log(options, "Excluding self")
         return
 
-    if not os.path.isdir(dir):
-        print('Cannot open dir "%s"' % dir)
+    if not os.path.isdir(scan_dir):
+        logging.info('Cannot open dir "%s"', scan_dir)
         return
 
+    subdirs = []
+    onlinedir = None
     have_index = False
-    for entry in os.listdir(dir):
-        full_entry = os.path.join(dir, entry)
+    for entry in os.listdir(scan_dir):
+        full_entry = os.path.join(scan_dir, entry)
         if os.path.isdir(full_entry):
             subdirs.append(full_entry)
             continue
 
         if entry.endswith('.devhelp2'):
             log(options, "Reading index from " + entry)
-            o = ReadDevhelp(dir, entry)
+            o = ReadDevhelp(scan_dir, entry)
             # Prefer this location over possibly stale index.sgml
             if o is not None:
                 onlinedir = o
@@ -111,20 +110,20 @@ def ScanDirectory(dir, options):
             log(options, "Reading index from index.sgml")
             onlinedir = ReadIndex(dir, entry)
             have_index = True
-        elif entry == "index.sgml.gz" and not os.path.exists(os.path.join(dir, 'index.sgml')):
+        elif entry == "index.sgml.gz" and not os.path.exists(os.path.join(scan_dir, 'index.sgml')):
             # debian/ubuntu started to compress this as index.sgml.gz :/
             print(''' Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/77138 . For now run:
 gunzip %s/%s
-''' % (dir, entry))
+''' % (scan_dir, entry))
         elif entry.endswith('.devhelp2.gz') and not os.path.exists(full_entry[:-3]):
             # debian/ubuntu started to compress this as *devhelp2.gz :/
             print('''Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
 gunzip %d/%s
-''' % (dir, entry))
+''' % (scan_dir, entry))
         # we could consider supporting: gzip module
 
     if have_index:
-        AddMap(dir, onlinedir, options)
+        AddMap(scan_dir, onlinedir, options)
 
     # Now recursively scan the subdirectories.
     for subdir in subdirs:
