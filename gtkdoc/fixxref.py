@@ -120,10 +120,12 @@ def ScanIndices(scan_dir, use_absolute_links):
 
     logging.info('Scanning index directory: %s, absolute: %d', scan_dir, use_absolute_links)
 
-    # This array holds any subdirectories found.
-    subdirs = []
-
     # TODO(ensonic): this code is the same as in rebase.py
+    if not os.path.isdir(scan_dir):
+        logging.info('Cannot open dir "%s"', scan_dir)
+        return
+
+    subdirs = []
     for entry in os.listdir(scan_dir):
         full_entry = os.path.join(scan_dir, entry)
         if os.path.isdir(full_entry):
