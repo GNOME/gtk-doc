@@ -299,14 +299,6 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
 
             logging.info('no decl: %s', line.strip())
 
-            # Regular expression m17 below invokes pathological behaviour in
-            # Python's regex parser. In Perl it is fast. This hack makes the
-            # slowdown go away, but there has not been a thorough investigation
-            # why that is.
-            #
-            # https://bugzilla.gnome.org/show_bug.cgi?id=781569
-            line17 = line.replace('  ', ' ')
-
             # avoid generating regex with |'' (matching no string)
             ignore_decorators = ''
             if options.ignore_decorators:
@@ -337,13 +329,12 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
             m15 = re.search(
                 r'^\s*((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*\=', line)
             m16 = re.search(r'.*G_DECLARE_(FINAL_TYPE|DERIVABLE_TYPE|INTERFACE)\s*\(', line)
-            # private functions
-            #                                             $1                                                                                                    $2                                                          $3
+            #                                             $1                                                                                                    $2                                                     $3
             m17 = re.search(
-                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(' % ignore_decorators, line17)
-            #                                             $1                                                                                                    $2                                                          $3
+                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(' % ignore_decorators, line)
+            #                                             $1                                                                                                    $2                                                     $3
             m18 = re.search(
-                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s+|\*)+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(' % ignore_decorators, line)
+                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(' % ignore_decorators, line)
             m19 = re.search(r'^\s*([A-Za-z]\w*)\s*\(', line)
             m20 = re.search(r'^\s*\(', line)
             m21 = re.search(r'^\s*struct\s+_?(\w+)', line)
@@ -507,6 +498,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
             # We assume that functions which start with '_' are private, so
             # we skip them.
             elif m17:
+                logging.debug('m17: %s', line)
                 ret_type = m17.group(1)
                 if m17.group(2):
                     ret_type += ' ' + m17.group(2)
@@ -521,6 +513,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                     skip_block = 1
 
             elif m18:
+                logging.debug('m18: %s', line)
                 ret_type = m18.group(1)
                 if m18.group(2):
                     ret_type += ' ' + m18.group(2)
