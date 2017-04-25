@@ -498,7 +498,6 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
             # We assume that functions which start with '_' are private, so
             # we skip them.
             elif m17:
-                logging.debug('m17: %s', line)
                 ret_type = m17.group(1)
                 if m17.group(2):
                     ret_type += ' ' + m17.group(2)
@@ -513,7 +512,6 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                     skip_block = 1
 
             elif m18:
-                logging.debug('m18: %s', line)
                 ret_type = m18.group(1)
                 if m18.group(2):
                     ret_type += ' ' + m18.group(2)
