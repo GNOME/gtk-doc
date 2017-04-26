@@ -24,7 +24,7 @@ import argparse
 import sys
 sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-from gtkdoc import config, mkpdf
+from gtkdoc import common, config, mkpdf
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -42,4 +42,7 @@ if __name__ == '__main__':
                         help='MODULE DRIVER_FILE')
 
     options = parser.parse_args()
+
+    common.setup_logging()
+
     sys.exit(mkpdf.run(options))

@@ -26,7 +26,7 @@ import argparse
 import sys
 sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-from gtkdoc import config, mkhtml
+from gtkdoc import common, config, mkhtml
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -45,5 +45,7 @@ if __name__ == '__main__':
     options = parser.parse_args()
     if len(options.args) < 2:
         sys.exit('Too few arguments')
+
+    common.setup_logging()
 
     sys.exit(mkhtml.run(options))

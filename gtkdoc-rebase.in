@@ -25,7 +25,7 @@ import argparse
 import sys
 sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-from gtkdoc import config, rebase
+from gtkdoc import common, config, rebase
 
 
 if __name__ == '__main__':
@@ -53,5 +53,7 @@ if __name__ == '__main__':
 
     if options.html_dir == '':
         sys.exit("No HTML directory (--html-dir) given.")
+
+    common.setup_logging()
 
     sys.exit(rebase.run(options))

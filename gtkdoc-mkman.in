@@ -26,7 +26,7 @@ import argparse
 import sys
 sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-from gtkdoc import config, mkman
+from gtkdoc import common, config, mkman
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -43,5 +43,7 @@ if __name__ == '__main__':
                         help='???')
 
     options = parser.parse_args()
+
+    common.setup_logging()
 
     sys.exit(mkman.run(options))

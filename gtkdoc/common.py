@@ -26,8 +26,22 @@ import logging
 import os
 import re
 import subprocess
+import sys
 
 from . import config
+
+
+def setup_logging():
+    """Check GTKDOC_TRACE environment variable.
+
+    Set python log level to the value of the environment variable (DEBUG, INFO,
+    WARNING, ERROR and CRITICAL) or INFO if the environment variable is empty.
+    """
+    log_level = os.environ.get('GTKDOC_TRACE')
+    if log_level == '':
+        log_level = 'INFO'
+    if log_level:
+        logging.basicConfig(stream=sys.stdout, level=logging.getLevelName(log_level))
 
 
 def UpdateFileIfChanged(old_file, new_file, make_backup):
