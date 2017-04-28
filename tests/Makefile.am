@@ -5,7 +5,7 @@ SUBDIRS = gobject bugs annotations fail empty program .
 if BUILD_TESTS
 
 TESTS = \
-  gtkdoc-common.t gtkdoc-mkdb.t \
+  gtkdoc-common.t \
   gtkdoc-check.py gtkdoc-common.py \
   tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh \
   program.sh

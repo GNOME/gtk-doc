@@ -22,6 +22,7 @@
 # Support both Python 2 and 3
 from __future__ import print_function
 
+from collections import OrderedDict
 import logging
 import os
 import re
@@ -167,7 +168,7 @@ def ParseStructDeclaration(declaration, is_object, output_function_params, typef
       namefunc (func): function to apply to name
 
     Returns:
-      str: list of strings describing the public declaration
+      dict: map of (symbol, decl) pairs describing the public declaration
     """
 
     # For forward struct declarations just return an empty array.
@@ -200,16 +201,19 @@ def ParseStructDeclaration(declaration, is_object, output_function_params, typef
         return ()
 
     # Prime match after "struct/union {" declaration
-    if not re.search(r'(?:struct|union)\s+\w*\s*\{', declaration, flags=re.MULTILINE | re.DOTALL):
+    match = re.search(r'(?:struct|union)\s+\w*\s*\{', declaration, flags=re.MULTILINE | re.DOTALL)
+    if not match:
         raise ParseError('Declaration "%s" does not begin with "struct/union [NAME] {"' % declaration)
 
     logging.debug('public fields in struct/union: %s', declaration)
 
-    result = []
+    result = OrderedDict()
 
     # Treat lines in sequence, allowing singly nested anonymous structs and unions.
-    for m in re.finditer(r'\s*([^{;]+(\{[^\}]*\}[^{;]+)?);', declaration, flags=re.MULTILINE | re.DOTALL):
+    for m in re.finditer(r'\s*([^{;]+(\{[^\}]*\}[^{;]+)?);', declaration[match.end():], flags=re.MULTILINE | re.DOTALL):
         line = m.group(1)
+
+        logging.debug('checking "%s"', line)
 
         if re.search(r'^\s*\}\s*\w*\s*$', line):
             break
@@ -256,16 +260,15 @@ def ParseStructDeclaration(declaration, is_object, output_function_params, typef
             ptype = func_type
             if typefunc:
                 ptype = typefunc(func_type, '<type>%s</type>' % func_type)
-
-            result.append(name)
+            pname = name
             if namefunc:
-                name = namefunc(name)
+                pname = namefunc(name)
 
             if output_function_params:
-                result.append('%s%s%s%s%s%s&#160;(*%s)&#160;(%s)' %
-                              (mod1, ptype, ptr1, mod2, ptr2, mod3, name, func_params))
+                result[name] = '%s%s%s%s%s%s&#160;(*%s)&#160;(%s)' % (
+                    mod1, ptype, ptr1, mod2, ptr2, mod3, pname, func_params)
             else:
-                result.append('%s&#160;()' % name)
+                result[name] = '%s&#160;()' % pname
 
         # Try to match normal struct fields of comma-separated variables/
         elif vars_match:
@@ -292,7 +295,7 @@ def ParseStructDeclaration(declaration, is_object, output_function_params, typef
                 # e.g. *foo, ***bar, *baz[12][23], foo : 25.
                 m = re.search(
                     r'^\s* (\**(?:\s*restrict\b)?) \s* (\w+) \s* (?: ((?:\[[^\]]*\]\s*)+) | (:\s*\d+)?) \s* $',
-                    line, flags=re.VERBOSE)
+                    n, flags=re.VERBOSE)
                 if m:
                     ptrs = m.group(1)
                     name = m.group(2)
@@ -300,19 +303,21 @@ def ParseStructDeclaration(declaration, is_object, output_function_params, typef
                     bits = m.group(4)
                     if bits:
                         bits = ' ' + bits
+                    else:
+                        bits = ''
                     if ptrs and not ptrs.endswith('*'):
                         ptrs += ' '
 
                     array = array.replace(' ', '&#160;')
                     bits = bits.replace(' ', '&#160;')
 
-                    result.append(name)
+                    pname = name
                     if namefunc:
-                        name = namefunc(name)
+                        pname = namefunc(name)
 
-                    result.append('%s%s%s&#160;%s%s%s%s;' % (mod1, ptype, mod2, ptrs, name, array, bits))
+                    result[name] = '%s%s%s&#160;%s%s%s%s;' % (mod1, ptype, mod2, ptrs, pname, array, bits)
 
-                    logging.debug('Matched line: %s%s%s %s%s%s%s', mod1, ptype, mod2, ptrs, name, array, bits)
+                    logging.debug('Matched line: %s%s%s %s%s%s%s', mod1, ptype, mod2, ptrs, pname, array, bits)
                 else:
                     logging.warning('Cannot parse struct field: "%s"', n)
 
@@ -371,13 +376,14 @@ def ParseEnumDeclaration(declaration):
     declaration = re.sub(r',(\s*})', r'\1', declaration)
 
     # Prime match after "typedef enum {" declaration
-    if not re.search(r'(typedef\s+)?enum\s*(\S+\s*)?\{', declaration, flags=re.MULTILINE | re.DOTALL):
+    match = re.search(r'(typedef\s+)?enum\s*(\S+\s*)?\{', declaration, flags=re.MULTILINE | re.DOTALL)
+    if not match:
         raise ParseError('Enum declaration "%s" does not begin with "typedef enum {" or "enum [NAME] {"' % declaration)
 
-    logging.debug("public fields in enum: %s', declaration")
+    logging.debug("public fields in enum: %s'", declaration)
 
     # Treat lines in sequence.
-    for m in re.finditer(r'\s*([^,\}]+)([,\}])', declaration, flags=re.MULTILINE | re.DOTALL):
+    for m in re.finditer(r'\s*([^,\}]+)([,\}])', declaration[match.end():], flags=re.MULTILINE | re.DOTALL):
         line = m.group(1)
         terminator = m.group(2)
 
@@ -417,10 +423,10 @@ def ParseFunctionDeclaration(declaration, typefunc, namefunc):
       namefunc (func): function to apply to name
 
     Returns:
-      str: list of strings describing the prototype
+      dict: map of (symbol, decl) pairs describing the prototype
     """
 
-    result = []
+    result = OrderedDict()
 
     param_num = 0
     while declaration:
@@ -435,15 +441,13 @@ def ParseFunctionDeclaration(declaration, typefunc, namefunc):
         if n:
             if param_num != 0:
                 logging.warning('void used as parameter %d in function %s', param_num, declaration)
-            result.append('void')
-            result.append(namefunc('<type>void</type>'))
+            result['void'] = namefunc('<type>void</type>')
             param_num += 1
             continue
 
         declaration, n = re.subn(r'^\s*[_a-zA-Z0-9]*\.\.\.\s*[,\n]', '', declaration)
         if n:
-            result.append('...')
-            result.append(namefunc('...'))
+            result['...'] = namefunc('...')
             param_num += 1
             continue
 
@@ -480,10 +484,8 @@ def ParseFunctionDeclaration(declaration, typefunc, namefunc):
 
             logging.debug('"%s" "%s" "%s" "%s" "%s"', pre, type, ptr, name, array)
 
-            result.append(name)
             xref = typefunc(type, '<type>%s</type>' % type)
-            label = namefunc('%s%s %s%s%s' % (pre, xref, ptr, name, array))
-            result.append(label)
+            result[name] = namefunc('%s%s %s%s%s' % (pre, xref, ptr, name, array))
             param_num += 1
             continue
 
@@ -504,16 +506,14 @@ def ParseFunctionDeclaration(declaration, typefunc, namefunc):
             name = m.group(7)
             func_params = m.group(8) or ''
 
-            if ptr and not ptr.endswith('*'):
-                ptr += ' '
+            if ptr1 and not ptr1.endswith('*'):
+                ptr1 += ' '
             func_ptr = re.sub(r'\s+', ' ', func_ptr)
 
             logging.debug('"%s" "%s" "%s" "%s" "%s"', mod1, type, mod2, func_ptr, name)
 
-            result.append(name)
             xref = typefunc(type, '<type>%s</type>' % type)
-            label = namefunc('%s%s%s%s (%s%s) (%s)' % (mod1, xref, ptr1, mod2, func_ptr, name, func_params))
-            result.append(label)
+            result[name] = namefunc('%s%s%s%s (%s%s) (%s)' % (mod1, xref, ptr1, mod2, func_ptr, name, func_params))
             param_num += 1
             continue
 
@@ -534,15 +534,19 @@ def ParseMacroDeclaration(declaration, namefunc):
       namefunc (func): function to apply to name
 
     Returns:
-      str: list of strings describing the macro
+      dict: map of (symbol, decl) pairs describing the macro
     """
 
-    result = []
+    result = OrderedDict()
+
+    logging.debug('decl=[%s]', declaration)
 
     m = re.search(r'^\s*#\s*define\s+\w+\(([^\)]*)\)', declaration)
     if m:
         params = m.group(1)
-        params = re.sub(r'\\\n', '', params)
+        params = re.sub(r'\n', '', params)
+
+        logging.debug('params=[%s]', params)
 
         for param in params.split(','):
             param = param.strip()
@@ -551,8 +555,7 @@ def ParseMacroDeclaration(declaration, namefunc):
             if param.endswith('...'):
                 param = '...'
 
-            if param.strip() != '':
-                result.append(param)
-                result.append(namefunc(param))
+            if param != '':
+                result[param] = namefunc(param)
 
     return result
