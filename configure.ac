@@ -10,7 +10,7 @@ m4_define(gtk_doc_version, 1.25.1)
 AC_INIT([gtk-doc],[gtk_doc_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc],[gtk-doc])
 
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_SRCDIR([gtkdoc-common.pl.in])
+AC_CONFIG_SRCDIR([gtk-doc.pc.in])
 AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([1.11 check-news std-options -Wno-portability tar-ustar no-dist-gzip dist-xz])
@@ -30,22 +30,6 @@ LT_INIT
 
 dnl Make sure we have pkg-config >= 0.19, so installing in $(datadir) is OK.
 PKG_PROG_PKG_CONFIG([0.19])
-
-dnl
-dnl Check for Perl.
-dnl
-AC_PATH_PROG([PERL], [perl])
-if test -z "$PERL"; then
-	AC_MSG_ERROR([perl not found])
-fi
-
-AC_MSG_CHECKING([if Perl version >= 5.16.0])
-if "$PERL" -e "require v5.16.0"; then
-	AC_MSG_RESULT([yes])
-else
-	AC_MSG_RESULT([no])
-	AC_MSG_ERROR([perl >= 5.16.0 is required for gtk-doc])
-fi
 
 dnl
 dnl Check for Python.
@@ -237,7 +221,6 @@ AM_CONDITIONAL([HAVE_YELP_TOOLS],[test x$have_yelp_tools = xyes])
 
 AC_CONFIG_FILES([Makefile
 gtk-doc.pc
-gtkdoc-common.pl
 cmake/Makefile
 cmake/GtkDocConfig.cmake
 cmake/GtkDocConfigVersion.cmake

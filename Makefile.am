@@ -18,7 +18,6 @@ bin_SCRIPTS = \
 
 gtkdocdatadir = $(datadir)/gtk-doc/data
 gtkdocdata_DATA = \
-	gtkdoc-common.pl	\
 	gtk-doc.xsl		\
 	version-greater-or-equal.xsl \
 	devhelp2.xsd		\
@@ -98,7 +97,6 @@ CLEANFILES = \
 
 DISTCLEANFILES = \
   gtkdoc-check \
-  gtkdoc-common.pl \
   gtkdoc-depscan \
   gtkdoc-fixxref \
   gtkdocize \
