@@ -43,7 +43,7 @@ if __name__ == '__main__':
                         'in addition to HTML_DIR')
     parser.add_argument('--src-lang', default='c',
                         help='Programing language used for syntax highlighting. The'
-                        'available languages depend on the source source'
+                        'available languages depend on the source'
                         'highlighter you use.')
 
     options = parser.parse_args()
