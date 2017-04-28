@@ -1,5 +1,5 @@
 # Swedish translation of gtk-doc.
-# Copyright © 2009 Free Software Foundation, Inc.
+# Copyright © 2009-2017 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk-doc package.
 # Daniel Nylander <po@danielnylander.se>, 2009.
 # Sebastian Rasmussen <sebras@gmail.com>, 2016.
@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc master\n"
-"POT-Creation-Date: 2017-03-21 20:30+0000\n"
-"PO-Revision-Date: 2017-03-22 18:10+0100\n"
+"POT-Creation-Date: 2017-04-23 16:21+0000\n"
+"PO-Revision-Date: 2017-04-28 23:38+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -758,12 +758,10 @@ msgstr ""
 "filename>. Annars kommer förgenererad dokumentation att installeras (vilket "
 "är rimligt för användare men inte för utvecklare)."
 
-# sebras: <function> or <symbol>?
-# TODO: inside *your*
 #. (itstool) path: sect1/para
 #: C/index.docbook:454
 msgid ""
-"Furthermore it is recommended that you have the following line inside you "
+"Furthermore it is recommended that you have the following line inside your "
 "<filename>configure.ac</filename> script. This allows "
 "<application>gtkdocize</application> to automatically copy the macro "
 "definition for <function>GTK_DOC_CHECK</function> to your project."
@@ -1611,12 +1609,11 @@ msgstr ""
 msgid "SECTION:&lt;name&gt;"
 msgstr "SECTION:&lt;namn&gt;"
 
-# TODO: the name give -> the name given
 #. (itstool) path: listitem/para
 #: C/index.docbook:942
 msgid ""
 "The name links the section documentation to the respective part in the "
-"<filename>&lt;package&gt;-sections.txt</filename> file. The name give here "
+"<filename>&lt;package&gt;-sections.txt</filename> file. The name given here "
 "should match the &lt;FILE&gt; tag in the <filename>&lt;package&gt;-sections."
 "txt</filename> file."
 msgstr ""
@@ -3322,7 +3319,6 @@ msgstr ""
 "den manuella uppdateringen av en avsnittsfil att vara så enkelt som att köra "
 "<code>meld &lt;paket&gt;-decl-list.txt &lt;paket&gt;-sections.txt</code>."
 
-# TODO: you source control system -> *your*
 #. (itstool) path: sect1/para
 #: C/index.docbook:1976
 msgid ""
@@ -3331,7 +3327,7 @@ msgid ""
 "\">tmpl</filename>. This version adds options to switch the whole doc module "
 "to not use the extra tmpl build step at all, by using <option>--flavour no-"
 "tmpl</option> in <filename>configure.ac</filename>. If you don't have a "
-"<filename class=\"directory\">tmpl</filename> checked into you source "
+"<filename class=\"directory\">tmpl</filename> checked into your source "
 "control system and haven't yet switched, just add the flag to "
 "<filename>configure.ac</filename> and you are done."
 msgstr ""
@@ -3480,14 +3476,13 @@ msgstr ""
 "    &lt;/releaseinfo&gt;\n"
 "  &lt;/bookinfo&gt;\n"
 
-# TODO: is any example -> is an example
 #. (itstool) path: sect1/para
 #: C/index.docbook:2035
 msgid ""
 "The makefiles shipped with this version generate an entity file at "
 "<filename>xml/gtkdocentities.ent</filename>, containing entities for e.g. "
 "package_name and package_version. You can use this e.g. in the main xml file "
-"to avoid hardcoding the version number. Below is any example that shows how "
+"to avoid hardcoding the version number. Below is an example that shows how "
 "the entity file is included and how the entities are used. The entities can "
 "also be used in all generated files, GTK-Doc will use the same xml header in "
 "generated xml files. <_:example-1/>"
@@ -3495,10 +3490,10 @@ msgstr ""
 "Makefilerna som skeppas med denna version genererar en entitetsfil vid namn "
 "<filename>xml/gtkdocentities.ent</filename> som innehåller entiteter för t."
 "ex. package_name och package_version. Du kan använda detta för att t.ex. i "
-"filen main xml undvika att hårdkoda versionsnumret. Nedan finns exempel som "
-"visar hur entitetsfilen inkluderas och hur entiteter används. Entiteterna "
-"kan också användas i alla genererade filer, GTK-Doc kommer att använda samma "
-"xml-huvud i genererade xml-filer. <_:example-1/>"
+"filen main xml undvika att hårdkoda versionsnumret. Nedan finns ett exempel "
+"som visar hur entitetsfilen inkluderas och hur entiteter används. "
+"Entiteterna kan också användas i alla genererade filer, GTK-Doc kommer att "
+"använda samma xml-huvud i genererade xml-filer. <_:example-1/>"
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:2069
