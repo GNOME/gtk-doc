@@ -41,7 +41,9 @@ def setup_logging():
     if log_level == '':
         log_level = 'INFO'
     if log_level:
-        logging.basicConfig(stream=sys.stdout, level=logging.getLevelName(log_level))
+        logging.basicConfig(stream=sys.stdout,
+                            level=logging.getLevelName(log_level.upper()),
+                            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
 
 
 def UpdateFileIfChanged(old_file, new_file, make_backup):
