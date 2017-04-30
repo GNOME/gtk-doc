@@ -335,7 +335,7 @@ def HighlightSource(options, type, source):
 
     # write source to a temp file
     # FIXME: use .c for now to hint the language to the highlighter
-    with tempfile.NamedTemporaryFile(suffix='.c') as f:
+    with tempfile.NamedTemporaryFile(mode='w+', suffix='.c') as f:
         f.write(source)
         f.flush()
         temp_source_file = f.name
@@ -344,8 +344,9 @@ def HighlightSource(options, type, source):
         logging.info('running %s %s %s', config.highlight, highlight_options, temp_source_file)
 
         # format source
+        # returns bytes, thus needs to be decoded to use in re.sub()
         highlighted_source = subprocess.check_output(
-            [config.highlight] + shlex.split(highlight_options) + [temp_source_file])
+            [config.highlight] + shlex.split(highlight_options) + [temp_source_file]).decode('utf-8')
         logging.debug('result: [%s]', highlighted_source)
         if config.highlight.endswith('/source-highlight'):
             highlighted_source = re.sub(r'^<\!-- .*? -->', '', highlighted_source, flags=re.MULTILINE | re.DOTALL)
@@ -371,7 +372,7 @@ def HighlightSourceVim(options, type, source):
     source = HighlightSourcePreProcess(source)
 
     # write source to a temp file
-    with tempfile.NamedTemporaryFile(suffix='.h') as f:
+    with tempfile.NamedTemporaryFile(mode='w+', suffix='.h') as f:
         f.write(source)
         f.flush()
         temp_source_file = f.name
