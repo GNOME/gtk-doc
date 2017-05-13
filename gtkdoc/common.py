@@ -173,7 +173,7 @@ def ParseStructDeclaration(declaration, is_object, output_function_params, typef
 
     # For forward struct declarations just return an empty array.
     if re.search(r'(?:struct|union)\s+\S+\s*;', declaration, flags=re.MULTILINE | re.DOTALL):
-        return ()
+        return {}
 
     # Remove all private parts of the declaration
     # For objects, assume private
@@ -198,7 +198,7 @@ def ParseStructDeclaration(declaration, is_object, output_function_params, typef
     declaration = re.sub(r'(\{)\s*(\w)+\s+(g_iface|parent_instance|parent_class)\s*;', r'\1', declaration)
 
     if declaration.strip() == '':
-        return ()
+        return {}
 
     # Prime match after "struct/union {" declaration
     match = re.search(r'(?:struct|union)\s+\w*\s*\{', declaration, flags=re.MULTILINE | re.DOTALL)
