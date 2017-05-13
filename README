@@ -13,14 +13,8 @@ at Doxygen (http://www.doxygen.org/). However GTK-Doc has some special code
 to document the signals and properties of GTK+ widgets and GObject classes
 which other tools may not have.
 
-GTK-Doc allows your documentation to be written in 2 ways:
-  a) Embedded inside the source code in specially-formatted comments.
- or
-  b) Added to the 'template' files which gtk-doc outputs after scanning all
-     the header files and parsing the declarations (deprecated now).
-
-From these source code comments and template files GTK-Doc generates a Docbook
-XML document, which is then transformed into HTML and/or PDF.
+From your source code comments GTK-Doc generates a Docbook XML document, which
+is then transformed into HTML and/or PDF.
 The generated HTML documentation can be browsed in an ordinary web browser or
 by using the special Devhelp API browser
 (see http://developer.imendio.com/wiki/Devhelp).
