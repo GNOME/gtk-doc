@@ -2804,7 +2804,11 @@ def ExpandAbbreviationsEndTag(start_tag):
     if start_tag == "<!DOCTYPE":
         return '>'
     m = re.search(r'<(\w+)', start_tag)
-    return "</%s>" % m.group(1)
+    if m:
+        return "</%s>" % m.group(1)
+
+    logging.warning('no end tag for "%s"', start_tag)
+    return ''
 
 # Called inside or outside each CDATA or <programlisting> section.
 def ExpandAbbreviationsCallback(text, symbol, tag):
