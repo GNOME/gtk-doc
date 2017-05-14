@@ -4109,8 +4109,8 @@ def OutputMissingDocumentation():
 
         elif m2:
             total += 1
-            if symbol in SymbolDocs and len(SymbolDocs[symbol]) > 0\
-               or symbol in AllDocumentedSymbols and len(AllDocumentedSymbols[symbol]) > 0:
+            if (symbol in SymbolDocs and len(SymbolDocs[symbol]) > 0)\
+               or (symbol in AllDocumentedSymbols and AllDocumentedSymbols[symbol] > 0):
                 n_documented += 1
             else:
                 # cut off the leading namespace ($TMPL_DIR)
@@ -4440,7 +4440,7 @@ def MergeSourceDocumentation():
                         # Output a warning if the parameter is empty and
                         # remember for stats.
                         if tmpl_param_name != "void" and not re.search(r'\S', tmpl_param_desc):
-                            if symbol in AllIncompleteSymbols[symbol]:
+                            if symbol in AllIncompleteSymbols:
                                 AllIncompleteSymbols[symbol] += ", " + tmpl_param_name
                             else:
                                 AllIncompleteSymbols[symbol] = tmpl_param_name
@@ -5401,7 +5401,6 @@ def ReadTemplateFile(docsfile, skip_unused_params):
         logging.info("File doesn't exist: " + template)
         return 0
 
-
     # start with empty hashes, we merge the source comment for each file
     # afterwards
     global SymbolDocs, SymbolTypes, SymbolParams
@@ -5440,7 +5439,6 @@ def ReadTemplateFile(docsfile, skip_unused_params):
 
                 symbol = docsfile + ":" + symbol
 
-
             logging.info("Found symbol: " + symbol)
             # Remember file and line for the symbol
             SymbolSourceFile[symbol] = template
@@ -5453,7 +5451,7 @@ def ReadTemplateFile(docsfile, skip_unused_params):
                 SymbolDocs[current_symbol] = symbol_doc
 
                 # Check that the stability level is valid.
-                if StabilityLevel[current_symbol]:
+                if current_symbol in StabilityLevel:
                     StabilityLevel[current_symbol] = ParseStabilityLevel(StabilityLevel[current_symbol], template, line_number, "Stability level for " + current_symbol)
 
                 if param_name:
@@ -5461,8 +5459,7 @@ def ReadTemplateFile(docsfile, skip_unused_params):
                 else:
                     # Delete any existing params in case we are overriding a
                     # previously read template.
-                    del SymbolParams[current_symbol]
-
+                    SymbolParams.pop(current_symbol, None)
 
             current_type = stype
             current_symbol = symbol
@@ -5498,7 +5495,6 @@ def ReadTemplateFile(docsfile, skip_unused_params):
                 # Allow varargs variations
                 if re.search(r'^.*\.\.\.$', param_name):
                     param_name = "..."
-
 
                 # strip trailing whitespaces and blank lines
                 line = re.sub(r'\s+\n$', '\n', line, flags=re.M)
@@ -5543,7 +5539,7 @@ def ReadTemplateFile(docsfile, skip_unused_params):
         SymbolDocs[current_symbol] = symbol_doc
 
         # Check that the stability level is valid.
-        if StabilityLevel[current_symbol]:
+        if current_symbol in StabilityLevel:
             StabilityLevel[current_symbol] = ParseStabilityLevel(StabilityLevel[current_symbol], template, line_number, "Stability level for " + current_symbol)
 
         if param_name:
@@ -5551,7 +5547,7 @@ def ReadTemplateFile(docsfile, skip_unused_params):
         else:
             # Delete any existing params in case we are overriding a
             # previously read template.
-            del SymbolParams[current_symbol]
+            SymbolParams.pop(current_symbol, None)
 
     DOCS.close()
     return 1
