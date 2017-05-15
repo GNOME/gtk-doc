@@ -3684,7 +3684,9 @@ def ReadSourceDocumentation(source_dir):
                 logging.info("Skipping source directory: %s", source_dir)
                 return
             else:
-                logging.info("No match for: %s", (m1.group(1) or source_dir))
+                logging.info("No match for: %s", m1.group(1))
+        else:
+            logging.info("No match for: %s", source_dir)
 
     logging.info("Scanning source directory: %s", source_dir)
 
@@ -3702,7 +3704,7 @@ def ReadSourceDocumentation(source_dir):
             subdirs.append(fname)
         elif SOURCE_SUFFIXES:
             for suffix in suffix_list:
-                if ifile.endswith(suffix):
+                if ifile.endswith("." + suffix):
                     ScanSourceFile(fname)
         elif re.search(r'\.[ch]$', ifile):
             ScanSourceFile(fname)
@@ -3730,7 +3732,7 @@ def ScanSourceFile(ifile):
         if m1:
             m2 = re.search(r'(\s|^)%s(\s|$)' % re.escape(m1.group(1)), IGNORE_FILES)
             if m2:
-                logging.info("Skipping source file: ", ifile)
+                logging.info("Skipping source file: %s", ifile)
                 return
 
     m = re.search(r'^.*[\/\\]([^\/\\]*)$', ifile)
