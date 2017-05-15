@@ -69,6 +69,7 @@ def UpdateFileIfChanged(old_file, new_file, make_backup):
         old_contents = open(old_file, 'rb').read()
         new_contents = open(new_file, 'rb').read()
         if old_contents == new_contents:
+            os.unlink(new_file)
             return False
 
         if make_backup:
