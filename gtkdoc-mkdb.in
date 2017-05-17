@@ -2530,7 +2530,7 @@ def OutputProgramDBFile(program, section_id):
 #############################################################################
 def OutputExtraFile(file):
 
-    basename = re.sub(r'^.*/', '', file)
+    basename = os.path.basename(file)
 
     old_db_file = os.path.join(DB_OUTPUT_DIR, basename)
     new_db_file = os.path.join(DB_OUTPUT_DIR, basename + ".new")
@@ -2538,7 +2538,6 @@ def OutputExtraFile(file):
     contents = open(file).read()
 
     OUTPUT = open(new_db_file, 'w')
-
     OUTPUT.write(ExpandAbbreviations(basename + " file", contents))
     OUTPUT.close()
 
@@ -2821,6 +2820,7 @@ def ExpandAbbreviationsCallback(text, symbol, tag):
                                  ExpandAbbreviationsCallback2)
     elif tag == '':
         # NOTE: this is a fallback. It is normally done by the Markdown parser.
+        # but is also used for OutputExtraFile
 
         # We are outside any CDATA or <programlisting> sections, so we expand
         # any gtk-doc abbreviations.
@@ -2828,7 +2828,7 @@ def ExpandAbbreviationsCallback(text, symbol, tag):
         # Convert '@param()'
         # FIXME: we could make those also links ($symbol.$2), but that would be less
         # useful as the link target is a few lines up or down
-        text = re.sub(r'(\A|[^\\])\@(\w+((\.|->)\w+)*)\s*\(\)', r'\1<parameter>\2()<\/parameter>', text)
+        text = re.sub(r'(\A|[^\\])\@(\w+((\.|->)\w+)*)\s*\(\)', r'\1<parameter>\2()</parameter>', text)
 
         # Convert 'function()' or 'macro()'.
         # if there is abc_*_def() we don't want to make a link to _def()
@@ -2840,7 +2840,7 @@ def ExpandAbbreviationsCallback(text, symbol, tag):
         text = re.sub(r'(\A|[^\\])#([\w\-:\.]+[\w]+)\s*\(\)', f1, text)
 
         # Convert '@param', but not '\@param'.
-        text = re.sub(r'(\A|[^\\])\@(\w+((\.|->)\w+)*)', r'\1<parameter>\2<\/parameter>', text)
+        text = re.sub(r'(\A|[^\\])\@(\w+((\.|->)\w+)*)', r'\1<parameter>\2</parameter>', text)
         text = re.sub(r'/\\\@', r'\@', text)
 
         # Convert '%constant', but not '\%constant'.
