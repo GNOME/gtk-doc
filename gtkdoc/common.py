@@ -154,6 +154,31 @@ class ParseError(Exception):
     pass
 
 
+def PreprocessStructOrEnum(declaration):
+    """Trim a type declaration for display.
+
+    Removes private sections and comments from the declaration.
+
+    Args:
+      declaration (str): the type declaration (struct or enum)
+
+    Returns:
+      str: the trimmed declaration
+    """
+    # Remove private symbols
+    # Assume end of declaration if line begins with '}'
+    declaration = re.sub(r'\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/.*?(?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))',
+                         '', declaration, flags=re.MULTILINE | re.DOTALL)
+
+    # Remove all other comments
+    declaration = re.sub(r'\n\s*/\*.*?\*/\s*\n', r'\n', declaration, flags=re.MULTILINE | re.DOTALL)
+    declaration = re.sub(r'/\*([^*]+|\*(?!/))*\*/', r' ', declaration)
+    declaration = re.sub(r'\n\s*//.*?\n', r'\n', declaration, flags=re.MULTILINE | re.DOTALL)
+    declaration = re.sub(r'//.*', '', declaration)
+
+    return declaration
+
+
 # TODO: output_function_params is always passed as 0
 # TODO: we always pass both functions
 def ParseStructDeclaration(declaration, is_object, output_function_params, typefunc=None, namefunc=None):
@@ -184,19 +209,10 @@ def ParseStructDeclaration(declaration, is_object, output_function_params, typef
                                  (?:/\*\s*<\s*public\s*>\s*\*/|(?=\}))''',
                              r'\1', declaration, flags=re.MULTILINE | re.DOTALL | re.VERBOSE)
 
-    # Remove private symbols
-    # Assume end of declaration if line begins with '}'
-    declaration = re.sub(r'\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/.*?(?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))',
-                         '', declaration, flags=re.MULTILINE | re.DOTALL)
-
-    # Remove all other comments
-    declaration = re.sub(r'\n\s*/\*([^*]+|\*(?!/))*\*/\s*\n', r'\n', declaration, flags=re.MULTILINE | re.DOTALL)
-    declaration = re.sub(r'/\*([^*]+|\*(?!/))*\*/', r' ', declaration)
-    declaration = re.sub(r'\n\s*//.*?\n', r'\n', declaration, flags=re.MULTILINE | re.DOTALL)
-    declaration = re.sub(r'//.*', '', declaration)
-
     # Remove g_iface, parent_instance and parent_class if they are first member
     declaration = re.sub(r'(\{)\s*(\w)+\s+(g_iface|parent_instance|parent_class)\s*;', r'\1', declaration)
+
+    declaration = PreprocessStructOrEnum(declaration)
 
     if declaration.strip() == '':
         return {}
@@ -345,16 +361,7 @@ def ParseEnumDeclaration(declaration):
     if re.search(r'enum\s+\S+\s*;', declaration, flags=re.MULTILINE | re.DOTALL):
         return ()
 
-    # Remove private symbols
-    # Assume end of declaration if line begins with '}'
-    declaration = re.sub(r'\n?[ \t]*/\*\s*<\s*(private|protected)\s*>\s*\*/.*?(?:/\*\s*<\s*public\s*>\s*\*/|(?=^\}))',
-                         '', declaration, flags=re.MULTILINE | re.DOTALL)
-
-    # Remove all other comments
-    declaration = re.sub(r'\n\s*/\*([^*]+|\*(?!/))*\*/\s*\n', r'\n', declaration, flags=re.MULTILINE | re.DOTALL)
-    declaration = re.sub(r'/\*([^*]+|\*(?!/))*\*/', r' ', declaration)
-    declaration = re.sub(r'\n\s*//.*?\n', r'\n', declaration, flags=re.MULTILINE | re.DOTALL)
-    declaration = re.sub(r'//.*', '', declaration)
+    declaration = PreprocessStructOrEnum(declaration)
 
     if declaration.strip() == '':
         return ()
