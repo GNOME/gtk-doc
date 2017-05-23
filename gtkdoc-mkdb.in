@@ -3696,7 +3696,7 @@ def ReadSourceDocumentation(source_dir):
     suffix_list = SOURCE_SUFFIXES.split(',')
 
     for ifile in os.listdir(source_dir):
-        logging.info("... : %s", ifile)
+        logging.debug("... : %s", ifile)
         if ifile.startswith('.'):
             continue
         fname = os.path.join(source_dir, ifile)
@@ -3816,8 +3816,8 @@ def ScanSourceFile(ifile):
 
                     logging.info("SECTION DOCS found in source for : '%s'", real_symbol)
                     for param_name, param_desc in params.iteritems():
-                        param_name = param_name.lower()
                         logging.info("   '" + param_name + "'")
+                        param_name = param_name.lower()
                         key = None
                         if param_name == "short_description":
                             key = os.path.join(TMPL_DIR, real_symbol + ":Short_Description")
@@ -3850,8 +3850,8 @@ def ScanSourceFile(ifile):
 
                     logging.info("PROGRAM DOCS found in source for '%s'", real_symbol)
                     for param_name, param_desc in params.iteritems():
-                        param_name = param_name.lower()
                         logging.info("PROGRAM key %s: '%s'", real_symbol, param_name)
+                        param_name = param_name.lower()
                         key = None
                         if param_name == "short_description":
                             key = os.path.join(TMPL_DIR, real_symbol + ":Short_Description")
@@ -3897,7 +3897,7 @@ def ScanSourceFile(ifile):
                     OutputProgramDBFile(real_symbol, section_id)
 
                 else:
-                    logging.info("SYMBOL DOCS found in source for : '%s' %d, %s", symbol, len(description), str(params))
+                    logging.info("SYMBOL DOCS found in source for : '%s'", symbol)
                     SourceSymbolDocs[symbol] = description
                     SourceSymbolParams[symbol] = params
                     # FIXME $SourceSymbolTypes{$symbol} = "STRUCT,SIGNAL,ARG,FUNCTION,MACRO"
@@ -3939,7 +3939,7 @@ def ScanSourceFile(ifile):
         if not line.endswith('\n'):
             line = line + "\n"
 
-        logging.info("scanning : %s", line)
+        logging.info("scanning :%s", line)
 
         # If we haven't found the symbol name yet, look for it.
         if not symbol:
@@ -4537,7 +4537,7 @@ def MarkDownParseBlocks(lines, symbol, context):
   md_blocks = []
   md_block = {"type": ''}
 
-  logging.info("parsing %s lines", len(lines))
+  logging.debug("parsing %s lines", len(lines))
   for line in lines:
     logging.info("type='%s', int='%s', parsing '%s'", md_block["type"], md_block.get('interrupted'), line)
     first_char = None
@@ -4851,7 +4851,6 @@ def MarkDownParseBlocks(lines, symbol, context):
                   }
       logging.info("new paragraph due to different block type")
 
-  logging.info('done')
   md_blocks.append(md_block)
   md_blocks.pop(0)
 
@@ -5302,7 +5301,7 @@ def ReadDeclarationsFile(ifile, override):
 
                     Declarations[declaration_name] = declaration
                     DeclarationTypes[declaration_name] = declaration_type
-                    logging.info("added declaration: %s, %s, [%s]", declaration_type, declaration_name, declaration)
+                    logging.debug("added declaration: %s, %s, [%s]", declaration_type, declaration_name, declaration)
 
                 declaration_type = ''
                 is_deprecated = False
@@ -5632,7 +5631,7 @@ def ReadObjectHierarchy():
     old_tree_index = os.path.join(DB_OUTPUT_DIR, "tree_index.sgml")
     new_tree_index = os.path.join(DB_OUTPUT_DIR, "tree_index.new")
 
-    logging.info('got %d entries for hierarchy', len(tree))
+    logging.debug('got %d entries for hierarchy', len(tree))
 
     OUTPUT = open(new_tree_index, 'w')
     OUTPUT.write(MakeDocHeader("screen") + "\n<screen>\n" + AddTreeLineArt(tree) + "\n</screen>\n")
