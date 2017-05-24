@@ -564,10 +564,9 @@ def OutputDB(file):
     prerequisites = ''
     derived = ''
     file_objects = []
-    templates = {}
+    file_def_line = {}
     symbol_def_line = {}
 
-    # merge the source docs
     MergeSourceDocumentation()
 
     line_number = 0
@@ -610,10 +609,10 @@ def OutputDB(file):
 
         elif m3:
             filename = m3.group(1)
-            if not filename in templates:
-                templates[filename] = line_number
+            if not filename in file_def_line:
+                file_def_line[filename] = line_number
             else:
-                common.LogWarning(file, line_number, "Double <FILE>%s</FILE> entry. Previous occurrence on line %s." % (filename, templates[filename]))
+                common.LogWarning(file, line_number, "Double <FILE>%s</FILE> entry. Previous occurrence on line %s." % (filename, file_def_line[filename]))
             if title == '':
                 key = filename + ":Title"
                 if key in SourceSymbolDocs:
