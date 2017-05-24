@@ -133,21 +133,8 @@ IndexEntriesDeprecated = {}
 
 # Standard C preprocessor directives, which we ignore for '#' abbreviations.
 PreProcessorDirectives = {
-    'assert': 1,
-    'define': 1,
-    'elif': 1,
-    'else': 1,
-    'endif': 1,
-    'error': 1,
-    'if': 1,
-    'ifdef': 1,
-    'ifndef': 1,
-    'include': 1,
-    'line': 1,
-    'pragma': 1,
-    'unassert': 1,
-    'undef': 1,
-    'warning': 1
+    'assert', 'define', 'elif', 'else', 'endif', 'error', 'if', 'ifdef', 'ifndef',
+    'include', 'line', 'pragma', 'unassert', 'undef', 'warning'
 }
 
 # remember used annotation (to write minimal glossary)
@@ -225,41 +212,13 @@ documented ways.
 }
 
 # Elements to consider non-block items in MarkDown parsing
-MD_TEXT_LEVEL_ELEMENTS = {"literal": 1,
-                          "emphasis": 1,
-                          "envar": 1,
-                          "filename": 1,
-                          "firstterm": 1,
-                          "footnote": 1,
-                          "function": 1,
-                          "manvolnum": 1,
-                          "option": 1,
-                          "replaceable": 1,
-                          "structfield": 1,
-                          "structname": 1,
-                          "title": 1,
-                          "varname": 1,
-                         }
-MD_ESCAPABLE_CHARS = {"\\": 1,
-                      "`": 1,
-                      "*": 1,
-                      "_": 1,
-                      "{": 1,
-                      "}": 1,
-                      "[": 1,
-                      "]": 1,
-                      "(": 1,
-                      ")": 1,
-                      '>': 1,
-                      '#': 1,
-                      "+": 1,
-                      "-": 1,
-                      ".": 1,
-                      '!': 1,
-                     }
-MD_GTK_ESCAPABLE_CHARS = {"@": 1,
-                          "%": 1,
-                         }
+MD_TEXT_LEVEL_ELEMENTS = {
+    'emphasis', 'envar', 'filename', 'firstterm', 'footnote', 'function', 'literal',
+    'manvolnum', 'option', 'replaceable', 'structfield', 'structname', 'title',
+    'varname'
+}
+MD_ESCAPABLE_CHARS = r'\`*_{}[]()>#+-.!'
+MD_GTK_ESCAPABLE_CHARS = r'@%'
 
 # Function and other declaration output settings.
 RETURN_TYPE_FIELD_WIDTH = 20
@@ -493,6 +452,7 @@ def Run():
 
         open(os.path.join(ROOT_DIR, 'sgml.stamp'), 'w').write('timestamp')
 
+
 #############################################################################
 # Function    : OutputObjectList
 # Description : This outputs the alphabetical list of objects, in a columned
@@ -724,7 +684,7 @@ def OutputDB(file):
 </tgroup>
 </informaltable>
 </refsect1>
-''' %(section_id, args_synop)
+''' % (section_id, args_synop)
                     args_desc = TrimTextBlock(args_desc)
                     args_desc = '''<refsect1 id="%s.property-details" role="property_details">
 <title role="property_details.title">Property Details</title>
@@ -1001,6 +961,7 @@ def OutputDB(file):
     logging.info("All files created: %d", changed)
     return changed
 
+
 #############################################################################
 # Function    : OutputIndex
 # Description : This writes an indexlist that can be included into the main-
@@ -1085,7 +1046,7 @@ def OutputIndex(basename, apiindex):
                 #symbol_desc +=" in " + ExpandAbbreviations(symbol, "#symbol_section")
 
         curletter = short_symbol[0].upper()
-        ixid =  apiindex[symbol]
+        ixid = apiindex[symbol]
 
         logging.info("  add symbol %s with %s to index in section '%s' (derived from %s)", symbol, ixid, curletter, short_symbol)
 
@@ -1107,7 +1068,6 @@ def OutputIndex(basename, apiindex):
     OUTPUT.close()
 
     common.UpdateFileIfChanged(old_index, new_index, 0)
-
 
 
 #############################################################################
@@ -1141,7 +1101,7 @@ def OutputSinceIndexes():
 
     for version in sinces:
         logging.info("Since : [%s]", version)
-        index = {x:IndexEntriesSince[x] for x in IndexEntriesSince.keys() if Since[x] == version}
+        index = {x: IndexEntriesSince[x] for x in IndexEntriesSince.keys() if Since[x] == version}
 
         OutputIndex("api-index-" + version, index)
 
@@ -1272,6 +1232,7 @@ def ReadKnownSymbols(file):
                 KnownSymbols[symbol] = 0
     INPUT.close()
 
+
 #############################################################################
 # Function    : OutputDeclaration
 # Description : Returns the synopsis and detailed description DocBook
@@ -1344,10 +1305,11 @@ def uri_escape(text):
 
     return text
 
+
 def OutputSymbolExtraLinks(symbol):
     desc = ''
 
-    if False: # NEW FEATURE: needs configurability
+    if False:   # NEW FEATURE: needs configurability
         sstr = uri_escape(symbol)
         mstr = uri_escape(MODULE)
         desc += '''<ulink role="extralinks" url="http://www.google.com/codesearch?q=%s">code search</ulink>
@@ -1360,7 +1322,7 @@ def OutputSymbolExtraLinks(symbol):
 def OutputSectionExtraLinks(symbol, docsymbol):
     desc = ''
 
-    if False: # NEW FEATURE: needs configurability
+    if False:   # NEW FEATURE: needs configurability
         sstr = uri_escape(symbol)
         mstr = uri_escape(MODULE)
         dsstr = uri_escape(docsymbol)
@@ -1402,7 +1364,7 @@ def OutputMacro(symbol, declaration):
     # longer than 2 lines, otherwise we get lots of complicated macros like
     # g_assert.
     if symbol not in DeclarationConditional and not symbol.startswith('g_') \
-        and not re.search(r'^_?gnome_', symbol) and declaration.count('\n') < 2:
+            and not re.search(r'^_?gnome_', symbol) and declaration.count('\n') < 2:
         decl_out = CreateValidSGML(declaration)
         desc += "<programlisting language=\"C\">%s</programlisting>\n" % decl_out
     else:
@@ -1424,7 +1386,6 @@ def OutputMacro(symbol, declaration):
     if symbol in SymbolDocs:
         symbol_docs = ConvertMarkDown(symbol, SymbolDocs[symbol])
         desc += symbol_docs
-
 
     desc += parameters
     desc += OutputSymbolTraits(symbol)
@@ -1450,10 +1411,9 @@ def OutputTypedef(symbol, declaration):
     desc += "\n"
     desc += OutputSymbolExtraLinks(symbol)
 
-    if  symbol in DeclarationConditional:
+    if symbol in DeclarationConditional:
         decl_out = CreateValidSGML(declaration)
         desc += "<programlisting language=\"C\">%s</programlisting>\n" % decl_out
-
 
     desc += MakeDeprecationNote(symbol)
 
@@ -1463,7 +1423,6 @@ def OutputTypedef(symbol, declaration):
     desc += OutputSymbolTraits(symbol)
     desc += "</refsect2>\n"
     return (synop, desc)
-
 
 
 #############################################################################
@@ -1533,7 +1492,7 @@ def OutputStruct(symbol, declaration):
             public = default_to_public
             new_declaration = ''
 
-            for decl_line  in struct_contents.splitlines():
+            for decl_line in struct_contents.splitlines():
                 logging.info("Struct line: %s", decl_line)
                 m2 = re.search(r'/\*\s*<\s*public\s*>\s*\*/', decl_line)
                 m3 = re.search(r'/\*\s*<\s*(private|protected)\s*>\s*\*/', decl_line)
@@ -1613,8 +1572,8 @@ def OutputStruct(symbol, declaration):
                 (field_descr, param_annotations) = ExpandAnnotation(symbol, field_descrs[field_name])
                 field_descr = ConvertMarkDown(symbol, field_descr)
                 # trim
-                field_descr = re.sub(r'^(\s|\n)+', '', field_descr, flags=re.M|re.S)
-                field_descr = re.sub(r'(\s|\n)+$', '', field_descr, flags=re.M|re.S)
+                field_descr = re.sub(r'^(\s|\n)+', '', field_descr, flags=re.M | re.S)
+                field_descr = re.sub(r'(\s|\n)+$', '', field_descr, flags=re.M | re.S)
                 desc += "<entry role=\"struct_member_description\">%s</entry>\n<entry role=\"struct_member_annotations\">%s</entry>\n" % (field_descr, param_annotations)
                 del field_descrs[field_name]
             else:
@@ -1661,7 +1620,6 @@ def OutputStruct(symbol, declaration):
     desc += OutputSymbolTraits(symbol)
     desc += "</refsect2>\n"
     return (synop, desc)
-
 
 
 #############################################################################
@@ -1754,8 +1712,8 @@ def OutputUnion(symbol, declaration):
                 field_descr = ConvertMarkDown(symbol, field_descr)
 
                 # trim
-                field_descr = re.sub(r'^(\s|\n)+', '', field_descr, flags=re.M|re.S)
-                field_descr = re.sub(r'(\s|\n)+$', '', field_descr, flags=re.M|re.S)
+                field_descr = re.sub(r'^(\s|\n)+', '', field_descr, flags=re.M | re.S)
+                field_descr = re.sub(r'(\s|\n)+$', '', field_descr, flags=re.M | re.S)
                 desc += "<entry role=\"union_member_description\">%s</entry>\n<entry role=\"union_member_annotations\">%s</entry>\n" % (field_descr, param_annotations)
                 del field_descrs[field_name]
             else:
@@ -1796,6 +1754,7 @@ def OutputUnion(symbol, declaration):
     desc += OutputSymbolTraits(symbol)
     desc += "</refsect2>\n"
     return (synop, desc)
+
 
 #############################################################################
 # Function    : OutputEnum
@@ -1909,7 +1868,6 @@ def OutputEnum(symbol, declaration):
     return (synop, desc)
 
 
-
 #############################################################################
 # Function    : OutputVariable
 # Description : Returns the synopsis and detailed description of a variable.
@@ -1964,12 +1922,9 @@ def OutputVariable(symbol, declaration):
         if param_annotations != '':
             desc += "\n<para>%s</para>" % param_annotations
 
-
-
     desc += OutputSymbolTraits(symbol)
     desc += "</refsect2>\n"
     return (synop, desc)
-
 
 
 #############################################################################
@@ -2062,6 +2017,7 @@ def OutputFunction(symbol, declaration, symbol_type):
     desc += "</refsect2>\n"
     return (synop, desc)
 
+
 #############################################################################
 # Function    : OutputParamDescriptions
 # Description : Returns the DocBook output describing the parameters of a
@@ -2097,8 +2053,8 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
             (param_desc, param_annotations) = ExpandAnnotation(symbol, param_desc)
             param_desc = ConvertMarkDown(symbol, param_desc)
             # trim
-            param_desc = re.sub(r'^(\s|\n)+', '', param_desc, flags=re.M|re.S)
-            param_desc = re.sub(r'(\s|\n)+$', '', param_desc, flags=re.M|re.S)
+            param_desc = re.sub(r'^(\s|\n)+', '', param_desc, flags=re.M | re.S)
+            param_desc = re.sub(r'(\s|\n)+$', '', param_desc, flags=re.M | re.S)
             if param_name == "Returns":
                 returns = param_desc
                 if param_annotations != '':
@@ -2135,7 +2091,6 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
         if symbol_type == "SIGNAL":
             params_desc += "<row><entry role=\"parameter_name\"><simpara>user_data</simpara></entry>\n<entry role=\"parameter_description\"><simpara>user data set when the signal handler was connected.</simpara></entry>\n<entry role=\"parameter_annotations\"></entry></row>\n"
 
-
         # Start a table if we need one.
         if params_desc != '':
             sid = common.CreateValidSGMLID("%s.parameters" % symbol)
@@ -2160,7 +2115,6 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
             output += returns
             output += "\n</refsect3>"
 
-
         # remember missing/unused parameters (needed in tmpl-free build)
         if missing_parameters != '' and (symbol not in AllIncompleteSymbols):
             AllIncompleteSymbols[symbol] = missing_parameters
@@ -2172,7 +2126,6 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
         if symbol not in AllIncompleteSymbols:
             AllIncompleteSymbols[symbol] = "<parameters>"
     return output
-
 
 
 #############################################################################
@@ -2198,10 +2151,9 @@ def ParseStabilityLevel(stability, file, line, message):
     elif stability == 'private':
         stability = "Private"
     else:
-        common.LogWarning(file, line, "%s is %s." % (message, stability) +\
-            "It should be one of these: Stable, Unstable, or Private.")
+        common.LogWarning(file, line, "%s is %s." % (message, stability) +
+                          "It should be one of these: Stable, Unstable, or Private.")
     return stability
-
 
 
 #############################################################################
@@ -2335,32 +2287,32 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     # "<refentry id="$section_id" revision="$mday $month $year">"
 
     OUTPUT.write(REFENTRY.substitute({
-            'args_desc': args_desc,
-            'args_synop': args_synop,
-            'derived': derived,
-            'extralinks': extralinks,
-            'functions_details': functions_details,
-            'functions_synop': functions_synop,
-            'header': MakeDocHeader('refentry'),
-            'hierarchy': hierarchy,
-            'image': image,
-            'include_output': include_output,
-            'interfaces': interfaces,
-            'implementations': implementations,
-            'long_desc': long_desc,
-            'object_anchors': object_anchors,
-            'other_details': other_details,
-            'other_synop': other_synop,
-            'prerequisites': prerequisites,
-            'section_id': section_id,
-            'see_also': see_also,
-            'signals_desc': signals_desc,
-            'signals_synop': signals_synop,
-            'short_desc': short_desc,
-            'stability': stability,
-            'title': title,
-            'MODULE': MODULE.upper(),
-        }))
+        'args_desc': args_desc,
+        'args_synop': args_synop,
+        'derived': derived,
+        'extralinks': extralinks,
+        'functions_details': functions_details,
+        'functions_synop': functions_synop,
+        'header': MakeDocHeader('refentry'),
+        'hierarchy': hierarchy,
+        'image': image,
+        'include_output': include_output,
+        'interfaces': interfaces,
+        'implementations': implementations,
+        'long_desc': long_desc,
+        'object_anchors': object_anchors,
+        'other_details': other_details,
+        'other_synop': other_synop,
+        'prerequisites': prerequisites,
+        'section_id': section_id,
+        'see_also': see_also,
+        'signals_desc': signals_desc,
+        'signals_synop': signals_synop,
+        'short_desc': short_desc,
+        'stability': stability,
+        'title': title,
+        'MODULE': MODULE.upper(),
+    }))
     OUTPUT.close()
 
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
@@ -2529,6 +2481,7 @@ def OutputExtraFile(file):
 
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
+
 #############################################################################
 # Function    : OutputBook
 # Description : Outputs the entities that need to be included into the
@@ -2550,7 +2503,6 @@ def OutputBook(book_top, book_bottom):
 
     common.UpdateFileIfChanged(old_file, new_file, 0)
 
-
     old_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.bottom")
     new_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.bottom.new")
 
@@ -2559,7 +2511,6 @@ def OutputBook(book_top, book_bottom):
     OUTPUT.close()
 
     common.UpdateFileIfChanged(old_file, new_file, 0)
-
 
     # If the main docbook file hasn't been created yet, we create it here.
     # The user can tweak it later.
@@ -2620,6 +2571,7 @@ def OutputBook(book_top, book_bottom):
 
         OUTPUT.close()
 
+
 #############################################################################
 # Function    : CreateValidSGML
 # Description : This turns any chars which are used in SGML into entities,
@@ -2664,10 +2616,12 @@ def ConvertSGMLChars(symbol, text):
 
     return text
 
+
 def ConvertSGMLCharsEndTag(t):
     if t == '<![CDATA[':
         return "]]>"
     return "</programlisting>"
+
 
 def ConvertSGMLCharsCallback(text, symbol, tag):
     if re.search(r'^<programlisting', tag):
@@ -2745,7 +2699,6 @@ def ExpandAnnotation(symbol, param_desc):
                                   "unknown annotation \"%s\" in documentation for %s." % (annotation, symbol))
                 param_annotations += "[%s]" % annotation
 
-
         param_desc = param_desc.strip()
         m = re.search(r'^(.*?)\.*\s*$', param_desc, flags=re.S)
         param_desc = m.group(1) + '. '
@@ -2794,6 +2747,7 @@ def ExpandAbbreviationsEndTag(start_tag):
 
     logging.warning('no end tag for "%s"', start_tag)
     return ''
+
 
 # Called inside or outside each CDATA or <programlisting> section.
 def ExpandAbbreviationsCallback(text, symbol, tag):
@@ -2857,7 +2811,6 @@ def ExpandAbbreviationsCallback2(text, symbol, tag):
         # NOTE: this is a fallback. It is normally done by the Markdown parser.
         text = ReplaceEntities(text, symbol)
 
-
     return text
 
 
@@ -2865,7 +2818,7 @@ def MakeHashXRef(symbol, tag):
     text = symbol
 
     # Check for things like '#include', '#define', and skip them.
-    if PreProcessorDirectives.get(symbol):
+    if symbol in PreProcessorDirectives:
         return "#%s" % symbol
 
     # Get rid of special suffixes ('-struct','-enum').
@@ -2886,13 +2839,10 @@ def MakeHashXRef(symbol, tag):
         symbol = '%s--%s' % (o, p)
         text = '“' + p + '”'
 
-
     if tag != '':
         text = tagify(text, tag)
 
-
     return MakeXRef(symbol, text)
-
 
 
 #############################################################################
@@ -2922,9 +2872,9 @@ def ModifyXMLElements(text, symbol, start_tag_regexp, end_tag_func, callback):
 
     m = re.search(start_tag_regexp, text, flags=re.S)
     while m:
-        before_tag = text[:m.start()] # Prematch for last successful match string
-        start_tag = m.group(0)        # Last successful match
-        text = text[m.end():]         # Postmatch for last successful match string
+        before_tag = text[:m.start()]  # Prematch for last successful match string
+        start_tag = m.group(0)         # Last successful match
+        text = text[m.end():]          # Postmatch for last successful match string
 
         logging.debug('symbol: %s matched start %s: text: [%s]', symbol, start_tag, text)
 
@@ -2963,6 +2913,7 @@ def ModifyXMLElements(text, symbol, start_tag_regexp, end_tag_func, callback):
 def tagify(text, elem):
     return '<' + elem + '>' + text + '</' + elem + '>'
 
+
 #############################################################################
 # Function    : MakeDocHeader
 # Description : Builds a docbook header for the given tag
@@ -2977,7 +2928,6 @@ def MakeDocHeader(tag):
     if tag == 'book':
         header = re.sub(r'<!ENTITY % gtkdocentities SYSTEM "../([a-zA-Z./]+)">', r'<!ENTITY % gtkdocentities SYSTEM "\1">', header)
     return header
-
 
 
 #############################################################################
@@ -3006,6 +2956,7 @@ def MakeXRef(symbol, text=None):
 
     symbol_id = common.CreateValidSGMLID(symbol)
     return "<link linkend=\"%s\">%s</link>" % (symbol_id, text)
+
 
 #############################################################################
 # Function    : MakeIndexterms
@@ -3351,7 +3302,6 @@ def GetDerived(iface):
     return text
 
 
-
 #############################################################################
 # Function    : GetSignals
 # Description : Returns the synopsis and detailed description DocBook output
@@ -3497,6 +3447,7 @@ def GetSignals(gobject):
 
     return (synop, desc)
 
+
 #############################################################################
 # Function    : GetArgs
 # Description : Returns the synopsis and detailed description DocBook output
@@ -3529,7 +3480,6 @@ def GetArgs(gobject):
                 id_sep = "s-"
             else:
                 kind = "property"
-
 
             # Remember only one colon so we don't clash with signals.
             symbol = '%s:%s' % (gobject, name)
@@ -3573,7 +3523,6 @@ def GetArgs(gobject):
                     flags_string += " / "
                 flags_string += "Construct Only"
 
-
             AllSymbols[symbol] = 1
             blurb = ''
             if symbol in SymbolDocs and not IsEmptyDoc(SymbolDocs[symbol]):
@@ -3592,7 +3541,6 @@ def GetArgs(gobject):
             pad1 = ''
             if len(name) < 24:
                 pad1 = " " * (24 - len(name))
-
 
             arg_synop = "<row><entry role=\"property_type\">%s</entry><entry role=\"property_name\"><link linkend=\"%s\">%s</link></entry><entry role=\"property_flags\">%s</entry></row>\n" % (type_output, sid, name, flags_string)
             arg_desc = "<refsect2 id=\"%s\" role=\"property\"><title>The <literal>“%s”</literal> %s</title>\n" % (sid, name, kind)
@@ -3635,7 +3583,6 @@ def GetArgs(gobject):
                 desc += arg_desc
 
     return (synop, child_synop, style_synop, desc, child_desc, style_desc)
-
 
 
 #############################################################################
@@ -3694,6 +3641,7 @@ def ReadSourceDocumentation(source_dir):
     # Now recursively scan the subdirectories.
     for sdir in subdirs:
         ReadSourceDocumentation(sdir)
+
 
 #############################################################################
 # Function    : ScanSourceFile
@@ -4097,8 +4045,7 @@ def OutputMissingDocumentation():
     else:
         percent = (n_documented / total) * 100.0
 
-
-    UNDOCUMENTED.write("%.0f%% symbol docs coverage.\n"%percent)
+    UNDOCUMENTED.write("%.0f%% symbol docs coverage.\n" % percent)
     UNDOCUMENTED.write("%s symbols documented.\n" % n_documented)
     UNDOCUMENTED.write("%s symbols incomplete.\n" % n_incomplete)
     UNDOCUMENTED.write("%d not documented.\n" % (total - n_documented))
@@ -4115,11 +4062,6 @@ def OutputMissingDocumentation():
     UNDOCUMENTED.close()
 
     return common.UpdateFileIfChanged(old_undocumented_file, new_undocumented_file, 0)
-
-#    printf "%.0f%% symbol docs coverage", $percent
-#    print "($n_documented symbols documented, $n_incomplete symbols incomplete, " . ($total - $n_documented) . " not documented)\n"
-#    print "See $MODULE-undocumented.txt for a list of missing docs.\nThe doc coverage percentage doesn't include intro sections.\n"
-
 
 
 #############################################################################
@@ -4166,7 +4108,6 @@ def OutputUnusedSymbols():
             UNUSED.write("%s\n" % symbol)
             num_unused += 1
 
-
     for symbol in sorted(AllUnusedSymbols.keys()):
         UNUSED.write(symbol + "(" + AllUnusedSymbols[symbol] + ")\n")
         num_unused += 1
@@ -4175,9 +4116,7 @@ def OutputUnusedSymbols():
     if num_unused != 0:
         common.LogWarning(old_unused_file, 1, "%d unused declarations. They should be added to %s-sections.txt in the appropriate place." % (num_unused, MODULE))
 
-
     return common.UpdateFileIfChanged(old_unused_file, new_unused_file, 0)
-
 
 
 #############################################################################
@@ -4244,6 +4183,7 @@ def CheckParamsDocumented(symbol, params):
         common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
                           "%s descriptions for %s are missing in source code comment block." % (item, symbol))
 
+
 #############################################################################
 # Function    : MergeSourceDocumentation
 # Description : This merges documentation read from a source file into the
@@ -4303,15 +4243,10 @@ def MergeSourceDocumentation():
 # Arguments   : the doc-string
 #############################################################################
 def IsEmptyDoc(doc):
-
     if re.search(r'^\s*$', doc):
         return True
-
-
     if re.search(r'^\s*<para>\s*(FIXME)?\s*<\/para>\s*$', doc):
         return True
-
-
     return False
 
 
@@ -4406,7 +4341,7 @@ def MarkDownParseBlocks(lines, symbol, context):
                       'text': text,
                       'lines': [],
                       'level': 1,
-                     }
+                      }
           continue
         elif heading_match:
           md_block.pop("interrupted", None)
@@ -4415,7 +4350,7 @@ def MarkDownParseBlocks(lines, symbol, context):
                       'text': heading_match.group(1),
                       'lines': [],
                       'level': 1,
-                     }
+                      }
           if heading_match.group(2):
               md_block['id'] = heading_match.group(2)
           continue
@@ -4434,7 +4369,7 @@ def MarkDownParseBlocks(lines, symbol, context):
                       'text': text,
                       'lines': [],
                       'level': 1,
-          }
+                      }
           continue
         elif re.search(r'^[-]{4,}[ \t]*$', line):
           text = md_block["lines"].pop()
@@ -4507,7 +4442,7 @@ def MarkDownParseBlocks(lines, symbol, context):
       if 'interrupted' in md_block:
         if first_char == " ":
           md_block["lines"].append('')
-          line =  re.sub(r'^[ ]{0,4}', '', line)
+          line = re.sub(r'^[ ]{0,4}', '', line)
           md_block["lines"].append(line)
           md_block.pop("interrupted", None)
           continue
@@ -4719,7 +4654,7 @@ def MarkDownParseSpanElementsInner(text, markersref):
     if text_marker == '':
       markup += text
       text = ''
-      continue # last
+      continue
 
     markup += text[:closest_marker_position]
     text = text[closest_marker_position:]
@@ -4729,10 +4664,9 @@ def MarkDownParseSpanElementsInner(text, markersref):
       element = None
 
       ## FIXME: '(?R)' is a recursive subpattern
-      # \[((?:[^][]|(?R))*)\]
       # match a [...] block with no ][ inside or this thing again
       # m = re.search(r'\[((?:[^][]|(?R))*)\]', text)
-      m = re.search(  r'\[((?:[^][])*)\]', text)
+      m = re.search(r'\[((?:[^][])*)\]', text)
       if ']' in text and m:
         element = {'!': text[0] == '!',
                    'a': m.group(1),
@@ -4919,7 +4853,7 @@ def ReplaceEntities(text, symbol):
                 ["&quot;", '"'],
                 ["&apos;", "'"],
                 ["&nbsp;", ' '],
-                ["&amp;", '&'], # Do this last, or the others get messed up.
+                ["&amp;", '&'],  # Do this last, or the others get messed up.
                ]
 
     # Expand entities in <programlisting> even inside CDATA since
@@ -5088,7 +5022,7 @@ def ReadDeclarationsFile(ifile, override):
                 # If the declaration is an empty typedef struct _XXX XXX
                 # set the flag to indicate the struct has a typedef.
                 if (declaration_type == 'STRUCT' or declaration_type == 'UNION') \
-                    and re.search(r'^\s*$', declaration):
+                        and re.search(r'^\s*$', declaration):
                     logging.info("Struct has typedef: %s", declaration_name)
                     StructHasTypedef[declaration_name] = 1
 
@@ -5521,7 +5455,6 @@ def CheckIsObject(name):
     return root and root != 'GEnum' and root != 'GFlags'
 
 
-
 #############################################################################
 # Function    : MakeReturnField
 # Description : Pads a string to $RETURN_TYPE_FIELD_WIDTH.
@@ -5540,6 +5473,7 @@ def MakeReturnField(s):
 
 def GetSymbolSourceFile(symbol):
     return SourceSymbolSourceFile.get(symbol, '')
+
 
 #############################################################################
 # Function    : GetSymbolSourceLine
