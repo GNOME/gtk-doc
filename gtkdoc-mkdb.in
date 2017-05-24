@@ -42,7 +42,6 @@ from gtkdoc import common
 
 # name of documentation module
 MODULE = None
-TMPL_DIR = None
 DB_OUTPUT_DIR = None
 SOURCE_DIRS = None
 SOURCE_SUFFIXES = ''
@@ -314,7 +313,7 @@ parser.add_argument('--source-dir', action='append', dest='source_dir', default=
 parser.add_argument('--source-suffixes', dest='source_suffixes', default='')
 parser.add_argument('--ignore-files', dest='ignore_files', default='')
 parser.add_argument('--output-dir', dest='output_dir', default='')
-parser.add_argument('--tmpl-dir', dest='tmpl_dir', default='')
+parser.add_argument('--tmpl-dir', dest='tmpl_dir', help="DEPRECATED")
 parser.add_argument('--main-sgml-file', dest='main_sgml_file', default='')
 parser.add_argument('--expand-content-files', dest='expand_content_files', default='')
 group = parser.add_mutually_exclusive_group()
@@ -329,7 +328,7 @@ parser.add_argument('--outputsymbolswithoutsince', default=False, action='store_
 
 
 def Run():
-    global MODULE, TMPL_DIR, SOURCE_DIRS, SOURCE_SUFFIXES, IGNORE_FILES, MAIN_SGML_FILE, EXPAND_CONTENT_FILES, \
+    global MODULE, SOURCE_DIRS, SOURCE_SUFFIXES, IGNORE_FILES, MAIN_SGML_FILE, EXPAND_CONTENT_FILES, \
         INLINE_MARKUP_MODE, DEFAULT_STABILITY, DEFAULT_INCLUDES, OUTPUT_FORMAT, NAME_SPACE, OUTPUT_ALL_SYMBOLS, \
         OUTPUT_SYMBOLS_WITHOUT_SINCE, DB_OUTPUT_DIR, OBJECT_TREE_FILE, INTERFACES_FILE, PREREQUISITES_FILE, \
         SIGNALS_FILE, ARGS_FILE, doctype_header
@@ -341,7 +340,6 @@ def Run():
     # We should pass the options variable around instead of this global variable horror
     # but too much of the code expects these to be around. Fix this once the transition is done.
     MODULE = options.module
-    TMPL_DIR = options.tmpl_dir
     SOURCE_DIRS = options.source_dir
     SOURCE_SUFFIXES = options.source_suffixes
     IGNORE_FILES = options.ignore_files
@@ -399,9 +397,6 @@ def Run():
   <!ENTITY % gtkdocentities SYSTEM "../xml/gtkdocentities.ent">
   %gtkdocentities;
 ]>'''
-
-    # All the files are written in subdirectories beneath here.
-    TMPL_DIR = TMPL_DIR if TMPL_DIR else os.path.join(ROOT_DIR, "tmpl")
 
     # This is where we put all the DocBook output.
     DB_OUTPUT_DIR = DB_OUTPUT_DIR if DB_OUTPUT_DIR else os.path.join(ROOT_DIR, "xml")
@@ -665,10 +660,10 @@ def OutputDB(file):
                 templates[filename] = line_number
             else:
                 common.LogWarning(file, line_number, "Double <FILE>%s</FILE> entry. Previous occurrence on line %s." % (filename, templates[filename]))
-            if title == '' and ("%s/%s:Title" % (TMPL_DIR, filename)) in SourceSymbolDocs:
-                title = SourceSymbolDocs["%s/%s:Title" % (TMPL_DIR, filename)]
-                 # Remove trailing blanks
-                title = title.rstrip()
+            if title == '':
+                key = filename + ":Title"
+                if key in SourceSymbolDocs:
+                    title = SourceSymbolDocs[key].rstrip()
 
         elif m4:
             if in_section:
@@ -685,12 +680,11 @@ def OutputDB(file):
                 # collect documents
                 book_bottom += "    <xi:include href=\"xml/%s.xml\"/>\n" % filename
 
-                i = os.path.join(TMPL_DIR, filename + ":Include")
-
-                if i in SourceSymbolDocs:
+                key = filename + ":Include"
+                if key in SourceSymbolDocs:
                     if section_includes:
                         common.LogWarning(file, line_number, "Section <INCLUDE> being overridden by inline comments.")
-                    section_includes = SourceSymbolDocs[i]
+                    section_includes = SourceSymbolDocs[key]
 
                 if section_includes == '':
                     section_includes = includes
@@ -975,7 +969,7 @@ def OutputDB(file):
 
                     filename = filename.replace(' ', '_')
 
-                    section_id = SourceSymbolDocs.get(os.path.join(TMPL_DIR, filename + ":Section_Id"))
+                    section_id = SourceSymbolDocs.get(filename + ":Section_Id")
                     if section_id and section_id.strip() != '':
                         # Remove trailing blanks and use as is
                         section_id = section_id.rstrip()
@@ -1263,8 +1257,8 @@ def ReadKnownSymbols(file):
 
         m = re.search(r'^<FILE>(.*)<\/FILE>', line)
         if m:
-            KnownSymbols[os.path.join(TMPL_DIR, m.group(1) + ":Long_Description")] = 1
-            KnownSymbols[os.path.join(TMPL_DIR, m.group(1) + ":Short_Description")] = 1
+            KnownSymbols[m.group(1) + ":Long_Description"] = 1
+            KnownSymbols[m.group(1) + ":Short_Description"] = 1
             continue
 
         m = re.search(r'^<INCLUDE>(.*)<\/INCLUDE>', line)
@@ -2246,12 +2240,12 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     logging.info("Output docbook for file %s with title '%s'", file, title)
 
     # The edited title overrides the one from the sections file.
-    new_title = SymbolDocs.get(os.path.join(TMPL_DIR, file + ":Title"))
+    new_title = SymbolDocs.get(file + ":Title")
     if new_title and not new_title.strip() == '':
         title = new_title
         logging.info("Found title: %s", title)
 
-    short_desc = SymbolDocs.get(os.path.join(TMPL_DIR, file + ":Short_Description"))
+    short_desc = SymbolDocs.get(file + ":Short_Description")
     if not short_desc or short_desc.strip() == '':
         short_desc = ''
     else:
@@ -2259,14 +2253,14 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
         short_desc = ExpandAbbreviations(title + ":Short_description", short_desc)
         logging.info("Found short_desc: %s", short_desc)
 
-    long_desc = SymbolDocs.get(os.path.join(TMPL_DIR, file + ":Long_Description"))
+    long_desc = SymbolDocs.get(file + ":Long_Description")
     if not long_desc or long_desc.strip() == '':
         long_desc = ''
     else:
         long_desc = ConvertMarkDown(title + ":Long_description", long_desc)
         logging.info("Found long_desc: %s", long_desc)
 
-    see_also = SymbolDocs.get(os.path.join(TMPL_DIR, file + ":See_Also"))
+    see_also = SymbolDocs.get(file + ":See_Also")
     if not see_also or re.search(r'^\s*(<para>)?\s*(</para>)?\s*$', see_also):
         see_also = ''
     else:
@@ -2276,11 +2270,11 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     if see_also:
         see_also = "<refsect1 id=\"%s.see-also\">\n<title>See Also</title>\n%s\n</refsect1>\n" % (section_id, see_also)
 
-    stability = SymbolDocs.get(os.path.join(TMPL_DIR, file + ":Stability_Level"))
+    stability = SymbolDocs.get(file + ":Stability_Level")
     if not stability or re.search(r'^\s*$', stability):
         stability = ''
     else:
-        line_number = GetSymbolSourceLine(os.path.join(TMPL_DIR, file + ":Stability_Level"))
+        line_number = GetSymbolSourceLine(file + ":Stability_Level")
         stability = ParseStabilityLevel(stability, file, line_number, "Section stability level")
         logging.info("Found stability: %s", stability)
 
@@ -2291,7 +2285,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
         AnnotationsUsed[DEFAULT_STABILITY] = 1
         stability = "<refsect1 id=\"%s.stability-level\">\n<title>Stability Level</title>\n<acronym>%s</acronym>, unless otherwise indicated\n</refsect1>\n" % (section_id, DEFAULT_STABILITY)
 
-    image = SymbolDocs.get(os.path.join(TMPL_DIR, file + ":Image"))
+    image = SymbolDocs.get(file + ":Image")
     if not image or re.search(r'^\s*$', image):
         image = ''
     else:
@@ -2388,7 +2382,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
 def OutputProgramDBFile(program, section_id):
     logging.info("Output program docbook for %s", program)
 
-    short_desc = SourceSymbolDocs.get(os.path.join(TMPL_DIR, program + ":Short_Description"))
+    short_desc = SourceSymbolDocs.get(program + ":Short_Description")
     if not short_desc or short_desc.strip() == '':
         short_desc = ''
     else:
@@ -2396,7 +2390,7 @@ def OutputProgramDBFile(program, section_id):
         short_desc = ExpandAbbreviations(program, short_desc)
         logging.info("Found short_desc: %s", short_desc)
 
-    synopsis = SourceSymbolDocs.get(os.path.join(TMPL_DIR, program + ":Synopsis"))
+    synopsis = SourceSymbolDocs.get(program + ":Synopsis")
     if synopsis and synopsis.strip() != '':
         items = synopsis.split(' ')
         for i in range(0, len(items)):
@@ -2437,7 +2431,7 @@ def OutputProgramDBFile(program, section_id):
     else:
         synopsis = "<command>%s</command>" % program
 
-    long_desc = SourceSymbolDocs.get(os.path.join(TMPL_DIR, program + ":Long_Description"))
+    long_desc = SourceSymbolDocs.get(program + ":Long_Description")
     if not long_desc or long_desc.strip() == '':
         long_desc = ''
     else:
@@ -2445,7 +2439,7 @@ def OutputProgramDBFile(program, section_id):
         logging.info("Found long_desc: %s", long_desc)
 
     options = ''
-    o = os.path.join(TMPL_DIR, program + ":Options")
+    o = program + ":Options"
     if o in SourceSymbolDocs:
         opts = SourceSymbolDocs[o].split('\t')
 
@@ -2472,14 +2466,14 @@ def OutputProgramDBFile(program, section_id):
 
         options += "</variablelist></refsect1>\n"
 
-    exit_status = SourceSymbolDocs.get(os.path.join(TMPL_DIR, program + ":Returns"))
+    exit_status = SourceSymbolDocs.get(program + ":Returns")
     if exit_status and exit_status != '':
         exit_status = ConvertMarkDown("%s:Returns" % program, exit_status)
         exit_status = "<refsect1 id=\"%s.exit-status\">\n<title>Exit Status</title>\n%s\n</refsect1>\n" % (section_id, exit_status)
     else:
         exit_status = ''
 
-    see_also = SourceSymbolDocs.get(os.path.join(TMPL_DIR, program + ":See_Also"))
+    see_also = SourceSymbolDocs.get(program + ":See_Also")
     if not see_also or re.search(r'^\s*(<para>)?\s*(</para>)?\s*$', see_also):
         see_also = ''
     else:
@@ -3802,7 +3796,7 @@ def ScanSourceFile(ifile):
                 m2 = re.search(r'PROGRAM:\s*(.*)', symbol)
                 if m:
                     real_symbol = m.group(1)
-                    long_descr = os.path.join(TMPL_DIR, real_symbol + ":Long_Description")
+                    long_descr = real_symbol + ":Long_Description"
 
                     if KnownSymbols:
                         if long_descr not in KnownSymbols or KnownSymbols[long_descr] != 1:
@@ -3814,19 +3808,19 @@ def ScanSourceFile(ifile):
                         param_name = param_name.lower()
                         key = None
                         if param_name == "short_description":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Short_Description")
+                            key = real_symbol + ":Short_Description"
                         elif param_name == "see_also":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":See_Also")
+                            key = real_symbol + ":See_Also"
                         elif param_name == "title":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Title")
+                            key = real_symbol + ":Title"
                         elif param_name == "stability":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Stability_Level")
+                            key = real_symbol + ":Stability_Level"
                         elif param_name == "section_id":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Section_Id")
+                            key = real_symbol + ":Section_Id"
                         elif param_name == "include":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Include")
+                            key = real_symbol + ":Include"
                         elif param_name == "image":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Image")
+                            key = real_symbol + ":Image"
 
                         if key:
                             SourceSymbolDocs[key] = param_desc
@@ -3848,18 +3842,18 @@ def ScanSourceFile(ifile):
                         param_name = param_name.lower()
                         key = None
                         if param_name == "short_description":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Short_Description")
+                            key = real_symbol + ":Short_Description"
                         elif param_name == "see_also":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":See_Also")
+                            key = real_symbol + ":See_Also"
                         elif param_name == "section_id":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Section_Id")
+                            key = real_symbol + ":Section_Id"
                         elif param_name == "synopsis":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Synopsis")
+                            key = real_symbol + ":Synopsis"
                         elif param_name == "returns":
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Returns")
+                            key = real_symbol + ":Returns"
                         elif re.search(r'^(-.*)', param_name):
                             logging.info("PROGRAM opts: '%s': '%s'", param_name, param_desc)
-                            key = os.path.join(TMPL_DIR, real_symbol + ":Options")
+                            key = real_symbol + ":Options"
                             opts = []
                             opts_str = SourceSymbolDocs.get(key)
                             if opts_str:
@@ -3877,12 +3871,12 @@ def ScanSourceFile(ifile):
                             SourceSymbolSourceFile[key] = ifile
                             SourceSymbolSourceLine[key] = line_number
 
-                    long_descr = os.path.join(TMPL_DIR, real_symbol + ":Long_Description")
+                    long_descr = real_symbol + ":Long_Description"
                     SourceSymbolDocs[long_descr] = description
                     SourceSymbolSourceFile[long_descr] = ifile
                     SourceSymbolSourceLine[long_descr] = line_number
 
-                    section_id = SourceSymbolDocs.get(os.path.join(TMPL_DIR, real_symbol + ":Section_Id"))
+                    section_id = SourceSymbolDocs.get(real_symbol + ":Section_Id")
                     if section_id and section_id.strip() != '':
                         # Remove trailing blanks and use as is
                         section_id = section_id.rstrip()
@@ -4113,9 +4107,7 @@ def OutputMissingDocumentation():
                or (symbol in AllDocumentedSymbols and AllDocumentedSymbols[symbol] > 0):
                 n_documented += 1
             else:
-                # cut off the leading namespace ($TMPL_DIR)
-                m = re.search(r'^.*\/(.*)$', symbol)
-                buffer_descriptions += m.group(1) + "\n"
+                buffer_descriptions += symbol + "\n"
 
     if total == 0:
         percent = 100
@@ -4331,8 +4323,8 @@ def MergeSourceDocumentation():
                 src_doc_para = src_doc
 
 
-            m = re.search(TMPL_DIR + r'\/.+:Long_Description', symbol)
-            m2 = re.search(TMPL_DIR + r'\/.+:.+', symbol)
+            m = re.search(r'.+:Long_Description', symbol)
+            m2 = re.search(r'.+:.+', symbol)
             if m:
                 SymbolDocs[symbol] = '%s%s' % (src_doc_para, tmpl_doc)
             elif m2:
