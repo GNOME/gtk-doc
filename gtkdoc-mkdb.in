@@ -22,7 +22,7 @@
 
 #############################################################################
 # Script      : gtkdoc-mkdb
-# Description : This creates the DocBook files from the edited templates.
+# Description : This creates the DocBook files from the source comments.
 #############################################################################
 
 from __future__ import print_function
@@ -662,12 +662,10 @@ def OutputDB(file):
         elif m3:
             filename = m3.group(1)
             if not filename in templates:
-                if ReadTemplateFile(os.path.join(TMPL_DIR, filename), 1):
-                    MergeSourceDocumentation()
-                    templates[filename] = line_number
+                templates[filename] = line_number
             else:
                 common.LogWarning(file, line_number, "Double <FILE>%s</FILE> entry. Previous occurrence on line %s." % (filename, templates[filename]))
-            if title == ''  and ("%s/%s:Title" % (TMPL_DIR, filename)) in SourceSymbolDocs:
+            if title == '' and ("%s/%s:Title" % (TMPL_DIR, filename)) in SourceSymbolDocs:
                 title = SourceSymbolDocs["%s/%s:Title" % (TMPL_DIR, filename)]
                  # Remove trailing blanks
                 title = title.rstrip()
@@ -2970,10 +2968,6 @@ def ModifyXMLElements(text, symbol, start_tag_regexp, end_tag_func, callback):
     result += callback(text, symbol, '')
 
     return result
-
-
-def noop(*args):
-    return args[0]
 
 
 # Adds a tag around some text.
@@ -5384,179 +5378,6 @@ def ReadSignalsFile(ifile):
             else:
                 signal_prototype += line
     INPUT.close()
-
-
-
-#############################################################################
-# Function    : ReadTemplateFile
-# Description : This reads in the manually-edited documentation file
-#               corresponding to the file currently being created, so we can
-#               insert the documentation at the appropriate places.
-#               It outputs %SymbolTypes, %SymbolDocs and %SymbolParams, which
-#               is a hash of arrays.
-# Arguments   : $docsfile - the template file to read in.
-#               $skip_unused_params - 1 if the unused parameters should be
-#                 skipped.
-#############################################################################
-
-def ReadTemplateFile(docsfile, skip_unused_params):
-
-    template = docsfile + ".sgml"
-    if not os.path.isfile(template):
-        logging.info("File doesn't exist: " + template)
-        return 0
-
-    # start with empty hashes, we merge the source comment for each file
-    # afterwards
-    global SymbolDocs, SymbolTypes, SymbolParams
-    SymbolDocs = {}
-    SymbolTypes = {}
-    SymbolParams = {}
-
-    current_type = ''          # Type of symbol being read.
-    current_symbol = ''        # Name of symbol being read.
-    symbol_doc = ''            # Description of symbol being read.
-    params = {}                # Parameter names and descriptions of current function/macro/function typedef.
-    param_name = None          # Parameter name
-    in_unused_params = 0       # True if we are reading in the unused params.
-    in_deprecated = 0
-    in_since = 0
-    in_stability = 0
-
-    DOCS = open(template)
-
-    logging.info("reading template " + template)
-
-    line_number = 0
-    for line in DOCS:
-        line_number += 1
-        m1 = re.search(r'^<!-- ##### ([A-Z_]+) (\S+) ##### -->', line)
-        if m1:
-            stype = m1.group(1)
-            symbol = m1.group(2)
-            if symbol == "Title" \
-                or symbol == "Short_Description" \
-                or symbol == "Long_Description" \
-                or symbol == "See_Also" \
-                or symbol == "Stability_Level" \
-                or symbol == "Include" \
-                or symbol == "Image":
-
-                symbol = docsfile + ":" + symbol
-
-            logging.info("Found symbol: " + symbol)
-            # Remember file and line for the symbol
-            SymbolSourceFile[symbol] = template
-            SymbolSourceLine[symbol] = line_number
-
-            # Store previous symbol, but remove any trailing blank lines.
-            if current_symbol != '':
-                symbol_doc = symbol_doc.rstrip()
-                SymbolTypes[current_symbol] = current_type
-                SymbolDocs[current_symbol] = symbol_doc
-
-                # Check that the stability level is valid.
-                if current_symbol in StabilityLevel:
-                    StabilityLevel[current_symbol] = ParseStabilityLevel(StabilityLevel[current_symbol], template, line_number, "Stability level for " + current_symbol)
-
-                if param_name:
-                    SymbolParams[current_symbol] = params
-                else:
-                    # Delete any existing params in case we are overriding a
-                    # previously read template.
-                    SymbolParams.pop(current_symbol, None)
-
-            current_type = stype
-            current_symbol = symbol
-            in_unused_params = 0
-            in_deprecated = 0
-            in_since = 0
-            in_stability = 0
-            symbol_doc = ''
-            params = {}
-            param_name = None
-
-        elif re.search(r'^<!-- # Unused Parameters # -->', line):
-            logging.info("Found unused parameters")
-            in_unused_params = True
-            continue
-
-        elif in_unused_params and skip_unused_params:
-            # When outputting the DocBook we skip unused parameters.
-            logging.info("Skipping unused param: " + line)
-            continue
-
-        else:
-            # Check if param found. Need to handle "..." and "format...".
-            m2 = re.search(r'^\@([\w\.]+):\040?', line)
-            if m2:
-                line = re.sub(r'^\@([\w\.]+):\040?', '', line)
-                param_name = m2.group(1)
-                param_desc = line
-                # Allow variations of 'Returns'
-                if re.search(r'^[Rr]eturns?$', param_name):
-                    param_name = "Returns"
-
-                # Allow varargs variations
-                if re.search(r'^.*\.\.\.$', param_name):
-                    param_name = "..."
-
-                # strip trailing whitespaces and blank lines
-                line = re.sub(r'\s+\n$', '\n', line, flags=re.M)
-                line = re.sub(r'\n+$', '\n', line, flags=re.M|re.S)
-                logging.info("Found param for symbol %s : '%s'= '%s'", current_symbol, param_name, line)
-
-                if param_name == "Deprecated":
-                    in_deprecated = True
-                    Deprecated[current_symbol] = line
-                elif param_name == "Since":
-                    in_since = True
-                    Since[current_symbol] = line.strip()
-                elif param_name == "Stability":
-                    in_stability = True
-                    StabilityLevel[current_symbol] = line
-                else:
-                    params[param_name] = param_desc
-
-            else:
-                # strip trailing whitespaces and blank lines
-                line = re.sub(r'\s+\n$', '\n', line, flags=re.M)
-                line = re.sub(r'\n+$', '\n', line, flags=re.M|re.S)
-
-                if re.search(r'^\s+$', line):
-                    if in_deprecated:
-                        Deprecated[current_symbol] += line
-                    elif in_since:
-                        common.LogWarning(template, line_number, "multi-line since docs found")
-                        #$Since{$current_symbol} += $_
-                    elif in_stability:
-                        StabilityLevel[current_symbol] += line
-                    elif param_name:
-                        params[param_name] += line
-                    else:
-                        symbol_doc += line
-
-    # Remember to finish the current symbol doccs.
-    if current_symbol != '':
-
-        symbol_doc = re.sub(r'\s+$', '', symbol_doc)
-        SymbolTypes[current_symbol] = current_type
-        SymbolDocs[current_symbol] = symbol_doc
-
-        # Check that the stability level is valid.
-        if current_symbol in StabilityLevel:
-            StabilityLevel[current_symbol] = ParseStabilityLevel(StabilityLevel[current_symbol], template, line_number, "Stability level for " + current_symbol)
-
-        if param_name:
-            SymbolParams[current_symbol] = params
-        else:
-            # Delete any existing params in case we are overriding a
-            # previously read template.
-            SymbolParams.pop(current_symbol, None)
-
-    DOCS.close()
-    return 1
-
 
 
 #############################################################################
