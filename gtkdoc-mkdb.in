@@ -93,10 +93,7 @@ StructHasTypedef = {}
 
 # These global hashes store the existing documentation.
 SymbolDocs = {}
-SymbolTypes = {}
 SymbolParams = {}
-SymbolSourceFile = {}
-SymbolSourceLine = {}
 SymbolAnnotations = {}
 
 # These global hashes store documentation scanned from the source files.
@@ -266,12 +263,9 @@ MD_GTK_ESCAPABLE_CHARS = {"@": 1,
 
 # Function and other declaration output settings.
 RETURN_TYPE_FIELD_WIDTH = 20
-SYMBOL_FIELD_WIDTH = 36
 MAX_SYMBOL_FIELD_WIDTH = 40
-SIGNAL_FIELD_WIDTH = 16
-PARAM_FIELD_COUNT = 2
 
-# XML, SGML formatting helper
+# XML header
 doctype_header = None
 
 # refentry template
@@ -613,7 +607,7 @@ def OutputDB(file):
     templates = {}
     symbol_def_line = {}
 
-    # merge the source docs, in case there are no templates
+    # merge the source docs
     MergeSourceDocumentation()
 
     line_number = 0
@@ -3704,9 +3698,8 @@ def ReadSourceDocumentation(source_dir):
 #############################################################################
 # Function    : ScanSourceFile
 # Description : Scans one source file looking for specially-formatted comment
-#                blocks. Later &MergeSourceDocumentation is used to merge any
-#                documentation found with the documentation already read in
-#                from the template files.
+#               blocks. Later MergeSourceDocumentation() is copying over the
+#               doc blobs that are not suppressed/ignored.
 #
 # Arguments   : $file - the file to scan.
 #############################################################################
@@ -3730,12 +3723,10 @@ def ScanSourceFile(ifile):
         common.LogWarning(ifile, 1, "Can't find basename for this filename.")
         basename = ifile
 
-
     # Check if the basename is in the list of files to ignore.
     if re.search(r'(\s|^)%s(\s|$)' % re.escape(basename), IGNORE_FILES):
         logging.info("Skipping source file: %s", ifile)
         return
-
 
     logging.info("Scanning source file: %s", ifile)
 
@@ -3798,9 +3789,8 @@ def ScanSourceFile(ifile):
                     real_symbol = m.group(1)
                     long_descr = real_symbol + ":Long_Description"
 
-                    if KnownSymbols:
-                        if long_descr not in KnownSymbols or KnownSymbols[long_descr] != 1:
-                            common.LogWarning(ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
+                    if long_descr not in KnownSymbols or KnownSymbols[long_descr] != 1:
+                        common.LogWarning(ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
 
                     logging.info("SECTION DOCS found in source for : '%s'", real_symbol)
                     for param_name, param_desc in params.iteritems():
@@ -3830,7 +3820,6 @@ def ScanSourceFile(ifile):
                     SourceSymbolDocs[long_descr] = description
                     SourceSymbolSourceFile[long_descr] = ifile
                     SourceSymbolSourceLine[long_descr] = line_number
-                    #$SourceSymbolTypes{$symbol} = "SECTION"
                 elif m2:
                     real_symbol = m2.group(1)
                     key = None
@@ -3888,10 +3877,6 @@ def ScanSourceFile(ifile):
                     logging.info("SYMBOL DOCS found in source for : '%s'", symbol)
                     SourceSymbolDocs[symbol] = description
                     SourceSymbolParams[symbol] = params
-                    # FIXME $SourceSymbolTypes{$symbol} = "STRUCT,SIGNAL,ARG,FUNCTION,MACRO"
-                    #if (defined $DeclarationTypes{$symbol})
-                    #    $SourceSymbolTypes{$symbol} = $DeclarationTypes{$symbol
-                    #
                     SourceSymbolSourceFile[symbol] = ifile
                     SourceSymbolSourceLine[symbol] = line_number
 
@@ -4068,9 +4053,7 @@ def OutputMissingDocumentation():
     for symbol in sorted(AllSymbols.keys()):
         # FIXME: should we print common.LogWarnings for undocumented stuff?
         # DEBUG
-        #my $ssfile = &GetSymbolSourceFile($symbol)
-        #my $ssline = &GetSymbolSourceLine($symbol)
-        #my $location = "defined at " . (defined($ssfile)?$ssfile:"?") . ":" . (defined($ssline)?$ssline:"0") . "\n"
+        #location = "defined at " + GetSymbolSourceFile(symbol) + ":" + GetSymbolSourceLine(symbol) + "\n"
         # DEBUG
         m = re.search(r':(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include|Section_Id|Image)', symbol)
         m2 = re.search(r':(Long_Description|Short_Description)', symbol)
@@ -4227,6 +4210,40 @@ def OutputSymbolsWithoutSince():
             SYMBOLS.write(symbol + "\n")
     SYMBOLS.close()
 
+
+def CheckParamsDocumented(symbol, params):
+    stype = DeclarationTypes.get(symbol)
+
+    item = "Parameter"
+    if stype:
+        if stype == 'STRUCT':
+            item = "Field"
+        elif stype == 'ENUM':
+            item = "Value"
+        elif stype == 'UNION':
+            item = "Field"
+    else:
+        stype = "SIGNAL"
+    logging.info("Check param docs for %s, params: %s entries, type=%s", symbol, len(params), stype)
+
+    if len(params) > 0:
+        logging.info("params: %s", str(params))
+        for (param_name, param_desc) in params.iteritems():
+            # Output a warning if the parameter is empty and remember for stats.
+            if param_name != "void" and not re.search(r'\S', param_desc):
+                if symbol in AllIncompleteSymbols:
+                    AllIncompleteSymbols[symbol] += ", " + param_name
+                else:
+                    AllIncompleteSymbols[symbol] = param_name
+
+                common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                                  "%s description for %s::%s is missing in source code comment block." % (item, symbol, param_name))
+
+    elif len(params) == 0:
+        AllIncompleteSymbols[symbol] = "<items>"
+        common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                          "%s descriptions for %s are missing in source code comment block." % (item, symbol))
+
 #############################################################################
 # Function    : MergeSourceDocumentation
 # Description : This merges documentation read from a source file into the
@@ -4240,214 +4257,42 @@ def OutputSymbolsWithoutSince():
 #############################################################################
 
 def MergeSourceDocumentation():
-    if SymbolDocs:
-        Symbols = SymbolDocs.keys()
-        logging.info("num existing entries: %d", len(Symbols))
-    else:
-        # filter scanned declarations, with what we suppress from -sections.txt
-        tmp = {}
-        for symbol in Declarations.keys():
-            if symbol in KnownSymbols and KnownSymbols[symbol] == 1:
-                tmp[symbol] = 1
 
-        # , add the rest from -sections.txt
-        for symbol in KnownSymbols.keys():
-            if KnownSymbols[symbol] == 1:
-                tmp[symbol] = 1
+    # add whats found in the source
+    symbols = set(SourceSymbolDocs.keys())
 
-        # and add whats found in the source
-        for symbol in SourceSymbolDocs.keys():
-            tmp[symbol] = 1
+    # and add known symbols from -sections.txt
+    for symbol in KnownSymbols.keys():
+        if KnownSymbols[symbol] == 1:
+            symbols.add(symbol)
 
-        Symbols = tmp.keys()
-        logging.info("num source entries: %d", len(Symbols))
+    logging.info("num source entries: %d", len(symbols))
 
-    for symbol in Symbols:
+    for symbol in symbols:
         AllSymbols[symbol] = 1
 
-        have_tmpl_docs = 0
-
-        ## see if the symbol is documented in template
-        tmpl_doc = SymbolDocs.get(symbol, '')
-        check_tmpl_doc = tmpl_doc
-        # remove all xml-tags and whitespaces
-        check_tmpl_doc = re.sub(r'<.*?>', '', check_tmpl_doc)
-        check_tmpl_doc = re.sub(r'\s', '', check_tmpl_doc)
-        # anything left ?
-        if check_tmpl_doc != '':
-            have_tmpl_docs = 1
-        else:
-            # if the docs have just an empty para, don't merge that.
-            check_tmpl_doc = re.sub(r'(\s|\n)', '', tmpl_doc, flags=re.M|re.S)
-            if check_tmpl_doc == "<para></para>":
-                tmpl_doc = ''
-
         if symbol in SourceSymbolDocs:
-            stype = DeclarationTypes.get(symbol)
-
             logging.info("merging [%s] from source", symbol)
 
-            item = "Parameter"
-            if stype:
-                if stype == 'STRUCT':
-                    item = "Field"
-                elif stype == 'ENUM':
-                    item = "Value"
-                elif stype == 'UNION':
-                    item = "Field"
-            else:
-                stype = "SIGNAL"
-
-            src_doc = SourceSymbolDocs[symbol]
             # remove leading and training whitespaces
-            src_doc = src_doc.strip()
-
-            # Don't output warnings for overridden titles as titles are
-            # automatically generated in the -sections.txt file, and thus they
-            # are often overridden.
-            m = re.search(r':Title$', symbol)
-            if have_tmpl_docs and not m:
-                # check if content is different
-                if tmpl_doc != src_doc:
-                    #print "[$tmpl_doc] [$src_doc]\n"
-                    common.LogWarning(SourceSymbolSourceFile[symbol], SourceSymbolSourceLine[symbol],
-                                      "Documentation in template " + SymbolSourceFile[symbol] + ":" + SymbolSourceLine[symbol] + " for %s being overridden by inline comments." % symbol)
-
-            if src_doc != '':
+            src_docs = SourceSymbolDocs[symbol].strip()
+            if src_docs != '':
                 AllDocumentedSymbols[symbol] = 1
 
-
-            # Do not add <para> to nothing, it breaks missing docs checks.
-            src_doc_para = ''
-            if src_doc != '':
-                src_doc_para = src_doc
-
-
-            m = re.search(r'.+:Long_Description', symbol)
-            m2 = re.search(r'.+:.+', symbol)
-            if m:
-                SymbolDocs[symbol] = '%s%s' % (src_doc_para, tmpl_doc)
-            elif m2:
-                # For the title/summary/see also section docs we don't want to
-                # add any <para> tags.
-                SymbolDocs[symbol] = src_doc
-            else:
-                SymbolDocs[symbol] = '%s%s' % (src_doc_para, tmpl_doc)
+            SymbolDocs[symbol] = src_docs
 
             # merge parameters
-            if re.search(r'.*::.*', symbol):
-                # For signals we prefer the param names from the source docs,
-                # since the ones from the templates are likely to contain the
-                # artificial argn names which are generated by gtkdoc-scangobj.
-                SymbolParams[symbol] = SourceSymbolParams[symbol]
-                # FIXME: we need to check for empty docs here as well!
-            else:
-                # The templates contain the definitive parameter names and order,
-                # so we will not change that. We only override the actual text.
-                tmpl_params = SymbolParams.get(symbol)
-                if not tmpl_params:
-                    logging.info("No merge needed for %s", symbol)
-                    if symbol in SourceSymbolParams:
-                        SymbolParams[symbol] = SourceSymbolParams[symbol]
-                    #  FIXME: we still like to get the number of params and merge
-                    #  1) we would noticed that params have been removed/renamed
-                    #  2) we would catch undocumented params
-                    #  params are not (yet) exported in -decl.txt so that we
-                    #  could easily grab them :/
-                else:
-                    params = SourceSymbolParams.get(symbol)
-                    logging.info("Merge needed for %s, tmpl_params: %d, source_params: %d", symbol, len(tmpl_params), len(params))
-                    for tmpl_param_name in tmpl_params.keys():
-                        # Try to find the param in the source comment documentation.
-                        found = False
-                        logging.info("  try merge param %s", tmpl_param_name)
-                        for (param_name, param_desc) in params.iteritems():
-                            logging.info("    test param  %s", param_name)
-                            # We accept changes in case, since the Gnome source
-                            # docs contain a lot of these.
-                            if param_name.lower() == tmpl_param_name.lower():
-                                found = True
-
-                                # Override the description.
-                                tmpl_params[param_name] = param_desc
-
-                                # Set the name to '' to mark it as used.
-                                params[param_name] = ''
-                                break
-
-                        # If it looks like the parameters are there, but not
-                        # in the right place, try to explain a bit better.
-                        if found and re.search(r'\@%s:' % tmpl_param_name, src_doc):
-                            common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
-                                              "Parameters for %s must start on the line immediately after the function or macro name." % symbol)
-
-                    # Now we output a warning if parameters have been described which
-                    # do not exist.
-                    for param_name in params.keys():
-                        if param_name:
-                            # the template builder cannot detect if a macro returns
-                            # a result or not
-                            if stype == "MACRO" and param_name == "Returns":
-                                # FIXME: do we need to add it then to tmpl_params[] ?
-                                logging.info("  adding Returns: to macro docs for %s.", symbol)
-                                tmpl_params['Returns'] = params[param_name]
-                                continue
-
-                            common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
-                                              "%s described in source code comment block but does not exist. %s: %s %s: %s." % (item, stype, symbol, item, param_name))
-
+            if symbol in SourceSymbolParams:
+                param_docs = SourceSymbolParams[symbol]
+                SymbolParams[symbol] = param_docs
+                # if this symbol is documented, check if docs are complete
+                # remove all xml-tags and whitespaces
+                check_docs = re.sub(r'\s', '', re.sub(r'<.*?>', '', src_docs))
+                if check_docs != '' and param_docs:
+                    CheckParamsDocumented(symbol, param_docs)
         else:
-            if have_tmpl_docs:
-                AllDocumentedSymbols[symbol] = 1
-                logging.info("merging [%s] from template", symbol)
-            else:
-                logging.info("[%s] undocumented", symbol)
+            logging.info("[%s] undocumented", symbol)
 
-        # if this symbol is documented, check if docs are complete
-        check_tmpl_doc = SymbolDocs.get(symbol, '')
-        # remove all xml-tags and whitespaces
-        check_tmpl_doc = re.sub(r'<.*?>', '', check_tmpl_doc)
-        check_tmpl_doc = re.sub(r'\s', '', check_tmpl_doc)
-        if check_tmpl_doc != '':
-            tmpl_params = SymbolParams.get(symbol)
-            if tmpl_params:
-                stype = DeclarationTypes.get(symbol)
-
-                item = "Parameter"
-                if stype:
-                    if stype == 'STRUCT':
-                        item = "Field"
-                    elif stype == 'ENUM':
-                        item = "Value"
-                    elif stype == 'UNION':
-                        item = "Field"
-
-                else:
-                    stype = "SIGNAL"
-                logging.info("Check param docs for %s, tmpl_params: %s entries, type=%s", symbol, len(tmpl_params), stype)
-
-                if len(tmpl_params) > 0:    # FIXME: we checked this already above
-                    logging.info("tmpl_params: %s", str(tmpl_params))
-                    for (tmpl_param_name, tmpl_param_desc) in tmpl_params.iteritems():
-                        # Output a warning if the parameter is empty and
-                        # remember for stats.
-                        if tmpl_param_name != "void" and not re.search(r'\S', tmpl_param_desc):
-                            if symbol in AllIncompleteSymbols:
-                                AllIncompleteSymbols[symbol] += ", " + tmpl_param_name
-                            else:
-                                AllIncompleteSymbols[symbol] = tmpl_param_name
-
-                            common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
-                                              "%s description for %s::%s is missing in source code comment block." % (item, symbol, tmpl_param_name))
-
-                else:
-                    if len(tmpl_params) == 0:
-                        AllIncompleteSymbols[symbol] = "<items>"
-                        common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
-                                          "%s descriptions for %s are missing in source code comment block." % (item, symbol))
-
-                    # $#$tmpl_params==-1 means we don't know about parameters
-                    # this unfortunately does not tell if there should be some
     logging.info("num doc entries: %d", len(SymbolDocs))
 
 
@@ -5694,11 +5539,7 @@ def MakeReturnField(s):
 #############################################################################
 
 def GetSymbolSourceFile(symbol):
-    if symbol in SourceSymbolSourceFile:
-        return SourceSymbolSourceFile[symbol]
-    if symbol in SymbolSourceFile:
-        return SymbolSourceFile[symbol]
-    return ''
+    return SourceSymbolSourceFile.get(symbol, '')
 
 #############################################################################
 # Function    : GetSymbolSourceLine
@@ -5707,11 +5548,7 @@ def GetSymbolSourceFile(symbol):
 #############################################################################
 
 def GetSymbolSourceLine(symbol):
-    if symbol in SourceSymbolSourceLine:
-        return SourceSymbolSourceLine[symbol]
-    if symbol in SymbolSourceLine:
-        return SymbolSourceLine[symbol]
-    return 0
+    return SourceSymbolSourceLine.get(symbol, 0)
 
 
 if __name__ == '__main__':
