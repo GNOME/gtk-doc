@@ -79,10 +79,13 @@ CLEANFILES = \
   gtk-doc.flat.make \
   gtkdoc-checkc \
   gtkdoc-depscanc \
+  gtkdoc-fixxrefc \
+  gtkdoc-mkdbc \
   gtkdoc-mkhtmlc \
   gtkdoc-mkmanc \
   gtkdoc-mkpdfc \
   gtkdoc-rebasec \
+  gtkdoc-scangobjc \
   gtkdoc/__init__.pyc \
   gtkdoc/check.pyc \
   gtkdoc/common.pyc \
