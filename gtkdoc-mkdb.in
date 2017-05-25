@@ -20,10 +20,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-#############################################################################
+#
 # Script      : gtkdoc-mkdb
 # Description : This creates the DocBook files from the source comments.
-#############################################################################
+#
 
 from __future__ import print_function
 
@@ -228,8 +228,7 @@ MAX_SYMBOL_FIELD_WIDTH = 40
 doctype_header = None
 
 # refentry template
-REFENTRY = string.Template(
-'''${header}
+REFENTRY = string.Template('''${header}
 <refentry id="${section_id}">
 <refmeta>
 <refentrytitle role="top_of_page" id="${section_id}.top_of_page">${title}</refentrytitle>
@@ -272,7 +271,8 @@ parser.add_argument('--expand-content-files', dest='expand_content_files', defau
 group = parser.add_mutually_exclusive_group()
 group.add_argument('--sgml-mode', action='store_true', default=False, dest='sgml_mode')
 group.add_argument('--xml-mode', action='store_true', default=False, dest='xml_mode')
-parser.add_argument('--default-stability', dest='default_stability', choices=['', 'Stable', 'Private', 'Unstable'], default='')
+parser.add_argument('--default-stability', dest='default_stability',
+                    choices=['', 'Stable', 'Private', 'Unstable'], default='')
 parser.add_argument('--default-includes', dest='default_includes', default='')
 parser.add_argument('--output-format', dest='default_format', default='')
 parser.add_argument('--name-space', dest='name_space', default='')
@@ -337,7 +337,8 @@ def Run():
             # if there are SYSTEM ENTITIES here, we should prepend "../" to the path
             # FIXME: not sure if we can do this now, as people already work-around the problem
             # r'#<!ENTITY % ([a-zA-Z-]+) SYSTEM \"([^/][a-zA-Z./]+)\">', r'<!ENTITY % \1 SYSTEM \"../\2\">';
-            line = re.sub(r'<!ENTITY % gtkdocentities SYSTEM "([^"]*)">', r'<!ENTITY % gtkdocentities SYSTEM "../\1">', line)
+            line = re.sub(
+                r'<!ENTITY % gtkdocentities SYSTEM "([^"]*)">', r'<!ENTITY % gtkdocentities SYSTEM "../\1">', line)
             doctype_header += line
         INPUT.close()
         doctype_header = doctype_header.strip()
@@ -404,7 +405,7 @@ def Run():
                 for symbol in IndexEntriesFull.keys():
                     if NAME_SPACE == '' or NAME_SPACE.lower() in symbol.lower():
                         if len(symbol) > pos:
-                            letter = symbol[pos:pos+1]
+                            letter = symbol[pos:pos + 1]
                             # stop prefix scanning
                             if letter == "_":
                                 # stop on "_"
@@ -453,14 +454,14 @@ def Run():
         open(os.path.join(ROOT_DIR, 'sgml.stamp'), 'w').write('timestamp')
 
 
-#############################################################################
+#
 # Function    : OutputObjectList
 # Description : This outputs the alphabetical list of objects, in a columned
 #                table.
 #               FIXME: Currently this also outputs ancestor objects
 #                which may not actually be in this module.
 # Arguments   : none
-#############################################################################
+#
 
 def OutputObjectList():
     cols = 3
@@ -505,12 +506,12 @@ def OutputObjectList():
     common.UpdateFileIfChanged(old_object_index, new_object_index, 0)
 
 
-#############################################################################
+#
 # Function    : TrimTextBlock
 # Description : Trims extra whitespace. Empty lines inside a block are
 #                preserved.
 # Arguments   : $desc - the text block to trim. May contain newlines.
-#############################################################################
+#
 
 def TrimTextBlock(desc):
     # strip leading spaces on the block
@@ -521,14 +522,14 @@ def TrimTextBlock(desc):
     return desc
 
 
-#############################################################################
+#
 # Function    : OutputDB
 # Description : This collects the output for each section of the docs, and
 #                outputs each file when the end of the section is found.
 # Arguments   : $file - the $MODULE-sections.txt file which contains all of
 #                the functions/macros/structs etc. being documented, organised
 #                into sections and subsections.
-#############################################################################
+#
 
 def OutputDB(file):
 
@@ -612,7 +613,8 @@ def OutputDB(file):
             if not filename in file_def_line:
                 file_def_line[filename] = line_number
             else:
-                common.LogWarning(file, line_number, "Double <FILE>%s</FILE> entry. Previous occurrence on line %s." % (filename, file_def_line[filename]))
+                common.LogWarning(file, line_number, "Double <FILE>%s</FILE> entry. Previous occurrence on line %s." %
+                                  (filename, file_def_line[filename]))
             if title == '':
                 key = filename + ":Title"
                 if key in SourceSymbolDocs:
@@ -858,7 +860,7 @@ def OutputDB(file):
             # check for duplicate entries
             if symbol not in symbol_def_line:
                 declaration = Declarations.get(symbol)
-                ## FIXME: with this we'll output empty declaration
+                # FIXME: with this we'll output empty declaration
                 if declaration is not None:
                     if CheckIsObject(symbol):
                         file_objects.append(symbol)
@@ -880,7 +882,8 @@ def OutputDB(file):
                             other_details += desc
 
                     sig_synop, sig_desc = GetSignals(symbol)
-                    arg_synop, child_arg_synop, style_arg_synop, arg_desc, child_arg_desc, style_arg_desc = GetArgs(symbol)
+                    arg_synop, child_arg_synop, style_arg_synop, arg_desc, child_arg_desc, style_arg_desc = GetArgs(
+                        symbol)
                     ifaces = GetInterfaces(symbol)
                     impls = GetImplementations(symbol)
                     prereqs = GetPrerequisites(symbol)
@@ -961,11 +964,11 @@ def OutputDB(file):
     return changed
 
 
-#############################################################################
+#
 # Function    : OutputIndex
 # Description : This writes an indexlist that can be included into the main-
 #               document into an <index> tag.
-#############################################################################
+#
 
 def OutputIndex(basename, apiindex):
     old_index = os.path.join(DB_OUTPUT_DIR, basename + '.xml')
@@ -1042,12 +1045,13 @@ def OutputIndex(basename, apiindex):
             symbol_desc = ", " + symbol_type
             if symbol_section != '':
                 symbol_desc += " in <link linkend=\"%s\">%s</link>" % (symbol_section_id, symbol_section)
-                #symbol_desc +=" in " + ExpandAbbreviations(symbol, "#symbol_section")
+                # symbol_desc +=" in " + ExpandAbbreviations(symbol, "#symbol_section")
 
         curletter = short_symbol[0].upper()
         ixid = apiindex[symbol]
 
-        logging.info("  add symbol %s with %s to index in section '%s' (derived from %s)", symbol, ixid, curletter, short_symbol)
+        logging.info("  add symbol %s with %s to index in section '%s' (derived from %s)",
+                     symbol, ixid, curletter, short_symbol)
 
         if curletter != lastletter:
             lastletter = curletter
@@ -1058,7 +1062,8 @@ def OutputIndex(basename, apiindex):
             OUTPUT.write("<indexdiv><title>%s</title>\n" % curletter)
             divopen = True
 
-        OUTPUT.write('<indexentry><primaryie linkends="%s"><link linkend="%s">%s</link>%s</primaryie></indexentry>\n' % (ixid, ixid, symbol, symbol_desc))
+        OUTPUT.write('<indexentry><primaryie linkends="%s"><link linkend="%s">%s</link>%s</primaryie></indexentry>\n' %
+                     (ixid, ixid, symbol, symbol_desc))
 
     if divopen:
         OUTPUT.write("</indexdiv>\n")
@@ -1069,31 +1074,31 @@ def OutputIndex(basename, apiindex):
     common.UpdateFileIfChanged(old_index, new_index, 0)
 
 
-#############################################################################
+#
 # Function    : OutputIndexFull
 # Description : This writes the full api indexlist that can be included into the
 #               main document into an <index> tag.
-#############################################################################
+#
 
 def OutputIndexFull():
     OutputIndex("api-index-full", IndexEntriesFull)
 
 
-#############################################################################
+#
 # Function    : OutputDeprecatedIndex
 # Description : This writes the deprecated api indexlist that can be included
 #               into the main document into an <index> tag.
-#############################################################################
+#
 
 def OutputDeprecatedIndex():
     OutputIndex("api-index-deprecated", IndexEntriesDeprecated)
 
 
-#############################################################################
+#
 # Function    : OutputSinceIndexes
 # Description : This writes the 'since' api indexlists that can be included into
 #               the main document into an <index> tag.
-#############################################################################
+#
 
 def OutputSinceIndexes():
     sinces = set(Since.values())
@@ -1105,12 +1110,12 @@ def OutputSinceIndexes():
         OutputIndex("api-index-" + version, index)
 
 
-#############################################################################
+#
 # Function    : OutputAnnotationGlossary
 # Description : This writes a glossary of the used annotation terms into a
 #               separate glossary file that can be included into the main
 #               document.
-#############################################################################
+#
 
 def OutputAnnotationGlossary():
     old_glossary = os.path.join(DB_OUTPUT_DIR, "annotation-glossary.xml")
@@ -1173,14 +1178,14 @@ def OutputAnnotationGlossary():
     common.UpdateFileIfChanged(old_glossary, new_glossary, 0)
 
 
-#############################################################################
+#
 # Function    : ReadKnownSymbols
 # Description : This collects the names of non-private symbols from the
 #               $MODULE-sections.txt file.
 # Arguments   : $file - the $MODULE-sections.txt file which contains all of
 #                the functions/macros/structs etc. being documented, organised
 #                into sections and subsections.
-#############################################################################
+#
 
 def ReadKnownSymbols(file):
 
@@ -1232,13 +1237,13 @@ def ReadKnownSymbols(file):
     INPUT.close()
 
 
-#############################################################################
+#
 # Function    : OutputDeclaration
 # Description : Returns the synopsis and detailed description DocBook
 #                describing one function/macro etc.
 # Arguments   : $symbol - the name of the function/macro begin described.
 #                $declaration - the declaration of the function/macro.
-#############################################################################
+#
 
 def OutputDeclaration(symbol, declaration):
     dtype = DeclarationTypes[symbol]
@@ -1262,11 +1267,11 @@ def OutputDeclaration(symbol, declaration):
         sys.exit("Unknown symbol type " + dtype)
 
 
-#############################################################################
+#
 # Function    : OutputSymbolTraits
 # Description : Returns the Since and StabilityLevel paragraphs for a symbol.
 # Arguments   : $symbol - the name of the function/macro begin described.
-#############################################################################
+#
 
 def OutputSymbolTraits(symbol):
     desc = ''
@@ -1282,11 +1287,11 @@ def OutputSymbolTraits(symbol):
     return desc
 
 
-#############################################################################
+#
 # Function    : Output{Symbol,Section}ExtraLinks
 # Description : Returns extralinks for the symbol (if enabled).
 # Arguments   : $symbol - the name of the function/macro begin described.
-#############################################################################
+#
 
 def uri_escape(text):
     if text is None:
@@ -1331,17 +1336,18 @@ def OutputSectionExtraLinks(symbol, docsymbol):
     return desc
 
 
-#############################################################################
+#
 # Function    : OutputMacro
 # Description : Returns the synopsis and detailed description of a macro.
 # Arguments   : $symbol - the macro.
 #                $declaration - the declaration of the macro.
-#############################################################################
+#
 
 def OutputMacro(symbol, declaration):
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
-    synop = "<row><entry role=\"define_keyword\">#define</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link>" % (sid, symbol)
+    synop = "<row><entry role=\"define_keyword\">#define</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link>" % (
+        sid, symbol)
 
     fields = common.ParseMacroDeclaration(declaration, CreateValidSGML)
     title = symbol
@@ -1392,19 +1398,20 @@ def OutputMacro(symbol, declaration):
     return (synop, desc)
 
 
-#############################################################################
+#
 # Function    : OutputTypedef
 # Description : Returns the synopsis and detailed description of a typedef.
 # Arguments   : $symbol - the typedef.
 #                $declaration - the declaration of the typedef,
 #                  e.g. 'typedef unsigned int guint;'
-#############################################################################
+#
 
 def OutputTypedef(symbol, declaration):
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
     desc = "<refsect2 id=\"%s\" role=\"typedef\"%s>\n<title>%s</title>\n" % (sid, condition, symbol)
-    synop = "<row><entry role=\"typedef_keyword\">typedef</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (sid, symbol)
+    synop = "<row><entry role=\"typedef_keyword\">typedef</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (
+        sid, symbol)
 
     desc += MakeIndexterms(symbol, sid)
     desc += "\n"
@@ -1424,7 +1431,7 @@ def OutputTypedef(symbol, declaration):
     return (synop, desc)
 
 
-#############################################################################
+#
 # Function    : OutputStruct
 # Description : Returns the synopsis and detailed description of a struct.
 #                We check if it is a object struct, and if so we only output
@@ -1433,7 +1440,7 @@ def OutputTypedef(symbol, declaration):
 #                original ID is used for the entire RefEntry.
 # Arguments   : $symbol - the struct.
 #                $declaration - the declaration of the struct.
-#############################################################################
+#
 
 def OutputStruct(symbol, declaration):
 
@@ -1468,7 +1475,8 @@ def OutputStruct(symbol, declaration):
         type_output = "struct"
         desc = "<refsect2 id=\"%s\" role=\"struct\"%s>\n<title>struct %s</title>\n" % (sid, condition, symbol)
 
-    synop = "<row><entry role=\"datatype_keyword\">%s</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (type_output, sid, symbol)
+    synop = "<row><entry role=\"datatype_keyword\">%s</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (
+        type_output, sid, symbol)
 
     desc += MakeIndexterms(symbol, sid)
     desc += "\n"
@@ -1484,7 +1492,8 @@ def OutputStruct(symbol, declaration):
         logging.info("Found opaque struct: %s", symbol)
         decl_out = "struct %s;" % symbol
     else:
-        m = re.search(r'^\s*(typedef\s+)?struct\s*\w*\s*(?:\/\*.*\*\/)?\s*{(.*)}\s*\w*\s*;\s*$', declaration, flags=re.S)
+        m = re.search(
+            r'^\s*(typedef\s+)?struct\s*\w*\s*(?:\/\*.*\*\/)?\s*{(.*)}\s*\w*\s*;\s*$', declaration, flags=re.S)
         if m:
             struct_contents = m.group(2)
 
@@ -1573,7 +1582,8 @@ def OutputStruct(symbol, declaration):
                 # trim
                 field_descr = re.sub(r'^(\s|\n)+', '', field_descr, flags=re.M | re.S)
                 field_descr = re.sub(r'(\s|\n)+$', '', field_descr, flags=re.M | re.S)
-                desc += "<entry role=\"struct_member_description\">%s</entry>\n<entry role=\"struct_member_annotations\">%s</entry>\n" % (field_descr, param_annotations)
+                desc += "<entry role=\"struct_member_description\">%s</entry>\n<entry role=\"struct_member_annotations\">%s</entry>\n" % (
+                    field_descr, param_annotations)
                 del field_descrs[field_name]
             else:
                 common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
@@ -1621,12 +1631,12 @@ def OutputStruct(symbol, declaration):
     return (synop, desc)
 
 
-#############################################################################
+#
 # Function    : OutputUnion
 # Description : Returns the synopsis and detailed description of a union.
 # Arguments   : $symbol - the union.
 #                $declaration - the declaration of the union.
-#############################################################################
+#
 
 def OutputUnion(symbol, declaration):
 
@@ -1659,7 +1669,8 @@ def OutputUnion(symbol, declaration):
         type_output = "union"
         desc = "<refsect2 id=\"%s\" role=\"union\"%s>\n<title>union %s</title>\n" % (sid, condition, symbol)
 
-    synop = "<row><entry role=\"datatype_keyword\">%s</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (type_output, sid, symbol)
+    synop = "<row><entry role=\"datatype_keyword\">%s</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (
+        type_output, sid, symbol)
 
     desc += MakeIndexterms(symbol, sid)
     desc += "\n"
@@ -1713,7 +1724,8 @@ def OutputUnion(symbol, declaration):
                 # trim
                 field_descr = re.sub(r'^(\s|\n)+', '', field_descr, flags=re.M | re.S)
                 field_descr = re.sub(r'(\s|\n)+$', '', field_descr, flags=re.M | re.S)
-                desc += "<entry role=\"union_member_description\">%s</entry>\n<entry role=\"union_member_annotations\">%s</entry>\n" % (field_descr, param_annotations)
+                desc += "<entry role=\"union_member_description\">%s</entry>\n<entry role=\"union_member_annotations\">%s</entry>\n" % (
+                    field_descr, param_annotations)
                 del field_descrs[field_name]
             else:
                 common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
@@ -1755,12 +1767,12 @@ def OutputUnion(symbol, declaration):
     return (synop, desc)
 
 
-#############################################################################
+#
 # Function    : OutputEnum
 # Description : Returns the synopsis and detailed description of a enum.
 # Arguments   : $symbol - the enum.
 #                $declaration - the declaration of the enum.
-#############################################################################
+#
 
 def OutputEnum(symbol, declaration):
     is_gtype = False
@@ -1777,7 +1789,8 @@ def OutputEnum(symbol, declaration):
         sid = common.CreateValidSGMLID(symbol)
         condition = MakeConditionDescription(symbol)
 
-    synop = "<row><entry role=\"datatype_keyword\">enum</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (sid, symbol)
+    synop = "<row><entry role=\"datatype_keyword\">enum</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (
+        sid, symbol)
     desc = "<refsect2 id=\"%s\" role=\"enum\"%s>\n<title>enum %s</title>\n" % (sid, condition, symbol)
 
     desc += MakeIndexterms(symbol, sid)
@@ -1822,11 +1835,13 @@ def OutputEnum(symbol, declaration):
 
         sid = common.CreateValidSGMLID(field_name)
         condition = MakeConditionDescription(field_name)
-        desc += "<row role=\"constant\"><entry role=\"enum_member_name\"><para id=\"%s\">%s</para></entry>\n" % (sid, field_name)
+        desc += "<row role=\"constant\"><entry role=\"enum_member_name\"><para id=\"%s\">%s</para></entry>\n" % (
+            sid, field_name)
         if field_descr:
             field_descr, param_annotations = ExpandAnnotation(symbol, field_descr)
             field_descr = ConvertMarkDown(symbol, field_descr)
-            desc += "<entry role=\"enum_member_description\">%s</entry>\n<entry role=\"enum_member_annotations\">%s</entry>\n" % (field_descr, param_annotations)
+            desc += "<entry role=\"enum_member_description\">%s</entry>\n<entry role=\"enum_member_annotations\">%s</entry>\n" % (
+                field_descr, param_annotations)
             del field_descrs[field_name]
         else:
             if found:
@@ -1867,12 +1882,12 @@ def OutputEnum(symbol, declaration):
     return (synop, desc)
 
 
-#############################################################################
+#
 # Function    : OutputVariable
 # Description : Returns the synopsis and detailed description of a variable.
 # Arguments   : $symbol - the extern'ed variable.
 #                $declaration - the declaration of the variable.
-#############################################################################
+#
 
 def OutputVariable(symbol, declaration):
     sid = common.CreateValidSGMLID(symbol)
@@ -1881,8 +1896,10 @@ def OutputVariable(symbol, declaration):
     logging.info("ouputing variable: '%s' '%s'", symbol, declaration)
 
     type_output = None
-    m1 = re.search(r'^\s*extern\s+((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)(\s*)(const\s+)*([A-Za-z]\w*)\s*;', declaration)
-    m2 = re.search(r'\s*((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)(\s*)(const\s+)*([A-Za-z]\w*)\s*=', declaration)
+    m1 = re.search(
+        r'^\s*extern\s+((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)(\s*)(const\s+)*([A-Za-z]\w*)\s*;', declaration)
+    m2 = re.search(
+        r'\s*((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)(\s*)(const\s+)*([A-Za-z]\w*)\s*=', declaration)
     if m1:
         mod1 = m1.group(1) or ''
         ptr = m1.group(3) or ''
@@ -1898,7 +1915,8 @@ def OutputVariable(symbol, declaration):
     else:
         type_output = "extern"
 
-    synop = "<row><entry role=\"variable_type\">%s</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (type_output, sid, symbol)
+    synop = "<row><entry role=\"variable_type\">%s</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link></entry></row>\n" % (
+        type_output, sid, symbol)
 
     desc = "<refsect2 id=\"%s\" role=\"variable\"%s>\n<title>%s</title>\n" % (sid, condition, symbol)
 
@@ -1926,12 +1944,12 @@ def OutputVariable(symbol, declaration):
     return (synop, desc)
 
 
-#############################################################################
+#
 # Function    : OutputFunction
 # Description : Returns the synopsis and detailed description of a function.
 # Arguments   : $symbol - the function.
 #                $declaration - the declaration of the function.
-#############################################################################
+#
 
 def OutputFunction(symbol, declaration, symbol_type):
     sid = common.CreateValidSGMLID(symbol)
@@ -1949,8 +1967,8 @@ def OutputFunction(symbol, declaration, symbol_type):
     pointer = pointer.rstrip()
     xref = MakeXRef(type, tagify(type, "returnvalue"))
     start = ''
-    #if ($symbol_type == 'USER_FUNCTION')
-    #    $start = "typedef "
+    # if (symbol_type == 'USER_FUNCTION')
+    #    start = "typedef "
     #
 
     # We output const rather than G_CONST_RETURN.
@@ -1975,7 +1993,8 @@ def OutputFunction(symbol, declaration, symbol_type):
         indent_len = MAX_SYMBOL_FIELD_WIDTH - 8
         symbol_desc_output = ('%s%s%s%s\n' % (char1, char2, symbol, char3)) + (' ' * (indent_len - 1))
 
-    synop = "<row><entry role=\"function_type\">%s</entry><entry role=\"function_name\">%s&#160;<phrase role=\"c_punctuation\">()</phrase></entry></row>\n" % (ret_type_output, symbol_output)
+    synop = "<row><entry role=\"function_type\">%s</entry><entry role=\"function_name\">%s&#160;<phrase role=\"c_punctuation\">()</phrase></entry></row>\n" % (
+        ret_type_output, symbol_output)
 
     desc = "<refsect2 id=\"%s\" role=\"function\"%s>\n<title>%s&#160;()</title>\n" % (sid, condition, symbol)
 
@@ -2017,7 +2036,7 @@ def OutputFunction(symbol, declaration, symbol_type):
     return (synop, desc)
 
 
-#############################################################################
+#
 # Function    : OutputParamDescriptions
 # Description : Returns the DocBook output describing the parameters of a
 #                function, macro or signal handler.
@@ -2026,7 +2045,7 @@ def OutputFunction(symbol, declaration, symbol_type):
 #                $symbol - the name of the function/macro being described.
 #               @fields - parsed fields from the declaration, used to determine
 #                  undocumented/unused entries
-#############################################################################
+#
 
 def OutputParamDescriptions(symbol_type, symbol, fields):
     output = ''
@@ -2075,7 +2094,8 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
                         field_descrs.remove(param_name)
 
                 if param_desc != '':
-                    params_desc += "<row><entry role=\"parameter_name\"><para>%s</para></entry>\n<entry role=\"parameter_description\">%s</entry>\n<entry role=\"parameter_annotations\">%s</entry></row>\n" % (param_name, param_desc, param_annotations)
+                    params_desc += "<row><entry role=\"parameter_name\"><para>%s</para></entry>\n<entry role=\"parameter_description\">%s</entry>\n<entry role=\"parameter_annotations\">%s</entry></row>\n" % (
+                        param_name, param_desc, param_annotations)
                     num_params += 1
 
         for param_name in field_descrs:
@@ -2127,7 +2147,7 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
     return output
 
 
-#############################################################################
+#
 # Function    : ParseStabilityLevel
 # Description : Parses a stability level and outputs a warning if it isn't
 #               valid.
@@ -2136,7 +2156,7 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
 #                $message - description of where the level is from, to use in
 #               any error message.
 # Returns     : The parsed stability level string.
-#############################################################################
+#
 
 def ParseStabilityLevel(stability, file, line, message):
 
@@ -2155,7 +2175,7 @@ def ParseStabilityLevel(stability, file, line, message):
     return stability
 
 
-#############################################################################
+#
 # Function    : OutputDBFile
 # Description : Outputs the final DocBook file for one section.
 # Arguments   : $file - the name of the file.
@@ -2178,7 +2198,7 @@ def ParseStabilityLevel(stability, file, line, message):
 #               $prerequisites - reference to the DocBook for the Prerequisites part
 #               $derived - reference to the DocBook for the Derived Interfaces part
 #               $file_objects - reference to an array of objects in this file
-#############################################################################
+#
 
 def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop, functions_details, other_details, signals_synop, signals_desc, args_synop, args_desc, hierarchy, interfaces, implementations, prerequisites, derived, file_objects):
 
@@ -2225,10 +2245,12 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
 
     if stability:
         AnnotationsUsed[stability] = 1
-        stability = "<refsect1 id=\"%s.stability-level\">\n<title>Stability Level</title>\n<acronym>%s</acronym>, unless otherwise indicated\n</refsect1>\n" % (section_id, stability)
+        stability = "<refsect1 id=\"%s.stability-level\">\n<title>Stability Level</title>\n<acronym>%s</acronym>, unless otherwise indicated\n</refsect1>\n" % (
+            section_id, stability)
     elif DEFAULT_STABILITY:
         AnnotationsUsed[DEFAULT_STABILITY] = 1
-        stability = "<refsect1 id=\"%s.stability-level\">\n<title>Stability Level</title>\n<acronym>%s</acronym>, unless otherwise indicated\n</refsect1>\n" % (section_id, DEFAULT_STABILITY)
+        stability = "<refsect1 id=\"%s.stability-level\">\n<title>Stability Level</title>\n<acronym>%s</acronym>, unless otherwise indicated\n</refsect1>\n" % (
+            section_id, DEFAULT_STABILITY)
 
     image = SymbolDocs.get(file + ":Image")
     if not image or re.search(r'^\s*$', image):
@@ -2317,12 +2339,12 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
 
-#############################################################################
+#
 # Function    : OutputProgramDBFile
 # Description : Outputs the final DocBook file for one program.
 # Arguments   : $file - the name of the file.
 #               $section_id - the id to use for the toplevel tag.
-#############################################################################
+#
 
 def OutputProgramDBFile(program, section_id):
     logging.info("Output program docbook for %s", program)
@@ -2392,7 +2414,7 @@ def OutputProgramDBFile(program, section_id):
 
         options = "<refsect1>\n<title>Options</title>\n<variablelist>\n"
         for k in range(0, len(opts), 2):
-            opt_desc = opts[k+1]
+            opt_desc = opts[k + 1]
 
             opt_desc = re.sub(r'\*(.+?)\*', r'<replaceable>\1</replaceable>', opt_desc)
 
@@ -2414,7 +2436,8 @@ def OutputProgramDBFile(program, section_id):
     exit_status = SourceSymbolDocs.get(program + ":Returns")
     if exit_status and exit_status != '':
         exit_status = ConvertMarkDown("%s:Returns" % program, exit_status)
-        exit_status = "<refsect1 id=\"%s.exit-status\">\n<title>Exit Status</title>\n%s\n</refsect1>\n" % (section_id, exit_status)
+        exit_status = "<refsect1 id=\"%s.exit-status\">\n<title>Exit Status</title>\n%s\n</refsect1>\n" % (
+            section_id, exit_status)
     else:
         exit_status = ''
 
@@ -2459,12 +2482,12 @@ def OutputProgramDBFile(program, section_id):
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
 
-#############################################################################
+#
 # Function    : OutputExtraFile
 # Description : Copies an "extra" DocBook file into the output directory,
 #               expanding abbreviations
 # Arguments   : $file - the source file.
-#############################################################################
+#
 def OutputExtraFile(file):
 
     basename = os.path.basename(file)
@@ -2481,7 +2504,7 @@ def OutputExtraFile(file):
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
 
-#############################################################################
+#
 # Function    : OutputBook
 # Description : Outputs the entities that need to be included into the
 #                main docbook file for the module.
@@ -2489,7 +2512,7 @@ def OutputExtraFile(file):
 #                  at the top of the main docbook file.
 #                $book_bottom - the references to the entities, which are
 #                  added in the main docbook file at the desired position.
-#############################################################################
+#
 
 def OutputBook(book_top, book_bottom):
 
@@ -2571,12 +2594,12 @@ def OutputBook(book_top, book_bottom):
         OUTPUT.close()
 
 
-#############################################################################
+#
 # Function    : CreateValidSGML
 # Description : This turns any chars which are used in SGML into entities,
 #                e.g. '<' into '&lt;'
 # Arguments   : $text - the text to turn into proper SGML.
-#############################################################################
+#
 
 def CreateValidSGML(text):
     text = re.sub(r'&', r'&amp;', text)        # Do this first, or the others get messed up.
@@ -2587,7 +2610,7 @@ def CreateValidSGML(text):
     return text
 
 
-#############################################################################
+#
 # Function    : ConvertSGMLChars
 # Description : This is used for text in source code comment blocks, to turn
 #               chars which are used in SGML into entities, e.g. '<' into
@@ -2595,7 +2618,7 @@ def CreateValidSGML(text):
 #               unconditionally or only if the character doesn't seem to be
 #               part of an SGML construct (tag or entity reference).
 # Arguments   : $text - the text to turn into proper SGML.
-#############################################################################
+#
 
 def ConvertSGMLChars(symbol, text):
 
@@ -2657,12 +2680,12 @@ def ConvertSGMLCharsCallback2(text, symbol, tag):
     return text
 
 
-#############################################################################
+#
 # Function    : ExpandAnnotation
 # Description : This turns annotations into acronym tags.
 # Arguments   : $symbol - the symbol being documented, for error messages.
 #                $text - the text to expand.
-#############################################################################
+#
 def ExpandAnnotation(symbol, param_desc):
     param_annotations = ''
 
@@ -2708,14 +2731,14 @@ def ExpandAnnotation(symbol, param_desc):
     return (param_desc, param_annotations)
 
 
-#############################################################################
+#
 # Function    : ExpandAbbreviations
 # Description : This turns the abbreviations function(), macro(), @param,
-#                %constant, and #symbol into appropriate DocBook markup.
+#               %constant, and #symbol into appropriate DocBook markup.
 #               CDATA sections and <programlisting> parts are skipped.
 # Arguments   : $symbol - the symbol being documented, for error messages.
 #                $text - the text to expand.
-#############################################################################
+#
 
 def ExpandAbbreviations(symbol, text):
     # Note: This is a fallback and normally done in the markdown parser
@@ -2844,7 +2867,7 @@ def MakeHashXRef(symbol, tag):
     return MakeXRef(symbol, text)
 
 
-#############################################################################
+#
 # Function    : ModifyXMLElements
 # Description : Looks for given XML element tags within the text, and calls
 #               the callback on pieces of text inside & outside those elements.
@@ -2862,7 +2885,7 @@ def MakeHashXRef(symbol, tag):
 #                      called with a piece of text, the symbol being
 #                      documented, and the matched start tag or '' if the text
 #                      is outside the XML elements being matched.
-#############################################################################
+#
 def ModifyXMLElements(text, symbol, start_tag_regexp, end_tag_func, callback):
     before_tag = start_tag = end_tag_regexp = end_tag = None
     result = ''
@@ -2913,11 +2936,11 @@ def tagify(text, elem):
     return '<' + elem + '>' + text + '</' + elem + '>'
 
 
-#############################################################################
+#
 # Function    : MakeDocHeader
 # Description : Builds a docbook header for the given tag
 # Arguments   : $tag - doctype tag
-#############################################################################
+#
 
 def MakeDocHeader(tag):
     header = doctype_header
@@ -2925,18 +2948,19 @@ def MakeDocHeader(tag):
 
     # fix the path for book since this is one level up
     if tag == 'book':
-        header = re.sub(r'<!ENTITY % gtkdocentities SYSTEM "../([a-zA-Z./]+)">', r'<!ENTITY % gtkdocentities SYSTEM "\1">', header)
+        header = re.sub(
+            r'<!ENTITY % gtkdocentities SYSTEM "../([a-zA-Z./]+)">', r'<!ENTITY % gtkdocentities SYSTEM "\1">', header)
     return header
 
 
-#############################################################################
+#
 # Function    : MakeXRef
 # Description : This returns a cross-reference link to the given symbol.
 #                Though it doesn't try to do this for a few standard C types
 #                that it        knows won't be in the documentation.
 # Arguments   : $symbol - the symbol to try to create a XRef to.
 #               $text - text text to put inside the XRef, defaults to $symbol
-#############################################################################
+#
 
 def MakeXRef(symbol, text=None):
     symbol = symbol.strip()
@@ -2957,11 +2981,11 @@ def MakeXRef(symbol, text=None):
     return "<link linkend=\"%s\">%s</link>" % (symbol_id, text)
 
 
-#############################################################################
+#
 # Function    : MakeIndexterms
 # Description : This returns a indexterm elements for the given symbol
 # Arguments   : $symbol - the symbol to create indexterms for
-#############################################################################
+#
 
 def MakeIndexterms(symbol, sid):
     terms = ''
@@ -2974,13 +2998,15 @@ def MakeIndexterms(symbol, sid):
             sortas = ' sortas="%s"' % m.group(1)
 
     if symbol in Deprecated:
-        terms += "<indexterm zone=\"%s\" role=\"deprecated\"><primary%s>%s</primary></indexterm>" % (sid, sortas, symbol)
+        terms += "<indexterm zone=\"%s\" role=\"deprecated\"><primary%s>%s</primary></indexterm>" % (
+            sid, sortas, symbol)
         IndexEntriesDeprecated[symbol] = sid
         IndexEntriesFull[symbol] = sid
     if symbol in Since:
         since = Since[symbol].strip()
         if since != '':
-            terms += "<indexterm zone=\"%s\" role=\"%s\"><primary%s>%s</primary></indexterm>" % (sid, since, sortas, symbol)
+            terms += "<indexterm zone=\"%s\" role=\"%s\"><primary%s>%s</primary></indexterm>" % (
+                sid, since, sortas, symbol)
         IndexEntriesSince[symbol] = sid
         IndexEntriesFull[symbol] = sid
     if terms == '':
@@ -2989,11 +3015,11 @@ def MakeIndexterms(symbol, sid):
     return terms
 
 
-#############################################################################
+#
 # Function    : MakeDeprecationNote
 # Description : This returns a deprecation warning for the given symbol.
 # Arguments   : $symbol - the symbol to try to create a warning for.
-#############################################################################
+#
 
 def MakeDeprecationNote(symbol):
     desc = ''
@@ -3004,7 +3030,8 @@ def MakeDeprecationNote(symbol):
 
         m = re.search(r'^\s*([0-9\.]+)\s*:?', note)
         if m:
-            desc += "has been deprecated since version %s and should not be used in newly-written code.</para>" % m.group(1)
+            desc += "has been deprecated since version %s and should not be used in newly-written code.</para>" % m.group(
+                1)
         else:
             desc += "is deprecated and should not be used in newly-written code.</para>"
 
@@ -3020,11 +3047,11 @@ def MakeDeprecationNote(symbol):
     return desc
 
 
-#############################################################################
+#
 # Function    : MakeConditionDescription
 # Description : This returns a sumary of conditions for the given symbol.
 # Arguments   : $symbol - the symbol to try to create the sumary.
-#############################################################################
+#
 
 def MakeConditionDescription(symbol):
     desc = ''
@@ -3060,7 +3087,7 @@ def MakeConditionDescription(symbol):
     return desc
 
 
-#############################################################################
+#
 # Function    : GetHierarchy
 # Description : Returns the DocBook output describing the ancestors and
 #               immediate children of a GObject subclass. It uses the
@@ -3068,7 +3095,7 @@ def MakeConditionDescription(symbol):
 #
 # Arguments   : $object - the GtkObject subclass.
 #               @hierarchy - previous hierarchy
-#############################################################################
+#
 
 def GetHierarchy(gobject, hierarchy):
     # Find object in the objects array.
@@ -3174,12 +3201,12 @@ def GetHierarchy(gobject, hierarchy):
     return hierarchy
 
 
-#############################################################################
+#
 # Function    : GetInterfaces
 # Description : Returns the DocBook output describing the interfaces
 #               implemented by a class. It uses the global %Interfaces hash.
 # Arguments   : $object - the GtkObject subclass.
-#############################################################################
+#
 
 def GetInterfaces(gobject):
     text = ''
@@ -3204,12 +3231,12 @@ def GetInterfaces(gobject):
     return text
 
 
-#############################################################################
+#
 # Function    : GetImplementations
 # Description : Returns the DocBook output describing the implementations
 #               of an interface. It uses the global %Interfaces hash.
 # Arguments   : $object - the GtkObject subclass.
-#############################################################################
+#
 
 def GetImplementations(gobject):
     text = ''
@@ -3238,12 +3265,12 @@ def GetImplementations(gobject):
     return text
 
 
-#############################################################################
+#
 # Function    : GetPrerequisites
 # Description : Returns the DocBook output describing the prerequisites
 #               of an interface. It uses the global %Prerequisites hash.
 # Arguments   : $iface - the interface.
-#############################################################################
+#
 
 def GetPrerequisites(iface):
     text = ''
@@ -3267,12 +3294,12 @@ def GetPrerequisites(iface):
     return text
 
 
-#############################################################################
+#
 # Function    : GetDerived
 # Description : Returns the DocBook output describing the derived interfaces
 #               of an interface. It uses the global %Prerequisites hash.
 # Arguments   : $iface - the interface.
-#############################################################################
+#
 
 def GetDerived(iface):
     text = ''
@@ -3301,12 +3328,12 @@ def GetDerived(iface):
     return text
 
 
-#############################################################################
+#
 # Function    : GetSignals
 # Description : Returns the synopsis and detailed description DocBook output
 #                for the signal handlers of a given GtkObject subclass.
 # Arguments   : $object - the GtkObject subclass, e.g. 'GtkButton'.
-#############################################################################
+#
 
 def GetSignals(gobject):
     synop = ''
@@ -3319,7 +3346,8 @@ def GetSignals(gobject):
             symbol = '%s::%s' % (gobject, name)
             sid = common.CreateValidSGMLID('%s-%s' % (gobject, name))
 
-            desc += "<refsect2 id=\"%s\" role=\"signal\"><title>The <literal>“%s”</literal> signal</title>\n" % (sid, name)
+            desc += "<refsect2 id=\"%s\" role=\"signal\"><title>The <literal>“%s”</literal> signal</title>\n" % (
+                sid, name)
             desc += MakeIndexterms(symbol, sid)
             desc += "\n"
             desc += OutputSymbolExtraLinks(symbol)
@@ -3415,7 +3443,8 @@ def GetSignals(gobject):
                         flags_string += " / "
                     flags_string = "<link linkend=\"G-SIGNAL-NO-HOOKS:CAPS\">No Hooks</link>"
 
-            synop += "<row><entry role=\"signal_type\">%s</entry><entry role=\"signal_name\"><link linkend=\"%s\">%s</link></entry><entry role=\"signal_flags\">%s</entry></row>\n" % (ret_type_output, sid, name, flags_string)
+            synop += "<row><entry role=\"signal_type\">%s</entry><entry role=\"signal_name\"><link linkend=\"%s\">%s</link></entry><entry role=\"signal_flags\">%s</entry></row>\n" % (
+                ret_type_output, sid, name, flags_string)
 
             parameters = OutputParamDescriptions("SIGNAL", symbol, None)
             logging.info("formatted signal params: '%s' -> '%s'", symbol, parameters)
@@ -3447,12 +3476,12 @@ def GetSignals(gobject):
     return (synop, desc)
 
 
-#############################################################################
+#
 # Function    : GetArgs
 # Description : Returns the synopsis and detailed description DocBook output
 #                for the Args of a given GtkObject subclass.
 # Arguments   : $object - the GtkObject subclass, e.g. 'GtkButton'.
-#############################################################################
+#
 
 def GetArgs(gobject):
     synop = ''
@@ -3541,8 +3570,10 @@ def GetArgs(gobject):
             if len(name) < 24:
                 pad1 = " " * (24 - len(name))
 
-            arg_synop = "<row><entry role=\"property_type\">%s</entry><entry role=\"property_name\"><link linkend=\"%s\">%s</link></entry><entry role=\"property_flags\">%s</entry></row>\n" % (type_output, sid, name, flags_string)
-            arg_desc = "<refsect2 id=\"%s\" role=\"property\"><title>The <literal>“%s”</literal> %s</title>\n" % (sid, name, kind)
+            arg_synop = "<row><entry role=\"property_type\">%s</entry><entry role=\"property_name\"><link linkend=\"%s\">%s</link></entry><entry role=\"property_flags\">%s</entry></row>\n" % (
+                type_output, sid, name, flags_string)
+            arg_desc = "<refsect2 id=\"%s\" role=\"property\"><title>The <literal>“%s”</literal> %s</title>\n" % (
+                sid, name, kind)
             arg_desc += MakeIndexterms(symbol, sid)
             arg_desc += "\n"
             arg_desc += OutputSymbolExtraLinks(symbol)
@@ -3584,7 +3615,7 @@ def GetArgs(gobject):
     return (synop, child_synop, style_synop, desc, child_desc, style_desc)
 
 
-#############################################################################
+#
 # Function    : ReadSourceDocumentation
 # Description : This reads in the documentation embedded in comment blocks
 #                in the source code (for Gnome).
@@ -3598,7 +3629,7 @@ def GetArgs(gobject):
 #                blocks.
 #
 # Arguments   : $source_dir - the directory to scan.
-#############m###############################################################
+# m###############################################################
 
 def ReadSourceDocumentation(source_dir):
 
@@ -3642,14 +3673,14 @@ def ReadSourceDocumentation(source_dir):
         ReadSourceDocumentation(sdir)
 
 
-#############################################################################
+#
 # Function    : ScanSourceFile
 # Description : Scans one source file looking for specially-formatted comment
 #               blocks. Later MergeSourceDocumentation() is copying over the
 #               doc blobs that are not suppressed/ignored.
 #
 # Arguments   : $file - the file to scan.
-#############################################################################
+#
 
 def ScanSourceFile(ifile):
 
@@ -3692,7 +3723,7 @@ def ScanSourceFile(ifile):
         # Look for the start of a comment block.
         if not in_comment_block:
             if re.search(r'^\s*/\*.*\*/', line):
-                #one-line comment - not gtkdoc
+                # one-line comment - not gtkdoc
                 pass
             elif re.search(r'^\s*/\*\*\s', line):
                 logging.info("Found comment block start")
@@ -3737,7 +3768,8 @@ def ScanSourceFile(ifile):
                     long_descr = real_symbol + ":Long_Description"
 
                     if long_descr not in KnownSymbols or KnownSymbols[long_descr] != 1:
-                        common.LogWarning(ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
+                        common.LogWarning(
+                            ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
 
                     logging.info("SECTION DOCS found in source for : '%s'", real_symbol)
                     for param_name, param_desc in params.iteritems():
@@ -3837,13 +3869,14 @@ def ScanSourceFile(ifile):
                         common.LogWarning(ifile, line_number, "multi-line since docs found")
 
                 if stability_desc:
-                    stability_desc = ParseStabilityLevel(stability_desc, ifile, line_number, "Stability level for %s" % symbol)
+                    stability_desc = ParseStabilityLevel(
+                        stability_desc, ifile, line_number, "Stability level for %s" % symbol)
                     StabilityLevel[symbol] = ConvertSGMLChars(symbol, stability_desc)
 
                 if deprecated_desc:
                     if symbol not in Deprecated:
                         # don't warn for signals and properties
-                        #if ($symbol !~ m/::?(.*)/)
+                        # if ($symbol !~ m/::?(.*)/)
                         if symbol in DeclarationTypes:
                             common.LogWarning(ifile, line_number,
                                               "%s is deprecated in the inline comments, but no deprecation guards were found around the declaration. (See the --deprecated-guards option for gtkdoc-scan.)" % symbol)
@@ -3975,12 +4008,12 @@ def ScanSourceFile(ifile):
     SRCFILE.close()
 
 
-#############################################################################
+#
 # Function    : OutputMissingDocumentation
 # Description : Outputs report of documentation coverage to a file
 #
 # Arguments   : none
-#############################################################################
+#
 
 def OutputMissingDocumentation():
     old_undocumented_file = os.path.join(ROOT_DIR, MODULE + "-undocumented.txt")
@@ -4000,9 +4033,10 @@ def OutputMissingDocumentation():
     for symbol in sorted(AllSymbols.keys()):
         # FIXME: should we print common.LogWarnings for undocumented stuff?
         # DEBUG
-        #location = "defined at " + GetSymbolSourceFile(symbol) + ":" + GetSymbolSourceLine(symbol) + "\n"
+        # location = "defined at " + GetSymbolSourceFile(symbol) + ":" + GetSymbolSourceLine(symbol) + "\n"
         # DEBUG
-        m = re.search(r':(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include|Section_Id|Image)', symbol)
+        m = re.search(
+            r':(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include|Section_Id|Image)', symbol)
         m2 = re.search(r':(Long_Description|Short_Description)', symbol)
         if not m:
             total += 1
@@ -4063,13 +4097,13 @@ def OutputMissingDocumentation():
     return common.UpdateFileIfChanged(old_undocumented_file, new_undocumented_file, 0)
 
 
-#############################################################################
+#
 # Function    : OutputUndeclaredSymbols
 # Description : Outputs symbols that are listed in the section file, but not
 #               declaration is found in the sources
 #
 # Arguments   : none
-#############################################################################
+#
 
 def OutputUndeclaredSymbols():
     old_undeclared_file = os.path.join(ROOT_DIR, MODULE + "-undeclared.txt")
@@ -4087,13 +4121,13 @@ def OutputUndeclaredSymbols():
     return common.UpdateFileIfChanged(old_undeclared_file, new_undeclared_file, 0)
 
 
-#############################################################################
+#
 # Function    : OutputUnusedSymbols
 # Description : Outputs symbols that are documented in comments, but not
 #               declared in the sources
 #
 # Arguments   : none
-#############################################################################
+#
 
 def OutputUnusedSymbols():
     num_unused = 0
@@ -4113,17 +4147,18 @@ def OutputUnusedSymbols():
 
     UNUSED.close()
     if num_unused != 0:
-        common.LogWarning(old_unused_file, 1, "%d unused declarations. They should be added to %s-sections.txt in the appropriate place." % (num_unused, MODULE))
+        common.LogWarning(
+            old_unused_file, 1, "%d unused declarations. They should be added to %s-sections.txt in the appropriate place." % (num_unused, MODULE))
 
     return common.UpdateFileIfChanged(old_unused_file, new_unused_file, 0)
 
 
-#############################################################################
+#
 # Function    : OutputAllSymbols
 # Description : Outputs list of all symbols to a file
 #
 # Arguments   : none
-#############################################################################
+#
 
 def OutputAllSymbols():
     SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-symbols.txt"), 'w')
@@ -4133,12 +4168,12 @@ def OutputAllSymbols():
     SYMBOLS.close()
 
 
-#############################################################################
+#
 # Function    : OutputSymbolsWithoutSince
 # Description : Outputs list of all symbols without a since tag to a file
 #
 # Arguments   : none
-#############################################################################
+#
 
 def OutputSymbolsWithoutSince():
     SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-nosince.txt"), 'w')
@@ -4183,7 +4218,7 @@ def CheckParamsDocumented(symbol, params):
                           "%s descriptions for %s are missing in source code comment block." % (item, symbol))
 
 
-#############################################################################
+#
 # Function    : MergeSourceDocumentation
 # Description : This merges documentation read from a source file into the
 #                documentation read in from a template file.
@@ -4193,7 +4228,7 @@ def CheckParamsDocumented(symbol, params):
 #                the template files.
 #
 # Arguments   : none
-#############################################################################
+#
 
 def MergeSourceDocumentation():
 
@@ -4235,12 +4270,12 @@ def MergeSourceDocumentation():
     logging.info("num doc entries: %d", len(SymbolDocs))
 
 
-#############################################################################
+#
 # Function    : IsEmptyDoc
 # Description : Check if a doc-string is empty. Its also regarded as empty if
 #               it only consist of whitespace or e.g. FIXME.
 # Arguments   : the doc-string
-#############################################################################
+#
 def IsEmptyDoc(doc):
     if re.search(r'^\s*$', doc):
         return True
@@ -4249,7 +4284,7 @@ def IsEmptyDoc(doc):
     return False
 
 
-#############################################################################
+#
 # Function    : ConvertMarkDown
 # Description : Converts mark down syntax to the respective docbook.
 #               http://de.wikipedia.org/wiki/Markdown
@@ -4257,7 +4292,7 @@ def IsEmptyDoc(doc):
 #               http://parsedown.org/
 #               Copyright (c) 2013 Emanuil Rusev, erusev.com
 # Arguments   : the symbol name, the doc-string
-#############################################################################
+#
 
 def ConvertMarkDown(symbol, text):
     text = MarkDownParse(text, symbol)
@@ -4299,533 +4334,534 @@ def ConvertMarkDown(symbol, text):
 # TODO(ensonic): it would be nice to add id parameters to the refsect2 elements
 
 def MarkDownParseBlocks(lines, symbol, context):
-  md_blocks = []
-  md_block = {"type": ''}
+    md_blocks = []
+    md_block = {"type": ''}
 
-  logging.debug("parsing %s lines", len(lines))
-  for line in lines:
-    logging.info("type='%s', int='%s', parsing '%s'", md_block["type"], md_block.get('interrupted'), line)
-    first_char = None
-    if line:
-        first_char = line[0]
+    logging.debug("parsing %s lines", len(lines))
+    for line in lines:
+        logging.info("type='%s', int='%s', parsing '%s'", md_block["type"], md_block.get('interrupted'), line)
+        first_char = None
+        if line:
+            first_char = line[0]
 
-    if md_block["type"] == "markup":
-      if 'closed' not in md_block:
-        if md_block["start"] in line:
-          md_block["depth"] += 1
+        if md_block["type"] == "markup":
+            if 'closed' not in md_block:
+                if md_block["start"] in line:
+                    md_block["depth"] += 1
 
-        if md_block["end"] in line:
-          if md_block["depth"] > 0:
-            md_block["depth"] -= 1
-          else:
-            logging.info("closing tag '%s'", line)
-            md_block["closed"] = 1
-            # TODO(ensonic): reparse inner text with MarkDownParseLines?
+                if md_block["end"] in line:
+                    if md_block["depth"] > 0:
+                        md_block["depth"] -= 1
+                    else:
+                        logging.info("closing tag '%s'", line)
+                        md_block["closed"] = 1
+                        # TODO(ensonic): reparse inner text with MarkDownParseLines?
 
-        md_block["text"] += "\n" + line
-        logging.info("add to markup: '%s'", line)
-        continue
+                md_block["text"] += "\n" + line
+                logging.info("add to markup: '%s'", line)
+                continue
 
-    deindented_line = line.lstrip()
+        deindented_line = line.lstrip()
 
-    if md_block["type"] == "heading":
-      # a heading is ended by any level less than or equal
-      if md_block["level"] == 1:
-        heading_match = re.search(r'^[#][ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$', line)
-        if re.search(r'^={4,}[ \t]*$', line):
-          text = md_block["lines"].pop()
-          md_block.pop("interrupted", None)
-          md_blocks.append(md_block)
-          md_block = {'type': "heading",
-                      'text': text,
-                      'lines': [],
-                      'level': 1,
-                      }
-          continue
-        elif heading_match:
-          md_block.pop("interrupted", None)
-          md_blocks.append(md_block)
-          md_block = {'type': "heading",
-                      'text': heading_match.group(1),
-                      'lines': [],
-                      'level': 1,
-                      }
-          if heading_match.group(2):
-              md_block['id'] = heading_match.group(2)
-          continue
-        else:
-          # push lines into the block until the end is reached
-          md_block["lines"].append(line)
-          continue
-
-      else:
-        heading_match = re.search(r'^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$', line)
-        if re.search(r'^[=]{4,}[ \t]*$', line):
-          text = md_block["lines"].pop()
-          md_block.pop("interrupted", None)
-          md_blocks.append(md_block)
-          md_block = {'type': "heading",
-                      'text': text,
-                      'lines': [],
-                      'level': 1,
-                      }
-          continue
-        elif re.search(r'^[-]{4,}[ \t]*$', line):
-          text = md_block["lines"].pop()
-          md_block.pop("interrupted", None)
-          md_blocks.append(md_block)
-          md_block = {'type': "heading",
-                      'text': text,
-                      'lines': [],
-                      'level': 2,
-                      }
-          continue
-        elif heading_match:
-          md_block.pop("interrupted", None)
-          md_blocks.append(md_block)
-          md_block = {'type': "heading",
-                      'text': heading_match.group(2),
-                      'lines': [],
-                      'level': len(heading_match.group(1))
-                      }
-          if heading_match.group(3):
-              md_block['id'] = heading_match.group(3)
-          continue
-        else:
-          # push lines into the block until the end is reached
-          md_block["lines"].append(line)
-          continue
-    elif md_block["type"] == "code":
-      end_of_code_match = re.search(r'^[ \t]*\]\|(.*)', line)
-      if end_of_code_match:
-        md_blocks.append(md_block)
-        md_block = {'type': "paragraph",
-                    'text': end_of_code_match.group(1),
-                    'lines': [],
-                    }
-      else:
-        md_block["lines"].append(line)
-      continue
-
-    if deindented_line == '':
-      logging.info('setting "interrupted" due to empty line')
-      md_block["interrupted"] = 1
-      continue
-
-    if md_block["type"] == "quote":
-      if 'interrupted' not in md_block:
-        line = re.sub(r'^[ ]*>[ ]?', '', line)
-        md_block["lines"].append(line)
-        continue
-
-    elif md_block["type"] == "li":
-      marker = md_block["marker"]
-      marker_match = re.search(r'^([ ]{0,3})(%s)[ ](.*)' % marker, line)
-      if marker_match:
-        indentation = marker_match.group(1)
-        if md_block["indentation"] != indentation:
-          md_block["lines"].append(line)
-        else:
-          ordered = md_block["ordered"]
-          md_block.pop('last', None)
-          md_blocks.append(md_block)
-          md_block = {'type': "li",
-                      'ordered': ordered,
-                      'indentation': indentation,
-                      'marker': marker,
-                      'last': 1,
-                      'lines': [re.sub(r'^[ ]{0,4}', '', marker_match.group(3))],
-                      }
-        continue
-
-      if 'interrupted' in md_block:
-        if first_char == " ":
-          md_block["lines"].append('')
-          line = re.sub(r'^[ ]{0,4}', '', line)
-          md_block["lines"].append(line)
-          md_block.pop("interrupted", None)
-          continue
-      else:
-        line = re.sub(r'^[ ]{0,4}', '', line)
-        md_block["lines"].append(line)
-        continue
-
-    # indentation sensitive types
-    heading_match = re.search(r'^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$', line)
-    code_match = re.search(r'^[ \t]*\|\[[ ]*(?:<!-- language="([^"]+?)" -->)?', line)
-    if heading_match:
-      # atx heading (#)
-      md_blocks.append(md_block)
-      md_block = {'type': "heading",
-                  'text': heading_match.group(2),
-                  'lines': [],
-                  'level': len(heading_match.group(1)),
-                  }
-      if heading_match.group(3):
-          md_block['id'] = heading_match.group(3)
-      continue
-    elif re.search(r'^={4,}[ \t]*$', line):
-      # setext heading (====)
-
-      if md_block["type"] == "paragraph" and "interrupted" in md_block:
-        md_blocks.append(md_block.copy())
-        md_block["type"] = "heading"
-        md_block["lines"] = []
-        md_block["level"] = 1
-      continue
-    elif re.search(r'^-{4,}[ \t]*$', line):
-      # setext heading (-----)
-
-      if md_block["type"] == "paragraph" and "interrupted" in md_block:
-        md_blocks.append(md_block.copy())
-        md_block["type"] = "heading"
-        md_block["lines"] = []
-        md_block["level"] = 2
-
-      continue
-    elif code_match:
-      # code
-      md_block["interrupted"] = 1
-      md_blocks.append(md_block)
-      md_block = {'type': "code",
-                  'lines': [],
-                  }
-      if code_match.group(1):
-          md_block['language'] = code_match.group(1)
-      continue
-
-    # indentation insensitive types
-    markup_match = re.search(r'^[ ]*<\??(\w+)[^>]*([\/\?])?[ \t]*>', line)
-    li_match = re.search(r'^([ ]*)[*+-][ ](.*)', line)
-    quote_match = re.search(r'^[ ]*>[ ]?(.*)', line)
-    if re.search(r'^[ ]*<!DOCTYPE/', line):
-      md_blocks.append(md_block)
-      md_block = {'type'   : "markup",
-                  'text'   : deindented_line,
-                  'start'  : '<',
-                  'end'    : '>',
-                  'depth'  : 0,
-                  }
-
-    elif markup_match:
-      # markup, including <?xml version="1.0"?>
-      tag = markup_match.group(1)
-      is_self_closing = markup_match.group(2) is not None
-
-      # skip link markdown
-      # TODO(ensonic): consider adding more uri schemes (ftp, ...)
-      if re.search(r'https?', tag):
-        logging.info("skipping link '%s'", tag)
-      else:
-        # for TEXT_LEVEL_ELEMENTS, we want to keep them as-is in the paragraph
-        # instead of creation a markdown block.
-        scanning_for_end_of_text_level_tag = (
-            md_block["type"] == "paragraph" and
-            'start' in md_block and
-            'closed' not in md_block)
-        logging.info("markup found '%s', scanning %s ?", tag, scanning_for_end_of_text_level_tag)
-        if tag not in MD_TEXT_LEVEL_ELEMENTS and not scanning_for_end_of_text_level_tag:
-          md_blocks.append(md_block)
-
-          if is_self_closing:
-            logging.info("self-closing docbook '%s'", tag)
-            md_block = {'type': "self-closing tag",
-                        'text': deindented_line,
-                        }
-            is_self_closing = 0
-            continue
-
-          logging.info("new markup '%s'", tag)
-          md_block = {'type'   : "markup",
-                      'text'   : deindented_line,
-                      'start'  : '<' + tag + '>',
-                      'end'    : '</' + tag + '>',
-                      'depth'  : 0,
-                      }
-          if re.search(r'<\/%s>' % tag, deindented_line):
-            md_block["closed"] = 1
-
-          continue
-        else:
-          if tag in MD_TEXT_LEVEL_ELEMENTS:
-            logging.info("text level docbook '%s' in '%s' state", tag, md_block["type"])
-            # TODO(ensonic): handle nesting
-            if not scanning_for_end_of_text_level_tag:
-              if not re.search(r'<\/%s>' % tag, deindented_line):
-                logging.info("new text level markup '%s'", tag)
-                md_block["start"] = '<' + tag + '>'
-                md_block["end"] = '</' + tag + '>'
-                md_block.pop("closed", None)
-                logging.info("scanning for end of '%s'", tag)
+        if md_block["type"] == "heading":
+            # a heading is ended by any level less than or equal
+            if md_block["level"] == 1:
+                heading_match = re.search(r'^[#][ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$', line)
+                if re.search(r'^={4,}[ \t]*$', line):
+                    text = md_block["lines"].pop()
+                    md_block.pop("interrupted", None)
+                    md_blocks.append(md_block)
+                    md_block = {'type': "heading",
+                                'text': text,
+                                'lines': [],
+                                'level': 1,
+                                }
+                    continue
+                elif heading_match:
+                    md_block.pop("interrupted", None)
+                    md_blocks.append(md_block)
+                    md_block = {'type': "heading",
+                                'text': heading_match.group(1),
+                                'lines': [],
+                                'level': 1,
+                                }
+                    if heading_match.group(2):
+                        md_block['id'] = heading_match.group(2)
+                    continue
+                else:
+                    # push lines into the block until the end is reached
+                    md_block["lines"].append(line)
+                    continue
 
             else:
-              if md_block["end"] in deindented_line:
-                md_block["closed"] = 1
-                logging.info("found end of '%s'", tag)
-    elif li_match:
-      # li
-      md_blocks.append(md_block)
-      indentation = li_match.group(1)
-      md_block = {'type': "li",
-                  'ordered': 0,
-                  'indentation': indentation,
-                  'marker': "[*+-]",
-                  'first': 1,
-                  'last': 1,
-                  'lines': [re.sub(r'^[ ]{0,4}', '', li_match.group(2))],
-                  }
-      continue
-    elif quote_match:
-      md_blocks.append(md_block)
-      md_block = {'type': "quote",
-                  'lines': [quote_match.group(1)],
-                  }
-      continue
+                heading_match = re.search(r'^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$', line)
+                if re.search(r'^[=]{4,}[ \t]*$', line):
+                    text = md_block["lines"].pop()
+                    md_block.pop("interrupted", None)
+                    md_blocks.append(md_block)
+                    md_block = {'type': "heading",
+                                'text': text,
+                                'lines': [],
+                                'level': 1,
+                                }
+                    continue
+                elif re.search(r'^[-]{4,}[ \t]*$', line):
+                    text = md_block["lines"].pop()
+                    md_block.pop("interrupted", None)
+                    md_blocks.append(md_block)
+                    md_block = {'type': "heading",
+                                'text': text,
+                                'lines': [],
+                                'level': 2,
+                                }
+                    continue
+                elif heading_match:
+                    md_block.pop("interrupted", None)
+                    md_blocks.append(md_block)
+                    md_block = {'type': "heading",
+                                'text': heading_match.group(2),
+                                'lines': [],
+                                'level': len(heading_match.group(1))
+                                }
+                    if heading_match.group(3):
+                        md_block['id'] = heading_match.group(3)
+                    continue
+                else:
+                    # push lines into the block until the end is reached
+                    md_block["lines"].append(line)
+                    continue
+        elif md_block["type"] == "code":
+            end_of_code_match = re.search(r'^[ \t]*\]\|(.*)', line)
+            if end_of_code_match:
+                md_blocks.append(md_block)
+                md_block = {'type': "paragraph",
+                            'text': end_of_code_match.group(1),
+                            'lines': [],
+                            }
+            else:
+                md_block["lines"].append(line)
+            continue
 
-    # list item
-    list_item_match = re.search(r'^([ ]{0,4})\d+[.][ ]+(.*)', line)
-    if list_item_match:
-      md_blocks.append(md_block)
-      indentation = list_item_match.group(1)
-      md_block = {'type': "li",
-                  'ordered': 1,
-                  'indentation': indentation,
-                  'marker': "\\d+[.]",
-                  'first': 1,
-                  'last': 1,
-                  'lines': [re.sub(r'^[ ]{0,4}', '', list_item_match.group(2))],
-                  }
-      continue
+        if deindented_line == '':
+            logging.info('setting "interrupted" due to empty line')
+            md_block["interrupted"] = 1
+            continue
 
-    # paragraph
-    if md_block["type"] == "paragraph":
-      if "interrupted" in md_block:
-        md_blocks.append(md_block)
-        md_block = {'type': "paragraph",
-                    'text': line,
-                    }
-        logging.info("new paragraph due to interrupted")
-      else:
-        md_block["text"] += "\n" + line
-        logging.info("add to paragraph: '%s'", line)
+        if md_block["type"] == "quote":
+            if 'interrupted' not in md_block:
+                line = re.sub(r'^[ ]*>[ ]?', '', line)
+                md_block["lines"].append(line)
+                continue
 
-    else:
-      md_blocks.append(md_block)
-      md_block = {'type': "paragraph",
-                  'text': line,
-                  }
-      logging.info("new paragraph due to different block type")
+        elif md_block["type"] == "li":
+            marker = md_block["marker"]
+            marker_match = re.search(r'^([ ]{0,3})(%s)[ ](.*)' % marker, line)
+            if marker_match:
+                indentation = marker_match.group(1)
+                if md_block["indentation"] != indentation:
+                    md_block["lines"].append(line)
+                else:
+                    ordered = md_block["ordered"]
+                    md_block.pop('last', None)
+                    md_blocks.append(md_block)
+                    md_block = {'type': "li",
+                                'ordered': ordered,
+                                'indentation': indentation,
+                                'marker': marker,
+                                'last': 1,
+                                'lines': [re.sub(r'^[ ]{0,4}', '', marker_match.group(3))],
+                                }
+                continue
 
-  md_blocks.append(md_block)
-  md_blocks.pop(0)
+            if 'interrupted' in md_block:
+                if first_char == " ":
+                    md_block["lines"].append('')
+                    line = re.sub(r'^[ ]{0,4}', '', line)
+                    md_block["lines"].append(line)
+                    md_block.pop("interrupted", None)
+                    continue
+            else:
+                line = re.sub(r'^[ ]{0,4}', '', line)
+                md_block["lines"].append(line)
+                continue
 
-  return md_blocks
+        # indentation sensitive types
+        heading_match = re.search(r'^([#]{1,2})[ \t]+(.+?)[ \t]*[#]*[ \t]*(?:{#([^}]+)})?[ \t]*$', line)
+        code_match = re.search(r'^[ \t]*\|\[[ ]*(?:<!-- language="([^"]+?)" -->)?', line)
+        if heading_match:
+            # atx heading (#)
+            md_blocks.append(md_block)
+            md_block = {'type': "heading",
+                        'text': heading_match.group(2),
+                        'lines': [],
+                        'level': len(heading_match.group(1)),
+                        }
+            if heading_match.group(3):
+                md_block['id'] = heading_match.group(3)
+            continue
+        elif re.search(r'^={4,}[ \t]*$', line):
+            # setext heading (====)
+
+            if md_block["type"] == "paragraph" and "interrupted" in md_block:
+                md_blocks.append(md_block.copy())
+                md_block["type"] = "heading"
+                md_block["lines"] = []
+                md_block["level"] = 1
+            continue
+        elif re.search(r'^-{4,}[ \t]*$', line):
+            # setext heading (-----)
+
+            if md_block["type"] == "paragraph" and "interrupted" in md_block:
+                md_blocks.append(md_block.copy())
+                md_block["type"] = "heading"
+                md_block["lines"] = []
+                md_block["level"] = 2
+
+            continue
+        elif code_match:
+            # code
+            md_block["interrupted"] = 1
+            md_blocks.append(md_block)
+            md_block = {'type': "code",
+                        'lines': [],
+                        }
+            if code_match.group(1):
+                md_block['language'] = code_match.group(1)
+            continue
+
+        # indentation insensitive types
+        markup_match = re.search(r'^[ ]*<\??(\w+)[^>]*([\/\?])?[ \t]*>', line)
+        li_match = re.search(r'^([ ]*)[*+-][ ](.*)', line)
+        quote_match = re.search(r'^[ ]*>[ ]?(.*)', line)
+        if re.search(r'^[ ]*<!DOCTYPE/', line):
+            md_blocks.append(md_block)
+            md_block = {'type': "markup",
+                        'text': deindented_line,
+                        'start': '<',
+                        'end': '>',
+                        'depth': 0,
+                        }
+
+        elif markup_match:
+            # markup, including <?xml version="1.0"?>
+            tag = markup_match.group(1)
+            is_self_closing = markup_match.group(2) is not None
+
+            # skip link markdown
+            # TODO(ensonic): consider adding more uri schemes (ftp, ...)
+            if re.search(r'https?', tag):
+                logging.info("skipping link '%s'", tag)
+            else:
+                # for TEXT_LEVEL_ELEMENTS, we want to keep them as-is in the paragraph
+                # instead of creation a markdown block.
+                scanning_for_end_of_text_level_tag = (
+                    md_block["type"] == "paragraph" and
+                    'start' in md_block and
+                    'closed' not in md_block)
+                logging.info("markup found '%s', scanning %s ?", tag, scanning_for_end_of_text_level_tag)
+                if tag not in MD_TEXT_LEVEL_ELEMENTS and not scanning_for_end_of_text_level_tag:
+                    md_blocks.append(md_block)
+
+                    if is_self_closing:
+                        logging.info("self-closing docbook '%s'", tag)
+                        md_block = {'type': "self-closing tag",
+                                    'text': deindented_line,
+                                    }
+                        is_self_closing = 0
+                        continue
+
+                    logging.info("new markup '%s'", tag)
+                    md_block = {'type': "markup",
+                                'text': deindented_line,
+                                'start': '<' + tag + '>',
+                                'end': '</' + tag + '>',
+                                'depth': 0,
+                                }
+                    if re.search(r'<\/%s>' % tag, deindented_line):
+                        md_block["closed"] = 1
+
+                    continue
+                else:
+                    if tag in MD_TEXT_LEVEL_ELEMENTS:
+                        logging.info("text level docbook '%s' in '%s' state", tag, md_block["type"])
+                        # TODO(ensonic): handle nesting
+                        if not scanning_for_end_of_text_level_tag:
+                            if not re.search(r'<\/%s>' % tag, deindented_line):
+                                logging.info("new text level markup '%s'", tag)
+                                md_block["start"] = '<' + tag + '>'
+                                md_block["end"] = '</' + tag + '>'
+                                md_block.pop("closed", None)
+                                logging.info("scanning for end of '%s'", tag)
+
+                        else:
+                            if md_block["end"] in deindented_line:
+                                md_block["closed"] = 1
+                                logging.info("found end of '%s'", tag)
+        elif li_match:
+            # li
+            md_blocks.append(md_block)
+            indentation = li_match.group(1)
+            md_block = {'type': "li",
+                        'ordered': 0,
+                        'indentation': indentation,
+                        'marker': "[*+-]",
+                        'first': 1,
+                        'last': 1,
+                        'lines': [re.sub(r'^[ ]{0,4}', '', li_match.group(2))],
+                        }
+            continue
+        elif quote_match:
+            md_blocks.append(md_block)
+            md_block = {'type': "quote",
+                        'lines': [quote_match.group(1)],
+                        }
+            continue
+
+        # list item
+        list_item_match = re.search(r'^([ ]{0,4})\d+[.][ ]+(.*)', line)
+        if list_item_match:
+            md_blocks.append(md_block)
+            indentation = list_item_match.group(1)
+            md_block = {'type': "li",
+                        'ordered': 1,
+                        'indentation': indentation,
+                        'marker': "\\d+[.]",
+                        'first': 1,
+                        'last': 1,
+                        'lines': [re.sub(r'^[ ]{0,4}', '', list_item_match.group(2))],
+                        }
+            continue
+
+        # paragraph
+        if md_block["type"] == "paragraph":
+            if "interrupted" in md_block:
+                md_blocks.append(md_block)
+                md_block = {'type': "paragraph",
+                            'text': line,
+                            }
+                logging.info("new paragraph due to interrupted")
+            else:
+                md_block["text"] += "\n" + line
+                logging.info("add to paragraph: '%s'", line)
+
+        else:
+            md_blocks.append(md_block)
+            md_block = {'type': "paragraph",
+                        'text': line,
+                        }
+            logging.info("new paragraph due to different block type")
+
+    md_blocks.append(md_block)
+    md_blocks.pop(0)
+
+    return md_blocks
 
 
 def MarkDownParseSpanElementsInner(text, markersref):
-  markup = ''
-  markers = {i: 1 for i in markersref}
+    markup = ''
+    markers = {i: 1 for i in markersref}
 
-  while text != '':
-    closest_marker = ''
-    closest_marker_position = -1
-    text_marker = ''
-    offset = 0
-    markers_rest = []
+    while text != '':
+        closest_marker = ''
+        closest_marker_position = -1
+        text_marker = ''
+        offset = 0
+        markers_rest = []
 
-    for marker, use in markers.items():
-      if not use:
-        continue
+        for marker, use in markers.items():
+            if not use:
+                continue
 
-      marker_position = text.find(marker)
+            marker_position = text.find(marker)
 
-      if marker_position < 0:
-        markers[marker] = 0
-        continue
+            if marker_position < 0:
+                markers[marker] = 0
+                continue
 
-      if closest_marker == '' or marker_position < closest_marker_position:
-        closest_marker = marker
-        closest_marker_position = marker_position
+            if closest_marker == '' or marker_position < closest_marker_position:
+                closest_marker = marker
+                closest_marker_position = marker_position
 
-    if closest_marker_position >= 0:
-      text_marker = text[closest_marker_position:]
+        if closest_marker_position >= 0:
+            text_marker = text[closest_marker_position:]
 
-    if text_marker == '':
-      markup += text
-      text = ''
-      continue
+        if text_marker == '':
+            markup += text
+            text = ''
+            continue
 
-    markup += text[:closest_marker_position]
-    text = text[closest_marker_position:]
-    markers_rest = {k: v for k, v in markers.items() if v and k != closest_marker}
+        markup += text[:closest_marker_position]
+        text = text[closest_marker_position:]
+        markers_rest = {k: v for k, v in markers.items() if v and k != closest_marker}
 
-    if closest_marker == '![' or closest_marker == '[':
-      element = None
+        if closest_marker == '![' or closest_marker == '[':
+            element = None
 
-      ## FIXME: '(?R)' is a recursive subpattern
-      # match a [...] block with no ][ inside or this thing again
-      # m = re.search(r'\[((?:[^][]|(?R))*)\]', text)
-      m = re.search(r'\[((?:[^][])*)\]', text)
-      if ']' in text and m:
-        element = {'!': text[0] == '!',
-                   'a': m.group(1),
-                   }
+            # FIXME: '(?R)' is a recursive subpattern
+            # match a [...] block with no ][ inside or this thing again
+            # m = re.search(r'\[((?:[^][]|(?R))*)\]', text)
+            m = re.search(r'\[((?:[^][])*)\]', text)
+            if ']' in text and m:
+                element = {'!': text[0] == '!',
+                           'a': m.group(1),
+                           }
 
-        offset = len(m.group(0))
-        if element['!']:
-          offset += 1
-        logging.debug("Recursive md-expr match: off=%d, text='%s', match='%s'", offset, text, m.group(1))
+                offset = len(m.group(0))
+                if element['!']:
+                    offset += 1
+                logging.debug("Recursive md-expr match: off=%d, text='%s', match='%s'", offset, text, m.group(1))
 
-        remaining_text = text[offset:]
-        m2 = re.search(r'''^\([ ]*([^)'"]*?)(?:[ ]+['"](.+?)['"])?[ ]*\)''', remaining_text)
-        m3 = re.search(r'^\s*\[([^\]<]*?)\]', remaining_text)
-        if m2:
-          element['»'] = m2.group(1)
-          if m2.group(2):
-            element['#'] = m2.group(2)
-          offset += len(m2.group(0))
-        elif m3:
-          element['ref'] = m3.group(1)
-          offset += len(m3.group(0))
-        else:
-          element = None
+                remaining_text = text[offset:]
+                m2 = re.search(r'''^\([ ]*([^)'"]*?)(?:[ ]+['"](.+?)['"])?[ ]*\)''', remaining_text)
+                m3 = re.search(r'^\s*\[([^\]<]*?)\]', remaining_text)
+                if m2:
+                    element['»'] = m2.group(1)
+                    if m2.group(2):
+                        element['#'] = m2.group(2)
+                    offset += len(m2.group(0))
+                elif m3:
+                    element['ref'] = m3.group(1)
+                    offset += len(m3.group(0))
+                else:
+                    element = None
 
-      if element:
-        if '»' in element:
-          element['»'] = element['»'].replace('&', '&amp;').replace('<', '&lt;')
+            if element:
+                if '»' in element:
+                    element['»'] = element['»'].replace('&', '&amp;').replace('<', '&lt;')
 
-        if element['!']:
-          markup += '<inlinemediaobject><imageobject><imagedata fileref="' + element['»'] + '"></imagedata></imageobject>'
+                if element['!']:
+                    markup += '<inlinemediaobject><imageobject><imagedata fileref="' + \
+                        element['»'] + '"></imagedata></imageobject>'
 
-          if 'a' in element:
-            markup += "<textobject><phrase>" + element['a'] + "</phrase></textobject>"
+                    if 'a' in element:
+                        markup += "<textobject><phrase>" + element['a'] + "</phrase></textobject>"
 
-            markup += "</inlinemediaobject>"
-        elif 'ref' in element:
-          element['a'] = MarkDownParseSpanElementsInner(element['a'], markers_rest)
-          markup += '<link linkend="' + element['ref'] + '"'
+                        markup += "</inlinemediaobject>"
+                elif 'ref' in element:
+                    element['a'] = MarkDownParseSpanElementsInner(element['a'], markers_rest)
+                    markup += '<link linkend="' + element['ref'] + '"'
 
-          if '#' in element:
-            # title attribute not supported
-            pass
+                    if '#' in element:
+                        # title attribute not supported
+                        pass
 
-          markup += '>' + element['a'] + "</link>"
-        else:
-          element['a'] = MarkDownParseSpanElementsInner(element['a'], markers_rest)
-          markup += '<ulink url="' + element['»'] + '"'
+                    markup += '>' + element['a'] + "</link>"
+                else:
+                    element['a'] = MarkDownParseSpanElementsInner(element['a'], markers_rest)
+                    markup += '<ulink url="' + element['»'] + '"'
 
-          if '#' in element:
-            # title attribute not supported
-            pass
+                    if '#' in element:
+                        # title attribute not supported
+                        pass
 
-          markup += '>' + element['a'] + "</ulink>"
+                    markup += '>' + element['a'] + "</ulink>"
 
-      else:
-        markup += closest_marker
-        if closest_marker == '![':
-          offset = 2
-        else:
-          offset = 1
+            else:
+                markup += closest_marker
+                if closest_marker == '![':
+                    offset = 2
+                else:
+                    offset = 1
 
-    elif closest_marker == '<':
-      m4 = re.search(r'^<(https?:[\/]{2}[^\s]+?)>', text, flags=re.I)
-      m5 = re.search(r'^<([A-Za-z0-9._-]+?@[A-Za-z0-9._-]+?)>', text)
-      m6 = re.search(r'^<[^>]+?>', text)
-      if m4:
-        element_url = m4.group(1).replace('&', '&amp;').replace('<', '&lt;')
+        elif closest_marker == '<':
+            m4 = re.search(r'^<(https?:[\/]{2}[^\s]+?)>', text, flags=re.I)
+            m5 = re.search(r'^<([A-Za-z0-9._-]+?@[A-Za-z0-9._-]+?)>', text)
+            m6 = re.search(r'^<[^>]+?>', text)
+            if m4:
+                element_url = m4.group(1).replace('&', '&amp;').replace('<', '&lt;')
 
-        markup += '<ulink url="' + element_url + '">' + element_url + '</ulink>'
-        offset = len(m4.group(0))
-      elif m5:
-        markup += "<ulink url=\"mailto:" + m5.group(1) + "\">" + m5.group(1) + "</ulink>"
-        offset = len(m5.group(0))
-      elif m6:
-        markup += m6.group(0)
-        offset = len(m6.group(0))
-      else:
-        markup += "&lt;"
-        offset = 1
+                markup += '<ulink url="' + element_url + '">' + element_url + '</ulink>'
+                offset = len(m4.group(0))
+            elif m5:
+                markup += "<ulink url=\"mailto:" + m5.group(1) + "\">" + m5.group(1) + "</ulink>"
+                offset = len(m5.group(0))
+            elif m6:
+                markup += m6.group(0)
+                offset = len(m6.group(0))
+            else:
+                markup += "&lt;"
+                offset = 1
 
-    elif closest_marker == "\\":
-      special_char = ''
-      if len(text) > 1:
-          special_char = text[1]
-      if special_char in MD_ESCAPABLE_CHARS or special_char in MD_GTK_ESCAPABLE_CHARS:
-        markup += special_char
-        offset = 2
-      else:
-        markup += "\\"
-        offset = 1
+        elif closest_marker == "\\":
+            special_char = ''
+            if len(text) > 1:
+                special_char = text[1]
+            if special_char in MD_ESCAPABLE_CHARS or special_char in MD_GTK_ESCAPABLE_CHARS:
+                markup += special_char
+                offset = 2
+            else:
+                markup += "\\"
+                offset = 1
 
-    elif closest_marker == "`":
-      m7 = re.search(r'^(`+)([^`]+?)\1(?!`)', text)
-      if m7:
-        element_text = m7.group(2)
-        markup += "<literal>" + element_text + "</literal>"
-        offset = len(m7.group(0))
-      else:
-        markup += "`"
-        offset = 1
+        elif closest_marker == "`":
+            m7 = re.search(r'^(`+)([^`]+?)\1(?!`)', text)
+            if m7:
+                element_text = m7.group(2)
+                markup += "<literal>" + element_text + "</literal>"
+                offset = len(m7.group(0))
+            else:
+                markup += "`"
+                offset = 1
 
-    elif closest_marker == "@":
-      # Convert '@param()'
-      # FIXME: we could make those also links ($symbol.$2), but that would be less
-      # useful as the link target is a few lines up or down
-      m7 = re.search(r'^(\A|[^\\])\@(\w+((\.|->)\w+)*)\s*\(\)', text)
-      m8 = re.search(r'^(\A|[^\\])\@(\w+((\.|->)\w+)*)', text)
-      m9 = re.search(r'^\\\@', text)
-      if m7:
-        markup += m7.group(1) + "<parameter>" + m7.group(2) + "()</parameter>\n"
-        offset = len(m7.group(0))
-      elif m8:
-        # Convert '@param', but not '\@param'.
-        markup += m8.group(1) + "<parameter>" + m8.group(2) + "</parameter>\n"
-        offset = len(m8.group(0))
-      elif m9:
-        markup += r"\@"
-        offset = len(m9.group(0))
-      else:
-        markup += "@"
-        offset = 1
+        elif closest_marker == "@":
+            # Convert '@param()'
+            # FIXME: we could make those also links ($symbol.$2), but that would be less
+            # useful as the link target is a few lines up or down
+            m7 = re.search(r'^(\A|[^\\])\@(\w+((\.|->)\w+)*)\s*\(\)', text)
+            m8 = re.search(r'^(\A|[^\\])\@(\w+((\.|->)\w+)*)', text)
+            m9 = re.search(r'^\\\@', text)
+            if m7:
+                markup += m7.group(1) + "<parameter>" + m7.group(2) + "()</parameter>\n"
+                offset = len(m7.group(0))
+            elif m8:
+                # Convert '@param', but not '\@param'.
+                markup += m8.group(1) + "<parameter>" + m8.group(2) + "</parameter>\n"
+                offset = len(m8.group(0))
+            elif m9:
+                markup += r"\@"
+                offset = len(m9.group(0))
+            else:
+                markup += "@"
+                offset = 1
 
-    elif closest_marker == '#':
-      m10 = re.search(r'^(\A|[^\\])#([\w\-:\.]+[\w]+)\s*\(\)', text)
-      m11 = re.search(r'^(\A|[^\\])#([\w\-:\.]+[\w]+)', text)
-      m12 = re.search(r'^\\#', text)
-      if m10:
-        # handle #Object.func()
-        markup += m10.group(1) + MakeXRef(m10.group(2), tagify(m10.group(2) + "()", "function"))
-        offset = len(m10.group(0))
-      elif m11:
-        # Convert '#symbol', but not '\#symbol'.
-        markup += m11.group(1) + MakeHashXRef(m11.group(2), "type")
-        offset = len(m11.group(0))
-      elif m12:
-        markup += '#'
-        offset = len(m12.group(0))
-      else:
-        markup += '#'
-        offset = 1
+        elif closest_marker == '#':
+            m10 = re.search(r'^(\A|[^\\])#([\w\-:\.]+[\w]+)\s*\(\)', text)
+            m11 = re.search(r'^(\A|[^\\])#([\w\-:\.]+[\w]+)', text)
+            m12 = re.search(r'^\\#', text)
+            if m10:
+                # handle #Object.func()
+                markup += m10.group(1) + MakeXRef(m10.group(2), tagify(m10.group(2) + "()", "function"))
+                offset = len(m10.group(0))
+            elif m11:
+                # Convert '#symbol', but not '\#symbol'.
+                markup += m11.group(1) + MakeHashXRef(m11.group(2), "type")
+                offset = len(m11.group(0))
+            elif m12:
+                markup += '#'
+                offset = len(m12.group(0))
+            else:
+                markup += '#'
+                offset = 1
 
-    elif closest_marker == "%":
-      m12 = re.search(r'^(\A|[^\\])\%(-?\w+)', text)
-      m13 = re.search(r'^\\%', text)
-      if m12:
-        # Convert '%constant', but not '\%constant'.
-        # Also allow negative numbers, e.g. %-1.
-        markup += m12.group(1) + MakeXRef(m12.group(2), tagify(m12.group(2), "literal"))
-        offset = len(m12.group(0))
-      elif m13:
-        markup += r"\%"
-        offset = len(m13.group(0))
-      else:
-        markup += "%"
-        offset = 1
+        elif closest_marker == "%":
+            m12 = re.search(r'^(\A|[^\\])\%(-?\w+)', text)
+            m13 = re.search(r'^\\%', text)
+            if m12:
+                # Convert '%constant', but not '\%constant'.
+                # Also allow negative numbers, e.g. %-1.
+                markup += m12.group(1) + MakeXRef(m12.group(2), tagify(m12.group(2), "literal"))
+                offset = len(m12.group(0))
+            elif m13:
+                markup += r"\%"
+                offset = len(m13.group(0))
+            else:
+                markup += "%"
+                offset = 1
 
-    if offset > 0:
-      text = text[offset:]
+        if offset > 0:
+            text = text[offset:]
 
-  return markup
+    return markup
 
 
 def MarkDownParseSpanElements(text):
@@ -4853,7 +4889,7 @@ def ReplaceEntities(text, symbol):
                 ["&apos;", "'"],
                 ["&nbsp;", ' '],
                 ["&amp;", '&'],  # Do this last, or the others get messed up.
-               ]
+                ]
 
     # Expand entities in <programlisting> even inside CDATA since
     # we changed the definition of |[ to add CDATA
@@ -4863,86 +4899,86 @@ def ReplaceEntities(text, symbol):
 
 
 def MarkDownOutputDocBook(blocksref, symbol, context):
-  output = ''
-  blocks = blocksref
+    output = ''
+    blocks = blocksref
 
-  for block in blocks:
+    for block in blocks:
     #$output += "\n<!-- beg type='" . $block->{"type"} . "'-->\n"
 
-    if block["type"] == "paragraph":
-      text = MarkDownParseSpanElements(block["text"])
-      if context == "li" and output == '':
-        if 'interrupted' in block:
-          output += "\n<para>%s</para>\n" % text
+        if block["type"] == "paragraph":
+            text = MarkDownParseSpanElements(block["text"])
+            if context == "li" and output == '':
+                if 'interrupted' in block:
+                    output += "\n<para>%s</para>\n" % text
+                else:
+                    output += "<para>%s</para>" % text
+                    if len(blocks) > 1:
+                        output += "\n"
+            else:
+                output += "<para>%s</para>\n" % text
+
+        elif block["type"] == "heading":
+
+            title = MarkDownParseSpanElements(block["text"])
+
+            if block["level"] == 1:
+                tag = "refsect2"
+            else:
+                tag = "refsect3"
+
+            text = MarkDownParseLines(block["lines"], symbol, "heading")
+            if 'id' in block:
+                output += "<%s id=\"%s\">" % (tag, block["id"])
+            else:
+                output += "<%s>" % tag
+
+            output += "<title>%s</title>%s</%s>\n" % (title, text, tag)
+        elif block["type"] == "li":
+            tag = "itemizedlist"
+
+            if "first" in block:
+                if block["ordered"]:
+                    tag = "orderedlist"
+                output += "<%s>\n" % tag
+
+            if "interrupted" in block:
+                block["lines"].append('')
+
+            text = MarkDownParseLines(block["lines"], symbol, "li")
+            output += "<listitem>" + text + "</listitem>\n"
+            if 'last' in block:
+                if block["ordered"]:
+                    tag = "orderedlist"
+                output += "</%s>\n" % tag
+
+        elif block["type"] == "quote":
+            text = MarkDownParseLines(block["lines"], symbol, "quote")
+            output += "<blockquote>\n%s</blockquote>\n" % text
+        elif block["type"] == "code":
+            tag = "programlisting"
+
+            if "language" in block:
+                if block["language"] == "plain":
+                    output += "<informalexample><screen><![CDATA[\n"
+                    tag = "screen"
+                else:
+                    output += "<informalexample><programlisting language=\"%s\"><![CDATA[\n" % block['language']
+            else:
+                output += "<informalexample><programlisting><![CDATA[\n"
+
+            logging.debug('listing for %s: [%s]', symbol, '\n'.join(block['lines']))
+            for line in block["lines"]:
+                output += ReplaceEntities(line, symbol) + "\n"
+
+            output += "]]></%s></informalexample>\n" % tag
+        elif block["type"] == "markup":
+            text = ExpandAbbreviations(symbol, block["text"])
+            output += text + "\n"
         else:
-          output += "<para>%s</para>" % text
-          if len(blocks) > 1:
-            output += "\n"
-      else:
-        output += "<para>%s</para>\n" % text
+            output += block["text"] + "\n"
 
-    elif block["type"] == "heading":
-
-      title = MarkDownParseSpanElements(block["text"])
-
-      if block["level"] == 1:
-        tag = "refsect2"
-      else:
-        tag = "refsect3"
-
-      text = MarkDownParseLines(block["lines"], symbol, "heading")
-      if 'id' in block:
-        output += "<%s id=\"%s\">" % (tag, block["id"])
-      else:
-        output += "<%s>" % tag
-
-      output += "<title>%s</title>%s</%s>\n" % (title, text, tag)
-    elif block["type"] == "li":
-      tag = "itemizedlist"
-
-      if "first" in block:
-        if block["ordered"]:
-          tag = "orderedlist"
-        output += "<%s>\n" % tag
-
-      if "interrupted" in block:
-        block["lines"].append('')
-
-      text = MarkDownParseLines(block["lines"], symbol, "li")
-      output += "<listitem>" + text + "</listitem>\n"
-      if 'last' in block:
-        if block["ordered"]:
-          tag = "orderedlist"
-        output += "</%s>\n" % tag
-
-    elif block["type"] == "quote":
-      text = MarkDownParseLines(block["lines"], symbol, "quote")
-      output += "<blockquote>\n%s</blockquote>\n" % text
-    elif block["type"] == "code":
-      tag = "programlisting"
-
-      if "language" in block:
-        if block["language"] == "plain":
-          output += "<informalexample><screen><![CDATA[\n"
-          tag = "screen"
-        else:
-          output += "<informalexample><programlisting language=\"%s\"><![CDATA[\n" % block['language']
-      else:
-        output += "<informalexample><programlisting><![CDATA[\n"
-
-      logging.debug('listing for %s: [%s]', symbol, '\n'.join(block['lines']))
-      for line in block["lines"]:
-        output += ReplaceEntities(line, symbol) + "\n"
-
-      output += "]]></%s></informalexample>\n" % tag
-    elif block["type"] == "markup":
-      text = ExpandAbbreviations(symbol, block["text"])
-      output += text + "\n"
-    else:
-      output += block["text"] + "\n"
-
-    #$output += "\n<!-- end type='" . $block->{"type"} . "'-->\n"
-  return output
+        #$output += "\n<!-- end type='" . $block->{"type"} . "'-->\n"
+    return output
 
 
 def MarkDownParseLines(lines, symbol, context):
@@ -4956,7 +4992,7 @@ def MarkDownParse(text, symbol):
     return MarkDownParseLines(text.splitlines(), symbol, '')
 
 
-#############################################################################
+#
 # Function    : ReadDeclarationsFile
 # Description : This reads in a file containing the function/macro/enum etc.
 #                declarations.
@@ -4977,7 +5013,7 @@ def MarkDownParse(text, symbol):
 # Arguments   : $file - the declarations file to read
 #                $override - if declarations in this file should override
 #                        any current declaration.
-#############################################################################
+#
 
 def ReadDeclarationsFile(ifile, override):
 
@@ -5049,7 +5085,8 @@ def ReadDeclarationsFile(ifile, override):
                                 # Ignore an empty or forward declaration.
                                 pass
                             else:
-                                common.LogWarning(ifile, line_number, "Structure %s has multiple definitions." % declaration_name)
+                                common.LogWarning(
+                                    ifile, line_number, "Structure %s has multiple definitions." % declaration_name)
 
                         else:
                             # set flag in %DeclarationConditional hash for
@@ -5074,7 +5111,7 @@ def ReadDeclarationsFile(ifile, override):
     INPUT.close()
 
 
-#############################################################################
+#
 # Function    : ReadSignalsFile
 # Description : This reads in an existing file which contains information on
 #                all GTK signals. It creates the arrays @SignalNames and
@@ -5085,7 +5122,7 @@ def ReadDeclarationsFile(ifile, override):
 #                so is not included.
 # Arguments   : $file - the file containing the signal handler prototype
 #                        information.
-#############################################################################
+#
 
 def ReadSignalsFile(ifile):
 
@@ -5138,7 +5175,8 @@ def ReadSignalsFile(ifile):
             elif m3:
                 signal_flags = m3.group(1)
             elif re.search(r'^</SIGNAL>', line):
-                logging.info("Found end of signal: %s::%s\nReturns: %s\n%s", signal_object, signal_name, signal_returns, signal_prototype)
+                logging.info("Found end of signal: %s::%s\nReturns: %s\n%s",
+                             signal_object, signal_name, signal_returns, signal_prototype)
                 SignalObjects.append(signal_object)
                 SignalNames.append(signal_name)
                 SignalReturns.append(signal_returns)
@@ -5150,7 +5188,7 @@ def ReadSignalsFile(ifile):
     INPUT.close()
 
 
-#############################################################################
+#
 # Function    : ReadObjectHierarchy
 # Description : This reads in the $MODULE-hierarchy.txt file containing all
 #               the GtkObject subclasses described in this module (and their
@@ -5162,7 +5200,7 @@ def ReadSignalsFile(ifile):
 #               This also generates tree_index.sgml as it goes along.
 #
 # Arguments   : none
-#############################################################################
+#
 
 def ReadObjectHierarchy():
 
@@ -5211,8 +5249,8 @@ def ReadObjectHierarchy():
                 Objects.append(gobject)
                 ObjectLevels.append(level)
                 ObjectRoots[gobject] = root
-        #else
-        #    common.LogWarning($OBJECT_TREE_FILE, line_number, "unknown type $object")
+        # else
+        #    common.LogWarning(OBJECT_TREE_FILE, line_number, "unknown type %s" % object)
         #
 
     INPUT.close()
@@ -5233,12 +5271,12 @@ def ReadObjectHierarchy():
     OutputObjectList()
 
 
-#############################################################################
+#
 # Function    : ReadInterfaces
 # Description : This reads in the $MODULE.interfaces file.
 #
 # Arguments   : none
-#############################################################################
+#
 
 def ReadInterfaces():
     global Interfaces
@@ -5269,12 +5307,12 @@ def ReadInterfaces():
     INPUT.close()
 
 
-#############################################################################
+#
 # Function    : ReadPrerequisites
 # Description : This reads in the $MODULE.prerequisites file.
 #
 # Arguments   : none
-#############################################################################
+#
 
 def ReadPrerequisites():
     global Prerequisites
@@ -5302,14 +5340,14 @@ def ReadPrerequisites():
     INPUT.close()
 
 
-#############################################################################
+#
 # Function    : ReadArgsFile
 # Description : This reads in an existing file which contains information on
 #                all GTK args. It creates the arrays @ArgObjects, @ArgNames,
 #                @ArgTypes, @ArgFlags, @ArgNicks and @ArgBlurbs containing info
 #               on the args.
 # Arguments   : $file - the file containing the arg information.
-#############################################################################
+#
 
 def ReadArgsFile(ifile):
     in_arg = False
@@ -5382,7 +5420,8 @@ def ReadArgsFile(ifile):
                 arg_blurb = m6.group(1)
                 if arg_blurb == "(null)":
                     arg_blurb = ''
-                    common.LogWarning(ifile, line_number, "Property %s:%s has no documentation." % (arg_object, arg_name))
+                    common.LogWarning(
+                        ifile, line_number, "Property %s:%s has no documentation." % (arg_object, arg_name))
 
             elif m7:
                 arg_default = m7.group(1)
@@ -5401,12 +5440,12 @@ def ReadArgsFile(ifile):
     INPUT.close()
 
 
-#############################################################################
+#
 # Function    : AddTreeLineArt
 # Description : Add unicode lineart to a pre-indented string array and returns
 #               it as as multiline string.
 # Arguments   : @tree - array of indented strings.
-#############################################################################
+#
 
 def AddTreeLineArt(tree):
     # iterate bottom up over the tree
@@ -5416,15 +5455,15 @@ def AddTreeLineArt(tree):
         indent = len(m.group(1))
         # replace with ╰───, if place of ╰ is not space insert ├
         if indent > 4:
-            if tree[i][indent-4] == " ":
-                tree[i] = tree[i][:indent-4] + "--- " + tree[i][indent:]
+            if tree[i][indent - 4] == " ":
+                tree[i] = tree[i][:indent - 4] + "--- " + tree[i][indent:]
             else:
-                tree[i] = tree[i][:indent-4] + "+-- " + tree[i][indent:]
+                tree[i] = tree[i][:indent - 4] + "+-- " + tree[i][indent:]
 
             # go lines up while space and insert |
             j = i - 1
-            while j >= 0 and tree[j][indent-4] == ' ':
-                tree[j] = tree[j][:indent-4] + '|' + tree[j][indent-3:]
+            while j >= 0 and tree[j][indent - 4] == ' ':
+                tree[j] = tree[j][:indent - 4] + '|' + tree[j][indent - 3:]
                 j -= 1
 
     res = "\n".join(tree)
@@ -5438,14 +5477,14 @@ def AddTreeLineArt(tree):
     return res
 
 
-#############################################################################
+#
 # Function    : CheckIsObject
 # Description : Returns 1 if the given name is a GObject or a subclass.
 #                It uses the global @Objects array.
 #                Note that the @Objects array only contains classes in the
 #                current module and their ancestors - not all GObject classes.
 # Arguments   : $name - the name to check.
-#############################################################################
+#
 
 def CheckIsObject(name):
     root = ObjectRoots.get(name)
@@ -5454,31 +5493,31 @@ def CheckIsObject(name):
     return root and root != 'GEnum' and root != 'GFlags'
 
 
-#############################################################################
+#
 # Function    : MakeReturnField
 # Description : Pads a string to $RETURN_TYPE_FIELD_WIDTH.
 # Arguments   : $str - the string to pad.
-#############################################################################
+#
 
 def MakeReturnField(s):
     return s + (' ' * (RETURN_TYPE_FIELD_WIDTH - len(s)))
 
 
-#############################################################################
+#
 # Function    : GetSymbolSourceFile
 # Description : Get the filename where the symbol docs where taken from.
 # Arguments   : $symbol - the symbol name
-#############################################################################
+#
 
 def GetSymbolSourceFile(symbol):
     return SourceSymbolSourceFile.get(symbol, '')
 
 
-#############################################################################
+#
 # Function    : GetSymbolSourceLine
 # Description : Get the file line where the symbol docs where taken from.
 # Arguments   : $symbol - the symbol name
-#############################################################################
+#
 
 def GetSymbolSourceLine(symbol):
     return SourceSymbolSourceLine.get(symbol, 0)
