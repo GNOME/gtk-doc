@@ -20,10 +20,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-#
-# Script      : gtkdoc-mkdb
-# Description : This creates the DocBook files from the source comments.
-#
+"""
+Creates the DocBook files from the source comments.
+"""
 
 from __future__ import print_function
 
@@ -436,24 +435,18 @@ def Run(options):
 
         logging.info('namespace prefix ="%s"', NAME_SPACE)
 
-        OutputIndexFull()
-        OutputDeprecatedIndex()
+        OutputIndex("api-index-full", IndexEntriesFull)
+        OutputIndex("api-index-deprecated", IndexEntriesDeprecated)
         OutputSinceIndexes()
         OutputAnnotationGlossary()
 
         open(os.path.join(ROOT_DIR, 'sgml.stamp'), 'w').write('timestamp')
 
 
-#
-# Function    : OutputObjectList
-# Description : This outputs the alphabetical list of objects, in a columned
-#                table.
-#               FIXME: Currently this also outputs ancestor objects
-#                which may not actually be in this module.
-# Arguments   : none
-#
-
 def OutputObjectList():
+    """This outputs the alphabetical list of objects, in a columned table."""
+    # FIXME: Currently this also outputs ancestor objects which may not actually
+    # be in this module.
     cols = 3
 
     # FIXME: use .xml
@@ -496,32 +489,29 @@ def OutputObjectList():
     common.UpdateFileIfChanged(old_object_index, new_object_index, 0)
 
 
-#
-# Function    : TrimTextBlock
-# Description : Trims extra whitespace. Empty lines inside a block are
-#                preserved.
-# Arguments   : $desc - the text block to trim. May contain newlines.
-#
-
 def TrimTextBlock(desc):
-    # strip leading spaces on the block
-    desc = re.sub(r'^\s+', '', desc)
+    """Trims extra whitespace.
+
+    Empty lines inside a block are preserved.
+    Args:
+        desc (str): the text block to trim. May contain newlines.
+    """
+
     # strip trailing spaces on every line
-    desc = re.sub(r'\s+$', '\n', desc, flags=re.MULTILINE)
+    return re.sub(r'\s+$', '\n', desc.lstrip(), flags=re.MULTILINE)
 
-    return desc
-
-
-#
-# Function    : OutputDB
-# Description : This collects the output for each section of the docs, and
-#                outputs each file when the end of the section is found.
-# Arguments   : $file - the $MODULE-sections.txt file which contains all of
-#                the functions/macros/structs etc. being documented, organised
-#                into sections and subsections.
-#
 
 def OutputDB(file):
+    """Generate docbook files.
+
+    This collects the output for each section of the docs, and outputs each file
+    when the end of the section is found.
+
+    Args:
+        file (str): the $MODULE-sections.txt file which contains all of the
+                    functions/macros/structs etc. being documented, organised
+                    into sections and subsections.
+    """
 
     logging.info("Reading: %s", file)
     INPUT = open(file)
@@ -954,13 +944,13 @@ def OutputDB(file):
     return changed
 
 
-#
-# Function    : OutputIndex
-# Description : This writes an indexlist that can be included into the main-
-#               document into an <index> tag.
-#
-
 def OutputIndex(basename, apiindex):
+    """Writes an index that can be included into the main-document into an <index> tag.
+
+    Args:
+        basename (str): name of the index file without extension
+        apiindex (dict): the index data
+    """
     old_index = os.path.join(DB_OUTPUT_DIR, basename + '.xml')
     new_index = os.path.join(DB_OUTPUT_DIR, basename + '.new')
     lastletter = " "
@@ -1064,58 +1054,27 @@ def OutputIndex(basename, apiindex):
     common.UpdateFileIfChanged(old_index, new_index, 0)
 
 
-#
-# Function    : OutputIndexFull
-# Description : This writes the full api indexlist that can be included into the
-#               main document into an <index> tag.
-#
-
-def OutputIndexFull():
-    OutputIndex("api-index-full", IndexEntriesFull)
-
-
-#
-# Function    : OutputDeprecatedIndex
-# Description : This writes the deprecated api indexlist that can be included
-#               into the main document into an <index> tag.
-#
-
-def OutputDeprecatedIndex():
-    OutputIndex("api-index-deprecated", IndexEntriesDeprecated)
-
-
-#
-# Function    : OutputSinceIndexes
-# Description : This writes the 'since' api indexlists that can be included into
-#               the main document into an <index> tag.
-#
-
 def OutputSinceIndexes():
-    sinces = set(Since.values())
-
-    for version in sinces:
+    """Generate the 'since' api index files."""
+    for version in set(Since.values()):
         logging.info("Since : [%s]", version)
         index = {x: IndexEntriesSince[x] for x in IndexEntriesSince.keys() if Since[x] == version}
-
         OutputIndex("api-index-" + version, index)
 
 
-#
-# Function    : OutputAnnotationGlossary
-# Description : This writes a glossary of the used annotation terms into a
-#               separate glossary file that can be included into the main
-#               document.
-#
-
 def OutputAnnotationGlossary():
+    """Writes a glossary of the used annotation terms.
+
+    The glossary file can be included into the main document.
+    """
+    # if there are no annotations used return
+    if not AnnotationsUsed:
+        return
+
     old_glossary = os.path.join(DB_OUTPUT_DIR, "annotation-glossary.xml")
     new_glossary = os.path.join(DB_OUTPUT_DIR, "annotation-glossary.new")
     lastletter = " "
     divopen = False
-
-    # if there are no annotations used return
-    if not AnnotationsUsed:
-        return
 
     # add acronyms that are referenced from acronym text
     rerun = True
@@ -1168,22 +1127,17 @@ def OutputAnnotationGlossary():
     common.UpdateFileIfChanged(old_glossary, new_glossary, 0)
 
 
-#
-# Function    : ReadKnownSymbols
-# Description : This collects the names of non-private symbols from the
-#               $MODULE-sections.txt file.
-# Arguments   : $file - the $MODULE-sections.txt file which contains all of
-#                the functions/macros/structs etc. being documented, organised
-#                into sections and subsections.
-#
-
 def ReadKnownSymbols(file):
+    """Collect the names of non-private symbols from the $MODULE-sections.txt file.
+
+    Args:
+        file: the $MODULE-sections.txt file
+    """
 
     subsection = ''
 
     logging.info("Reading: %s", file)
     INPUT = open(file)
-
     for line in INPUT:
         if line.startswith('#'):
             continue
@@ -1227,15 +1181,17 @@ def ReadKnownSymbols(file):
     INPUT.close()
 
 
-#
-# Function    : OutputDeclaration
-# Description : Returns the synopsis and detailed description DocBook
-#                describing one function/macro etc.
-# Arguments   : $symbol - the name of the function/macro begin described.
-#                $declaration - the declaration of the function/macro.
-#
-
 def OutputDeclaration(symbol, declaration):
+    """Returns the formatted documentation block for a symbol.
+
+    Args:
+        symbol (str): the name of the function/macro/...
+        declaration (str): the declaration of the function/macro.
+
+    Returns:
+        str: the formatted documentation
+    """
+
     dtype = DeclarationTypes[symbol]
     if dtype == 'MACRO':
         return OutputMacro(symbol, declaration)
@@ -1257,13 +1213,16 @@ def OutputDeclaration(symbol, declaration):
         sys.exit("Unknown symbol type " + dtype)
 
 
-#
-# Function    : OutputSymbolTraits
-# Description : Returns the Since and StabilityLevel paragraphs for a symbol.
-# Arguments   : $symbol - the name of the function/macro begin described.
-#
-
 def OutputSymbolTraits(symbol):
+    """Returns the Since and StabilityLevel paragraphs for a symbol.
+
+    Args:
+        symbol (str): the name to describe
+
+    Returns:
+        str: paragraph or empty string
+    """
+
     desc = ''
 
     if symbol in Since:
@@ -1277,30 +1236,28 @@ def OutputSymbolTraits(symbol):
     return desc
 
 
-#
-# Function    : Output{Symbol,Section}ExtraLinks
-# Description : Returns extralinks for the symbol (if enabled).
-# Arguments   : $symbol - the name of the function/macro begin described.
-#
-
 def uri_escape(text):
     if text is None:
         return None
 
     # Build a char to hex map
-    escapes = {}
-    for i in range(256):
-        escapes[chr(i)] = "%%%02X" % i
+    escapes = {chr(i): ("%%%02X" % i) for i in range(256)}
 
     # Default unsafe characters.  RFC 2732 ^(uric - reserved)
     def do_escape(char):
         return escapes[char]
-    text = re.sub(r"([^A-Za-z0-9\-_.!~*'()]", do_escape, text)
-
-    return text
+    return re.sub(r"([^A-Za-z0-9\-_.!~*'()]", do_escape, text)
 
 
 def OutputSymbolExtraLinks(symbol):
+    """Returns extralinks for the symbol (if enabled).
+
+    Args:
+        symbol (str): the name to describe
+
+    Returns:
+        str: paragraph or empty string
+    """
     desc = ''
 
     if False:   # NEW FEATURE: needs configurability
@@ -1326,14 +1283,16 @@ def OutputSectionExtraLinks(symbol, docsymbol):
     return desc
 
 
-#
-# Function    : OutputMacro
-# Description : Returns the synopsis and detailed description of a macro.
-# Arguments   : $symbol - the macro.
-#                $declaration - the declaration of the macro.
-#
-
 def OutputMacro(symbol, declaration):
+    """Returns the synopsis and detailed description of a macro.
+
+    Args:
+        symbol (str): the macro name.
+        declaration (str): the declaration of the macro.
+
+    Returns:
+        str: the formated docs
+    """
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
     synop = "<row><entry role=\"define_keyword\">#define</entry><entry role=\"function_name\"><link linkend=\"%s\">%s</link>" % (
@@ -1363,7 +1322,7 @@ def OutputMacro(symbol, declaration):
         decl_out = CreateValidSGML(declaration)
         desc += "<programlisting language=\"C\">%s</programlisting>\n" % decl_out
     else:
-        desc += "<programlisting language=\"C\">" + MakeReturnField("#define") + symbol
+        desc += "<programlisting language=\"C\">" + "#define".ljust(RETURN_TYPE_FIELD_WIDTH) + symbol
         m = re.search(r'^\s*#\s*define\s+\w+(\([^\)]*\))', declaration)
         if m:
             args = m.group(1)
@@ -1388,15 +1347,17 @@ def OutputMacro(symbol, declaration):
     return (synop, desc)
 
 
-#
-# Function    : OutputTypedef
-# Description : Returns the synopsis and detailed description of a typedef.
-# Arguments   : $symbol - the typedef.
-#                $declaration - the declaration of the typedef,
-#                  e.g. 'typedef unsigned int guint;'
-#
-
 def OutputTypedef(symbol, declaration):
+    """Returns the synopsis and detailed description of a typedef.
+
+    Args:
+        symbol (str): the typedef.
+        declaration (str): the declaration of the typedef,
+                           e.g. 'typedef unsigned int guint;'
+
+    Returns:
+        str: the formated docs
+    """
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
     desc = "<refsect2 id=\"%s\" role=\"typedef\"%s>\n<title>%s</title>\n" % (sid, condition, symbol)
@@ -1421,19 +1382,20 @@ def OutputTypedef(symbol, declaration):
     return (synop, desc)
 
 
-#
-# Function    : OutputStruct
-# Description : Returns the synopsis and detailed description of a struct.
-#                We check if it is a object struct, and if so we only output
-#                parts of it that are noted as public fields.
-#                We also use a different IDs for object structs, since the
-#                original ID is used for the entire RefEntry.
-# Arguments   : $symbol - the struct.
-#                $declaration - the declaration of the struct.
-#
-
 def OutputStruct(symbol, declaration):
+    """Returns the synopsis and detailed description of a struct.
 
+    We check if it is a object struct, and if so we only output parts of it that
+    are noted as public fields. We also use a different IDs for object structs,
+    since the original ID is used for the entire RefEntry.
+
+    Args:
+        symbol (str): the struct.
+        declaration (str): the declaration of the struct.
+
+    Returns:
+        str: the formated docs
+    """
     is_gtype = False
     default_to_public = True
     if CheckIsObject(symbol):
@@ -1621,15 +1583,16 @@ def OutputStruct(symbol, declaration):
     return (synop, desc)
 
 
-#
-# Function    : OutputUnion
-# Description : Returns the synopsis and detailed description of a union.
-# Arguments   : $symbol - the union.
-#                $declaration - the declaration of the union.
-#
-
 def OutputUnion(symbol, declaration):
+    """Returns the synopsis and detailed description of a union.
 
+    Args:
+        symbol (str): the union.
+        declaration (str): the declaration of the union.
+
+    Returns:
+        str: the formated docs
+    """
     is_gtype = False
     if CheckIsObject(symbol):
         logging.info("Found union gtype: %s", symbol)
@@ -1757,14 +1720,16 @@ def OutputUnion(symbol, declaration):
     return (synop, desc)
 
 
-#
-# Function    : OutputEnum
-# Description : Returns the synopsis and detailed description of a enum.
-# Arguments   : $symbol - the enum.
-#                $declaration - the declaration of the enum.
-#
-
 def OutputEnum(symbol, declaration):
+    """Returns the synopsis and detailed description of a enum.
+
+    Args:
+        symbol (str): the enum.
+        declaration (str): the declaration of the enum.
+
+    Returns:
+        str: the formated docs
+    """
     is_gtype = False
     if CheckIsObject(symbol):
         logging.info("Found enum gtype: %s", symbol)
@@ -1872,14 +1837,16 @@ def OutputEnum(symbol, declaration):
     return (synop, desc)
 
 
-#
-# Function    : OutputVariable
-# Description : Returns the synopsis and detailed description of a variable.
-# Arguments   : $symbol - the extern'ed variable.
-#                $declaration - the declaration of the variable.
-#
-
 def OutputVariable(symbol, declaration):
+    """Returns the synopsis and detailed description of a variable.
+
+    Args:
+        symbol (str): the extern'ed variable.
+        declaration (str): the declaration of the variable.
+
+    Returns:
+        str: the formated docs
+    """
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
 
@@ -1934,14 +1901,16 @@ def OutputVariable(symbol, declaration):
     return (synop, desc)
 
 
-#
-# Function    : OutputFunction
-# Description : Returns the synopsis and detailed description of a function.
-# Arguments   : $symbol - the function.
-#                $declaration - the declaration of the function.
-#
-
 def OutputFunction(symbol, declaration, symbol_type):
+    """Returns the synopsis and detailed description of a function.
+
+    Args:
+        symbol (str): the function.
+        declaration (str): the declaration of the function.
+
+    Returns:
+        str: the formated docs
+    """
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
 
@@ -1953,7 +1922,6 @@ def OutputFunction(symbol, declaration, symbol_type):
     type_modifier = m.group(1) or ''
     type = m.group(2)
     pointer = m.group(3)
-    # Trim trailing spaces as we are going to pad to $RETURN_TYPE_FIELD_WIDTH below anyway
     pointer = pointer.rstrip()
     xref = MakeXRef(type, tagify(type, "returnvalue"))
     start = ''
@@ -2026,18 +1994,21 @@ def OutputFunction(symbol, declaration, symbol_type):
     return (synop, desc)
 
 
-#
-# Function    : OutputParamDescriptions
-# Description : Returns the DocBook output describing the parameters of a
-#                function, macro or signal handler.
-# Arguments   : $symbol_type - 'FUNCTION', 'MACRO' or 'SIGNAL'. Signal
-#                  handlers have an implicit user_data parameter last.
-#                $symbol - the name of the function/macro being described.
-#               @fields - parsed fields from the declaration, used to determine
-#                  undocumented/unused entries
-#
-
 def OutputParamDescriptions(symbol_type, symbol, fields):
+    """Returns the DocBook output describing the parameters of a symbol.
+
+    This can be used for functions, macros or signal handlers.
+
+    Args:
+        symbol_type (str): 'FUNCTION', 'MACRO' or 'SIGNAL'. Signal
+                           handlers have an implicit user_data parameter last.
+        symbol (str): the name of the symbol being described.
+        fields (list): parsed fields from the declaration, used to determine
+                       undocumented/unused entries
+
+    Returns:
+        str: the formated parameter docs
+    """
     output = ''
     num_params = 0
     field_descrs = None
@@ -2137,27 +2108,21 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
     return output
 
 
-#
-# Function    : ParseStabilityLevel
-# Description : Parses a stability level and outputs a warning if it isn't
-#               valid.
-# Arguments   : $stability - the stability text.
-#                $file, $line - context for error message
-#                $message - description of where the level is from, to use in
-#               any error message.
-# Returns     : The parsed stability level string.
-#
-
 def ParseStabilityLevel(stability, file, line, message):
-
-    stability = stability.strip()
-    sl = stability.lower()
-
+    """Parses a stability level and outputs a warning if it isn't valid.
+    Args:
+        stability (str): the stability text.
+        file, line: context for error message
+        message: description of where the level is from, to use in any error message.
+    Returns:
+        str: the parsed stability level string.
+    """
+    sl = stability.strip().lower()
     if sl == 'stable':
         stability = "Stable"
-    elif stability == 'unstable':
+    elif sl == 'unstable':
         stability = "Unstable"
-    elif stability == 'private':
+    elif sl == 'private':
         stability = "Private"
     else:
         common.LogWarning(file, line, "%s is %s." % (message, stability) +
@@ -2165,32 +2130,33 @@ def ParseStabilityLevel(stability, file, line, message):
     return stability
 
 
-#
-# Function    : OutputDBFile
-# Description : Outputs the final DocBook file for one section.
-# Arguments   : $file - the name of the file.
-#               $title - the title from the $MODULE-sections.txt file, which
-#                 will be overridden by the title in the template file.
-#               $section_id - the id to use for the toplevel tag.
-#               $includes - comma-separates list of include files added at top of
-#                 synopsis, with '<' '>' around them (if not already enclosed in '').
-#               $functions_synop - reference to the DocBook for the Functions Synopsis part.
-#               $other_synop - reference to the DocBook for the Types and Values Synopsis part.
-#               $functions_details - reference to the DocBook for the Functions Details part.
-#               $other_details - reference to the DocBook for the Types and Values Details part.
-#               $signal_synop - reference to the DocBook for the Signal Synopsis part
-#               $signal_desc - reference to the DocBook for the Signal Description part
-#               $args_synop - reference to the DocBook for the Arg Synopsis part
-#               $args_desc - reference to the DocBook for the Arg Description part
-#               $hierarchy - reference to the DocBook for the Object Hierarchy part
-#               $interfaces - reference to the DocBook for the Interfaces part
-#               $implementations - reference to the DocBook for the Known Implementations part
-#               $prerequisites - reference to the DocBook for the Prerequisites part
-#               $derived - reference to the DocBook for the Derived Interfaces part
-#               $file_objects - reference to an array of objects in this file
-#
-
 def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop, functions_details, other_details, signals_synop, signals_desc, args_synop, args_desc, hierarchy, interfaces, implementations, prerequisites, derived, file_objects):
+    """Outputs the final DocBook file for one section.
+
+    Args:
+        file (str): the name of the file.
+        title (str): the title from the $MODULE-sections.txt file
+        section_id (str): the id to use for the toplevel tag.
+        includes (str): comma-separates list of include files added at top of
+                   synopsis, with '<' '>' around them (if not already enclosed in '').
+        functions_synop (str): the DocBook for the Functions Synopsis part.
+        other_synop (str): the DocBook for the Types and Values Synopsis part.
+        functions_details (str): the DocBook for the Functions Details part.
+        other_details (str): the DocBook for the Types and Values Details part.
+        signal_synop (str): the DocBook for the Signal Synopsis part
+        signal_desc (str): the DocBook for the Signal Description part
+        args_synop (str): the DocBook for the Arg Synopsis part
+        args_desc (str): the DocBook for the Arg Description part
+        hierarchy (str): the DocBook for the Object Hierarchy part
+        interfaces (str): the DocBook for the Interfaces part
+        implementations (str): the DocBook for the Known Implementations part
+        prerequisites (str): the DocBook for the Prerequisites part
+        derived (str): the DocBook for the Derived Interfaces part
+        file_objects (list): objects in this file
+
+    Returns:
+        bool: True if the docs where updated
+    """
 
     logging.info("Output docbook for file %s with title '%s'", file, title)
 
@@ -2329,14 +2295,16 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
 
-#
-# Function    : OutputProgramDBFile
-# Description : Outputs the final DocBook file for one program.
-# Arguments   : $file - the name of the file.
-#               $section_id - the id to use for the toplevel tag.
-#
-
 def OutputProgramDBFile(program, section_id):
+    """Outputs the final DocBook file for one program.
+
+    Args:
+        file (str): the name of the file.
+        section_id (str): the id to use for the toplevel tag.
+
+    Returns:
+        bool: True if the docs where updated
+    """
     logging.info("Output program docbook for %s", program)
 
     short_desc = SourceSymbolDocs.get(program + ":Short_Description")
@@ -2472,13 +2440,15 @@ def OutputProgramDBFile(program, section_id):
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
 
-#
-# Function    : OutputExtraFile
-# Description : Copies an "extra" DocBook file into the output directory,
-#               expanding abbreviations
-# Arguments   : $file - the source file.
-#
 def OutputExtraFile(file):
+    """Copies an "extra" DocBook file into the output directory, expanding abbreviations.
+
+    Args:
+        file (str): the source file.
+
+    Returns:
+        bool: True if the docs where updated
+    """
 
     basename = os.path.basename(file)
 
@@ -2494,17 +2464,15 @@ def OutputExtraFile(file):
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
 
-#
-# Function    : OutputBook
-# Description : Outputs the entities that need to be included into the
-#                main docbook file for the module.
-# Arguments   : $book_top - the declarations of the entities, which are added
-#                  at the top of the main docbook file.
-#                $book_bottom - the references to the entities, which are
-#                  added in the main docbook file at the desired position.
-#
-
 def OutputBook(book_top, book_bottom):
+    """Outputs the entities that need to be included into the main docbook file for the module.
+
+    Args:
+        book_top (str): the declarations of the entities, which are added
+                        at the top of the main docbook file.
+        book_bottom (str): the entities, which are added in the main docbook
+                           file at the desired position.
+    """
 
     old_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.top")
     new_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.top.new")
@@ -2584,14 +2552,18 @@ def OutputBook(book_top, book_bottom):
         OUTPUT.close()
 
 
-#
-# Function    : CreateValidSGML
-# Description : This turns any chars which are used in SGML into entities,
-#                e.g. '<' into '&lt;'
-# Arguments   : $text - the text to turn into proper SGML.
-#
-
 def CreateValidSGML(text):
+    """Turn any chars which are used in XML into entities.
+
+    e.g. '<' into '&lt;'
+
+    Args:
+        text (str): the text to turn into proper XML.
+
+    Returns:
+        str: escaped input
+    """
+
     text = re.sub(r'&', r'&amp;', text)        # Do this first, or the others get messed up.
     text = re.sub(r'<', r'&lt;', text)
     text = re.sub(r'>', r'&gt;', text)
@@ -2600,17 +2572,20 @@ def CreateValidSGML(text):
     return text
 
 
-#
-# Function    : ConvertSGMLChars
-# Description : This is used for text in source code comment blocks, to turn
-#               chars which are used in SGML into entities, e.g. '<' into
-#               '&lt;'. Depending on $INLINE_MARKUP_MODE, this is done
-#               unconditionally or only if the character doesn't seem to be
-#               part of an SGML construct (tag or entity reference).
-# Arguments   : $text - the text to turn into proper SGML.
-#
-
 def ConvertSGMLChars(symbol, text):
+    """Escape XML chars.
+
+    This is used for text in source code comment blocks, to turn
+    chars which are used in XML into entities, e.g. '<' into
+    &lt;'. Depending on INLINE_MARKUP_MODE, this is done
+    unconditionally or only if the character doesn't seem to be
+    part of an XML construct (tag or entity reference).
+    Args:
+        text (str): the text to turn into proper XML.
+
+    Returns:
+        str: escaped input
+    """
 
     if INLINE_MARKUP_MODE:
         # For the XML/SGML mode only convert to entities outside CDATA sections.
@@ -2656,7 +2631,6 @@ def ConvertSGMLCharsCallback(text, symbol, tag):
 
 
 def ConvertSGMLCharsCallback2(text, symbol, tag):
-
     # If we're not in CDATA convert to entities.
     # We could handle <programlisting> differently, though I'm not sure it helps.
     if tag == '':
@@ -2670,13 +2644,16 @@ def ConvertSGMLCharsCallback2(text, symbol, tag):
     return text
 
 
-#
-# Function    : ExpandAnnotation
-# Description : This turns annotations into acronym tags.
-# Arguments   : $symbol - the symbol being documented, for error messages.
-#                $text - the text to expand.
-#
 def ExpandAnnotation(symbol, param_desc):
+    """This turns annotations into acronym tags.
+    Args:
+        symbol (str): the symbol being documented, for error messages.
+        param_desc (str): the text to expand.
+
+    Returns:
+        str: the remaining param_desc
+        str: the formatted annotations
+    """
     param_annotations = ''
 
     # look for annotations at the start of the comment part
@@ -2721,16 +2698,20 @@ def ExpandAnnotation(symbol, param_desc):
     return (param_desc, param_annotations)
 
 
-#
-# Function    : ExpandAbbreviations
-# Description : This turns the abbreviations function(), macro(), @param,
-#               %constant, and #symbol into appropriate DocBook markup.
-#               CDATA sections and <programlisting> parts are skipped.
-# Arguments   : $symbol - the symbol being documented, for error messages.
-#                $text - the text to expand.
-#
-
 def ExpandAbbreviations(symbol, text):
+    """Expand the shortcut notation for symbol references.
+
+    This turns the abbreviations function(), macro(), @param, %constant, and #symbol
+    into appropriate DocBook markup. CDATA sections and <programlisting> parts
+    are skipped.
+
+    Args:
+        symbol (str): the symbol being documented, for error messages.
+        text (str): the text to expand.
+
+    Returns:
+        str: the expanded text
+    """
     # Note: This is a fallback and normally done in the markdown parser
 
     # Convert "|[" and "]|" into the start and end of program listing examples.
@@ -2747,8 +2728,8 @@ def ExpandAbbreviations(symbol, text):
                              ExpandAbbreviationsCallback)
 
 
-# Returns the end tag (as a regexp) corresponding to the given start tag.
 def ExpandAbbreviationsEndTag(start_tag):
+    # Returns the end tag (as a regexp) corresponding to the given start tag.
     if start_tag == r'<!\[CDATA\[':
         return "]]>"
     if start_tag == "<!DOCTYPE":
@@ -2761,9 +2742,8 @@ def ExpandAbbreviationsEndTag(start_tag):
     return ''
 
 
-# Called inside or outside each CDATA or <programlisting> section.
 def ExpandAbbreviationsCallback(text, symbol, tag):
-
+    # Called inside or outside each CDATA or <programlisting> section.
     if tag.startswith(r'^<programlisting'):
         # Handle any embedded CDATA sections.
         return ModifyXMLElements(text, symbol,
@@ -2811,8 +2791,8 @@ def ExpandAbbreviationsCallback(text, symbol, tag):
     return text
 
 
-# This is called inside a <programlisting>
 def ExpandAbbreviationsCallback2(text, symbol, tag):
+    # This is called inside a <programlisting>
     if tag == '':
         # We are inside a <programlisting> but outside any CDATA sections,
         # so we expand any gtk-doc abbreviations.
@@ -2857,26 +2837,32 @@ def MakeHashXRef(symbol, tag):
     return MakeXRef(symbol, text)
 
 
-#
-# Function    : ModifyXMLElements
-# Description : Looks for given XML element tags within the text, and calls
-#               the callback on pieces of text inside & outside those elements.
-#               Used for special handling of text inside things like CDATA
-#               and <programlisting>.
-# Arguments   : $text - the text.
-#               $symbol - the symbol currently being documented (only used for
-#                      error messages).
-#               $start_tag_regexp - the regular expression to match start tags.
-#                      e.g. "<!\\[CDATA\\[|<programlisting[^>]*>" to match
-#                      CDATA sections or programlisting elements.
-#               $end_tag_func - function which is passed the matched start tag
-#                      and should return the appropriate end tag string regexp.
-#               $callback - callback called with each part of the text. It is
-#                      called with a piece of text, the symbol being
-#                      documented, and the matched start tag or '' if the text
-#                      is outside the XML elements being matched.
-#
 def ModifyXMLElements(text, symbol, start_tag_regexp, end_tag_func, callback):
+    """Rewrite XML blocks.
+
+    Looks for given XML element tags within the text, and calls
+    the callback on pieces of text inside & outside those elements.
+    Used for special handling of text inside things like CDATA
+    and <programlisting>.
+
+    Args:
+        text (str): the text.
+        symbol (str): the symbol currently being documented (only used for
+                      error messages).
+        start_tag_regexp (str): the regular expression to match start tags.
+                                e.g. "<!\\[CDATA\\[|<programlisting[^>]*>" to
+                                match CDATA sections or programlisting elements.
+        end_tag_func (func): function which is passed the matched start tag
+                             and should return the appropriate end tag string
+                             regexp.
+        callback - callback called with each part of the text. It is
+                   called with a piece of text, the symbol being
+                   documented, and the matched start tag or '' if the text
+                   is outside the XML elements being matched.
+
+    Returns:
+        str: modified text
+    """
     before_tag = start_tag = end_tag_regexp = end_tag = None
     result = ''
 
@@ -2920,22 +2906,22 @@ def ModifyXMLElements(text, symbol, start_tag_regexp, end_tag_func, callback):
     return result
 
 
-# Adds a tag around some text.
-# e.g tagify("Text", "literal") => "<literal>Text</literal>".
 def tagify(text, elem):
+    # Adds a tag around some text.
+    # e.g tagify("Text", "literal") => "<literal>Text</literal>".
     return '<' + elem + '>' + text + '</' + elem + '>'
 
 
-#
-# Function    : MakeDocHeader
-# Description : Builds a docbook header for the given tag
-# Arguments   : $tag - doctype tag
-#
-
 def MakeDocHeader(tag):
-    header = doctype_header
-    header = re.sub(r'<!DOCTYPE \w+', r'<!DOCTYPE ' + tag, header)
+    """Builds a docbook header for the given tag.
 
+    Args:
+        tag (str): doctype tag
+
+    Returns:
+        str: the docbook header
+    """
+    header = re.sub(r'<!DOCTYPE \w+', r'<!DOCTYPE ' + tag, doctype_header)
     # fix the path for book since this is one level up
     if tag == 'book':
         header = re.sub(
@@ -2943,18 +2929,20 @@ def MakeDocHeader(tag):
     return header
 
 
-#
-# Function    : MakeXRef
-# Description : This returns a cross-reference link to the given symbol.
-#                Though it doesn't try to do this for a few standard C types
-#                that it        knows won't be in the documentation.
-# Arguments   : $symbol - the symbol to try to create a XRef to.
-#               $text - text text to put inside the XRef, defaults to $symbol
-#
-
 def MakeXRef(symbol, text=None):
-    symbol = symbol.strip()
+    """This returns a cross-reference link to the given symbol.
 
+    Though it doesn't try to do this for a few standard C types that it knows
+    won't be in the documentation.
+
+    Args:
+        symbol (str): the symbol to try to create a XRef to.
+        text (str): text to put inside the XRef, defaults to symbol
+
+    Returns:
+        str: a docbook link
+    """
+    symbol = symbol.strip()
     if not text:
         text = symbol
 
@@ -2971,13 +2959,15 @@ def MakeXRef(symbol, text=None):
     return "<link linkend=\"%s\">%s</link>" % (symbol_id, text)
 
 
-#
-# Function    : MakeIndexterms
-# Description : This returns a indexterm elements for the given symbol
-# Arguments   : $symbol - the symbol to create indexterms for
-#
-
 def MakeIndexterms(symbol, sid):
+    """This returns a indexterm elements for the given symbol
+
+    Args:
+        symbol (str): the symbol to create indexterms for
+
+    Returns:
+        str: doxbook index terms
+    """
     terms = ''
     sortas = ''
 
@@ -3005,17 +2995,18 @@ def MakeIndexterms(symbol, sid):
     return terms
 
 
-#
-# Function    : MakeDeprecationNote
-# Description : This returns a deprecation warning for the given symbol.
-# Arguments   : $symbol - the symbol to try to create a warning for.
-#
-
 def MakeDeprecationNote(symbol):
+    """This returns a deprecation warning for the given symbol.
+
+    Args:
+        symbol (str): the symbol to try to create a warning for.
+
+    Returns:
+        str: formatted warning or empty string if symbol is not deprecated
+    """
     desc = ''
     if symbol in Deprecated:
         desc += "<warning><para><literal>%s</literal> " % symbol
-
         note = Deprecated[symbol]
 
         m = re.search(r'^\s*([0-9\.]+)\s*:?', note)
@@ -3037,13 +3028,15 @@ def MakeDeprecationNote(symbol):
     return desc
 
 
-#
-# Function    : MakeConditionDescription
-# Description : This returns a sumary of conditions for the given symbol.
-# Arguments   : $symbol - the symbol to try to create the sumary.
-#
-
 def MakeConditionDescription(symbol):
+    """This returns a sumary of conditions for the given symbol.
+
+    Args:
+        symbol (str): the symbol to create the sumary for.
+
+    Returns:
+        str: formatted text or empty string if no special conditions apply.
+    """
     desc = ''
     if symbol in Deprecated:
         if desc != '':
@@ -3077,17 +3070,20 @@ def MakeConditionDescription(symbol):
     return desc
 
 
-#
-# Function    : GetHierarchy
-# Description : Returns the DocBook output describing the ancestors and
-#               immediate children of a GObject subclass. It uses the
-#               global @Objects and @ObjectLevels arrays to walk the tree.
-#
-# Arguments   : $object - the GtkObject subclass.
-#               @hierarchy - previous hierarchy
-#
-
 def GetHierarchy(gobject, hierarchy):
+    """Generate the object inheritance graph.
+
+    Returns the DocBook output describing the ancestors and
+    immediate children of a GObject subclass. It uses the
+    global Objects and ObjectLevels arrays to walk the tree.
+
+    Args:
+        object (str): the GtkObject subclass.
+        hierarchy (list) - previous hierarchy
+
+    Returns:
+        list: lines of docbook describing the hierarchy
+    """
     # Find object in the objects array.
     found = False
     children = []
@@ -3191,16 +3187,19 @@ def GetHierarchy(gobject, hierarchy):
     return hierarchy
 
 
-#
-# Function    : GetInterfaces
-# Description : Returns the DocBook output describing the interfaces
-#               implemented by a class. It uses the global %Interfaces hash.
-# Arguments   : $object - the GtkObject subclass.
-#
-
 def GetInterfaces(gobject):
-    text = ''
+    """Generate interface implementation graph.
 
+    Returns the DocBook output describing the interfaces
+    implemented by a class. It uses the global Interfaces hash.
+
+    Args:
+        object (str): the GObject subclass.
+
+    Returns:
+        str: implemented interfaces
+    """
+    text = ''
     # Find object in the objects array.
     if gobject in Interfaces:
         ifaces = Interfaces[gobject].split()
@@ -3221,16 +3220,19 @@ def GetInterfaces(gobject):
     return text
 
 
-#
-# Function    : GetImplementations
-# Description : Returns the DocBook output describing the implementations
-#               of an interface. It uses the global %Interfaces hash.
-# Arguments   : $object - the GtkObject subclass.
-#
-
 def GetImplementations(gobject):
-    text = ''
+    """Generate interface usage graph.
 
+    Returns the DocBook output describing the implementations
+    of an interface. It uses the global Interfaces hash.
+
+    Args:
+        object (str): the GObject subclass.
+
+    Returns:
+        str: interface implementations
+    """
+    text = ''
     impls = []
     for key in Interfaces:
         if re.search(r'\b%s\b' % gobject, Interfaces[key]):
@@ -3255,16 +3257,19 @@ def GetImplementations(gobject):
     return text
 
 
-#
-# Function    : GetPrerequisites
-# Description : Returns the DocBook output describing the prerequisites
-#               of an interface. It uses the global %Prerequisites hash.
-# Arguments   : $iface - the interface.
-#
-
 def GetPrerequisites(iface):
-    text = ''
+    """Generates interface requirements.
 
+    Returns the DocBook output describing the prerequisites
+    of an interface. It uses the global Prerequisites hash.
+    Args:
+        iface (str): the interface.
+
+    Returns:
+        str: required interfaces
+    """
+
+    text = ''
     if iface in Prerequisites:
         text = '''<para>
 %s requires
@@ -3284,16 +3289,18 @@ def GetPrerequisites(iface):
     return text
 
 
-#
-# Function    : GetDerived
-# Description : Returns the DocBook output describing the derived interfaces
-#               of an interface. It uses the global %Prerequisites hash.
-# Arguments   : $iface - the interface.
-#
-
 def GetDerived(iface):
-    text = ''
+    """
+    Returns the DocBook output describing the derived interfaces
+    of an interface. It uses the global %Prerequisites hash.
 
+    Args:
+        iface (str): the interface.
+
+    Returns:
+        str: derived interfaces
+    """
+    text = ''
     derived = []
     for key in Prerequisites:
         if re.search(r'\b%s\b' % iface, Prerequisites[key]):
@@ -3318,14 +3325,18 @@ def GetDerived(iface):
     return text
 
 
-#
-# Function    : GetSignals
-# Description : Returns the synopsis and detailed description DocBook output
-#                for the signal handlers of a given GtkObject subclass.
-# Arguments   : $object - the GtkObject subclass, e.g. 'GtkButton'.
-#
-
 def GetSignals(gobject):
+    """Generate signal docs.
+
+    Returns the synopsis and detailed description DocBook output
+    for the signal handlers of a given GObject subclass.
+
+    Args:
+        object (str): the GObject subclass, e.g. 'GtkButton'.
+
+    Returns:
+        str: signal docs
+    """
     synop = ''
     desc = ''
 
@@ -3466,14 +3477,18 @@ def GetSignals(gobject):
     return (synop, desc)
 
 
-#
-# Function    : GetArgs
-# Description : Returns the synopsis and detailed description DocBook output
-#                for the Args of a given GtkObject subclass.
-# Arguments   : $object - the GtkObject subclass, e.g. 'GtkButton'.
-#
-
 def GetArgs(gobject):
+    """Generate property docs.
+
+    Returns the synopsis and detailed description DocBook output
+    for the Args of a given GtkObject subclass.
+
+    Args:
+        object (str): the GObject subclass, e.g. 'GtkButton'.
+
+    Returns:
+        str: property docs
+    """
     synop = ''
     desc = ''
     child_synop = ''
@@ -3605,24 +3620,15 @@ def GetArgs(gobject):
     return (synop, child_synop, style_synop, desc, child_desc, style_desc)
 
 
-#
-# Function    : ReadSourceDocumentation
-# Description : This reads in the documentation embedded in comment blocks
-#                in the source code (for Gnome).
-#
-#                Parameter descriptions override any in the template files.
-#                Function descriptions are placed before any description from
-#                the template files.
-#
-#                It recursively descends the source directory looking for .c
-#                files and scans them looking for specially-formatted comment
-#                blocks.
-#
-# Arguments   : $source_dir - the directory to scan.
-# m###############################################################
-
 def ReadSourceDocumentation(source_dir):
+    """Read the documentation embedded in comment blocks in the source code.
 
+    It recursively descends the source directory looking for source files and
+    scans them looking for specially-formatted comment blocks.
+
+    Args:
+        source_dir (str): the directory to scan.
+    """
     # prepend entries from @SOURCE_DIR
     for sdir in SOURCE_DIRS:
         # Check if the filename is in the ignore list.
@@ -3663,17 +3669,15 @@ def ReadSourceDocumentation(source_dir):
         ReadSourceDocumentation(sdir)
 
 
-#
-# Function    : ScanSourceFile
-# Description : Scans one source file looking for specially-formatted comment
-#               blocks. Later MergeSourceDocumentation() is copying over the
-#               doc blobs that are not suppressed/ignored.
-#
-# Arguments   : $file - the file to scan.
-#
-
 def ScanSourceFile(ifile):
+    """Scans one source file looking for specially-formatted comment blocks.
 
+    Later MergeSourceDocumentation() is copying over the doc blobs that are not
+    suppressed/ignored.
+
+    Args:
+        file (str): the file to scan.
+    """
     # prepend entries from @SOURCE_DIR
     for idir in SOURCE_DIRS:
         # Check if the filename is in the ignore list.
@@ -3998,14 +4002,12 @@ def ScanSourceFile(ifile):
     SRCFILE.close()
 
 
-#
-# Function    : OutputMissingDocumentation
-# Description : Outputs report of documentation coverage to a file
-#
-# Arguments   : none
-#
-
 def OutputMissingDocumentation():
+    """Outputs report of documentation coverage to a file.
+
+    Returns:
+        bool: True if the report was updated
+    """
     old_undocumented_file = os.path.join(ROOT_DIR, MODULE + "-undocumented.txt")
     new_undocumented_file = os.path.join(ROOT_DIR, MODULE + "-undocumented.new")
 
@@ -4087,15 +4089,15 @@ def OutputMissingDocumentation():
     return common.UpdateFileIfChanged(old_undocumented_file, new_undocumented_file, 0)
 
 
-#
-# Function    : OutputUndeclaredSymbols
-# Description : Outputs symbols that are listed in the section file, but not
-#               declaration is found in the sources
-#
-# Arguments   : none
-#
-
 def OutputUndeclaredSymbols():
+    """Reports undeclared symbols.
+
+    Outputs symbols that are listed in the section file, but have no declaration
+    in the sources.
+
+    Returns:
+        bool: True if the report was updated
+    """
     old_undeclared_file = os.path.join(ROOT_DIR, MODULE + "-undeclared.txt")
     new_undeclared_file = os.path.join(ROOT_DIR, MODULE + "-undeclared.new")
 
@@ -4111,15 +4113,15 @@ def OutputUndeclaredSymbols():
     return common.UpdateFileIfChanged(old_undeclared_file, new_undeclared_file, 0)
 
 
-#
-# Function    : OutputUnusedSymbols
-# Description : Outputs symbols that are documented in comments, but not
-#               declared in the sources
-#
-# Arguments   : none
-#
-
 def OutputUnusedSymbols():
+    """Reports unused documentation.
+
+    Outputs symbols that are documented in comments, but not declared in the
+    sources.
+
+    Returns:
+        bool: True if the report was updated
+    """
     num_unused = 0
     old_unused_file = os.path.join(ROOT_DIR, MODULE + "-unused.txt")
     new_unused_file = os.path.join(ROOT_DIR, MODULE + "-unused.new")
@@ -4143,14 +4145,8 @@ def OutputUnusedSymbols():
     return common.UpdateFileIfChanged(old_unused_file, new_unused_file, 0)
 
 
-#
-# Function    : OutputAllSymbols
-# Description : Outputs list of all symbols to a file
-#
-# Arguments   : none
-#
-
 def OutputAllSymbols():
+    """Outputs list of all symbols to a file."""
     SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-symbols.txt"), 'w')
 
     for symbol in sorted(AllSymbols.keys()):
@@ -4158,14 +4154,8 @@ def OutputAllSymbols():
     SYMBOLS.close()
 
 
-#
-# Function    : OutputSymbolsWithoutSince
-# Description : Outputs list of all symbols without a since tag to a file
-#
-# Arguments   : none
-#
-
 def OutputSymbolsWithoutSince():
+    """Outputs list of all symbols without a since tag to a file."""
     SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-nosince.txt"), 'w')
 
     for symbol in sorted(SourceSymbolDocs.keys()):
@@ -4208,19 +4198,13 @@ def CheckParamsDocumented(symbol, params):
                           "%s descriptions for %s are missing in source code comment block." % (item, symbol))
 
 
-#
-# Function    : MergeSourceDocumentation
-# Description : This merges documentation read from a source file into the
-#                documentation read in from a template file.
-#
-#                Parameter descriptions override any in the template files.
-#                Function descriptions are placed before any description from
-#                the template files.
-#
-# Arguments   : none
-#
-
 def MergeSourceDocumentation():
+    """Merges documentation read from a source file.
+
+    Parameter descriptions override any in the template files.
+    Function descriptions are placed before any description from
+    the template files.
+    """
 
     # add whats found in the source
     symbols = set(SourceSymbolDocs.keys())
@@ -4260,13 +4244,17 @@ def MergeSourceDocumentation():
     logging.info("num doc entries: %d", len(SymbolDocs))
 
 
-#
-# Function    : IsEmptyDoc
-# Description : Check if a doc-string is empty. Its also regarded as empty if
-#               it only consist of whitespace or e.g. FIXME.
-# Arguments   : the doc-string
-#
 def IsEmptyDoc(doc):
+    """Check if a doc-string is empty.
+
+    It is also regarded as empty if it only consist of whitespace or e.g. FIXME.
+
+    Args:
+        doc (str): the doc-string
+
+    Returns:
+        bool: True if empty
+    """
     if re.search(r'^\s*$', doc):
         return True
     if re.search(r'^\s*<para>\s*(FIXME)?\s*<\/para>\s*$', doc):
@@ -4274,55 +4262,12 @@ def IsEmptyDoc(doc):
     return False
 
 
-#
-# Function    : ConvertMarkDown
-# Description : Converts mark down syntax to the respective docbook.
-#               http://de.wikipedia.org/wiki/Markdown
-#               Inspired by the design of ParseDown
-#               http://parsedown.org/
-#               Copyright (c) 2013 Emanuil Rusev, erusev.com
-# Arguments   : the symbol name, the doc-string
-#
-
+# FIXME(ensonic): replace
 def ConvertMarkDown(symbol, text):
-    text = MarkDownParse(text, symbol)
-    return text
+    return MarkDownParse(text, symbol)
 
-
-# SUPPORTED MARKDOWN
-# ==================
-#
-# Atx-style Headers
-# -----------------
-#
-# # Header 1
-#
-# ## Header 2 ##
-#
-# Setext-style Headers
-# --------------------
-#
-# Header 1
-# ========
-#
-# Header 2
-# --------
-#
-# Ordered (unnested) Lists
-# ------------------------
-#
-# 1. item 1
-#
-# 1. item 2 with loooong
-#    description
-#
-# 3. item 3
-#
-# Note: we require a blank line above the list items
-#
 
 # TODO(ensonic): it would be nice to add id parameters to the refsect2 elements
-
 def MarkDownParseBlocks(lines, symbol, context):
     md_blocks = []
     md_block = {"type": ''}
@@ -4979,40 +4924,73 @@ def MarkDownParseLines(lines, symbol, context):
 
 
 def MarkDownParse(text, symbol):
+    """Converts mark down syntax to the respective docbook.
+
+    http://de.wikipedia.org/wiki/Markdown
+    Inspired by the design of ParseDown
+    http://parsedown.org/
+    Copyright (c) 2013 Emanuil Rusev, erusev.com
+
+    SUPPORTED MARKDOWN
+    ==================
+
+    Atx-style Headers
+    -----------------
+
+    # Header 1
+
+    ## Header 2 ##
+
+    Setext-style Headers
+    --------------------
+
+    Header 1
+    ========
+
+    Header 2
+    --------
+
+    Ordered (unnested) Lists
+    ------------------------
+
+    1. item 1
+
+    1. item 2 with loooong
+       description
+
+    3. item 3
+
+    Note: we require a blank line above the list items
+    """
     return MarkDownParseLines(text.splitlines(), symbol, '')
 
 
-#
-# Function    : ReadDeclarationsFile
-# Description : This reads in a file containing the function/macro/enum etc.
-#                declarations.
-#
-#                Note that in some cases there are several declarations with
-#                the same name, e.g. for conditional macros. In this case we
-#                set a flag in the %DeclarationConditional hash so the
-#                declaration is not shown in the docs.
-#
-#                If a macro and a function have the same name, e.g. for
-#                gtk_object_ref, the function declaration takes precedence.
-#
-#                Some opaque structs are just declared with 'typedef struct
-#                _name name;' in which case the declaration may be empty.
-#                The structure may have been found later in the header, so
-#                that overrides the empty declaration.
-#
-# Arguments   : $file - the declarations file to read
-#                $override - if declarations in this file should override
-#                        any current declaration.
-#
-
 def ReadDeclarationsFile(ifile, override):
+    """Reads in a file containing the function/macro/enum etc. declarations.
 
+    Note that in some cases there are several declarations with
+    the same name, e.g. for conditional macros. In this case we
+    set a flag in the DeclarationConditional hash so the
+    declaration is not shown in the docs.
+
+    If a macro and a function have the same name, e.g. for
+    g_object_ref, the function declaration takes precedence.
+
+    Some opaque structs are just declared with 'typedef struct
+    _name name;' in which case the declaration may be empty.
+    The structure may have been found later in the header, so
+    that overrides the empty declaration.
+
+    Args:
+        file (str): the declarations file to read
+        override (bool): if declarations in this file should override
+                         any current declaration.
+    """
     if override == 0:
-        global Declarations, DeclarationTypes, DeclarationConditional, DeclarationOutput
-        Declarations = {}
-        DeclarationTypes = {}
-        DeclarationConditional = {}
-        DeclarationOutput = {}
+        Declarations.clear()
+        DeclarationTypes.clear()
+        DeclarationConditional.clear()
+        DeclarationOutput.clear()
 
     INPUT = open(ifile)
     declaration_type = ''
@@ -5029,7 +5007,6 @@ def ReadDeclarationsFile(ifile, override):
                 declaration_name = ''
                 logging.info("Found declaration: %s", declaration_type)
                 declaration = ''
-
         else:
             m2 = re.search(r'^<NAME>(.*)</NAME>', line)
             m3 = re.search(r'^<DEPRECATED/>', line)
@@ -5101,21 +5078,17 @@ def ReadDeclarationsFile(ifile, override):
     INPUT.close()
 
 
-#
-# Function    : ReadSignalsFile
-# Description : This reads in an existing file which contains information on
-#                all GTK signals. It creates the arrays @SignalNames and
-#                @SignalPrototypes containing info on the signals. The first
-#                line of the SignalPrototype is the return type of the signal
-#                handler. The remaining lines are the parameters passed to it.
-#                The last parameter, "gpointer user_data" is always the same
-#                so is not included.
-# Arguments   : $file - the file containing the signal handler prototype
-#                        information.
-#
-
 def ReadSignalsFile(ifile):
+    """Reads information about object signals.
 
+    It creates the arrays @SignalNames and @SignalPrototypes containing details
+    about the signals. The first line of the SignalPrototype is the return type
+    of the signal handler. The remaining lines are the parameters passed to it.
+    The last parameter, "gpointer user_data" is always the same so is not included.
+
+    Args:
+       ifile (str): the file containing the signal handler prototype information.
+    """
     in_signal = 0
     signal_object = None
     signal_name = None
@@ -5124,12 +5097,11 @@ def ReadSignalsFile(ifile):
     signal_prototype = None
 
     # Reset the signal info.
-    global SignalObjects, SignalNames, SignalReturns, SignalFlags, SignalPrototypes
-    SignalObjects = []
-    SignalNames = []
-    SignalReturns = []
-    SignalFlags = []
-    SignalPrototypes = []
+    SignalObjects[:] = []
+    SignalNames[:] = []
+    SignalReturns[:] = []
+    SignalFlags[:] = []
+    SignalPrototypes[:] = []
 
     if not os.path.isfile(ifile):
         return
@@ -5178,25 +5150,20 @@ def ReadSignalsFile(ifile):
     INPUT.close()
 
 
-#
-# Function    : ReadObjectHierarchy
-# Description : This reads in the $MODULE-hierarchy.txt file containing all
-#               the GtkObject subclasses described in this module (and their
-#               ancestors).
-#               It places them in the @Objects array, and places their level
-#               in the object hierarchy in the @ObjectLevels array, at the
-#               same index. GtkObject, the root object, has a level of 1.
-#
-#               This also generates tree_index.sgml as it goes along.
-#
-# Arguments   : none
-#
-
 def ReadObjectHierarchy():
+    """Reads the $MODULE-hierarchy.txt file.
 
-    global Objects, ObjectLevels
-    Objects = []
-    ObjectLevels = []
+    This contains all the GObject subclasses described in this module (and their
+    ancestors).
+    It places them in the Objects array, and places their level
+    in the object hierarchy in the ObjectLevels array, at the
+    same index. GObject, the root object, has a level of 1.
+
+    This also generates tree_index.sgml as it goes along.
+    """
+
+    Objects[:] = []
+    ObjectLevels[:] = []
 
     if not os.path.isfile(OBJECT_TREE_FILE):
         return
@@ -5261,16 +5228,10 @@ def ReadObjectHierarchy():
     OutputObjectList()
 
 
-#
-# Function    : ReadInterfaces
-# Description : This reads in the $MODULE.interfaces file.
-#
-# Arguments   : none
-#
-
 def ReadInterfaces():
-    global Interfaces
-    Interfaces = {}
+    """Reads the $MODULE.interfaces file."""
+
+    Interfaces.clear()
 
     if not os.path.isfile(INTERFACES_FILE):
         return
@@ -5297,16 +5258,9 @@ def ReadInterfaces():
     INPUT.close()
 
 
-#
-# Function    : ReadPrerequisites
-# Description : This reads in the $MODULE.prerequisites file.
-#
-# Arguments   : none
-#
-
 def ReadPrerequisites():
-    global Prerequisites
-    Prerequisites = {}
+    """This reads in the $MODULE.prerequisites file."""
+    Prerequisites.clear()
 
     if not os.path.isfile(PREREQUISITES_FILE):
         return
@@ -5330,16 +5284,15 @@ def ReadPrerequisites():
     INPUT.close()
 
 
-#
-# Function    : ReadArgsFile
-# Description : This reads in an existing file which contains information on
-#                all GTK args. It creates the arrays @ArgObjects, @ArgNames,
-#                @ArgTypes, @ArgFlags, @ArgNicks and @ArgBlurbs containing info
-#               on the args.
-# Arguments   : $file - the file containing the arg information.
-#
-
 def ReadArgsFile(ifile):
+    """Reads information about object properties
+
+    It creates the arrays ArgObjects, ArgNames, ArgTypes, ArgFlags, ArgNicks and
+    ArgBlurbs containing info on the args.
+
+    Args:
+        ifile (str): the file containing the arg information.
+    """
     in_arg = False
     arg_object = None
     arg_name = None
@@ -5351,15 +5304,14 @@ def ReadArgsFile(ifile):
     arg_range = None
 
     # Reset the args info.
-    global ArgObjects, ArgNames, ArgTypes, ArgFlags, ArgNicks, ArgBlurbs, ArgDefaults, ArgRanges
-    ArgObjects = []
-    ArgNames = []
-    ArgTypes = []
-    ArgFlags = []
-    ArgNicks = []
-    ArgBlurbs = []
-    ArgDefaults = []
-    ArgRanges = []
+    ArgObjects[:] = []
+    ArgNames[:] = []
+    ArgTypes[:] = []
+    ArgFlags[:] = []
+    ArgNicks[:] = []
+    ArgBlurbs[:] = []
+    ArgDefaults[:] = []
+    ArgRanges[:] = []
 
     if not os.path.isfile(ifile):
         return
@@ -5430,14 +5382,18 @@ def ReadArgsFile(ifile):
     INPUT.close()
 
 
-#
-# Function    : AddTreeLineArt
-# Description : Add unicode lineart to a pre-indented string array and returns
-#               it as as multiline string.
-# Arguments   : @tree - array of indented strings.
-#
-
 def AddTreeLineArt(tree):
+    """Generate a line art tree.
+
+    Add unicode lineart to a pre-indented string array and returns
+    it as as multiline string.
+
+    Args:
+        tree (list): of indented strings.
+
+    Returns:
+        str: multiline string with tree line art
+    """
     # iterate bottom up over the tree
     for i in range(len(tree) - 1, -1, -1):
         # count leading spaces
@@ -5467,47 +5423,29 @@ def AddTreeLineArt(tree):
     return res
 
 
-#
-# Function    : CheckIsObject
-# Description : Returns 1 if the given name is a GObject or a subclass.
-#                It uses the global @Objects array.
-#                Note that the @Objects array only contains classes in the
-#                current module and their ancestors - not all GObject classes.
-# Arguments   : $name - the name to check.
-#
-
 def CheckIsObject(name):
+    """Check if symbols is an object.
+
+    It uses the global Objects array. Note that the Objects array only contains
+    classes in the current module and their ancestors - not all GObject classes.
+
+    Args:
+        name (str): the object name to check.
+
+    Returns:
+        bool: True if the given name is a GObject or a subclass.
+    """
     root = ObjectRoots.get(name)
     # Let GBoxed pass as an object here to get -struct appended to the id
     # and prevent conflicts with sections.
     return root and root != 'GEnum' and root != 'GFlags'
 
 
-#
-# Function    : MakeReturnField
-# Description : Pads a string to $RETURN_TYPE_FIELD_WIDTH.
-# Arguments   : $str - the string to pad.
-#
-
-def MakeReturnField(s):
-    return s + (' ' * (RETURN_TYPE_FIELD_WIDTH - len(s)))
-
-
-#
-# Function    : GetSymbolSourceFile
-# Description : Get the filename where the symbol docs where taken from.
-# Arguments   : $symbol - the symbol name
-#
-
 def GetSymbolSourceFile(symbol):
+    """Get the filename where the symbol docs where taken from."""
     return SourceSymbolSourceFile.get(symbol, '')
 
 
-#
-# Function    : GetSymbolSourceLine
-# Description : Get the file line where the symbol docs where taken from.
-# Arguments   : $symbol - the symbol name
-#
-
 def GetSymbolSourceLine(symbol):
+    """Get the file line where the symbol docs where taken from."""
     return SourceSymbolSourceLine.get(symbol, 0)
