@@ -5,7 +5,7 @@ SUBDIRS = gobject bugs annotations fail empty program .
 if BUILD_TESTS
 
 TESTS = \
-  gtkdoc-check.py gtkdoc-common.py \
+  check.py common.py mk_to_db.py \
   tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh \
   program.sh
 TESTS_ENVIRONMENT = \
@@ -20,10 +20,7 @@ TESTS_ENVIRONMENT = \
 
 endif
 
-EXTRA_DIST = gtkdoctest.sh \
-  gtkdoc-check.py gtkdoc-common.py \
-  tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh \
-	program.sh
+EXTRA_DIST = gtkdoctest.sh $(TESTS)
 
 # run any given test by running make <test>.check
 %.check: %
