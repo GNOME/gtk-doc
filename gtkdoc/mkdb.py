@@ -53,10 +53,6 @@ OUTPUT_ALL_SYMBOLS = None
 OUTPUT_SYMBOLS_WITHOUT_SINCE = None
 ROOT_DIR = "."
 OBJECT_TREE_FILE = None
-INTERFACES_FILE = None
-PREREQUISITES_FILE = None
-SIGNALS_FILE = None
-ARGS_FILE = None
 
 # These global arrays store information on signals. Each signal has an entry
 # in each of these arrays at the same index, like a multi-dimensional array.
@@ -270,8 +266,7 @@ parser.add_argument('--outputsymbolswithoutsince', default=False, action='store_
 def Run(options):
     global MODULE, SOURCE_DIRS, SOURCE_SUFFIXES, IGNORE_FILES, MAIN_SGML_FILE, EXPAND_CONTENT_FILES, \
         INLINE_MARKUP_MODE, DEFAULT_STABILITY, DEFAULT_INCLUDES, NAME_SPACE, OUTPUT_ALL_SYMBOLS, \
-        OUTPUT_SYMBOLS_WITHOUT_SINCE, DB_OUTPUT_DIR, OBJECT_TREE_FILE, INTERFACES_FILE, PREREQUISITES_FILE, \
-        SIGNALS_FILE, ARGS_FILE, doctype_header
+        OUTPUT_SYMBOLS_WITHOUT_SINCE, DB_OUTPUT_DIR, OBJECT_TREE_FILE, doctype_header
 
     options = parser.parse_args()
 
@@ -336,28 +331,16 @@ def Run(options):
     # This file contains the object hierarchy.
     OBJECT_TREE_FILE = os.path.join(ROOT_DIR, MODULE + ".hierarchy")
 
-    # This file contains the interfaces.
-    INTERFACES_FILE = os.path.join(ROOT_DIR, MODULE + ".interfaces")
-
-    # This file contains the prerequisites.
-    PREREQUISITES_FILE = os.path.join(ROOT_DIR, MODULE + ".prerequisites")
-
-    # This file contains signal arguments and names.
-    SIGNALS_FILE = os.path.join(ROOT_DIR, MODULE + ".signals")
-
-    # The file containing Arg information.
-    ARGS_FILE = os.path.join(ROOT_DIR, MODULE + ".args")
-
     # Create the root DocBook output directory if it doens't exist.
     if not os.path.isdir(DB_OUTPUT_DIR):
         os.mkdir(DB_OUTPUT_DIR)
 
     ReadKnownSymbols(os.path.join(ROOT_DIR, MODULE + "-sections.txt"))
-    ReadSignalsFile(SIGNALS_FILE)
-    ReadArgsFile(ARGS_FILE)
-    ReadObjectHierarchy()
-    ReadInterfaces()
-    ReadPrerequisites()
+    ReadSignalsFile(os.path.join(ROOT_DIR, MODULE + ".signals"))
+    ReadArgsFile(os.path.join(ROOT_DIR, MODULE + ".args"))
+    ReadObjectHierarchy(OBJECT_TREE_FILE)
+    ReadInterfaces(os.path.join(ROOT_DIR, MODULE + ".interfaces"))
+    ReadPrerequisites(os.path.join(ROOT_DIR, MODULE + ".prerequisites"))
 
     ReadDeclarationsFile(os.path.join(ROOT_DIR, MODULE + "-decl.txt"), 0)
     if os.path.isfile(os.path.join(ROOT_DIR, MODULE + "-overrides.txt")):
@@ -4441,7 +4424,7 @@ def ReadSignalsFile(ifile):
     INPUT.close()
 
 
-def ReadObjectHierarchy():
+def ReadObjectHierarchy(ifile):
     """Reads the $MODULE-hierarchy.txt file.
 
     This contains all the GObject subclasses described in this module (and their
@@ -4451,15 +4434,18 @@ def ReadObjectHierarchy():
     same index. GObject, the root object, has a level of 1.
 
     This also generates tree_index.sgml as it goes along.
+
+    Args:
+        ifile (str): the input filename.
     """
 
     Objects[:] = []
     ObjectLevels[:] = []
 
-    if not os.path.isfile(OBJECT_TREE_FILE):
+    if not os.path.isfile(ifile):
         return
 
-    INPUT = open(OBJECT_TREE_FILE)
+    INPUT = open(ifile)
 
     # Only emit objects if they are supposed to be documented, or if
     # they have documented children. To implement this, we maintain a
@@ -4498,7 +4484,7 @@ def ReadObjectHierarchy():
                 ObjectLevels.append(level)
                 ObjectRoots[gobject] = root
         # else
-        #    common.LogWarning(OBJECT_TREE_FILE, line_number, "unknown type %s" % object)
+        #    common.LogWarning(ifile, line_number, "unknown type %s" % object)
         #
 
     INPUT.close()
@@ -4519,15 +4505,19 @@ def ReadObjectHierarchy():
     OutputObjectList()
 
 
-def ReadInterfaces():
-    """Reads the $MODULE.interfaces file."""
+def ReadInterfaces(ifile):
+    """Reads the $MODULE.interfaces file.
+
+    Args:
+        ifile (str): the input filename.
+    """
 
     Interfaces.clear()
 
-    if not os.path.isfile(INTERFACES_FILE):
+    if not os.path.isfile(ifile):
         return
 
-    INPUT = open(INTERFACES_FILE)
+    INPUT = open(ifile)
 
     for line in INPUT:
         line = line.strip()
@@ -4549,14 +4539,18 @@ def ReadInterfaces():
     INPUT.close()
 
 
-def ReadPrerequisites():
-    """This reads in the $MODULE.prerequisites file."""
+def ReadPrerequisites(ifile):
+    """This reads in the $MODULE.prerequisites file.
+
+    Args:
+        ifile (str): the input filename.
+    """
     Prerequisites.clear()
 
-    if not os.path.isfile(PREREQUISITES_FILE):
+    if not os.path.isfile(ifile):
         return
 
-    INPUT = open(PREREQUISITES_FILE)
+    INPUT = open(ifile)
 
     for line in INPUT:
         line = line.strip()
@@ -4582,7 +4576,7 @@ def ReadArgsFile(ifile):
     ArgBlurbs containing info on the args.
 
     Args:
-        ifile (str): the file containing the arg information.
+        ifile (str): the input filename.
     """
     in_arg = False
     arg_object = None
