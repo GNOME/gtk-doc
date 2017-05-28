@@ -29,6 +29,7 @@ import os
 import re
 import shlex
 import subprocess
+import sys
 import tempfile
 
 from . import common, config
@@ -220,6 +221,8 @@ def FixHTMLFile(options, file):
     logging.info('Fixing file: %s', file)
 
     content = open(file).read()
+    if sys.version_info < (3,):
+        content = content.decode('utf-8')
 
     if config.highlight:
         # FIXME: ideally we'd pass a clue about the example language to the highligher
@@ -262,7 +265,10 @@ def FixHTMLFile(options, file):
             logging.info('make xref failed for line %d: "%s"', i, lines[i])
 
     new_file = file + '.new'
-    open(new_file, 'w').write('\n'.join(lines))
+    content = '\n'.join(lines)
+    if sys.version_info < (3,):
+        content = content.encode('utf-8')
+    open(new_file, 'w').write(content)
 
     os.unlink(file)
     os.rename(new_file, file)
@@ -335,7 +341,7 @@ def HighlightSource(options, type, source):
 
     # write source to a temp file
     # FIXME: use .c for now to hint the language to the highlighter
-    with tempfile.NamedTemporaryFile(suffix='.c') as f:
+    with tempfile.NamedTemporaryFile(mode='w+', suffix='.c') as f:
         f.write(source)
         f.flush()
         temp_source_file = f.name
@@ -345,7 +351,7 @@ def HighlightSource(options, type, source):
 
         # format source
         highlighted_source = subprocess.check_output(
-            [config.highlight] + shlex.split(highlight_options) + [temp_source_file])
+            [config.highlight] + shlex.split(highlight_options) + [temp_source_file]).decode('utf-8')
         logging.debug('result: [%s]', highlighted_source)
         if config.highlight.endswith('/source-highlight'):
             highlighted_source = re.sub(r'^<\!-- .*? -->', '', highlighted_source, flags=re.MULTILINE | re.DOTALL)
@@ -371,7 +377,7 @@ def HighlightSourceVim(options, type, source):
     source = HighlightSourcePreProcess(source)
 
     # write source to a temp file
-    with tempfile.NamedTemporaryFile(suffix='.h') as f:
+    with tempfile.NamedTemporaryFile(mode='w+', suffix='.h') as f:
         f.write(source)
         f.flush()
         temp_source_file = f.name
