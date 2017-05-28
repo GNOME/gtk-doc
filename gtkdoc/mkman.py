@@ -36,10 +36,9 @@ def run(options):
 
     # we could do "--path $PWD " to avoid needing rewriting entities that
     # are copied from the header into docs under xml
-    if options.path == '':
-        path_arg = []
-    else:
-        path_arg = ['--path', options.path]
+    path_arg = []
+    for path in options.path:
+        path_arg += ['--path', path]
 
     # would it make sense to create man pages only for certain refentries
     # e.g. for tools

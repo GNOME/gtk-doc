@@ -30,13 +30,12 @@ from . import config
 
 
 def run_xsltproc(options, args):
+    command = [config.xsltproc]
     # we could do "--path $PWD " to avoid needing rewriting entities that are
     # copied from the header into docs under xml
-    if len(options.path) == 0:
-        cmd = [config.xsltproc] + args
-    else:
-        cmd = [config.xsltproc, '--path'] + options.searchpath + args
-    pc = subprocess.Popen(cmd, stderr=subprocess.PIPE)
+    for path in options.path:
+        command += ['--path', path]
+    pc = subprocess.Popen(command + args, stderr=subprocess.PIPE)
     (o, stde) = pc.communicate()
     open('profile.txt', 'wb').write(stde)
     return pc.returncode

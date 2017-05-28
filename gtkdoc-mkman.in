@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser.add_argument('--version', action='version', version=config.version)
     parser.add_argument('--verbose', default=False, action='store_true',
                         help='Print extra output while processing')
-    parser.add_argument('--path', default='',
+    parser.add_argument('--path', default=[], action='append',
                         help='Extra source directories')
     parser.add_argument('args', nargs=2,
                         help='MODULE DRIVER_FILE')
