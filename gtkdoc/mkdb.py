@@ -4461,7 +4461,7 @@ def ReadObjectHierarchy(ifile):
             continue
 
         gobject = m1.group(0)
-        level = len(line[:m1.start()]) / 2 + 1
+        level = len(line[:m1.start()]) // 2 + 1
 
         if level == 1:
             root = gobject
