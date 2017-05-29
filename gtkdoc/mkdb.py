@@ -36,17 +36,12 @@ import sys
 from . import common, md_to_db
 
 # Options
-
-# name of documentation module
 MODULE = None
 DB_OUTPUT_DIR = None
-MAIN_SGML_FILE = None
 INLINE_MARKUP_MODE = None
 DEFAULT_STABILITY = None
-DEFAULT_INCLUDES = None
 NAME_SPACE = ''
-ROOT_DIR = "."
-OBJECT_TREE_FILE = None
+ROOT_DIR = '.'
 
 # These global arrays store information on signals. Each signal has an entry
 # in each of these arrays at the same index, like a multi-dimensional array.
@@ -258,9 +253,8 @@ parser.add_argument('--outputsymbolswithoutsince', default=False, action='store_
 
 
 def Run(options):
-    global MODULE, MAIN_SGML_FILE, \
-        INLINE_MARKUP_MODE, DEFAULT_STABILITY, DEFAULT_INCLUDES, NAME_SPACE, \
-        DB_OUTPUT_DIR, OBJECT_TREE_FILE, doctype_header
+    global MODULE, INLINE_MARKUP_MODE, DEFAULT_STABILITY, NAME_SPACE, \
+        DB_OUTPUT_DIR, doctype_header
 
     options = parser.parse_args()
 
@@ -269,62 +263,30 @@ def Run(options):
     # We should pass the options variable around instead of this global variable horror
     # but too much of the code expects these to be around. Fix this once the transition is done.
     MODULE = options.module
-    MAIN_SGML_FILE = options.main_sgml_file
     INLINE_MARKUP_MODE = options.xml_mode or options.sgml_mode
     DEFAULT_STABILITY = options.default_stability
-    DEFAULT_INCLUDES = options.default_includes
     NAME_SPACE = options.name_space
 
-    if not MAIN_SGML_FILE:
+    main_sgml_file = options.main_sgml_file
+    if not main_sgml_file:
         # backwards compatibility
         if os.path.exists(MODULE + "-docs.sgml"):
-            MAIN_SGML_FILE = MODULE + "-docs.sgml"
+            main_sgml_file = MODULE + "-docs.sgml"
         else:
-            MAIN_SGML_FILE = MODULE + "-docs.xml"
+            main_sgml_file = MODULE + "-docs.xml"
 
     # extract docbook header or define default
-    if os.path.exists(MAIN_SGML_FILE):
-        INPUT = open(MAIN_SGML_FILE)
-        doctype_header = ''
-        for line in INPUT:
-            if re.search(r'^\s*<(book|chapter|article)', line):
-                # check that the top-level tagSYSTEM or the doctype decl contain the xinclude namespace decl
-                if not re.search(r'http:\/\/www.w3.org\/200[13]\/XInclude', line) and not re.search(r'http:\/\/www.w3.org\/200[13]\/XInclude', doctype_header, flags=re.MULTILINE):
-                    doctype_header = ''
-                break
-
-            # if there are SYSTEM ENTITIES here, we should prepend "../" to the path
-            # FIXME: not sure if we can do this now, as people already work-around the problem
-            # r'#<!ENTITY % ([a-zA-Z-]+) SYSTEM \"([^/][a-zA-Z./]+)\">', r'<!ENTITY % \1 SYSTEM \"../\2\">';
-            line = re.sub(
-                r'<!ENTITY % gtkdocentities SYSTEM "([^"]*)">', r'<!ENTITY % gtkdocentities SYSTEM "../\1">', line)
-            doctype_header += line
-        INPUT.close()
-        doctype_header = doctype_header.strip()
-    else:
-        doctype_header = '''<?xml version="1.0"?>
-<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
-               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
-[
-  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
-  <!ENTITY % gtkdocentities SYSTEM "../xml/gtkdocentities.ent">
-  %gtkdocentities;
-]>'''
+    doctype_header = GetDocbookHeader(main_sgml_file)
 
     # This is where we put all the DocBook output.
     DB_OUTPUT_DIR = DB_OUTPUT_DIR if DB_OUTPUT_DIR else os.path.join(ROOT_DIR, "xml")
-
-    # This file contains the object hierarchy.
-    OBJECT_TREE_FILE = os.path.join(ROOT_DIR, MODULE + ".hierarchy")
-
-    # Create the root DocBook output directory if it doens't exist.
     if not os.path.isdir(DB_OUTPUT_DIR):
         os.mkdir(DB_OUTPUT_DIR)
 
     ReadKnownSymbols(os.path.join(ROOT_DIR, MODULE + "-sections.txt"))
     ReadSignalsFile(os.path.join(ROOT_DIR, MODULE + ".signals"))
     ReadArgsFile(os.path.join(ROOT_DIR, MODULE + ".args"))
-    ReadObjectHierarchy(OBJECT_TREE_FILE)
+    ReadObjectHierarchy(os.path.join(ROOT_DIR, MODULE + ".hierarchy"))
     ReadInterfaces(os.path.join(ROOT_DIR, MODULE + ".interfaces"))
     ReadPrerequisites(os.path.join(ROOT_DIR, MODULE + ".prerequisites"))
 
@@ -344,7 +306,10 @@ def Run(options):
     for sdir in source_dirs:
         ReadSourceDocumentation(sdir, suffix_list, source_dirs, ignore_files)
 
-    changed = OutputDB(os.path.join(ROOT_DIR, MODULE + "-sections.txt"), options)
+    changed, book_top, book_bottom = OutputDB(os.path.join(ROOT_DIR, MODULE + "-sections.txt"), options)
+    OutputBook(main_sgml_file, book_top, book_bottom)
+
+    logging.info("All files created: %d", changed)
 
     # If any of the DocBook files have changed, update the timestamp file (so
     # it can be used for Makefile dependencies).
@@ -353,52 +318,7 @@ def Run(options):
         # try to detect the common prefix
         # GtkWidget, GTK_WIDGET, gtk_widget -> gtk
         if NAME_SPACE == '':
-            pos = 0
-            ratio = 0.0
-            while True:
-                prefix = {}
-                letter = ''
-                for symbol in IndexEntriesFull.keys():
-                    if NAME_SPACE == '' or NAME_SPACE.lower() in symbol.lower():
-                        if len(symbol) > pos:
-                            letter = symbol[pos:pos + 1]
-                            # stop prefix scanning
-                            if letter == "_":
-                                # stop on "_"
-                                break
-                            # Should we also stop on a uppercase char, if last was lowercase
-                            #   GtkWidget, if we have the 'W' and had the 't' before
-                            # or should we count upper and lowercase, and stop one 2nd uppercase, if we already had a lowercase
-                            #   GtkWidget, the 'W' would be the 2nd uppercase and with 't','k' we had lowercase chars before
-                            # need to recound each time as this is per symbol
-                            ul = letter.upper()
-                            if ul in prefix:
-                                prefix[ul] += 1
-                            else:
-                                prefix[ul] = 1
-
-                if letter != '' and letter != "_":
-                    maxletter = ''
-                    maxsymbols = 0
-                    for letter in prefix.keys():
-                        logging.debug("ns prefix: %s: %s", letter, prefix[letter])
-                        if prefix[letter] > maxsymbols:
-                            maxletter = letter
-                            maxsymbols = prefix[letter]
-
-                    ratio = float(len(IndexEntriesFull)) / prefix[maxletter]
-                    logging.debug('most symbols start with %s, that is %f', maxletter, (100 * ratio))
-                    if ratio > 0.9:
-                        # do another round
-                        NAME_SPACE += maxletter
-
-                    pos += 1
-
-                else:
-                    ratio = 0.0
-
-                if ratio < 0.9:
-                    break
+            NAME_SPACE = DetermineNamespace()
 
         logging.info('namespace prefix ="%s"', NAME_SPACE)
 
@@ -486,7 +406,7 @@ def OutputDB(file, options):
     filename = ''
     book_top = ''
     book_bottom = ''
-    includes = DEFAULT_INCLUDES if DEFAULT_INCLUDES else ''
+    includes = options.default_includes or ''
     section_includes = ''
     in_section = 0
     title = ''
@@ -572,7 +492,7 @@ def OutputDB(file, options):
             if in_section:
                 section_includes = m4.group(1)
             else:
-                if DEFAULT_INCLUDES:
+                if options.default_includes:
                     common.LogWarning(file, line_number, "Default <INCLUDE> being overridden by command line option.")
                 else:
                     includes = m4.group(1)
@@ -906,10 +826,59 @@ def OutputDB(file, options):
         if file_changed:
             changed = True
 
-    OutputBook(book_top, book_bottom)
-
-    logging.info("All files created: %d", changed)
     return (changed, book_top, book_bottom)
+
+
+def DetermineNamespace():
+    """Find common set of characters."""
+    name_space = ''
+    pos = 0
+    ratio = 0.0
+    while True:
+        prefix = {}
+        letter = ''
+        for symbol in IndexEntriesFull.keys():
+            if name_space == '' or name_space.lower() in symbol.lower():
+                if len(symbol) > pos:
+                    letter = symbol[pos:pos + 1]
+                    # stop prefix scanning
+                    if letter == "_":
+                        # stop on "_"
+                        break
+                    # Should we also stop on a uppercase char, if last was lowercase
+                    #   GtkWidget, if we have the 'W' and had the 't' before
+                    # or should we count upper and lowercase, and stop one 2nd uppercase, if we already had a lowercase
+                    #   GtkWidget, the 'W' would be the 2nd uppercase and with 't','k' we had lowercase chars before
+                    # need to recound each time as this is per symbol
+                    ul = letter.upper()
+                    if ul in prefix:
+                        prefix[ul] += 1
+                    else:
+                        prefix[ul] = 1
+
+        if letter != '' and letter != "_":
+            maxletter = ''
+            maxsymbols = 0
+            for letter in prefix.keys():
+                logging.debug("ns prefix: %s: %s", letter, prefix[letter])
+                if prefix[letter] > maxsymbols:
+                    maxletter = letter
+                    maxsymbols = prefix[letter]
+
+            ratio = float(len(IndexEntriesFull)) / prefix[maxletter]
+            logging.debug('most symbols start with %s, that is %f', maxletter, (100 * ratio))
+            if ratio > 0.9:
+                # do another round
+                name_space += maxletter
+
+            pos += 1
+
+        else:
+            ratio = 0.0
+
+        if ratio < 0.9:
+            break
+    return name_space
 
 
 def OutputIndex(basename, apiindex):
@@ -2432,7 +2401,39 @@ def OutputExtraFile(file):
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
 
-def OutputBook(book_top, book_bottom):
+def GetDocbookHeader(main_file):
+    if os.path.exists(main_file):
+        INPUT = open(main_file)
+        header = ''
+        for line in INPUT:
+            if re.search(r'^\s*<(book|chapter|article)', line):
+                # check that the top-level tagSYSTEM or the doctype decl contain the xinclude namespace decl
+                if not re.search(r'http:\/\/www.w3.org\/200[13]\/XInclude', line) and \
+                        not re.search(r'http:\/\/www.w3.org\/200[13]\/XInclude', header, flags=re.MULTILINE):
+                    header = ''
+                break
+
+            # if there are SYSTEM ENTITIES here, we should prepend "../" to the path
+            # FIXME: not sure if we can do this now, as people already work-around the problem
+            # r'#<!ENTITY % ([a-zA-Z-]+) SYSTEM \"([^/][a-zA-Z./]+)\">', r'<!ENTITY % \1 SYSTEM \"../\2\">';
+            line = re.sub(
+                r'<!ENTITY % gtkdocentities SYSTEM "([^"]*)">', r'<!ENTITY % gtkdocentities SYSTEM "../\1">', line)
+            header += line
+        INPUT.close()
+        header = header.strip()
+    else:
+        header = '''<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+  <!ENTITY % gtkdocentities SYSTEM "../xml/gtkdocentities.ent">
+  %gtkdocentities;
+]>'''
+    return header
+
+
+def OutputBook(main_file, book_top, book_bottom):
     """Outputs the entities that need to be included into the main docbook file for the module.
 
     Args:
@@ -2462,8 +2463,8 @@ def OutputBook(book_top, book_bottom):
 
     # If the main docbook file hasn't been created yet, we create it here.
     # The user can tweak it later.
-    if MAIN_SGML_FILE and not os.path.exists(MAIN_SGML_FILE):
-        OUTPUT = open(MAIN_SGML_FILE, 'w')
+    if main_file and not os.path.exists(main_file):
+        OUTPUT = open(main_file, 'w')
 
         OUTPUT.write('''%s
 <book id="index">
@@ -2481,7 +2482,7 @@ def OutputBook(book_top, book_bottom):
     %s
   </chapter>
 ''' % (MakeDocHeader("book"), book_bottom))
-        if os.path.exists(OBJECT_TREE_FILE):
+        if os.path.exists('xml/tree_index.sgml'):
             OUTPUT.write('''  <chapter id="object-tree">
     <title>Object Hierarchy</title>
     <xi:include href="xml/tree_index.sgml"/>
