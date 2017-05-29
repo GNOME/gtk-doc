@@ -40,9 +40,6 @@ from . import common, md_to_db
 # name of documentation module
 MODULE = None
 DB_OUTPUT_DIR = None
-SOURCE_DIRS = None
-SOURCE_SUFFIXES = ''
-IGNORE_FILES = ''
 MAIN_SGML_FILE = None
 EXPAND_CONTENT_FILES = ''
 INLINE_MARKUP_MODE = None
@@ -264,7 +261,7 @@ parser.add_argument('--outputsymbolswithoutsince', default=False, action='store_
 
 
 def Run(options):
-    global MODULE, SOURCE_DIRS, SOURCE_SUFFIXES, IGNORE_FILES, MAIN_SGML_FILE, EXPAND_CONTENT_FILES, \
+    global MODULE, MAIN_SGML_FILE, EXPAND_CONTENT_FILES, \
         INLINE_MARKUP_MODE, DEFAULT_STABILITY, DEFAULT_INCLUDES, NAME_SPACE, OUTPUT_ALL_SYMBOLS, \
         OUTPUT_SYMBOLS_WITHOUT_SINCE, DB_OUTPUT_DIR, OBJECT_TREE_FILE, doctype_header
 
@@ -275,9 +272,6 @@ def Run(options):
     # We should pass the options variable around instead of this global variable horror
     # but too much of the code expects these to be around. Fix this once the transition is done.
     MODULE = options.module
-    SOURCE_DIRS = options.source_dir
-    SOURCE_SUFFIXES = options.source_suffixes
-    IGNORE_FILES = options.ignore_files
     MAIN_SGML_FILE = options.main_sgml_file
     EXPAND_CONTENT_FILES = options.expand_content_files
     INLINE_MARKUP_MODE = options.xml_mode or options.sgml_mode
@@ -286,8 +280,6 @@ def Run(options):
     NAME_SPACE = options.name_space
     OUTPUT_ALL_SYMBOLS = options.outputallsymbols
     OUTPUT_SYMBOLS_WITHOUT_SINCE = options.outputsymbolswithoutsince
-
-    logging.info(" ignore files: " + IGNORE_FILES)
 
     if not MAIN_SGML_FILE:
         # backwards compatibility
@@ -346,8 +338,17 @@ def Run(options):
     if os.path.isfile(os.path.join(ROOT_DIR, MODULE + "-overrides.txt")):
         ReadDeclarationsFile(os.path.join(ROOT_DIR, MODULE + "-overrides.txt"), 1)
 
-    for sdir in SOURCE_DIRS:
-        ReadSourceDocumentation(sdir)
+    # Scan sources
+    if options.source_suffixes:
+        suffix_list = ['.' + ext for ext in options.source_suffixes.split(',')]
+    else:
+        suffix_list = ['.c', '.h']
+
+    source_dirs = options.source_dir
+    ignore_files = options.ignore_files
+    logging.info(" ignore files: " + ignore_files)
+    for sdir in source_dirs:
+        ReadSourceDocumentation(sdir, suffix_list, source_dirs, ignore_files)
 
     changed = OutputDB(os.path.join(ROOT_DIR, MODULE + "-sections.txt"))
 
@@ -3592,7 +3593,24 @@ def GetArgs(gobject):
     return (synop, child_synop, style_synop, desc, child_desc, style_desc)
 
 
-def ReadSourceDocumentation(source_dir):
+def IgnorePath(path, source_dirs, ignore_files):
+    for sdir in source_dirs:
+        # Cut off base directory
+        m1 = re.search(r'^%s/(.*)$' % re.escape(sdir), path)
+        if m1:
+            # Check if the filename is in the ignore list.
+            m2 = re.search(r'(\s|^)%s(\s|$)' % re.escape(m1.group(1)), ignore_files)
+            if m2:
+                logging.info("Skipping path: %s", path)
+                return True
+            else:
+                logging.info("No match for: %s", m1.group(1))
+        else:
+            logging.info("No match for: %s", path)
+    return False
+
+
+def ReadSourceDocumentation(source_dir, suffix_list, source_dirs, ignore_files):
     """Read the documentation embedded in comment blocks in the source code.
 
     It recursively descends the source directory looking for source files and
@@ -3600,27 +3618,15 @@ def ReadSourceDocumentation(source_dir):
 
     Args:
         source_dir (str): the directory to scan.
+        suffix_list (list): extensions to check
     """
-    # prepend entries from @SOURCE_DIR
-    for sdir in SOURCE_DIRS:
-        # Check if the filename is in the ignore list.
-        m1 = re.search(r'^%s/(.*)$' % re.escape(sdir), source_dir)
-        if m1:
-            m2 = re.search(r'(\s|^)%s(\s|$)' % re.escape(m1.group(1)), IGNORE_FILES)
-            if m2:
-                logging.info("Skipping source directory: %s", source_dir)
-                return
-            else:
-                logging.info("No match for: %s", m1.group(1))
-        else:
-            logging.info("No match for: %s", source_dir)
+    if IgnorePath(source_dir, source_dirs, ignore_files):
+        return
 
     logging.info("Scanning source directory: %s", source_dir)
 
     # This array holds any subdirectories found.
     subdirs = []
-
-    suffix_list = SOURCE_SUFFIXES.split(',')
 
     for ifile in os.listdir(source_dir):
         logging.debug("... : %s", ifile)
@@ -3629,19 +3635,19 @@ def ReadSourceDocumentation(source_dir):
         fname = os.path.join(source_dir, ifile)
         if os.path.isdir(fname):
             subdirs.append(fname)
-        elif SOURCE_SUFFIXES:
+        else:
             for suffix in suffix_list:
-                if ifile.endswith("." + suffix):
-                    ScanSourceFile(fname)
-        elif re.search(r'\.[ch]$', ifile):
-            ScanSourceFile(fname)
+                if ifile.endswith(suffix):
+                    if not IgnorePath(fname, source_dirs, ignore_files):
+                        ScanSourceFile(fname, ignore_files)
+                        break
 
     # Now recursively scan the subdirectories.
     for sdir in subdirs:
-        ReadSourceDocumentation(sdir)
+        ReadSourceDocumentation(sdir, suffix_list, source_dirs, ignore_files)
 
 
-def ScanSourceFile(ifile):
+def ScanSourceFile(ifile, ignore_files):
     """Scans one source file looking for specially-formatted comment blocks.
 
     Later MergeSourceDocumentation() is copying over the doc blobs that are not
@@ -3650,16 +3656,6 @@ def ScanSourceFile(ifile):
     Args:
         file (str): the file to scan.
     """
-    # prepend entries from @SOURCE_DIR
-    for idir in SOURCE_DIRS:
-        # Check if the filename is in the ignore list.
-        m1 = re.search(r'^%s/(.*)$' % re.escape(idir), ifile)
-        if m1:
-            m2 = re.search(r'(\s|^)%s(\s|$)' % re.escape(m1.group(1)), IGNORE_FILES)
-            if m2:
-                logging.info("Skipping source file: %s", ifile)
-                return
-
     m = re.search(r'^.*[\/\\]([^\/\\]*)$', ifile)
     if m:
         basename = m.group(1)
@@ -3668,7 +3664,7 @@ def ScanSourceFile(ifile):
         basename = ifile
 
     # Check if the basename is in the list of files to ignore.
-    if re.search(r'(\s|^)%s(\s|$)' % re.escape(basename), IGNORE_FILES):
+    if re.search(r'(\s|^)%s(\s|$)' % re.escape(basename), ignore_files):
         logging.info("Skipping source file: %s", ifile)
         return
 
