@@ -25,7 +25,6 @@ Creates the DocBook files from the source comments.
 
 from __future__ import print_function
 
-import argparse
 from collections import OrderedDict
 import logging
 import os
@@ -231,34 +230,9 @@ ${args_desc}${signals_desc}${see_also}
 ''')
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--module', default='')
-parser.add_argument('--source-dir', action='append', dest='source_dir', default=[])
-parser.add_argument('--source-suffixes', dest='source_suffixes', default='')
-parser.add_argument('--ignore-files', dest='ignore_files', default='')
-parser.add_argument('--output-dir', dest='output_dir', default='')
-parser.add_argument('--tmpl-dir', dest='tmpl_dir', help="DEPRECATED")
-parser.add_argument('--main-sgml-file', dest='main_sgml_file', default='')
-parser.add_argument('--expand-content-files', dest='expand_content_files', default='')
-group = parser.add_mutually_exclusive_group()
-group.add_argument('--sgml-mode', action='store_true', default=False, dest='sgml_mode')
-group.add_argument('--xml-mode', action='store_true', default=False, dest='xml_mode')
-parser.add_argument('--default-stability', dest='default_stability',
-                    choices=['', 'Stable', 'Private', 'Unstable'], default='')
-parser.add_argument('--default-includes', dest='default_includes', default='')
-parser.add_argument('--output-format', dest='default_format', default='')
-parser.add_argument('--name-space', dest='name_space', default='')
-parser.add_argument('--outputallsymbols', default=False, action='store_true')
-parser.add_argument('--outputsymbolswithoutsince', default=False, action='store_true')
-
-
 def Run(options):
     global MODULE, INLINE_MARKUP_MODE, DEFAULT_STABILITY, NAME_SPACE, \
         DB_OUTPUT_DIR, doctype_header
-
-    options = parser.parse_args()
-
-    common.setup_logging()
 
     # We should pass the options variable around instead of this global variable horror
     # but too much of the code expects these to be around. Fix this once the transition is done.
