@@ -26,10 +26,11 @@ import argparse
 import sys
 sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-from gtkdoc import common, mkdb
+from gtkdoc import common, config, mkdb
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('--version', action='version', version=config.version)
     parser.add_argument('--module', default='')
     parser.add_argument('--source-dir', action='append', dest='source_dir', default=[])
     parser.add_argument('--source-suffixes', dest='source_suffixes', default='')
