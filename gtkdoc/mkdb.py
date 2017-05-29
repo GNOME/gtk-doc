@@ -41,13 +41,10 @@ from . import common, md_to_db
 MODULE = None
 DB_OUTPUT_DIR = None
 MAIN_SGML_FILE = None
-EXPAND_CONTENT_FILES = ''
 INLINE_MARKUP_MODE = None
 DEFAULT_STABILITY = None
 DEFAULT_INCLUDES = None
 NAME_SPACE = ''
-OUTPUT_ALL_SYMBOLS = None
-OUTPUT_SYMBOLS_WITHOUT_SINCE = None
 ROOT_DIR = "."
 OBJECT_TREE_FILE = None
 
@@ -261,9 +258,9 @@ parser.add_argument('--outputsymbolswithoutsince', default=False, action='store_
 
 
 def Run(options):
-    global MODULE, MAIN_SGML_FILE, EXPAND_CONTENT_FILES, \
-        INLINE_MARKUP_MODE, DEFAULT_STABILITY, DEFAULT_INCLUDES, NAME_SPACE, OUTPUT_ALL_SYMBOLS, \
-        OUTPUT_SYMBOLS_WITHOUT_SINCE, DB_OUTPUT_DIR, OBJECT_TREE_FILE, doctype_header
+    global MODULE, MAIN_SGML_FILE, \
+        INLINE_MARKUP_MODE, DEFAULT_STABILITY, DEFAULT_INCLUDES, NAME_SPACE, \
+        DB_OUTPUT_DIR, OBJECT_TREE_FILE, doctype_header
 
     options = parser.parse_args()
 
@@ -273,13 +270,10 @@ def Run(options):
     # but too much of the code expects these to be around. Fix this once the transition is done.
     MODULE = options.module
     MAIN_SGML_FILE = options.main_sgml_file
-    EXPAND_CONTENT_FILES = options.expand_content_files
     INLINE_MARKUP_MODE = options.xml_mode or options.sgml_mode
     DEFAULT_STABILITY = options.default_stability
     DEFAULT_INCLUDES = options.default_includes
     NAME_SPACE = options.name_space
-    OUTPUT_ALL_SYMBOLS = options.outputallsymbols
-    OUTPUT_SYMBOLS_WITHOUT_SINCE = options.outputsymbolswithoutsince
 
     if not MAIN_SGML_FILE:
         # backwards compatibility
@@ -350,7 +344,7 @@ def Run(options):
     for sdir in source_dirs:
         ReadSourceDocumentation(sdir, suffix_list, source_dirs, ignore_files)
 
-    changed = OutputDB(os.path.join(ROOT_DIR, MODULE + "-sections.txt"))
+    changed = OutputDB(os.path.join(ROOT_DIR, MODULE + "-sections.txt"), options)
 
     # If any of the DocBook files have changed, update the timestamp file (so
     # it can be used for Makefile dependencies).
@@ -474,7 +468,7 @@ def TrimTextBlock(desc):
     return re.sub(r'\s+$', '\n', desc.lstrip(), flags=re.MULTILINE)
 
 
-def OutputDB(file):
+def OutputDB(file, options):
     """Generate docbook files.
 
     This collects the output for each section of the docs, and outputs each file
@@ -484,6 +478,7 @@ def OutputDB(file):
         file (str): the $MODULE-sections.txt file which contains all of the
                     functions/macros/structs etc. being documented, organised
                     into sections and subsections.
+        options:    commandline options
     """
 
     logging.info("Reading: %s", file)
@@ -900,13 +895,13 @@ def OutputDB(file):
     OutputUndeclaredSymbols()
     OutputUnusedSymbols()
 
-    if OUTPUT_ALL_SYMBOLS:
+    if options.outputallsymbols:
         OutputAllSymbols()
 
-    if OUTPUT_SYMBOLS_WITHOUT_SINCE:
+    if options.outputsymbolswithoutsince:
         OutputSymbolsWithoutSince()
 
-    for filename in EXPAND_CONTENT_FILES.split():
+    for filename in options.expand_content_files.split():
         file_changed = OutputExtraFile(filename)
         if file_changed:
             changed = True
