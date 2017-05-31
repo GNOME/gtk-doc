@@ -24,6 +24,7 @@ Creates the DocBook files from the source comments.
 """
 
 from __future__ import print_function
+from six import iteritems
 
 from collections import OrderedDict
 import logging
@@ -1435,7 +1436,7 @@ def OutputStruct(symbol, declaration):
 <tbody>
 ''' % sid
 
-        for field_name, text in fields.iteritems():
+        for field_name, text in iteritems(fields):
             param_annotations = ''
 
             desc += "<row role=\"member\"><entry role=\"struct_member_name\"><para>%s</para></entry>\n" % text
@@ -1577,7 +1578,7 @@ def OutputUnion(symbol, declaration):
 <tbody>
 ''' % sid
 
-        for field_name, text in fields.iteritems():
+        for field_name, text in iteritems(fields):
             param_annotations = ''
 
             desc += "<row><entry role=\"union_member_name\"><para>%s</para></entry>\n" % text
@@ -1939,7 +1940,7 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
         missing_parameters = ''
         unused_parameters = ''
 
-        for param_name, param_desc in params.iteritems():
+        for param_name, param_desc in iteritems(params):
             (param_desc, param_annotations) = ExpandAnnotation(symbol, param_desc)
             param_desc = ConvertMarkDown(symbol, param_desc)
             # trim
@@ -3689,7 +3690,7 @@ def ScanSourceFile(ifile, ignore_files):
 
                 # Convert special characters
                 description = ConvertSGMLChars(symbol, description)
-                for (param_name, param_desc) in params.iteritems():
+                for (param_name, param_desc) in iteritems(params):
                     params[param_name] = ConvertSGMLChars(symbol, param_desc)
 
                 # Handle Section docs
@@ -3704,7 +3705,7 @@ def ScanSourceFile(ifile, ignore_files):
                             ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
 
                     logging.info("SECTION DOCS found in source for : '%s'", real_symbol)
-                    for param_name, param_desc in params.iteritems():
+                    for param_name, param_desc in iteritems(params):
                         logging.info("   '" + param_name + "'")
                         param_name = param_name.lower()
                         key = None
@@ -3737,7 +3738,7 @@ def ScanSourceFile(ifile, ignore_files):
                     section_id = None
 
                     logging.info("PROGRAM DOCS found in source for '%s'", real_symbol)
-                    for param_name, param_desc in params.iteritems():
+                    for param_name, param_desc in iteritems(params):
                         logging.info("PROGRAM key %s: '%s'", real_symbol, param_name)
                         param_name = param_name.lower()
                         key = None
@@ -4119,7 +4120,7 @@ def CheckParamsDocumented(symbol, params):
 
     if len(params) > 0:
         logging.info("params: %s", str(params))
-        for (param_name, param_desc) in params.iteritems():
+        for (param_name, param_desc) in iteritems(params):
             # Output a warning if the parameter is empty and remember for stats.
             if param_name != "void" and not re.search(r'\S', param_desc):
                 if symbol in AllIncompleteSymbols:
