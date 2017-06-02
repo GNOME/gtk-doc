@@ -125,7 +125,8 @@ MAINTAINERCLEANFILES = \
 	RELNOTES.txt \
 	ChangeLog-?.?? \
 	gtk-doc-*.tar.xz \
-	build-aux
+	build-aux \
+	gtkdoc/__pycache__ tests/__pycache__
 
 -include $(top_srcdir)/git.mk
 
