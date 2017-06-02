@@ -74,7 +74,7 @@ def run(options):
         dbcmd = [config.dblatex] + dblatex_options
         pc = subprocess.Popen(dbcmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         (stde, _) = pc.communicate()
-        for line in stde.split('\n'):
+        for line in stde.decode('utf-8').split('\n'):
             if not line.strip():
                 continue
             if 'programlisting or screen' in line:
