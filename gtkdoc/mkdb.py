@@ -24,7 +24,7 @@ Creates the DocBook files from the source comments.
 """
 
 from __future__ import print_function
-from six import iteritems
+from six import iteritems, iterkeys
 
 from collections import OrderedDict
 import logging
@@ -812,7 +812,7 @@ def DetermineNamespace():
     while True:
         prefix = {}
         letter = ''
-        for symbol in IndexEntriesFull.keys():
+        for symbol in iterkeys(IndexEntriesFull):
             if name_space == '' or name_space.lower() in symbol.lower():
                 if len(symbol) > pos:
                     letter = symbol[pos:pos + 1]
@@ -834,7 +834,7 @@ def DetermineNamespace():
         if letter != '' and letter != "_":
             maxletter = ''
             maxsymbols = 0
-            for letter in prefix.keys():
+            for letter in iterkeys(prefix):
                 logging.debug("ns prefix: %s: %s", letter, prefix[letter])
                 if prefix[letter] > maxsymbols:
                     maxletter = letter
@@ -881,7 +881,7 @@ def OutputIndex(basename, apiindex):
         {
             'original': x,
             'short': re.sub(r'^' + NAME_SPACE + r'\_?(.*)', r'\1', x.upper(), flags=re.I),
-        } for x in apiindex.keys()]
+        } for x in iterkeys(apiindex)]
     sorted_keys = sorted(mapped_keys, key=lambda d: (d['short'], d['original']))
 
     for key in sorted_keys:
@@ -970,7 +970,7 @@ def OutputSinceIndexes():
     """Generate the 'since' api index files."""
     for version in set(Since.values()):
         logging.info("Since : [%s]", version)
-        index = {x: IndexEntriesSince[x] for x in IndexEntriesSince.keys() if Since[x] == version}
+        index = {x: IndexEntriesSince[x] for x in iterkeys(IndexEntriesSince) if Since[x] == version}
         OutputIndex("api-index-" + version, index)
 
 
@@ -1008,7 +1008,7 @@ def OutputAnnotationGlossary():
   <title>Annotation Glossary</title>
 ''' % MakeDocHeader("glossary"))
 
-    for annotation in sorted(AnnotationsUsed.keys(), key=str.lower):
+    for annotation in sorted(iterkeys(AnnotationsUsed), key=str.lower):
         if annotation in AnnotationDefinition:
             definition = AnnotationDefinition[annotation]
             curletter = annotation[0].upper()
@@ -1900,7 +1900,7 @@ def OutputFunction(symbol, declaration, symbol_type):
         if param_annotations != '':
             desc += "\n<para>%s</para>" % param_annotations
 
-    desc += OutputParamDescriptions("FUNCTION", symbol, fields.keys())
+    desc += OutputParamDescriptions("FUNCTION", symbol, iterkeys(fields))
     desc += OutputSymbolTraits(symbol)
     desc += "</refsect2>\n"
     return (synop, desc)
@@ -3325,7 +3325,7 @@ def GetSignals(gobject):
                         gtype = m.group(1)
                         pointer = m.group(2)
                         if sourceparams:
-                            param_name = sourceparams.keys()[j]
+                            param_name = list(sourceparams)[j]   # keys as list
                             logging.info('from sourceparams: "%s" (%d: %s)', param_name, j, params[j])
                         else:
                             param_name = m.group(3)
@@ -3961,7 +3961,7 @@ def OutputMissingDocumentation():
 
     UNDOCUMENTED = open(new_undocumented_file, 'w')
 
-    for symbol in sorted(AllSymbols.keys()):
+    for symbol in sorted(iterkeys(AllSymbols)):
         # FIXME: should we print common.LogWarnings for undocumented stuff?
         # DEBUG
         # location = "defined at " + GetSymbolSourceFile(symbol) + ":" + GetSymbolSourceLine(symbol) + "\n"
@@ -4043,7 +4043,7 @@ def OutputUndeclaredSymbols():
     UNDECLARED = open(new_undeclared_file, 'w')
 
     if UndeclaredSymbols:
-        UNDECLARED.write("\n".join(sorted(UndeclaredSymbols.keys())))
+        UNDECLARED.write("\n".join(sorted(iterkeys(UndeclaredSymbols))))
         UNDECLARED.write("\n")
         print("See %s-undeclared.txt for the list of undeclared symbols." % MODULE)
 
@@ -4067,12 +4067,12 @@ def OutputUnusedSymbols():
 
     UNUSED = open(new_unused_file, 'w')
 
-    for symbol in sorted(Declarations.keys()):
+    for symbol in sorted(iterkeys(Declarations)):
         if not symbol in DeclarationOutput:
             UNUSED.write("%s\n" % symbol)
             num_unused += 1
 
-    for symbol in sorted(AllUnusedSymbols.keys()):
+    for symbol in sorted(iterkeys(AllUnusedSymbols)):
         UNUSED.write(symbol + "(" + AllUnusedSymbols[symbol] + ")\n")
         num_unused += 1
 
@@ -4088,7 +4088,7 @@ def OutputAllSymbols():
     """Outputs list of all symbols to a file."""
     SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-symbols.txt"), 'w')
 
-    for symbol in sorted(AllSymbols.keys()):
+    for symbol in sorted(iterkeys(AllSymbols)):
         SYMBOLS.write(symbol + "\n")
     SYMBOLS.close()
 
@@ -4097,7 +4097,7 @@ def OutputSymbolsWithoutSince():
     """Outputs list of all symbols without a since tag to a file."""
     SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-nosince.txt"), 'w')
 
-    for symbol in sorted(SourceSymbolDocs.keys()):
+    for symbol in sorted(iterkeys(SourceSymbolDocs)):
         if symbol in Since:
             SYMBOLS.write(symbol + "\n")
     SYMBOLS.close()
@@ -4146,10 +4146,10 @@ def MergeSourceDocumentation():
     """
 
     # add whats found in the source
-    symbols = set(SourceSymbolDocs.keys())
+    symbols = set(iterkeys(SourceSymbolDocs))
 
     # and add known symbols from -sections.txt
-    for symbol in KnownSymbols.keys():
+    for symbol in iterkeys(KnownSymbols):
         if KnownSymbols[symbol] == 1:
             symbols.add(symbol)
 

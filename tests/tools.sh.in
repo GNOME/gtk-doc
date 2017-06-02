@@ -27,6 +27,8 @@ done
 
 
 # test python scripts
+# TODO: also test the module files
+# TODO: test python 2 and 3 (python3 -mcompileall gtkdoc/*.py)
 for file in gtkdoc-check gtkdoc-depscan gtkdoc-fixxref gtkdoc-mkdb gtkdoc-mkhtml gtkdoc-mkman gtkdoc-mkpdf gtkdoc-rebase gtkdoc-scangobj; do
     fullfile=`which $file`
     @PYTHON@ -m py_compile $fullfile

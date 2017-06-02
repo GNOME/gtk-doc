@@ -33,6 +33,9 @@ This second list file is typically copied to '$MODULE-sections.txt' and
 organized into sections ready to output the XML pages.
 """
 
+from __future__ import print_function
+from six import iteritems, iterkeys
+
 import logging
 import os
 import re
@@ -74,7 +77,7 @@ def Run(options):
         ScanHeaders(dir, section_list, decl_list, get_types, options)
 
     with open(new_decl_list, 'w') as f:
-        for section in sorted(section_list.keys()):
+        for section in sorted(iterkeys(section_list)):
             f.write(section_list[section])
 
     with open(new_decl, 'w') as f:
@@ -766,7 +769,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
         previous_line = line
 
     # print remaining forward declarations
-    for symbol in sorted(forward_decls.keys()):
+    for symbol in sorted(iterkeys(forward_decls)):
         if forward_decls[symbol]:
             AddSymbolToList(slist, symbol)
             decl_list.append(forward_decls[symbol])

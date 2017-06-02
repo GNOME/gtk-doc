@@ -25,6 +25,7 @@ The rebase tool rewrites URI references in installed HTML documentation.
 """
 
 from __future__ import print_function
+from six import iteritems, iterkeys
 
 import logging
 import os
@@ -248,6 +249,6 @@ def RebaseLink(href, options):
 
 
 def PrintWhatWeHaveDone():
-    for origdir in sorted(Mapped.keys()):
+    for origdir in sorted(iterkeys(Mapped)):
         info = Mapped[origdir]
         print(origdir, "->", info[0], "(%s)" % info[1])
