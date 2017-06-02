@@ -126,7 +126,7 @@ MAINTAINERCLEANFILES = \
 	ChangeLog-?.?? \
 	gtk-doc-*.tar.xz \
 	build-aux \
-	gtkdoc/__pycache__ tests/__pycache__
+	__pycache__ gtkdoc/__pycache__ tests/__pycache__
 
 -include $(top_srcdir)/git.mk
 
