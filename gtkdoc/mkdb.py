@@ -2508,9 +2508,9 @@ def CreateValidSGML(text):
         str: escaped input
     """
 
-    text = re.sub(r'&', r'&amp;', text)        # Do this first, or the others get messed up.
-    text = re.sub(r'<', r'&lt;', text)
-    text = re.sub(r'>', r'&gt;', text)
+    text = text.replace('&', '&amp;')        # Do this first, or the others get messed up.
+    text = text.replace('<', '&lt;')
+    text = text.replace('>', '&gt;')
     # browsers render single tabs inconsistently
     text = re.sub(r'([^\s])\t([^\s])', r'\1&#160;\2', text)
     return text
