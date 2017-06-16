@@ -337,14 +337,10 @@ def MakeGtkDocLink(pre, symbol, post):
 
 
 def HighlightSource(options, type, source):
-    source = HighlightSourcePreProcess(source)
-
     # write source to a temp file
     # FIXME: use .c for now to hint the language to the highlighter
     with tempfile.NamedTemporaryFile(mode='w+', suffix='.c') as f:
-        f.write(source)
-        f.flush()
-        temp_source_file = f.name
+        temp_source_file = HighlightSourcePreProcess(f, source)
         highlight_options = config.highlight_options.replace('$SRC_LANG', options.src_lang)
 
         logging.info('running %s %s %s', config.highlight, highlight_options, temp_source_file)
@@ -374,13 +370,9 @@ def HighlightSource(options, type, source):
 
 
 def HighlightSourceVim(options, type, source):
-    source = HighlightSourcePreProcess(source)
-
     # write source to a temp file
     with tempfile.NamedTemporaryFile(mode='w+', suffix='.h') as f:
-        f.write(source)
-        f.flush()
-        temp_source_file = f.name
+        temp_source_file = HighlightSourcePreProcess(f, source)
 
         # format source
         # TODO(ensonic): use p.communicate()
@@ -408,7 +400,7 @@ def HighlightSourceVim(options, type, source):
     return HighlightSourcePostprocess(type, highlighted_source)
 
 
-def HighlightSourcePreProcess(source):
+def HighlightSourcePreProcess(f, source):
     # chop of leading and trailing empty lines, leave leading space in first real line
     source = source.strip(' ')
     source = source.strip('\n')
@@ -422,7 +414,11 @@ def HighlightSourcePreProcess(source):
     source = source.replace('&lt;', '<')
     source = source.replace('&gt;', '>')
     source = source.replace('&amp;', '&')
-    return source
+    if sys.version_info < (3,):
+        source = source.encode('utf-8')
+    f.write(source)
+    f.flush()
+    return f.name
 
 
 def HighlightSourcePostprocess(type, highlighted_source):
