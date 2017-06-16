@@ -3312,6 +3312,9 @@ def GetSignals(gobject):
             indentation = ' ' * (len(callback_name) + 2)
 
             sourceparams = SourceSymbolParams.get(symbol)
+            sourceparam_names = None
+            if sourceparams:
+                sourceparam_names = list(sourceparams)  # keys as list
             params = SignalPrototypes[i].splitlines()
             type_len = len("gpointer")
             name_len = len("user_data")
@@ -3324,9 +3327,11 @@ def GetSignals(gobject):
                     if m:
                         gtype = m.group(1)
                         pointer = m.group(2)
-                        if sourceparams:
-                            param_name = list(sourceparams)[j]   # keys as list
-                            logging.info('from sourceparams: "%s" (%d: %s)', param_name, j, params[j])
+                        if sourceparam_names:
+                            if j < len(sourceparam_names):
+                                param_name = sourceparam_names[j]
+                                logging.info('from sourceparams: "%s" (%d: %s)', param_name, j, params[j])
+                            # we're mssing the docs for this param, don't warn here though
                         else:
                             param_name = m.group(3)
                             logging.info('from params: "%s" (%d: %s)', param_name, j, params[j])
