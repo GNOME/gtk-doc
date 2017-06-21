@@ -45,6 +45,10 @@ def setup_logging():
         logging.basicConfig(stream=sys.stdout,
                             level=logging.getLevelName(log_level.upper()),
                             format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+    # When redirecting the output on python2 we get UnicodeEncodeError:
+    if not sys.stdout.encoding:
+        import codecs
+        sys.stdout = codecs.getwriter('utf8')(sys.stdout)
 
 
 def UpdateFileIfChanged(old_file, new_file, make_backup):
