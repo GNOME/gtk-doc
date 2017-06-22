@@ -1275,6 +1275,9 @@ def run(options):
         os.unlink(c_file)
         os.unlink(o_file)
         os.unlink(x_file)
+    else:
+        logging.debug('Keeping generated sources for analysis: %s, %s, %s',
+                      c_file, o_file, x_file)
 
     common.UpdateFileIfChanged(old_signals_filename, new_signals_filename, False)
     common.UpdateFileIfChanged(old_hierarchy_filename, new_hierarchy_filename, False)
