@@ -25,7 +25,7 @@ import os
 import sys
 sys.path.append('@PYTHON_PACKAGE_DIR@')
 
-from gtkdoc import config, scangobj
+from gtkdoc import common, config, scangobj
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -65,5 +65,7 @@ if __name__ == '__main__':
         options.ldflags = os.environ.get('LDFLAGS', '')
     if not options.run:
         options.run = os.environ.get('RUN', '')
+
+    common.setup_logging()
 
     sys.exit(scangobj.run(options))
