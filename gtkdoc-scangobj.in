@@ -31,7 +31,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='gtkdoc-rebase version %s - introspect g-objects' % config.version)
     parser.add_argument('--version', action='version', version=config.version)
-    parser.add_argument('--module', default='',
+    parser.add_argument('--module', required=True,
                         help='Name of the doc module being parsed')
     parser.add_argument('--types', default='',
                         help='The name of the file to store the types in')

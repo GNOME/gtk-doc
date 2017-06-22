@@ -32,7 +32,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='gtkdoc-scan version %s - scan header files for public symbols' % config.version)
     parser.add_argument('--version', action='version', version=config.version)
-    parser.add_argument('--module', default='', help='Name of the doc module being parsed.')
+    parser.add_argument('--module', required=True,
+                        help='Name of the doc module being processed.')
     parser.add_argument('--source-dir', action='append', default=[],
                         help='Directories containing the source files to scan')
     parser.add_argument('--ignore-headers', default='',
@@ -52,9 +53,6 @@ if __name__ == '__main__':
     parser.add_argument('headers', nargs='*')
 
     options = parser.parse_args()
-    if options.module == '':
-        print('Error, missing module.')
-        sys.exit(1)
 
     common.setup_logging()
 

@@ -32,7 +32,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='gtkdoc-fixxref version %s - fix cross references in html files' % config.version)
     parser.add_argument('--version', action='version', version=config.version)
-    parser.add_argument('--module', default='', help='Name of the doc module being processed.')
+    parser.add_argument('--module', required=True,
+                        help='Name of the doc module being processed.')
     parser.add_argument('--module-dir', default='',
                         help='The directory which contains the generated HTML.')
     parser.add_argument('--html-dir', default='',
@@ -47,9 +48,6 @@ if __name__ == '__main__':
                         'highlighter you use.')
 
     options = parser.parse_args()
-    if options.module == '':
-        print('Error, missing module.')
-        sys.exit(1)
 
     if not options.module_dir:
         options.module_dir = os.path.join(options.html_dir, options.module)

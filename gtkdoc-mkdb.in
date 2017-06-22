@@ -31,7 +31,8 @@ from gtkdoc import common, config, mkdb
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--version', action='version', version=config.version)
-    parser.add_argument('--module', default='')
+    parser.add_argument('--module', required=True,
+                        help='Name of the doc module being parsed')
     parser.add_argument('--source-dir', action='append', dest='source_dir', default=[])
     parser.add_argument('--source-suffixes', dest='source_suffixes', default='')
     parser.add_argument('--ignore-files', dest='ignore_files', default='')
@@ -51,9 +52,6 @@ if __name__ == '__main__':
     parser.add_argument('--outputsymbolswithoutsince', default=False, action='store_true')
 
     options = parser.parse_args()
-    if options.module == '':
-        print('Error, missing module.')
-        sys.exit(1)
 
     if options.output_format != "xml":
         sys.exit('Invalid format "%s" passed to --output.format' % options.output_format)
