@@ -1250,6 +1250,8 @@ def run(options):
     if not options.verbose:
         stdout = ">/dev/null"
 
+    logging.debug('Intermediate scanner files: %s, %s, %s', c_file, o_file, x_file)
+
     # Compiling scanner
     command = '%s %s %s -c -o %s %s' % (options.cc, stdout, options.cflags, o_file, c_file)
     res = subprocess.check_call(command, shell=True)
@@ -1271,10 +1273,13 @@ def run(options):
         logging.warning('Running scanner failed: %d', res)
         return res
 
+    logging.debug('Scan complete')
     if 'GTK_DOC_KEEP_INTERMEDIATE' not in os.environ:
         os.unlink(c_file)
         os.unlink(o_file)
         os.unlink(x_file)
+        if 'libtool' in options.cc:
+            os.unlink(options.module + '-scan.o')
     else:
         logging.debug('Keeping generated sources for analysis: %s, %s, %s',
                       c_file, o_file, x_file)
