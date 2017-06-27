@@ -1279,7 +1279,9 @@ def run(options):
         os.unlink(o_file)
         os.unlink(x_file)
         if 'libtool' in options.cc:
-            os.unlink(options.module + '-scan.o')
+            o_file = options.module + '-scan.o'
+            if os.path.exists(o_file):
+                os.unlink(o_file)
     else:
         logging.debug('Keeping generated sources for analysis: %s, %s, %s',
                       c_file, o_file, x_file)
