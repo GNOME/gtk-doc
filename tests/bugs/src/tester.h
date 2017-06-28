@@ -115,7 +115,7 @@ const char* const * bug_552602 (void);
 
 /**
  * Bug446648:
- * @BUG_446648_FOO: field
+ * @BUG_446648_FOO: foo
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=446648
  */
