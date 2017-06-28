@@ -32,6 +32,9 @@
  * A new instance can be created using the gtkdoc_object_new() function. The
  * whole lifecycle usualy looks like shown in this example:
  * |[<!-- language="C" -->
+ * #include <glib.h>
+ * #include <glib-object.h>
+ *
  * GObject *myobj;
  *
  * myobj = gtkdoc_object_new();
