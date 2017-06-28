@@ -127,7 +127,7 @@ def ScanHeaders(source_dir, section_list, decl_list, get_types, options):
     # This array holds any subdirectories found.
     subdirs = []
 
-    for file in os.listdir(source_dir):
+    for file in sorted(os.listdir(source_dir)):
         if file.startswith('.'):
             continue
         fullname = os.path.join(source_dir, file)

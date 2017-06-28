@@ -3604,7 +3604,7 @@ def ReadSourceDocumentation(source_dir, suffix_list, source_dirs, ignore_files):
     # This array holds any subdirectories found.
     subdirs = []
 
-    for ifile in os.listdir(source_dir):
+    for ifile in sorted(os.listdir(source_dir)):
         logging.debug("... : %s", ifile)
         if ifile.startswith('.'):
             continue

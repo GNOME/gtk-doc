@@ -127,7 +127,7 @@ def ScanIndices(scan_dir, use_absolute_links):
         return
 
     subdirs = []
-    for entry in os.listdir(scan_dir):
+    for entry in sorted(os.listdir(scan_dir)):
         full_entry = os.path.join(scan_dir, entry)
         if os.path.isdir(full_entry):
             subdirs.append(full_entry)
@@ -209,7 +209,7 @@ def ReadSections(options):
 def FixCrossReferences(options):
     scan_dir = options.module_dir
     # TODO(ensonic): use glob.glob()?
-    for entry in os.listdir(scan_dir):
+    for entry in sorted(os.listdir(scan_dir)):
         full_entry = os.path.join(scan_dir, entry)
         if os.path.isdir(full_entry):
             continue
