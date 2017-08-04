@@ -4,6 +4,13 @@
 #include <glib.h>
 #include <glib-object.h>
 
+/**
+ * FOO:
+ * The FOO.
+ *
+ * Since: 0.1
+ */
+#define FOO "bar"
 
 void test (gint a);
 

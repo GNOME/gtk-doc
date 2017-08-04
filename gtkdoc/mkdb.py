@@ -2441,6 +2441,8 @@ def OutputBook(main_file, book_top, book_bottom):
     if main_file and not os.path.exists(main_file):
         OUTPUT = open(main_file, 'w')
 
+        logging.info("no master doc, create default one at: " + main_file)
+
         OUTPUT.write('''%s
 <book id="index">
   <bookinfo>
@@ -2481,6 +2483,14 @@ def OutputBook(main_file, book_top, book_bottom):
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
   </index>
 ''')
+        for version in set(Since.values()):
+            dash_version = version.replace('.', '-')
+            OUTPUT.write('''  <index id="api-index-%s" role="%s">
+    <title>Index of new API in %s</title>
+    <xi:include href="xml/api-index-%s.xml"><xi:fallback /></xi:include>
+  </index>
+''' % (dash_version, version, version, version))
+
         if AnnotationsUsed:
             OUTPUT.write('''  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
 ''')
