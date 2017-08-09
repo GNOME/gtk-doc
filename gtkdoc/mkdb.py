@@ -4425,6 +4425,7 @@ def ReadObjectHierarchy(ifile):
     ObjectLevels[:] = []
 
     if not os.path.isfile(ifile):
+        logging.debug('no *-hierarchy.tx')
         return
 
     INPUT = open(ifile)
