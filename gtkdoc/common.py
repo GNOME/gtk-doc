@@ -74,6 +74,7 @@ def UpdateFileIfChanged(old_file, new_file, make_backup):
         new_contents = open(new_file, 'rb').read()
         if old_contents == new_contents:
             os.unlink(new_file)
+            logging.debug("-> content is the same.")
             return False
 
         if make_backup:
@@ -83,6 +84,9 @@ def UpdateFileIfChanged(old_file, new_file, make_backup):
             os.rename(old_file, backupname)
         else:
             os.unlink(old_file)
+        logging.debug("-> content differs.")
+    else:
+        logging.debug("-> %s created.", old_file)
 
     os.rename(new_file, old_file)
     return True
