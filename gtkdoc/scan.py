@@ -236,7 +236,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
             logging.info('Comment: %s', line.strip())
             doc_comment += line
             if re.search(r'\*/', line):
-                m = re.search(r'\* ([a-zA-Z][a-zA-Z0-9_]+):/', doc_comment)
+                m = re.search(r'\* ([a-zA-Z][a-zA-Z0-9_]+):', doc_comment)
                 if m:
                     doc_comments[m.group(1).lower()] = 1
                 in_comment = 0
