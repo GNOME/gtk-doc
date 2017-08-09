@@ -39,6 +39,7 @@ from six import iteritems, iterkeys
 import logging
 import os
 import re
+import shutil
 
 from . import common
 
@@ -104,7 +105,9 @@ def Run(options):
     # we copy the MODULE-decl-list.txt file into its place. The user can tweak it
     # later if they want.
     if options.rebuild_sections or not os.path.exists(sections_file):
-        common.UpdateFileIfChanged(sections_file, old_decl_list, False)
+        new_sections_file = base_filename + '-sections.new'
+        shutil.copyfile(old_decl_list, new_sections_file)
+        common.UpdateFileIfChanged(sections_file, new_sections_file, False)
 
     # If there is no MODULE-overrides.txt file we create an empty one
     # because EXTRA_DIST in gtk-doc.make requires it.
