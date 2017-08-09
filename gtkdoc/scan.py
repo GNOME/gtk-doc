@@ -231,7 +231,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
 
         # Skip to the end of the current comment.
         if in_comment:
-            logging.info('Comment: %s', line)
+            logging.info('Comment: %s', line.strip())
             doc_comment += line
             if re.search(r'\*/', line):
                 m = re.search(r'\* ([a-zA-Z][a-zA-Z0-9_]+):/', doc_comment)
@@ -275,7 +275,8 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
         if deprecated_conditional_nest == 0 and '_DEPRECATED' in line:
             m = re.search(r'^\s*#\s*(if*|define)', line)
             if not (m or in_declaration == 'enum'):
-                logging.info('Found deprecation annotation (decl: "%s"): "%s"', in_declaration, line)
+                logging.info('Found deprecation annotation (decl: "%s"): "%s"',
+                             in_declaration, line.strip())
                 deprecated_conditional_nest += 0.1
 
         # set flag that is used later when we do AddSymbolToList
@@ -293,11 +294,11 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
             if m:
                 re.sub(r'^\s*/\*', '', line)
                 if re.search(r'\*/', line):
-                    logging.info('Found one-line comment: %s', line)
+                    logging.info('Found one-line comment: %s', line.strip())
                 else:
                     in_comment = 1
                     doc_comment = line
-                    logging.info('Found start of comment: %s', line)
+                    logging.info('Found start of comment: %s', line.strip())
                 continue
 
             logging.info('no decl: %s', line.strip())
