@@ -6,6 +6,7 @@
 
 /**
  * FOO:
+ *
  * The FOO.
  *
  * Since: 0.1
