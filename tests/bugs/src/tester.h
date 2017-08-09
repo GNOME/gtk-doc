@@ -506,6 +506,7 @@ void bug_741941(void *object, void *par) G_GNUC_NONNULL(1) G_GNUC_NONNULL(2);
 void bug_732689 (const gchar *spec);
 void bug_749142 (void);
 
+void bug_783420 (int in, int *out);
 
 /**
  * BUG_731417_DEPRECATED:

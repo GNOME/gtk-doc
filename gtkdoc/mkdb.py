@@ -2669,6 +2669,12 @@ def ExpandAbbreviations(symbol, text):
     """
     # Note: This is a fallback and normally done in the markdown parser
 
+    logging.debug('expand abbreviations for "%s", text: [%s]', symbol, text)
+    m = re.search(r'\|\[[^\n]*\n(.*)\]\|', text, flags=re.M | re.S)
+    if m:
+        logging.debug('replaced entities in code block')
+        text = text[:m.start(1)] + md_to_db.ReplaceEntities(m.group(1)) + text[m.end(1):]
+
     # Convert "|[" and "]|" into the start and end of program listing examples.
     # Support \[<!-- language="C" --> modifiers
     text = re.sub(r'\|\[<!-- language="([^"]+)" -->', r'<informalexample><programlisting language="\1"><![CDATA[', text)

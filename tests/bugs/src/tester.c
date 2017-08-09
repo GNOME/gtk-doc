@@ -461,3 +461,35 @@ void
 bug_749142 (void)
 {
 }
+
+/**
+ * bug_783420:
+ * @in: input
+ * @out: output
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=783420
+ *
+ * |[
+ * #include <tester.h>
+ *
+ * int res;
+ * bug_783420(42, &res);
+ * ]|
+ *
+ * <refsect2 id="subsect">
+ * <title>Subsection</title>
+ * <para>
+ * Lorem ipsum ...
+ * |[
+ * #include <tester.h>
+ *
+ * int res;
+ * bug_783420(42, &res);
+ * ]|
+ * </para>
+ * </refsect2>
+ */
+void
+bug_783420 (int in, int *out)
+{
+}
