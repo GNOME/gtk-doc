@@ -2549,8 +2549,7 @@ def ConvertSGMLChars(symbol, text):
                                  ConvertSGMLCharsCallback)
     # For the simple non-sgml mode, convert to entities everywhere.
 
-    # First, convert freestanding & to &amp
-    text = re.sub(r'&(?![a-zA-Z#]+;)', r'&amp;', text)
+    text = re.sub(r'&(?![a-zA-Z#]+;)', r'&amp;', text)        # Do this first, or the others get messed up.
     text = re.sub(r'<', r'&lt;', text)
     # Allow '>' at beginning of string for blockquote markdown
     text = re.sub(r'''(?<=[^\w\n"'\/-])>''', r'&gt;', text)
@@ -2558,20 +2557,22 @@ def ConvertSGMLChars(symbol, text):
     return text
 
 
-def ConvertSGMLCharsEndTag(t):
-    if t == '<![CDATA[':
+def ConvertSGMLCharsEndTag(start_tag):
+    if start_tag == '<![CDATA[':
         return "]]>"
     return "</programlisting>"
 
 
 def ConvertSGMLCharsCallback(text, symbol, tag):
     if re.search(r'^<programlisting', tag):
+        logging.debug('call modifyXML')
         # We can handle <programlisting> specially here.
         return ModifyXMLElements(text, symbol,
                                  "<!\\[CDATA\\[",
                                  ConvertSGMLCharsEndTag,
                                  ConvertSGMLCharsCallback2)
     elif tag == '':
+        logging.debug('replace entities')
         # If we're not in CDATA convert to entities.
         text = re.sub(r'&(?![a-zA-Z#]+;)', r'&amp;', text)        # Do this first, or the others get messed up.
         text = re.sub(r'<(?![a-zA-Z\/!])', r'&lt;', text)
@@ -2820,21 +2821,21 @@ def ModifyXMLElements(text, symbol, start_tag_regexp, end_tag_func, callback):
     before_tag = start_tag = end_tag_regexp = end_tag = None
     result = ''
 
-    logging.debug('symbol: %s text: [%s]', symbol, text)
+    logging.debug('modify xml for symbol: %s, regex: %s, text: [%s]', symbol, start_tag_regexp, text)
 
     m = re.search(start_tag_regexp, text, flags=re.S)
     while m:
         before_tag = text[:m.start()]  # Prematch for last successful match string
         start_tag = m.group(0)         # Last successful match
         text = text[m.end():]          # Postmatch for last successful match string
-
-        logging.debug('symbol: %s matched start %s: text: [%s]', symbol, start_tag, text)
-
-        result += callback(before_tag, symbol, '')
-        result += start_tag
-
         # get the matching end-tag for current tag
         end_tag_regexp = end_tag_func(start_tag)
+
+        logging.debug('symbol: %s matched start: %s, end_tag: %s, text: [%s]', symbol, start_tag, end_tag_regexp, text)
+
+        logging.debug('converting before tag: [%s]', before_tag)
+        result += callback(before_tag, symbol, '')
+        result += start_tag
 
         m2 = re.search(end_tag_regexp, text, flags=re.S)
         if m2:
@@ -2855,7 +2856,9 @@ def ModifyXMLElements(text, symbol, start_tag_regexp, end_tag_func, callback):
         m = re.search(start_tag_regexp, text, flags=re.S)
 
     # Handle any remaining text outside the tags.
+    logging.debug('converting after tag: [%s]', text)
     result += callback(text, symbol, '')
+    logging.debug('results for symbol: %s, text: [%s]', symbol, result)
 
     return result
 
@@ -3840,7 +3843,7 @@ def ScanSourceFile(ifile, ignore_files):
         if not line.endswith('\n'):
             line = line + "\n"
 
-        logging.info("scanning :%s", line)
+        logging.info("scanning :%s", line.strip())
 
         # If we haven't found the symbol name yet, look for it.
         if not symbol:
