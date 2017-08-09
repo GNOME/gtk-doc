@@ -161,35 +161,34 @@ def ScanHeaders(source_dir, section_list, decl_list, get_types, options):
 
 def ScanHeader(input_file, section_list, decl_list, get_types, options):
     global seen_headers
-    slist = []                  # Holds the resulting list of declarations.
+    slist = []                 # Holds the resulting list of declarations.
     title = ''                 # Holds the title of the section
-    in_comment = 0                  # True if we are in a comment.
-    in_declaration = ''          # The type of declaration we are in, e.g.
-                              #   'function' or 'macro'.
-    skip_block = 0                  # True if we should skip a block.
-    symbol = None                  # The current symbol being declared.
-    decl = ''                          # Holds the declaration of the current symbol.
-    ret_type = None                  # For functions and function typedefs this
-                              #   holds the function's return type.
-    pre_previous_line = ''   # The pre-previous line read in - some Gnome
-                              #   functions have the return type on one
-                              #   line, the function name on the next,
-                              #   and the rest of the declaration after.
-    previous_line = ''          # The previous line read in - some Gnome
-                              #   functions have the return type on one line
-                              #   and the rest of the declaration after.
-    first_macro = 1          # Used to try to skip the standard #ifdef XXX
-                              # define XXX at the start of headers.
-    level = None                          # Used to handle structs/unions which contain
-                              #   nested structs or unions.
-    internal = 0             # Set to 1 for internal symbols, we need to
-                                #   fully parse, but don't add them to docs
-    forward_decls = {}         # hashtable of forward declarations, we skip
-                                #   them if we find the real declaration
-                                #   later.
-    doc_comments = {}          # hastable of doc-comment we found. We can
-                                # use that to put element to the right
-                                # sction in the generated section-file
+    in_comment = 0             # True if we are in a comment.
+    in_declaration = ''        # The type of declaration we are in, e.g.
+                               #   'function' or 'macro'.
+    skip_block = 0             # True if we should skip a block.
+    symbol = None              # The current symbol being declared.
+    decl = ''                  # Holds the declaration of the current symbol.
+    ret_type = None            # For functions and function typedefs this
+                               #   holds the function's return type.
+    pre_previous_line = ''     # The pre-previous line read in - some Gnome
+                               #   functions have the return type on one
+                               #   line, the function name on the next,
+                               #   and the rest of the declaration after.
+    previous_line = ''         # The previous line read in - some Gnome
+                               #   functions have the return type on one line
+                               #   and the rest of the declaration after.
+    first_macro = 1            # Used to try to skip the standard #ifdef XXX
+                               # define XXX at the start of headers.
+    level = None               # Used to handle structs/unions which contain
+                               #   nested structs or unions.
+    internal = 0               # Set to 1 for internal symbols, we need to
+                               #   fully parse, but don't add them to docs
+    forward_decls = {}         # Dict of forward declarations, we skip
+                               #   them if we find the real declaration
+                               #   later.
+    doc_comments = {}          # Dict of doc-comments we found.
+                               # The key is lowercase symbol name, val=1.
 
     file_basename = None
 
@@ -686,9 +685,9 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
             regex = r'\)\s*(G_GNUC_.*|.*DEPRECATED.*%s\s*|__attribute__\s*\(.*\)\s*)*;.*$' % ignore_decorators
             pm = re.search(regex, decl, flags=re.MULTILINE)
             if pm:
-                logging.info('scrubbing:[%s]', decl)
+                logging.info('scrubbing:[%s]', decl.strip())
                 decl = re.sub(regex, '', decl, flags=re.MULTILINE)
-                logging.info('scrubbed:[%s]', decl)
+                logging.info('scrubbed:[%s]', decl.strip())
                 if internal == 0:
                     decl = re.sub(r'/\*.*?\*/', '', decl, flags=re.MULTILINE)   # remove comments.
                     decl = re.sub(r'\s*\n\s*(?!$)', ' ', decl, flags=re.MULTILINE)
