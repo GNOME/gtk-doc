@@ -590,7 +590,7 @@ def MarkDownParseSpanElements(text):
     return text
 
 
-def ReplaceEntities(text, symbol):
+def ReplaceEntities(text):
     entities = [["&lt;", '<'],
                 ["&gt;", '>'],
                 ["&ast;", '*'],
@@ -680,7 +680,7 @@ def MarkDownOutputDocBook(blocksref, symbol, context):
 
             logging.debug('listing for %s: [%s]', symbol, '\n'.join(block['lines']))
             for line in block["lines"]:
-                output += ReplaceEntities(line, symbol) + "\n"
+                output += ReplaceEntities(line) + "\n"
 
             output += "]]></%s></informalexample>\n" % tag
         elif block["type"] == "markup":
