@@ -61,6 +61,7 @@ gtk-doc.flat.make: gtk-doc.make
 EXTRA_DIST = \
 	MAINTAINERS     \
 	$(gtkdocdata_DATA) \
+	$(pylibdata_DATA) \
 	gtk-doc.pc.in   \
 	gtk-doc.m4      \
 	gtk-doc.doap \
