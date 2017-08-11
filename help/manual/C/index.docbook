@@ -211,7 +211,7 @@
       </para>
 
       <para>
-        GTK-Doc consists of a number of perl scripts, each performing a different step
+        GTK-Doc consists of a number of python scripts, each performing a different step
         in the process.
       </para>
 
@@ -308,7 +308,7 @@
       <sect2 id="requirements">
         <title>Requirements</title>
         <para>
-          <guilabel>Perl v5</guilabel> - the main scripts are in Perl.
+          <guilabel>python 2/3</guilabel> - the main scripts are written in python.
         </para>
         <para>
           <guilabel>xsltproc</guilabel> - the xslt processor from libxslt
@@ -317,9 +317,6 @@
         <para>
           <guilabel>docbook-xsl</guilabel> - the docbook xsl stylesheets
           <ulink url="http://sourceforge.net/projects/docbook/files/docbook-xsl/" type="http">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>
-        </para>
-        <para>
-          <guilabel>Python</guilabel> - optional - for gtkdoc-depscan
         </para>
         <para>
           One of <guilabel>source-highlight</guilabel>, <guilabel>highlight</guilabel> or
