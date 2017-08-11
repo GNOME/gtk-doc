@@ -1,7 +1,54 @@
-GTK-Doc 1.25.1  (... .. ....)
+GTK-Doc 1.26  (Aug 11 2017)
 ==============
 
-Remove tmpl support (gtkdoc-mktmpl).
+Remove tmpl support (gtkdoc-mktmpl). Port all tools from bash/perl to python.
+
+ Changes
+
+ o 773879 :  &ndash;  &nbsp; scangobj: Do not generate unused parameters
+ o 780789 : Convert gtkdoc-scan from Perl to Python
+ o 752126 : Add support for inline program documentation
+ o 753052 : _() causes element a: validity error : ID idx already defined
+ o 758137 : GtkLabel and GtkShortcutsShortcut notes on escaping character entities don't render properly
+ o 764407 : Broken links to structs in function definitions
+ o 764543 : /usr/bin/gtkdoc-mkpdf always exits with an error
+ o 768675 : make check fails on master
+ o 769125 : gtkdoc-mkhtml/pdf fails on spaces in search path
+ o 769341 : gtkdoc-mkdb line 3966 triggers &quot; Negative repeat count does nothing &quot; warnings
+ o 771255 :  &quot; Symbol name not found at the start of comment block &quot; warning with &quot; attributes &quot; annotation.
+ o 773151 : configure: Lower perl dependency to 5.16.0
+ o 774168 : gobject introspection annotations and gtk-doc parser do not agree
+ o 774812 : Error messages from xsltproc are hidden by gtkdoc-mkhtml
+ o 778144 : Allow disabling introspection for ancillary property mechanisms
+ o 779566 : Replace shell executables with Python
+
+ Contributors
+
+ Anders Jonsson
+ Bernhard M. Wiedemann
+ Carlos Garcia Campos
+ Christian Kirbach
+ Daniel Mustieles
+ Emmanuele Bassi
+ Ernestas Kulik
+ HorimotoYasuhiro
+ Jussi Pakkanen
+ Kalev Lember
+ Marek Černocký
+ Mario Blättermann
+ Marius Vlad
+ Marvin Schmidt
+ Nirbheek Chauhan
+ Philip Withnall
+ Rafael Fontenelle
+ Sam Thursfield
+ Sebastian Rasmussen
+ Simon Josefsson
+ Stefan Sauer
+ Thomas Wood
+ Ting-Wei Lan
+ Tom Tryfonidis
+ Víctor Manuel Jáquez Leal
 
 GTK-Doc 1.25  (Mar 21 2016)
 ==============
@@ -200,7 +247,7 @@ GTK-Doc 1.20    (Feb 16 2014)
  o 706404 : Minor bug in gtkdoc-mkdb
  o 706438 : Empty lines added at the beginning and at the end of a programlisting
  o 707426 : master is broken in picking up flavour from configure.ac
- o 707717 : Support &quot; Deprecated: X.Y &quot; 
+ o 707717 : Support &quot; Deprecated: X.Y &quot;
  o 708268 : New *-insensitive.png files are not distributes
  o 710478 : gtkdoc-mkdb: Don't complain about annotations with hyphen
  o 711111 : gtkdoc-mkdb: sort entries in the glossary
@@ -260,7 +307,7 @@ GTK-Doc 1.19    (Jun 05 2013)
  o 671960 : make dist fails without html/*
  o 672710 : Use new documentation infrastructure
  o 676685 : Allow to order functions without using $MODULE-sections.txt
- o 685365 : (PATCH) Fix contents of warning message, should be &quot; -sections.txt &quot; not &quot; -section.txt &quot; 
+ o 685365 : (PATCH) Fix contents of warning message, should be &quot; -sections.txt &quot; not &quot; -section.txt &quot;
  o 686148 : [patch] suggested parameters for gtkdoc-scangobj
  o 687685 : 'g_type_init' is deprecated
  o 688204 : undocumented enum values missing in indexes
@@ -314,7 +361,7 @@ GTK-Doc 1.18    (Sep 14 2011)
  o gtk-doc does not generate old devhelp files any more. This cuts down doc
    generation time and works for devhelp >=0.11 (was released in 2005).
  o changes for out-of-source dir build caused breakage for projects using
-   DOC_SOURCE_DIR with a relative path (to builddir). It is recommended to use 
+   DOC_SOURCE_DIR with a relative path (to builddir). It is recommended to use
    DOC_SOURCE_DIR=$(top_srcdir)/src/xxx.
 
  Changes
@@ -457,7 +504,7 @@ GTK-Doc 1.14    (Mar 28 2010)
  o 512155 : gets confused by multiline typedef
  o 568711 : undocumented enum values are not reported
  o 590602 : secondly running gtkdoc-mkdb will generate DOCTYPE missing XML files
- o 590625 : $(DOC_MODULE)-overrides.txt is required by &quot; make dist &quot; 
+ o 590625 : $(DOC_MODULE)-overrides.txt is required by &quot; make dist &quot;
  o 591975 : Section_Id always embeds a trailing newline
  o 604885 : Fix the use of gtkdocize --flavour option
  o 604992 : gtkdoc-fixxref broken link warning is broken for functions
@@ -477,7 +524,7 @@ GTK-Doc 1.14    (Mar 28 2010)
  o 609194 : sort interface implementers
  o 610255 : Self-test failure in git as of 2010-02-17: FAIL: gobject.sh
  o 610257 : Patch to make GTK-DOC notice functions/variables with 'signed' prototypes
- o 611848 : gtk-doc produces invalid DocBook markup if the SECTION ends with a tag that cannot be nested inside &lt; para &gt; 
+ o 611848 : gtk-doc produces invalid DocBook markup if the SECTION ends with a tag that cannot be nested inside &lt; para &gt;
 
  Contributors
 
@@ -603,10 +650,10 @@ GTK-Doc 1.11    (Nov 16 2008)
  o 552822 : Add rules to create $(REPORT_FILES)
  o 553407 : Example Makefile.am uses obsolete INCLUDES instead of AM_...
  o 554718 : gtk-doc needs to allow versioned TARGET_DIR
- o 554833 : Be more careful with &quot; struct _ &lt; struct_name &gt;  &quot; 
+ o 554833 : Be more careful with &quot; struct _ &lt; struct_name &gt;  &quot;
  o 558082 : evince docs build fails with GTK_DISABLE_SINGLE_INCLUDES
  o 559281 : Correct check for existance of gtkdoc-rebase
- 
+
  Contributors
 
  Behdad Esfahbod
@@ -682,7 +729,7 @@ GTK-Doc 1.9     (Sep 30 2007)
  o 379466 : Improve C parser to handle TYPE\nVARIABLE in function pro...
  o 380824 : docs are truncated if line begins with '* returns '
  o 383456 : ' make check ' test for 100% documentation
- o 411739 : Gtk-doc fails to handle ' struct tm * function_name (); ' 
+ o 411739 : Gtk-doc fails to handle ' struct tm * function_name (); '
  o 415388 : Please clean -undocumented.txt files
  o 418027 : gtkdoc-mkdb does not handle #ifdef in enum {}
  o 419997 : parameter name trouble
@@ -698,7 +745,7 @@ GTK-Doc 1.9     (Sep 30 2007)
  o 459725 : ' jhbuild build gtk-doc ' fails on make
  o 460127 : parsing nested union/structs confuses public/private state
  o 465365 : [PATCH] gtk-doc does not compile
- o 466559 : [CSS] styling <hr />; 
+ o 466559 : [CSS] styling <hr />;
  o 471014 : G_CONST_RETURN * G_CONST_RETURN * function not picked up
  o 477532 : function variables
  o 479913 : gtk-doc.notmpl.make is not distributed
@@ -817,7 +864,7 @@ GTK-Doc 1.2     (Feb 16 2004)
  o Emit "Since:" information for signals and properties.
  o Added derived subclasses and interfaces to the widget hierarchies.
  o Added .cat SGML catalog file.
- o Support properties on interfaces. 
+ o Support properties on interfaces.
  o Added "--help" options to the scripts.
 
 
@@ -853,15 +900,15 @@ GTK-Doc 1.0	(Jan 20 2003)
 GTK-Doc 0.10	(Nov 14 2002)
 ============
 
- o --output-format option to select whether SGML or XML is generated. 
+ o --output-format option to select whether SGML or XML is generated.
  o Use openjade or jade when converting SGML to HTML.
  o Use xsltproc to convert XML to HTML, with a new look.
  o In XML mode, support XIncludes as an alternative to entities.
- o In XML mode, create .devhelp files. 
+ o In XML mode, create .devhelp files.
  o List interfaces in the object hierarchy.
  o Create docs for signals on interfaces.
  o Generate links between interface and their implementations and
    prerequisites.
  o Create docs for child and style properties.
  o Use blurbs for property documentation.
- o Allow inline documentation for signals and properties. 
+ o Allow inline documentation for signals and properties.
