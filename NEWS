@@ -1,11 +1,16 @@
-GTK-Doc 1.26  (Aug 11 2017)
+GTK-Doc 1.26.1  (... .. ....)
 ==============
+
+Development
+
+GTK-Doc 1.26  (Aug 11 2017)
+============
 
 Remove tmpl support (gtkdoc-mktmpl). Port all tools from bash/perl to python.
 
  Changes
 
- o 773879 :  &ndash;  &nbsp; scangobj: Do not generate unused parameters
+ o 773879 : scangobj: Do not generate unused parameters
  o 780789 : Convert gtkdoc-scan from Perl to Python
  o 752126 : Add support for inline program documentation
  o 753052 : _() causes element a: validity error : ID idx already defined
@@ -14,8 +19,8 @@ Remove tmpl support (gtkdoc-mktmpl). Port all tools from bash/perl to python.
  o 764543 : /usr/bin/gtkdoc-mkpdf always exits with an error
  o 768675 : make check fails on master
  o 769125 : gtkdoc-mkhtml/pdf fails on spaces in search path
- o 769341 : gtkdoc-mkdb line 3966 triggers &quot; Negative repeat count does nothing &quot; warnings
- o 771255 :  &quot; Symbol name not found at the start of comment block &quot; warning with &quot; attributes &quot; annotation.
+ o 769341 : gtkdoc-mkdb line 3966 triggers "Negative repeat count does nothing" warnings
+ o 771255 : "Symbol name not found at the start of comment block" warning with "attributes" annotation.
  o 773151 : configure: Lower perl dependency to 5.16.0
  o 774168 : gobject introspection annotations and gtk-doc parser do not agree
  o 774812 : Error messages from xsltproc are hidden by gtkdoc-mkhtml
