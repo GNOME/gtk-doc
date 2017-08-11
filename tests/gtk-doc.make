@@ -101,7 +101,7 @@ scan-build.stamp: ts setup-build.stamp $(HFILE_GLOB) $(CFILE_GLOB)
 	  _source_dir="$${_source_dir} --source-dir=$$i" ; \
 	done ; \
 	echo "gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(SCAN_OPTIONS) $(EXTRA_HFILES)"  >gtkdoc-scan.log; \
-	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) \
 	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers="$(IGNORE_HFILES)" $${_source_dir} $(SCAN_OPTIONS) $(EXTRA_HFILES) 2>&1 | tee -a gtkdoc-scan.log
 	@if grep -l '^..*$$' $(DOC_MODULE).types > /dev/null 2>&1 ; then \
 		ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
@@ -111,7 +111,7 @@ scan-build.stamp: ts setup-build.stamp $(HFILE_GLOB) $(CFILE_GLOB)
 	    scanobj_options="--verbose"; \
 	  fi; \
 	  echo "gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) $$scanobj_options" >gtkdoc-scangobj.log; \
-	  PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	  PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) \
 	  CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" RUN="$(GTKDOC_RUN)" CFLAGS="$(GTKDOC_CFLAGS) $(CFLAGS)" LDFLAGS="$(GTKDOC_LIBS) $(LDFLAGS)" \
 	  gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) $$scanobj_options 2>&1 | tee -a gtkdoc-scangobj.log; \
 	else \
@@ -134,7 +134,7 @@ sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(HF
 	    _source_dir="$${_source_dir} --source-dir=$$i" ; \
 	done ; \
 	echo "gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $${_source_dir} $(MKDB_OPTIONS)" >gtkdoc-mkdb.log; \
-	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) \
 	gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $${_source_dir} $(MKDB_OPTIONS) 2>&1 | tee -a gtkdoc-mkdb.log
 	@touch sgml-build.stamp
 
@@ -164,7 +164,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	  mkhtml_options="$$mkhtml_options --verbose"; \
 	fi; \
 	echo "gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)" >gtkdoc-mkhtml.log; \
-	cd html && PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
+	cd html && PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
 	gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE) 2>&1 | tee -a ../gtkdoc-mkhtml.log
 	-@test "x$(HTML_IMAGES)" = "x" || \
 	for file in $(HTML_IMAGES) ; do \
@@ -178,7 +178,7 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `$(DATE_FMT_CMD)$$tsd`: Fixing cross-references"
 	@echo "gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)" >gtkdoc-fixxref.log; \
-	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) \
+	PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) \
 	gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS) 2>&1 | tee -a gtkdoc-fixxref.log
 	@touch html-build.stamp
 
@@ -202,7 +202,7 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	  done; \
 	fi; \
 	echo "gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $$mkpdf_options $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS)" >gtkdoc-mkpdf.log; \
-	PATH=$(abs_top_builddir):$(PATH) PERL5LIB=$(abs_top_builddir):$(PERL5LIB) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
+	PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
 	gtkdoc-mkpdf --uninstalled --path="$(abs_srcdir)" $$mkpdf_options $(DOC_MODULE) $(DOC_MAIN_SGML_FILE) $(MKPDF_OPTIONS) 2>&1 | tee -a gtkdoc-mkpdf.log
 	@touch pdf-build.stamp
 
