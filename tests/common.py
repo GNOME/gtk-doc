@@ -20,7 +20,16 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-import mock
+try:
+    from unittest import mock
+except ImportError:
+    import mock
+
+try:
+    import builtins
+except ImportError:
+    import __builtin__ as builtins
+
 import unittest
 
 from gtkdoc import common
@@ -37,7 +46,7 @@ class TestUpdateFileIfChanged(unittest.TestCase):
         self.assertTrue(res)
 
     @mock.patch('os.path.exists')
-    @mock.patch('__builtin__.open', mock.mock_open(read_data='bar'))
+    @mock.patch('builtins.open', mock.mock_open(read_data='bar'))
     @mock.patch('os.unlink')
     def test_FilesAreTheSame(self, os_unlink, os_path_exists):
         os_path_exists.return_value = True
