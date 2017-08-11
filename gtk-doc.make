@@ -152,6 +152,9 @@ sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(HF
 sgml.stamp: sgml-build.stamp
 	@true
 
+$(DOC_MAIN_SGML_FILE): sgml-build.stamp
+	@true
+
 xml/gtkdocentities.ent: Makefile
 	$(GTK_DOC_V_XML)$(MKDIR_P) $(@D) && ( \
 		echo "<!ENTITY package \"$(PACKAGE)\">"; \
