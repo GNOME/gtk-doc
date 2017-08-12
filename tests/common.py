@@ -23,14 +23,16 @@ try:
 except ImportError:
     import mock
 
-try:
-    import builtins
-except ImportError:
-    import __builtin__ as builtins
-
 import unittest
 
+from six import PY2
 from gtkdoc import common
+
+
+if PY2:
+    openname = '__builtin__.open'
+else:
+    openname = 'builtins.open'
 
 
 class TestUpdateFileIfChanged(unittest.TestCase):
@@ -44,7 +46,7 @@ class TestUpdateFileIfChanged(unittest.TestCase):
         self.assertTrue(res)
 
     @mock.patch('os.path.exists')
-    @mock.patch('builtins.open', mock.mock_open(read_data='bar'))
+    @mock.patch(openname, mock.mock_open(read_data='bar'))
     @mock.patch('os.unlink')
     def test_FilesAreTheSame(self, os_unlink, os_path_exists):
         os_path_exists.return_value = True
