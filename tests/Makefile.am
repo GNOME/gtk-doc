@@ -16,7 +16,8 @@ TESTS_ENVIRONMENT = \
 	PATH=$(abs_top_builddir):$(srcdir):$(PATH) \
 	PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) \
 	GLIB_PREFIX="$(glib_prefix)"
-
+TEST_EXTENSIONS = .py
+PY_LOG_COMPILER = $(PYTHON)
 endif
 
 EXTRA_DIST = gtkdoctest.sh $(TESTS)
