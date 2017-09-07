@@ -46,6 +46,11 @@ class TestCheck(unittest.TestCase):
         result = check.get_variable({}, ['foo = bar'], 'foo')
         self.assertEqual('bar', result)
 
+    def test_get_variable_empty_file(self):
+        with self.assertRaises(check.FileFormatError) as ctx:
+            check.get_variable({'foo': 'bar'}, [], 'foo')
+        self.assertEqual(str(ctx.exception), 'foo')
+
 
 if __name__ == '__main__':
     unittest.main()

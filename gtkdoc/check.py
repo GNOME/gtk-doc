@@ -130,7 +130,11 @@ def run(options=None):
     makefilename = 'Makefile.am'
     if not os.path.exists(makefilename):
         makefilename = 'Makefile'
-    makefile = read_file(makefilename)
+    makefile = []
+    try:
+        makefile = read_file(makefilename)
+    except (OSError, IOError):
+        pass
 
     # For historic reasons tests are launched in srcdir
     workdir = os.environ.get('BUILDDIR', None)
