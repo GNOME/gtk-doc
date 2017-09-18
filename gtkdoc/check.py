@@ -32,6 +32,8 @@ import os
 import re
 from glob import glob
 
+from . import common
+
 
 class FileFormatError(Exception):
     pass
@@ -46,14 +48,14 @@ def grep(regexp, lines, what):
 
 
 def check_empty(filename):
-    with open(filename) as f:
+    with open(filename, "rb") as f:
         count = sum(1 for line in f if line.strip())
     return count
 
 
 def check_includes(filename):
     # Check that each XML file in the xml directory is included in doc_main_file
-    with open(filename) as f:
+    with common.open_text(filename) as f:
         lines = f.read().splitlines()
         num_missing = 0
         for include in glob('xml/*.xml'):
@@ -73,7 +75,7 @@ def get_variable(env, lines, variable):
 
 
 def read_file(filename):
-    with open(filename) as f:
+    with common.open_text(filename) as f:
         return f.read().splitlines()
 
 

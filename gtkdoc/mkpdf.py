@@ -37,7 +37,8 @@ def run_xsltproc(options, args):
         command += ['--path', path]
     pc = subprocess.Popen(command + args, stderr=subprocess.PIPE)
     (o, stde) = pc.communicate()
-    open('profile.txt', 'wb').write(stde)
+    with open('profile.txt', 'wb') as h:
+        h.write(stde)
     return pc.returncode
 
 
@@ -118,5 +119,6 @@ def run(options):
         print("dblatex or fop must be installed to use gtkdoc-mkpdf.")
         res = 1
 
-    open('pdf.stamp', 'w').write('timestamp')
+    with open('pdf.stamp', 'w') as h:
+        h.write('timestamp')
     return res

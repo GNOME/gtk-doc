@@ -302,7 +302,8 @@ def Run(options):
         OutputSinceIndexes()
         OutputAnnotationGlossary()
 
-        open(os.path.join(ROOT_DIR, 'sgml.stamp'), 'w').write('timestamp')
+        with open(os.path.join(ROOT_DIR, 'sgml.stamp'), 'w') as h:
+            h.write('timestamp')
 
 
 def OutputObjectList():
@@ -315,7 +316,7 @@ def OutputObjectList():
     old_object_index = os.path.join(DB_OUTPUT_DIR, "object_index.sgml")
     new_object_index = os.path.join(DB_OUTPUT_DIR, "object_index.new")
 
-    OUTPUT = open(new_object_index, 'w')
+    OUTPUT = common.open_text(new_object_index, 'w')
 
     OUTPUT.write('''%s
 <informaltable pgwide="1" frame="none">
@@ -377,7 +378,7 @@ def OutputDB(file, options):
     """
 
     logging.info("Reading: %s", file)
-    INPUT = open(file)
+    INPUT = common.open_text(file)
     filename = ''
     book_top = ''
     book_bottom = ''
@@ -1001,7 +1002,7 @@ def OutputAnnotationGlossary():
                 rerun = True
                 break
 
-    OUTPUT = open(new_glossary, 'w')
+    OUTPUT = common.open_text(new_glossary, 'w')
 
     OUTPUT.write('''%s
 <glossary id="annotation-glossary">
@@ -1049,7 +1050,7 @@ def ReadKnownSymbols(file):
     subsection = ''
 
     logging.info("Reading: %s", file)
-    INPUT = open(file)
+    INPUT = common.open_text(file)
     for line in INPUT:
         if line.startswith('#'):
             continue
@@ -2157,7 +2158,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     old_db_file = os.path.join(DB_OUTPUT_DIR, file + '.xml')
     new_db_file = os.path.join(DB_OUTPUT_DIR, file + '.xml.new')
 
-    OUTPUT = open(new_db_file, 'w')
+    OUTPUT = common.open_text(new_db_file, 'w')
 
     object_anchors = ''
     for fobject in file_objects:
@@ -2324,7 +2325,7 @@ def OutputProgramDBFile(program, section_id):
     old_db_file = os.path.join(DB_OUTPUT_DIR, program + ".xml")
     new_db_file = os.path.join(DB_OUTPUT_DIR, program + ".xml.new")
 
-    OUTPUT = open(new_db_file, 'w')
+    OUTPUT = common.open_text(new_db_file, 'w')
 
     OUTPUT.write('''%s
 <refentry id="%s">
@@ -2367,9 +2368,9 @@ def OutputExtraFile(file):
     old_db_file = os.path.join(DB_OUTPUT_DIR, basename)
     new_db_file = os.path.join(DB_OUTPUT_DIR, basename + ".new")
 
-    contents = open(file).read()
+    contents = common.open_text(file).read()
 
-    OUTPUT = open(new_db_file, 'w')
+    OUTPUT = common.open_text(new_db_file, 'w')
     OUTPUT.write(ExpandAbbreviations(basename + " file", contents))
     OUTPUT.close()
 
@@ -2378,7 +2379,7 @@ def OutputExtraFile(file):
 
 def GetDocbookHeader(main_file):
     if os.path.exists(main_file):
-        INPUT = open(main_file)
+        INPUT = common.open_text(main_file)
         header = ''
         for line in INPUT:
             if re.search(r'^\s*<(book|chapter|article)', line):
@@ -2421,7 +2422,7 @@ def OutputBook(main_file, book_top, book_bottom):
     old_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.top")
     new_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.top.new")
 
-    OUTPUT = open(new_file, 'w')
+    OUTPUT = common.open_text(new_file, 'w')
     OUTPUT.write(book_top)
     OUTPUT.close()
 
@@ -2430,7 +2431,7 @@ def OutputBook(main_file, book_top, book_bottom):
     old_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.bottom")
     new_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.bottom.new")
 
-    OUTPUT = open(new_file, 'w')
+    OUTPUT = common.open_text(new_file, 'w')
     OUTPUT.write(book_bottom)
     OUTPUT.close()
 
@@ -2439,7 +2440,7 @@ def OutputBook(main_file, book_top, book_bottom):
     # If the main docbook file hasn't been created yet, we create it here.
     # The user can tweak it later.
     if main_file and not os.path.exists(main_file):
-        OUTPUT = open(main_file, 'w')
+        OUTPUT = common.open_text(main_file, 'w')
 
         logging.info("no master doc, create default one at: " + main_file)
 
@@ -3665,7 +3666,7 @@ def ScanSourceFile(ifile, ignore_files):
 
     logging.info("Scanning source file: %s", ifile)
 
-    SRCFILE = open(ifile)
+    SRCFILE = common.open_text(ifile)
     in_comment_block = False
     symbol = None
     in_part = ''
@@ -3983,7 +3984,7 @@ def OutputMissingDocumentation():
     buffer_deprecated = ''
     buffer_descriptions = ''
 
-    UNDOCUMENTED = open(new_undocumented_file, 'w')
+    UNDOCUMENTED = common.open_text(new_undocumented_file, 'w')
 
     for symbol in sorted(iterkeys(AllSymbols)):
         # FIXME: should we print common.LogWarnings for undocumented stuff?
@@ -4064,7 +4065,7 @@ def OutputUndeclaredSymbols():
     old_undeclared_file = os.path.join(ROOT_DIR, MODULE + "-undeclared.txt")
     new_undeclared_file = os.path.join(ROOT_DIR, MODULE + "-undeclared.new")
 
-    UNDECLARED = open(new_undeclared_file, 'w')
+    UNDECLARED = common.open_text(new_undeclared_file, 'w')
 
     if UndeclaredSymbols:
         UNDECLARED.write("\n".join(sorted(iterkeys(UndeclaredSymbols))))
@@ -4089,7 +4090,7 @@ def OutputUnusedSymbols():
     old_unused_file = os.path.join(ROOT_DIR, MODULE + "-unused.txt")
     new_unused_file = os.path.join(ROOT_DIR, MODULE + "-unused.new")
 
-    UNUSED = open(new_unused_file, 'w')
+    UNUSED = common.open_text(new_unused_file, 'w')
 
     for symbol in sorted(iterkeys(Declarations)):
         if not symbol in DeclarationOutput:
@@ -4110,7 +4111,7 @@ def OutputUnusedSymbols():
 
 def OutputAllSymbols():
     """Outputs list of all symbols to a file."""
-    SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-symbols.txt"), 'w')
+    SYMBOLS = common.open_text(os.path.join(ROOT_DIR, MODULE + "-symbols.txt"), 'w')
 
     for symbol in sorted(iterkeys(AllSymbols)):
         SYMBOLS.write(symbol + "\n")
@@ -4119,7 +4120,7 @@ def OutputAllSymbols():
 
 def OutputSymbolsWithoutSince():
     """Outputs list of all symbols without a since tag to a file."""
-    SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-nosince.txt"), 'w')
+    SYMBOLS = common.open_text(os.path.join(ROOT_DIR, MODULE + "-nosince.txt"), 'w')
 
     for symbol in sorted(iterkeys(SourceSymbolDocs)):
         if symbol in Since:
@@ -4257,7 +4258,7 @@ def ReadDeclarationsFile(ifile, override):
         DeclarationConditional.clear()
         DeclarationOutput.clear()
 
-    INPUT = open(ifile)
+    INPUT = common.open_text(ifile)
     declaration_type = ''
     declaration_name = None
     declaration = None
@@ -4371,7 +4372,7 @@ def ReadSignalsFile(ifile):
     if not os.path.isfile(ifile):
         return
 
-    INPUT = open(ifile)
+    INPUT = common.open_text(ifile)
     line_number = 0
     for line in INPUT:
         line_number += 1
@@ -4437,7 +4438,7 @@ def ReadObjectHierarchy(ifile):
         logging.debug('no *-hierarchy.tx')
         return
 
-    INPUT = open(ifile)
+    INPUT = common.open_text(ifile)
 
     # Only emit objects if they are supposed to be documented, or if
     # they have documented children. To implement this, we maintain a
@@ -4488,7 +4489,7 @@ def ReadObjectHierarchy(ifile):
 
     logging.debug('got %d entries for hierarchy', len(tree))
 
-    OUTPUT = open(new_tree_index, 'w')
+    OUTPUT = common.open_text(new_tree_index, 'w')
     OUTPUT.write(MakeDocHeader("screen") + "\n<screen>\n" + AddTreeLineArt(tree) + "\n</screen>\n")
     OUTPUT.close()
 
@@ -4509,7 +4510,7 @@ def ReadInterfaces(ifile):
     if not os.path.isfile(ifile):
         return
 
-    INPUT = open(ifile)
+    INPUT = common.open_text(ifile)
 
     for line in INPUT:
         line = line.strip()
@@ -4542,7 +4543,7 @@ def ReadPrerequisites(ifile):
     if not os.path.isfile(ifile):
         return
 
-    INPUT = open(ifile)
+    INPUT = common.open_text(ifile)
 
     for line in INPUT:
         line = line.strip()
@@ -4593,7 +4594,7 @@ def ReadArgsFile(ifile):
     if not os.path.isfile(ifile):
         return
 
-    INPUT = open(ifile)
+    INPUT = common.open_text(ifile)
     line_number = 0
     for line in INPUT:
         line_number += 1

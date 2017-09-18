@@ -77,16 +77,16 @@ def Run(options):
     for dir in options.source_dir:
         ScanHeaders(dir, section_list, decl_list, get_types, options)
 
-    with open(new_decl_list, 'w') as f:
+    with common.open_text(new_decl_list, 'w') as f:
         for section in sorted(iterkeys(section_list)):
             f.write(section_list[section])
 
-    with open(new_decl, 'w') as f:
+    with common.open_text(new_decl, 'w') as f:
         for decl in decl_list:
             f.write(decl)
 
     if options.rebuild_types:
-        with open(new_types, 'w') as f:
+        with common.open_text(new_types, 'w') as f:
             for func in sorted(get_types):
                 f.write(func + '\n')
 
@@ -226,7 +226,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
 
     logging.info('Scanning %s', input_file)
 
-    for line in open(input_file):
+    for line in common.open_text(input_file):
         # If this is a private header, skip it.
         if re.search(r'%^\s*/\*\s*<\s*private_header\s*>\s*\*/', line):
             return

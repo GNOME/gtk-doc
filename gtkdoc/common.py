@@ -28,8 +28,33 @@ import os
 import re
 import subprocess
 import sys
+import six
+import codecs
 
 from . import config
+
+
+def open_text(filename, mode="r", encoding="utf-8"):
+    """An open() which removes some differences between Python 2 and 3 and
+    has saner defaults.
+
+    Unlike the builtin open by default utf-8 is use and not the locale
+    encoding (which is ANSI on Windows for example, not very helpful)
+
+    For Python 2, files are opened in text mode like with Python 3.
+    """
+
+    if mode not in ("r", "w"):
+        raise ValueError("mode %r not supported, must be 'r' or 'w'" % mode)
+
+    if six.PY3:
+        return open(filename, mode, encoding=encoding)
+    else:
+        # We can't use io.open() here as its write method is too strict and
+        # only allows unicode instances and not everything in the codebase
+        # forces unicode at the moment. codecs.open() on the other hand
+        # happily takes ASCII str and decodes it.
+        return codecs.open(filename, mode, encoding=encoding)
 
 
 def setup_logging():

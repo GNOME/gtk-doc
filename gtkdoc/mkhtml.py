@@ -90,5 +90,6 @@ def run(options):
     for f in glob(styledir + '/*.png') + glob(styledir + '/*.css'):
         shutil.copy(f, '.')
 
-    open('../html.stamp', 'w').write('timestamp')
+    with open('../html.stamp', 'w') as h:
+        h.write('timestamp')
     return res

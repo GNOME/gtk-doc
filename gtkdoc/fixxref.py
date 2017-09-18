@@ -175,7 +175,7 @@ def ReadDevhelp(file, use_absolute_links):
 
     logging.info('Scanning index file=%s, absolute=%d, dir=%s', file, use_absolute_links, dir)
 
-    for line in open(file):
+    for line in common.open_text(file):
         m = re.search(r' link="([^#]*)#([^"]*)"', line)
         if m:
             link = m.group(1) + '#' + m.group(2)
@@ -184,7 +184,7 @@ def ReadDevhelp(file, use_absolute_links):
 
 
 def ReadSections(options):
-    for line in open(options.module + '-sections.txt'):
+    for line in common.open_text(options.module + '-sections.txt'):
         m1 = re.search(r'^<SUBSECTION\s*(.*)>', line)
         if line.startswith('#') or line.strip() == '':
             continue
@@ -220,9 +220,7 @@ def FixCrossReferences(options):
 def FixHTMLFile(options, file):
     logging.info('Fixing file: %s', file)
 
-    content = open(file).read()
-    if sys.version_info < (3,):
-        content = content.decode('utf-8')
+    content = common.open_text(file).read()
 
     if config.highlight:
         # FIXME: ideally we'd pass a clue about the example language to the highligher
@@ -266,9 +264,8 @@ def FixHTMLFile(options, file):
 
     new_file = file + '.new'
     content = '\n'.join(lines)
-    if sys.version_info < (3,):
-        content = content.encode('utf-8')
-    open(new_file, 'w').write(content)
+    with common.open_text(new_file, 'w') as h:
+        h.write(content)
 
     os.unlink(file)
     os.rename(new_file, file)
@@ -381,7 +378,7 @@ def HighlightSourceVim(options, type, source):
         script += "%s -n -e -u NONE -T xterm >/dev/null" % config.highlight
         subprocess.check_call([script], shell=True)
 
-        highlighted_source = open(temp_source_file + ".html").read()
+        highlighted_source = common.open_text(temp_source_file + ".html").read()
         highlighted_source = re.sub(r'.*<pre\b[^>]*>\n', '', highlighted_source, flags=re.MULTILINE)
         highlighted_source = re.sub(r'</pre>.*', '', highlighted_source, flags=re.MULTILINE)
 

@@ -136,7 +136,7 @@ gunzip %s/%s
 def ReadDevhelp(dir, file):
     onlinedir = None
 
-    for line in open(os.path.join(dir, file)):
+    for line in common.open_text(os.path.join(dir, file)):
         # online must come before chapter/functions
         if '<chapters' in line or '<functions' in line:
             break
@@ -150,7 +150,7 @@ def ReadDevhelp(dir, file):
 def ReadIndex(dir, file):
     onlinedir = None
 
-    for line in open(os.path.join(dir, file)):
+    for line in common.open_text(os.path.join(dir, file)):
         # ONLINE must come before any ANCHORs
         if '<ANCHOR' in line:
             break
@@ -207,10 +207,11 @@ def RebaseFile(filename, options):
     def repl_func(match):
         return match.group(1) + RebaseLink(match.group(2), options) + match.group(3)
 
-    contents = open(filename).read()
+    contents = common.open_text(filename).read()
     processed = re.sub(regex, repl_func, contents)
     newfilename = filename + '.new'
-    open(newfilename, 'w').write(processed)
+    with common.open_text(newfilename, 'w') as h:
+        h.write(processed)
     os.unlink(filename)
     os.rename(newfilename, filename)
 
