@@ -30,6 +30,7 @@ from six import iteritems, iterkeys
 import logging
 import os
 import re
+import subprocess
 
 from . import common
 
@@ -63,9 +64,13 @@ def run(options):
                 log(options, "Prepending GNOME2_PATH directory:", dir)
                 other_dirs = [dir] + other_dirs
 
-    dir = common.GetModuleDocDir('glib-2.0')
-    log(options, "Prepending GLib directory", dir)
-    other_dirs = [dir] + other_dirs
+    try:
+        dir = common.GetModuleDocDir('glib-2.0')
+    except subprocess.CalledProcessError:
+        pass
+    else:
+        log(options, "Prepending GLib directory", dir)
+        other_dirs = [dir] + other_dirs
 
     # Check all other dirs, but skip already scanned dirs ord subdirs of those
 
