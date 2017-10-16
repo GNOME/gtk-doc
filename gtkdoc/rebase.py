@@ -119,7 +119,7 @@ gunzip %s/%s
         elif entry.endswith('.devhelp2.gz') and not os.path.exists(full_entry[:-3]):
             # debian/ubuntu started to compress this as *devhelp2.gz :/
             print('''Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+bug/1466210 . For now run:
-gunzip %d/%s
+gunzip %s/%s
 ''' % (scan_dir, entry))
         # we could consider supporting: gzip module
 
