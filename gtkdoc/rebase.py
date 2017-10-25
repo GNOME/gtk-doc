@@ -59,18 +59,15 @@ def run(options):
     # first, but these will be overriden by any later scans.
     if "GNOME2_PATH" in os.environ:
         for dir in os.environ["GNOME2_PATH"].split(':'):
-            dir = os.path.join(dir, "/share/gtk-doc/html")
+            dir = os.path.join(dir, "share/gtk-doc/html")
             if os.path.isdir(dir):
                 log(options, "Prepending GNOME2_PATH directory:", dir)
                 other_dirs = [dir] + other_dirs
 
-    try:
-        dir = common.GetModuleDocDir('glib-2.0')
-    except subprocess.CalledProcessError:
-        pass
-    else:
-        log(options, "Prepending GLib directory", dir)
-        other_dirs = [dir] + other_dirs
+    glib_dir = common.GetModuleDocDir('glib-2.0')
+    if glib_dir:
+        log(options, "Prepending GLib directory", glib_dir)
+        other_dirs = [glib_dir] + other_dirs
 
     # Check all other dirs, but skip already scanned dirs ord subdirs of those
 

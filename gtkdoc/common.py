@@ -99,9 +99,13 @@ def GetModuleDocDir(module_name):
       module_name (string): The module, e.g. 'glib-2.0'
 
     Returns:
-      str: the doc directory
+      str: the doc directory or None
     """
-    path = subprocess.check_output([config.pkg_config, '--variable=prefix', module_name], universal_newlines=True)
+    path = None
+    try:
+        path = subprocess.check_output([config.pkg_config, '--variable=prefix', module_name], universal_newlines=True)
+    except subprocess.CalledProcessError:
+        return None
     return os.path.join(path.strip(), 'share/gtk-doc/html')
 
 

@@ -71,27 +71,23 @@ def Run(options):
 
     # We scan the directory containing GLib and any directories in GNOME2_PATH
     # first, but these will be overriden by any later scans.
-    try:
-        dir = common.GetModuleDocDir('glib-2.0')
-    except subprocess.CalledProcessError:
-        pass
-    else:
-        if os.path.exists(dir):
-            # Some predefined link targets to get links into type hierarchies as these
-            # have no targets. These are always absolute for now.
-            Links['GBoxed'] = dir + '/gobject/gobject-Boxed-Types.html'
-            Links['GEnum'] = dir + '/gobject/gobject-Enumeration-and-Flag-Types.html'
-            Links['GFlags'] = dir + '/gobject/gobject-Enumeration-and-Flag-Types.html'
-            Links['GInterface'] = dir + '/gobject/GTypeModule.html'
+    dir = common.GetModuleDocDir('glib-2.0')
+    if dir and os.path.exists(dir):
+        # Some predefined link targets to get links into type hierarchies as these
+        # have no targets. These are always absolute for now.
+        Links['GBoxed'] = dir + '/gobject/gobject-Boxed-Types.html'
+        Links['GEnum'] = dir + '/gobject/gobject-Enumeration-and-Flag-Types.html'
+        Links['GFlags'] = dir + '/gobject/gobject-Enumeration-and-Flag-Types.html'
+        Links['GInterface'] = dir + '/gobject/GTypeModule.html'
 
-            if dir != options.html_dir:
-                logging.info('Scanning GLib directory: %s', dir)
-                ScanIndices(dir, (re.search(prefix_match, dir) is None))
+        if dir != options.html_dir:
+            logging.info('Scanning GLib directory: %s', dir)
+            ScanIndices(dir, (re.search(prefix_match, dir) is None))
 
     path = os.environ.get('GNOME2_PATH')
     if path:
         for dir in path.split(':'):
-            dir += '/share/gtk-doc/html'
+            dir += 'share/gtk-doc/html'
             if os.path.exists(dir) and dir != options.html_dir:
                 logging.info('Scanning GNOME2_PATH directory: %s', dir)
                 ScanIndices(dir, (re.search(prefix_match, dir) is None))
