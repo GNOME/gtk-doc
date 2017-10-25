@@ -2784,14 +2784,14 @@ def MakeHashXRef(symbol, tag):
     if '::' in symbol:
         o, s = symbol.split('::', 1)
         symbol = '%s-%s' % (o, s)
-        text = '“' + s + '”'
+        text = u'“' + s + u'”'
 
     # If the symbol is in the form "Object:property", then change the symbol to
     # "Object--property" and use "property" as the text.
     if ':' in symbol:
         o, p = symbol.split(':', 1)
         symbol = '%s--%s' % (o, p)
-        text = '“' + p + '”'
+        text = u'“' + p + u'”'
 
     if tag != '':
         text = tagify(text, tag)
@@ -3311,7 +3311,7 @@ def GetSignals(gobject):
             symbol = '%s::%s' % (gobject, name)
             sid = common.CreateValidSGMLID('%s-%s' % (gobject, name))
 
-            desc += "<refsect2 id=\"%s\" role=\"signal\"><title>The <literal>“%s”</literal> signal</title>\n" % (
+            desc += u"<refsect2 id=\"%s\" role=\"signal\"><title>The <literal>“%s”</literal> signal</title>\n" % (
                 sid, name)
             desc += MakeIndexterms(symbol, sid)
             desc += "\n"
@@ -3546,13 +3546,13 @@ def GetArgs(gobject):
 
             arg_synop = "<row><entry role=\"property_type\">%s</entry><entry role=\"property_name\"><link linkend=\"%s\">%s</link></entry><entry role=\"property_flags\">%s</entry></row>\n" % (
                 type_output, sid, name, flags_string)
-            arg_desc = "<refsect2 id=\"%s\" role=\"property\"><title>The <literal>“%s”</literal> %s</title>\n" % (
+            arg_desc = u"<refsect2 id=\"%s\" role=\"property\"><title>The <literal>“%s”</literal> %s</title>\n" % (
                 sid, name, kind)
             arg_desc += MakeIndexterms(symbol, sid)
             arg_desc += "\n"
             arg_desc += OutputSymbolExtraLinks(symbol)
 
-            arg_desc += "<programlisting>  “%s”%s %s</programlisting>\n" % (name, pad1, type_output)
+            arg_desc += u"<programlisting>  “%s”%s %s</programlisting>\n" % (name, pad1, type_output)
             arg_desc += blurb
             if symbol in SymbolAnnotations:
                 param_desc = SymbolAnnotations[symbol]
