@@ -1281,7 +1281,7 @@ def OutputTypedef(symbol, declaration):
     desc += "\n"
     desc += OutputSymbolExtraLinks(symbol)
 
-    if symbol in DeclarationConditional:
+    if symbol not in DeclarationConditional:
         decl_out = CreateValidSGML(declaration)
         desc += "<programlisting language=\"C\">%s</programlisting>\n" % decl_out
 
