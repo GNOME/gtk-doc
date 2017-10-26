@@ -31,7 +31,6 @@ import logging
 import os
 import re
 import string
-import sys
 
 from . import common, md_to_db
 
@@ -1123,7 +1122,8 @@ def OutputDeclaration(symbol, declaration):
     elif dtype == 'USER_FUNCTION':
         return OutputFunction(symbol, declaration, dtype)
     else:
-        sys.exit("Unknown symbol type " + dtype)
+        logging.warning("Unknown symbol type %s for symbol %s", dtype, symbol)
+        return ('', '')
 
 
 def OutputSymbolTraits(symbol):
