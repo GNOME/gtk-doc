@@ -1316,8 +1316,8 @@ g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);
  *
  * The ::foobarized signal is emitted each time someone tries to foobarize @widget.
  */
-foo_signals[FOOBARIZE] =
-  g_signal_new ("foobarize",
+foo_signals[FOOBARIZED] =
+  g_signal_new ("foobarized",
                 ...
 ]]></programlisting>
         </example>
