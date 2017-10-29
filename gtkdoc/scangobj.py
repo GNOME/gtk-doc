@@ -125,7 +125,7 @@ static void output_args (void);
 static void output_object_args (FILE *fp, GType object_type);
 
 int
-main (int argc, char *argv[])
+main (${main_func_params})
 {
   ${type_init_func};
 
@@ -1229,6 +1229,14 @@ def run(options):
 
     # substitute local vars in the template
     type_init_func = options.type_init_func
+    main_func_params = "int argc, char *argv[]"
+    if "argc" in type_init_func and "argv" not in type_init_func:
+        main_func_params = "int argc, G_GNUC_UNUSED char *argv[]"
+    elif "argc" not in type_init_func and "argv" in type_init_func:
+        main_func_params = "G_GNUC_UNUSED int argc, char *argv[]"
+    elif "argc" not in type_init_func and "argv" not in type_init_func:
+        main_func_params = "void"
+
     output.write(string.Template(MAIN_CODE).substitute(locals()))
 
     if options.query_child_properties:
