@@ -60,8 +60,6 @@ DirCache = {}
 
 
 def Run(options):
-    # logging.basicConfig(level=logging.INFO)
-
     path_prefix = ''
     m = re.search(r'(.*?)/share/gtk-doc/html', options.html_dir)
     if m:
