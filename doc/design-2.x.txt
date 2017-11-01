@@ -94,3 +94,13 @@ We can enable such a toolchain via the configure flavors option.
 TODO:
 - markdown does not define a way to aggregate fragments into a large book
   - we can only concat all the files in a stable order
+
+As a first step we need to make sure we only render the html files with docbook.
+Right now we also produce the devhelp files using xslt (see devhelp2.xsl). We
+should be able to produce the devhelp files from gtkdoc-mkdb directly. We can
+generate this file outside of the html dir (and adjust the make install target).
+The tricky part is that we might need to scan the static content files to be
+able to generate the same toc.
+A nice extra benefit would be that this should already make things faster.
+
+
