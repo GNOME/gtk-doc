@@ -15,6 +15,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# As a special exception, the above copyright owner gives unlimited
+# permission to copy, distribute and modify this Makefile.am template.
+# You need not follow the terms of the GNU General Public License when
+# using or distributing such Makefile.am files, even though portions of
+# the text of the Makefile.am appear in them. The GNU General Public
+# License (GPL) does govern all other use of the material that constitutes
+# the Makefile.am template.
 
 # This is a blank Makefile.am for using gtk-doc.
 # Copy this to your project's API docs directory and modify the variables to
