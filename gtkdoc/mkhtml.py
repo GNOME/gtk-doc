@@ -21,6 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
+import logging
 import os
 import sys
 import subprocess
@@ -37,11 +38,13 @@ def run_xsltproc(options, args):
     if os.environ.get("GTKDOC_PROFILE", '') == '':
         for path in options.path:
             command += ['--path', path]
+        logging.info('running "%s"', ' '.join(command + args))
         return subprocess.call(command + args)
     else:
         command += ['--profile']
         for path in options.path:
             command += ['--path', path]
+        logging.info('running "%s"', ' '.join(command + args))
         return subprocess.call(command + args, stderr=open('profile.txt', 'w'))
 
 

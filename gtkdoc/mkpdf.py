@@ -22,6 +22,7 @@
 # Support both Python 2 and 3
 from __future__ import print_function
 
+import logging
 import os
 import sys
 import subprocess
@@ -35,6 +36,7 @@ def run_xsltproc(options, args):
     # copied from the header into docs under xml
     for path in options.path:
         command += ['--path', path]
+    logging.info('running "%s"', ' '.join(command + args))
     pc = subprocess.Popen(command + args, stderr=subprocess.PIPE)
     (o, stde) = pc.communicate()
     with open('profile.txt', 'wb') as h:
