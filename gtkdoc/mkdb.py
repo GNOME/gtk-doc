@@ -4266,6 +4266,7 @@ def ReadDeclarationsFile(ifile, override):
     line_number = 0
     for line in INPUT:
         line_number += 1
+        # logging.debug("%s:%d: %s", ifile, line_number, line)
         if not declaration_type:
             m1 = re.search(r'^<([^>]+)>', line)
             if m1:
