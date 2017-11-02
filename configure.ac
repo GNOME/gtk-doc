@@ -169,13 +169,6 @@ AC_ARG_ENABLE([debug],
 	[enable_debug="no"])
 AC_MSG_RESULT($enable_debug)
 
-if test "x$enable_debug" != "xno"; then
-	TRACE="LogTrace"
-else
-	TRACE="#"
-fi
-AC_SUBST(TRACE)
-
 dnl check what date format we can use for the makefile tracing in tests
 dnl this is mostly to detect the date command on macosx that is quite cripled
 dnl  and broken too
