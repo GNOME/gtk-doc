@@ -29,7 +29,6 @@ import logging
 import os
 import string
 import subprocess
-import shlex
 
 from . import common, config
 
@@ -1255,44 +1254,32 @@ def run(options):
 
     x_file = options.module + '-scan' + config.exeext
 
-    if options.verbose:
-        call = subprocess.check_call
-    else:
-        call = subprocess.check_output
+    stdout = ""
+    if not options.verbose:
+        stdout = ">/dev/null"
 
     logging.debug('Intermediate scanner files: %s, %s, %s', c_file, o_file, x_file)
 
     # Compiling scanner
-    try:
-        call(shlex.split(options.cc) + shlex.split(options.cflags) +
-             ["-c", "-o", o_file, c_file])
-    except subprocess.CalledProcessError as e:
-        logging.warning('Compilation of scanner failed: %d', e.returncode)
-        return e.returncode
-    except OSError as e:
-        logging.warning(str(e))
-        return 1
+    command = '%s %s %s -c -o %s %s' % (options.cc, stdout, options.cflags, o_file, c_file)
+    res = subprocess.check_call(command, shell=True)
+    if res > 0:
+        logging.warning('Compilation of scanner failed: %d', res)
+        return res
 
     # Linking scanner
-    try:
-        call(shlex.split(options.ld) + [o_file] +
-             shlex.split(options.ldflags) + ['-o', x_file])
-    except subprocess.CalledProcessError as e:
-        logging.warning('Linking of scanner failed: %d', e.returncode)
-        return e.returncode
-    except OSError as e:
-        logging.warning(str(e))
-        return 1
+    command = '%s %s %s %s -o %s' % (options.ld, stdout, o_file, options.ldflags, x_file)
+    res = subprocess.check_call(command, shell=True)
+    if res > 0:
+        logging.warning('Linking of scanner failed: %d', res)
+        return res
 
     # Running scanner
-    try:
-        call(shlex.split(options.run) + ['./' + x_file])
-    except subprocess.CalledProcessError as e:
-        logging.warning('Running scanner failed: %d', e.returncode)
-        return e.returncode
-    except OSError as e:
-        logging.warning(str(e))
-        return 1
+    command = '%s ./%s' % (options.run, x_file)
+    res = subprocess.check_call(command, shell=True)
+    if res > 0:
+        logging.warning('Running scanner failed: %d', res)
+        return res
 
     logging.debug('Scan complete')
     if 'GTK_DOC_KEEP_INTERMEDIATE' not in os.environ:
