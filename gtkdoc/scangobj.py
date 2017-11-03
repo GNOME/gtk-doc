@@ -1183,8 +1183,26 @@ MAIN_CODE_END = """
 """
 
 
-def run(options):
+def execute_command(options, description, command):
+    if options.verbose:
+        call = subprocess.check_call
+    else:
+        call = subprocess.check_output
 
+    try:
+        call(command)
+    except subprocess.CalledProcessError as e:
+        logging.warning('%s scanner failed: %d, command: %s', description,
+                        e.returncode, ' '.join(command))
+        return e.returncode
+    except OSError as e:
+        logging.warning('%s scanner failed: %s, command: %s', description,
+                        str(e), ' '.join(command))
+        return 1
+    return 0
+
+
+def run(options):
     c_file = options.module + '-scan.c'
     output = common.open_text(c_file, 'w')
 
@@ -1255,44 +1273,24 @@ def run(options):
 
     x_file = options.module + '-scan' + config.exeext
 
-    if options.verbose:
-        call = subprocess.check_call
-    else:
-        call = subprocess.check_output
-
     logging.debug('Intermediate scanner files: %s, %s, %s', c_file, o_file, x_file)
 
-    # Compiling scanner
-    try:
-        call(shlex.split(options.cc) + shlex.split(options.cflags) +
-             ["-c", "-o", o_file, c_file])
-    except subprocess.CalledProcessError as e:
-        logging.warning('Compilation of scanner failed: %d', e.returncode)
-        return e.returncode
-    except OSError as e:
-        logging.warning(str(e))
-        return 1
+    res = execute_command(options, 'Compiling',
+                          shlex.split(options.cc) + shlex.split(options.cflags) +
+                          ["-c", "-o", o_file, c_file])
+    if res:
+        return res
 
-    # Linking scanner
-    try:
-        call(shlex.split(options.ld) + [o_file] +
-             shlex.split(options.ldflags) + ['-o', x_file])
-    except subprocess.CalledProcessError as e:
-        logging.warning('Linking of scanner failed: %d', e.returncode)
-        return e.returncode
-    except OSError as e:
-        logging.warning(str(e))
-        return 1
+    res = execute_command(options, 'Linking',
+                          shlex.split(options.ld) + [o_file] +
+                          shlex.split(options.ldflags) + ['-o', x_file])
+    if res:
+        return res
 
-    # Running scanner
-    try:
-        call(shlex.split(options.run) + ['./' + x_file])
-    except subprocess.CalledProcessError as e:
-        logging.warning('Running scanner failed: %d', e.returncode)
-        return e.returncode
-    except OSError as e:
-        logging.warning(str(e))
-        return 1
+    res = execute_command(options, 'Running',
+                          shlex.split(options.run) + ['./' + x_file])
+    if res:
+        return res
 
     logging.debug('Scan complete')
     if 'GTK_DOC_KEEP_INTERMEDIATE' not in os.environ:
