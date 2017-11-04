@@ -27,9 +27,6 @@
  * This file contains non-sense code for the sole purpose of testing the docs.
  */
 
-#include <glib.h>
-#include <glib-object.h>
-
 #include "giface.h"
 
 /* constructor methods */
@@ -70,7 +67,7 @@ static void gtkdoc_iface_base_init (gpointer g_class) {
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, // return type
                   0); // n_params
-  
+
     g_object_interface_install_property (g_class ,
                                     g_param_spec_string ("itest",
                                        "itest prop",

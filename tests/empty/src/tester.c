@@ -8,8 +8,6 @@
  * returns nothing.
  */
 
-#include <glib.h>
-
 #include "tester.h"
 
 /**

@@ -24,8 +24,6 @@
  * This file contains non-sense code for the sole purpose of testing the docs.
  */
 
-#include <glib.h>
-
 #include "tester.h"
 
 /**

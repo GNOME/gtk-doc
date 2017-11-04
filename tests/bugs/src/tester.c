@@ -18,8 +18,6 @@
  * </refsect2>
  */
 
-#include <glib.h>
-
 #include "tester.h"
 
 /**
