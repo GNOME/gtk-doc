@@ -1,6 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = gobject bugs annotations fail empty program .
+# we need to run '.' last so that sanity processes the generated docs
+# maybe move it to a subdir?
+SUBDIRS = annotations bugs empty fail gobject program repro .
 
 if BUILD_TESTS
 
