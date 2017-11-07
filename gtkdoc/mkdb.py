@@ -128,6 +128,7 @@ AnnotationDefinition = {
     'nullable': "NULL may be passed as the value in, out, in-out; or as a return value.",
     'not nullable': "NULL must not be passed as the value in, out, in-out; or as a return value.",
     'optional': "NULL may be passed instead of a pointer to a location.",
+    'not optional': "NULL must not be passed as the pointer to a location.",
     'array': "Parameter points to an array of items.",
     'attribute': "Deprecated free-form custom annotation, replaced by (attributes) annotation.",
     'attributes': "Free-form key-value pairs.",

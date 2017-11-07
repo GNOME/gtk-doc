@@ -151,6 +151,20 @@ annotation_outparams_optional (GList **list)
 }
 
 /**
+ * annotation_outparams_not_optional:
+ * @list: (out) (transfer none) (not optional): a pointer to take a list
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_outparams_not_optional (GList **list)
+{
+  return TRUE;
+}
+
+/**
  * annotation_outparams_nullable:
  * @list: (out) (transfer none) (nullable): a pointer to take a list; but %NULL
  * may also be returned
@@ -196,6 +210,21 @@ annotation_outparams_optional_nullable (GList **list)
 }
 
 /**
+ * annotation_outparams_not_optional_nullable:
+ * @list: (out) (transfer none) (not optional) (nullable): a pointer to take a
+ * list, not %NULL; but %NULL may also be returned in @list — isn’t that cool?
+ *
+ * Document non-optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_outparams_not_optional_nullable (GList **list)
+{
+  return TRUE;
+}
+
+/**
  * annotation_outparams_optional_not_nullable:
  * @list: (out) (transfer none) (optional) (not nullable): a pointer to take a
  * list, not %NULL; and %NULL must not be returned in @list — isn’t that cool?
@@ -206,6 +235,21 @@ annotation_outparams_optional_nullable (GList **list)
  */
 gboolean
 annotation_outparams_optional_not_nullable (GList **list)
+{
+  return TRUE;
+}
+
+/**
+ * annotation_outparams_not_optional_not_nullable:
+ * @list: (out) (transfer none) (not optional) (not nullable): a pointer to take a
+ * list, not %NULL; and %NULL must not be returned in @list — isn’t that cool?
+ *
+ * Document non-optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_outparams_not_optional_not_nullable (GList **list)
 {
   return TRUE;
 }
