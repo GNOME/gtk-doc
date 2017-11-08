@@ -67,11 +67,6 @@ https://bugzilla.gnome.org/show_bug.cgi?id=646094
 * expand urls (needds more work, see gtkdoc-mkdb : ExpandAbbreviations)
 
 
-= Testing =
-cd test/gobject
-diff -u --exclude="Makefile*" docs docs-tmpl | diffstat
-
-
 = Running =
 gtk-doc is using a makefile with several targets to get from sources to docs. It
 uses makefile variables for configuration.
@@ -80,14 +75,14 @@ in the right order (ev. by importing them as modules). This could handle a few
 things nicer that the makefiles don't do well. This would also make it easy to
 run it manually or integrate into other build systems.
 
+
 = Intermediate files =
-Can we change the intermediate files into a perl-module? So that all we need to
-do is to import it. Ideally we have just one outfile for each tool:
-gtkdoc-scan     -> scan.pm (decl.txt, decl-list.txt, types.txt, sections.txt)
-gtkdoc-scangobj -> scanobj.pm (interfacs, prerequisites, ...)
+Can we change the intermediate files into e.g. json or yaml so that we can just
+load it from python?
 
 Can we drop the decl-list.txt file (or rename to make sure this is what a
 generated section.txt would look like)
+
 
 = Issues =
 * gtkdoc-fixxref makefile targets use $HTML_DIR
@@ -101,7 +96,7 @@ generated section.txt would look like)
 * gtkdoc does not know about module versions
   * this is causing troubles when multiple library versions are installed
     (gtk+-{2,3}, gstreamer-{0.8,0.10,1.0}
-  * right now gtk-doc is xreffing against any <module>/index.sgml found
+  * right now gtk-doc is xreffing against any <module>/*.devhelp2 found
   * just using the one with a higher number won't work
 
 
@@ -143,6 +138,7 @@ libs can benefit from the extensions too.
   * we might also need to reflow some things, as gtk-doc.xsl also runs the devhelp/devhelp2 generation
     - but then the urls in the devhelp file, refer to the chunked html anyway
 
+
 = Warnings =
 Bugzilla has some requests for extra warnings. We should support a common
 commandline option(s) in all tools to enable/disable the warnings. The makefiles
@@ -168,6 +164,7 @@ more warnings:
   - 'dummy-docs' check if symbol docs are very short and repeat mainly words
     from the symbol.
   - possible xrefs (e.g. adding a # or () would make it a successful xref)
+
 
 = GIR =
 == scanning ==

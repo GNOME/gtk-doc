@@ -78,29 +78,37 @@ If the ID contain a ':' xml processors believe it is using a namespace.
 
 === docbook -> markdown ===
 The main performance culprit is the use of docbook (tools). Also writing docbook
-in source comments is cumbersome. We already support lots of markdown, so we'd
+in source comments is cumbersome. Finally the docbook toolchain is a heavy
+dependency and harms portability. We already support lots of markdown, so we'd
 like to have a pure markdown based workflow.
 
 For that we'd like to provide a migration path:
-- convert existing docbook files to markdown (e.g. pandoc)
+- convert existing docbook files to markdown (e.g. using pandoc)
 - convert/identify comments using docbook to markdown
 
-Next we need a replacement for gtkdoc-mkdb: gtkdoc-mkmd to create extract
-markdown from  sources and generate support files (index files). We also need to
-patch gtkdoc-{mkdb/pdf} to run respective tools (e.g. pandoc).
+Next we would replace gtkdoc-mkdb+gtkdoc-fixxref with gtkdoc-mkhtml2. This would
+output html directly.
+
+We could change gtkdoc-mkpdf to use https://wkhtmltopdf.org/. For man-pages we
+can use https://rtomayko.github.io/ronn/ronn.1.html.
+The devhelp2 files would be output directly from gtkdoc-mkhtml2.
 
 We can enable such a toolchain via the configure flavors option.
 
-TODO:
-- markdown does not define a way to aggregate fragments into a large book
-  - we can only concat all the files in a stable order
+These would be the steps to do this:
+1.) [unassigned] write the docbook comment migation tool:
+This would convert the comments in the given source file. One would make a copy
+of the docs/xml dir, run the migration tool for some sources, rebuild the docs
+and compare the new xml. If all good, submit the changes.
 
-As a first step we need to make sure we only render the html files with docbook.
-Right now we also produce the devhelp files using xslt (see devhelp2.xsl). We
-should be able to produce the devhelp files from gtkdoc-mkdb directly. We can
-generate this file outside of the html dir (and adjust the make install target).
-The tricky part is that we might need to scan the static content files to be
-able to generate the same toc.
-A nice extra benefit would be that this should already make things faster.
+2.) [unassigned] create the plumbing for the new tool chain
+Add the new makefile flavour to run gtkdoc-mkhtml2 instead. Add --flavour
+options for gtkdocize. Create a stub  gtkdoc-mkhtml2 tool.
 
+3.) [in progress] refactor gtkdoc/mkdb.py to exctract reusable code
+- gtkdoc/md_to_db.py
+  - only have the parse there
 
+4.) [unassigned] write gtkdoc/mkhtml2.py
+- create templates from the current html for the various page types (refentry,
+  index, ...).
