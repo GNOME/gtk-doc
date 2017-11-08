@@ -474,6 +474,8 @@ def OutputDB(file, options):
 
         elif re.search(r'^<\/SECTION>', line):
             logging.info("End of section: %s", title)
+            # TODO: also output if we have sections docs?
+            # long_desc = SymbolDocs.get(filename + ":Long_Description")
             if num_symbols > 0:
                 # collect documents
                 book_bottom += "    <xi:include href=\"xml/%s.xml\"/>\n" % filename
