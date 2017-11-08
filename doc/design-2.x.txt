@@ -112,3 +112,18 @@ options for gtkdocize. Create a stub  gtkdoc-mkhtml2 tool.
 4.) [unassigned] write gtkdoc/mkhtml2.py
 - create templates from the current html for the various page types (refentry,
   index, ...).
+- we won't need content_files and expand_content_files in Makefile.am, mkhtml2
+  would read $(DOC_MODULE)-docs.md (rename to index.md?) and find local links
+  from it
+- convert all hand-written md files starting from the main-doc to html
+
+Open Issues:
+wkhtmltopdf html/*.html tester2.pdf
+Error: This version of wkhtmltopdf is build against an unpatched version of QT, and does not support more then one input document.
+
+pandoc -r docbook -w markdown_github -o tester-docs.md tester-docs.xml
+- pandoc has no xi:include support
+- if we pipe it through xmllint we convert everything.
+xmllint --noent --xinclude tester-docs.xml | pandoc -r docbook -w markdown -o tester-docs.md
+- the index.md would need to represent the structure the docbook chunker would
+  create
