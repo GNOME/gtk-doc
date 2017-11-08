@@ -538,11 +538,12 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                 symbol = m19.group(1)
                 decl = line[m19.end():]
 
-                previous_line_words = previous_line.strip().split()
+                previous_line_strip = previous_line.strip()
+                previous_line_words = previous_line_strip.split()
 
-                if not previous_line.strip().startswith('G_INLINE_FUNC'):
+                if not previous_line_strip.startswith('G_INLINE_FUNC'):
                     if not previous_line_words or previous_line_words[0] != 'static':
-                        #                                           $1                                                                                                   $2
+                        #                                          $ 1                                                                                                   $2
                         pm = re.search(r'^\s*(?:\b(?:extern%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
                                        ignore_decorators, previous_line)
                         if pm:
@@ -569,7 +570,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                         logging.info('skip block after inline function')
                         # now we we need to skip a whole { } block
                         skip_block = 1
-                        #                                                         $1                                                                                                    $2
+                        #                                                         $1                                                                                                   $2
                         pm = re.search(r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
                                        ignore_decorators, previous_line)
                         if pm:
