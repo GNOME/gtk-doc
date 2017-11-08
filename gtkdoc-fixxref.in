@@ -40,7 +40,7 @@ if __name__ == '__main__':
                         help='The directory where gtk-doc generated documentation is'
                        'installed.')
     parser.add_argument('--extra-dir', default=[], action='append',
-                        help='Directories to recursively scan for indices (index.sgml)'
+                        help='Directories to recursively scan for indices (*.devhelp2)'
                         'in addition to HTML_DIR')
     parser.add_argument('--src-lang', default='c',
                         help='Programing language used for syntax highlighting. The'
