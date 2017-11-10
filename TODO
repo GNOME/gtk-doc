@@ -467,5 +467,7 @@ grep "gst_caps_is_always_compatible" tags
 - switch intermediate files to json/yaml
   - we need to pick something, that we can easilly output from plain c (produced by gtkdoc-scangobj)
   - decl-list.txt and .types would need to stay
+  - maybe maintain one file per sourcefile (in a subdir) to eventually be able to
+    do incremental builds
 - refactor Read{Args,Declarations,Signals}File to output into a single dictionary each:
   Signal{Names,Objects,Returns,...}[key] -> Signals[key].{names,objects,returns,...}

@@ -89,17 +89,15 @@ For that we'd like to provide a migration path:
 Next we would replace gtkdoc-mkdb+gtkdoc-fixxref with gtkdoc-mkhtml2. This would
 output html directly.
 
-We could change gtkdoc-mkpdf to use https://wkhtmltopdf.org/. For man-pages we
+We could change gtkdoc-mkpdf to use wkhtmltopdf/htmldoc. For man-pages we
 can use https://rtomayko.github.io/ronn/ronn.1.html.
 The devhelp2 files would be output directly from gtkdoc-mkhtml2.
 
 We can enable such a toolchain via the configure flavors option.
 
 These would be the steps to do this:
-1.) [unassigned] write the docbook comment migation tool:
-This would convert the comments in the given source file. One would make a copy
-of the docs/xml dir, run the migration tool for some sources, rebuild the docs
-and compare the new xml. If all good, submit the changes.
+1.) [in progress] write the docbook comment migation tool:
+see tools: db2md.py
 
 2.) [unassigned] create the plumbing for the new tool chain
 Add the new makefile flavour to run gtkdoc-mkhtml2 instead. Add --flavour
@@ -120,6 +118,12 @@ options for gtkdocize. Create a stub  gtkdoc-mkhtml2 tool.
 Open Issues:
 wkhtmltopdf html/*.html tester2.pdf
 Error: This version of wkhtmltopdf is build against an unpatched version of QT, and does not support more then one input document.
+
+htmldoc --book --outfile tester2.pdf html/*.html
+- need to pass html files in the logical order
+- unicode issues (passing --charset utf-8 fails)
+- --link seems to create bad links (opens file-browser)
+- no css rendering :/
 
 pandoc -r docbook -w markdown_github -o tester-docs.md tester-docs.xml
 - pandoc has no xi:include support
