@@ -34,7 +34,7 @@ import codecs
 from . import config
 
 
-def open_text(filename, mode="r", encoding="utf-8"):
+def open_text(filename, mode='r', encoding='utf-8'):
     """An open() which removes some differences between Python 2 and 3 and
     has saner defaults.
 
@@ -44,7 +44,7 @@ def open_text(filename, mode="r", encoding="utf-8"):
     For Python 2, files are opened in text mode like with Python 3.
     """
 
-    if mode not in ("r", "w"):
+    if mode not in ('r', 'w'):
         raise ValueError("mode %r not supported, must be 'r' or 'w'" % mode)
 
     if six.PY3:
@@ -95,8 +95,11 @@ def UpdateFileIfChanged(old_file, new_file, make_backup):
     logging.debug("Comparing %s with %s...", old_file, new_file)
 
     if os.path.exists(old_file):
-        old_contents = open(old_file, 'rb').read()
-        new_contents = open(new_file, 'rb').read()
+        old_contents = new_contents = None
+        with open(old_file, 'rb') as f:
+            old_contents = f.read()
+        with open(new_file, 'rb') as f:
+            new_contents = f.read()
         if old_contents == new_contents:
             os.unlink(new_file)
             logging.debug("-> content is the same.")
