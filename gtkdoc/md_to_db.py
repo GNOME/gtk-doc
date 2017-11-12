@@ -442,14 +442,16 @@ def MarkDownParseSpanElementsInner(text, markersref):
                     element['»'] = element['»'].replace('&', '&amp;').replace('<', '&lt;')
 
                 if element['!']:
+                    # media link
                     markup += '<inlinemediaobject><imageobject><imagedata fileref="' + \
                         element['»'] + '"></imagedata></imageobject>'
 
                     if 'a' in element:
                         markup += "<textobject><phrase>" + element['a'] + "</phrase></textobject>"
 
-                        markup += "</inlinemediaobject>"
+                    markup += "</inlinemediaobject>"
                 elif 'ref' in element:
+                    # internal link
                     element['a'] = MarkDownParseSpanElementsInner(element['a'], markers_rest)
                     markup += '<link linkend="' + element['ref'] + '"'
 
@@ -459,6 +461,7 @@ def MarkDownParseSpanElementsInner(text, markersref):
 
                     markup += '>' + element['a'] + "</link>"
                 else:
+                    # external link
                     element['a'] = MarkDownParseSpanElementsInner(element['a'], markers_rest)
                     markup += '<ulink url="' + element['»'] + '"'
 
