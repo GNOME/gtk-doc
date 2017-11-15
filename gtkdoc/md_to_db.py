@@ -407,6 +407,11 @@ def MarkDownParseSpanElementsInner(text, markersref):
         markers_rest = {k: v for k, v in markers.items() if v and k != closest_marker}
 
         if closest_marker == '![' or closest_marker == '[':
+            # 'id-ref' : local id reference
+            # 'title'  : link short description/alt-text/tooltip
+            # 'a'      : linked text
+            # 'href'   : external link
+            # 'is-media': is link to media object
             element = None
 
             # FIXME: '(?R)' is a recursive subpattern
@@ -414,48 +419,52 @@ def MarkDownParseSpanElementsInner(text, markersref):
             # m = re.search(r'\[((?:[^][]|(?R))*)\]', text)
             m = re.search(r'\[((?:[^][])*)\]', text)
             if ']' in text and m:
-                element = {'!': text[0] == '!',
-                           'a': m.group(1),
+                element = {'is-media': text[0] == '!',
+                           'a': EscapeEntities(m.group(1)),
                            }
 
                 offset = len(m.group(0))
-                if element['!']:
+                if element['is-media']:
                     offset += 1
                 logging.debug("Recursive md-expr match: off=%d, text='%s', match='%s'", offset, text, m.group(1))
 
                 remaining_text = text[offset:]
+                # (link "alt-text")
                 m2 = re.search(r'''^\([ ]*([^)'"]*?)(?:[ ]+['"](.+?)['"])?[ ]*\)''', remaining_text)
+                # [id-reference]
                 m3 = re.search(r'^\s*\[([^\]<]*?)\]', remaining_text)
                 if m2:
-                    element['»'] = m2.group(1)
+                    element['href'] = m2.group(1)
                     if m2.group(2):
-                        element['#'] = m2.group(2)
+                        element['title'] = m2.group(2)
                     offset += len(m2.group(0))
                 elif m3:
-                    element['ref'] = m3.group(1)
+                    element['id-ref'] = m3.group(1)
                     offset += len(m3.group(0))
                 else:
                     element = None
 
             if element:
-                if '»' in element:
-                    element['»'] = element['»'].replace('&', '&amp;').replace('<', '&lt;')
+                logging.debug("output link for", element)
 
-                if element['!']:
+                if 'href' in element:
+                    element['href'] = EscapeEntities(element['href'])
+
+                if element['is-media']:
                     # media link
                     markup += '<inlinemediaobject><imageobject><imagedata fileref="' + \
-                        element['»'] + '"></imagedata></imageobject>'
+                        element['href'] + '"></imagedata></imageobject>'
 
                     if 'a' in element:
                         markup += "<textobject><phrase>" + element['a'] + "</phrase></textobject>"
 
                     markup += "</inlinemediaobject>"
-                elif 'ref' in element:
+                elif 'id-ref' in element:
                     # internal link
                     element['a'] = MarkDownParseSpanElementsInner(element['a'], markers_rest)
-                    markup += '<link linkend="' + element['ref'] + '"'
+                    markup += '<link linkend="' + element['id-ref'] + '"'
 
-                    if '#' in element:
+                    if 'title' in element:
                         # title attribute not supported
                         pass
 
@@ -463,9 +472,9 @@ def MarkDownParseSpanElementsInner(text, markersref):
                 else:
                     # external link
                     element['a'] = MarkDownParseSpanElementsInner(element['a'], markers_rest)
-                    markup += '<ulink url="' + element['»'] + '"'
+                    markup += '<ulink url="' + element['href'] + '"'
 
-                    if '#' in element:
+                    if 'title' in element:
                         # title attribute not supported
                         pass
 
@@ -483,7 +492,7 @@ def MarkDownParseSpanElementsInner(text, markersref):
             m5 = re.search(r'^<([A-Za-z0-9._-]+?@[A-Za-z0-9._-]+?)>', text)
             m6 = re.search(r'^<[^>]+?>', text)
             if m4:
-                element_url = m4.group(1).replace('&', '&amp;').replace('<', '&lt;')
+                element_url = EscapeEntities(m4.group(1))
 
                 markup += '<ulink url="' + element_url + '">' + element_url + '</ulink>'
                 offset = len(m4.group(0))
@@ -511,7 +520,7 @@ def MarkDownParseSpanElementsInner(text, markersref):
         elif closest_marker == "`":
             m7 = re.search(r'^(`+)([^`]+?)\1(?!`)', text)
             if m7:
-                element_text = m7.group(2)
+                element_text = EscapeEntities(m7.group(2))
                 markup += "<literal>" + element_text + "</literal>"
                 offset = len(m7.group(0))
             else:
@@ -593,6 +602,10 @@ def MarkDownParseSpanElements(text):
     return text
 
 
+def EscapeEntities(text):
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('<', '&gt;')
+
+
 def ReplaceEntities(text):
     entities = [["&lt;", '<'],
                 ["&gt;", '>'],
@@ -606,8 +619,6 @@ def ReplaceEntities(text):
                 ["&amp;", '&'],  # Do this last, or the others get messed up.
                 ]
 
-    # Expand entities in <programlisting> even inside CDATA since
-    # we changed the definition of |[ to add CDATA
     for i in entities:
         text = re.sub(i[0], i[1], text)
     return text
