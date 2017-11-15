@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-"""Migate from inline docbook markup to markdown.
+"""Migrate from inline docbook markup to markdown.
 
 The tool converts markup in comments for the given source file(s). If --dry-run
 is given it would only report that docbook tags were found with exit code 1.
@@ -74,6 +74,8 @@ def convert_block(dry_run, filename, lines, beg, end):
             logging.warning("%s:%d: missing '*' in comment?", filename, ix)
             continue
 
+        line = line[indent:]
+
         # skip |[ ... ]| and <![CDATA[ ...  ]]> blocks
         if end_skip:
             if re.search(end_skip, line):
@@ -90,6 +92,18 @@ def convert_block(dry_run, filename, lines, beg, end):
             #     end_skip = r'\]\]>'
             #     continue
 
+        # TODO: skip `...` blocks
+        # check for historic non markdown compatible chars
+        if re.search(r'\s\*\w+[\s.]', line):
+            logging.warning("%s:%d: leading '*' needs escaping: '%s'", filename, ix, line)
+        #if re.search(r'\s\w+\*[\s.]', line):
+        #    logging.warning("%s:%d: trailing '*' needs escaping: '%s'", filename, ix, line)
+        if re.search(r'\s_\w+[\s.]', line):
+            logging.warning("%s:%d: leading '_' needs escaping: '%s'", filename, ix, line)
+        #if re.search(r'\s\w+_[\s.]', line):
+        #    logging.warning("%s:%d: trailing '_' needs escaping: '%s'", filename, ix, line)
+
+        # look for docbook
         for m in re.finditer(r'<([^>]*)>', line):
             tag = m.group(1)
             tag_name = tag.split(' ')[0]
@@ -117,6 +131,7 @@ def convert_block(dry_run, filename, lines, beg, end):
             return 0
 
         if dry_run:
+            print('%s:%d:' % (filename, ix))
             print_xml(root)
         else:
             # TODO: convert_tags()
@@ -145,7 +160,7 @@ def convert_file(dry_run, filename):
         if beg == -1 and end == -1:
             if re.search(r'^\s*/\*.*\*/', line):
                 pass
-            elif re.search(r'^\s*/\*\*\s*', line):
+            elif re.search(r'^\s*/\*\*(\s|$)', line):
                 logging.debug("%s:%d: comment start", filename, ix)
                 beg = ix
         elif beg > -1 and end == -1:

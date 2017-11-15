@@ -97,7 +97,12 @@ We can enable such a toolchain via the configure flavors option.
 
 These would be the steps to do this:
 1.) [in progress] write the docbook comment migation tool:
-see tools: db2md.py
+see tools: tools/db2md.py
+At the same time improve the amount of markdown we handle:
+* or _: <emphasis>
+** or __: <empahsis role="strong">
+but be careful with already existing '*' and '_' chars (check warnings in
+tools/db2md.py).
 
 2.) [unassigned] create the plumbing for the new tool chain
 Add the new makefile flavour to run gtkdoc-mkhtml2 instead. Add --flavour
@@ -131,3 +136,9 @@ pandoc -r docbook -w markdown_github -o tester-docs.md tester-docs.xml
 xmllint --noent --xinclude tester-docs.xml | pandoc -r docbook -w markdown -o tester-docs.md
 - the index.md would need to represent the structure the docbook chunker would
   create
+
+gdbus-codegen:
+- add an option to generate markdown comments
+
+gstreamer plugindocs:
+- generate markdown formatted files
