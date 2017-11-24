@@ -371,14 +371,14 @@ def HighlightSourceVim(options, type, source):
 
         # format source
         # TODO(ensonic): use p.communicate()
-        script = "echo 'let html_number_lines=0|let html_use_css=1|let html_use_xhtml=1|e %s|syn on|set syntax=%s|run! syntax/2html.vim|w! %s.html|qa!' | " % (
+        script = "echo 'let html_number_lines=0|let html_use_css=1|let html_use_xhtml=1|e %s|syn on|set syntax=%s|run! plugin/tohtml.vim|run! syntax/2html.vim|w! out.html|qa!' | " % (
             temp_source_file, options.src_lang, temp_source_file)
         script += "%s -n -e -u NONE -T xterm >/dev/null" % config.highlight
         subprocess.check_call([script], shell=True)
 
         highlighted_source = common.open_text(temp_source_file + ".html").read()
-        highlighted_source = re.sub(r'.*<pre\b[^>]*>\n', '', highlighted_source, flags=re.MULTILINE)
-        highlighted_source = re.sub(r'</pre>.*', '', highlighted_source, flags=re.MULTILINE)
+        highlighted_source = re.sub(r'.*<pre\b[^>]*>\n', '', highlighted_source, flags=re.DOTALL)
+        highlighted_source = re.sub(r'</pre>.*', '', highlighted_source, flags=re.DOTALL)
 
         # need to rewrite the stylesheet classes
         highlighted_source = highlighted_source.replace('<span class="Comment">', '<span class="comment">')
