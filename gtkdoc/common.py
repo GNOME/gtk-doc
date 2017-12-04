@@ -74,6 +74,7 @@ def setup_logging():
     # we get UnicodeEncodeError:
     encoding = sys.stdout.encoding
     if 'PYTHONIOENCODING' not in os.environ and (not encoding or encoding != 'UTF-8'):
+        sys.stdout.flush()
         if six.PY3:
             sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
         else:
