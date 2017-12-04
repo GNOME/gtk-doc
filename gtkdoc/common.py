@@ -70,10 +70,15 @@ def setup_logging():
         logging.basicConfig(stream=sys.stdout,
                             level=logging.getLevelName(log_level.upper()),
                             format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
-    # When redirecting the output on python2 we get UnicodeEncodeError:
-    if not sys.stdout.encoding:
-        import codecs
-        sys.stdout = codecs.getwriter('utf8')(sys.stdout)
+    # When redirecting the output on python2 or if run with a non utf-8 locale
+    # we get UnicodeEncodeError:
+    encoding = sys.stdout.encoding
+    if 'PYTHONIOENCODING' not in os.environ and (not encoding or encoding != 'UTF-8'):
+        if six.PY3:
+            sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
+        else:
+            import codecs
+            sys.stdout = codecs.getwriter('utf8')(sys.stdout)
 
 
 def UpdateFileIfChanged(old_file, new_file, make_backup):
@@ -148,7 +153,7 @@ def LogWarning(filename, line, message):
     filename = filename or "unknown"
 
     # TODO: write to stderr
-    print ("%s:%d: warning: %s" % (filename, line, message))
+    print("%s:%d: warning: %s" % (filename, line, message))
 
 
 def CreateValidSGMLID(xml_id):
