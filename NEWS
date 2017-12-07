@@ -1,7 +1,37 @@
-GTK-Doc 1.26.1  (... .. ....)
+GTK-Doc 1.27  (Dec 07 2017)
 ==============
 
-Development
+Finetune the python port.
+
+ Changes
+
+ o 773879 : scangobj: Do not generate unused parameters
+ o 786174 : Several test failures on Arch Linux
+ o 787495 : gtkdoc-fixxref crashes when running vim for syntax highlighting
+ o 787768 : Aborts when glib2.0-dev is not installed
+ o 787862 : Always open files in text mode and always use utf-8
+ o 788473 : fixxref crashes if a .devhelp2.gz file is found
+ o 789531 : Don't depend on the system shell
+ o 790022 : mkdb: Add support for (not optional) annotation
+ o 791131 : gtk-doc and python3: fixxref failures
+
+ Contributors
+
+ Alban Browaeys
+ Anders Jonsson
+ Christian Kirbach
+ Christoph Reiter
+ Daniel Mustieles
+ gkrithi8
+ Jan Alexander Steffens (heftig)
+ Marek Cernocky
+ Michael Catanzaro
+ Pavel Grunt
+ Philip Withnall
+ Rafael Fontenelle
+ Simon McVittie
+ Stefan Sauer
+ Will Thompson
 
 GTK-Doc 1.26  (Aug 11 2017)
 ============
