@@ -18,15 +18,21 @@ Releasing
 
 http://live.gnome.org/MaintainersCorner/Releasing
 
+export OLD_VER=1.26
+export NEW_VER=1.27
+export OLD_VER_TAG=$(echo ${OLD_VER} | tr '.' '_')
+export NEW_VER_TAG=$(echo ${NEW_VER} | tr '.' '_')
+
+
 - bump release date in:
   help/manual/C/index.docbook
-- bump version in (1.14.1 -> 1.15)
+- bump version in (x.y.1 -> x.y+1)
   configure.ac
 
 - update NEWS
-  ./bugzilla.py general 1.12 gtk-doc >RELNOTES.txt
-  git log --summary --format=short GTK_DOC_1_11.. >ChangeLog-1.12
-  grep "Author:" ChangeLog-1.12 | sed 's/Author:\(.*\)\ <.*>/\1/' | sort | uniq >>RELNOTES.txt
+  ./bugzilla.py general ${NEW_VER} gtk-doc >RELNOTES.txt
+  git log --summary --format=short GTK_DOC_${OLD_VER_TAG}.. >ChangeLog-${NEW_VER}
+  grep "Author:" ChangeLog-${NEW_VER} | sed 's/Author:\(.*\)\ <.*>/\1/' | sort | uniq >>RELNOTES.txt
   and then copy to NEWS
 
 - commit
@@ -38,13 +44,13 @@ http://live.gnome.org/MaintainersCorner/Releasing
    TAR_OPTIONS="--owner=root --group=root" make distcheck
 
 - tag
-  git tag -a GTK_DOC_1_12 -m"release: 1.12"
-  git push origin GTK_DOC_1_12
+  git tag -a GTK_DOC_${NEW_VER_TAG} -m"release: ${NEW_VER}"
+  git push origin GTK_DOC_${NEW_VER_TAG}
 
 - release
-  scp gtk-doc-1.12.tar.xz <user>@master.gnome.org:
-  scp NEWS <user>@master.gnome.org:gtk-doc-1.12.news
-  scp ChangeLog-1.12 <user>@master.gnome.org:gtk-doc-1.12.changes
+  scp gtk-doc-${NEW_VER}.tar.xz <user>@master.gnome.org:
+  scp NEWS <user>@master.gnome.org:gtk-doc-${NEW_VER}.news
+  scp ChangeLog-${NEW_VER} <user>@master.gnome.org:gtk-doc-${NEW_VER}.changes
   ssh <user>@master.gnome.org
   ftpadmin install gtk-doc-1.12.tar.xz
   exit
@@ -61,7 +67,7 @@ http://live.gnome.org/MaintainersCorner/Releasing
 
 - update web-pages (gtk-web/gtk-doc)
   git add gtk-doc/news.php
-  git commit -m"gtk-doc: new release (1.15)"
+  git commit -m"gtk-doc: new release (${NEW_VER})"
   git push
 
 - if we want a icon on the newsfeed, we should copy a icon like on
