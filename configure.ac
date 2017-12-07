@@ -1,11 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.63])
 
-dnl Use a simple 2-digit version number for a while, since our old example
-dnl Makefile can only cope with that, i.e. use 1.1, 1.2, 1.3 ... 9.9.
-dnl FIXME: I can't see anything failing (1.14.1), lets try to use a three digit
-dnl number for the development version
-m4_define(gtk_doc_version, 1.27)
+dnl We're using a two digit number for the releases and
+dnl a three digit number for the development version
+m4_define(gtk_doc_version, 1.27.1)
 
 AC_INIT([gtk-doc],[gtk_doc_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc],[gtk-doc])
 
