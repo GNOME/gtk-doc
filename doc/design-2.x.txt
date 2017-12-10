@@ -93,7 +93,8 @@ We could change gtkdoc-mkpdf to use wkhtmltopdf/htmldoc. For man-pages we
 can use https://rtomayko.github.io/ronn/ronn.1.html.
 The devhelp2 files would be output directly from gtkdoc-mkhtml2.
 
-We can enable such a toolchain via the configure flavors option.
+We can enable this new toolchain via the configure flavors option (needs support
+for cmake, meson, ...).
 
 These would be the steps to do this:
 1.) [in progress] write the docbook comment migation tool:
@@ -113,11 +114,12 @@ options for gtkdocize. Create a stub  gtkdoc-mkhtml2 tool.
   - only have the parse there
 
 4.) [unassigned] write gtkdoc/mkhtml2.py
+- select a template engine (e.g. jinja)
 - create templates from the current html for the various page types (refentry,
   index, ...).
-- we won't need content_files and expand_content_files in Makefile.am, mkhtml2
-  would read $(DOC_MODULE)-docs.md (rename to index.md?) and find local links
-  from it
+- we won't need content_files and expand_content_files in Makefile.am, as
+  mkhtml2 would read $(DOC_MODULE)-docs.md (rename to index.md?) and find local
+  links in there
 - convert all hand-written md files starting from the main-doc to html
 
 Open Issues:
@@ -142,3 +144,28 @@ gdbus-codegen:
 
 gstreamer plugindocs:
 - generate markdown formatted files
+
+=== only drop docbook-xsl ===
+Since the processing with docbook-xsl is what is slow, we could also consider to
+keep the whole gtkdoc-mkdb and have 2 codepaths in gtkdoc-mkhtml. The new code-
+path would real the docbook with element-tree, replicate the chunking that
+docbook-xsl does and use a templating system to generate the html files
+(e.g. jinja).
+
+This is probably easier to achieve, but has less potential in the long run (e.g.
+incremental doc updates).
+
+On the plus side, we can do rarely used output-formats (like pdf, man) the way
+we do them right now.
+
+These would be the steps to do this:
+1.) [done] write a the chunker
+- standalone tool to load the docbook xml and chunk it (just touch the resulting
+  *.html files) until we produce the same
+
+2.) [unassigned] transform some docbook to html
+- evaluate template engines
+- we need to warn when not handling certain docbook
+
+3.) [unassigned] integrate this into the gtkdoc library
+- add an option to gtkgoc-mkhtml (e.g. --engine={xslt,builtin} or just --noxlst)

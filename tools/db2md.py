@@ -96,12 +96,12 @@ def convert_block(dry_run, filename, lines, beg, end):
         # check for historic non markdown compatible chars
         if re.search(r'\s\*\w+[\s.]', line):
             logging.warning("%s:%d: leading '*' needs escaping: '%s'", filename, ix, line)
-        #if re.search(r'\s\w+\*[\s.]', line):
-        #    logging.warning("%s:%d: trailing '*' needs escaping: '%s'", filename, ix, line)
+        # if re.search(r'\s\w+\*[\s.]', line):
+        #     logging.warning("%s:%d: trailing '*' needs escaping: '%s'", filename, ix, line)
         if re.search(r'\s_\w+[\s.]', line):
             logging.warning("%s:%d: leading '_' needs escaping: '%s'", filename, ix, line)
-        #if re.search(r'\s\w+_[\s.]', line):
-        #    logging.warning("%s:%d: trailing '_' needs escaping: '%s'", filename, ix, line)
+        # if re.search(r'\s\w+_[\s.]', line):
+        #     logging.warning("%s:%d: trailing '_' needs escaping: '%s'", filename, ix, line)
 
         # look for docbook
         for m in re.finditer(r'<([^>]*)>', line):
@@ -189,6 +189,7 @@ def main(dry_run, files):
     for f in files:
         found_docbook = found_docbook | convert_file(dry_run, f)
     return found_docbook
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
