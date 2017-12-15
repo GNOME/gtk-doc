@@ -165,6 +165,8 @@ These would be the steps to do this:
 
 2.) [unassigned] transform some docbook to html
 - evaluate template engines
+  - jinja2:
+    - we can use the block syntax to handle nesting
 - we need to warn when not handling certain docbook
 
 3.) [unassigned] integrate this into the gtkdoc library

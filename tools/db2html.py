@@ -26,6 +26,9 @@ like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 
 TODO: convert the docbook-xml to html
 
+Requirements:
+sudo pip3 install anytree jinja2 lxml
+
 Examples:
 python3 tools/db2html.py tests/gobject/docs/tester-docs.xml
 ll tests/gobject/docs/db2html
@@ -39,6 +42,8 @@ import logging
 import os
 import sys
 
+from anytree import Node
+from jinja2 import Template
 from lxml import etree
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
@@ -91,6 +96,23 @@ CHUNK_NAMING = {
     },
 }
 
+DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">'
+
+BOOK_TEMPLATE = DOCTYPE + """
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{{ xpath('./bookinfo/title/text()') }}</title>
+</head>
+<body>
+</body>
+</html>
+"""
+
+TEMPLATES = {
+    'book': Template(BOOK_TEMPLATE),
+}
+
 
 def gen_chunk_name(node):
     if 'id' in node.attrib:
@@ -119,20 +141,45 @@ def gen_chunk_name(node):
     return name
 
 
-def convert(out_dir, node, out_file=None):
-    # iterate and chunk
-    # TODO: convert to HTML, need a templates for each CHUNK_TAG
+def chunk(out_dir, xml_node, parent=None):
+    """Chunk the tree.
 
-    for child in node:
-        print('<%s %s>' % (child.tag, child.attrib))
-        if child.tag in CHUNK_TAGS:
-            base = gen_chunk_name(child) + '.html'
-            out_filename = os.path.join(out_dir, base)
-            convert(out_dir, child, open(out_filename, 'wt'))
+    The first time, we're called with parent=None and in that case we return
+    the new_node as the root of the tree
+    """
+    # print('<%s %s>' % (xml_node.tag, xml_node.attrib))
+    if xml_node.tag in CHUNK_TAGS:
+        base = gen_chunk_name(xml_node) + '.html'
+        out_filename = os.path.join(out_dir, base)
+        # print('*** %s ***' % (out_filename))
+        # TODO: do we need to remove the xml-node from the parent?
+        parent = Node(xml_node.tag, parent=parent, xml=xml_node, filename=out_filename)
+    for child in xml_node:
+        chunk(out_dir, child, parent)
+
+    return parent
+
+
+def convert(node):
+    """Convert the docbook chunks to html files."""
+
+    logging.info('Writing: %s', node.filename)
+    with open(node.filename, 'wt') as html:
+        if node.name in TEMPLATES:
+            def lxml_xpath(expr):
+                return node.xml.xpath(expr, smart_strings=False)[0]
+
+            template = TEMPLATES[node.name]
+            template.globals['xpath'] = lxml_xpath
+            # TODO: extract from xml
+            params = {
+            }
+            html.write(template.render(**params))
         else:
-            convert(out_dir, child, out_file)
-    if out_file:
-        out_file.close()
+            logging.warning('Add template for "%s"', node.name)
+
+    for child in node.children:
+        convert(child)
 
 
 def main(index_file):
@@ -152,7 +199,13 @@ def main(index_file):
     except OSError as e:
         if e.errno != errno.EEXIST:
             raise
-    convert(out_dir, tree.getroot())
+
+    # We need two passes:
+    # 1) recursively walk the tree and chunk it into a python tree so that we
+    #   can generate navigation and link tags
+    files = chunk(out_dir, tree.getroot())
+    # 2) walk the tree and output files
+    convert(files)
 
 
 if __name__ == '__main__':
