@@ -2,18 +2,45 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 {% endmacro %}
 
+{% macro head_links(home, up, prev, next) %}
+<link rel="home" href="{{ home[0] }}" title="{{ home[1] }}">
+{% if up is defined %}
+<link rel="up" href="{{ up[0] }}" title="{{ up[1] }}">
+{% endif %}
+{% if prev is defined %}
+<link rel="prev" href="{{ prev[0] }}" title="{{ prev[1] }}">
+{% endif %}
+{% if next is defined %}
+<link rel="next" href="{{ next[0] }}" title="{{ next[1] }}">
+{% endif %}
+{% endmacro %}
+
 {% macro navigation_main(title) %}
-<div>
-  <table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="0">
-    <tr><th valign="middle"><p class="title">{{ title }}</p></th></tr>
-  </table>
-</div>
+<table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="0">
+  <tr><th valign="middle"><p class="title">{{ title }}</p></th></tr>
+</table>
 {% endmacro %}
 
 {% macro navigation_std(title) %}
 {% endmacro %}
 
-{% macro navigation_ref(title) %}
+{% macro navigation_ref() %}
+<table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="5">
+  <tr valign="middle">
+    <td width="100%" align="left" class="shortcuts">
+      <a href="#" class="shortcut">Top</a>
+      <span id="nav_description">
+        <span class="dim">|</span> 
+        <a href="#tester-GtkdocTester.description" class="shortcut">Description</a>
+      </span>
+    </td>
+    <td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+    <td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+    <td><a accesskey="p" href="ch01.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+    <td><a accesskey="n" href="api-index.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+  </tr>
+</table>
+
 {% endmacro %}
 
 {% macro navigation_idx(title) %}

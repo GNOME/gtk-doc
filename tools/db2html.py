@@ -39,6 +39,7 @@ python3 tools/db2html.py tests/bugs/docs/tester-docs.xml
 ll tests/bugs/docs/db2html
 cp tests/bugs/docs/html/*.{css,png} tests/bugs/docs/db2html/
 xdg-open tests/bugs/docs/db2html/index.html
+meld tests/bugs/docs/{html,db2html}
 """
 
 import argparse
@@ -47,7 +48,7 @@ import logging
 import os
 import sys
 
-from anytree import Node
+from anytree import Node, PreOrderIter
 from jinja2 import Environment, FileSystemLoader
 from lxml import etree
 
@@ -114,6 +115,7 @@ TEMPLATE_ENV = Environment(
 
 TEMPLATES = {
     'book': TEMPLATE_ENV.get_template('book.html'),
+    'refentry': TEMPLATE_ENV.get_template('refentry.html'),
 }
 
 
@@ -144,7 +146,7 @@ def gen_chunk_name(node):
     return name
 
 
-def chunk(out_dir, xml_node, parent=None):
+def chunk(xml_node, parent=None):
     """Chunk the tree.
 
     The first time, we're called with parent=None and in that case we return
@@ -152,26 +154,24 @@ def chunk(out_dir, xml_node, parent=None):
     """
     # print('<%s %s>' % (xml_node.tag, xml_node.attrib))
     if xml_node.tag in CHUNK_TAGS:
-        base = gen_chunk_name(xml_node) + '.html'
-        out_filename = os.path.join(out_dir, base)
-        # print('*** %s ***' % (out_filename))
+        filename = gen_chunk_name(xml_node) + '.html'
         # TODO: do we need to remove the xml-node from the parent?
         #       we generate toc from the files tree
         # from copy import deepcopy
         # ..., xml=deepcopy(xml_node), ...
         # xml_node.getparent().remove(xml_node)
-        parent = Node(xml_node.tag, parent=parent, xml=xml_node, filename=out_filename)
+        parent = Node(xml_node.tag, parent=parent, xml=xml_node, filename=filename)
     for child in xml_node:
-        chunk(out_dir, child, parent)
+        chunk(child, parent)
 
     return parent
 
 
-def convert(node):
-    """Convert the docbook chunks to html files."""
+def convert(out_dir, files, node):
+    """Convert the docbook chunks to a html file."""
 
     logging.info('Writing: %s', node.filename)
-    with open(node.filename, 'wt') as html:
+    with open(os.path.join(out_dir, node.filename), 'wt') as html:
         if node.name in TEMPLATES:
             # TODO: ideally precomiple common xpath exprs once:
             #   func = etree.XPath("//b")
@@ -181,15 +181,24 @@ def convert(node):
 
             template = TEMPLATES[node.name]
             template.globals['xpath'] = lxml_xpath
-            # TODO: extract from xml
             params = {
+                'nav_home': (node.root.filename, ''),
             }
+            # up, prev, next: link + title
+            # TODO: need titles
+            if node.parent:
+                params['nav_up'] = (node.parent.filename, '')
+            ix = files.index(node)
+            if ix > 0:
+                params['nav_prev'] = (files[ix - 1].filename, '')
+            if ix < len(files) - 1:
+                params['nav_next'] = (files[ix + 1].filename, '')
+
             html.write(template.render(**params))
+            # attempt to get the title, does not work
+            # print("Title: %s" % template.module.title)
         else:
             logging.warning('Add template for "%s"', node.name)
-
-    for child in node.children:
-        convert(child)
 
 
 def main(index_file):
@@ -213,10 +222,12 @@ def main(index_file):
     # We need two passes:
     # 1) recursively walk the tree and chunk it into a python tree so that we
     #   can generate navigation and link tags
-    files = chunk(out_dir, tree.getroot())
-    # 2) walk the tree and output files
-    # TODO: iterate with the anytree iterator and use multiprocessing
-    convert(files)
+    files = chunk(tree.getroot())
+    # 2) iterate the tree and output files
+    # TODO: use multiprocessing
+    files = list(PreOrderIter(files))
+    for node in files:
+        convert(out_dir, files, node)
 
 
 if __name__ == '__main__':
