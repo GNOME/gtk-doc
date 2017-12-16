@@ -25,7 +25,8 @@ The tool loaded the main xml document (<module>-docs.xml) and chunks it
 like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 
 TODO: convert the docbook-xml to html
-- try macros for the navigation
+- navigation
+- toc
 
 Requirements:
 sudo pip3 install anytree jinja2 lxml
@@ -33,8 +34,11 @@ sudo pip3 install anytree jinja2 lxml
 Examples:
 python3 tools/db2html.py tests/gobject/docs/tester-docs.xml
 ll tests/gobject/docs/db2html
+
 python3 tools/db2html.py tests/bugs/docs/tester-docs.xml
 ll tests/bugs/docs/db2html
+cp tests/bugs/docs/html/*.{css,png} tests/bugs/docs/db2html/
+xdg-open tests/bugs/docs/db2html/index.html
 """
 
 import argparse
@@ -44,8 +48,9 @@ import os
 import sys
 
 from anytree import Node
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 from lxml import etree
+
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
 CHUNK_TAGS = [
@@ -97,21 +102,18 @@ CHUNK_NAMING = {
     },
 }
 
-DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">'
-
-BOOK_TEMPLATE = DOCTYPE + """
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>{{ xpath('./bookinfo/title/text()') }}</title>
-</head>
-<body>
-</body>
-</html>
-"""
+# Jinja2 templates
+TOOL_PATH = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_ENV = Environment(
+    # loader=PackageLoader('gtkdoc', 'templates'),
+    # autoescape=select_autoescape(['html', 'xml'])
+    loader=FileSystemLoader(os.path.join(TOOL_PATH, 'templates')),
+    autoescape=False,
+    trim_blocks=True,
+)
 
 TEMPLATES = {
-    'book': Template(BOOK_TEMPLATE),
+    'book': TEMPLATE_ENV.get_template('book.html'),
 }
 
 

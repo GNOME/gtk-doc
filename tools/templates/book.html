@@ -1,0 +1,17 @@
+{% from 'common.html' import doctype, navigation_main %}
+{% set title = xpath('./bookinfo/title/text()') %}
+{{ doctype() }}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{{ title }}</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<div class="book">
+<div class="titlepage">
+{{ navigation_main(title) }}
+</div>
+</div>
+</body>
+</html>
