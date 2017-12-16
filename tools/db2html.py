@@ -25,6 +25,7 @@ The tool loaded the main xml document (<module>-docs.xml) and chunks it
 like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 
 TODO: convert the docbook-xml to html
+- try macros for the navigation
 
 Requirements:
 sudo pip3 install anytree jinja2 lxml
@@ -153,6 +154,10 @@ def chunk(out_dir, xml_node, parent=None):
         out_filename = os.path.join(out_dir, base)
         # print('*** %s ***' % (out_filename))
         # TODO: do we need to remove the xml-node from the parent?
+        #       we generate toc from the files tree
+        # from copy import deepcopy
+        # ..., xml=deepcopy(xml_node), ...
+        # xml_node.getparent().remove(xml_node)
         parent = Node(xml_node.tag, parent=parent, xml=xml_node, filename=out_filename)
     for child in xml_node:
         chunk(out_dir, child, parent)
@@ -166,6 +171,9 @@ def convert(node):
     logging.info('Writing: %s', node.filename)
     with open(node.filename, 'wt') as html:
         if node.name in TEMPLATES:
+            # TODO: ideally precomiple common xpath exprs once:
+            #   func = etree.XPath("//b")
+            #   func(xml_node)[0]
             def lxml_xpath(expr):
                 return node.xml.xpath(expr, smart_strings=False)[0]
 
@@ -205,6 +213,7 @@ def main(index_file):
     #   can generate navigation and link tags
     files = chunk(out_dir, tree.getroot())
     # 2) walk the tree and output files
+    # TODO: iterate with the anytree iterator and use multiprocessing
     convert(files)
 
 
