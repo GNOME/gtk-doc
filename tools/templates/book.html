@@ -13,6 +13,16 @@
 {{ navigation_main(title) }}
 <hr>
 </div>
+<div class="toc">
+  <dl class="toc">
+  {%- for item in toc.children recursive %}
+      <dt><a href="{{ item.filename|e }}">{{ item.title }}</a>
+      {%- if item.children -%}
+          <dd><dl>{{ loop(item.children) }}</dl></dd>
+      {%- endif %}</dt>
+  {%- endfor %}
+  </dl>
+</div>
 </div>
 </body>
 </html>

@@ -26,7 +26,7 @@ like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 
 TODO: convert the docbook-xml to html
 - more templates
-- toc
+- refentry/index nav headers
 
 Requirements:
 sudo pip3 install anytree jinja2 lxml
@@ -95,10 +95,10 @@ CHUNK_PARAMS = {
 }
 
 TITLE_XPATH = {
-    'book': etree.XPath('//bookinfo/title/text()'),
-    'chapter': etree.XPath('//chapter/title/text()'),
-    'index': etree.XPath('//index/title/text()'),
-    'refentry': etree.XPath('//refentry/refmeta/refentrytitle/text()'),
+    'book': etree.XPath('./bookinfo/title/text()'),
+    'chapter': etree.XPath('./title/text()'),
+    'index': etree.XPath('./title/text()'),
+    'refentry': etree.XPath('./refmeta/refentrytitle/text()'),
 }
 
 # Jinja2 templates
@@ -163,8 +163,10 @@ def chunk(xml_node, parent=None):
         # TODO: do we need to remove the xml-node from the parent?
         #       we generate toc from the files tree
         # from copy import deepcopy
-        # ..., xml=deepcopy(xml_node), ...
+        # sub_tree = deepcopy(xml_node)
         # xml_node.getparent().remove(xml_node)
+        # # or:
+        # sub_tree = etree.ElementTree(xml_node).getroot()
         parent = Node(xml_node.tag, parent=parent, xml=xml_node,
                       filename=gen_chunk_name(xml_node) + '.html',
                       title=get_chunk_title(xml_node))
@@ -200,6 +202,11 @@ def convert(out_dir, files, node):
                 params['nav_prev'] = files[ix - 1]
             if ix < len(files) - 1:
                 params['nav_next'] = files[ix + 1]
+
+            # page specific vars
+            # TODO: extract into functions?
+            if node.name == 'book':
+                params['toc'] = node.root
 
             html.write(template.render(**params))
         else:
