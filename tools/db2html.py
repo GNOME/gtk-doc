@@ -27,6 +27,7 @@ like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 TODO: convert the docbook-xml to html
 - more templates
 - refentry/index nav headers
+- for refsec, we need a 'long-title' that also contains refpurpose
 
 Requirements:
 sudo pip3 install anytree jinja2 lxml
