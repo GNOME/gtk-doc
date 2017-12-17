@@ -40,6 +40,9 @@ ll tests/bugs/docs/db2html
 cp tests/bugs/docs/html/*.{css,png} tests/bugs/docs/db2html/
 xdg-open tests/bugs/docs/db2html/index.html
 meld tests/bugs/docs/{html,db2html}
+
+Benchmarking:
+(cd tests/bugs/docs/; rm html-build.stamp; time make html-build.stamp)
 """
 
 import argparse
@@ -73,34 +76,22 @@ CHUNK_TAGS = [
     'setindex',
 ]
 
+
+class ChunkParams(object):
+    def __init__(self, prefix, parent=None):
+        self.prefix = prefix
+        self.parent = None
+        self.count = 0
+
+
 # TODO: look up the abbrevs and hierarchy for other tags
 # http://www.sagehill.net/docbookxsl/Chunking.html#GeneratedFilenames
-CHUNK_NAMING = {
-    'book': {
-        'prefix': 'bk',
-        'count': 0,
-        'parent': None,
-    },
-    'chapter': {
-        'prefix': 'ch',
-        'count': 0,
-        'parent': 'book'
-    },
-    'index': {
-        'prefix': 'ix',
-        'count': 0,
-        'parent': 'book'
-    },
-    'sect1': {
-        'prefix': 's',
-        'count': 0,
-        'parent': 'chapter',
-    },
-    'section': {
-        'prefix': 's',
-        'count': 0,
-        'parent': 'chapter',
-    },
+CHUNK_PARAMS = {
+    'book': ChunkParams('bk'),
+    'chapter': ChunkParams('ch', 'book'),
+    'index': ChunkParams('ix', 'book'),
+    'sect1': ChunkParams('s', 'chapter'),
+    'section': ChunkParams('s', 'chapter'),
 }
 
 # Jinja2 templates
@@ -124,25 +115,22 @@ def gen_chunk_name(node):
         return node.attrib['id']
 
     tag = node.tag
-    if tag not in CHUNK_NAMING:
-        CHUNK_NAMING[tag] = {
-            'prefix': node.tag[:2],
-            'count': 0
-        }
-        logging.warning('Add CHUNK_NAMING for "%s"', tag)
+    if tag not in CHUNK_PARAMS:
+        CHUNK_PARAMS[tag] = ChunkParams(node.tag[:2])
+        logging.warning('Add CHUNK_PARAMS for "%s"', tag)
 
-    naming = CHUNK_NAMING[tag]
-    naming['count'] += 1
-    name = ('%s%02d' % (naming['prefix'], naming['count']))
+    naming = CHUNK_PARAMS[tag]
+    naming.count += 1
+    name = ('%s%02d' % (naming.prefix, naming.count))
     # handle parents to make names of nested tags unique
     # TODO: we only need to prepend the parent if there are > 1 of them in the
     #       xml
-    # while naming['parent']:
-    #     parent = naming['parent']
-    #     if parent not in CHUNK_NAMING:
+    # while naming.parent:
+    #     parent = naming.parent
+    #     if parent not in CHUNK_PARAMS:
     #         break;
-    #     naming = CHUNK_NAMING[parent]
-    #     name = ('%s%02d' % (naming['prefix'], naming['count'])) + name
+    #     naming = CHUNK_PARAMS[parent]
+    #     name = ('%s%02d' % (naming.prefix, naming.count)) + name
     return name
 
 
@@ -185,7 +173,8 @@ def convert(out_dir, files, node):
                 'nav_home': (node.root.filename, ''),
             }
             # up, prev, next: link + title
-            # TODO: need titles
+            # TODO: need titles, get them in the chunck stage from precompiled
+            # xpath exprs (xml_node.tag: get_title_xpath_expr)
             if node.parent:
                 params['nav_up'] = (node.parent.filename, '')
             ix = files.index(node)
