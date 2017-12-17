@@ -3,15 +3,15 @@
 {% endmacro %}
 
 {% macro head_links(home, up, prev, next) %}
-<link rel="home" href="{{ home[0] }}" title="{{ home[1] }}">
+<link rel="home" href="{{ home.filename }}" title="{{ home.title }}">
 {% if up is defined %}
-<link rel="up" href="{{ up[0] }}" title="{{ up[1] }}">
+<link rel="up" href="{{ up.filename }}" title="{{ up.title }}">
 {% endif %}
 {% if prev is defined %}
-<link rel="prev" href="{{ prev[0] }}" title="{{ prev[1] }}">
+<link rel="prev" href="{{ prev.filename }}" title="{{ prev.title }}">
 {% endif %}
 {% if next is defined %}
-<link rel="next" href="{{ next[0] }}" title="{{ next[1] }}">
+<link rel="next" href="{{ next.filename }}" title="{{ next.title }}">
 {% endif %}
 {% endmacro %}
 
@@ -24,7 +24,7 @@
 {% macro navigation_std(title) %}
 {% endmacro %}
 
-{% macro navigation_ref() %}
+{% macro navigation_ref(home, up, prev, next) %}
 <table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="5">
   <tr valign="middle">
     <td width="100%" align="left" class="shortcuts">
@@ -34,10 +34,22 @@
         <a href="#tester-GtkdocTester.description" class="shortcut">Description</a>
       </span>
     </td>
-    <td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
-    <td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
-    <td><a accesskey="p" href="ch01.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
-    <td><a accesskey="n" href="api-index.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+    <td><a accesskey="h" href="{{ home.filename }}"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+  {% if up is defined %}
+    <td><a accesskey="u" href="{{ up.filename }}"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+  {% else %}
+    <td><img src="up-insensitive.png" width="16" height="16" border="0"></td>
+  {% endif %}
+  {% if prev is defined %}
+    <td><a accesskey="p" href="{{ prev.filename }}"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+  {% else %}
+    <td><img src="left-insensitive.png" width="16" height="16" border="0"></td>
+  {% endif %}
+  {% if next is defined %}
+    <td><a accesskey="n" href="{{ next.filename }}"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+  {% else %}
+    <td><img src="right-insensitive.png" width="16" height="16" border="0"></td>
+  {% endif %}
   </tr>
 </table>
 

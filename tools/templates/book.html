@@ -1,5 +1,4 @@
 {% from 'common.html' import doctype, head_links, navigation_main %}
-{% set title = xpath('//bookinfo/title/text()') %}
 {{ doctype() }}
 <html>
 <head>
@@ -12,6 +11,7 @@
 <div class="book">
 <div class="titlepage">
 {{ navigation_main(title) }}
+<hr>
 </div>
 </div>
 </body>

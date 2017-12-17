@@ -25,7 +25,7 @@ The tool loaded the main xml document (<module>-docs.xml) and chunks it
 like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 
 TODO: convert the docbook-xml to html
-- navigation
+- more templates
 - toc
 
 Requirements:
@@ -94,6 +94,13 @@ CHUNK_PARAMS = {
     'section': ChunkParams('s', 'chapter'),
 }
 
+TITLE_XPATH = {
+    'book': etree.XPath('//bookinfo/title/text()'),
+    'chapter': etree.XPath('//chapter/title/text()'),
+    'index': etree.XPath('//index/title/text()'),
+    'refentry': etree.XPath('//refentry/refmeta/refentrytitle/text()'),
+}
+
 # Jinja2 templates
 TOOL_PATH = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_ENV = Environment(
@@ -134,6 +141,16 @@ def gen_chunk_name(node):
     return name
 
 
+def get_chunk_title(node):
+    tag = node.tag
+    if tag not in TITLE_XPATH:
+        logging.warning('Add TITLE_XPATH for "%s"', tag)
+        return ''
+
+    xpath = TITLE_XPATH[tag]
+    return xpath(node, smart_strings=False)[0]
+
+
 def chunk(xml_node, parent=None):
     """Chunk the tree.
 
@@ -142,13 +159,14 @@ def chunk(xml_node, parent=None):
     """
     # print('<%s %s>' % (xml_node.tag, xml_node.attrib))
     if xml_node.tag in CHUNK_TAGS:
-        filename = gen_chunk_name(xml_node) + '.html'
         # TODO: do we need to remove the xml-node from the parent?
         #       we generate toc from the files tree
         # from copy import deepcopy
         # ..., xml=deepcopy(xml_node), ...
         # xml_node.getparent().remove(xml_node)
-        parent = Node(xml_node.tag, parent=parent, xml=xml_node, filename=filename)
+        parent = Node(xml_node.tag, parent=parent, xml=xml_node,
+                      filename=gen_chunk_name(xml_node) + '.html',
+                      title=get_chunk_title(xml_node))
     for child in xml_node:
         chunk(child, parent)
 
@@ -162,7 +180,7 @@ def convert(out_dir, files, node):
     with open(os.path.join(out_dir, node.filename), 'wt') as html:
         if node.name in TEMPLATES:
             # TODO: ideally precomiple common xpath exprs once:
-            #   func = etree.XPath("//b")
+            #   func = etree.XPath('//b')
             #   func(xml_node)[0]
             def lxml_xpath(expr):
                 return node.xml.xpath(expr, smart_strings=False)[0]
@@ -170,22 +188,19 @@ def convert(out_dir, files, node):
             template = TEMPLATES[node.name]
             template.globals['xpath'] = lxml_xpath
             params = {
-                'nav_home': (node.root.filename, ''),
+                'title': node.title,
+                'nav_home': node.root,
             }
-            # up, prev, next: link + title
-            # TODO: need titles, get them in the chunck stage from precompiled
-            # xpath exprs (xml_node.tag: get_title_xpath_expr)
+            # nav params: up, prev, next
             if node.parent:
-                params['nav_up'] = (node.parent.filename, '')
+                params['nav_up'] = node.parent
             ix = files.index(node)
             if ix > 0:
-                params['nav_prev'] = (files[ix - 1].filename, '')
+                params['nav_prev'] = files[ix - 1]
             if ix < len(files) - 1:
-                params['nav_next'] = (files[ix + 1].filename, '')
+                params['nav_next'] = files[ix + 1]
 
             html.write(template.render(**params))
-            # attempt to get the title, does not work
-            # print("Title: %s" % template.module.title)
         else:
             logging.warning('Add template for "%s"', node.name)
 

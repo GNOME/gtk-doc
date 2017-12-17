@@ -1,5 +1,4 @@
 {% from 'common.html' import doctype, head_links, navigation_ref %}
-{% set title = xpath('//refentry/refmeta/refentrytitle/text()') %}
 {{ doctype() }}
 <html>
 <head>
@@ -11,7 +10,7 @@
 <body>
 <div class="book">
 <div class="titlepage">
-{{ navigation_ref() }}
+{{ navigation_ref(nav_home, nav_up, nav_prev, nav_next) }}
 </div>
 </div>
 </body>
