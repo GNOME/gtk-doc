@@ -21,19 +21,7 @@
 </table>
 {% endmacro %}
 
-{% macro navigation_std(title) %}
-{% endmacro %}
-
-{% macro navigation_ref(home, up, prev, next) %}
-<table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="5">
-  <tr valign="middle">
-    <td width="100%" align="left" class="shortcuts">
-      <a href="#" class="shortcut">Top</a>
-      <span id="nav_description">
-        <span class="dim">|</span> 
-        <a href="#tester-GtkdocTester.description" class="shortcut">Description</a>
-      </span>
-    </td>
+{% macro _navigation_pages(home, up, prev, next) %}
     <td><a accesskey="h" href="{{ home.filename }}"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
   {% if up is defined %}
     <td><a accesskey="u" href="{{ up.filename }}"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
@@ -50,10 +38,54 @@
   {% else %}
     <td><img src="right-insensitive.png" width="16" height="16" border="0"></td>
   {% endif %}
+{% endmacro %}
+
+{% macro navigation_std(title) %}
+{% endmacro %}
+
+{% macro navigation_ref(home, up, prev, next) %}
+<table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="5">
+  <tr valign="middle">
+    <td width="100%" align="left" class="shortcuts">
+      <a href="#" class="shortcut">Top</a>
+      <span id="nav_description">
+        <span class="dim">|</span> 
+        <a href="#tester-GtkdocTester.description" class="shortcut">Description</a>
+      </span>
+    </td>
+    {{ _navigation_pages(home, up, prev, next) }}
   </tr>
 </table>
 
 {% endmacro %}
 
-{% macro navigation_idx(title) %}
+{% macro navigation_idx(home, up, prev, next) %}
+<table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="5">
+  <tr valign="middle">
+    <td width="100%" align="left" class="shortcuts">
+      <span id="nav_index">
+        <a class="shortcut" href="#idx0">0</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx1">1</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx3">3</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx4">4</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx5">5</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx6">6</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx7">7</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idxD">D</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idxG">G</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idxM">M</a>
+      </span>
+    </td>
+    {{ _navigation_pages(home, up, prev, next) }}
+  </tr>
+</table>
 {% endmacro %}

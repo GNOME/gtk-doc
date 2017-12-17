@@ -113,6 +113,7 @@ TEMPLATE_ENV = Environment(
 
 TEMPLATES = {
     'book': TEMPLATE_ENV.get_template('book.html'),
+    'index': TEMPLATE_ENV.get_template('index.html'),
     'refentry': TEMPLATE_ENV.get_template('refentry.html'),
 }
 
