@@ -27,7 +27,9 @@ like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 TODO: convert the docbook-xml to html
 - more templates
 - refentry/index nav headers
-- for refsec, we need a 'long-title' that also contains refpurpose
+- for refsect, we need a 'long-title' that also contains refpurpose
+- figure how to deal with all the possible docbook
+  - how can we report 'unhandled' data
 
 Requirements:
 sudo pip3 install anytree jinja2 lxml
@@ -195,6 +197,11 @@ def convert(out_dir, files, node):
                 'title': node.title,
                 'nav_home': node.root,
             }
+            if 'id' in node.xml.attrib:
+                params['id'] = node.xml.attrib['id']
+            else:
+                # TODO: generate?
+                logging.warning('No top-level "id" for "%s"', node.xml.tag)
             # nav params: up, prev, next
             if node.parent:
                 params['nav_up'] = node.parent
