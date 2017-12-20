@@ -30,6 +30,10 @@ TODO: convert the docbook-xml to html
 - for refsect, we need a 'long-title' that also contains refpurpose
 - figure how to deal with all the possible docbook
   - how can we report 'unhandled' data
+- we need a generic transform for everything in a para
+
+OPTIONAL:
+- minify html: https://pypi.python.org/pypi/htmlmin/
 
 Requirements:
 sudo pip3 install anytree jinja2 lxml
@@ -188,12 +192,18 @@ def convert(out_dir, files, node):
             # TODO: ideally precomiple common xpath exprs once:
             #   func = etree.XPath('//b')
             #   func(xml_node)[0]
-            def lxml_xpath(expr):
-                return node.xml.xpath(expr, smart_strings=False)[0]
+            # unused, we can call api :)
+            # def lxml_xpath_str0(xml, expr):
+            #     return xml.xpath(expr, smart_strings=False)[0]
+            #
+            # def lxml_xpath(xml, expr):
+            #     return xml.xpath(expr)
 
             template = TEMPLATES[node.name]
-            template.globals['xpath'] = lxml_xpath
+            # template.globals['xpath'] = lxml_xpath
+            # template.globals['xpath_str0'] = lxml_xpath_str0
             params = {
+                'xml': node.xml,
                 'title': node.title,
                 'nav_home': node.root,
             }
@@ -215,6 +225,10 @@ def convert(out_dir, files, node):
             # TODO: extract into functions?
             if node.name == 'book':
                 params['toc'] = node.root
+            elif node.name == 'refsect':
+                # TODO: toc params from xml
+                # all refsect1 + refsect1/title/text() from xml
+                pass
 
             html.write(template.render(**params))
         else:

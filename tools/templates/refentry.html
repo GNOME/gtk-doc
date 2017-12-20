@@ -10,6 +10,7 @@
 <body>
 {{ navigation_ref(nav_home, nav_up, nav_prev, nav_next) }}
 <div class="refentry">
+<a name="{{ id }}"></a>
 <div class="refnamediv">
   <table width="100%"><tr>
     <td valign="top">
@@ -19,6 +20,13 @@
     <td class="gallery_image" valign="top" align="right"></td>
   </tr></table>
 </div>
+
+{%- for sect in xml.findall('refsect1') %}
+<div class="refsect1">
+<a name="{{ sect.attrib['id'] }}"></a><h2>{{ sect.findtext('title') }}</h2>
+</div>
+{%- endfor %}
+
 </div>
 </body>
 </html>
