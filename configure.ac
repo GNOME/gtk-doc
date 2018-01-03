@@ -210,10 +210,10 @@ if test "x$have_yelp_tools" != "xyes"; then
 fi
 AM_CONDITIONAL([HAVE_YELP_TOOLS],[test x$have_yelp_tools = xyes])
 
+# cmake/GtkDocConfig.cmake is handled in the Makefile, not here.
 AC_CONFIG_FILES([Makefile
 gtk-doc.pc
 cmake/Makefile
-cmake/GtkDocConfig.cmake
 cmake/GtkDocConfigVersion.cmake
 gtkdoc/config.py
 help/Makefile
