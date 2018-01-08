@@ -4008,25 +4008,20 @@ def OutputMissingDocumentation():
                 if symbol in AllIncompleteSymbols:
                     n_incomplete += 1
                     buffer += symbol + " (" + AllIncompleteSymbols[symbol] + ")\n"
-                    #$buffer += "\t0: ".$location
 
             elif symbol in Deprecated:
                 if symbol in AllIncompleteSymbols:
                     n_incomplete += 1
                     buffer_deprecated += symbol + " (" + AllIncompleteSymbols[symbol] + ")\n"
-                    #$buffer += "\t1a: ".$location
                 else:
                     buffer_deprecated += symbol + "\n"
-                    #$buffer += "\t1b: ".$location
 
             else:
                 if symbol in AllIncompleteSymbols:
                     n_incomplete += 1
                     buffer += symbol + " (" + AllIncompleteSymbols[symbol] + ")\n"
-                    #$buffer += "\t2a: ".$location
                 else:
                     buffer += symbol + "\n"
-                    #$buffer += "\t2b: ".$location
 
         elif m2:
             total += 1
