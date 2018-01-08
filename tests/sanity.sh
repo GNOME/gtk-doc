@@ -94,6 +94,9 @@ for file in $dir/*/docs/gtkdoc-*.log; do
   if test $file = "$dir/fail/docs/gtkdoc-mkdb.log"; then
     expected_lines="16"
   fi
+  if test $file = "$dir/bugs/docs/gtkdoc-mkdb.log"; then
+    expected_lines="2"
+  fi
   if test $file = "$dir/gobject/docs/gtkdoc-fixxref.log"; then
     expected_lines="2"
   fi

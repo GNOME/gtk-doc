@@ -1147,8 +1147,10 @@ def OutputSymbolTraits(symbol):
 
     if symbol in StabilityLevel:
         stability = StabilityLevel[symbol]
-        AnnotationsUsed[stability] = True
-        desc += "<para role=\"stability\">Stability Level: <acronym>%s</acronym></para>" % stability
+        if stability in AnnotationDefinition:
+            AnnotationsUsed[stability] = True
+            stability = "<acronym>%s</acronym>" % stability
+        desc += "<para role=\"stability\">Stability Level: %s</para>" % stability
     return desc
 
 
@@ -2034,7 +2036,7 @@ def ParseStabilityLevel(stability, file, line, message):
         str: the parsed stability level string.
     """
     stability = stability.strip()
-    sl = stability.lower()
+    sl = stability.strip().lower()
     if sl == 'stable':
         stability = "Stable"
     elif sl == 'unstable':
@@ -2116,14 +2118,15 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
         stability = ParseStabilityLevel(stability, file, line_number, "Section stability level")
         logging.info("Found stability: %s", stability)
 
+    if not stability:
+        stability = DEFAULT_STABILITY or ''
+
     if stability:
-        AnnotationsUsed[stability] = 1
-        stability = "<refsect1 id=\"%s.stability-level\">\n<title>Stability Level</title>\n<acronym>%s</acronym>, unless otherwise indicated\n</refsect1>\n" % (
+        if stability in AnnotationDefinition:
+            AnnotationsUsed[stability] = True
+            stability = "<acronym>%s</acronym>" % stability
+        stability = "<refsect1 id=\"%s.stability-level\">\n<title>Stability Level</title>\n%s, unless otherwise indicated\n</refsect1>\n" % (
             section_id, stability)
-    elif DEFAULT_STABILITY:
-        AnnotationsUsed[DEFAULT_STABILITY] = 1
-        stability = "<refsect1 id=\"%s.stability-level\">\n<title>Stability Level</title>\n<acronym>%s</acronym>, unless otherwise indicated\n</refsect1>\n" % (
-            section_id, DEFAULT_STABILITY)
 
     image = SymbolDocs.get(file + ":Image")
     if not image or re.search(r'^\s*$', image):
