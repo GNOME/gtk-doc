@@ -454,7 +454,7 @@ def OutputDB(file, options):
 
         elif m3:
             filename = m3.group(1)
-            if not filename in file_def_line:
+            if filename not in file_def_line:
                 file_def_line[filename] = line_number
             else:
                 common.LogWarning(file, line_number, "Double <FILE>%s</FILE> entry. Previous occurrence on line %s." %
@@ -4100,7 +4100,7 @@ def OutputUnusedSymbols():
     UNUSED = common.open_text(new_unused_file, 'w')
 
     for symbol in sorted(iterkeys(Declarations)):
-        if not symbol in DeclarationOutput:
+        if symbol not in DeclarationOutput:
             UNUSED.write("%s\n" % symbol)
             num_unused += 1
 
