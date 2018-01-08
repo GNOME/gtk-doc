@@ -2033,7 +2033,8 @@ def ParseStabilityLevel(stability, file, line, message):
     Returns:
         str: the parsed stability level string.
     """
-    sl = stability.strip().lower()
+    stability = stability.strip()
+    sl = stability.lower()
     if sl == 'stable':
         stability = "Stable"
     elif sl == 'unstable':
@@ -2043,7 +2044,7 @@ def ParseStabilityLevel(stability, file, line, message):
     else:
         common.LogWarning(file, line, "%s is %s." % (message, stability) +
                           "It should be one of these: Stable, Unstable, or Private.")
-    return stability
+    return str(stability)
 
 
 def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop, functions_details, other_details, signals_synop, signals_desc, args_synop, args_desc, hierarchy, interfaces, implementations, prerequisites, derived, file_objects):

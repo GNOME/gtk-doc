@@ -553,4 +553,14 @@ typedef enum
  */
 #define _(str) str
 
+/**
+ * BUG_791928:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=791928
+ *
+ * Stability: UndefinedTestValue
+ */
+#define BUG_791928   1
+
+
 #endif // GTKDOC_TESTER_H
