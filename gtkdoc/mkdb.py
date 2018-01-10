@@ -2044,8 +2044,10 @@ def ParseStabilityLevel(stability, file, line, message):
     elif sl == 'private':
         stability = "Private"
     else:
-        common.LogWarning(file, line, "%s is %s." % (message, stability) +
-                          "It should be one of these: Stable, Unstable, or Private.")
+        common.LogWarning(file, line,
+                          "%s is %s. It should be one of these: Stable, "
+                          "Unstable, or Private." % (
+                              message, stability))
     return str(stability)
 
 
