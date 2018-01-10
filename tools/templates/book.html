@@ -7,14 +7,14 @@
 {{ head_links(nav_home, nav_up, nav_prev, nav_next) }}
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
-<body>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="book">
 <div class="titlepage">
 {{ navigation_main(title) }}
-{% set releaseinfo=xml.find('bookinfo/releaseinfo') %}
-{% if releaseinfo %}
-{{ releaseinfo.text }}
-{% endif %}
+{%- set releaseinfo=xml.find('bookinfo/releaseinfo') %}
+{%- if releaseinfo %}
+{{ convert_para(releaseinfo) }}
+{%- endif %}
 <hr>
 </div>
 <div class="toc">

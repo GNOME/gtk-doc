@@ -30,7 +30,12 @@ TODO: convert the docbook-xml to html
 - for refsect, we need a 'long-title' that also contains refpurpose
 - figure how to deal with all the possible docbook
   - how can we report 'unhandled' data
-- we need a generic transform for everything in a para
+- we need a generic transform for everything in a para (and others like
+  releaseinfo)
+  - this will walk the tree and replace nodes to convert from docbook to html
+  - we can start with 1:1, but most likely each transform will be a function
+    that mangles the sub tree and recurses for certain children (kind of what
+    xslt does)
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
@@ -183,6 +188,43 @@ def chunk(xml_node, parent=None):
     return parent
 
 
+def convert__inner(xml):
+    result = ''
+    for child in xml:
+        result += convert_tags.get(child.tag)(child)
+    return result
+
+
+def convert__unknown(xml):
+    logging.warning('Add tag converter for "%s"', xml.tag)
+    return '<!-- ' + xml.tag + '-->\n'
+
+
+def convert_para(xml):
+    result = '<p>'
+    if xml.tag != 'para':
+        result = '<p class="%s">' % xml.tag
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '\n</p>'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
+def convert_ulink(xml):
+    url = xml.text
+    result = '<a class="%s" href="%s">%s</a>' % (xml.tag, url, url)
+    return result
+
+
+convert_tags = {
+    'para': convert_para,
+    'ulink': convert_ulink,
+}
+
+
 def convert(out_dir, files, node):
     """Convert the docbook chunks to a html file."""
 
@@ -200,8 +242,7 @@ def convert(out_dir, files, node):
             #     return xml.xpath(expr)
 
             template = TEMPLATES[node.name]
-            # template.globals['xpath'] = lxml_xpath
-            # template.globals['xpath_str0'] = lxml_xpath_str0
+            template.globals['convert_para'] = convert_para
             params = {
                 'xml': node.xml,
                 'title': node.title,
