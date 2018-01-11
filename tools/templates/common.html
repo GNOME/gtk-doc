@@ -1,6 +1,6 @@
-{% macro doctype() %}
+{% macro doctype() -%}
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-{% endmacro %}
+{%- endmacro %}
 
 {% macro head_links(home, up, prev, next) %}
 <link rel="home" href="{{ home.filename }}" title="{{ home.title }}">
