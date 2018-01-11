@@ -119,6 +119,7 @@ TEMPLATE_ENV = Environment(
     # loader=PackageLoader('gtkdoc', 'templates'),
     # autoescape=select_autoescape(['html', 'xml'])
     loader=FileSystemLoader(os.path.join(TOOL_PATH, 'templates')),
+    extensions=['jinja2.ext.do'],
     autoescape=False,
     trim_blocks=True,
 )
@@ -199,7 +200,7 @@ missing_tags = {}
 
 
 def convert__unknown(xml):
-    # TODO: warn only once
+    # warn only once
     if xml.tag not in missing_tags:
         logging.warning('Add tag converter for "%s"', xml.tag)
         missing_tags[xml.tag] = True
@@ -223,8 +224,9 @@ def convert_para(xml):
 
 
 def convert_ulink(xml):
-    url = xml.text
-    result = '<a class="%s" href="%s">%s</a>' % (xml.tag, url, url)
+    result = '<a class="%s" href="%s">%s</a>' % (xml.tag, xml.attrib['url'], xml.text)
+    if xml.tail:
+        result += xml.tail
     return result
 
 
