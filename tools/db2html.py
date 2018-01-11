@@ -191,13 +191,22 @@ def chunk(xml_node, parent=None):
 def convert__inner(xml):
     result = ''
     for child in xml:
-        result += convert_tags.get(child.tag)(child)
+        result += convert_tags.get(child.tag, convert__unknown)(child)
     return result
 
 
+missing_tags = {}
+
+
 def convert__unknown(xml):
-    logging.warning('Add tag converter for "%s"', xml.tag)
-    return '<!-- ' + xml.tag + '-->\n'
+    # TODO: warn only once
+    if xml.tag not in missing_tags:
+        logging.warning('Add tag converter for "%s"', xml.tag)
+        missing_tags[xml.tag] = True
+    result = '<!-- ' + xml.tag + '-->\n'
+    result += convert__inner(xml)
+    result += '<!-- /' + xml.tag + '-->\n'
+    return result
 
 
 def convert_para(xml):
@@ -207,7 +216,7 @@ def convert_para(xml):
     if xml.text:
         result += xml.text
     result += convert__inner(xml)
-    result += '\n</p>'
+    result += '</p>'
     if xml.tail:
         result += xml.tail
     return result
@@ -243,6 +252,7 @@ def convert(out_dir, files, node):
 
             template = TEMPLATES[node.name]
             template.globals['convert_para'] = convert_para
+            template.globals['convert_inner'] = convert__inner
             params = {
                 'xml': node.xml,
                 'title': node.title,

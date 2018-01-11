@@ -24,6 +24,8 @@
 {%- for sect in xml.findall('refsect1') %}
 <div class="refsect1">
 <a name="{{ sect.attrib['id'] }}"></a><h2>{{ sect.findtext('title') }}</h2>
+{# TODO: can we remove title so that we don't copy this again #}
+{{ convert_inner(sect) }}
 </div>
 {%- endfor %}
 
