@@ -99,7 +99,7 @@ GTKDOC_LIBS=
 # This includes the standard gtk-doc make rules, copied by gtkdocize.
 include $(top_srcdir)/gtk-doc.make
 
-# Comment this out if you want 'make check' to test you doc status
+# Comment this out if you don't want 'make check' to test you doc status
 # and run some sanity checks
 if ENABLE_GTK_DOC
 TESTS_ENVIRONMENT = \
