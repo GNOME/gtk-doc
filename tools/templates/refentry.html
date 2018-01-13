@@ -21,13 +21,8 @@
   </tr></table>
 </div>
 
-{%- for sect in xml.findall('refsect1') %}
-<div class="refsect1">
-{% set tag=sect.find('title') -%}
-<a name="{{ sect.attrib['id'] }}"></a><h2>{{ tag.text }}</h2>
-{% do sect.remove(tag) %}
-{{ convert_inner(sect) }}
-</div>
+{%- for sect in xml.findall('refsect1') -%}
+{{ convert_refsect1(sect) }}
 {%- endfor %}
 
 </div>

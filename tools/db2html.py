@@ -119,8 +119,9 @@ TEMPLATE_ENV = Environment(
     # loader=PackageLoader('gtkdoc', 'templates'),
     # autoescape=select_autoescape(['html', 'xml'])
     loader=FileSystemLoader(os.path.join(TOOL_PATH, 'templates')),
-    extensions=['jinja2.ext.do'],
+    # extensions=['jinja2.ext.do'],
     autoescape=False,
+    lstrip_blocks=True,
     trim_blocks=True,
 )
 
@@ -188,12 +189,18 @@ def chunk(xml_node, parent=None):
 
     return parent
 
+# conversion helpers
+
 
 def convert__inner(xml):
     result = ''
     for child in xml:
         result += convert_tags.get(child.tag, convert__unknown)(child)
     return result
+
+
+def convert_ignore(xml):
+    return ''
 
 
 missing_tags = {}
@@ -210,6 +217,60 @@ def convert__unknown(xml):
     return result
 
 
+def convert_refsect(xml, h_tag):
+    result = '<div class="%s">\n' % xml.tag
+    title = xml.find('title')
+    if title is not None:
+        if 'id' in xml.attrib:
+            result += '<a name="%s"></a>' % xml.attrib['id']
+        result += '<%s>%s</%s>' % (h_tag, title.text, h_tag)
+        xml.remove(title)
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</div>'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+# docbook tags
+
+
+def convert_em_class(xml):
+    result = '<em class="%s"><code>' % xml.tag
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</code></em>'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
+def convert_link(xml):
+    # TODO: inline fixxref functionality
+    # TODO: need to build an 'id' map and resolve against internal links too
+    result = '<!-- GTKDOCLINK HREF="%s" -->' % xml.attrib.get('linkend', '')
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '<!-- /GTKDOCLINK -->'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
+def convert_literal(xml):
+    result = '<code class="%s">' % xml.tag
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</code>'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
 def convert_para(xml):
     result = '<p>'
     if xml.tag != 'para':
@@ -223,6 +284,57 @@ def convert_para(xml):
     return result
 
 
+def convert_phrase(xml):
+    result = '<span'
+    if 'role' in xml.attrib:
+        result += ' class="%s">' % xml.attrib['role']
+    else:
+        result += '>'
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</span>'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+# TODO: encode entities
+
+
+def convert_programlisting(xml):
+    result = '<pre class="programlisting">'
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</pre>'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
+def convert_refsect1(xml):
+    return convert_refsect(xml, 'h2')
+
+
+def convert_refsect2(xml):
+    return convert_refsect(xml, 'h3')
+
+
+def convert_refsect3(xml):
+    return convert_refsect(xml, 'h4')
+
+
+def convert_span(xml):
+    result = '<span class="%s">' % xml.tag
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</span>'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
 def convert_ulink(xml):
     result = '<a class="%s" href="%s">%s</a>' % (xml.tag, xml.attrib['url'], xml.text)
     if xml.tail:
@@ -231,7 +343,20 @@ def convert_ulink(xml):
 
 
 convert_tags = {
+    'function': convert_span,
+    'indexterm': convert_ignore,
+    'link': convert_link,
+    'literal': convert_literal,
     'para': convert_para,
+    'parameter': convert_em_class,
+    'phrase': convert_phrase,
+    'programlisting': convert_programlisting,
+    'refsect1': convert_refsect1,
+    'refsect2': convert_refsect2,
+    'refsect3': convert_refsect3,
+    'returnvalue': convert_span,
+    'structfield': convert_em_class,
+    'type': convert_span,
     'ulink': convert_ulink,
 }
 
@@ -253,8 +378,8 @@ def convert(out_dir, files, node):
             #     return xml.xpath(expr)
 
             template = TEMPLATES[node.name]
+            template.globals['convert_refsect1'] = convert_refsect1
             template.globals['convert_para'] = convert_para
-            template.globals['convert_inner'] = convert__inner
             params = {
                 'xml': node.xml,
                 'title': node.title,
