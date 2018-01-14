@@ -25,8 +25,10 @@ The tool loaded the main xml document (<module>-docs.xml) and chunks it
 like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 
 TODO: convert the docbook-xml to html
-- more templates or maybe don't use the templates at all
+- more templates or maybe don't use jinja2 at all
 - refentry/index nav headers
+- check each docbook tag if it can contain #PCDATA, if not don't check for
+  xml.text
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
@@ -228,6 +230,18 @@ def convert_refsect(xml, h_tag, inner_func=convert__inner):
 # docbook tags
 
 
+def convert_colspec(xml):
+    result = '<col'
+    a = xml.attrib
+    if 'colname' in a:
+        result += ' class="%s"' % a['colname']
+    if 'colwidth' in a:
+        result += ' width="%s"' % a['colwidth']
+    result += '>\n'
+    # is in tgroup and there can be no 'text'
+    return result
+
+
 def convert_div(xml):
     result = '<div class="%s">\n' % xml.tag
     if xml.text:
@@ -245,6 +259,36 @@ def convert_em_class(xml):
         result += xml.text
     result += convert__inner(xml)
     result += '</code></em>'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
+def convert_entry(xml):
+    result = '<td'
+    if 'role' in xml.attrib:
+        result += ' class="%s">\n' % xml.attrib['role']
+    else:
+        result += '>\n'
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</td>\n'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
+def convert_informaltable(xml):
+    result = '<div class="informaltable"><table class="informaltable"'
+    a = xml.attrib
+    if 'pgwide' in a and a['pgwide'] == '1':
+        result += ' width="100%"'
+    if 'frame' in a and a['frame'] == 'none':
+        result += ' border="0"'
+    result += '>\n'
+    result += convert__inner(xml)
+    result += '</table></div>\n'
     if xml.tail:
         result += xml.tail
     return result
@@ -358,6 +402,13 @@ def convert_refsect3(xml):
     return convert_refsect(xml, 'h4')
 
 
+def convert_row(xml):
+    result = '<tr>\n'
+    result += convert__inner(xml)
+    result += '</tr>\n'
+    return result
+
+
 def convert_span(xml):
     result = '<span class="%s">' % xml.tag
     if xml.text:
@@ -369,6 +420,22 @@ def convert_span(xml):
     return result
 
 
+def convert_tbody(xml):
+    result = '<tbody>'
+    result += convert__inner(xml)
+    result += '</tbody>'
+    # is in tgroup and there can be no 'text'
+    return result
+
+
+def convert_tgroup(xml):
+    result = '<colgroup>\n'
+    result += convert__inner(xml)
+    result += '</colgroup>\n'
+    # is in informaltable and there can be no 'text'
+    return result
+
+
 def convert_ulink(xml):
     result = '<a class="%s" href="%s">%s</a>' % (xml.tag, xml.attrib['url'], xml.text)
     if xml.tail:
@@ -377,9 +444,12 @@ def convert_ulink(xml):
 
 
 convert_tags = {
+    'colspec': convert_colspec,
+    'entry': convert_entry,
     'function': convert_span,
     'indexterm': convert_ignore,
     'informalexample': convert_div,
+    'informaltable': convert_informaltable,
     'itemizedlist': convert_itemizedlist,
     'link': convert_link,
     'listitem': convert_listitem,
@@ -392,7 +462,10 @@ convert_tags = {
     'refsect2': convert_refsect2,
     'refsect3': convert_refsect3,
     'returnvalue': convert_span,
+    'row': convert_row,
     'structfield': convert_em_class,
+    'tbody': convert_tbody,
+    'tgroup': convert_tgroup,
     'type': convert_span,
     'ulink': convert_ulink,
     'warning': convert_div,
