@@ -224,7 +224,19 @@ def convert_refsect(xml, h_tag, inner_func=convert__inner):
         result += xml.tail
     return result
 
+
 # docbook tags
+
+
+def convert_div(xml):
+    result = '<div class="%s">\n' % xml.tag
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</div>'
+    if xml.tail:
+        result += xml.tail
+    return result
 
 
 def convert_em_class(xml):
@@ -238,6 +250,17 @@ def convert_em_class(xml):
     return result
 
 
+def convert_itemizedlist(xml):
+    result = '<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">'
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</ul></div>'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
 def convert_link(xml):
     # TODO: inline fixxref functionality
     # TODO: need to build an 'id' map and resolve against internal links too
@@ -246,6 +269,17 @@ def convert_link(xml):
         result += xml.text
     result += convert__inner(xml)
     result += '<!-- /GTKDOCLINK -->'
+    if xml.tail:
+        result += xml.tail
+    return result
+
+
+def convert_listitem(xml):
+    result = '<li class="listitem">'
+    if xml.text:
+        result += xml.text
+    result += convert__inner(xml)
+    result += '</li>'
     if xml.tail:
         result += xml.tail
     return result
@@ -345,7 +379,10 @@ def convert_ulink(xml):
 convert_tags = {
     'function': convert_span,
     'indexterm': convert_ignore,
+    'informalexample': convert_div,
+    'itemizedlist': convert_itemizedlist,
     'link': convert_link,
+    'listitem': convert_listitem,
     'literal': convert_literal,
     'para': convert_para,
     'parameter': convert_em_class,
