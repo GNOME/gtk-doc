@@ -25,17 +25,8 @@ The tool loaded the main xml document (<module>-docs.xml) and chunks it
 like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 
 TODO: convert the docbook-xml to html
-- more templates
+- more templates or maybe don't use the templates at all
 - refentry/index nav headers
-- for refsect, we need a 'long-title' that also contains refpurpose
-- figure how to deal with all the possible docbook
-  - how can we report 'unhandled' data
-- we need a generic transform for everything in a para (and others like
-  releaseinfo)
-  - this will walk the tree and replace nodes to convert from docbook to html
-  - we can start with 1:1, but most likely each transform will be a function
-    that mangles the sub tree and recurses for certain children (kind of what
-    xslt does)
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
@@ -193,10 +184,10 @@ def chunk(xml_node, parent=None):
 
 
 def convert__inner(xml):
-    result = ''
+    result = []
     for child in xml:
-        result += convert_tags.get(child.tag, convert__unknown)(child)
-    return result
+        result.append(convert_tags.get(child.tag, convert__unknown)(child))
+    return ''.join(result)
 
 
 def convert_ignore(xml):
@@ -298,10 +289,9 @@ def convert_phrase(xml):
         result += xml.tail
     return result
 
-# TODO: encode entities
-
 
 def convert_programlisting(xml):
+    # TODO: encode entities
     result = '<pre class="programlisting">'
     if xml.text:
         result += xml.text
@@ -367,7 +357,7 @@ def convert(out_dir, files, node):
     logging.info('Writing: %s', node.filename)
     with open(os.path.join(out_dir, node.filename), 'wt') as html:
         if node.name in TEMPLATES:
-            # TODO: ideally precomiple common xpath exprs once:
+            # TODO: ideally precompile common xpath exprs once:
             #   func = etree.XPath('//b')
             #   func(xml_node)[0]
             # unused, we can call api :)
