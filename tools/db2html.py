@@ -395,6 +395,7 @@ convert_tags = {
     'structfield': convert_em_class,
     'type': convert_span,
     'ulink': convert_ulink,
+    'warning': convert_div,
 }
 
 
