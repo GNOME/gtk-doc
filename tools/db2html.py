@@ -208,7 +208,7 @@ def convert__unknown(xml):
     return result
 
 
-def convert_refsect(xml, h_tag):
+def convert_refsect(xml, h_tag, inner_func=convert__inner):
     result = '<div class="%s">\n' % xml.tag
     title = xml.find('title')
     if title is not None:
@@ -218,7 +218,7 @@ def convert_refsect(xml, h_tag):
         xml.remove(title)
     if xml.text:
         result += xml.text
-    result += convert__inner(xml)
+    result += inner_func(xml)
     result += '</div>'
     if xml.tail:
         result += xml.tail
@@ -303,7 +303,17 @@ def convert_programlisting(xml):
 
 
 def convert_refsect1(xml):
-    return convert_refsect(xml, 'h2')
+    # Add a divider between two consequitive refsect2
+    def convert_inner(xml):
+        result = []
+        prev = None
+        for child in xml:
+            if child.tag == 'refsect2' and prev is not None and prev.tag == child.tag:
+                result.append('<hr>\n')
+            result.append(convert_tags.get(child.tag, convert__unknown)(child))
+            prev = child
+        return ''.join(result)
+    return convert_refsect(xml, 'h2', convert_inner)
 
 
 def convert_refsect2(xml):
