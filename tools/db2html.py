@@ -188,11 +188,9 @@ def chunk(xml_node, parent=None):
 # conversion helpers
 
 
-def convert__inner(xml):
-    result = []
+def convert_inner(xml, result):
     for child in xml:
         result.append(convert_tags.get(child.tag, convert__unknown)(child))
-    return ''.join(result)
 
 
 def convert_ignore(xml):
@@ -207,103 +205,103 @@ def convert__unknown(xml):
     if xml.tag not in missing_tags:
         logging.warning('Add tag converter for "%s"', xml.tag)
         missing_tags[xml.tag] = True
-    result = '<!-- ' + xml.tag + '-->\n'
-    result += convert__inner(xml)
-    result += '<!-- /' + xml.tag + '-->\n'
-    return result
+    result = ['<!-- ' + xml.tag + '-->\n']
+    convert_inner(xml, result)
+    result.append('<!-- /' + xml.tag + '-->\n')
+    return ''.join(result)
 
 
-def convert_refsect(xml, h_tag, inner_func=convert__inner):
-    result = '<div class="%s">\n' % xml.tag
+def convert_refsect(xml, h_tag, inner_func=convert_inner):
+    result = ['<div class="%s">\n' % xml.tag]
     title = xml.find('title')
     if title is not None:
         if 'id' in xml.attrib:
-            result += '<a name="%s"></a>' % xml.attrib['id']
-        result += '<%s>%s</%s>' % (h_tag, title.text, h_tag)
+            result.append('<a name="%s"></a>' % xml.attrib['id'])
+        result.append('<%s>%s</%s>' % (h_tag, title.text, h_tag))
         xml.remove(title)
     if xml.text:
-        result += xml.text
-    result += inner_func(xml)
-    result += '</div>'
+        result.append(xml.text)
+    inner_func(xml, result)
+    result.append('</div>')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 # docbook tags
 
 
 def convert_colspec(xml):
-    result = '<col'
+    result = ['<col']
     a = xml.attrib
     if 'colname' in a:
-        result += ' class="%s"' % a['colname']
+        result.append(' class="%s"' % a['colname'])
     if 'colwidth' in a:
-        result += ' width="%s"' % a['colwidth']
-    result += '>\n'
+        result.append(' width="%s"' % a['colwidth'])
+    result.append('>\n')
     # is in tgroup and there can be no 'text'
-    return result
+    return ''.join(result)
 
 
 def convert_div(xml):
-    result = '<div class="%s">\n' % xml.tag
+    result = ['<div class="%s">\n' % xml.tag]
     if xml.text:
-        result += xml.text
-    result += convert__inner(xml)
-    result += '</div>'
+        result.append(xml.text)
+    convert_inner(xml, result)
+    result.append('</div>')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_em_class(xml):
-    result = '<em class="%s"><code>' % xml.tag
+    result = ['<em class="%s"><code>' % xml.tag]
     if xml.text:
-        result += xml.text
-    result += convert__inner(xml)
-    result += '</code></em>'
+        result.append(xml.text)
+    convert_inner(xml, result)
+    result.append('</code></em>')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_entry(xml):
-    result = '<td'
+    result = ['<td']
     if 'role' in xml.attrib:
-        result += ' class="%s">\n' % xml.attrib['role']
+        result.append(' class="%s">\n' % xml.attrib['role'])
     else:
-        result += '>\n'
+        result.append('>\n')
     if xml.text:
-        result += xml.text
-    result += convert__inner(xml)
-    result += '</td>\n'
+        result.append(xml.text)
+    convert_inner(xml, result)
+    result.append('</td>\n')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_informaltable(xml):
-    result = '<div class="informaltable"><table class="informaltable"'
+    result = ['<div class="informaltable"><table class="informaltable"']
     a = xml.attrib
     if 'pgwide' in a and a['pgwide'] == '1':
-        result += ' width="100%"'
+        result.append(' width="100%"')
     if 'frame' in a and a['frame'] == 'none':
-        result += ' border="0"'
-    result += '>\n'
-    result += convert__inner(xml)
-    result += '</table></div>\n'
+        result.append(' border="0"')
+    result.append('>\n')
+    convert_inner(xml, result)
+    result.append('</table></div>\n')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_itemizedlist(xml):
-    result = '<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">'
-    result += convert__inner(xml)
-    result += '</ul></div>'
+    result = ['<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">']
+    convert_inner(xml, result)
+    result.append('</ul></div>')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_link(xml):
@@ -312,90 +310,87 @@ def convert_link(xml):
     linkend = xml.attrib['linkend']
     if linkend in NoLinks:
         linkend = None
+    result = []
     if linkend:
-        result = '<!-- GTKDOCLINK HREF="%s" -->' % linkend
-    else:
-        result = ''
+        result = ['<!-- GTKDOCLINK HREF="%s" -->' % linkend]
     if xml.text:
-        result += xml.text
-    result += convert__inner(xml)
+        result.append(xml.text)
+    convert_inner(xml, result)
     if linkend:
-        result += '<!-- /GTKDOCLINK -->'
+        result.append('<!-- /GTKDOCLINK -->')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_listitem(xml):
-    result = '<li class="listitem">'
-    result += convert__inner(xml)
-    result += '</li>'
+    result = ['<li class="listitem">']
+    convert_inner(xml, result)
+    result.append('</li>')
     # is in itemizedlist and there can be no 'text'
-    return result
+    return ''.join(result)
 
 
 def convert_literal(xml):
-    result = '<code class="%s">' % xml.tag
+    result = ['<code class="%s">' % xml.tag]
     if xml.text:
-        result += xml.text
-    result += convert__inner(xml)
-    result += '</code>'
+        result.append(xml.text)
+    convert_inner(xml, result)
+    result.append('</code>')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_para(xml):
-    result = '<p>'
+    result = ['<p>']
     if xml.tag != 'para':
-        result = '<p class="%s">' % xml.tag
+        result = ['<p class="%s">' % xml.tag]
     if xml.text:
-        result += xml.text
-    result += convert__inner(xml)
-    result += '</p>'
+        result.append(xml.text)
+    convert_inner(xml, result)
+    result.append('</p>')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_phrase(xml):
-    result = '<span'
+    result = ['<span']
     if 'role' in xml.attrib:
-        result += ' class="%s">' % xml.attrib['role']
+        result.append(' class="%s">' % xml.attrib['role'])
     else:
-        result += '>'
+        result.append('>')
     if xml.text:
-        result += xml.text
-    result += convert__inner(xml)
-    result += '</span>'
+        result.append(xml.text)
+    convert_inner(xml, result)
+    result.append('</span>')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_programlisting(xml):
     # TODO: encode entities
-    result = '<pre class="programlisting">'
+    result = ['<pre class="programlisting">']
     if xml.text:
-        result += xml.text
-    result += convert__inner(xml)
-    result += '</pre>'
+        result.append(xml.text)
+    convert_inner(xml, result)
+    result.append('</pre>')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_refsect1(xml):
     # Add a divider between two consequitive refsect2
-    def convert_inner(xml):
-        result = []
+    def convert_inner(xml, result):
         prev = None
         for child in xml:
             if child.tag == 'refsect2' and prev is not None and prev.tag == child.tag:
                 result.append('<hr>\n')
             result.append(convert_tags.get(child.tag, convert__unknown)(child))
             prev = child
-        return ''.join(result)
     return convert_refsect(xml, 'h2', convert_inner)
 
 
@@ -408,29 +403,29 @@ def convert_refsect3(xml):
 
 
 def convert_row(xml):
-    result = '<tr>\n'
-    result += convert__inner(xml)
-    result += '</tr>\n'
-    return result
+    result = ['<tr>\n']
+    convert_inner(xml, result)
+    result.append('</tr>\n')
+    return ''.join(result)
 
 
 def convert_span(xml):
-    result = '<span class="%s">' % xml.tag
+    result = ['<span class="%s">' % xml.tag]
     if xml.text:
-        result += xml.text
-    result += convert__inner(xml)
-    result += '</span>'
+        result.append(xml.text)
+    convert_inner(xml, result)
+    result.append('</span>')
     if xml.tail:
-        result += xml.tail
-    return result
+        result.append(xml.tail)
+    return ''.join(result)
 
 
 def convert_tbody(xml):
-    result = '<tbody>'
-    result += convert__inner(xml)
-    result += '</tbody>'
+    result = ['<tbody>']
+    convert_inner(xml, result)
+    result.append('</tbody>')
     # is in tgroup and there can be no 'text'
-    return result
+    return ''.join(result)
 
 
 def convert_tgroup(xml):
@@ -444,7 +439,7 @@ def convert_tgroup(xml):
             result.append(convert_colspec(col))
             xml.remove(col)
         result.append('</colgroup>\n')
-    result.append(convert__inner(xml))
+    convert_inner(xml, result)
     # is in informaltable and there can be no 'text'
     return ''.join(result)
 
