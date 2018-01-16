@@ -60,6 +60,9 @@ from anytree import Node, PreOrderIter
 from jinja2 import Environment, FileSystemLoader
 from lxml import etree
 
+# TODO(ensonic): requires gtk-doc to be installed, rewrite later
+from gtkdoc.fixxref import NoLinks
+
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
 CHUNK_TAGS = [
@@ -306,13 +309,20 @@ def convert_itemizedlist(xml):
 
 
 def convert_link(xml):
-    # TODO: inline fixxref functionality
+    # TODO: inline more fixxref functionality
     # TODO: need to build an 'id' map and resolve against internal links too
-    result = '<!-- GTKDOCLINK HREF="%s" -->' % xml.attrib.get('linkend', '')
+    linkend = xml.attrib['linkend']
+    if linkend in NoLinks:
+        linkend = None
+    if linkend:
+        result = '<!-- GTKDOCLINK HREF="%s" -->' % linkend
+    else:
+        result = ''
     if xml.text:
         result += xml.text
     result += convert__inner(xml)
-    result += '<!-- /GTKDOCLINK -->'
+    if linkend:
+        result += '<!-- /GTKDOCLINK -->'
     if xml.tail:
         result += xml.tail
     return result
@@ -429,11 +439,19 @@ def convert_tbody(xml):
 
 
 def convert_tgroup(xml):
-    result = '<colgroup>\n'
-    result += convert__inner(xml)
-    result += '</colgroup>\n'
+    # tgroup does not expand to anything, but the nested colspecs need to
+    # be put into a colgroup
+    cols = xml.findall('colspec')
+    result = []
+    if cols:
+        result.append('<colgroup>\n')
+        for col in cols:
+            result.append(convert_colspec(col))
+            xml.remove(col)
+        result.append('</colgroup>\n')
+    result.append(convert__inner(xml))
     # is in informaltable and there can be no 'text'
-    return result
+    return ''.join(result)
 
 
 def convert_ulink(xml):
