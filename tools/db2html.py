@@ -299,8 +299,6 @@ def convert_informaltable(xml):
 
 def convert_itemizedlist(xml):
     result = '<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">'
-    if xml.text:
-        result += xml.text
     result += convert__inner(xml)
     result += '</ul></div>'
     if xml.tail:
@@ -330,12 +328,9 @@ def convert_link(xml):
 
 def convert_listitem(xml):
     result = '<li class="listitem">'
-    if xml.text:
-        result += xml.text
     result += convert__inner(xml)
     result += '</li>'
-    if xml.tail:
-        result += xml.tail
+    # is in itemizedlist and there can be no 'text'
     return result
 
 
