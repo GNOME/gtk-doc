@@ -467,6 +467,7 @@ convert_tags = {
     'parameter': convert_em_class,
     'phrase': convert_phrase,
     'programlisting': convert_programlisting,
+    'releaseinfo': convert_para,
     'refsect1': convert_refsect1,
     'refsect2': convert_refsect2,
     'refsect3': convert_refsect3,
@@ -484,11 +485,8 @@ convert_tags = {
 def convert(out_dir, files, node):
     """Convert the docbook chunks to a html file."""
 
-    def jinja_convert_refsect1(xml):
-        return ''.join(convert_refsect1(xml))
-
-    def jinja_convert_para(xml):
-        return ''.join(convert_para(xml))
+    def jinja_convert(xml):
+        return ''.join(convert_tags.get(xml.tag, convert__unknown)(xml))
 
     logging.info('Writing: %s', node.filename)
     with open(os.path.join(out_dir, node.filename), 'wt') as html:
@@ -504,8 +502,7 @@ def convert(out_dir, files, node):
             #     return xml.xpath(expr)
 
             template = TEMPLATES[node.name]
-            template.globals['convert_refsect1'] = jinja_convert_refsect1
-            template.globals['convert_para'] = jinja_convert_para
+            template.globals['convert_block'] = jinja_convert
             params = {
                 'xml': node.xml,
                 'title': node.title,

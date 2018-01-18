@@ -20,11 +20,9 @@
     <td class="gallery_image" valign="top" align="right"></td>
   </tr></table>
 </div>
-
 {%- for sect in xml.findall('refsect1') -%}
-{{ convert_refsect1(sect) }}
+{{ convert_block(sect) }}
 {%- endfor %}
-
 </div>
 </body>
 </html>

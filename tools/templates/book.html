@@ -13,7 +13,7 @@
 {{ navigation_main(title) }}
 {%- set releaseinfo=xml.find('bookinfo/releaseinfo') %}
 {%- if releaseinfo %}
-{{ convert_para(releaseinfo) }}
+{{ convert_block(releaseinfo) }}
 {%- endif %}
 <hr>
 </div>
