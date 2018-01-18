@@ -603,7 +603,7 @@ def MarkDownParseSpanElements(text):
 
 
 def EscapeEntities(text):
-    return text.replace('&', '&amp;').replace('<', '&lt;').replace('<', '&gt;')
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
 def ReplaceEntities(text):
@@ -629,7 +629,7 @@ def MarkDownOutputDocBook(blocksref, symbol, context):
     blocks = blocksref
 
     for block in blocks:
-    #$output += "\n<!-- beg type='" . $block->{"type"} . "'-->\n"
+        # $output += "\n<!-- beg type='" . $block->{"type"} . "'-->\n"
 
         if block["type"] == "paragraph":
             text = MarkDownParseSpanElements(block["text"])
@@ -703,7 +703,7 @@ def MarkDownOutputDocBook(blocksref, symbol, context):
         else:
             output += block["text"] + "\n"
 
-        #$output += "\n<!-- end type='" . $block->{"type"} . "'-->\n"
+        # $output += "\n<!-- end type='" . $block->{"type"} . "'-->\n"
     return output
 
 
