@@ -61,6 +61,7 @@ from jinja2 import Environment, FileSystemLoader
 from lxml import etree
 
 # TODO(ensonic): requires gtk-doc to be installed, rewrite later
+sys.path.append('/usr/share/gtk-doc/python')
 from gtkdoc.fixxref import NoLinks
 
 
@@ -190,11 +191,11 @@ def chunk(xml_node, parent=None):
 
 def convert_inner(xml, result):
     for child in xml:
-        result.append(convert_tags.get(child.tag, convert__unknown)(child))
+        result.extend(convert_tags.get(child.tag, convert__unknown)(child))
 
 
 def convert_ignore(xml):
-    return ''
+    return ['']
 
 
 missing_tags = {}
@@ -208,7 +209,7 @@ def convert__unknown(xml):
     result = ['<!-- ' + xml.tag + '-->\n']
     convert_inner(xml, result)
     result.append('<!-- /' + xml.tag + '-->\n')
-    return ''.join(result)
+    return result
 
 
 def convert_refsect(xml, h_tag, inner_func=convert_inner):
@@ -225,7 +226,7 @@ def convert_refsect(xml, h_tag, inner_func=convert_inner):
     result.append('</div>')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 # docbook tags
@@ -240,7 +241,7 @@ def convert_colspec(xml):
         result.append(' width="%s"' % a['colwidth'])
     result.append('>\n')
     # is in tgroup and there can be no 'text'
-    return ''.join(result)
+    return result
 
 
 def convert_div(xml):
@@ -251,7 +252,7 @@ def convert_div(xml):
     result.append('</div>')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_em_class(xml):
@@ -262,7 +263,7 @@ def convert_em_class(xml):
     result.append('</code></em>')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_entry(xml):
@@ -277,7 +278,7 @@ def convert_entry(xml):
     result.append('</td>\n')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_informaltable(xml):
@@ -292,7 +293,7 @@ def convert_informaltable(xml):
     result.append('</table></div>\n')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_itemizedlist(xml):
@@ -301,7 +302,7 @@ def convert_itemizedlist(xml):
     result.append('</ul></div>')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_link(xml):
@@ -320,7 +321,7 @@ def convert_link(xml):
         result.append('<!-- /GTKDOCLINK -->')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_listitem(xml):
@@ -328,7 +329,7 @@ def convert_listitem(xml):
     convert_inner(xml, result)
     result.append('</li>')
     # is in itemizedlist and there can be no 'text'
-    return ''.join(result)
+    return result
 
 
 def convert_literal(xml):
@@ -339,7 +340,7 @@ def convert_literal(xml):
     result.append('</code>')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_para(xml):
@@ -352,7 +353,7 @@ def convert_para(xml):
     result.append('</p>')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_phrase(xml):
@@ -367,7 +368,7 @@ def convert_phrase(xml):
     result.append('</span>')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_programlisting(xml):
@@ -379,7 +380,7 @@ def convert_programlisting(xml):
     result.append('</pre>')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_refsect1(xml):
@@ -389,7 +390,7 @@ def convert_refsect1(xml):
         for child in xml:
             if child.tag == 'refsect2' and prev is not None and prev.tag == child.tag:
                 result.append('<hr>\n')
-            result.append(convert_tags.get(child.tag, convert__unknown)(child))
+            result.extend(convert_tags.get(child.tag, convert__unknown)(child))
             prev = child
     return convert_refsect(xml, 'h2', convert_inner)
 
@@ -406,7 +407,7 @@ def convert_row(xml):
     result = ['<tr>\n']
     convert_inner(xml, result)
     result.append('</tr>\n')
-    return ''.join(result)
+    return result
 
 
 def convert_span(xml):
@@ -417,7 +418,7 @@ def convert_span(xml):
     result.append('</span>')
     if xml.tail:
         result.append(xml.tail)
-    return ''.join(result)
+    return result
 
 
 def convert_tbody(xml):
@@ -425,7 +426,7 @@ def convert_tbody(xml):
     convert_inner(xml, result)
     result.append('</tbody>')
     # is in tgroup and there can be no 'text'
-    return ''.join(result)
+    return result
 
 
 def convert_tgroup(xml):
@@ -436,18 +437,18 @@ def convert_tgroup(xml):
     if cols:
         result.append('<colgroup>\n')
         for col in cols:
-            result.append(convert_colspec(col))
+            result.extend(convert_colspec(col))
             xml.remove(col)
         result.append('</colgroup>\n')
     convert_inner(xml, result)
     # is in informaltable and there can be no 'text'
-    return ''.join(result)
+    return result
 
 
 def convert_ulink(xml):
-    result = '<a class="%s" href="%s">%s</a>' % (xml.tag, xml.attrib['url'], xml.text)
+    result = ['<a class="%s" href="%s">%s</a>' % (xml.tag, xml.attrib['url'], xml.text)]
     if xml.tail:
-        result += xml.tail
+        result.append(xml.tail)
     return result
 
 
@@ -483,6 +484,12 @@ convert_tags = {
 def convert(out_dir, files, node):
     """Convert the docbook chunks to a html file."""
 
+    def jinja_convert_refsect1(xml):
+        return ''.join(convert_refsect1(xml))
+
+    def jinja_convert_para(xml):
+        return ''.join(convert_para(xml))
+
     logging.info('Writing: %s', node.filename)
     with open(os.path.join(out_dir, node.filename), 'wt') as html:
         if node.name in TEMPLATES:
@@ -497,8 +504,8 @@ def convert(out_dir, files, node):
             #     return xml.xpath(expr)
 
             template = TEMPLATES[node.name]
-            template.globals['convert_refsect1'] = convert_refsect1
-            template.globals['convert_para'] = convert_para
+            template.globals['convert_refsect1'] = jinja_convert_refsect1
+            template.globals['convert_para'] = jinja_convert_para
             params = {
                 'xml': node.xml,
                 'title': node.title,
