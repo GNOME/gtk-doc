@@ -188,6 +188,9 @@ def chunk(xml_node, parent=None):
 
 # conversion helpers
 
+def escape_entities(text):
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
 
 def convert_inner(xml, result):
     for child in xml:
@@ -269,13 +272,13 @@ def convert_em_class(xml):
 def convert_entry(xml):
     result = ['<td']
     if 'role' in xml.attrib:
-        result.append(' class="%s">\n' % xml.attrib['role'])
+        result.append(' class="%s">' % xml.attrib['role'])
     else:
-        result.append('>\n')
+        result.append('>')
     if xml.text:
         result.append(xml.text)
     convert_inner(xml, result)
-    result.append('</td>\n')
+    result.append('</td>')
     if xml.tail:
         result.append(xml.tail)
     return result
@@ -290,7 +293,7 @@ def convert_informaltable(xml):
         result.append(' border="0"')
     result.append('>\n')
     convert_inner(xml, result)
-    result.append('</table></div>\n')
+    result.append('</table></div>')
     if xml.tail:
         result.append(xml.tail)
     return result
@@ -372,10 +375,9 @@ def convert_phrase(xml):
 
 
 def convert_programlisting(xml):
-    # TODO: encode entities
     result = ['<pre class="programlisting">']
     if xml.text:
-        result.append(xml.text)
+        result.append(escape_entities(xml.text))
     convert_inner(xml, result)
     result.append('</pre>')
     if xml.tail:
