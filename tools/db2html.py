@@ -29,6 +29,11 @@ TODO: convert the docbook-xml to html
 - refentry/index nav headers
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
+- integrate syntax-highlighing from fixxref
+  - maybe handle the combination <informalexample><programlisting> directly
+  - switch to http://pygments.org/docs/quickstart/?
+- integrate MakeXRef from fixxref
+  - first create devhelp2 output
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
@@ -187,6 +192,7 @@ def chunk(xml_node, parent=None):
     return parent
 
 # conversion helpers
+
 
 def escape_entities(text):
     return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
