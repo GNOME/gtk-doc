@@ -530,14 +530,12 @@ def convert(out_dir, files, node):
             if ix < len(files) - 1:
                 params['nav_next'] = files[ix + 1]
 
-            # page specific vars
-            # TODO: extract into functions?
-            if node.name == 'book':
-                params['toc'] = node.root
-            elif node.name == 'refsect':
-                # TODO: toc params from xml
-                # all refsect1 + refsect1/title/text() from xml
-                pass
+            # TODO: call a top-level python converter instead
+            # generate_{book,chapter,index,refentry}(files, node)
+            # xml is node.xml
+            # We need to rewrite all other converters to take
+            # (xml, files, node) or (xml, params)
+            # where params is sort of like what we have above
 
             html.write(template.render(**params))
         else:
@@ -562,15 +560,20 @@ def main(index_file):
         if e.errno != errno.EEXIST:
             raise
 
-    # We need two passes:
+    # We need multiple passes:
     # 1) recursively walk the tree and chunk it into a python tree so that we
-    #   can generate navigation and link tags
+    #   can generate navigation and link tags.
+    #   also collect all 'id' attributes on the way and build map of
+    #   id:rel-link (in fixxref is is Links[])
     files = chunk(tree.getroot())
     # 2) iterate the tree and output files
     # TODO: use multiprocessing
     files = list(PreOrderIter(files))
     for node in files:
         convert(out_dir, files, node)
+    # 3) create a devhelp2.xsl
+    # - toc under 'chapter'
+    # - keywords under 'functions' from all refsect2 and refsect3
 
 
 if __name__ == '__main__':

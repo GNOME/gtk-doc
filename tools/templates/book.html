@@ -19,7 +19,7 @@
 </div>
 <div class="toc">
   <dl class="toc">
-  {%- for item in toc.children recursive %}
+  {%- for item in nav_home.children recursive %}
       <dt><a href="{{ item.filename|e }}">{{ item.title }}</a>
       {%- if item.children -%}
           <dd><dl>{{ loop(item.children) }}</dl></dd>
