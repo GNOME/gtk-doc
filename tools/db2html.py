@@ -21,11 +21,15 @@
 
 """Prototype for builtin docbook processing
 
-The tool loaded the main xml document (<module>-docs.xml) and chunks it
+The tool loades the main xml document (<module>-docs.xml) and chunks it
 like the xsl-stylesheets would do. For that it resolves all the xml-includes.
 
+In contrast to our previous approach of running gtkdoc-mkhtml + gtkdoc-fixxref,
+this tools will replace both without relying on external tools such as xsltproc
+and source-highlight.
+
 TODO: convert the docbook-xml to html
-- more templates or maybe don't use jinja2 at all
+- more chunk converters
 - refentry/index nav headers
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
@@ -39,7 +43,7 @@ OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
 
 Requirements:
-sudo pip3 install anytree jinja2 lxml
+sudo pip3 install anytree lxml
 
 Examples:
 python3 tools/db2html.py tests/gobject/docs/tester-docs.xml
@@ -62,7 +66,6 @@ import os
 import sys
 
 from anytree import Node, PreOrderIter
-from jinja2 import Environment, FileSystemLoader
 from lxml import etree
 
 # TODO(ensonic): requires gtk-doc to be installed, rewrite later
@@ -113,24 +116,6 @@ TITLE_XPATH = {
     'chapter': etree.XPath('./title/text()'),
     'index': etree.XPath('./title/text()'),
     'refentry': etree.XPath('./refmeta/refentrytitle/text()'),
-}
-
-# Jinja2 templates
-TOOL_PATH = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE_ENV = Environment(
-    # loader=PackageLoader('gtkdoc', 'templates'),
-    # autoescape=select_autoescape(['html', 'xml'])
-    loader=FileSystemLoader(os.path.join(TOOL_PATH, 'templates')),
-    # extensions=['jinja2.ext.do'],
-    autoescape=False,
-    lstrip_blocks=True,
-    trim_blocks=True,
-)
-
-TEMPLATES = {
-    'book': TEMPLATE_ENV.get_template('book.html'),
-    'index': TEMPLATE_ENV.get_template('index.html'),
-    'refentry': TEMPLATE_ENV.get_template('refentry.html'),
 }
 
 
@@ -198,30 +183,30 @@ def escape_entities(text):
     return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
-def convert_inner(xml, result):
+def convert_inner(ctx, xml, result):
     for child in xml:
-        result.extend(convert_tags.get(child.tag, convert__unknown)(child))
+        result.extend(convert_tags.get(child.tag, convert__unknown)(ctx, child))
 
 
-def convert_ignore(xml):
+def convert_ignore(ctx, xml):
     return ['']
 
 
 missing_tags = {}
 
 
-def convert__unknown(xml):
+def convert__unknown(ctx, xml):
     # warn only once
     if xml.tag not in missing_tags:
         logging.warning('Add tag converter for "%s"', xml.tag)
         missing_tags[xml.tag] = True
     result = ['<!-- ' + xml.tag + '-->\n']
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('<!-- /' + xml.tag + '-->\n')
     return result
 
 
-def convert_refsect(xml, h_tag, inner_func=convert_inner):
+def convert_refsect(ctx, xml, h_tag, inner_func=convert_inner):
     result = ['<div class="%s">\n' % xml.tag]
     title = xml.find('title')
     if title is not None:
@@ -231,7 +216,7 @@ def convert_refsect(xml, h_tag, inner_func=convert_inner):
         xml.remove(title)
     if xml.text:
         result.append(xml.text)
-    inner_func(xml, result)
+    inner_func(ctx, xml, result)
     result.append('</div>')
     if xml.tail:
         result.append(xml.tail)
@@ -240,8 +225,18 @@ def convert_refsect(xml, h_tag, inner_func=convert_inner):
 
 # docbook tags
 
+def convert_bookinfo(ctx, xml):
+    result = ['<div class="titlepage">']
+    for releaseinfo in xml.findall('releaseinfo'):
+        result.extend(convert_para(ctx, releaseinfo))
+    result.append("""<hr>
+</div>""")
+    if xml.tail:
+        result.append(xml.tail)
+    return result
 
-def convert_colspec(xml):
+
+def convert_colspec(ctx, xml):
     result = ['<col']
     a = xml.attrib
     if 'colname' in a:
@@ -253,29 +248,29 @@ def convert_colspec(xml):
     return result
 
 
-def convert_div(xml):
+def convert_div(ctx, xml):
     result = ['<div class="%s">\n' % xml.tag]
     if xml.text:
         result.append(xml.text)
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</div>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_em_class(xml):
+def convert_em_class(ctx, xml):
     result = ['<em class="%s"><code>' % xml.tag]
     if xml.text:
         result.append(xml.text)
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</code></em>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_entry(xml):
+def convert_entry(ctx, xml):
     result = ['<td']
     if 'role' in xml.attrib:
         result.append(' class="%s">' % xml.attrib['role'])
@@ -283,14 +278,14 @@ def convert_entry(xml):
         result.append('>')
     if xml.text:
         result.append(xml.text)
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</td>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_informaltable(xml):
+def convert_informaltable(ctx, xml):
     result = ['<div class="informaltable"><table class="informaltable"']
     a = xml.attrib
     if 'pgwide' in a and a['pgwide'] == '1':
@@ -298,23 +293,23 @@ def convert_informaltable(xml):
     if 'frame' in a and a['frame'] == 'none':
         result.append(' border="0"')
     result.append('>\n')
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</table></div>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_itemizedlist(xml):
+def convert_itemizedlist(ctx, xml):
     result = ['<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">']
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</ul></div>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_link(xml):
+def convert_link(ctx, xml):
     # TODO: inline more fixxref functionality
     # TODO: need to build an 'id' map and resolve against internal links too
     linkend = xml.attrib['linkend']
@@ -325,7 +320,7 @@ def convert_link(xml):
         result = ['<!-- GTKDOCLINK HREF="%s" -->' % linkend]
     if xml.text:
         result.append(xml.text)
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     if linkend:
         result.append('<!-- /GTKDOCLINK -->')
     if xml.tail:
@@ -333,39 +328,39 @@ def convert_link(xml):
     return result
 
 
-def convert_listitem(xml):
+def convert_listitem(ctx, xml):
     result = ['<li class="listitem">']
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</li>')
     # is in itemizedlist and there can be no 'text'
     return result
 
 
-def convert_literal(xml):
+def convert_literal(ctx, xml):
     result = ['<code class="%s">' % xml.tag]
     if xml.text:
         result.append(xml.text)
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</code>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_para(xml):
+def convert_para(ctx, xml):
     result = ['<p>']
     if xml.tag != 'para':
         result = ['<p class="%s">' % xml.tag]
     if xml.text:
         result.append(xml.text)
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</p>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_phrase(xml):
+def convert_phrase(ctx, xml):
     result = ['<span']
     if 'role' in xml.attrib:
         result.append(' class="%s">' % xml.attrib['role'])
@@ -373,71 +368,71 @@ def convert_phrase(xml):
         result.append('>')
     if xml.text:
         result.append(xml.text)
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</span>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_programlisting(xml):
+def convert_programlisting(ctx, xml):
     result = ['<pre class="programlisting">']
     if xml.text:
         result.append(escape_entities(xml.text))
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</pre>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_refsect1(xml):
+def convert_refsect1(ctx, xml):
     # Add a divider between two consequitive refsect2
-    def convert_inner(xml, result):
+    def convert_inner(ctx, xml, result):
         prev = None
         for child in xml:
             if child.tag == 'refsect2' and prev is not None and prev.tag == child.tag:
                 result.append('<hr>\n')
-            result.extend(convert_tags.get(child.tag, convert__unknown)(child))
+            result.extend(convert_tags.get(child.tag, convert__unknown)(ctx, child))
             prev = child
-    return convert_refsect(xml, 'h2', convert_inner)
+    return convert_refsect(ctx, xml, 'h2', convert_inner)
 
 
-def convert_refsect2(xml):
-    return convert_refsect(xml, 'h3')
+def convert_refsect2(ctx, xml):
+    return convert_refsect(ctx, xml, 'h3')
 
 
-def convert_refsect3(xml):
-    return convert_refsect(xml, 'h4')
+def convert_refsect3(ctx, xml):
+    return convert_refsect(ctx, xml, 'h4')
 
 
-def convert_row(xml):
+def convert_row(ctx, xml):
     result = ['<tr>\n']
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</tr>\n')
     return result
 
 
-def convert_span(xml):
+def convert_span(ctx, xml):
     result = ['<span class="%s">' % xml.tag]
     if xml.text:
         result.append(xml.text)
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</span>')
     if xml.tail:
         result.append(xml.tail)
     return result
 
 
-def convert_tbody(xml):
+def convert_tbody(ctx, xml):
     result = ['<tbody>']
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     result.append('</tbody>')
     # is in tgroup and there can be no 'text'
     return result
 
 
-def convert_tgroup(xml):
+def convert_tgroup(ctx, xml):
     # tgroup does not expand to anything, but the nested colspecs need to
     # be put into a colgroup
     cols = xml.findall('colspec')
@@ -445,15 +440,15 @@ def convert_tgroup(xml):
     if cols:
         result.append('<colgroup>\n')
         for col in cols:
-            result.extend(convert_colspec(col))
+            result.extend(convert_colspec(ctx, col))
             xml.remove(col)
         result.append('</colgroup>\n')
-    convert_inner(xml, result)
+    convert_inner(ctx, xml, result)
     # is in informaltable and there can be no 'text'
     return result
 
 
-def convert_ulink(xml):
+def convert_ulink(ctx, xml):
     result = ['<a class="%s" href="%s">%s</a>' % (xml.tag, xml.attrib['url'], xml.text)]
     if xml.tail:
         result.append(xml.tail)
@@ -461,6 +456,7 @@ def convert_ulink(xml):
 
 
 convert_tags = {
+    'bookinfo': convert_bookinfo,
     'colspec': convert_colspec,
     'entry': convert_entry,
     'function': convert_span,
@@ -489,57 +485,276 @@ convert_tags = {
     'warning': convert_div,
 }
 
+# conversion helpers
+
+HTML_DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">\n'
+
+
+def generate_head_links(ctx):
+    l = ctx['nav_home']
+    result = [
+        '<link rel="home" href="%s" title="%s">\n' % (l.filename, l.title)
+    ]
+    if 'nav_up' in ctx:
+        l = ctx['nav_up']
+        result.append('<link rel="up" href="%s" title="%s">\n' % (l.filename, l.title))
+    if 'nav_prev' in ctx:
+        l = ctx['nav_prev']
+        result.append('<link rel="prev" href="%s" title="%s">\n' % (l.filename, l.title))
+    if 'nav_next' in ctx:
+        l = ctx['nav_next']
+        result.append('<link rel="next" href="%s" title="%s">\n' % (l.filename, l.title))
+    return ''.join(result)
+
+
+def generate_nav_links(ctx):
+    l = ctx['nav_home']
+    result = [
+        '<td><a accesskey="h" href="%s"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>' % l.filename
+    ]
+    if 'nav_up' in ctx:
+        l = ctx['nav_up']
+        result.append(
+            '<td><a accesskey="u" href="%s"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>' % l.filename)
+    else:
+        result.append('<td><img src="up-insensitive.png" width="16" height="16" border="0"></td>')
+    if 'nav_prev' in ctx:
+        l = ctx['nav_prev']
+        result.append(
+            '<td><a accesskey="p" href="%s"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>' % l.filename)
+    else:
+        result.append('<td><img src="left-insensitive.png" width="16" height="16" border="0"></td>')
+    if 'nav_next' in ctx:
+        l = ctx['nav_next']
+        result.append(
+            '<td><a accesskey="n" href="%s"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>' % l.filename)
+    else:
+        result.append('<td><img src="right-insensitive.png" width="16" height="16" border="0"></td>')
+
+    return ''.join(result)
+
+
+def generate_toc(ctx, node):
+    result = []
+    for c in node.children:
+        # TODO: urlencode the filename
+        result.append('<dt><span class="%s"><a href="%s">%s</a></span></dt>\n' % (
+            c.xml.tag, c.filename, c.title))
+        if c.children:
+            result.append('<dd><dl>')
+            result.extend(generate_toc(ctx, c))
+            result.append('</dl></dd>')
+    return result
+
+
+def generate_index_nav(ctx):
+    # TODO(ensonic): add actual index links
+    return """<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
+  <tr valign="middle">
+    <td width="100%%" align="left" class="shortcuts">
+      <span id="nav_index">
+        <a class="shortcut" href="#idx0">0</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx1">1</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx3">3</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx4">4</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx5">5</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx6">6</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idx7">7</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idxD">D</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idxG">G</a>
+           <span class="dim">|</span> 
+        <a class="shortcut" href="#idxM">M</a>
+      </span>
+    </td>
+    %s
+  </tr>
+</table>
+""" % generate_nav_links(ctx)
+
+
+def generate_refentry_nav(ctx, refsect1s):
+    result = ["""<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
+  <tr valign="middle">
+    <td width="100%%" align="left" class="shortcuts">
+      <a href="#" class="shortcut">Top</a>"""
+              ]
+    for s in refsect1s:
+        # don't list TOC sections (role="xxx_proto")
+        if s.attrib.get('role', '').endswith("_proto"):
+            continue
+
+        title = ''
+        title_tag = s.find('title')
+        if title_tag is not None:
+            title = title_tag.text
+        result.append("""
+          <span id="nav_description">
+            <span class="dim">|</span> 
+            <a href="#%s" class="shortcut">%s</a>
+          </span>""" % (s.attrib['id'], title))
+    result.append("""
+    </td>
+    %s
+  </tr>
+</table>
+""" % generate_nav_links(ctx))
+    return ''.join(result)
+
+
+# docbook chunks
+
+def convert_book(ctx):
+    node = ctx['node']
+    result = [
+        HTML_DOCTYPE,
+        """<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>%s</title>
+%s<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="0">
+    <tr><th valign="middle"><p class="title">%s</p></th></tr>
+</table>
+<div class="book">
+""" % (node.title, generate_head_links(ctx), node.title)
+    ]
+    bookinfo = node.xml.findall('bookinfo')[0]
+    result.extend(convert_bookinfo(ctx, bookinfo))
+    result.append("""<div class="toc">
+  <dl class="toc">
+""")
+    result.extend(generate_toc(ctx, node.root))
+    result.append("""</dl>
+</div>
+</div>
+</body>
+</html>""")
+    return ''.join(result)
+
+
+def convert_index(ctx):
+    node = ctx['node']
+    result = [
+        HTML_DOCTYPE,
+        """<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>%s: %s</title>
+%s<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+""" % (node.title, node.root.title, generate_head_links(ctx)),
+        generate_index_nav(ctx),
+    ]
+    # TODO: add index entries
+    result.append("""<div class="index">
+<div class="titlepage"><h1 class="title"><a name="api-index"></a>%s</h1></div>
+</div>
+</body>
+</html>""" % node.title)
+    return ''.join(result)
+
+
+def convert_refentry(ctx):
+    node = ctx['node']
+    node_id = ''  # TODO: generate otherwise?
+    if 'id' in node.xml.attrib:
+        node_id = node.xml.attrib['id']
+
+    # TODO(ensonic): besides 'refmeta' and 'refnamediv' those are direct
+    # children of 'refentry'
+    refsect1s = node.xml.findall('refsect1')
+
+    result = [
+        HTML_DOCTYPE,
+        """<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>%s: %s</title>
+%s<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+""" % (node.title, node.root.title, generate_head_links(ctx)),
+        generate_refentry_nav(ctx, refsect1s),
+        """
+<div class="refentry">
+<a name="%s"></a>
+<div class="refnamediv">
+  <table width="100%%"><tr>
+    <td valign="top">
+      <h2><span class="refentrytitle"><a name="%s.top_of_page"></a>%s</span></h2>
+      <p>%s — module for gtk-doc unit test</p>
+    </td>
+    <td class="gallery_image" valign="top" align="right"></td>
+  </tr></table>
+</div>
+""" % (node_id, node_id, node.title, node.title)
+    ]
+
+    for s in refsect1s:
+        result.extend(convert_refsect1(ctx, s))
+    result.append("""</div>
+</body>
+</html>""")
+    return ''.join(result)
+
+
+convert_chunks = {
+    'book': convert_book,
+    'index': convert_index,
+    'refentry': convert_refentry,
+}
+
+
+def generate_nav_nodes(files, node):
+    nav = {
+        'nav_home': node.root,
+    }
+    # nav params: up, prev, next
+    if node.parent:
+        nav['nav_up'] = node.parent
+    ix = files.index(node)
+    if ix > 0:
+        nav['nav_prev'] = files[ix - 1]
+    if ix < len(files) - 1:
+        nav['nav_next'] = files[ix + 1]
+    return nav
+
 
 def convert(out_dir, files, node):
-    """Convert the docbook chunks to a html file."""
+    """Convert the docbook chunks to a html file.
 
-    def jinja_convert(xml):
-        return ''.join(convert_tags.get(xml.tag, convert__unknown)(xml))
+    Args:
+      out_dir: already created output dir
+      files: list of nodes in the tree in pre-order
+      node: current tree node
+    """
+
+    def jinja_convert(ctx, xml):
+        return ''.join(convert_tags.get(xml.tag, convert__unknown)(ctx, xml))
 
     logging.info('Writing: %s', node.filename)
     with open(os.path.join(out_dir, node.filename), 'wt') as html:
-        if node.name in TEMPLATES:
-            # TODO: ideally precompile common xpath exprs once:
-            #   func = etree.XPath('//b')
-            #   func(xml_node)[0]
-            # unused, we can call api :)
-            # def lxml_xpath_str0(xml, expr):
-            #     return xml.xpath(expr, smart_strings=False)[0]
-            #
-            # def lxml_xpath(xml, expr):
-            #     return xml.xpath(expr)
+        ctx = {
+            'files': files,
+            'node': node,
+        }
+        ctx.update(generate_nav_nodes(files, node))
 
-            template = TEMPLATES[node.name]
-            template.globals['convert_block'] = jinja_convert
-            params = {
-                'xml': node.xml,
-                'title': node.title,
-                'nav_home': node.root,
-            }
-            if 'id' in node.xml.attrib:
-                params['id'] = node.xml.attrib['id']
-            else:
-                # TODO: generate?
-                logging.warning('No top-level "id" for "%s"', node.xml.tag)
-            # nav params: up, prev, next
-            if node.parent:
-                params['nav_up'] = node.parent
-            ix = files.index(node)
-            if ix > 0:
-                params['nav_prev'] = files[ix - 1]
-            if ix < len(files) - 1:
-                params['nav_next'] = files[ix + 1]
-
-            # TODO: call a top-level python converter instead
-            # generate_{book,chapter,index,refentry}(files, node)
-            # xml is node.xml
-            # We need to rewrite all other converters to take
-            # (xml, files, node) or (xml, params)
-            # where params is sort of like what we have above
-
-            html.write(template.render(**params))
+        if node.name in convert_chunks:
+            html.write(convert_chunks[node.name](ctx))
         else:
-            logging.warning('Add template for "%s"', node.name)
+            logging.warning('Add converter/template for "%s"', node.name)
 
 
 def main(index_file):
