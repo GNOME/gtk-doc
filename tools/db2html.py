@@ -71,6 +71,7 @@ from lxml import etree
 # TODO(ensonic): requires gtk-doc to be installed, rewrite later
 sys.path.append('/usr/share/gtk-doc/python')
 from gtkdoc.fixxref import NoLinks
+from gtkdoc import common
 
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
@@ -823,12 +824,6 @@ if __name__ == '__main__':
     if len(options.sources) != 1:
         sys.exit('Expect one source file argument.')
 
-    log_level = os.environ.get('GTKDOC_TRACE')
-    if log_level == '':
-        log_level = 'INFO'
-    if log_level:
-        logging.basicConfig(stream=sys.stdout,
-                            level=logging.getLevelName(log_level.upper()),
-                            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+    common.setup_logging()
 
     sys.exit(main(options.sources[0]))
