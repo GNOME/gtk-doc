@@ -189,6 +189,12 @@ def convert_inner(ctx, xml, result):
 
 
 def convert_ignore(ctx, xml):
+    result = []
+    convert_inner(ctx, xml, result)
+    return result
+
+
+def convert_skip(ctx, xml):
     return ['']
 
 
@@ -221,6 +227,16 @@ def convert_refsect(ctx, xml, h_tag, inner_func=convert_inner):
     if xml.tail:
         result.append(xml.tail)
     return result
+
+
+def xml_get_title(xml):
+    title = xml.find('title')
+    if title is not None:
+        return title.text
+    else:
+        # TODO(ensonic): need a better way to report a position in the tree
+        logging.warning('Expected title tag under %s', xml.tag)
+        return ''
 
 
 # docbook tags
@@ -282,6 +298,17 @@ def convert_entry(ctx, xml):
     result.append('</td>')
     if xml.tail:
         result.append(xml.tail)
+    return result
+
+
+def convert_indexdiv(ctx, xml):
+    title_tag = xml.find('title')
+    title = title_tag.text
+    xml.remove(title_tag)
+    result = [
+        '<a name="idx%s"></a><h3 class="title">%s</h3>' % (title, title)
+    ]
+    convert_inner(ctx, xml, result)
     return result
 
 
@@ -375,6 +402,13 @@ def convert_phrase(ctx, xml):
     return result
 
 
+def convert_primaryie(ctx, xml):
+    result = ['<dt>']
+    convert_inner(ctx, xml, result)
+    result.append('</dt>\n<dd></dd>\n')
+    return result
+
+
 def convert_programlisting(ctx, xml):
     result = ['<pre class="programlisting">']
     if xml.text:
@@ -455,12 +489,15 @@ def convert_ulink(ctx, xml):
     return result
 
 
+# TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_tags = {
     'bookinfo': convert_bookinfo,
     'colspec': convert_colspec,
     'entry': convert_entry,
     'function': convert_span,
-    'indexterm': convert_ignore,
+    'indexdiv': convert_indexdiv,
+    'indexentry': convert_ignore,
+    'indexterm': convert_skip,
     'informalexample': convert_div,
     'informaltable': convert_informaltable,
     'itemizedlist': convert_itemizedlist,
@@ -470,6 +507,7 @@ convert_tags = {
     'para': convert_para,
     'parameter': convert_em_class,
     'phrase': convert_phrase,
+    'primaryie': convert_primaryie,
     'programlisting': convert_programlisting,
     'releaseinfo': convert_para,
     'refsect1': convert_refsect1,
@@ -547,37 +585,23 @@ def generate_toc(ctx, node):
     return result
 
 
-def generate_index_nav(ctx):
-    # TODO(ensonic): add actual index links
+def generate_index_nav(ctx, indexdivs):
+    ix_nav = []
+    for s in indexdivs:
+        title = xml_get_title(s)
+        ix_nav.append('<a class="shortcut" href="#idx%s">%s</a>' % (title, title))
+
     return """<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
   <tr valign="middle">
     <td width="100%%" align="left" class="shortcuts">
       <span id="nav_index">
-        <a class="shortcut" href="#idx0">0</a>
-           <span class="dim">|</span> 
-        <a class="shortcut" href="#idx1">1</a>
-           <span class="dim">|</span> 
-        <a class="shortcut" href="#idx3">3</a>
-           <span class="dim">|</span> 
-        <a class="shortcut" href="#idx4">4</a>
-           <span class="dim">|</span> 
-        <a class="shortcut" href="#idx5">5</a>
-           <span class="dim">|</span> 
-        <a class="shortcut" href="#idx6">6</a>
-           <span class="dim">|</span> 
-        <a class="shortcut" href="#idx7">7</a>
-           <span class="dim">|</span> 
-        <a class="shortcut" href="#idxD">D</a>
-           <span class="dim">|</span> 
-        <a class="shortcut" href="#idxG">G</a>
-           <span class="dim">|</span> 
-        <a class="shortcut" href="#idxM">M</a>
+        %s
       </span>
     </td>
     %s
   </tr>
 </table>
-""" % generate_nav_links(ctx)
+    """ % ('\n<span class="dim">|</span>\n'.join(ix_nav), generate_nav_links(ctx))
 
 
 def generate_refentry_nav(ctx, refsect1s):
@@ -591,10 +615,7 @@ def generate_refentry_nav(ctx, refsect1s):
         if s.attrib.get('role', '').endswith("_proto"):
             continue
 
-        title = ''
-        title_tag = s.find('title')
-        if title_tag is not None:
-            title = title_tag.text
+        title = xml_get_title(s)
         result.append("""
           <span id="nav_description">
             <span class="dim">|</span> 
@@ -644,6 +665,10 @@ def convert_book(ctx):
 
 def convert_index(ctx):
     node = ctx['node']
+    node_id = node.xml.attrib.get('id', '')  # TODO: generate otherwise?
+    # Get all indexdivs under indexdiv
+    indexdivs = node.xml.find('indexdiv').findall('indexdiv')
+
     result = [
         HTML_DOCTYPE,
         """<html>
@@ -654,25 +679,23 @@ def convert_index(ctx):
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 """ % (node.title, node.root.title, generate_head_links(ctx)),
-        generate_index_nav(ctx),
+        generate_index_nav(ctx, indexdivs),
     ]
-    # TODO: add index entries
     result.append("""<div class="index">
-<div class="titlepage"><h1 class="title"><a name="api-index"></a>%s</h1></div>
-</div>
+<div class="titlepage"><h1 class="title">
+<a name="%s"></a>%s</h1>
+</div>""" % (node_id, node.title))
+    for i in indexdivs:
+        result.extend(convert_indexdiv(ctx, i))
+    result.append("""</div>
 </body>
-</html>""" % node.title)
+</html>""")
     return ''.join(result)
 
 
 def convert_refentry(ctx):
     node = ctx['node']
-    node_id = ''  # TODO: generate otherwise?
-    if 'id' in node.xml.attrib:
-        node_id = node.xml.attrib['id']
-
-    # TODO(ensonic): besides 'refmeta' and 'refnamediv' those are direct
-    # children of 'refentry'
+    node_id = node.xml.attrib.get('id', '')  # TODO: generate otherwise?
     refsect1s = node.xml.findall('refsect1')
 
     result = [
@@ -709,6 +732,7 @@ def convert_refentry(ctx):
     return ''.join(result)
 
 
+# TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_chunks = {
     'book': convert_book,
     'index': convert_index,
