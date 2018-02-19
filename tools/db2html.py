@@ -530,43 +530,43 @@ HTML_DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">\
 
 
 def generate_head_links(ctx):
-    l = ctx['nav_home']
+    n = ctx['nav_home']
     result = [
-        '<link rel="home" href="%s" title="%s">\n' % (l.filename, l.title)
+        '<link rel="home" href="%s" title="%s">\n' % (n.filename, n.title)
     ]
     if 'nav_up' in ctx:
-        l = ctx['nav_up']
-        result.append('<link rel="up" href="%s" title="%s">\n' % (l.filename, l.title))
+        n = ctx['nav_up']
+        result.append('<link rel="up" href="%s" title="%s">\n' % (n.filename, n.title))
     if 'nav_prev' in ctx:
-        l = ctx['nav_prev']
-        result.append('<link rel="prev" href="%s" title="%s">\n' % (l.filename, l.title))
+        n = ctx['nav_prev']
+        result.append('<link rel="prev" href="%s" title="%s">\n' % (n.filename, n.title))
     if 'nav_next' in ctx:
-        l = ctx['nav_next']
-        result.append('<link rel="next" href="%s" title="%s">\n' % (l.filename, l.title))
+        n = ctx['nav_next']
+        result.append('<link rel="next" href="%s" title="%s">\n' % (n.filename, n.title))
     return ''.join(result)
 
 
 def generate_nav_links(ctx):
-    l = ctx['nav_home']
+    n = ctx['nav_home']
     result = [
-        '<td><a accesskey="h" href="%s"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>' % l.filename
+        '<td><a accesskey="h" href="%s"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>' % n.filename
     ]
     if 'nav_up' in ctx:
-        l = ctx['nav_up']
+        n = ctx['nav_up']
         result.append(
-            '<td><a accesskey="u" href="%s"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>' % l.filename)
+            '<td><a accesskey="u" href="%s"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>' % n.filename)
     else:
         result.append('<td><img src="up-insensitive.png" width="16" height="16" border="0"></td>')
     if 'nav_prev' in ctx:
-        l = ctx['nav_prev']
+        n = ctx['nav_prev']
         result.append(
-            '<td><a accesskey="p" href="%s"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>' % l.filename)
+            '<td><a accesskey="p" href="%s"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>' % n.filename)
     else:
         result.append('<td><img src="left-insensitive.png" width="16" height="16" border="0"></td>')
     if 'nav_next' in ctx:
-        l = ctx['nav_next']
+        n = ctx['nav_next']
         result.append(
-            '<td><a accesskey="n" href="%s"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>' % l.filename)
+            '<td><a accesskey="n" href="%s"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>' % n.filename)
     else:
         result.append('<td><img src="right-insensitive.png" width="16" height="16" border="0"></td>')
 
