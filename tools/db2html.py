@@ -526,7 +526,15 @@ convert_tags = {
 
 # conversion helpers
 
-HTML_DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">\n'
+HTML_HEADER = """<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>%s</title>
+%s<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+"""
 
 
 def generate_head_links(ctx):
@@ -577,6 +585,8 @@ def generate_toc(ctx, node):
     result = []
     for c in node.children:
         # TODO: urlencode the filename
+        # TODO: add '<span class="refpurpose"> — module for gtk-doc unit test</span>' before <dt>
+        # TODO: in docbookxsl the span.class is 'refentrytitle' (the tag we took the title from)
         result.append('<dt><span class="%s"><a href="%s">%s</a></span></dt>\n' % (
             c.xml.tag, c.filename, c.title))
         if c.children:
@@ -584,6 +594,16 @@ def generate_toc(ctx, node):
             result.extend(generate_toc(ctx, c))
             result.append('</dl></dd>')
     return result
+
+
+def generate_basic_nav(ctx):
+    return """<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
+  <tr valign="middle">
+    <td width="100%%" align="left" class="shortcuts"></td>
+    %s
+  </tr>
+</table>
+    """ % generate_nav_links(ctx)
 
 
 def generate_index_nav(ctx, indexdivs):
@@ -636,19 +656,12 @@ def generate_refentry_nav(ctx, refsect1s):
 def convert_book(ctx):
     node = ctx['node']
     result = [
-        HTML_DOCTYPE,
-        """<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>%s</title>
-%s<link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="0">
+        HTML_HEADER % (node.title, generate_head_links(ctx)),
+        """<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="0">
     <tr><th valign="middle"><p class="title">%s</p></th></tr>
 </table>
 <div class="book">
-""" % (node.title, generate_head_links(ctx), node.title)
+""" % node.title
     ]
     bookinfo = node.xml.findall('bookinfo')[0]
     result.extend(convert_bookinfo(ctx, bookinfo))
@@ -664,6 +677,29 @@ def convert_book(ctx):
     return ''.join(result)
 
 
+def convert_chapter(ctx):
+    node = ctx['node']
+    result = [
+        HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
+        generate_basic_nav(ctx),
+        '<div class="chapter">',
+    ]
+    title = node.xml.find('title')
+    if title is not None:
+        result.append('<div class="titlepage"><h1 class="title"><a name="id-1.2"></a>%s</h1></div>' % title.text)
+        node.xml.remove(title)
+    # TODO(ensonic): convert the remaining children?
+    result.append("""<div class="toc">
+  <dl class="toc">
+""")
+    result.extend(generate_toc(ctx, node))
+    result.append("""</dl>
+</div>
+</body>
+</html>""")
+    return ''.join(result)
+
+
 def convert_index(ctx):
     node = ctx['node']
     node_id = node.xml.attrib.get('id', '')  # TODO: generate otherwise?
@@ -671,15 +707,7 @@ def convert_index(ctx):
     indexdivs = node.xml.find('indexdiv').findall('indexdiv')
 
     result = [
-        HTML_DOCTYPE,
-        """<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>%s: %s</title>
-%s<link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-""" % (node.title, node.root.title, generate_head_links(ctx)),
+        HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
         generate_index_nav(ctx, indexdivs),
     ]
     result.append("""<div class="index">
@@ -700,15 +728,7 @@ def convert_refentry(ctx):
     refsect1s = node.xml.findall('refsect1')
 
     result = [
-        HTML_DOCTYPE,
-        """<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>%s: %s</title>
-%s<link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-""" % (node.title, node.root.title, generate_head_links(ctx)),
+        HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
         generate_refentry_nav(ctx, refsect1s),
         """
 <div class="refentry">
@@ -736,6 +756,7 @@ def convert_refentry(ctx):
 # TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_chunks = {
     'book': convert_book,
+    'chapter': convert_chapter,
     'index': convert_index,
     'refentry': convert_refentry,
 }
@@ -777,6 +798,7 @@ def convert(out_dir, files, node):
         ctx.update(generate_nav_nodes(files, node))
 
         if node.name in convert_chunks:
+            # TODO(ensonic): try returning the array of string and loop over them to write them
             html.write(convert_chunks[node.name](ctx))
         else:
             logging.warning('Add converter/template for "%s"', node.name)
