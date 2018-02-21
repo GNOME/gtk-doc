@@ -260,8 +260,8 @@ def xml_get_title(xml):
     if title is not None:
         return title.text
     else:
-        # TODO(ensonic): need a better way to report a position in the tree
-        logging.warning('Expected title tag under %s', xml.tag)
+        # TODO(ensonic): any way to get the file (inlcudes) too?
+        logging.warning('%s: Expected title tag under %s', xml.sourceline, xml.tag)
         return ''
 
 
