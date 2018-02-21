@@ -112,11 +112,14 @@ CHUNK_PARAMS = {
     'section': ChunkParams('s', 'chapter'),
 }
 
-TITLE_XPATH = {
-    'book': etree.XPath('./bookinfo/title/text()'),
-    'chapter': etree.XPath('./title/text()'),
-    'index': etree.XPath('./title/text()'),
-    'refentry': etree.XPath('./refmeta/refentrytitle/text()'),
+TITLE_XPATHS = {
+    'book': (etree.XPath('./bookinfo/title/text()'), None),
+    'chapter': (etree.XPath('./title/text()'), None),
+    'index': (etree.XPath('./title/text()'), None),
+    'refentry': (
+        etree.XPath('./refmeta/refentrytitle/text()'),
+        etree.XPath('./refnamediv/refpurpose/text()')
+    ),
 }
 
 
@@ -144,14 +147,18 @@ def gen_chunk_name(node):
     return name
 
 
-def get_chunk_title(node):
+def get_chunk_titles(node):
     tag = node.tag
-    if tag not in TITLE_XPATH:
-        logging.warning('Add TITLE_XPATH for "%s"', tag)
-        return ''
+    if tag not in TITLE_XPATHS:
+        logging.warning('Add TITLE_XPATHS for "%s"', tag)
+        # TODO: should we try './title/text()' as a default?
+        return ('', None)
 
-    xpath = TITLE_XPATH[tag]
-    return xpath(node, smart_strings=False)[0]
+    (title, subtitle) = TITLE_XPATHS[tag]
+    if subtitle:
+        return (title(node, smart_strings=False)[0], subtitle(node, smart_strings=False)[0])
+    else:
+        return (title(node, smart_strings=False)[0], None)
 
 
 def chunk(xml_node, parent=None):
@@ -169,9 +176,10 @@ def chunk(xml_node, parent=None):
         # xml_node.getparent().remove(xml_node)
         # # or:
         # sub_tree = etree.ElementTree(xml_node).getroot()
+        titles = get_chunk_titles(xml_node)
         parent = Node(xml_node.tag, parent=parent, xml=xml_node,
                       filename=gen_chunk_name(xml_node) + '.html',
-                      title=get_chunk_title(xml_node))
+                      title=titles[0], subtitle=titles[1])
     for child in xml_node:
         chunk(child, parent)
 
@@ -585,10 +593,14 @@ def generate_toc(ctx, node):
     result = []
     for c in node.children:
         # TODO: urlencode the filename
-        # TODO: add '<span class="refpurpose"> — module for gtk-doc unit test</span>' before <dt>
-        # TODO: in docbookxsl the span.class is 'refentrytitle' (the tag we took the title from)
-        result.append('<dt><span class="%s"><a href="%s">%s</a></span></dt>\n' % (
+        # TODO: refentries work differently:
+        # - the class is not node.tag, but 'refentrytitle' (the tag we took the title from)
+        # - we need to keep the class for the subtitle too
+        result.append('<dt><span class="%s"><a href="%s">%s</a></span>\n' % (
             c.xml.tag, c.filename, c.title))
+        if c.subtitle:
+            result.append('<span class="refpurpose"> — %s</span>' % c.subtitle)
+        result.append('</dt>\n')
         if c.children:
             result.append('<dd><dl>')
             result.extend(generate_toc(ctx, c))
@@ -686,6 +698,7 @@ def convert_chapter(ctx):
     ]
     title = node.xml.find('title')
     if title is not None:
+        # TODO(ensonic): generate the 'id'
         result.append('<div class="titlepage"><h1 class="title"><a name="id-1.2"></a>%s</h1></div>' % title.text)
         node.xml.remove(title)
     # TODO(ensonic): convert the remaining children?
@@ -694,6 +707,7 @@ def convert_chapter(ctx):
 """)
     result.extend(generate_toc(ctx, node))
     result.append("""</dl>
+</div>
 </div>
 </body>
 </html>""")
