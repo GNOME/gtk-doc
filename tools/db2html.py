@@ -113,12 +113,12 @@ CHUNK_PARAMS = {
 }
 
 TITLE_XPATHS = {
-    'book': (etree.XPath('./bookinfo/title/text()'), None),
-    'chapter': (etree.XPath('./title/text()'), None),
-    'index': (etree.XPath('./title/text()'), None),
+    'book': (etree.XPath('./bookinfo/title'), None),
+    'chapter': (etree.XPath('./title'), None),
+    'index': (etree.XPath('./title'), None),
     'refentry': (
-        etree.XPath('./refmeta/refentrytitle/text()'),
-        etree.XPath('./refnamediv/refpurpose/text()')
+        etree.XPath('./refmeta/refentrytitle'),
+        etree.XPath('./refnamediv/refpurpose')
     ),
 }
 
@@ -152,13 +152,30 @@ def get_chunk_titles(node):
     if tag not in TITLE_XPATHS:
         logging.warning('Add TITLE_XPATHS for "%s"', tag)
         # TODO: should we try './title/text()' as a default?
-        return ('', None)
+        return {
+            'title': '',
+            'title_tag': tag,
+            'subtitle': None
+        }
 
     (title, subtitle) = TITLE_XPATHS[tag]
-    if subtitle:
-        return (title(node, smart_strings=False)[0], subtitle(node, smart_strings=False)[0])
+    xml = title(node)[0]
+    result = {
+        'title': xml.text
+    }
+    if xml.tag != 'title':
+        result['title_tag'] = xml.tag
     else:
-        return (title(node, smart_strings=False)[0], None)
+        result['title_tag'] = tag
+
+    if subtitle:
+        xml = subtitle(node)[0]
+        result['subtitle'] = xml.text
+        result['subtitle_tag'] = xml.tag
+    else:
+        result['subtitle'] = None
+        result['subtitle_tag'] = None
+    return result
 
 
 def chunk(xml_node, parent=None):
@@ -176,10 +193,10 @@ def chunk(xml_node, parent=None):
         # xml_node.getparent().remove(xml_node)
         # # or:
         # sub_tree = etree.ElementTree(xml_node).getroot()
-        titles = get_chunk_titles(xml_node)
+        title_args = get_chunk_titles(xml_node)
         parent = Node(xml_node.tag, parent=parent, xml=xml_node,
                       filename=gen_chunk_name(xml_node) + '.html',
-                      title=titles[0], subtitle=titles[1])
+                      **title_args)
     for child in xml_node:
         chunk(child, parent)
 
@@ -593,13 +610,10 @@ def generate_toc(ctx, node):
     result = []
     for c in node.children:
         # TODO: urlencode the filename
-        # TODO: refentries work differently:
-        # - the class is not node.tag, but 'refentrytitle' (the tag we took the title from)
-        # - we need to keep the class for the subtitle too
         result.append('<dt><span class="%s"><a href="%s">%s</a></span>\n' % (
-            c.xml.tag, c.filename, c.title))
+            c.title_tag, c.filename, c.title))
         if c.subtitle:
-            result.append('<span class="refpurpose"> — %s</span>' % c.subtitle)
+            result.append('<span class="%s"> — %s</span>' % (c.subtitle_tag, c.subtitle))
         result.append('</dt>\n')
         if c.children:
             result.append('<dd><dl>')
