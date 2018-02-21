@@ -104,18 +104,20 @@ class ChunkParams(object):
 
 # TODO: look up the abbrevs and hierarchy for other tags
 # http://www.sagehill.net/docbookxsl/Chunking.html#GeneratedFilenames
+# https://github.com/oreillymedia/HTMLBook/blob/master/htmlbook-xsl/chunk.xsl#L33
 CHUNK_PARAMS = {
+    'appendix': ChunkParams('app', 'book'),
     'book': ChunkParams('bk'),
     'chapter': ChunkParams('ch', 'book'),
     'index': ChunkParams('ix', 'book'),
+    'part': ChunkParams('part', 'book'),
     'sect1': ChunkParams('s', 'chapter'),
     'section': ChunkParams('s', 'chapter'),
 }
 
 TITLE_XPATHS = {
+    '_': (etree.XPath('./title'), None),
     'book': (etree.XPath('./bookinfo/title'), None),
-    'chapter': (etree.XPath('./title'), None),
-    'index': (etree.XPath('./title'), None),
     'refentry': (
         etree.XPath('./refmeta/refentrytitle'),
         etree.XPath('./refnamediv/refpurpose')
@@ -150,15 +152,11 @@ def gen_chunk_name(node):
 def get_chunk_titles(node):
     tag = node.tag
     if tag not in TITLE_XPATHS:
-        logging.warning('Add TITLE_XPATHS for "%s"', tag)
-        # TODO: should we try './title/text()' as a default?
-        return {
-            'title': '',
-            'title_tag': tag,
-            'subtitle': None
-        }
+        # Use defaults
+        (title, subtitle) = TITLE_XPATHS['_']
+    else:
+        (title, subtitle) = TITLE_XPATHS[tag]
 
-    (title, subtitle) = TITLE_XPATHS[tag]
     xml = title(node)[0]
     result = {
         'title': xml.text
