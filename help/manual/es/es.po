@@ -3,13 +3,13 @@
 # Jorge Gonzalez <jorgegonz@svn.gnome.org>, 2009.
 # Jorge González <jorgegonz@svn.gnome.org>, 2009, 2010, 2011.
 # 
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012, 2013, 2014, 2015., 2016, 2017.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012, 2013, 2014, 2015., 2016, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2017-12-07 14:48+0000\n"
-"PO-Revision-Date: 2017-12-15 12:02+0100\n"
+"POT-Creation-Date: 2017-12-28 10:31+0000\n"
+"PO-Revision-Date: 2018-02-22 12:50+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -126,20 +126,17 @@ msgstr ""
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:83
 #| msgid ""
-#| "<revnumber>1.26.1</revnumber> <date>11 Aug 2017</date> "
-#| "<authorinitials>ss</authorinitials> <revremark>development</revremark>"
+#| "<revnumber>1.27.1</revnumber> <date>07 Dec 2017</date> "
+#| "<authorinitials>ss</authorinitials> <revremark>developemnt</revremark>"
 msgid ""
 "<revnumber>1.27.1</revnumber> <date>07 Dec 2017</date> <authorinitials>ss</"
-"authorinitials> <revremark>developemnt</revremark>"
+"authorinitials> <revremark>development</revremark>"
 msgstr ""
 "<revnumber>1.27.1</revnumber> <date>07 de diciembre de 2017</date> "
 "<authorinitials>ss</authorinitials> <revremark>desarrollo</revremark>"
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:89
-#| msgid ""
-#| "<revnumber>1.23</revnumber> <date>17 May 2015</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>bug fix</revremark>"
 msgid ""
 "<revnumber>1.27</revnumber> <date>07 Dec 2017</date> <authorinitials>ss</"
 "authorinitials> <revremark>fine tuning of the python port</revremark>"
@@ -2222,19 +2219,6 @@ msgstr "Documentar qué aplicación debe gestionar las señales."
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1316
 #, no-wrap
-#| msgid ""
-#| "\n"
-#| "/**\n"
-#| " * FooWidget::foobarized:\n"
-#| " * @widget: the widget that received the signal\n"
-#| " * @foo: some foo\n"
-#| " * @bar: some bar\n"
-#| " *\n"
-#| " * The ::foobarized signal is emitted each time someone tries to foobarize @widget.\n"
-#| " */\n"
-#| "foo_signals[FOOBARIZE] =\n"
-#| "  g_signal_new (\"foobarize\",\n"
-#| "                ...\n"
 msgid ""
 "\n"
 "/**\n"
