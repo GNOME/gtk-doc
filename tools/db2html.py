@@ -685,18 +685,17 @@ def get_id(node):
         return node_id
 
     logging.warning('%d: No "id" attribute on "%s"', xml.sourceline, xml.tag)
-    # Generate the 'id'. We need to walk up the tree and check the positions
-    # for each sibling.
-    # TODO(ensonic): we're doing it on the chunk level, do we need to do this on
-    # the xml tree? For one example we expect 'id-1.2' but generated 'id-1'
-    # See docbook-xsl/common/common.xsl:468
     ix = []
-    while node.parent:
-        children = node.parent.children
-        ix.insert(0, str(children.index(node) + 1))
-        node = node.parent
-    # logging.warning('indexes: %s', str(ix))
-    return 'id-' + '.'.join(ix)
+    # Generate the 'id'. We need to walk up the xml-tree and check the positions
+    # for each sibling.
+    parent = xml.getparent()
+    while parent is not None:
+        children = parent.getchildren()
+        ix.insert(0, str(children.index(xml) + 1))
+        xml = parent
+        parent = xml.getparent()
+    # logging.warning('%s: id indexes: %s', node.filename, str(ix))
+    return 'id-1.' + '.'.join(ix)
 
 # docbook chunks
 
