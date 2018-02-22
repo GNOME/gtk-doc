@@ -226,6 +226,9 @@ missing_tags = {}
 
 
 def convert__unknown(ctx, xml):
+    # don't recurse on subchunks
+    if xml.tag in CHUNK_TAGS:
+        return []
     # warn only once
     if xml.tag not in missing_tags:
         logging.warning('Add tag converter for "%s"', xml.tag)
@@ -713,7 +716,7 @@ def convert_chapter(ctx):
         # TODO(ensonic): generate the 'id'
         result.append('<div class="titlepage"><h1 class="title"><a name="id-1.2"></a>%s</h1></div>' % title.text)
         node.xml.remove(title)
-    # TODO(ensonic): convert the remaining children?
+    convert_inner(ctx, node.xml, result)
     result.append("""<div class="toc">
   <dl class="toc">
 """)
