@@ -185,7 +185,7 @@ def chunk(xml_node, parent=None):
     # print('<%s %s>' % (xml_node.tag, xml_node.attrib))
     if xml_node.tag in CHUNK_TAGS:
         # TODO: do we need to remove the xml-node from the parent?
-        #       we generate toc from the files tree
+        #
         # from copy import deepcopy
         # sub_tree = deepcopy(xml_node)
         # xml_node.getparent().remove(xml_node)
@@ -610,7 +610,7 @@ def generate_nav_links(ctx):
 def generate_toc(ctx, node):
     result = []
     for c in node.children:
-        # TODO: urlencode the filename
+        # TODO: urlencode the filename: urllib.parse.quote_plus()
         result.append('<dt><span class="%s"><a href="%s">%s</a></span>\n' % (
             c.title_tag, c.filename, c.title))
         if c.subtitle:
