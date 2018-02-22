@@ -262,7 +262,7 @@ def xml_get_title(xml):
         return title.text
     else:
         # TODO(ensonic): any way to get the file (inlcudes) too?
-        logging.warning('%s: Expected title tag under %s', xml.sourceline, xml.tag)
+        logging.warning('%s: Expected title tag under "%s"', xml.sourceline, xml.tag)
         return ''
 
 
@@ -678,7 +678,28 @@ def generate_refentry_nav(ctx, refsect1s):
     return ''.join(result)
 
 
+def get_id(node):
+    xml = node.xml
+    node_id = xml.attrib.get('id', None)
+    if node_id:
+        return node_id
+
+    logging.warning('%d: No "id" attribute on "%s"', xml.sourceline, xml.tag)
+    # Generate the 'id'. We need to walk up the tree and check the positions
+    # for each sibling.
+    # TODO(ensonic): we're doing it on the chunk level, do we need to do this on
+    # the xml tree? For one example we expect 'id-1.2' but generated 'id-1'
+    # See docbook-xsl/common/common.xsl:468
+    ix = []
+    while node.parent:
+        children = node.parent.children
+        ix.insert(0, str(children.index(node) + 1))
+        node = node.parent
+    # logging.warning('indexes: %s', str(ix))
+    return 'id-' + '.'.join(ix)
+
 # docbook chunks
+
 
 def convert_book(ctx):
     node = ctx['node']
@@ -713,8 +734,8 @@ def convert_chapter(ctx):
     ]
     title = node.xml.find('title')
     if title is not None:
-        # TODO(ensonic): generate the 'id'
-        result.append('<div class="titlepage"><h1 class="title"><a name="id-1.2"></a>%s</h1></div>' % title.text)
+        result.append('<div class="titlepage"><h1 class="title"><a name="%s"></a>%s</h1></div>' % (
+            get_id(node), title.text))
         node.xml.remove(title)
     convert_inner(ctx, node.xml, result)
     result.append("""<div class="toc">
@@ -731,7 +752,7 @@ def convert_chapter(ctx):
 
 def convert_index(ctx):
     node = ctx['node']
-    node_id = node.xml.attrib.get('id', '')  # TODO: generate otherwise?
+    node_id = get_id(node)
     # Get all indexdivs under indexdiv
     indexdivs = node.xml.find('indexdiv').findall('indexdiv')
 
@@ -753,7 +774,7 @@ def convert_index(ctx):
 
 def convert_refentry(ctx):
     node = ctx['node']
-    node_id = node.xml.attrib.get('id', '')  # TODO: generate otherwise?
+    node_id = get_id(node)
     refsect1s = node.xml.findall('refsect1')
 
     result = [
