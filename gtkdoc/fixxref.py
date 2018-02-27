@@ -57,17 +57,17 @@ NoLinks = {
 
 
 def Run(options):
-    LoadIndicies(options)
-    ReadSections(options)
-    FixCrossReferences(options)
+    LoadIndicies(options.module_dir, options.html_dir, options.extra_dir)
+    ReadSections(options.module)
+    FixCrossReferences(options.module_dir, options.module, options.src_lang)
 
 
-def LoadIndicies(options):
+def LoadIndicies(module_dir, html_dir, extra_dirs):
     # Cache of dirs we already scanned for index files
     dir_cache = {}
 
     path_prefix = ''
-    m = re.search(r'(.*?)/share/gtk-doc/html', options.html_dir)
+    m = re.search(r'(.*?)/share/gtk-doc/html', html_dir)
     if m:
         path_prefix = m.group(1)
         logging.info('Path prefix: %s', path_prefix)
@@ -84,7 +84,7 @@ def LoadIndicies(options):
         Links['GFlags'] = dir + '/gobject/gobject-Enumeration-and-Flag-Types.html'
         Links['GInterface'] = dir + '/gobject/GTypeModule.html'
 
-        if dir != options.html_dir:
+        if dir != html_dir:
             logging.info('Scanning GLib directory: %s', dir)
             ScanIndices(dir, (re.search(prefix_match, dir) is None), dir_cache)
 
@@ -92,17 +92,17 @@ def LoadIndicies(options):
     if path:
         for dir in path.split(':'):
             dir += 'share/gtk-doc/html'
-            if os.path.exists(dir) and dir != options.html_dir:
+            if os.path.exists(dir) and dir != html_dir:
                 logging.info('Scanning GNOME2_PATH directory: %s', dir)
                 ScanIndices(dir, (re.search(prefix_match, dir) is None), dir_cache)
 
-    logging.info('Scanning HTML_DIR directory: %s', options.html_dir)
-    ScanIndices(options.html_dir, False, dir_cache)
-    logging.info('Scanning MODULE_DIR directory: %s', options.module_dir)
-    ScanIndices(options.module_dir, False, dir_cache)
+    logging.info('Scanning HTML_DIR directory: %s', html_dir)
+    ScanIndices(html_dir, False, dir_cache)
+    logging.info('Scanning MODULE_DIR directory: %s', module_dir)
+    ScanIndices(module_dir, False, dir_cache)
 
     # check all extra dirs, but skip already scanned dirs or subdirs of those
-    for dir in options.extra_dir:
+    for dir in extra_dirs:
         dir = dir.rstrip('/')
         logging.info('Scanning EXTRA_DIR directory: %s', dir)
 
@@ -184,9 +184,9 @@ def ReadDevhelp(file, use_absolute_links):
             Links[m.group(2)] = dir + link
 
 
-def ReadSections(options):
+def ReadSections(module):
     """We don't warn on missing links to non-public sysmbols."""
-    for line in common.open_text(options.module + '-sections.txt'):
+    for line in common.open_text(module + '-sections.txt'):
         m1 = re.search(r'^<SUBSECTION\s*(.*)>', line)
         if line.startswith('#') or line.strip() == '':
             continue
@@ -208,18 +208,17 @@ def ReadSections(options):
                 NoLinks.add(common.CreateValidSGMLID(symbol))
 
 
-def FixCrossReferences(options):
-    scan_dir = options.module_dir
+def FixCrossReferences(module_dir, module, src_lang):
     # TODO(ensonic): use glob.glob()?
-    for entry in sorted(os.listdir(scan_dir)):
-        full_entry = os.path.join(scan_dir, entry)
+    for entry in sorted(os.listdir(module_dir)):
+        full_entry = os.path.join(module_dir, entry)
         if os.path.isdir(full_entry):
             continue
         elif entry.endswith('.html') or entry.endswith('.htm'):
-            FixHTMLFile(options, full_entry)
+            FixHTMLFile(src_lang, module, full_entry)
 
 
-def FixHTMLFile(options, file):
+def FixHTMLFile(src_lang, module, file):
     logging.info('Fixing file: %s', file)
 
     content = common.open_text(file).read()
@@ -230,13 +229,13 @@ def FixHTMLFile(options, file):
         # we could patch the customization to have <code class="xxx"> inside of <pre>
         if config.highlight.endswith('vim'):
             def repl_func(m):
-                return HighlightSourceVim(options, m.group(1), m.group(2))
+                return HighlightSourceVim(src_lang, m.group(1), m.group(2))
             content = re.sub(
                 r'<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>',
                 repl_func, content, flags=re.DOTALL)
         else:
             def repl_func(m):
-                return HighlightSource(options, m.group(1), m.group(2))
+                return HighlightSource(src_lang, m.group(1), m.group(2))
             content = re.sub(
                 r'<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>',
                 repl_func, content, flags=re.DOTALL)
@@ -256,7 +255,7 @@ def FixHTMLFile(options, file):
 
     def repl_func_with_ix(i):
         def repl_func(m):
-            return MakeXRef(options, file, i + 1, m.group(1), m.group(2))
+            return MakeXRef(module, file, i + 1, m.group(1), m.group(2))
         return repl_func
 
     for i in range(len(lines)):
@@ -273,7 +272,7 @@ def FixHTMLFile(options, file):
     os.rename(new_file, file)
 
 
-def MakeXRef(options, file, line, id, text):
+def MakeXRef(module, file, line, id, text):
     href = Links.get(id)
 
     # This is a workaround for some inconsistency we have with CreateValidSGMLID
@@ -290,7 +289,7 @@ def MakeXRef(options, file, line, id, text):
 
     if href:
         # if it is a link to same module, remove path to make it work uninstalled
-        m = re.search(r'^\.\./' + options.module + '/(.*)$', href)
+        m = re.search(r'^\.\./' + module + '/(.*)$', href)
         if m:
             href = m.group(1)
             logging.info('Fixing link to uninstalled doc: %s, %s, %s', id, href, text)
@@ -335,12 +334,12 @@ def MakeGtkDocLink(pre, symbol, post):
     return pre + '<GTKDOCLINK HREF="' + id + '">' + symbol + '</GTKDOCLINK>' + post
 
 
-def HighlightSource(options, type, source):
+def HighlightSource(src_lang, type, source):
     # write source to a temp file
     # FIXME: use .c for now to hint the language to the highlighter
     with tempfile.NamedTemporaryFile(mode='w+', suffix='.c') as f:
         temp_source_file = HighlightSourcePreProcess(f, source)
-        highlight_options = config.highlight_options.replace('$SRC_LANG', options.src_lang)
+        highlight_options = config.highlight_options.replace('$SRC_LANG', src_lang)
 
         logging.info('running %s %s %s', config.highlight, highlight_options, temp_source_file)
 
@@ -368,7 +367,7 @@ def HighlightSource(options, type, source):
     return HighlightSourcePostprocess(type, highlighted_source)
 
 
-def HighlightSourceVim(options, type, source):
+def HighlightSourceVim(src_lang, type, source):
     # write source to a temp file
     with tempfile.NamedTemporaryFile(mode='w+', suffix='.h') as f:
         temp_source_file = HighlightSourcePreProcess(f, source)
@@ -376,7 +375,7 @@ def HighlightSourceVim(options, type, source):
         # format source
         # TODO(ensonic): use p.communicate()
         script = "echo 'let html_number_lines=0|let html_use_css=1|let html_use_xhtml=1|e %s|syn on|set syntax=%s|run! plugin/tohtml.vim|run! syntax/2html.vim|w! %s.html|qa!' | " % (
-            temp_source_file, options.src_lang, temp_source_file)
+            temp_source_file, src_lang, temp_source_file)
         script += "%s -n -e -u NONE -T xterm >/dev/null" % config.highlight
         subprocess.check_call([script], shell=True)
 
