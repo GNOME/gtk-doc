@@ -649,12 +649,12 @@ def generate_index_nav(ctx, indexdivs):
     """ % ('\n<span class="dim">|</span>\n'.join(ix_nav), generate_nav_links(ctx))
 
 
-def generate_refentry_nav(ctx, refsect1s):
-    result = ["""<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
+def generate_refentry_nav(ctx, refsect1s, result):
+    result.append("""<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
   <tr valign="middle">
     <td width="100%%" align="left" class="shortcuts">
-      <a href="#" class="shortcut">Top</a>"""
-              ]
+      <a href="#" class="shortcut">Top</a>""")
+
     for s in refsect1s:
         # don't list TOC sections (role="xxx_proto")
         if s.attrib.get('role', '').endswith("_proto"):
@@ -672,7 +672,6 @@ def generate_refentry_nav(ctx, refsect1s):
   </tr>
 </table>
 """ % generate_nav_links(ctx))
-    return ''.join(result)
 
 
 def get_id(node):
@@ -693,6 +692,7 @@ def get_id(node):
         parent = xml.getparent()
     # logging.warning('%s: id indexes: %s', node.filename, str(ix))
     return 'id-1.' + '.'.join(ix)
+
 
 # docbook chunks
 
@@ -718,7 +718,7 @@ def convert_book(ctx):
 </div>
 </body>
 </html>""")
-    return ''.join(result)
+    return result
 
 
 def convert_chapter(ctx):
@@ -743,7 +743,7 @@ def convert_chapter(ctx):
 </div>
 </body>
 </html>""")
-    return ''.join(result)
+    return result
 
 
 def convert_index(ctx):
@@ -755,17 +755,17 @@ def convert_index(ctx):
     result = [
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
         generate_index_nav(ctx, indexdivs),
-    ]
-    result.append("""<div class="index">
+        """<div class="index">
 <div class="titlepage"><h1 class="title">
 <a name="%s"></a>%s</h1>
-</div>""" % (node_id, node.title))
+</div>""" % (node_id, node.title)
+    ]
     for i in indexdivs:
         result.extend(convert_indexdiv(ctx, i))
     result.append("""</div>
 </body>
 </html>""")
-    return ''.join(result)
+    return result
 
 
 def convert_refentry(ctx):
@@ -774,9 +774,10 @@ def convert_refentry(ctx):
     refsect1s = node.xml.findall('refsect1')
 
     result = [
-        HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
-        generate_refentry_nav(ctx, refsect1s),
-        """
+        HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx))
+    ]
+    generate_refentry_nav(ctx, refsect1s, result)
+    result.append("""
 <div class="refentry">
 <a name="%s"></a>
 <div class="refnamediv">
@@ -788,15 +789,14 @@ def convert_refentry(ctx):
     <td class="gallery_image" valign="top" align="right"></td>
   </tr></table>
 </div>
-""" % (node_id, node_id, node.title, node.title)
-    ]
+""" % (node_id, node_id, node.title, node.title))
 
     for s in refsect1s:
         result.extend(convert_refsect1(ctx, s))
     result.append("""</div>
 </body>
 </html>""")
-    return ''.join(result)
+    return result
 
 
 # TODO(ensonic): turn into class with converters as functions and ctx as self
@@ -844,8 +844,8 @@ def convert(out_dir, files, node):
         ctx.update(generate_nav_nodes(files, node))
 
         if node.name in convert_chunks:
-            # TODO(ensonic): try returning the array of string and loop over them to write them
-            html.write(convert_chunks[node.name](ctx))
+            for line in convert_chunks[node.name](ctx):
+                html.write(line)
         else:
             logging.warning('Add converter/template for "%s"', node.name)
 
