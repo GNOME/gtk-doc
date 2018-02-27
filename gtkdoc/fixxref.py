@@ -55,11 +55,17 @@ NoLinks = {
     'GInterface'
 }
 
-# Cache of dirs we already scanned for index files
-DirCache = {}
-
 
 def Run(options):
+    LoadIndicies(options)
+    ReadSections(options)
+    FixCrossReferences(options)
+
+
+def LoadIndicies(options):
+    # Cache of dirs we already scanned for index files
+    dir_cache = {}
+
     path_prefix = ''
     m = re.search(r'(.*?)/share/gtk-doc/html', options.html_dir)
     if m:
@@ -80,7 +86,7 @@ def Run(options):
 
         if dir != options.html_dir:
             logging.info('Scanning GLib directory: %s', dir)
-            ScanIndices(dir, (re.search(prefix_match, dir) is None))
+            ScanIndices(dir, (re.search(prefix_match, dir) is None), dir_cache)
 
     path = os.environ.get('GNOME2_PATH')
     if path:
@@ -88,12 +94,12 @@ def Run(options):
             dir += 'share/gtk-doc/html'
             if os.path.exists(dir) and dir != options.html_dir:
                 logging.info('Scanning GNOME2_PATH directory: %s', dir)
-                ScanIndices(dir, (re.search(prefix_match, dir) is None))
+                ScanIndices(dir, (re.search(prefix_match, dir) is None), dir_cache)
 
     logging.info('Scanning HTML_DIR directory: %s', options.html_dir)
-    ScanIndices(options.html_dir, 0)
+    ScanIndices(options.html_dir, False, dir_cache)
     logging.info('Scanning MODULE_DIR directory: %s', options.module_dir)
-    ScanIndices(options.module_dir, 0)
+    ScanIndices(options.module_dir, False, dir_cache)
 
     # check all extra dirs, but skip already scanned dirs or subdirs of those
     for dir in options.extra_dir:
@@ -104,18 +110,15 @@ def Run(options):
         # prefix as the target directory of the docs, we need to use absolute
         # directories for the links
         if not dir.startswith('..') and re.search(prefix_match, dir) is None:
-            ScanIndices(dir, 1)
+            ScanIndices(dir, True, dir_cache)
         else:
-            ScanIndices(dir, 0)
-
-    ReadSections(options)
-    FixCrossReferences(options)
+            ScanIndices(dir, False, dir_cache)
 
 
-def ScanIndices(scan_dir, use_absolute_links):
-    if not scan_dir or scan_dir in DirCache:
+def ScanIndices(scan_dir, use_absolute_links, dir_cache):
+    if not scan_dir or scan_dir in dir_cache:
         return
-    DirCache[scan_dir] = 1
+    dir_cache[scan_dir] = 1
 
     logging.info('Scanning index directory: %s, absolute: %d', scan_dir, use_absolute_links)
 
@@ -148,7 +151,7 @@ gunzip %s
 
     # Now recursively scan the subdirectories.
     for subdir in subdirs:
-        ScanIndices(subdir, use_absolute_links)
+        ScanIndices(subdir, use_absolute_links, dir_cache)
 
 
 def ReadDevhelp(file, use_absolute_links):
@@ -182,6 +185,7 @@ def ReadDevhelp(file, use_absolute_links):
 
 
 def ReadSections(options):
+    """We don't warn on missing links to non-public sysmbols."""
     for line in common.open_text(options.module + '-sections.txt'):
         m1 = re.search(r'^<SUBSECTION\s*(.*)>', line)
         if line.startswith('#') or line.strip() == '':
