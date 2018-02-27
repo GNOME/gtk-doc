@@ -9,6 +9,7 @@ bin_SCRIPTS = \
 	gtkdoc-fixxref  \
 	gtkdoc-mkdb     \
 	gtkdoc-mkhtml   \
+	gtkdoc-mkhtml2  \
 	gtkdoc-mkman    \
 	gtkdoc-mkpdf    \
 	gtkdoc-rebase   \
@@ -43,6 +44,7 @@ pylibdata_DATA = \
   gtkdoc/md_to_db.py \
   gtkdoc/mkdb.py \
   gtkdoc/mkhtml.py \
+  gtkdoc/mkhtml2.py \
   gtkdoc/mkman.py \
   gtkdoc/mkpdf.py \
   gtkdoc/rebase.py \
@@ -85,6 +87,7 @@ CLEANFILES = \
   gtkdoc-fixxrefc \
   gtkdoc-mkdbc \
   gtkdoc-mkhtmlc \
+  gtkdoc-mkhtml2c \
   gtkdoc-mkmanc \
   gtkdoc-mkpdfc \
   gtkdoc-rebasec \
@@ -97,6 +100,7 @@ CLEANFILES = \
   gtkdoc/md_to_db.pyc \
   gtkdoc/mkdb.pyc \
   gtkdoc/mkhtml.pyc \
+  gtkdoc/mkhtml2.pyc \
   gtkdoc/mkman.pyc \
   gtkdoc/mkpdf.pyc \
   gtkdoc/rebase.pyc \
@@ -110,6 +114,7 @@ DISTCLEANFILES = \
   gtkdocize \
   gtkdoc-mkdb \
   gtkdoc-mkhtml \
+  gtkdoc-mkhtml2 \
   gtkdoc-mkman \
   gtkdoc-mkpdf \
   gtk-doc.pc \

@@ -2,7 +2,7 @@
 # -*- python; coding: utf-8 -*-
 #
 # gtk-doc - GTK DocBook documentation generator.
-# Copyright (C) 2017  Stefan Sauer
+# Copyright (C) 2018  Stefan Sauer
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +21,9 @@
 
 """Prototype for builtin docbook processing
 
-The tool loades the main xml document (<module>-docs.xml) and chunks it
+The tool loads the main xml document (<module>-docs.xml) and chunks it
 like the xsl-stylesheets would do. For that it resolves all the xml-includes.
+Each chunk is converted to htnml using python functions.
 
 In contrast to our previous approach of running gtkdoc-mkhtml + gtkdoc-fixxref,
 this tools will replace both without relying on external tools such as xsltproc
@@ -30,7 +31,6 @@ and source-highlight.
 
 TODO: convert the docbook-xml to html
 - more chunk converters
-- refentry/index nav headers
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - integrate syntax-highlighing from fixxref
@@ -46,10 +46,10 @@ Requirements:
 sudo pip3 install anytree lxml
 
 Examples:
-python3 tools/db2html.py tests/gobject/docs/tester-docs.xml
+./gtkdoc-mkhtml2 tests/gobject/docs/tester-docs.xml
 ll tests/gobject/docs/db2html
 
-python3 tools/db2html.py tests/bugs/docs/tester-docs.xml
+./gtkdoc-mkhtml2 tests/bugs/docs/tester-docs.xml
 ll tests/bugs/docs/db2html
 cp tests/bugs/docs/html/*.{css,png} tests/bugs/docs/db2html/
 xdg-open tests/bugs/docs/db2html/index.html
@@ -68,11 +68,7 @@ import sys
 from anytree import Node, PreOrderIter
 from lxml import etree
 
-# TODO(ensonic): requires gtk-doc to be installed, rewrite later
-sys.path.append('/usr/share/gtk-doc/python')
-from gtkdoc.fixxref import NoLinks
-from gtkdoc import common
-
+from .fixxref import NoLinks
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
 CHUNK_TAGS = [
@@ -887,14 +883,6 @@ def main(index_file):
     # - keywords under 'functions' from all refsect2 and refsect3
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='db2html - chunk docbook')
-    parser.add_argument('sources', nargs='*')
-    options = parser.parse_args()
-    if len(options.sources) != 1:
-        sys.exit('Expect one source file argument.')
-
-    common.setup_logging()
-
-    sys.exit(main(options.sources[0]))
+def run(options):
+    document = options.args[0]
+    sys.exit(main(document))
