@@ -37,7 +37,8 @@ TODO: convert the docbook-xml to html
   - maybe handle the combination <informalexample><programlisting> directly
   - switch to http://pygments.org/docs/quickstart/?
 - integrate MakeXRef from fixxref
-  - first create devhelp2 output
+  - as a step, we could run FixHTMLFile() on each output file
+- create devhelp2 output
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
