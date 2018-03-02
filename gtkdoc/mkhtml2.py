@@ -29,15 +29,16 @@ In contrast to our previous approach of running gtkdoc-mkhtml + gtkdoc-fixxref,
 this tools will replace both without relying on external tools such as xsltproc
 and source-highlight.
 
-TODO: convert the docbook-xml to html
+TODO:
 - more chunk converters
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
-- integrate syntax-highlighing from fixxref
-  - maybe handle the combination <informalexample><programlisting> directly
-  - switch to http://pygments.org/docs/quickstart/?
-- integrate MakeXRef from fixxref
+- integrate fixxref:
   - as a step, we could run FixHTMLFile() on each output file
+  - integrate syntax-highlighing from fixxref
+    - maybe handle the combination <informalexample><programlisting> directly
+    - switch to http://pygments.org/docs/quickstart/?
+  - integrate MakeXRef from fixxref
 - create devhelp2 output
 
 OPTIONAL:
@@ -885,5 +886,6 @@ def main(index_file):
 
 
 def run(options):
+    logging.info('options: %s', str(options.__dict__))
     document = options.args[0]
     sys.exit(main(document))

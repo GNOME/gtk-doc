@@ -49,7 +49,7 @@ seen_headers = {}
 
 
 def Run(options):
-    # logging.basicConfig(level=logging.INFO)
+    logging.info('options: %s', str(options.__dict__))
 
     if not os.path.isdir(options.output_dir):
         os.mkdir(options.output_dir)

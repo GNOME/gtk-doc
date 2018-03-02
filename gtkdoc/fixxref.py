@@ -57,6 +57,8 @@ NoLinks = {
 
 
 def Run(options):
+    logging.info('options: %s', str(options.__dict__))
+
     LoadIndicies(options.module_dir, options.html_dir, options.extra_dir)
     ReadSections(options.module)
     FixCrossReferences(options.module_dir, options.module, options.src_lang)

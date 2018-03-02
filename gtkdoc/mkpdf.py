@@ -45,6 +45,8 @@ def run_xsltproc(options, args):
 
 
 def run(options):
+    logging.info('options: %s', str(options.__dict__))
+
     module = options.args[0]
     document = options.args[1]
 

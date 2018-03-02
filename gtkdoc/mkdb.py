@@ -235,6 +235,8 @@ def Run(options):
     global MODULE, INLINE_MARKUP_MODE, DEFAULT_STABILITY, NAME_SPACE, \
         DB_OUTPUT_DIR, doctype_header
 
+    logging.info('options: %s', str(options.__dict__))
+
     # We should pass the options variable around instead of this global variable horror
     # but too much of the code expects these to be around. Fix this once the transition is done.
     MODULE = options.module

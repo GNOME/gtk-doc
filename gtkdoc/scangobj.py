@@ -1203,6 +1203,8 @@ def execute_command(options, description, command):
 
 
 def run(options):
+    logging.info('options: %s', str(options.__dict__))
+
     c_file = options.module + '-scan.c'
     output = common.open_text(c_file, 'w')
 
