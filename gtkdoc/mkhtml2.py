@@ -833,9 +833,6 @@ def convert(out_dir, files, node):
       node: current tree node
     """
 
-    def jinja_convert(ctx, xml):
-        return ''.join(convert_tags.get(xml.tag, convert__unknown)(ctx, xml))
-
     logging.info('Writing: %s', node.filename)
     with open(os.path.join(out_dir, node.filename), 'wt') as html:
         ctx = {
