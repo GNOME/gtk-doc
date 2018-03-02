@@ -30,10 +30,10 @@ if __name__ == '__main__':
         description='gtkdoc-mkhtml version %s - generate documentation in html format' % config.version)
     parser.add_argument('--version', action='version', version=config.version)
     parser.add_argument('args', nargs='*',
-                        help='DRIVER_FILE')
+                        help='MODULE DRIVER_FILE')
 
     options = parser.parse_args()
-    if len(options.args) != 1:
+    if len(options.args) != 2:
         sys.exit('Too few arguments')
 
     common.setup_logging()

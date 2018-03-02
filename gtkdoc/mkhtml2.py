@@ -848,7 +848,36 @@ def convert(out_dir, files, node):
             logging.warning('Add converter/template for "%s"', node.name)
 
 
-def main(index_file):
+def create_devhelp2(out_dir, module, xml):
+    with open(os.path.join(out_dir, module + '.devhelp2'), 'wt') as idx:
+        bookinfo_nodes = xml.xpath('/book/bookinfo')
+        title = ''
+        if bookinfo_nodes is not None:
+            bookinfo = bookinfo_nodes[0]
+            title = bookinfo.xpath('./title/text()')[0]
+            online_url = bookinfo.xpath('./releaseinfo/ulink[@role="online-location"]/@url')[0]
+            # TODO: support author too (see devhelp2.xsl)
+        # TODO: fixxref uses '--src-lang' to set the language
+        result = [
+            """<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<book xmlns="http://www.devhelp.net/book" title="%s" link="index.html" author="" name="%s" version="2" language="c" online="%s">
+  <chapters>
+""" % (title, module, online_url)
+        ]
+        # TODO: toc under 'chapter'
+        result.append("""  </chapters>
+  <functions>
+""")
+        # TODO: keywords under 'functions' from all refsect2 and refsect3
+
+        result.append("""  </functions>
+</book>
+""")
+        for line in result:
+            idx.write(line)
+
+
+def main(module, index_file):
     tree = etree.parse(index_file)
     tree.xinclude()
 
@@ -879,12 +908,12 @@ def main(index_file):
     files = list(PreOrderIter(files))
     for node in files:
         convert(out_dir, files, node)
-    # 3) create a devhelp2.xsl
-    # - toc under 'chapter'
-    # - keywords under 'functions' from all refsect2 and refsect3
+    # 3) create a xxx.devhelp2 file
+    create_devhelp2(out_dir, module, tree.getroot())
 
 
 def run(options):
     logging.info('options: %s', str(options.__dict__))
-    document = options.args[0]
-    sys.exit(main(document))
+    module = options.args[0]
+    document = options.args[1]
+    sys.exit(main(module, document))
