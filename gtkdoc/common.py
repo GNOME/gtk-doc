@@ -63,13 +63,12 @@ def setup_logging():
     Set python log level to the value of the environment variable (DEBUG, INFO,
     WARNING, ERROR and CRITICAL) or INFO if the environment variable is empty.
     """
-    log_level = os.environ.get('GTKDOC_TRACE')
+    log_level = os.environ.get('GTKDOC_TRACE', 'WARNING')
     if log_level == '':
-        log_level = 'INFO'
-    if log_level:
-        logging.basicConfig(stream=sys.stdout,
-                            level=logging.getLevelName(log_level.upper()),
-                            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+        log_level = 'WARNING'
+    logging.basicConfig(stream=sys.stdout,
+                        level=logging.getLevelName(log_level.upper()),
+                        format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
     # When redirecting the output on python2 or if run with a non utf-8 locale
     # we get UnicodeEncodeError:
     encoding = sys.stdout.encoding
