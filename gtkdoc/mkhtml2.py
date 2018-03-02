@@ -862,6 +862,8 @@ def main(index_file):
     # tree.write(out_file)
 
     # TODO: rename to 'html' later on
+    # - right now in mkhtml, the dir is created by the Makefile and mkhtml
+    #   outputs into the working directory
     out_dir = os.path.join(dir_name, 'db2html')
     try:
         os.mkdir(out_dir)
@@ -869,11 +871,11 @@ def main(index_file):
         if e.errno != errno.EEXIST:
             raise
 
-    # We need multiple passes:
+    # We do multiple passes:
     # 1) recursively walk the tree and chunk it into a python tree so that we
     #   can generate navigation and link tags.
-    #   also collect all 'id' attributes on the way and build map of
-    #   id:rel-link (in fixxref is is Links[])
+    # TODO: also collect all 'id' attributes on the way and build map of
+    #   id:rel-link (in fixxref it is called Links[])
     files = chunk(tree.getroot())
     # 2) iterate the tree and output files
     # TODO: use multiprocessing
