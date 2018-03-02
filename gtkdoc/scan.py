@@ -604,7 +604,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                     symbol = re.sub(r'\s*\n', '', symbol, flags=re.MULTILINE)
                     logging.info('Function (6): "%s", Returns: "%s"', symbol, ret_type)
 
-            #} elsif (m/^extern\s+/) {
+            # } elsif (m/^extern\s+/) {
                 # print "DEBUG: Skipping extern: $_"
 
             # STRUCTS
@@ -692,7 +692,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                 if internal == 0:
                     decl = re.sub(r'/\*.*?\*/', '', decl, flags=re.MULTILINE)   # remove comments.
                     decl = re.sub(r'\s*\n\s*(?!$)', ' ', decl, flags=re.MULTILINE)
-                                  # consolidate whitespace at start/end of lines.
+                    # consolidate whitespace at start/end of lines.
                     decl = decl.strip()
                     ret_type = re.sub(r'/\*.*?\*/', '', ret_type)               # remove comments in ret type.
                     if AddSymbolToList(slist, symbol):
@@ -885,9 +885,9 @@ def AddSymbolToList(slist, symbol):
         symbol: The symbol to add to the list.
     """
     if symbol in slist:
-         # logging.info('Symbol %s already in list. skipping', symbol)
-         # we return False to skip outputting another entry to -decl.txt
-         # this is to avoid redeclarations (e.g. in conditional sections).
+        # logging.info('Symbol %s already in list. skipping', symbol)
+        # we return False to skip outputting another entry to -decl.txt
+        # this is to avoid redeclarations (e.g. in conditional sections).
         return False
     slist.append(symbol)
     return True
