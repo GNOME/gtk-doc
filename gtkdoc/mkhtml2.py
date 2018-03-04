@@ -39,7 +39,6 @@ TODO:
     - maybe handle the combination <informalexample><programlisting> directly
     - switch to http://pygments.org/docs/quickstart/?
   - integrate MakeXRef from fixxref
-- create devhelp2 output
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
@@ -68,6 +67,7 @@ import os
 import sys
 
 from anytree import Node, PreOrderIter
+from copy import deepcopy
 from lxml import etree
 
 from .fixxref import NoLinks
@@ -182,13 +182,12 @@ def chunk(xml_node, parent=None):
     """
     # print('<%s %s>' % (xml_node.tag, xml_node.attrib))
     if xml_node.tag in CHUNK_TAGS:
-        # TODO: do we need to remove the xml-node from the parent?
-        #
-        # from copy import deepcopy
-        # sub_tree = deepcopy(xml_node)
-        # xml_node.getparent().remove(xml_node)
-        # # or:
-        # sub_tree = etree.ElementTree(xml_node).getroot()
+        if parent:
+            # remove the xml-node from the parent
+            sub_tree = etree.ElementTree(deepcopy(xml_node)).getroot()
+            xml_node.getparent().remove(xml_node)
+            xml_node = sub_tree
+
         title_args = get_chunk_titles(xml_node)
         parent = Node(xml_node.tag, parent=parent, xml=xml_node,
                       filename=gen_chunk_name(xml_node) + '.html',
@@ -260,7 +259,7 @@ def xml_get_title(xml):
         return title.text
     else:
         # TODO(ensonic): any way to get the file (inlcudes) too?
-        logging.warning('%s: Expected title tag under "%s"', xml.sourceline, xml.tag)
+        logging.warning('%s: Expected title tag under "%s %s"', xml.sourceline, xml.tag, str(xml.attrib))
         return ''
 
 
@@ -848,7 +847,40 @@ def convert(out_dir, files, node):
             logging.warning('Add converter/template for "%s"', node.name)
 
 
-def create_devhelp2(out_dir, module, xml):
+def create_devhelp2_toc(node):
+    result = []
+    for c in node.children:
+        if c.children:
+            result.append('<sub name="%s" link="%s">\n' % (c.title, c.filename))
+            result.extend(create_devhelp2_toc(c))
+            result.append('</sub>\n')
+        else:
+            result.append('<sub name="%s" link="%s"/>\n' % (c.title, c.filename))
+    return result
+
+
+def create_devhelp2_condition_attribs(node):
+    if 'condition' in node.attrib:
+        # condition -> since, deprecated, ... (separated with '|')
+        cond = node.attrib['condition'].replace('"', '&quot;').split('|')
+        return' ' + ' '.join(['%s="%s"' % tuple(c.split(':', 1)) for c in cond])
+    else:
+        return ''
+
+
+def create_devhelp2_refsect2_keyword(node, base_link):
+    return'    <keyword type="%s" name="%s" link="%s"%s/>\n' % (
+        node.attrib['role'], xml_get_title(node), base_link + node.attrib['id'],
+        create_devhelp2_condition_attribs(node))
+
+
+def create_devhelp2_refsect3_keyword(node, base_link, title, name):
+    return'    <keyword type="%s" name="%s" link="%s"%s/>\n' % (
+        node.attrib['role'], title, base_link + name,
+        create_devhelp2_condition_attribs(node))
+
+
+def create_devhelp2(out_dir, module, xml, files):
     with open(os.path.join(out_dir, module + '.devhelp2'), 'wt') as idx:
         bookinfo_nodes = xml.xpath('/book/bookinfo')
         title = ''
@@ -864,11 +896,32 @@ def create_devhelp2(out_dir, module, xml):
   <chapters>
 """ % (title, module, online_url)
         ]
-        # TODO: toc under 'chapter'
+        # toc
+        result.extend(create_devhelp2_toc(files[0].root))
         result.append("""  </chapters>
   <functions>
 """)
-        # TODO: keywords under 'functions' from all refsect2 and refsect3
+        # keywords from all refsect2 and refsect3
+        refsect2 = etree.XPath('//refsect2[@role]')
+        refsect3_enum = etree.XPath('refsect3[@role="enum_members"]/informaltable/tgroup/tbody/row[@role="constant"]')
+        refsect3_enum_details = etree.XPath('entry[@role="enum_member_name"]/para')
+        refsect3_struct = etree.XPath('refsect3[@role="struct_members"]/informaltable/tgroup/tbody/row[@role="member"]')
+        refsect3_struct_details = etree.XPath('entry[@role="struct_member_name"]/para/structfield')
+        for node in files:
+            base_link = node.filename + '#'
+            refsect2_nodes = refsect2(node.xml)
+            for refsect2_node in refsect2_nodes:
+                result.append(create_devhelp2_refsect2_keyword(refsect2_node, base_link))
+                refsect3_nodes = refsect3_enum(refsect2_node)
+                for refsect3_node in refsect3_nodes:
+                    details_node = refsect3_enum_details(refsect3_node)[0]
+                    name = details_node.attrib['id']
+                    result.append(create_devhelp2_refsect3_keyword(refsect3_node, base_link, details_node.text, name))
+                refsect3_nodes = refsect3_struct(refsect2_node)
+                for refsect3_node in refsect3_nodes:
+                    details_node = refsect3_struct_details(refsect3_node)[0]
+                    name = details_node.attrib['id']
+                    result.append(create_devhelp2_refsect3_keyword(refsect3_node, base_link, name, name))
 
         result.append("""  </functions>
 </book>
@@ -903,13 +956,13 @@ def main(module, index_file):
     # TODO: also collect all 'id' attributes on the way and build map of
     #   id:rel-link (in fixxref it is called Links[])
     files = chunk(tree.getroot())
-    # 2) iterate the tree and output files
-    # TODO: use multiprocessing
     files = list(PreOrderIter(files))
+    # 2) create a xxx.devhelp2 file, do this before 3), since we modify the tree
+    create_devhelp2(out_dir, module, tree.getroot(), files)
+    # 3) iterate the tree and output files
+    # TODO: use multiprocessing
     for node in files:
         convert(out_dir, files, node)
-    # 3) create a xxx.devhelp2 file
-    create_devhelp2(out_dir, module, tree.getroot())
 
 
 def run(options):
