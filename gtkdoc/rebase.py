@@ -140,10 +140,10 @@ def ReadDevhelp(dir, file):
         # online must come before chapter/functions
         if '<chapters' in line or '<functions' in line:
             break
-        match = re.search(r'  online="([^"]*)"/', line)
+        match = re.search(r' online="([^"]*)"', line)
         if match:
             # Remove trailing non-directory component.
-            onlinedir = re.sub(r'(.*/).*', r'\1', match.groups(1))
+            onlinedir = re.sub(r'(.*/).*', r'\1', match.group(1))
     return onlinedir
 
 
