@@ -46,18 +46,17 @@ OPTIONAL:
 Requirements:
 sudo pip3 install anytree lxml
 
-Examples:
-./gtkdoc-mkhtml2 tests/gobject/docs/tester-docs.xml
-ll tests/gobject/docs/db2html
-
-./gtkdoc-mkhtml2 tests/bugs/docs/tester-docs.xml
-ll tests/bugs/docs/db2html
-cp tests/bugs/docs/html/*.{css,png} tests/bugs/docs/db2html/
-xdg-open tests/bugs/docs/db2html/index.html
-meld tests/bugs/docs/{html,db2html}
+Example invocation:
+cd tests/bugs/docs/
+../../../gtkdoc-mkhtml2 tester tester-docs.xml
+ll db2html
+cp html/*.{css,png} db2html/
+xdg-open db2html/index.html
+meld html db2html
 
 Benchmarking:
-(cd tests/bugs/docs/; rm html-build.stamp; time make html-build.stamp)
+cd tests/bugs/docs/;
+rm html-build.stamp; time make html-build.stamp
 """
 
 import argparse
