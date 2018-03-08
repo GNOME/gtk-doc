@@ -67,7 +67,7 @@ def Run(options):
 # TODO(ensonic): try to refactor so that we get a list of path's and then just
 # loop over them.
 # - module_dir is by default 'html'
-# - html_dir can be set by configure, but is usually empty
+# - html_dir can be set by configure, defaults to $(docdir)
 def LoadIndicies(module_dir, html_dir, extra_dirs):
     # Cache of dirs we already scanned for index files
     dir_cache = {}

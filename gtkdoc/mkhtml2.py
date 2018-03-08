@@ -33,12 +33,9 @@ TODO:
 - more chunk converters
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
-- integrate fixxref:
-  - as a step, we could run FixHTMLFile() on each output file
-  - integrate syntax-highlighing from fixxref
-    - maybe handle the combination <informalexample><programlisting> directly
-    - switch to http://pygments.org/docs/quickstart/?
-  - integrate MakeXRef from fixxref
+- integrate syntax-highlighing from fixxref
+  - maybe handle the combination <informalexample><programlisting> directly
+  - switch to http://pygments.org/docs/quickstart/?
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
@@ -69,7 +66,7 @@ from anytree import Node, PreOrderIter
 from copy import deepcopy
 from lxml import etree
 
-from .fixxref import NoLinks
+from . import fixxref
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
 CHUNK_TAGS = [
@@ -120,6 +117,8 @@ TITLE_XPATHS = {
         etree.XPath('./refnamediv/refpurpose')
     ),
 }
+
+ID_XPATH = etree.XPath('//@id')
 
 
 def gen_chunk_name(node):
@@ -179,7 +178,6 @@ def chunk(xml_node, parent=None):
     The first time, we're called with parent=None and in that case we return
     the new_node as the root of the tree
     """
-    # print('<%s %s>' % (xml_node.tag, xml_node.attrib))
     if xml_node.tag in CHUNK_TAGS:
         if parent:
             # remove the xml-node from the parent
@@ -188,13 +186,26 @@ def chunk(xml_node, parent=None):
             xml_node = sub_tree
 
         title_args = get_chunk_titles(xml_node)
+        chunk_name = gen_chunk_name(xml_node)
         parent = Node(xml_node.tag, parent=parent, xml=xml_node,
-                      filename=gen_chunk_name(xml_node) + '.html',
-                      **title_args)
+                      filename=chunk_name + '.html', **title_args)
+
     for child in xml_node:
         chunk(child, parent)
 
     return parent
+
+
+def add_id_links(files, links):
+    for node in files:
+        chunk_name = node.filename[:-5]
+        chunk_base = node.filename + '#'
+        for attr in ID_XPATH(node.xml):
+            if attr == chunk_name:
+                links[attr] = node.filename
+            else:
+                links[attr] = chunk_base + attr
+
 
 # conversion helpers
 
@@ -360,19 +371,17 @@ def convert_itemizedlist(ctx, xml):
 
 
 def convert_link(ctx, xml):
-    # TODO: inline more fixxref functionality
-    # TODO: need to build an 'id' map and resolve against internal links too
     linkend = xml.attrib['linkend']
-    if linkend in NoLinks:
+    if linkend in fixxref.NoLinks:
         linkend = None
     result = []
     if linkend:
-        result = ['<!-- GTKDOCLINK HREF="%s" -->' % linkend]
-    if xml.text:
-        result.append(xml.text)
-    convert_inner(ctx, xml, result)
-    if linkend:
-        result.append('<!-- /GTKDOCLINK -->')
+        link_text = []
+        convert_inner(ctx, xml, link_text)
+        if xml.text:
+            link_text.append(xml.text)
+        # TODO: fixxref does some weird checks in xml.text
+        result = [fixxref.MakeXRef(ctx['module'], '', 0, linkend, ''.join(link_text))]
     if xml.tail:
         result.append(xml.tail)
     return result
@@ -426,9 +435,9 @@ def convert_phrase(ctx, xml):
 
 
 def convert_primaryie(ctx, xml):
-    result = ['<dt>']
+    result = ['<dt>\n']
     convert_inner(ctx, xml, result)
-    result.append('</dt>\n<dd></dd>\n')
+    result.append('\n</dt>\n<dd></dd>\n')
     return result
 
 
@@ -822,7 +831,7 @@ def generate_nav_nodes(files, node):
     return nav
 
 
-def convert(out_dir, files, node):
+def convert(out_dir, module, files, node):
     """Convert the docbook chunks to a html file.
 
     Args:
@@ -834,6 +843,7 @@ def convert(out_dir, files, node):
     logging.info('Writing: %s', node.filename)
     with open(os.path.join(out_dir, node.filename), 'wt') as html:
         ctx = {
+            'module': module,
             'files': files,
             'node': node,
         }
@@ -949,19 +959,23 @@ def main(module, index_file):
         if e.errno != errno.EEXIST:
             raise
 
+    # TODO: migrate options from fixxref
+    # TODO: do in parallel with loading the xml above.
+    fixxref.LoadIndicies(out_dir, '/usr/share/gtk-doc/html', [])
+
     # We do multiple passes:
     # 1) recursively walk the tree and chunk it into a python tree so that we
     #   can generate navigation and link tags.
-    # TODO: also collect all 'id' attributes on the way and build map of
-    #   id:rel-link (in fixxref it is called Links[])
     files = chunk(tree.getroot())
     files = list(PreOrderIter(files))
-    # 2) create a xxx.devhelp2 file, do this before 3), since we modify the tree
+    # 2) find all 'id' attribs and add them to the link map
+    add_id_links(files, fixxref.Links)
+    # 3) create a xxx.devhelp2 file, do this before 3), since we modify the tree
     create_devhelp2(out_dir, module, tree.getroot(), files)
-    # 3) iterate the tree and output files
+    # 4) iterate the tree and output files
     # TODO: use multiprocessing
     for node in files:
-        convert(out_dir, files, node)
+        convert(out_dir, module, files, node)
 
 
 def run(options):
