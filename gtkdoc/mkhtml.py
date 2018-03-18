@@ -48,6 +48,21 @@ def run_xsltproc(options, args):
         return subprocess.call(command + args, stderr=open('profile.txt', 'w'))
 
 
+def get_dirs(uninstalled):
+    if uninstalled:
+        # this does not work from buiddir!=srcdir
+        gtkdocdir = os.path.split(sys.argv[0])[0]
+        if not os.path.exists(gtkdocdir + '/gtk-doc.xsl'):
+            # try 'srcdir' (set from makefiles) too
+            if os.path.exists(os.environ.get("ABS_TOP_SRCDIR", '') + '/gtk-doc.xsl'):
+                gtkdocdir = os.environ['ABS_TOP_SRCDIR']
+        styledir = gtkdocdir + '/style'
+    else:
+        gtkdocdir = os.path.join(config.datadir, 'gtk-doc/data')
+        styledir = gtkdocdir
+    return (gtkdocdir, styledir)
+
+
 def run(options):
     logging.info('options: %s', str(options.__dict__))
 
@@ -59,17 +74,7 @@ def run(options):
         quiet = '1'
     remaining_args = options.args[2:]
 
-    if options.uninstalled:
-        # this does not work from buiddir!=srcdir
-        gtkdocdir = os.path.split(sys.argv[0])[0]
-        if not os.path.exists(gtkdocdir + '/gtk-doc.xsl'):
-            # try to src dir (set from makefiles) too
-            if os.path.exists(os.environ.get("ABS_TOP_SRCDIR", '') + '/gtk-doc.xsl'):
-                gtkdocdir = os.environ['ABS_TOP_SRCDIR']
-        styledir = gtkdocdir + '/style'
-    else:
-        gtkdocdir = os.path.join(config.datadir, 'gtk-doc/data')
-        styledir = gtkdocdir
+    (gtkdocdir, styledir) = get_dirs(options.uninstalled)
 
     res = run_xsltproc(options, [
         '--nonet',

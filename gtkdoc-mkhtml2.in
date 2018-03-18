@@ -31,6 +31,9 @@ if __name__ == '__main__':
     parser.add_argument('--version', action='version', version=config.version)
     parser.add_argument('args', nargs='*',
                         help='MODULE DRIVER_FILE')
+    # TODO: only for testing, replace with env-var
+    parser.add_argument('--uninstalled', action='store_true', default=False,
+                        help='???')
 
     options = parser.parse_args()
     if len(options.args) != 2:

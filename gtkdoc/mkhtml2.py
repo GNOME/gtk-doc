@@ -33,21 +33,16 @@ TODO:
 - more chunk converters
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
-- integrate syntax-highlighing from fixxref
-  - maybe handle the combination <informalexample><programlisting> directly
-  - switch to http://pygments.org/docs/quickstart/?
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
 
 Requirements:
-sudo pip3 install anytree lxml
+sudo pip3 install anytree lxml pygments
 
 Example invocation:
 cd tests/bugs/docs/
 ../../../gtkdoc-mkhtml2 tester tester-docs.xml
-ll db2html
-cp html/*.{css,png} db2html/
 xdg-open db2html/index.html
 meld html db2html
 
@@ -60,23 +55,23 @@ import argparse
 import errno
 import logging
 import os
+import shutil
 import sys
 
 from anytree import Node, PreOrderIter
 from copy import deepcopy
+from glob import glob
 from lxml import etree
 from pygments import highlight
 from pygments.lexers import CLexer
 from pygments.formatters import HtmlFormatter
 
-from . import fixxref
+from . import config, fixxref
 
 # pygments setup
 # TODO: maybe use get_lexer_for_filename()
 LEXER = CLexer()
 HTML_FORMATTER = HtmlFormatter(nowrap=False, linenos='table')
-# dump css
-# logging.warning('\n' + HTML_FORMATTER.get_style_defs())
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
 CHUNK_TAGS = [
@@ -960,25 +955,33 @@ def create_devhelp2(out_dir, module, xml, files):
             idx.write(line)
 
 
-def main(module, index_file):
+def get_dirs(uninstalled):
+    if uninstalled:
+        # this does not work from buiddir!=srcdir
+        gtkdocdir = os.path.split(sys.argv[0])[0]
+        if not os.path.exists(gtkdocdir + '/gtk-doc.xsl'):
+            # try 'srcdir' (set from makefiles) too
+            if os.path.exists(os.environ.get("ABS_TOP_SRCDIR", '') + '/gtk-doc.xsl'):
+                gtkdocdir = os.environ['ABS_TOP_SRCDIR']
+        styledir = gtkdocdir + '/style'
+    else:
+        gtkdocdir = os.path.join(config.datadir, 'gtk-doc/data')
+        styledir = gtkdocdir
+    return (gtkdocdir, styledir)
+
+
+def main(module, index_file, out_dir, uninstalled):
     tree = etree.parse(index_file)
     tree.xinclude()
 
-    dir_name = os.path.dirname(index_file)
-
-    # for testing: dump to output file
-    # out_file = os.path.join(dir_name, 'db2html.xml')
-    # tree.write(out_file)
-
-    # TODO: rename to 'html' later on
-    # - right now in mkhtml, the dir is created by the Makefile and mkhtml
-    #   outputs into the working directory
-    out_dir = os.path.join(dir_name, 'db2html')
-    try:
-        os.mkdir(out_dir)
-    except OSError as e:
-        if e.errno != errno.EEXIST:
-            raise
+    (gtkdocdir, styledir) = get_dirs(uninstalled)
+    # copy navigation images and stylesheets to html directory ...
+    css_file = os.path.join(styledir, 'style.css')
+    for f in glob(os.path.join(styledir, '*.png')) + [css_file]:
+        shutil.copy(f, out_dir)
+    css_file = os.path.join(out_dir, 'style.css')
+    with open(css_file, 'at') as css:
+        css.write(HTML_FORMATTER.get_style_defs())
 
     # TODO: migrate options from fixxref
     # TODO: do in parallel with loading the xml above.
@@ -1003,4 +1006,15 @@ def run(options):
     logging.info('options: %s', str(options.__dict__))
     module = options.args[0]
     document = options.args[1]
-    sys.exit(main(module, document))
+
+    # TODO: rename to 'html' later on
+    # - right now in mkhtml, the dir is created by the Makefile and mkhtml
+    #   outputs into the working directory
+    out_dir = os.path.join(os.path.dirname(document), 'db2html')
+    try:
+        os.mkdir(out_dir)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+
+    sys.exit(main(module, document, out_dir, options.uninstalled))
