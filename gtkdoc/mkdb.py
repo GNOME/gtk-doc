@@ -2689,8 +2689,9 @@ def ExpandAbbreviations(symbol, text):
 
     # Convert "|[" and "]|" into the start and end of program listing examples.
     # Support \[<!-- language="C" --> modifiers
-    text = re.sub(r'\|\[<!-- language="([^"]+)" -->', r'<informalexample><programlisting language="\1"><![CDATA[', text)
-    text = re.sub(r'\|\[', r'<informalexample><programlisting><![CDATA[', text)
+    text = re.sub(r'\|\[<!-- language="([^"]+)" -->',
+                  r'<informalexample><programlisting role="example" language="\1"><![CDATA[', text)
+    text = re.sub(r'\|\[', r'<informalexample><programlisting role="example"><![CDATA[', text)
     text = re.sub(r'\]\|', r']]></programlisting></informalexample>', text)
 
     # keep CDATA unmodified, preserve ulink tags (ideally we preseve all tags
