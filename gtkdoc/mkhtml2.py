@@ -65,8 +65,18 @@ import sys
 from anytree import Node, PreOrderIter
 from copy import deepcopy
 from lxml import etree
+from pygments import highlight
+from pygments.lexers import CLexer
+from pygments.formatters import HtmlFormatter
 
 from . import fixxref
+
+# pygments setup
+# TODO: maybe use get_lexer_for_filename()
+LEXER = CLexer()
+HTML_FORMATTER = HtmlFormatter(nowrap=False, linenos='table')
+# dump css
+# logging.warning('\n' + HTML_FORMATTER.get_style_defs())
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
 CHUNK_TAGS = [
@@ -208,10 +218,6 @@ def add_id_links(files, links):
 
 
 # conversion helpers
-
-
-def escape_entities(text):
-    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
 def convert_inner(ctx, xml, result):
@@ -443,9 +449,24 @@ def convert_primaryie(ctx, xml):
 
 def convert_programlisting(ctx, xml):
     result = ['<pre class="programlisting">']
-    if xml.text:
-        result.append(escape_entities(xml.text))
-    convert_inner(ctx, xml, result)
+
+    # TODO: only do this if parent is 'informalexample'?
+    # Right now we also get programlisting node that are already marked.
+    # problem: there is no xml.parent :/
+    # 1) we could pass an option parent node when traversion the tree
+    # 2) we could set some attributes on this node in mkdb to indicate wheter
+    #    we'd like to colorize it (e.g. role="example"
+    # 3) we could also skip doing markup in mkdb and apply it entierly here
+    # 4) we could check for programlisting-children in informalexample
+    #
+    # we're trying 2) below
+    if xml.attrib.get('role', '') == 'example':
+        if xml.text:
+            result.append(highlight(xml.text, LEXER, HTML_FORMATTER))
+    else:
+        if xml.text:
+            result.append(xml.text)
+        convert_inner(ctx, xml, result)
     result.append('</pre>')
     if xml.tail:
         result.append(xml.tail)
