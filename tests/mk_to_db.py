@@ -221,7 +221,7 @@ accessed via the following functions.</para>
 """
 
         expected = '''\
-<informalexample><programlisting language="C"><![CDATA[
+<informalexample><programlisting role="example" language="C"><![CDATA[
     GdkEvent *event;
     GdkEventType type;
 

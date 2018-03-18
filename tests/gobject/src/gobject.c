@@ -50,7 +50,7 @@
  *
  * You can also change parameters:
  * <informalexample>
- * <programlisting language="c"><xi:include xmlns:xi="http://www.w3.org/2003/XInclude" parse="text" href="../../examples/gobject.c" /></programlisting>
+ * <programlisting role="example" language="c"><xi:include xmlns:xi="http://www.w3.org/2003/XInclude" parse="text" href="../../examples/gobject.c" /></programlisting>
  * </informalexample>
  *
  * This example serves two main purposes:

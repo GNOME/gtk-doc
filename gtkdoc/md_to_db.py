@@ -688,9 +688,9 @@ def MarkDownOutputDocBook(blocksref, symbol, context):
                     output += "<informalexample><screen><![CDATA[\n"
                     tag = "screen"
                 else:
-                    output += "<informalexample><programlisting language=\"%s\"><![CDATA[\n" % block['language']
+                    output += "<informalexample><programlisting role=\"example\" language=\"%s\"><![CDATA[\n" % block['language']
             else:
-                output += "<informalexample><programlisting><![CDATA[\n"
+                output += "<informalexample><programlisting role=\"example\"><![CDATA[\n"
 
             logging.debug('listing for %s: [%s]', symbol, '\n'.join(block['lines']))
             for line in block["lines"]:
