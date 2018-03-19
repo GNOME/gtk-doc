@@ -228,7 +228,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
 
     for line in common.open_text(input_file):
         # If this is a private header, skip it.
-        if re.search(r'%^\s*/\*\s*<\s*private_header\s*>\s*\*/', line):
+        if re.search(r'^\s*/\*\s*<\s*private_header\s*>\s*\*/', line):
             return
 
         # Skip to the end of the current comment.
