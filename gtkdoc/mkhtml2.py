@@ -71,7 +71,7 @@ from . import config, fixxref
 # pygments setup
 # TODO: maybe use get_lexer_for_filename()
 LEXER = CLexer()
-HTML_FORMATTER = HtmlFormatter(nowrap=False, linenos='table')
+HTML_FORMATTER = HtmlFormatter(nowrap=True)
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
 CHUNK_TAGS = [
@@ -443,26 +443,30 @@ def convert_primaryie(ctx, xml):
 
 
 def convert_programlisting(ctx, xml):
-    result = ['<pre class="programlisting">']
-
-    # TODO: only do this if parent is 'informalexample'?
-    # Right now we also get programlisting node that are already marked.
-    # problem: there is no xml.parent :/
-    # 1) we could pass an option parent node when traversion the tree
-    # 2) we could set some attributes on this node in mkdb to indicate wheter
-    #    we'd like to colorize it (e.g. role="example"
-    # 3) we could also skip doing markup in mkdb and apply it entierly here
-    # 4) we could check for programlisting-children in informalexample
-    #
-    # we're trying 2) below
+    result = []
     if xml.attrib.get('role', '') == 'example':
         if xml.text:
-            result.append(highlight(xml.text, LEXER, HTML_FORMATTER))
+            # TODO: check 'language' attr and use respective lexer
+            highlighted = highlight(xml.text, LEXER, HTML_FORMATTER)
+
+            # we do own line-numbering
+            line_count = highlighted.count('\n')
+            source_lines = '\n'.join([str(i) for i in range(1, line_count + 1)])
+            result.append("""<table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td class="listing_lines" align="right"><pre>%s</pre></td>
+      <td class="listing_code"><pre class="programlisting">%s</pre></td>
+    </tr>
+  </tbody>
+</table>
+""" % (source_lines, highlighted))
     else:
+        result.append('<pre class="programlisting">')
         if xml.text:
             result.append(xml.text)
         convert_inner(ctx, xml, result)
-    result.append('</pre>')
+        result.append('</pre>')
     if xml.tail:
         result.append(xml.tail)
     return result
