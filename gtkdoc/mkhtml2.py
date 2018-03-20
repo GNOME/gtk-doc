@@ -287,6 +287,17 @@ def convert_bookinfo(ctx, xml):
     return result
 
 
+def convert_blockquote(ctx, xml):
+    result = ['<div class="blockquote">\n<blockquote class="blockquote">']
+    if xml.text:
+        result.append(xml.text)
+    convert_inner(ctx, xml, result)
+    result.append('</blockquote>\n</div>')
+    if xml.tail:
+        result.append(xml.tail)
+    return result
+
+
 def convert_colspec(ctx, xml):
     result = ['<col']
     a = xml.attrib
@@ -407,6 +418,15 @@ def convert_literal(ctx, xml):
     return result
 
 
+def convert_orderedlist(ctx, xml):
+    result = ['<div class="orderedlistlist"><ol class="orderedlistlist" type="1">']
+    convert_inner(ctx, xml, result)
+    result.append('</ol></div>')
+    if xml.tail:
+        result.append(xml.tail)
+    return result
+
+
 def convert_para(ctx, xml):
     result = ['<p>']
     if xml.tag != 'para':
@@ -439,6 +459,17 @@ def convert_primaryie(ctx, xml):
     result = ['<dt>\n']
     convert_inner(ctx, xml, result)
     result.append('\n</dt>\n<dd></dd>\n')
+    return result
+
+
+def convert_pre(ctx, xml):
+    result = ['<pre class="%s">\n' % xml.tag]
+    if xml.text:
+        result.append(xml.text)
+    convert_inner(ctx, xml, result)
+    result.append('</pre>')
+    if xml.tail:
+        result.append(xml.tail)
     return result
 
 
@@ -499,6 +530,16 @@ def convert_row(ctx, xml):
     return result
 
 
+def convert_simpara(ctx, xml):
+    result = ['<p>']
+    if xml.text:
+        result.append(xml.text)
+    result.append('</p>')
+    if xml.tail:
+        result.append(xml.tail)
+    return result
+
+
 def convert_span(ctx, xml):
     result = ['<span class="%s">' % xml.tag]
     if xml.text:
@@ -544,6 +585,7 @@ def convert_ulink(ctx, xml):
 # TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_tags = {
     'bookinfo': convert_bookinfo,
+    'blockquote': convert_blockquote,
     'colspec': convert_colspec,
     'entry': convert_entry,
     'function': convert_span,
@@ -556,6 +598,8 @@ convert_tags = {
     'link': convert_link,
     'listitem': convert_listitem,
     'literal': convert_literal,
+    'note': convert_div,
+    'orderedlist': convert_orderedlist,
     'para': convert_para,
     'parameter': convert_em_class,
     'phrase': convert_phrase,
@@ -567,6 +611,8 @@ convert_tags = {
     'refsect3': convert_refsect3,
     'returnvalue': convert_span,
     'row': convert_row,
+    'screen': convert_pre,
+    'simpara': convert_simpara,
     'structfield': convert_em_class,
     'tbody': convert_tbody,
     'tgroup': convert_tgroup,
