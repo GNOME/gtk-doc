@@ -84,8 +84,10 @@ setup-build.stamp: ts
 	  files=`echo $(SETUP_FILES) $(expand_content_files) $(DOC_MODULE).types`; \
 	  if test "x$$files" != "x" ; then \
 	    for file in $$files ; do \
+	      destdir=`dirname $(abs_builddir)/$$file`; \
+	      test -d "$$destdir" || mkdir -p "$$destdir"; \
 	      test -f $(abs_srcdir)/$$file && \
-	        cp -pf $(abs_srcdir)/$$file $(abs_builddir)/ || true; \
+	        cp -pf $(abs_srcdir)/$$file $(abs_builddir)/$$file || true; \
 	    done; \
 	  fi; \
 	fi
@@ -131,7 +133,7 @@ sgml-build.stamp: setup-build.stamp $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(HF
 	echo "  DOC   `$(DATE_FMT_CMD)$$tsd`: Building XML"
 	@_source_dir='' ; \
 	for i in $(DOC_SOURCE_DIR) ; do \
-	    _source_dir="$${_source_dir} --source-dir=$$i" ; \
+	  _source_dir="$${_source_dir} --source-dir=$$i" ; \
 	done ; \
 	echo "gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $${_source_dir} $(MKDB_OPTIONS)" >gtkdoc-mkdb.log; \
 	PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) \
@@ -171,12 +173,8 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE) 2>&1 | tee -a ../gtkdoc-mkhtml.log
 	-@test "x$(HTML_IMAGES)" = "x" || \
 	for file in $(HTML_IMAGES) ; do \
-	  if test -f $(abs_srcdir)/$$file ; then \
-	    cp $(abs_srcdir)/$$file $(abs_builddir)/html; \
-	  fi; \
-	  if test -f $(abs_builddir)/$$file ; then \
-	    cp $(abs_builddir)/$$file $(abs_builddir)/html; \
-	  fi; \
+	  test -f $(abs_srcdir)/$$file && cp $(abs_srcdir)/$$file $(abs_builddir)/html; \
+	  test -f $(abs_builddir)/$$file && cp $(abs_builddir)/$$file $(abs_builddir)/html; \
 	done;
 	@ts1=`cat ts`;ts2=`date $(TS_FMT)`;tsd=`echo $$ts2-$$ts1 | bc`; \
 	echo "  DOC   `$(DATE_FMT_CMD)$$tsd`: Fixing cross-references"
