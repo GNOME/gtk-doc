@@ -89,6 +89,11 @@ gunzip .*.gz
 
 '
 for file in $dir/*/docs/gtkdoc-*.log; do
+  # skip this in verbose mode as we'll have more text
+  if test "x${V}" = "x1"; then
+    continue
+  fi
+
   expected_lines="1"
   # adjust for known files
   if test $file = "$dir/fail/docs/gtkdoc-mkdb.log"; then
