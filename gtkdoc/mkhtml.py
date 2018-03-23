@@ -36,14 +36,14 @@ def run_xsltproc(options, args):
     # we could do "$path_option $PWD " to avoid needing rewriting entities that
     # are copied from the header into docs under xml
     if os.environ.get("GTKDOC_PROFILE", '') == '':
-        for path in options.path:
-            command += ['--path', path]
+        if len(options.path):
+            command += ['--path', ':'.join(options.path)]
         logging.info('running "%s"', ' '.join(command + args))
         return subprocess.call(command + args)
     else:
         command += ['--profile']
-        for path in options.path:
-            command += ['--path', path]
+        if len(options.path):
+            command += ['--path', ':'.join(options.path)]
         logging.info('running "%s"', ' '.join(command + args))
         return subprocess.call(command + args, stderr=open('profile.txt', 'w'))
 

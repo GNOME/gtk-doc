@@ -25,7 +25,10 @@ SCAN_OPTIONS=--deprecated-guards="GTKDOC_TESTER_DISABLE_DEPRECATED" \
 MKDB_OPTIONS=--xml-mode
 
 # Extra options to supply to gtkdoc-mkhtml
-MKHTML_OPTIONS=
+MKHTML_OPTIONS=--path=$(abs_top_srcdir)/tests/gobject/examples
+
+# Extra options to supply to gtkdoc-mkpdf
+MKPDF_OPTIONS=--path=$(abs_top_srcdir)/tests/gobject/examples
 
 # Extra options to supply to gtkdoc-fixref. Not normally needed.
 # --html-dir=$(HTML_DIR)

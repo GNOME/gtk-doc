@@ -34,8 +34,8 @@ def run_xsltproc(options, args):
     command = [config.xsltproc]
     # we could do "--path $PWD " to avoid needing rewriting entities that are
     # copied from the header into docs under xml
-    for path in options.path:
-        command += ['--path', path]
+    if len(options.path):
+        command += ['--path', ':'.join(options.path)]
     logging.info('running "%s"', ' '.join(command + args))
     pc = subprocess.Popen(command + args, stderr=subprocess.PIPE)
     (o, stde) = pc.communicate()
@@ -65,11 +65,14 @@ def run(options):
         # -T db2latex : different style
         # -d : keep transient files (for debugging)
         # -P abc.def=$quiet : once the stylesheets have a quiet mode
+        # -x "--path /path/to/more/files"
         # xsltproc is already called with --xinclude
         # does not work: --xslt-opts "--path $searchpath --nonet $@"
         dblatex_options = ['-o', module + '.pdf']
         for i in options.imgdir:
             dblatex_options += ['-I', i]
+        if len(options.path):
+            dblatex_options += ['-x', '--path ' + ':'.join(options.path)]
         dblatex_options.append(document)
         if not options.verbose:
             pc = subprocess.Popen([config.dblatex, '--help'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
