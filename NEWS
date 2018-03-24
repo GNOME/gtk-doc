@@ -1,7 +1,30 @@
-GTK-Doc 1.27.1  (Dec 07 2017)
+GTK-Doc 1.28  (Mar 24 2018)
 ==============
 
-Development.
+Bug fixes.
+
+ Changes
+
+ o 791928 : gtk-doc doesn't understand 'stability: Obsolete'
+ o 792148 : cmake: Installed GtkDocConfig.cmake has incorrect bindir path
+ o 792661 : use pygments to do syntax highlighing
+ o 793599 : Please run testsuite with V=0
+ o 794051 : rebase: fix on-line location extraction from devhelp files
+ o 794182 : private_header regex is broken
+
+ Contributors
+
+ Anders Jonsson
+ Arnaud Rebillout
+ Behdad Esfahbod
+ Bruce Mitchener
+ Daniel Mustieles
+ Marek Černocký
+ Rafael Fontenelle
+ Stefan Sauer
+ Tim-Philipp Müller
+ Tim Sabsch
+
 
 GTK-Doc 1.27  (Dec 07 2017)
 ==============
