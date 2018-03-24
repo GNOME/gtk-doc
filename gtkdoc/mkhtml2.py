@@ -278,8 +278,7 @@ def xml_get_title(xml):
 
 def convert_bookinfo(ctx, xml):
     result = ['<div class="titlepage">']
-    for releaseinfo in xml.findall('releaseinfo'):
-        result.extend(convert_para(ctx, releaseinfo))
+    convert_inner(ctx, xml, result)
     result.append("""<hr>
 </div>""")
     if xml.tail:
@@ -307,6 +306,17 @@ def convert_colspec(ctx, xml):
         result.append(' width="%s"' % a['colwidth'])
     result.append('>\n')
     # is in tgroup and there can be no 'text'
+    return result
+
+
+def convert_corpauthor(ctx, xml):
+    result = ['<div><h3 class="corpauthor">\n']
+    if xml.text:
+        result.append(xml.text)
+    convert_inner(ctx, xml, result)
+    result.append('</h3></div>\n')
+    if xml.tail:
+        result.append(xml.tail)
     return result
 
 
@@ -428,9 +438,13 @@ def convert_orderedlist(ctx, xml):
 
 
 def convert_para(ctx, xml):
-    result = ['<p>']
+    result = []
+    if 'id' in xml.attrib:
+        result.append('<a name="%s"></a>' % xml.attrib['id'])
     if xml.tag != 'para':
-        result = ['<p class="%s">' % xml.tag]
+        result.append('<p class="%s">' % xml.tag)
+    else:
+        result.append('<p>')
     if xml.text:
         result.append(xml.text)
     convert_inner(ctx, xml, result)
@@ -587,6 +601,7 @@ convert_tags = {
     'bookinfo': convert_bookinfo,
     'blockquote': convert_blockquote,
     'colspec': convert_colspec,
+    'corpauthor': convert_corpauthor,
     'entry': convert_entry,
     'function': convert_span,
     'indexdiv': convert_indexdiv,
@@ -595,6 +610,7 @@ convert_tags = {
     'informalexample': convert_div,
     'informaltable': convert_informaltable,
     'itemizedlist': convert_itemizedlist,
+    'legalnotice': convert_para,
     'link': convert_link,
     'listitem': convert_listitem,
     'literal': convert_literal,
@@ -782,6 +798,10 @@ def convert_book(ctx):
 """ % node.title
     ]
     bookinfo = node.xml.findall('bookinfo')[0]
+    # we already used the title
+    title = bookinfo.find('title')
+    if title is not None:
+        bookinfo.remove(title)
     result.extend(convert_bookinfo(ctx, bookinfo))
     result.append("""<div class="toc">
   <dl class="toc">
