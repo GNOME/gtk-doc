@@ -638,6 +638,7 @@ convert_tags = {
     'caption': convert_div,
     'colspec': convert_colspec,
     'corpauthor': convert_corpauthor,
+    'emphasis': convert_span,
     'entry': convert_entry,
     'function': convert_span,
     'imageobject': convert_imageobject,
