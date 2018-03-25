@@ -109,12 +109,16 @@ class ChunkParams(object):
 # TODO: look up the abbrevs and hierarchy for other tags
 # http://www.sagehill.net/docbookxsl/Chunking.html#GeneratedFilenames
 # https://github.com/oreillymedia/HTMLBook/blob/master/htmlbook-xsl/chunk.xsl#L33
+#
+# If not defined, we can just create an example without an 'id' attr and see
+# docbook xsl does.
 CHUNK_PARAMS = {
     'appendix': ChunkParams('app', 'book'),
     'book': ChunkParams('bk'),
     'chapter': ChunkParams('ch', 'book'),
     'index': ChunkParams('ix', 'book'),
     'part': ChunkParams('pt', 'book'),
+    'preface': ChunkParams('pr', 'book'),
     'sect1': ChunkParams('s', 'chapter'),
     'section': ChunkParams('s', 'chapter'),
 }
