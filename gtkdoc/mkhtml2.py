@@ -31,6 +31,9 @@ and source-highlight.
 
 TODO:
 - more chunk converters
+- more tag converters:
+  - footnote: maybe track those in ctx and write them out at the end of the chunk
+  - acronym: need to resolve title from glossary
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 
