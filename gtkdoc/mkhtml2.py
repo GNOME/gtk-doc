@@ -873,6 +873,25 @@ def convert_index(ctx):
     return result
 
 
+def convert_preface(ctx):
+    node = ctx['node']
+    result = [
+        HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
+        generate_basic_nav(ctx),
+        '<div class="preface">',
+    ]
+    title = node.xml.find('title')
+    if title is not None:
+        result.append('<div class="titlepage"><h2 class="title"><a name="%s"></a>%s</h2></div>' % (
+            get_id(node), title.text))
+        node.xml.remove(title)
+    convert_inner(ctx, node.xml, result)
+    result.append("""</div>
+</body>
+</html>""")
+    return result
+
+
 def convert_refentry(ctx):
     node = ctx['node']
     node_id = get_id(node)
@@ -909,6 +928,7 @@ convert_chunks = {
     'book': convert_book,
     'chapter': convert_chapter,
     'index': convert_index,
+    'preface': convert_preface,
     'refentry': convert_refentry,
 }
 
