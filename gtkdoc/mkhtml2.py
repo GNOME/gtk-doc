@@ -279,6 +279,17 @@ def xml_get_title(xml):
 
 # docbook tags
 
+
+def convert_acronym(ctx, xml):
+    # TODO: resolve title from glossaries (key=glossentry/glossterm, value=glossentry/glossdef)
+    # print a sensible warning if missing
+    title='?'
+    result = ['<acronym title="%s"><span class="acronym">%s</span></acronym>' % (title, xml.text)]
+    if xml.tail:
+        result.append(xml.tail)
+    return result
+
+
 def convert_bookinfo(ctx, xml):
     result = ['<div class="titlepage">']
     convert_inner(ctx, xml, result)
@@ -612,6 +623,7 @@ def convert_ulink(ctx, xml):
 
 # TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_tags = {
+    'acronym': convert_acronym,
     'bookinfo': convert_bookinfo,
     'blockquote': convert_blockquote,
     'colspec': convert_colspec,
