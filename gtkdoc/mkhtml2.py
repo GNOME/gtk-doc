@@ -34,6 +34,8 @@ TODO:
 - more tag converters:
   - footnote: maybe track those in ctx and write them out at the end of the chunk
   - acronym: need to resolve title from glossary
+  - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
+    attr on the <img> tag of the 'imageobject'
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 
@@ -647,6 +649,7 @@ convert_tags = {
     'indexterm': convert_skip,
     'informalexample': convert_div,
     'informaltable': convert_informaltable,
+    'inlinemediaobject': convert_span,
     'itemizedlist': convert_itemizedlist,
     'legalnotice': convert_para_like,
     'link': convert_link,
