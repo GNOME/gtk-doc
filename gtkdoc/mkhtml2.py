@@ -283,7 +283,7 @@ def xml_get_title(xml):
 def convert_acronym(ctx, xml):
     # TODO: resolve title from glossaries (key=glossentry/glossterm, value=glossentry/glossdef)
     # print a sensible warning if missing
-    title='?'
+    title = '?'
     result = ['<acronym title="%s"><span class="acronym">%s</span></acronym>' % (title, xml.text)]
     if xml.tail:
         result.append(xml.tail)
@@ -651,6 +651,7 @@ convert_tags = {
     'refsect1': convert_refsect1,
     'refsect2': convert_refsect2,
     'refsect3': convert_refsect3,
+    'replaceable': convert_em_class,
     'returnvalue': convert_span,
     'row': convert_row,
     'screen': convert_pre,
