@@ -441,10 +441,21 @@ def convert_para(ctx, xml):
     result = []
     if 'id' in xml.attrib:
         result.append('<a name="%s"></a>' % xml.attrib['id'])
-    if xml.tag != 'para':
-        result.append('<p class="%s">' % xml.tag)
-    else:
-        result.append('<p>')
+    result.append('<p>')
+    if xml.text:
+        result.append(xml.text)
+    convert_inner(ctx, xml, result)
+    result.append('</p>')
+    if xml.tail:
+        result.append(xml.tail)
+    return result
+
+
+def convert_para_like(ctx, xml):
+    result = []
+    if 'id' in xml.attrib:
+        result.append('<a name="%s"></a>' % xml.attrib['id'])
+    result.append('<p class="%s">' % xml.tag)
     if xml.text:
         result.append(xml.text)
     convert_inner(ctx, xml, result)
@@ -610,7 +621,7 @@ convert_tags = {
     'informalexample': convert_div,
     'informaltable': convert_informaltable,
     'itemizedlist': convert_itemizedlist,
-    'legalnotice': convert_para,
+    'legalnotice': convert_para_like,
     'link': convert_link,
     'listitem': convert_listitem,
     'literal': convert_literal,
@@ -621,7 +632,7 @@ convert_tags = {
     'phrase': convert_phrase,
     'primaryie': convert_primaryie,
     'programlisting': convert_programlisting,
-    'releaseinfo': convert_para,
+    'releaseinfo': convert_para_like,
     'refsect1': convert_refsect1,
     'refsect2': convert_refsect2,
     'refsect3': convert_refsect3,
