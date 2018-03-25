@@ -835,7 +835,7 @@ def convert_chapter(ctx):
     ]
     title = node.xml.find('title')
     if title is not None:
-        result.append('<div class="titlepage"><h1 class="title"><a name="%s"></a>%s</h1></div>' % (
+        result.append('<div class="titlepage"><h2 class="title"><a name="%s"></a>%s</h2></div>' % (
             get_id(node), title.text))
         node.xml.remove(title)
     convert_inner(ctx, node.xml, result)
