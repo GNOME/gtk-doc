@@ -371,6 +371,15 @@ def convert_entry(ctx, xml):
     return result
 
 
+def convert_imageobject(ctx, xml):
+    imagedata = xml.find('imagedata')
+    if imagedata is not None:
+        # TODO(ensonic): warn on missing fileref attr?
+        return ['<img src="%s">' % imagedata.attrib.get('fileref', '')]
+    else:
+        return []
+
+
 def convert_indexdiv(ctx, xml):
     title_tag = xml.find('title')
     title = title_tag.text
@@ -626,10 +635,12 @@ convert_tags = {
     'acronym': convert_acronym,
     'bookinfo': convert_bookinfo,
     'blockquote': convert_blockquote,
+    'caption': convert_div,
     'colspec': convert_colspec,
     'corpauthor': convert_corpauthor,
     'entry': convert_entry,
     'function': convert_span,
+    'imageobject': convert_imageobject,
     'indexdiv': convert_indexdiv,
     'indexentry': convert_ignore,
     'indexterm': convert_skip,
@@ -640,6 +651,7 @@ convert_tags = {
     'link': convert_link,
     'listitem': convert_listitem,
     'literal': convert_literal,
+    'mediaobject': convert_div,
     'note': convert_div,
     'orderedlist': convert_orderedlist,
     'para': convert_para,
