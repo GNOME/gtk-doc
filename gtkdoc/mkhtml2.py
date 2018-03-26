@@ -19,11 +19,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-"""Prototype for builtin docbook processing
+"""Generate html from docbook
 
 The tool loads the main xml document (<module>-docs.xml) and chunks it
 like the xsl-stylesheets would do. For that it resolves all the xml-includes.
-Each chunk is converted to htnml using python functions.
+Each chunk is converted to html using python functions.
 
 In contrast to our previous approach of running gtkdoc-mkhtml + gtkdoc-fixxref,
 this tools will replace both without relying on external tools such as xsltproc
