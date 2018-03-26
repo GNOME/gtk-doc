@@ -831,6 +831,37 @@ def get_id(node):
     return 'id-1.' + '.'.join(ix)
 
 
+def convert_chunk_with_toc(ctx, div_class, title_tag):
+    node = ctx['node']
+    result = [
+        HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
+        generate_basic_nav(ctx),
+        '<div class="%s">' % div_class,
+    ]
+    title = node.xml.find('title')
+    if title is not None:
+        result.append("""
+<div class="titlepage">
+<%s class="title"><a name="%s"></a>%s</%s>
+</div>""" % (
+            title_tag, get_id(node), title.text, title_tag))
+        node.xml.remove(title)
+    convert_inner(ctx, node.xml, result)
+    result.append("""<p>
+  <b>Table of Contents</b>
+</p>
+<div class="toc">
+  <dl class="toc">
+""")
+    result.extend(generate_toc(ctx, node))
+    result.append("""</dl>
+</div>
+</div>
+</body>
+</html>""")
+    return result
+
+
 # docbook chunks
 
 
@@ -863,28 +894,7 @@ def convert_book(ctx):
 
 
 def convert_chapter(ctx):
-    node = ctx['node']
-    result = [
-        HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
-        generate_basic_nav(ctx),
-        '<div class="chapter">',
-    ]
-    title = node.xml.find('title')
-    if title is not None:
-        result.append('<div class="titlepage"><h2 class="title"><a name="%s"></a>%s</h2></div>' % (
-            get_id(node), title.text))
-        node.xml.remove(title)
-    convert_inner(ctx, node.xml, result)
-    result.append("""<div class="toc">
-  <dl class="toc">
-""")
-    result.extend(generate_toc(ctx, node))
-    result.append("""</dl>
-</div>
-</div>
-</body>
-</html>""")
-    return result
+    return convert_chunk_with_toc(ctx, 'chapter', 'h2')
 
 
 def convert_index(ctx):
@@ -909,23 +919,33 @@ def convert_index(ctx):
     return result
 
 
+def convert_part(ctx):
+    return convert_chunk_with_toc(ctx, 'part', 'h1')
+
+
 def convert_preface(ctx):
     node = ctx['node']
     result = [
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
         generate_basic_nav(ctx),
-        '<div class="preface">',
+        '<div class="preface">'
     ]
     title = node.xml.find('title')
     if title is not None:
-        result.append('<div class="titlepage"><h2 class="title"><a name="%s"></a>%s</h2></div>' % (
-            get_id(node), title.text))
+        result.append("""
+<div class="titlepage">
+<h2 class="title"><a name="%s"></a>%s</h2>
+</div>""" % (get_id(node), title.text))
         node.xml.remove(title)
     convert_inner(ctx, node.xml, result)
     result.append("""</div>
 </body>
 </html>""")
     return result
+
+
+def convert_reference(ctx):
+    return convert_chunk_with_toc(ctx, 'reference', 'h1')
 
 
 def convert_refentry(ctx):
@@ -964,7 +984,9 @@ convert_chunks = {
     'book': convert_book,
     'chapter': convert_chapter,
     'index': convert_index,
+    'part': convert_part,
     'preface': convert_preface,
+    'reference': convert_reference,
     'refentry': convert_refentry,
 }
 
