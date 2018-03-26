@@ -33,7 +33,6 @@ TODO:
 - more chunk converters
 - more tag converters:
   - footnote: maybe track those in ctx and write them out at the end of the chunk
-  - acronym: need to resolve title from glossary
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
 - check each docbook tag if it can contain #PCDATA, if not don't check for
@@ -134,6 +133,9 @@ TITLE_XPATHS = {
 
 ID_XPATH = etree.XPath('//@id')
 
+GLOSSENTRY_XPATH = etree.XPath('//glossentry')
+glossary = {}
+
 
 def gen_chunk_name(node):
     if 'id' in node.attrib:
@@ -221,6 +223,19 @@ def add_id_links(files, links):
                 links[attr] = chunk_base + attr
 
 
+def build_glossary(files):
+    for node in files:
+        if node.xml.tag != 'glossary':
+            continue
+        for term in GLOSSENTRY_XPATH(node.xml):
+            # TODO: there can be all kind of things in a glossary. This only supports
+            # what we commonly use
+            key = etree.tostring(term.find('glossterm'), method="text", encoding=str).strip()
+            value = etree.tostring(term.find('glossdef'), method="text", encoding=str).strip()
+            glossary[key] = value
+            # logging.debug('glosentry: %s:%s', key, value)
+
+
 # conversion helpers
 
 
@@ -287,10 +302,10 @@ def xml_get_title(xml):
 
 
 def convert_acronym(ctx, xml):
-    # TODO: resolve title from glossaries (key=glossentry/glossterm, value=glossentry/glossdef)
-    # print a sensible warning if missing
-    title = '?'
-    result = ['<acronym title="%s"><span class="acronym">%s</span></acronym>' % (title, xml.text)]
+    key = xml.text
+    title = glossary.get(key, '')
+    # TODO: print a sensible warning if missing
+    result = ['<acronym title="%s"><span class="acronym">%s</span></acronym>' % (title, key)]
     if xml.tail:
         result.append(xml.tail)
     return result
@@ -1151,8 +1166,13 @@ def main(module, index_file, out_dir, uninstalled):
     #   can generate navigation and link tags.
     files = chunk(tree.getroot())
     files = list(PreOrderIter(files))
-    # 2) find all 'id' attribs and add them to the link map
+    # 2) extract tables:
+    # TODO: use multiprocessing
+    # - find all 'id' attribs and add them to the link map
     add_id_links(files, fixxref.Links)
+    # - build glossary dict
+    build_glossary(files)
+
     # 3) create a xxx.devhelp2 file, do this before 3), since we modify the tree
     create_devhelp2(out_dir, module, tree.getroot(), files)
     # 4) iterate the tree and output files
