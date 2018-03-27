@@ -29,6 +29,11 @@ In contrast to our previous approach of running gtkdoc-mkhtml + gtkdoc-fixxref,
 this tools will replace both without relying on external tools such as xsltproc
 and source-highlight.
 
+Please note, that we're not aiming for complete docbook-xml support. All tags
+used in the generated xml are of course handled. More tags used in handwritten
+xml can be easilly supported, but for some combinations of tags we prefer
+simplicity.
+
 TODO:
 - more chunk converters
 - more tag converters:
