@@ -73,8 +73,10 @@ from pygments.formatters import HtmlFormatter
 from . import config, fixxref
 
 # pygments setup
-# TODO: maybe use get_lexer_for_filename()
-LEXER = CLexer()
+# lazily constructed lexer cache
+LEXERS = {
+    'c': CLexer()
+}
 HTML_FORMATTER = HtmlFormatter(nowrap=True)
 
 # http://www.sagehill.net/docbookxsl/Chunking.html
@@ -546,13 +548,17 @@ def convert_programlisting(ctx, xml):
     result = []
     if xml.attrib.get('role', '') == 'example':
         if xml.text:
-            # TODO: check 'language' attr and use respective lexer
-            highlighted = highlight(xml.text, LEXER, HTML_FORMATTER)
+            lang = xml.attrib.get('language', 'c').lower()
+            if lang not in LEXERS:
+                LEXERS[lang] = get_lexer_by_name(lang)
+            lexer = LEXERS.get(lang, None)
+            if lexer:
+                highlighted = highlight(xml.text, lexer, HTML_FORMATTER)
 
-            # we do own line-numbering
-            line_count = highlighted.count('\n')
-            source_lines = '\n'.join([str(i) for i in range(1, line_count + 1)])
-            result.append("""<table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
+                # we do own line-numbering
+                line_count = highlighted.count('\n')
+                source_lines = '\n'.join([str(i) for i in range(1, line_count + 1)])
+                result.append("""<table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
   <tbody>
     <tr>
       <td class="listing_lines" align="right"><pre>%s</pre></td>
@@ -561,6 +567,11 @@ def convert_programlisting(ctx, xml):
   </tbody>
 </table>
 """ % (source_lines, highlighted))
+            else:
+                logging.warn('No pygments lexer for language="%s"', lang)
+                result.append('<pre class="programlisting">')
+                result.append(xml.text)
+                result.append('</pre>')
     else:
         result.append('<pre class="programlisting">')
         if xml.text:
