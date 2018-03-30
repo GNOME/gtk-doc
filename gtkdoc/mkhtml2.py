@@ -1168,6 +1168,10 @@ def convert_refentry(ctx):
     return result
 
 
+def convert_sect1(ctx):
+    return convert_chunk_with_toc(ctx, 'sect1', 'h2')
+
+
 # TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_chunks = {
     'book': convert_book,
@@ -1178,6 +1182,7 @@ convert_chunks = {
     'preface': convert_preface,
     'reference': convert_reference,
     'refentry': convert_refentry,
+    'sect1': convert_sect1,
 }
 
 
