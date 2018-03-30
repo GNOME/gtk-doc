@@ -37,7 +37,7 @@ simplicity.
 TODO:
 - more chunk converters
 - more tag converters:
-  - footnote: maybe track those in ctx and write them out at the end of the chunk
+  - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
 - check each docbook tag if it can contain #PCDATA, if not don't check for
@@ -144,6 +144,8 @@ ID_XPATH = etree.XPath('//@id')
 
 GLOSSENTRY_XPATH = etree.XPath('//glossentry')
 glossary = {}
+
+footnote_idx = 1
 
 
 def gen_chunk_name(node):
@@ -402,6 +404,38 @@ def convert_entry(ctx, xml):
     if xml.tail:
         result.append(xml.tail)
     return result
+
+
+def convert_footnote(ctx, xml):
+    footnotes = ctx.get('footnotes', [])
+    # footnotes idx is not per page, but per doc
+    global footnote_idx
+    idx = footnote_idx
+    footnote_idx += 1
+
+    # need a pair of ids for each footnote (docbook generates different ids)
+    this_id = 'footnote-%d' % idx
+    that_id = 'ftn.' + this_id
+
+    inner = ['<div id="%s" class="footnote">' % that_id]
+    inner.append('<p><a href="#%s" class="para"><sup class="para">[%d] </sup></a>' % (
+        this_id, idx))
+    # TODO(ensonic): this can contain all kind of tags, if we convert them we'll
+    # get double nested paras :/.
+    # convert_inner(ctx, xml, inner)
+    para = xml.find('para')
+    if para is None:
+        para = xml.find('simpara')
+    if para is not None:
+        inner.append(para.text)
+    else:
+        logging.warning('%s: Unhandled footnote content: %s', xml.sourceline,
+                        etree.tostring(xml, method="text", encoding=str).strip())
+    inner.append('</p></div>')
+    footnotes.append(inner)
+    ctx['footnotes'] = footnotes
+    return ['<a href="#%s" class="footnote" name="%s"><sup class="footnote">[%s]</sup></a>' % (
+        that_id, this_id, idx)]
 
 
 def convert_glossdef(ctx, xml):
@@ -722,6 +756,7 @@ convert_tags = {
     'corpauthor': convert_corpauthor,
     'emphasis': convert_span,
     'entry': convert_entry,
+    'footnote': convert_footnote,
     'function': convert_span,
     'glossdef': convert_glossdef,
     'glossdiv': convert_glossdiv,
@@ -894,6 +929,18 @@ def generate_refentry_nav(ctx, refsect1s, result):
 """ % generate_nav_links(ctx))
 
 
+def generate_footer(ctx):
+    result = []
+    if 'footnotes' in ctx:
+        result.append("""<div class="footnotes">\n
+<br><hr style="width:100; text-align:left;margin-left: 0">
+""")
+        for f in ctx['footnotes']:
+            result.extend(f)
+        result.append('</div>\n')
+    return result
+
+
 def get_id(node):
     xml = node.xml
     node_id = xml.attrib.get('id', None)
@@ -940,7 +987,9 @@ def convert_chunk_with_toc(ctx, div_class, title_tag):
     result.extend(generate_toc(ctx, node))
     result.append("""</dl>
 </div>
-</div>
+""")
+    result.extend(generate_footer(ctx))
+    result.append("""</div>
 </body>
 </html>""")
     return result
@@ -971,7 +1020,9 @@ def convert_book(ctx):
     result.extend(generate_toc(ctx, node.root))
     result.append("""</dl>
 </div>
-</div>
+""")
+    result.extend(generate_footer(ctx))
+    result.append("""</div>
 </body>
 </html>""")
     return result
@@ -993,10 +1044,9 @@ def convert_glossary(ctx):
 <a name="%s"></a>%s</h1>
 </div>""" % (get_id(node), node.title)
     ]
-
     for i in glossdivs:
         result.extend(convert_glossdiv(ctx, i))
-
+    result.extend(generate_footer(ctx))
     result.append("""</div>
 </body>
 </html>""")
@@ -1018,6 +1068,7 @@ def convert_index(ctx):
     ]
     for i in indexdivs:
         result.extend(convert_indexdiv(ctx, i))
+    result.extend(generate_footer(ctx))
     result.append("""</div>
 </body>
 </html>""")
@@ -1043,6 +1094,7 @@ def convert_preface(ctx):
 </div>""" % (get_id(node), title.text))
         node.xml.remove(title)
     convert_inner(ctx, node.xml, result)
+    result.extend(generate_footer(ctx))
     result.append("""</div>
 </body>
 </html>""")
@@ -1078,6 +1130,7 @@ def convert_refentry(ctx):
 
     for s in refsect1s:
         result.extend(convert_refsect1(ctx, s))
+    result.extend(generate_footer(ctx))
     result.append("""</div>
 </body>
 </html>""")
