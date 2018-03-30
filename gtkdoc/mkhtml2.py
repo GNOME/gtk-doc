@@ -346,6 +346,17 @@ def convert_blockquote(ctx, xml):
     return result
 
 
+def convert_code(ctx, xml):
+    result = ['<code class="%s">' % xml.tag]
+    if xml.text:
+        result.append(xml.text)
+    convert_inner(ctx, xml, result)
+    result.append('</code>')
+    if xml.tail:
+        result.append(xml.tail)
+    return result
+
+
 def convert_colspec(ctx, xml):
     result = ['<col']
     a = xml.attrib
@@ -355,6 +366,17 @@ def convert_colspec(ctx, xml):
         result.append(' width="%s"' % a['colwidth'])
     result.append('>\n')
     # is in tgroup and there can be no 'text'
+    return result
+
+
+def convert_command(ctx, xml):
+    result = ['<span class="command"><strong>']
+    if xml.text:
+        result.append(xml.text)
+    convert_inner(ctx, xml, result)
+    result.append('</strong></span>')
+    if xml.tail:
+        result.append(xml.tail)
     return result
 
 
@@ -667,6 +689,17 @@ def convert_programlisting(ctx, xml):
     return result
 
 
+def convert_quote(ctx, xml):
+    result = ['<span class="quote">"<span class="quote">']
+    if xml.text:
+        result.append(xml.text)
+    convert_inner(ctx, xml, result)
+    result.append('</span>"</span>')
+    if xml.tail:
+        result.append(xml.tail)
+    return result
+
+
 def convert_refsect1(ctx, xml):
     # Add a divider between two consequitive refsect2
     def convert_inner(ctx, xml, result):
@@ -752,11 +785,14 @@ convert_tags = {
     'bookinfo': convert_bookinfo,
     'blockquote': convert_blockquote,
     'caption': convert_div,
+    'code': convert_code,
     'colspec': convert_colspec,
+    'command': convert_command,
     'corpauthor': convert_corpauthor,
     'emphasis': convert_span,
     'entry': convert_entry,
     'footnote': convert_footnote,
+    'filename': convert_literal,
     'function': convert_span,
     'glossdef': convert_glossdef,
     'glossdiv': convert_glossdiv,
@@ -776,12 +812,14 @@ convert_tags = {
     'literal': convert_literal,
     'mediaobject': convert_div,
     'note': convert_div,
+    'option': convert_literal,
     'orderedlist': convert_orderedlist,
     'para': convert_para,
     'parameter': convert_em_class,
     'phrase': convert_phrase,
     'primaryie': convert_primaryie,
     'programlisting': convert_programlisting,
+    'quote': convert_quote,
     'releaseinfo': convert_para_like,
     'refsect1': convert_refsect1,
     'refsect2': convert_refsect2,
@@ -792,8 +830,11 @@ convert_tags = {
     'screen': convert_pre,
     'simpara': convert_simpara,
     'structfield': convert_em_class,
+    'synopsis': convert_pre,
+    'symbol': convert_span,
     'tbody': convert_tbody,
     'tgroup': convert_tgroup,
+    'term': convert_span,
     'type': convert_span,
     'ulink': convert_ulink,
     'warning': convert_div,
