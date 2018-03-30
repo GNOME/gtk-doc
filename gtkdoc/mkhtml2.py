@@ -399,6 +399,46 @@ def convert_entry(ctx, xml):
     return result
 
 
+def convert_glossdef(ctx, xml):
+    result = ['<dd class="glossdef">']
+    convert_inner(ctx, xml, result)
+    result.append('</dd>\n')
+    return result
+
+
+def convert_glossdiv(ctx, xml):
+    title_tag = xml.find('title')
+    title = title_tag.text
+    xml.remove(title_tag)
+    result = [
+        '<a name="gls%s"></a><h3 class="title">%s</h3>' % (title, title)
+    ]
+    convert_inner(ctx, xml, result)
+    return result
+
+
+def convert_glossentry(ctx, xml):
+    result = []
+    convert_inner(ctx, xml, result)
+    return result
+
+
+def convert_glossterm(ctx, xml):
+    glossid = ''
+    text = ''
+    anchor = xml.find('anchor')
+    if anchor is not None:
+        glossid = anchor.attrib.get('id', '')
+        text += anchor.tail or ''
+    text += xml.text or ''
+    if glossid == '':
+        glossid = 'glossterm-' + text
+    return [
+        '<dt><span class="glossterm"><a name="%s"></a>%s</span></dt>' % (
+            glossid, text)
+    ]
+
+
 def convert_imageobject(ctx, xml):
     imagedata = xml.find('imagedata')
     if imagedata is not None:
@@ -678,6 +718,10 @@ convert_tags = {
     'emphasis': convert_span,
     'entry': convert_entry,
     'function': convert_span,
+    'glossdef': convert_glossdef,
+    'glossdiv': convert_glossdiv,
+    'glossentry': convert_glossentry,
+    'glossterm': convert_glossterm,
     'imageobject': convert_imageobject,
     'indexdiv': convert_indexdiv,
     'indexentry': convert_ignore,
@@ -798,11 +842,11 @@ def generate_basic_nav(ctx):
     """ % generate_nav_links(ctx)
 
 
-def generate_index_nav(ctx, indexdivs):
+def generate_alpha_nav(ctx, divs, prefix):
     ix_nav = []
-    for s in indexdivs:
+    for s in divs:
         title = xml_get_title(s)
-        ix_nav.append('<a class="shortcut" href="#idx%s">%s</a>' % (title, title))
+        ix_nav.append('<a class="shortcut" href="#%s%s">%s</a>' % (prefix, title, title))
 
     return """<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
   <tr valign="middle">
@@ -928,19 +972,40 @@ def convert_chapter(ctx):
     return convert_chunk_with_toc(ctx, 'chapter', 'h2')
 
 
+def convert_glossary(ctx):
+    node = ctx['node']
+    glossdivs = node.xml.findall('glossdiv')
+
+    result = [
+        HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
+        generate_alpha_nav(ctx, glossdivs, 'gls'),
+        """<div class="index">
+<div class="titlepage"><h1 class="title">
+<a name="%s"></a>%s</h1>
+</div>""" % (get_id(node), node.title)
+    ]
+
+    for i in glossdivs:
+        result.extend(convert_glossdiv(ctx, i))
+
+    result.append("""</div>
+</body>
+</html>""")
+    return result
+
+
 def convert_index(ctx):
     node = ctx['node']
-    node_id = get_id(node)
     # Get all indexdivs under indexdiv
     indexdivs = node.xml.find('indexdiv').findall('indexdiv')
 
     result = [
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
-        generate_index_nav(ctx, indexdivs),
-        """<div class="index">
-<div class="titlepage"><h1 class="title">
-<a name="%s"></a>%s</h1>
-</div>""" % (node_id, node.title)
+        generate_alpha_nav(ctx, indexdivs, 'idx'),
+        """<div class="glossary">
+<div class="titlepage"><h2 class="title">
+<a name="%s"></a>%s</h2>
+</div>""" % (get_id(node), node.title)
     ]
     for i in indexdivs:
         result.extend(convert_indexdiv(ctx, i))
@@ -1014,6 +1079,7 @@ def convert_refentry(ctx):
 convert_chunks = {
     'book': convert_book,
     'chapter': convert_chapter,
+    'glossary': convert_glossary,
     'index': convert_index,
     'part': convert_part,
     'preface': convert_preface,
