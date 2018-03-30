@@ -42,6 +42,8 @@ TODO:
     attr on the <img> tag of the 'imageobject'
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
+- consider some perf-warnings flag
+  - see 'No "id" attribute on'
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
@@ -892,7 +894,8 @@ def get_id(node):
     if node_id:
         return node_id
 
-    logging.warning('%d: No "id" attribute on "%s"', xml.sourceline, xml.tag)
+    logging.info('%d: No "id" attribute on "%s", generating one',
+                 xml.sourceline, xml.tag)
     ix = []
     # Generate the 'id'. We need to walk up the xml-tree and check the positions
     # for each sibling.
