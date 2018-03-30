@@ -569,17 +569,6 @@ def convert_listitem(ctx, xml):
     return result
 
 
-def convert_literal(ctx, xml):
-    result = ['<code class="%s">' % xml.tag]
-    if xml.text:
-        result.append(xml.text)
-    convert_inner(ctx, xml, result)
-    result.append('</code>')
-    if xml.tail:
-        result.append(xml.tail)
-    return result
-
-
 def convert_orderedlist(ctx, xml):
     result = ['<div class="orderedlistlist"><ol class="orderedlistlist" type="1">']
     convert_inner(ctx, xml, result)
@@ -792,8 +781,8 @@ convert_tags = {
     'emphasis': convert_span,
     'entry': convert_entry,
     'footnote': convert_footnote,
-    'filename': convert_literal,
-    'function': convert_span,
+    'filename': convert_code,
+    'function': convert_code,
     'glossdef': convert_glossdef,
     'glossdiv': convert_glossdiv,
     'glossentry': convert_glossentry,
@@ -809,10 +798,10 @@ convert_tags = {
     'legalnotice': convert_para_like,
     'link': convert_link,
     'listitem': convert_listitem,
-    'literal': convert_literal,
+    'literal': convert_code,
     'mediaobject': convert_div,
     'note': convert_div,
-    'option': convert_literal,
+    'option': convert_code,
     'orderedlist': convert_orderedlist,
     'para': convert_para,
     'parameter': convert_em_class,
