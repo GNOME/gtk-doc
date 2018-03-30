@@ -270,14 +270,17 @@ def convert__unknown(ctx, xml):
     # don't recurse on subchunks
     if xml.tag in CHUNK_TAGS:
         return []
-    # warn only once
-    if xml.tag not in missing_tags:
-        logging.warning('Add tag converter for "%s"', xml.tag)
-        missing_tags[xml.tag] = True
-    result = ['<!-- ' + xml.tag + '-->\n']
-    convert_inner(ctx, xml, result)
-    result.append('<!-- /' + xml.tag + '-->\n')
-    return result
+    if isinstance(xml, etree._Comment):
+        return ['<!-- ' + xml.text + '-->\n']
+    else:
+        # warn only once
+        if xml.tag not in missing_tags:
+            logging.warning('Add tag converter for "%s"', xml.tag)
+            missing_tags[xml.tag] = True
+        result = ['<!-- ' + xml.tag + '-->\n']
+        convert_inner(ctx, xml, result)
+        result.append('<!-- /' + xml.tag + '-->\n')
+        return result
 
 
 def convert_refsect(ctx, xml, h_tag, inner_func=convert_inner):
