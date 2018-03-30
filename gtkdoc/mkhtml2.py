@@ -1151,7 +1151,14 @@ def create_devhelp2_condition_attribs(node):
     if 'condition' in node.attrib:
         # condition -> since, deprecated, ... (separated with '|')
         cond = node.attrib['condition'].replace('"', '&quot;').split('|')
-        return' ' + ' '.join(['%s="%s"' % tuple(c.split(':', 1)) for c in cond])
+        keywords = []
+        for c in cond:
+            if ':' in c:
+                keywords.append('{}="{}"'.format(*c.split(':', 1)))
+            else:
+                # deprecated can have no description
+                keywords.append('{}="{}"'.format(c, ''))
+        return ' ' + ' '.join(keywords)
     else:
         return ''
 
