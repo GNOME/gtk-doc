@@ -780,6 +780,36 @@ def convert_userinput(ctx, xml):
     return result
 
 
+def convert_variablelist(ctx, xml):
+    result = ["""<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>"""]
+    convert_inner(ctx, xml, result)
+    result.append("""</tbody>
+</table></div>""")
+    return result
+
+
+def convert_varlistentry(ctx, xml):
+    result = ['<tr>']
+
+    result.append('<td><p>')
+    term = xml.find('term')
+    result.extend(convert_span(ctx, term))
+    result.append('</p></td>')
+
+    result.append('<td>')
+    listitem = xml.find('listitem')
+    convert_inner(ctx, listitem, result)
+    result.append('</td>')
+
+    result.append('<tr>')
+    return result
+
+
 # TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_tags = {
     'acronym': convert_acronym,
@@ -843,6 +873,8 @@ convert_tags = {
     'ulink': convert_ulink,
     'userinput': convert_userinput,
     'varname': convert_code,
+    'variablelist': convert_variablelist,
+    'varlistentry': convert_varlistentry,
     'warning': convert_div,
 }
 
