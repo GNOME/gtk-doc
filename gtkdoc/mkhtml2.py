@@ -371,11 +371,11 @@ def convert_colspec(ctx, xml):
 
 
 def convert_command(ctx, xml):
-    result = ['<span class="command"><strong>']
+    result = ['<strong class="userinput"><code>']
     if xml.text:
         result.append(xml.text)
     convert_inner(ctx, xml, result)
-    result.append('</strong></span>')
+    result.append('</code></strong>')
     if xml.tail:
         result.append(xml.tail)
     return result
@@ -769,6 +769,17 @@ def convert_ulink(ctx, xml):
     return result
 
 
+def convert_userinput(ctx, xml):
+    result = ['<span class="command"><strong>']
+    if xml.text:
+        result.append(xml.text)
+    convert_inner(ctx, xml, result)
+    result.append('</strong></span>')
+    if xml.tail:
+        result.append(xml.tail)
+    return result
+
+
 # TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_tags = {
     'acronym': convert_acronym,
@@ -777,10 +788,12 @@ convert_tags = {
     'caption': convert_div,
     'code': convert_code,
     'colspec': convert_colspec,
+    'constant': convert_code,
     'command': convert_command,
     'corpauthor': convert_corpauthor,
     'emphasis': convert_span,
     'entry': convert_entry,
+    'envar': convert_code,
     'footnote': convert_footnote,
     'filename': convert_code,
     'function': convert_code,
@@ -820,6 +833,7 @@ convert_tags = {
     'screen': convert_pre,
     'simpara': convert_simpara,
     'structfield': convert_em_class,
+    'structname': convert_span,
     'synopsis': convert_pre,
     'symbol': convert_span,
     'tbody': convert_tbody,
@@ -827,6 +841,8 @@ convert_tags = {
     'term': convert_span,
     'type': convert_span,
     'ulink': convert_ulink,
+    'userinput': convert_userinput,
+    'varname': convert_code,
     'warning': convert_div,
 }
 
