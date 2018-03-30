@@ -1116,7 +1116,8 @@ def convert(out_dir, module, files, node):
     """
 
     logging.info('Writing: %s', node.filename)
-    with open(os.path.join(out_dir, node.filename), 'wt') as html:
+    with open(os.path.join(out_dir, node.filename), 'wt',
+              newline='\n', encoding='utf-8') as html:
         ctx = {
             'module': module,
             'files': files,
@@ -1165,7 +1166,8 @@ def create_devhelp2_refsect3_keyword(node, base_link, title, name):
 
 
 def create_devhelp2(out_dir, module, xml, files):
-    with open(os.path.join(out_dir, module + '.devhelp2'), 'wt') as idx:
+    with open(os.path.join(out_dir, module + '.devhelp2'), 'wt',
+              newline='\n', encoding='utf-8') as idx:
         bookinfo_nodes = xml.xpath('/book/bookinfo')
         title = ''
         if bookinfo_nodes is not None:
@@ -1239,7 +1241,7 @@ def main(module, index_file, out_dir, uninstalled):
     for f in glob(os.path.join(styledir, '*.png')) + [css_file]:
         shutil.copy(f, out_dir)
     css_file = os.path.join(out_dir, 'style.css')
-    with open(css_file, 'at') as css:
+    with open(css_file, 'at', newline='\n', encoding='utf-8') as css:
         css.write(HTML_FORMATTER.get_style_defs())
 
     # TODO: migrate options from fixxref
