@@ -876,6 +876,9 @@ def generate_refentry_nav(ctx, refsect1s, result):
         # don't list TOC sections (role="xxx_proto")
         if s.attrib.get('role', '').endswith("_proto"):
             continue
+        # skip section without 'id' attrs
+        if 'id' not in s.attrib:
+            continue
 
         title = xml_get_title(s)
         result.append("""
