@@ -127,6 +127,7 @@ CHUNK_PARAMS = {
     'index': ChunkParams('ix', 'book'),
     'part': ChunkParams('pt', 'book'),
     'preface': ChunkParams('pr', 'book'),
+    'reference': ChunkParams('rn', 'book'),
     'sect1': ChunkParams('s', 'chapter'),
     'section': ChunkParams('s', 'chapter'),
 }
