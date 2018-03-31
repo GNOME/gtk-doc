@@ -807,7 +807,7 @@ convert_tags = {
     'informaltable': convert_informaltable,
     'inlinemediaobject': convert_span,
     'itemizedlist': convert_itemizedlist,
-    'legalnotice': convert_para_like,
+    'legalnotice': convert_div,
     'link': convert_link,
     'listitem': convert_listitem,
     'literal': convert_code,
