@@ -949,9 +949,9 @@ def generate_alpha_nav(ctx, divs, prefix):
 
 
 def generate_refentry_nav(ctx, refsect1s, result):
-    result.append("""<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
+    result.append("""<table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="5">
   <tr valign="middle">
-    <td width="100%%" align="left" class="shortcuts">
+    <td width="100%" align="left" class="shortcuts">
       <a href="#" class="shortcut">Top</a>""")
 
     for s in refsect1s:
@@ -964,10 +964,9 @@ def generate_refentry_nav(ctx, refsect1s, result):
 
         title = xml_get_title(s)
         result.append("""
-          <span id="nav_description">
-            <span class="dim">|</span> 
-            <a href="#%s" class="shortcut">%s</a>
-          </span>""" % (s.attrib['id'], title))
+          <span class="dim">|</span> 
+          <a href="#%s" class="shortcut">%s</a>
+          """ % (s.attrib['id'], title))
     result.append("""
     </td>
     %s
