@@ -781,6 +781,7 @@ def convert_varlistentry(ctx, xml):
 # TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_tags = {
     'acronym': convert_acronym,
+    'application': convert_span,
     'bookinfo': convert_bookinfo,
     'blockquote': convert_blockquote,
     'caption': convert_div,
