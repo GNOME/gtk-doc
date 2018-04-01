@@ -339,6 +339,10 @@ def convert_acronym(ctx, xml):
     return result
 
 
+def convert_anchor(ctx, xml):
+    return ['<a name="%s"></a>' % xml.attrib['id']]
+
+
 def convert_bookinfo(ctx, xml):
     result = ['<div class="titlepage">']
     convert_inner(ctx, xml, result)
@@ -800,6 +804,7 @@ def convert_varlistentry(ctx, xml):
 convert_tags = {
     'abstract': convert_abstract,
     'acronym': convert_acronym,
+    'anchor': convert_anchor,
     'application': convert_span,
     'bookinfo': convert_bookinfo,
     'blockquote': convert_blockquote,
