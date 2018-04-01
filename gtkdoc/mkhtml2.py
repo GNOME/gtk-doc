@@ -425,14 +425,16 @@ def convert_em_class(ctx, xml):
 
 
 def convert_entry(ctx, xml):
-    result = ['<td']
+    entry_type = ctx['table.entry']
+    result = ['<' + entry_type]
     if 'role' in xml.attrib:
-        result.append(' class="%s">' % xml.attrib['role'])
-    else:
-        result.append('>')
+        result.append(' class="%s"' % xml.attrib['role'])
+    if 'morerows' in xml.attrib:
+        result.append(' rowspan="%s"' % (1 + int(xml.attrib['morerows'])))
+    result.append('>')
     append_text(xml.text, result)
     convert_inner(ctx, xml, result)
-    result.append('</td>')
+    result.append('</' + entry_type + '>')
     append_text(xml.tail, result)
     return result
 
@@ -757,8 +759,29 @@ def convert_span(ctx, xml):
     return result
 
 
+def convert_table(ctx, xml):
+    result = ['<div class="table">']
+    if 'id' in xml.attrib:
+        result.append('<a name="%s"></a>' % xml.attrib['id'])
+    title_tag = xml.find('title')
+    if title_tag is not None:
+        result.append('<p class="title"><b>')
+        # TODO(ensonic): Add a 'Table X. ' prefix, needs a table counter
+        result.extend(convert_title(ctx, title_tag))
+        result.append('</b></p>')
+        xml.remove(title_tag)
+    result.append('<div class="table-contents"><table class="table" summary="g_object_new" border="1">')
+
+    convert_inner(ctx, xml, result)
+
+    result.append('</table></div></div>')
+    append_text(xml.tail, result)
+    return result
+
+
 def convert_tbody(ctx, xml):
     result = ['<tbody>']
+    ctx['table.entry'] = 'td'
     convert_inner(ctx, xml, result)
     result.append('</tbody>')
     # is in tgroup and there can be no 'text'
@@ -778,6 +801,24 @@ def convert_tgroup(ctx, xml):
         result.append('</colgroup>\n')
     convert_inner(ctx, xml, result)
     # is in informaltable and there can be no 'text'
+    return result
+
+
+def convert_thead(ctx, xml):
+    result = ['<thead>']
+    ctx['table.entry'] = 'th'
+    convert_inner(ctx, xml, result)
+    result.append('</thead>')
+    # is in tgroup and there can be no 'text'
+    return result
+
+
+def convert_title(ctx, xml):
+    # This is always called from some context
+    result = []
+    append_text(xml.text, result)
+    convert_inner(ctx, xml, result)
+    append_text(xml.tail, result)
     return result
 
 
@@ -891,9 +932,11 @@ convert_tags = {
     'structname': convert_span,
     'synopsis': convert_pre,
     'symbol': convert_span,
+    'table': convert_table,
     'tbody': convert_tbody,
-    'tgroup': convert_tgroup,
     'term': convert_span,
+    'tgroup': convert_tgroup,
+    'thead': convert_thead,
     'type': convert_span,
     'ulink': convert_ulink,
     'userinput': convert_userinput,
