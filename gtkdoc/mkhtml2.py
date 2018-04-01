@@ -1127,7 +1127,7 @@ def convert_glossary(ctx):
     result = [
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
         generate_alpha_nav(ctx, glossdivs, 'gls'),
-        """<div class="index">
+        """<div class="glossary">
 <div class="titlepage"><h1 class="title">
 <a name="%s"></a>%s</h1>
 </div>""" % (get_id(node), node.title)
@@ -1149,7 +1149,7 @@ def convert_index(ctx):
     result = [
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
         generate_alpha_nav(ctx, indexdivs, 'idx'),
-        """<div class="glossary">
+        """<div class="index">
 <div class="titlepage"><h2 class="title">
 <a name="%s"></a>%s</h2>
 </div>""" % (get_id(node), node.title)
