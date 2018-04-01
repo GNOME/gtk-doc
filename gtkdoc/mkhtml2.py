@@ -40,7 +40,11 @@ TODO:
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
   - glossary/index: depending on the parents, the headings as h1/h2
+    - maybe track depth when chunking
   - the part titles have a generated prefix, such as 'Part I:'
+  - replace get_title with a result.extend(convert_title(ctx, title_tag))
+    - see convert_table()
+  - if there a multiple sect1, it seems we don't chunk the first one?
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
