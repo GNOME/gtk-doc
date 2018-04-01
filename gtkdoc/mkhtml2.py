@@ -319,6 +319,16 @@ def xml_get_title(xml):
 # docbook tags
 
 
+def convert_abstract(ctx, xml):
+    result = ["""<div class="abstract">
+    <p class="title"><b>Abstract</b></p>"""]
+    append_text(xml.text, result)
+    convert_inner(ctx, xml, result)
+    result.append('</div>')
+    append_text(xml.tail, result)
+    return result
+
+
 def convert_acronym(ctx, xml):
     key = xml.text
     title = glossary.get(key, '')
@@ -788,6 +798,7 @@ def convert_varlistentry(ctx, xml):
 
 # TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_tags = {
+    'abstract': convert_abstract,
     'acronym': convert_acronym,
     'application': convert_span,
     'bookinfo': convert_bookinfo,
@@ -825,6 +836,7 @@ convert_tags = {
     'option': convert_code,
     'orderedlist': convert_orderedlist,
     'para': convert_para,
+    'partintro': convert_div,
     'parameter': convert_em_class,
     'phrase': convert_phrase,
     'primaryie': convert_primaryie,
