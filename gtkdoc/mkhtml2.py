@@ -291,7 +291,7 @@ def convert__unknown(ctx, xml):
         return result
 
 
-def convert_refsect(ctx, xml, h_tag, inner_func=convert_inner):
+def convert_sect(ctx, xml, h_tag, inner_func=convert_inner):
     result = ['<div class="%s">\n' % xml.tag]
     title = xml.find('title')
     if title is not None:
@@ -673,15 +673,15 @@ def convert_refsect1(ctx, xml):
                 result.append('<hr>\n')
             result.extend(convert_tags.get(child.tag, convert__unknown)(ctx, child))
             prev = child
-    return convert_refsect(ctx, xml, 'h2', convert_inner)
+    return convert_sect(ctx, xml, 'h2', convert_inner)
 
 
 def convert_refsect2(ctx, xml):
-    return convert_refsect(ctx, xml, 'h3')
+    return convert_sect(ctx, xml, 'h3')
 
 
 def convert_refsect3(ctx, xml):
-    return convert_refsect(ctx, xml, 'h4')
+    return convert_sect(ctx, xml, 'h4')
 
 
 def convert_row(ctx, xml):
@@ -689,6 +689,14 @@ def convert_row(ctx, xml):
     convert_inner(ctx, xml, result)
     result.append('</tr>\n')
     return result
+
+
+def convert_sect2(ctx, xml):
+    return convert_sect(ctx, xml, 'h3')
+
+
+def convert_sect3(ctx, xml):
+    return convert_sect(ctx, xml, 'h4')
 
 
 def convert_simpara(ctx, xml):
@@ -830,6 +838,8 @@ convert_tags = {
     'returnvalue': convert_span,
     'row': convert_row,
     'screen': convert_pre,
+    'sect2': convert_sect2,
+    'sect3': convert_sect3,
     'simpara': convert_simpara,
     'structfield': convert_em_class,
     'structname': convert_span,
