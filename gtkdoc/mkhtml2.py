@@ -585,6 +585,15 @@ def convert_listitem(ctx, xml):
     return result
 
 
+def convert_literallayout(ctx, xml):
+    result = ['<div class="literallayout"><p><br>\n']
+    append_text(xml.text, result)
+    convert_inner(ctx, xml, result)
+    result.append('</p></div>')
+    append_text(xml.tail, result)
+    return result
+
+
 def convert_orderedlist(ctx, xml):
     result = ['<div class="orderedlistlist"><ol class="orderedlistlist" type="1">']
     convert_inner(ctx, xml, result)
@@ -851,6 +860,7 @@ convert_tags = {
     'link': convert_link,
     'listitem': convert_listitem,
     'literal': convert_code,
+    'literallayout': convert_literallayout,
     'mediaobject': convert_div,
     'note': convert_div,
     'option': convert_code,
