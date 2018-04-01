@@ -464,6 +464,19 @@ def convert_footnote(ctx, xml):
         that_id, this_id, idx)]
 
 
+def convert_formalpara(ctx, xml):
+    result = None
+    title_tag = xml.find('title')
+    result = ['<p><b>%s</b>' % title_tag.text]
+    para_tag = xml.find('para')
+    append_text(para_tag.text, result)
+    convert_inner(ctx, para_tag, result)
+    append_text(para_tag.tail, result)
+    result.append('</p>')
+    append_text(xml.tail, result)
+    return result
+
+
 def convert_glossdef(ctx, xml):
     result = ['<dd class="glossdef">']
     convert_inner(ctx, xml, result)
@@ -819,6 +832,7 @@ convert_tags = {
     'envar': convert_code,
     'footnote': convert_footnote,
     'filename': convert_code,
+    'formalpara': convert_formalpara,
     'function': convert_code,
     'glossdef': convert_glossdef,
     'glossdiv': convert_glossdiv,
