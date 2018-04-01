@@ -35,11 +35,12 @@ xml can be easilly supported, but for some combinations of tags we prefer
 simplicity.
 
 TODO:
-- more chunk converters
-- more tag converters:
+- tag converters:
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
+  - glossary/index: depending on the parents, the headings as h1/h2
+  - the part titles have a generated prefix, such as 'Part I:'
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
