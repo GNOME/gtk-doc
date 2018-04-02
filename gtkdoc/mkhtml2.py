@@ -44,7 +44,6 @@ TODO:
   - the part titles have a generated prefix, such as 'Part I:'
   - replace get_title with a result.extend(convert_title(ctx, title_tag))
     - see convert_table()
-  - if there a multiple sect1, it seems we don't chunk the first one?
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
@@ -113,10 +112,10 @@ CHUNK_TAGS = [
 
 
 class ChunkParams(object):
-    def __init__(self, prefix, parent=None):
+    def __init__(self, prefix, parent=None, min_idx=0):
         self.prefix = prefix
-        self.parent = None
-        self.count = 0
+        self.parent = parent
+        self.min_idx = min_idx
 
 
 # TODO: look up the abbrevs and hierarchy for other tags
@@ -133,8 +132,8 @@ CHUNK_PARAMS = {
     'part': ChunkParams('pt', 'book'),
     'preface': ChunkParams('pr', 'book'),
     'reference': ChunkParams('rn', 'book'),
-    'sect1': ChunkParams('s', 'chapter'),
-    'section': ChunkParams('s', 'chapter'),
+    'sect1': ChunkParams('s', 'chapter', 1),
+    'section': ChunkParams('s', 'chapter', 1),
 }
 
 TITLE_XPATHS = {
@@ -154,7 +153,14 @@ glossary = {}
 footnote_idx = 1
 
 
-def gen_chunk_name(node):
+def get_chunk_min_idx(tag):
+    if tag not in CHUNK_PARAMS:
+        return 0
+
+    return CHUNK_PARAMS[tag].min_idx
+
+
+def gen_chunk_name(node, idx):
     if 'id' in node.attrib:
         return node.attrib['id']
 
@@ -164,8 +170,7 @@ def gen_chunk_name(node):
         logging.warning('Add CHUNK_PARAMS for "%s"', tag)
 
     naming = CHUNK_PARAMS[tag]
-    naming.count += 1
-    name = ('%s%02d' % (naming.prefix, naming.count))
+    name = ('%s%02d' % (naming.prefix, idx))
     # handle parents to make names of nested tags unique
     # TODO: we only need to prepend the parent if there are > 1 of them in the
     #       xml
@@ -174,7 +179,8 @@ def gen_chunk_name(node):
     #     if parent not in CHUNK_PARAMS:
     #         break;
     #     naming = CHUNK_PARAMS[parent]
-    #     name = ('%s%02d' % (naming.prefix, naming.count)) + name
+    #     name = ('%s%02d' % (naming.prefix, idx)) + name
+    logging.info('Gen chunk name: "%s"', name)
     return name
 
 
@@ -205,13 +211,16 @@ def get_chunk_titles(node):
     return result
 
 
-def chunk(xml_node, parent=None):
+def chunk(xml_node, idx=0, parent=None):
     """Chunk the tree.
 
     The first time, we're called with parent=None and in that case we return
     the new_node as the root of the tree
     """
-    if xml_node.tag in CHUNK_TAGS:
+    tag = xml_node.tag
+    # also check idx to handle 'sect1'/'section' special casing
+    if tag in CHUNK_TAGS and idx >= get_chunk_min_idx(tag):
+        logging.info('chunk tag: "%s"[%d]', tag, idx)
         if parent:
             # remove the xml-node from the parent
             sub_tree = etree.ElementTree(deepcopy(xml_node)).getroot()
@@ -219,12 +228,15 @@ def chunk(xml_node, parent=None):
             xml_node = sub_tree
 
         title_args = get_chunk_titles(xml_node)
-        chunk_name = gen_chunk_name(xml_node)
-        parent = Node(xml_node.tag, parent=parent, xml=xml_node,
+        chunk_name = gen_chunk_name(xml_node, (idx + 1))
+        parent = Node(tag, parent=parent, xml=xml_node,
                       filename=chunk_name + '.html', **title_args)
 
+    idx = 0
     for child in xml_node:
-        chunk(child, parent)
+        new_parent = chunk(child, idx, parent)
+        if child.tag in CHUNK_TAGS:
+            idx += 1
 
     return parent
 
@@ -734,6 +746,10 @@ def convert_row(ctx, xml):
     return result
 
 
+def convert_sect1_tag(ctx, xml):
+    return convert_sect(ctx, xml, 'h2')
+
+
 def convert_sect2(ctx, xml):
     return convert_sect(ctx, xml, 'h3')
 
@@ -925,6 +941,7 @@ convert_tags = {
     'returnvalue': convert_span,
     'row': convert_row,
     'screen': convert_pre,
+    'sect1': convert_sect1_tag,
     'sect2': convert_sect2,
     'sect3': convert_sect3,
     'simpara': convert_simpara,
