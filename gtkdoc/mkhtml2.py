@@ -1140,17 +1140,19 @@ def convert_chunk_with_toc(ctx, div_class, title_tag):
 </div>""" % (
             title_tag, get_id(node), title.text, title_tag))
         node.xml.remove(title)
+
+    toc = generate_toc(ctx, node)
+    if toc:
+        # TODO: not all docbook page types use this extra heading
+        result.append("""<p><b>Table of Contents</b></p>
+    <div class="toc">
+      <dl class="toc">
+    """)
+        result.extend(toc)
+        result.append("""</dl>
+    </div>
+    """)
     convert_inner(ctx, node.xml, result)
-    result.append("""<p>
-  <b>Table of Contents</b>
-</p>
-<div class="toc">
-  <dl class="toc">
-""")
-    result.extend(generate_toc(ctx, node))
-    result.append("""</dl>
-</div>
-""")
     result.extend(generate_footer(ctx))
     result.append("""</div>
 </body>
