@@ -41,7 +41,13 @@ TODO:
     attr on the <img> tag of the 'imageobject'
   - glossary/index: depending on the parents, the headings as h1/h2
     - maybe track depth when chunking
-  - the part titles have a generated prefix, such as 'Part I:'
+  - handle 'label' attributes on part/chapter/section-types
+    - the titles will have a generated prefix, such as 'Part I:'
+    - in the toc it would only be only the label: 'I.'
+  - we need to separate the toc data from the chunking tree
+    - since we don't chunk first 'secttion'/'sect1' those are missing from the
+      toc
+    - the toc also lists 'sect2' (TODO: check how deep it goes)
   - replace get_title with a result.extend(convert_title(ctx, title_tag))
     - see convert_table()
 - check each docbook tag if it can contain #PCDATA, if not don't check for
