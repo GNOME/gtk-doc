@@ -7,7 +7,7 @@ SUBDIRS = annotations bugs empty fail gobject program repro .
 if BUILD_TESTS
 
 TESTS = \
-  check.py common.py mk_to_db.py \
+  check.py common.py mk_to_db.py mkhtml2.py \
   tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh sanity.sh \
   program.sh
 TESTS_ENVIRONMENT = \

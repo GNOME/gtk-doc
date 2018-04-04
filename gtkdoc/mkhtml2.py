@@ -198,22 +198,27 @@ def get_chunk_titles(node):
     else:
         (title, subtitle) = TITLE_XPATHS[tag]
 
-    xml = title(node)[0]
     result = {
-        'title': xml.text
+        'title': None,
+        'title_tag': None,
+        'subtitle': None,
+        'subtitle_tag': None
     }
-    if xml.tag != 'title':
-        result['title_tag'] = xml.tag
-    else:
-        result['title_tag'] = tag
+    res = title(node)
+    if res:
+        xml = res[0]
+        result['title'] = xml.text
+        if xml.tag != 'title':
+            result['title_tag'] = xml.tag
+        else:
+            result['title_tag'] = tag
 
     if subtitle:
-        xml = subtitle(node)[0]
-        result['subtitle'] = xml.text
-        result['subtitle_tag'] = xml.tag
-    else:
-        result['subtitle'] = None
-        result['subtitle_tag'] = None
+        res = subtitle(node)
+        if res:
+            xml = res[0]
+            result['subtitle'] = xml.text
+            result['subtitle_tag'] = xml.tag
     return result
 
 
@@ -238,9 +243,11 @@ def chunk(xml_node, idx=0, parent=None):
         parent = Node(tag, parent=parent, xml=xml_node,
                       filename=chunk_name + '.html', **title_args)
 
+    # TODO(ensonic): add a is_terminal flag to CHUNK_PARAMS to stop recursing
+
     idx = 0
     for child in xml_node:
-        new_parent = chunk(child, idx, parent)
+        chunk(child, idx, parent)
         if child.tag in CHUNK_TAGS:
             idx += 1
 
