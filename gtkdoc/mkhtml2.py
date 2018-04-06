@@ -1038,7 +1038,7 @@ def generate_basic_nav(ctx):
     """ % generate_nav_links(ctx)
 
 
-def generate_alpha_nav(ctx, divs, prefix):
+def generate_alpha_nav(ctx, divs, prefix, span_id):
     ix_nav = []
     for s in divs:
         title = xml_get_title(s)
@@ -1047,14 +1047,14 @@ def generate_alpha_nav(ctx, divs, prefix):
     return """<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
   <tr valign="middle">
     <td width="100%%" align="left" class="shortcuts">
-      <span id="nav_index">
+      <span id="nav_%s">
         %s
       </span>
     </td>
     %s
   </tr>
 </table>
-    """ % ('\n<span class="dim">|</span>\n'.join(ix_nav), generate_nav_links(ctx))
+    """ % (span_id, '\n<span class="dim">|</span>\n'.join(ix_nav), generate_nav_links(ctx))
 
 
 def generate_refentry_nav(ctx, refsect1s, result):
@@ -1195,7 +1195,7 @@ def convert_glossary(ctx):
 
     result = [
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
-        generate_alpha_nav(ctx, glossdivs, 'gls'),
+        generate_alpha_nav(ctx, glossdivs, 'gls', 'glossary'),
         """<div class="glossary">
 <div class="titlepage"><h1 class="title">
 <a name="%s"></a>%s</h1>
@@ -1217,7 +1217,7 @@ def convert_index(ctx):
 
     result = [
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
-        generate_alpha_nav(ctx, indexdivs, 'idx'),
+        generate_alpha_nav(ctx, indexdivs, 'idx', 'index'),
         """<div class="index">
 <div class="titlepage"><h2 class="title">
 <a name="%s"></a>%s</h2>
