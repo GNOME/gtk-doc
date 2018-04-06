@@ -96,26 +96,6 @@ LEXERS = {
 }
 HTML_FORMATTER = HtmlFormatter(nowrap=True)
 
-# http://www.sagehill.net/docbookxsl/Chunking.html
-CHUNK_TAGS = [
-    'appendix',
-    'article',
-    'bibliography',  # in article or book
-    'book',
-    'chapter',
-    'colophon',
-    'glossary',      # in article or book
-    'index',         # in article or book
-    'part',
-    'preface',
-    'refentry',
-    'reference',
-    'sect1',         # except first
-    'section',       # if equivalent to sect1
-    'set',
-    'setindex',
-]
-
 
 class ChunkParams(object):
     def __init__(self, prefix, parent=None, min_idx=0):
@@ -134,13 +114,17 @@ CHUNK_PARAMS = {
     'appendix': ChunkParams('app', 'book'),
     'book': ChunkParams('bk'),
     'chapter': ChunkParams('ch', 'book'),
+    'glossary': ChunkParams('go', 'book'),
     'index': ChunkParams('ix', 'book'),
     'part': ChunkParams('pt', 'book'),
     'preface': ChunkParams('pr', 'book'),
+    'refentry': ChunkParams('re', 'book'),
     'reference': ChunkParams('rn', 'book'),
     'sect1': ChunkParams('s', 'chapter', 1),
     'section': ChunkParams('s', 'chapter', 1),
 }
+# TAGS we don't support:
+# 'article', 'bibliography', 'colophon', 'set', 'setindex'
 
 TITLE_XPATHS = {
     '_': (etree.XPath('./title'), None),
@@ -159,32 +143,26 @@ glossary = {}
 footnote_idx = 1
 
 
-def get_chunk_min_idx(tag):
-    if tag not in CHUNK_PARAMS:
-        return 0
+def gen_chunk_name(node, chunk_params, idx):
+    """Generate a chunk file name
 
-    return CHUNK_PARAMS[tag].min_idx
-
-
-def gen_chunk_name(node, idx):
+    This is either based on the id or on the position in the doc. In the latter
+    case it uses a prefix from CHUNK_PARAMS.
+    """
     if 'id' in node.attrib:
         return node.attrib['id']
 
-    tag = node.tag
-    if tag not in CHUNK_PARAMS:
-        CHUNK_PARAMS[tag] = ChunkParams(node.tag[:2])
-        logging.warning('Add CHUNK_PARAMS for "%s"', tag)
-
-    naming = CHUNK_PARAMS[tag]
-    name = ('%s%02d' % (naming.prefix, idx))
+    name = ('%s%02d' % (chunk_params.prefix, idx))
     # handle parents to make names of nested tags unique
     # TODO: we only need to prepend the parent if there are > 1 of them in the
-    #       xml
+    #       xml. None, the parents we have are not sufficient, e.g. 'index' can
+    #       be in 'book' or 'part' or ... Maybe we can track the chunk_parents
+    #       when we chunk explicitly and on each level maintain the 'idx'
     # while naming.parent:
     #     parent = naming.parent
     #     if parent not in CHUNK_PARAMS:
     #         break;
-    #     naming = CHUNK_PARAMS[parent]
+    #     chunk_params = CHUNK_PARAMS[parent]
     #     name = ('%s%02d' % (naming.prefix, idx)) + name
     logging.info('Gen chunk name: "%s"', name)
     return name
@@ -229,8 +207,11 @@ def chunk(xml_node, idx=0, parent=None):
     the new_node as the root of the tree
     """
     tag = xml_node.tag
+    chunk_params = CHUNK_PARAMS.get(tag)
+    # TODO: if this is None, we should stop traversing, right?
+
     # also check idx to handle 'sect1'/'section' special casing
-    if tag in CHUNK_TAGS and idx >= get_chunk_min_idx(tag):
+    if chunk_params and idx >= chunk_params.min_idx:
         logging.info('chunk tag: "%s"[%d]', tag, idx)
         if parent:
             # remove the xml-node from the parent
@@ -239,16 +220,14 @@ def chunk(xml_node, idx=0, parent=None):
             xml_node = sub_tree
 
         title_args = get_chunk_titles(xml_node)
-        chunk_name = gen_chunk_name(xml_node, (idx + 1))
+        chunk_name = gen_chunk_name(xml_node, chunk_params, (idx + 1))
         parent = Node(tag, parent=parent, xml=xml_node,
                       filename=chunk_name + '.html', **title_args)
-
-    # TODO(ensonic): add a is_terminal flag to CHUNK_PARAMS to stop recursing
 
     idx = 0
     for child in xml_node:
         chunk(child, idx, parent)
-        if child.tag in CHUNK_TAGS:
+        if child.tag in CHUNK_PARAMS:
             idx += 1
 
     return parent
@@ -306,7 +285,7 @@ missing_tags = {}
 
 def convert__unknown(ctx, xml):
     # don't recurse on subchunks
-    if xml.tag in CHUNK_TAGS:
+    if xml.tag in CHUNK_PARAMS:
         return []
     if isinstance(xml, etree._Comment):
         return ['<!-- ' + xml.text + '-->\n']
