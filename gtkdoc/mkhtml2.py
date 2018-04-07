@@ -579,10 +579,13 @@ def convert_link(ctx, xml):
     result = []
     if linkend:
         link_text = []
-        convert_inner(ctx, xml, link_text)
         append_text(xml.text, link_text)
+        convert_inner(ctx, xml, link_text)
         # TODO: fixxref does some weird checks in xml.text
         result = [fixxref.MakeXRef(ctx['module'], '', 0, linkend, ''.join(link_text))]
+    else:
+        append_text(xml.text, result)
+        convert_inner(ctx, xml, result)
     append_text(xml.tail, result)
     return result
 
