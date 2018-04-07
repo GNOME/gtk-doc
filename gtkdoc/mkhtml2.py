@@ -1286,12 +1286,12 @@ def convert_refentry(ctx):
   <table width="100%%"><tr>
     <td valign="top">
       <h2><span class="refentrytitle"><a name="%s.top_of_page"></a>%s</span></h2>
-      <p>%s — module for gtk-doc unit test</p>
+      <p>%s — %s</p>
     </td>
     <td class="gallery_image" valign="top" align="right"></td>
   </tr></table>
 </div>
-""" % (node_id, node_id, node.title, node.title))
+""" % (node_id, node_id, node.title, node.title, node.subtitle))
 
     for s in refsect1s:
         result.extend(convert_refsect1(ctx, s))
