@@ -564,6 +564,11 @@ def convert_informaltable(ctx, xml):
     return result
 
 
+def convert_inlinegraphic(ctx, xml):
+    # TODO(ensonic): warn on missing fileref attr?
+    return ['<img src="%s">' % xml.attrib.get('fileref', '')]
+
+
 def convert_itemizedlist(ctx, xml):
     result = ['<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">']
     convert_inner(ctx, xml, result)
@@ -914,6 +919,7 @@ convert_tags = {
     'indexterm': convert_skip,
     'informalexample': convert_div,
     'informaltable': convert_informaltable,
+    'inlinegraphic': convert_inlinegraphic,
     'inlinemediaobject': convert_span,
     'itemizedlist': convert_itemizedlist,
     'legalnotice': convert_div,
@@ -1274,11 +1280,19 @@ def convert_refentry(ctx):
     node_id = get_id(node)
     refsect1s = node.xml.findall('refsect1')
 
+    gallery = ''
+    refmeta = node.xml.find('refmeta')
+    if refmeta is not None:
+        refmiscinfo = refmeta.find('refmiscinfo')
+        if refmiscinfo is not None:
+            inlinegraphic = refmiscinfo.find('inlinegraphic')
+            if inlinegraphic is not None:
+                gallery = ''.join(convert_inlinegraphic(ctx, inlinegraphic))
+
     result = [
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx))
     ]
     generate_refentry_nav(ctx, refsect1s, result)
-    # TODO: if there is a  refmeta/refmiscinfo, the image goes to gallery_image
     result.append("""
 <div class="refentry">
 <a name="%s"></a>
@@ -1288,10 +1302,10 @@ def convert_refentry(ctx):
       <h2><span class="refentrytitle"><a name="%s.top_of_page"></a>%s</span></h2>
       <p>%s — %s</p>
     </td>
-    <td class="gallery_image" valign="top" align="right"></td>
+    <td class="gallery_image" valign="top" align="right">%s</td>
   </tr></table>
 </div>
-""" % (node_id, node_id, node.title, node.title, node.subtitle))
+""" % (node_id, node_id, node.title, node.title, node.subtitle, gallery))
 
     for s in refsect1s:
         result.extend(convert_refsect1(ctx, s))
