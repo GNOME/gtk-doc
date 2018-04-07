@@ -619,7 +619,10 @@ def convert_para(ctx, xml):
     result = []
     if 'id' in xml.attrib:
         result.append('<a name="%s"></a>' % xml.attrib['id'])
-    result.append('<p>')
+    if 'role' in xml.attrib:
+        result.append('<p class="%s">' % xml.attrib['role'])
+    else:
+        result.append('<p>')
     append_text(xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</p>')
