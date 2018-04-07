@@ -1085,10 +1085,14 @@ def generate_refentry_nav(ctx, refsect1s, result):
             continue
 
         title = xml_get_title(s)
+        ref_id = s.attrib['id']
+        span_id = ref_id.split('.')[1].replace('-', '_')
         result.append("""
-          <span class="dim">|</span> 
-          <a href="#%s" class="shortcut">%s</a>
-          """ % (s.attrib['id'], title))
+          <span id="nav_%s">
+            <span class="dim">|</span> 
+            <a href="#%s" class="shortcut">%s</a>
+          </span>
+          """ % (span_id, ref_id, title))
     result.append("""
     </td>
     %s
