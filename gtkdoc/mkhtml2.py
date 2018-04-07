@@ -1084,9 +1084,14 @@ def generate_refentry_nav(ctx, refsect1s, result):
         if 'id' not in s.attrib:
             continue
 
-        title = xml_get_title(s)
         ref_id = s.attrib['id']
+        # skip foreign sections
+        if '.' not in ref_id:
+            continue
+
+        title = xml_get_title(s)
         span_id = ref_id.split('.')[1].replace('-', '_')
+
         result.append("""
           <span id="nav_%s">
             <span class="dim">|</span> 
