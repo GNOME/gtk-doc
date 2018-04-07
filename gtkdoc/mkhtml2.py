@@ -50,6 +50,7 @@ TODO:
     - the toc also lists 'sect2' (TODO: check how deep it goes)
   - replace get_title with a result.extend(convert_title(ctx, title_tag))
     - see convert_table()
+  - 'linkend' seems to add a 'title' attr to 'a' if the targe has a title.
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
@@ -1277,6 +1278,7 @@ def convert_refentry(ctx):
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx))
     ]
     generate_refentry_nav(ctx, refsect1s, result)
+    # TODO: if there is a  refmeta/refmiscinfo, the image goes to gallery_image
     result.append("""
 <div class="refentry">
 <a name="%s"></a>
