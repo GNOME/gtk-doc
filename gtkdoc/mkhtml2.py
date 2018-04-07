@@ -614,7 +614,7 @@ def convert_literallayout(ctx, xml):
 
 
 def convert_orderedlist(ctx, xml):
-    result = ['<div class="orderedlistlist"><ol class="orderedlistlist" type="1">']
+    result = ['<div class="orderedlist"><ol class="orderedlist" type="1">']
     convert_inner(ctx, xml, result)
     result.append('</ol></div>')
     append_text(xml.tail, result)
