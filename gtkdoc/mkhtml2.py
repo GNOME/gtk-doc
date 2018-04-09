@@ -205,31 +205,31 @@ def chunk(xml_node, idx=0, parent=None):
     """Chunk the tree.
 
     The first time, we're called with parent=None and in that case we return
-    the new_node as the root of the tree
+    the new_node as the root of the tree. For each tree-node we generate a
+    filename and process the children.
     """
     tag = xml_node.tag
     chunk_params = CHUNK_PARAMS.get(tag)
-    # TODO: if this is None, we should stop traversing, right?
+    if chunk_params:
+        # check idx to handle 'sect1'/'section' special casing
+        if idx >= chunk_params.min_idx:
+            logging.info('chunk tag: "%s"[%d]', tag, idx)
+            if parent:
+                # remove the xml-node from the parent
+                sub_tree = etree.ElementTree(deepcopy(xml_node)).getroot()
+                xml_node.getparent().remove(xml_node)
+                xml_node = sub_tree
 
-    # also check idx to handle 'sect1'/'section' special casing
-    if chunk_params and idx >= chunk_params.min_idx:
-        logging.info('chunk tag: "%s"[%d]', tag, idx)
-        if parent:
-            # remove the xml-node from the parent
-            sub_tree = etree.ElementTree(deepcopy(xml_node)).getroot()
-            xml_node.getparent().remove(xml_node)
-            xml_node = sub_tree
+            title_args = get_chunk_titles(xml_node)
+            chunk_name = gen_chunk_name(xml_node, chunk_params, (idx + 1))
+            parent = Node(tag, parent=parent, xml=xml_node,
+                          filename=chunk_name + '.html', **title_args)
 
-        title_args = get_chunk_titles(xml_node)
-        chunk_name = gen_chunk_name(xml_node, chunk_params, (idx + 1))
-        parent = Node(tag, parent=parent, xml=xml_node,
-                      filename=chunk_name + '.html', **title_args)
-
-    idx = 0
-    for child in xml_node:
-        chunk(child, idx, parent)
-        if child.tag in CHUNK_PARAMS:
-            idx += 1
+        idx = 0
+        for child in xml_node:
+            chunk(child, idx, parent)
+            if child.tag in CHUNK_PARAMS:
+                idx += 1
 
     return parent
 
