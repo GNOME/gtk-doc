@@ -44,10 +44,6 @@ TODO:
   - handle 'label' attributes on part/chapter/section-types
     - the titles will have a generated prefix, such as 'Part I:'
     - in the toc it would only be only the label: 'I.'
-  - we need to separate the toc data from the chunking tree
-    - since we don't chunk first 'secttion'/'sect1' those are missing from the
-      toc
-    - the toc also lists 'sect2' (TODO: check how deep it goes)
   - replace get_title with a result.extend(convert_title(ctx, title_tag))
     - see convert_table()
   - 'linkend' seems to add a 'title' attr to 'a' if the targe has a title.
@@ -105,12 +101,16 @@ class ChunkParams(object):
         self.min_idx = min_idx
 
 
-# TODO: look up the abbrevs and hierarchy for other tags
+DONT_CHUNK = float('inf')
+# docbook-xsl defines the chunk tags here.
 # http://www.sagehill.net/docbookxsl/Chunking.html#GeneratedFilenames
 # https://github.com/oreillymedia/HTMLBook/blob/master/htmlbook-xsl/chunk.xsl#L33
-#
 # If not defined, we can just create an example without an 'id' attr and see
 # docbook xsl does.
+#
+# For toc levels see http://www.sagehill.net/docbookxsl/TOCcontrol.html
+# TODO: this list has also a flag that controls wheter we add the
+# 'Table of Contents' heading in convert_chunk_with_toc()
 CHUNK_PARAMS = {
     'appendix': ChunkParams('app', 'book'),
     'book': ChunkParams('bk'),
@@ -123,6 +123,10 @@ CHUNK_PARAMS = {
     'reference': ChunkParams('rn', 'book'),
     'sect1': ChunkParams('s', 'chapter', 1),
     'section': ChunkParams('s', 'chapter', 1),
+    'sect2': ChunkParams('s', 'sect1', DONT_CHUNK),
+    'sect3': ChunkParams('s', 'sect2', DONT_CHUNK),
+    'sect4': ChunkParams('s', 'sect3', DONT_CHUNK),
+    'sect5': ChunkParams('s', 'sect4', DONT_CHUNK),
 }
 # TAGS we don't support:
 # 'article', 'bibliography', 'colophon', 'set', 'setindex'
@@ -211,7 +215,11 @@ def chunk(xml_node, idx=0, parent=None):
     tag = xml_node.tag
     chunk_params = CHUNK_PARAMS.get(tag)
     if chunk_params:
-        # check idx to handle 'sect1'/'section' special casing
+        title_args = get_chunk_titles(xml_node)
+        chunk_name = gen_chunk_name(xml_node, chunk_params, (idx + 1))
+
+        # check idx to handle 'sect1'/'section' special casing and title-only
+        # segments
         if idx >= chunk_params.min_idx:
             logging.info('chunk tag: "%s"[%d]', tag, idx)
             if parent:
@@ -220,10 +228,13 @@ def chunk(xml_node, idx=0, parent=None):
                 xml_node.getparent().remove(xml_node)
                 xml_node = sub_tree
 
-            title_args = get_chunk_titles(xml_node)
-            chunk_name = gen_chunk_name(xml_node, chunk_params, (idx + 1))
             parent = Node(tag, parent=parent, xml=xml_node,
-                          filename=chunk_name + '.html', **title_args)
+                          filename=chunk_name + '.html', anchor=None,
+                          **title_args)
+        else:
+            parent = Node(tag, parent=parent, xml=xml_node,
+                          filename=parent.filename, anchor='#' + chunk_name,
+                          **title_args)
 
         idx = 0
         for child in xml_node:
@@ -1029,8 +1040,11 @@ def generate_toc(ctx, node):
     result = []
     for c in node.children:
         # TODO: urlencode the filename: urllib.parse.quote_plus()
+        link = c.filename
+        if c.anchor:
+            link += c.anchor
         result.append('<dt><span class="%s"><a href="%s">%s</a></span>\n' % (
-            c.title_tag, c.filename, c.title))
+            c.title_tag, link, c.title))
         if c.subtitle:
             result.append('<span class="%s"> — %s</span>' % (c.subtitle_tag, c.subtitle))
         result.append('</dt>\n')
@@ -1511,7 +1525,8 @@ def main(module, index_file, out_dir, uninstalled):
     # 1) recursively walk the tree and chunk it into a python tree so that we
     #   can generate navigation and link tags.
     files = chunk(tree.getroot())
-    files = list(PreOrderIter(files))
+    files = [f for f in PreOrderIter(files) if f.anchor is None]
+
     # 2) extract tables:
     # TODO: use multiprocessing
     # - find all 'id' attribs and add them to the link map
