@@ -44,8 +44,6 @@ TODO:
   - handle 'label' attributes on part/chapter/section-types
     - the titles will have a generated prefix, such as 'Part I:'
     - in the toc it would only be only the label: 'I.'
-  - replace get_title with a result.extend(convert_title(ctx, title_tag))
-    - see convert_table()
   - 'linkend' seems to add a 'title' attr to 'a' if the targe has a title.
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
@@ -190,7 +188,7 @@ def get_chunk_titles(node):
     res = title(node)
     if res:
         xml = res[0]
-        result['title'] = xml.text
+        result['title'] = ''.join(convert_title({}, xml))
         if xml.tag != 'title':
             result['title_tag'] = xml.tag
         else:
@@ -200,7 +198,7 @@ def get_chunk_titles(node):
         res = subtitle(node)
         if res:
             xml = res[0]
-            result['subtitle'] = xml.text
+            result['subtitle'] = ''.join(convert_title({}, xml))
             result['subtitle_tag'] = xml.tag
     return result
 
@@ -327,10 +325,10 @@ def convert_sect(ctx, xml, h_tag, inner_func=convert_inner):
     return result
 
 
-def xml_get_title(xml):
-    title = xml.find('title')
-    if title is not None:
-        return title.text
+def xml_get_title(ctx, xml):
+    title_tag = xml.find('title')
+    if title_tag is not None:
+        return ''.join(convert_title(ctx, title_tag))
     else:
         # TODO(ensonic): any way to get the file (inlcudes) too?
         logging.warning('%s: Expected title tag under "%s %s"', xml.sourceline, xml.tag, str(xml.attrib))
@@ -1068,7 +1066,7 @@ def generate_basic_nav(ctx):
 def generate_alpha_nav(ctx, divs, prefix, span_id):
     ix_nav = []
     for s in divs:
-        title = xml_get_title(s)
+        title = xml_get_title(ctx, s)
         ix_nav.append('<a class="shortcut" href="#%s%s">%s</a>' % (prefix, title, title))
 
     return """<table class="navigation" id="top" width="100%%" cellpadding="2" cellspacing="5">
@@ -1103,7 +1101,7 @@ def generate_refentry_nav(ctx, refsect1s, result):
         if '.' not in ref_id:
             continue
 
-        title = xml_get_title(s)
+        title = xml_get_title(ctx, s)
         span_id = ref_id.split('.')[1].replace('-', '_')
 
         result.append("""
@@ -1428,7 +1426,7 @@ def create_devhelp2_condition_attribs(node):
 
 def create_devhelp2_refsect2_keyword(node, base_link):
     return'    <keyword type="%s" name="%s" link="%s"%s/>\n' % (
-        node.attrib['role'], xml_get_title(node), base_link + node.attrib['id'],
+        node.attrib['role'], xml_get_title({}, node), base_link + node.attrib['id'],
         create_devhelp2_condition_attribs(node))
 
 
