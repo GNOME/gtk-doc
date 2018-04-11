@@ -429,6 +429,15 @@ def convert_div(ctx, xml):
     return result
 
 
+def convert_emphasis(ctx, xml):
+    result = ['<span class="emphasis"><em>']
+    append_text(xml.text, result)
+    convert_inner(ctx, xml, result)
+    result.append('</em></span>')
+    append_text(xml.tail, result)
+    return result
+
+
 def convert_em_class(ctx, xml):
     result = ['<em class="%s"><code>' % xml.tag]
     append_text(xml.text, result)
@@ -911,7 +920,7 @@ convert_tags = {
     'constant': convert_code,
     'command': convert_command,
     'corpauthor': convert_corpauthor,
-    'emphasis': convert_span,
+    'emphasis': convert_emphasis,
     'entry': convert_entry,
     'envar': convert_code,
     'footnote': convert_footnote,
