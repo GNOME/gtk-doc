@@ -171,7 +171,7 @@ def gen_chunk_name(node, chunk_params, idx):
     return name
 
 
-def get_chunk_titles(node):
+def get_chunk_titles(module, node):
     tag = node.tag
     if tag not in TITLE_XPATHS:
         # Use defaults
@@ -179,6 +179,9 @@ def get_chunk_titles(node):
     else:
         (title, subtitle) = TITLE_XPATHS[tag]
 
+    ctx = {
+        'module': module,
+    }
     result = {
         'title': None,
         'title_tag': None,
@@ -188,7 +191,7 @@ def get_chunk_titles(node):
     res = title(node)
     if res:
         xml = res[0]
-        result['title'] = ''.join(convert_title({}, xml))
+        result['title'] = ''.join(convert_title(ctx, xml))
         if xml.tag != 'title':
             result['title_tag'] = xml.tag
         else:
@@ -198,12 +201,12 @@ def get_chunk_titles(node):
         res = subtitle(node)
         if res:
             xml = res[0]
-            result['subtitle'] = ''.join(convert_title({}, xml))
+            result['subtitle'] = ''.join(convert_title(ctx, xml))
             result['subtitle_tag'] = xml.tag
     return result
 
 
-def chunk(xml_node, idx=0, parent=None):
+def chunk(xml_node, module, idx=0, parent=None):
     """Chunk the tree.
 
     The first time, we're called with parent=None and in that case we return
@@ -213,7 +216,7 @@ def chunk(xml_node, idx=0, parent=None):
     tag = xml_node.tag
     chunk_params = CHUNK_PARAMS.get(tag)
     if chunk_params:
-        title_args = get_chunk_titles(xml_node)
+        title_args = get_chunk_titles(module, xml_node)
         chunk_name = gen_chunk_name(xml_node, chunk_params, (idx + 1))
 
         # check idx to handle 'sect1'/'section' special casing and title-only
@@ -236,7 +239,7 @@ def chunk(xml_node, idx=0, parent=None):
 
         idx = 0
         for child in xml_node:
-            chunk(child, idx, parent)
+            chunk(child, module, idx, parent)
             if child.tag in CHUNK_PARAMS:
                 idx += 1
 
@@ -1531,7 +1534,7 @@ def main(module, index_file, out_dir, uninstalled):
     # We do multiple passes:
     # 1) recursively walk the tree and chunk it into a python tree so that we
     #   can generate navigation and link tags.
-    files = chunk(tree.getroot())
+    files = chunk(tree.getroot(), module)
     files = [f for f in PreOrderIter(files) if f.anchor is None]
 
     # 2) extract tables:
