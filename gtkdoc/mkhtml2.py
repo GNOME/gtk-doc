@@ -39,8 +39,6 @@ TODO:
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
-  - glossary/index: depending on the parents, the headings as h1/h2
-    - maybe track depth when chunking
   - handle 'label' attributes on part/chapter/section-types
     - the titles will have a generated prefix, such as 'Part I:'
     - in the toc it would only be only the label: 'I.'
@@ -206,7 +204,7 @@ def get_chunk_titles(module, node):
     return result
 
 
-def chunk(xml_node, module, idx=0, parent=None):
+def chunk(xml_node, module, depth=0, idx=0, parent=None):
     """Chunk the tree.
 
     The first time, we're called with parent=None and in that case we return
@@ -229,17 +227,18 @@ def chunk(xml_node, module, idx=0, parent=None):
                 xml_node.getparent().remove(xml_node)
                 xml_node = sub_tree
 
-            parent = Node(tag, parent=parent, xml=xml_node,
+            parent = Node(tag, parent=parent, xml=xml_node, depth=depth,
                           filename=chunk_name + '.html', anchor=None,
                           **title_args)
         else:
-            parent = Node(tag, parent=parent, xml=xml_node,
+            parent = Node(tag, parent=parent, xml=xml_node, depth=depth,
                           filename=parent.filename, anchor='#' + chunk_name,
                           **title_args)
 
+        depth += 1
         idx = 0
         for child in xml_node:
-            chunk(child, module, idx, parent)
+            chunk(child, module, depth, idx, parent)
             if child.tag in CHUNK_PARAMS:
                 idx += 1
 
@@ -1243,9 +1242,9 @@ def convert_glossary(ctx):
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
         generate_alpha_nav(ctx, glossdivs, 'gls', 'glossary'),
         """<div class="glossary">
-<div class="titlepage"><h1 class="title">
-<a name="%s"></a>%s</h1>
-</div>""" % (get_id(node), node.title)
+<div class="titlepage"><h%1d class="title">
+<a name="%s"></a>%s</h%1d>
+</div>""" % (node.depth, get_id(node), node.title, node.depth)
     ]
     for i in glossdivs:
         result.extend(convert_glossdiv(ctx, i))
@@ -1265,9 +1264,9 @@ def convert_index(ctx):
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),
         generate_alpha_nav(ctx, indexdivs, 'idx', 'index'),
         """<div class="index">
-<div class="titlepage"><h2 class="title">
-<a name="%s"></a>%s</h2>
-</div>""" % (get_id(node), node.title)
+<div class="titlepage"><h%1d class="title">
+<a name="%s"></a>%s</h%1d>
+</div>""" % (node.depth, get_id(node), node.title, node.depth)
     ]
     for i in indexdivs:
         result.extend(convert_indexdiv(ctx, i))
