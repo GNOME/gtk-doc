@@ -233,10 +233,12 @@ def chunk(xml_node, module, depth=0, idx=0, parent=None):
                 xml_node = sub_tree
 
             parent = Node(tag, parent=parent, xml=xml_node, depth=depth,
+                          idx=idx,
                           filename=chunk_name + '.html', anchor=None,
                           **title_args)
         else:
             parent = Node(tag, parent=parent, xml=xml_node, depth=depth,
+                          idx=idx,
                           filename=parent.filename, anchor='#' + chunk_name,
                           **title_args)
 
@@ -1146,25 +1148,40 @@ def generate_footer(ctx):
     return result
 
 
-def get_id(node):
-    xml = node.xml
-    node_id = xml.attrib.get('id', None)
-    if node_id:
-        return node_id
-
-    logging.info('%d: No "id" attribute on "%s", generating one',
-                 xml.sourceline, xml.tag)
+def get_id_path(node):
+    """ Generate the 'id'.
+    We need to walk up the xml-tree and check the positions for each sibling.
+    When reaching the top of the tree we collect remaining index entries from
+    the chunked-tree.
+    """
     ix = []
-    # Generate the 'id'. We need to walk up the xml-tree and check the positions
-    # for each sibling.
+    xml = node.xml
     parent = xml.getparent()
     while parent is not None:
         children = parent.getchildren()
         ix.insert(0, str(children.index(xml) + 1))
         xml = parent
         parent = xml.getparent()
+    while node is not None:
+        ix.insert(0, str(node.idx + 1))
+        node = node.parent
+
+    return ix
+
+
+def get_id(node):
+    xml = node.xml
+    node_id = xml.attrib.get('id', None)
+    if node_id:
+        return node_id
+
+    # TODO: this is moot if nothing links to it, we could also consider to omit
+    # the <a name="$id"></a> tag.
+    logging.info('%d: No "id" attribute on "%s", generating one',
+                 xml.sourceline, xml.tag)
+    ix = get_id_path(node)
     # logging.warning('%s: id indexes: %s', node.filename, str(ix))
-    return 'id-1.' + '.'.join(ix)
+    return 'id-' + '.'.join(ix)
 
 
 def convert_chunk_with_toc(ctx, div_class, title_tag):
