@@ -95,6 +95,7 @@ class ChunkParams(object):
         self.prefix = prefix
         self.parent = parent
         self.min_idx = min_idx
+        self.idx = 1
 
 
 DONT_CHUNK = float('inf')
@@ -144,27 +145,31 @@ glossary = {}
 footnote_idx = 1
 
 
-def gen_chunk_name(node, chunk_params, idx):
+def gen_chunk_name(node, chunk_params):
     """Generate a chunk file name
 
     This is either based on the id or on the position in the doc. In the latter
-    case it uses a prefix from CHUNK_PARAMS.
+    case it uses a prefix from CHUNK_PARAMS and a sequence number for each chunk
+    type.
     """
     if 'id' in node.attrib:
         return node.attrib['id']
 
-    name = ('%s%02d' % (chunk_params.prefix, idx))
-    # handle parents to make names of nested tags unique
-    # TODO: we only need to prepend the parent if there are > 1 of them in the
-    #       xml. None, the parents we have are not sufficient, e.g. 'index' can
-    #       be in 'book' or 'part' or ... Maybe we can track the chunk_parents
-    #       when we chunk explicitly and on each level maintain the 'idx'
-    # while naming.parent:
-    #     parent = naming.parent
+    name = ('%s%02d' % (chunk_params.prefix, chunk_params.idx))
+    chunk_params.idx += 1
+
+    # handle parents to make names of nested tags like in docbook
+    # - we only need to prepend the parent if there are > 1 of them in the
+    #   xml. None, the parents we have are not sufficient, e.g. 'index' can
+    #   be in 'book' or 'part' or ... Maybe we can track the chunk_parents
+    #   when we chunk explicitly and on each level maintain the 'idx'
+    # while chunk_params.parent:
+    #     parent = chunk_params.parent
     #     if parent not in CHUNK_PARAMS:
     #         break;
     #     chunk_params = CHUNK_PARAMS[parent]
-    #     name = ('%s%02d' % (naming.prefix, idx)) + name
+    #     name = ('%s%02d' % (chunk_params.prefix, chunk_params.idx)) + name
+
     logging.info('Gen chunk name: "%s"', name)
     return name
 
@@ -215,7 +220,7 @@ def chunk(xml_node, module, depth=0, idx=0, parent=None):
     chunk_params = CHUNK_PARAMS.get(tag)
     if chunk_params:
         title_args = get_chunk_titles(module, xml_node)
-        chunk_name = gen_chunk_name(xml_node, chunk_params, (idx + 1))
+        chunk_name = gen_chunk_name(xml_node, chunk_params)
 
         # check idx to handle 'sect1'/'section' special casing and title-only
         # segments
