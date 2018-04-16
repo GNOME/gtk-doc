@@ -1559,16 +1559,23 @@ def main(module, index_file, out_dir, uninstalled):
     files = [f for f in PreOrderIter(files) if f.anchor is None]
 
     # 2) extract tables:
-    # TODO: use multiprocessing
+    # TODO: can be done in parallel
     # - find all 'id' attribs and add them to the link map
     add_id_links(files, fixxref.Links)
     # - build glossary dict
     build_glossary(files)
 
-    # 3) create a xxx.devhelp2 file, do this before 3), since we modify the tree
+    # 3) create a xxx.devhelp2 file, do this before 4), since we modify the tree
     create_devhelp2(out_dir, module, tree.getroot(), files)
+
     # 4) iterate the tree and output files
-    # TODO: use multiprocessing
+    # TODO: can be done in parallel, figure out why this is not faster
+    # from multiprocessing.pool import Pool
+    # with Pool(4) as p:
+    #     p.apply_async(convert, args=(out_dir, module, files))
+    # from multiprocessing.pool import ThreadPool
+    # with ThreadPool(4) as p:
+    #     p.apply_async(convert, args=(out_dir, module, files))
     for node in files:
         convert(out_dir, module, files, node)
 
