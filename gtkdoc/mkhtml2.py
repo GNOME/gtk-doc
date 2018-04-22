@@ -41,8 +41,16 @@ TODO:
     attr on the <img> tag of the 'imageobject'
   - handle 'label' attributes on part/chapter/section-types
     - the titles will have a generated prefix, such as 'Part I:'
-    - in the toc it would only be only the label: 'I.'
-  - 'linkend' seems to add a 'title' attr to 'a' if the targe has a title.
+      (locale dependent)
+    - in the toc it would only be the label: 'I.'
+  - 'link' seems to add a 'title' attr to 'a' if the target has a title.
+    - we're using fixxref.MakeXRef to generate the 'a' tag, we could pass the
+      title with a default value of "" there to inject it
+    - we might need to split this a bit to first run the 'id' transform logic
+      and then do the linking.
+    - initially we could generate this as needed (we need to run the xpath on
+      each of the chunks though
+  - handle the 'xref' tag, this also need the title + the type of the target
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
@@ -1550,6 +1558,8 @@ def main(module, index_file, out_dir, uninstalled):
 
     # TODO: migrate options from fixxref
     # TODO: do in parallel with loading the xml above.
+    # TODO: ideally explicity specify the files we need, this will save us the
+    # globbing and we'll load less files.
     fixxref.LoadIndicies(out_dir, '/usr/share/gtk-doc/html', [])
 
     # We do multiple passes:
