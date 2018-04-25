@@ -68,9 +68,8 @@
  *
  * This is a section with a heading without a trailing hash mark.
  *
- * > Do not confuse the GtkUIManager UI Definitions described here with
- * > the similarly named <link linkend="BUILDER-UI">GtkBuilder UI
- * > Definitions</link>.
+ * > This is a bloclquote with a link to <link linkend="GtkdocObject2">
+ * > GtkdocObject2</link>.
  *
  * > Single line quote
  *
