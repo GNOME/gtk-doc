@@ -18,6 +18,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
+import logging
 import unittest
 
 from lxml import etree
@@ -27,26 +28,37 @@ from gtkdoc import mkhtml2
 
 class TestChunking(unittest.TestCase):
 
+    def setUp(self):
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+
     def test_chunk_only_root_gives_single_chunk(self):
         root = etree.XML('<book />')
-        files = mkhtml2.chunk(root)
+        files = mkhtml2.chunk(root, 'test')
         self.assertEqual('book', files.name)
         self.assertEqual(0, len(files.descendants))
 
     def test_chunk_single_chapter_gives_two_chunks(self):
         root = etree.XML('<book><chapter /></book>')
-        files = mkhtml2.chunk(root)
-        self.assertEqual(1, len(files.descendants))
+        files = mkhtml2.chunk(root, 'test')
+        descendants = [f for f in files.descendants if f.anchor is None]
+        logging.info('descendants : %s', str(descendants))
+        self.assertEqual(1, len(descendants))
 
     def test_chunk_first_sect1_is_inlined(self):
         root = etree.XML('<book><chapter><sect1 /></chapter></book>')
-        files = mkhtml2.chunk(root)
-        self.assertEqual(1, len(files.descendants))
+        files = mkhtml2.chunk(root, 'test')
+        descendants = [f for f in files.descendants if f.anchor is None]
+        logging.info('descendants : %s', str(descendants))
+        self.assertEqual(1, len(descendants))
 
-    def test_chunk_second_sect1_is_nt_inlined(self):
+    def test_chunk_second_sect1_is_not_inlined(self):
         root = etree.XML('<book><chapter><sect1 /><sect1 /></chapter></book>')
-        files = mkhtml2.chunk(root)
-        self.assertEqual(2, len(files.descendants))
+        files = mkhtml2.chunk(root, 'test')
+        descendants = [f for f in files.descendants if f.anchor is None]
+        logging.info('descendants : %s', str(descendants))
+        self.assertEqual(2, len(descendants))
 
 
 if __name__ == '__main__':
