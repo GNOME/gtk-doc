@@ -43,14 +43,14 @@ TODO:
     - the titles will have a generated prefix, such as 'Part I:'
       (locale dependent)
     - in the toc it would only be the label: 'I.'
-  - 'link' seems to add a 'title' attr to 'a' if the target has a title.
-    - we're using fixxref.MakeXRef to generate the 'a' tag, we could pass the
-      title with a default value of "" there to inject it
-    - we might need to split this a bit to first run the 'id' transform logic
-      and then do the linking.
-    - initially we could generate this as needed (we need to run the xpath on
-      each of the chunks though
-  - handle the 'xref' tag, this also need the title + the type of the target
+  - 'link' adds a 'title' attr to 'a' if the target has a title.
+    - there is an implementation in convert_link() but it is slow
+    - we might need to collect titles as we chunk
+    - if we do this we'd need to keep iterating, but might be able to replace
+      add_id_links()
+  - handle the 'xref' tag
+    - this needs the title + the type of the target
+    - for the title, see convert_link()
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
@@ -192,6 +192,7 @@ def get_chunk_titles(module, node):
 
     ctx = {
         'module': module,
+        'files': [],
     }
     result = {
         'title': None,
@@ -334,7 +335,6 @@ def convert_sect(ctx, xml, h_tag, inner_func=convert_inner):
         if 'id' in xml.attrib:
             result.append('<a name="%s"></a>' % xml.attrib['id'])
         result.append('<%s>%s</%s>' % (h_tag, title.text, h_tag))
-        xml.remove(title)
     append_text(xml.text, result)
     inner_func(ctx, xml, result)
     result.append('</div>')
@@ -622,8 +622,31 @@ def convert_link(ctx, xml):
         link_text = []
         append_text(xml.text, link_text)
         convert_inner(ctx, xml, link_text)
-        # TODO: fixxref does some weird checks in xml.text
-        result = [fixxref.MakeXRef(ctx['module'], '', 0, linkend, ''.join(link_text))]
+        text = ''.join(link_text)
+
+        (tid, href) = fixxref.GetXRef(linkend)
+        if href:
+            module = ctx['module']
+            title_attr = ''
+            # search for a title under id='tid' in all chunks
+            # NOTE: this will only work for local links
+            # TODO: this works but is super slow
+            # id_xpath = etree.XPath('//*[@id="%s"]' % tid)
+            # for c in ctx['files']:
+            #     nodes = id_xpath(c.xml)
+            #     if nodes:
+            #         title = get_chunk_titles(module, nodes[0])['title']
+            #         if title:
+            #             title_attr = ' title="%s"' % title
+            #             logging.debug('Have title node: href=%s%s', tid, title_attr)
+            #         break
+
+            href = fixxref.MakeRelativeXRef(module, href)
+            result = ['<a href="%s"%s>%s</a>' % (href, title_attr, text)]
+        else:
+            # TODO: filename is for the output and xml.sourceline is on the masterdoc ...
+            fixxref.ReportBadXRef(ctx['node'].filename, 0, linkend, text)
+            result = [text]
     else:
         append_text(xml.text, result)
         convert_inner(ctx, xml, result)
@@ -994,6 +1017,7 @@ convert_tags = {
     'term': convert_span,
     'tgroup': convert_tgroup,
     'thead': convert_thead,
+    'title': convert_skip,
     'type': convert_span,
     'ulink': convert_ulink,
     'userinput': convert_userinput,
@@ -1206,7 +1230,6 @@ def convert_chunk_with_toc(ctx, div_class, title_tag):
 <%s class="title"><a name="%s"></a>%s</%s>
 </div>""" % (
             title_tag, get_id(node), title.text, title_tag))
-        node.xml.remove(title)
 
     toc = generate_toc(ctx, node)
     if toc:
@@ -1241,10 +1264,6 @@ def convert_book(ctx):
 """ % node.title
     ]
     bookinfo = node.xml.findall('bookinfo')[0]
-    # we already used the title
-    title = bookinfo.find('title')
-    if title is not None:
-        bookinfo.remove(title)
     result.extend(convert_bookinfo(ctx, bookinfo))
     result.append("""<div class="toc">
   <dl class="toc">
@@ -1324,7 +1343,6 @@ def convert_preface(ctx):
 <div class="titlepage">
 <h2 class="title"><a name="%s"></a>%s</h2>
 </div>""" % (get_id(node), title.text))
-        node.xml.remove(title)
     convert_inner(ctx, node.xml, result)
     result.extend(generate_footer(ctx))
     result.append("""</div>
@@ -1575,7 +1593,7 @@ def main(module, index_file, out_dir, uninstalled):
     # - build glossary dict
     build_glossary(files)
 
-    # 3) create a xxx.devhelp2 file, do this before 4), since we modify the tree
+    # 3) create a xxx.devhelp2 file (could be done in parallel with 4
     create_devhelp2(out_dir, module, tree.getroot(), files)
 
     # 4) iterate the tree and output files

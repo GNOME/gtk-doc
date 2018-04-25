@@ -309,43 +309,50 @@ def GetXRef(id):
     return (id, None)
 
 
+def ReportBadXRef(file, line, id, text):
+    logging.info('no link for: id=%s, linktext=%s', id, text)
+
+    # don't warn multiple times and also skip blacklisted (ctypes)
+    if id in NoLinks:
+        return
+    # if it's a function, don't warn if it does not contain a "_"
+    # (transformed to "-")
+    # - gnome coding style would use '_'
+    # - will avoid wrong warnings for ansi c functions
+    if re.search(r' class=\"function\"', text) and '-' not in id:
+        return
+    # if it's a 'return value', don't warn (implicitly created link)
+    if re.search(r' class=\"returnvalue\"', text):
+        return
+    # if it's a 'type', don't warn if it starts with lowercase
+    # - gnome coding style would use CamelCase
+    if re.search(r' class=\"type\"', text) and id[0].islower():
+        return
+    # don't warn for self links
+    if text == id:
+        return
+
+    common.LogWarning(file, line, 'no link for: "%s" -> (%s).' % (id, text))
+    NoLinks.add(id)
+
+
+def MakeRelativeXRef(module, href):
+    # if it is a link to same module, remove path to make it work uninstalled
+    m = re.search(r'^\.\./' + module + '/(.*)$', href)
+    if m:
+        href = m.group(1)
+    return href
+
+
 def MakeXRef(module, file, line, id, text):
     href = GetXRef(id)[1]
 
     if href:
-        # if it is a link to same module, remove path to make it work uninstalled
-        m = re.search(r'^\.\./' + module + '/(.*)$', href)
-        if m:
-            href = m.group(1)
-            logging.info('Fixing link to uninstalled doc: %s, %s, %s', id, href, text)
-        else:
-            logging.info('Fixing link: %s, %s, %s', id, href, text)
+        href = MakeRelativeXRef(module, href)
+        logging.info('Fixing link: %s, %s, %s', id, href, text)
         return "<a href=\"%s\">%s</a>" % (href, text)
     else:
-        logging.info('no link for: %s, %s', id, text)
-
-        # don't warn multiple times and also skip blacklisted (ctypes)
-        if id in NoLinks:
-            return text
-        # if it's a function, don't warn if it does not contain a "_"
-        # (transformed to "-")
-        # - gnome coding style would use '_'
-        # - will avoid wrong warnings for ansi c functions
-        if re.search(r' class=\"function\"', text) and '-' not in id:
-            return text
-        # if it's a 'return value', don't warn (implicitly created link)
-        if re.search(r' class=\"returnvalue\"', text):
-            return text
-        # if it's a 'type', don't warn if it starts with lowercase
-        # - gnome coding style would use CamelCase
-        if re.search(r' class=\"type\"', text) and id[0].islower():
-            return text
-        # don't warn for self links
-        if text == id:
-            return text
-
-        common.LogWarning(file, line, 'no link for: "%s" -> (%s).' % (id, text))
-        NoLinks.add(id)
+        ReportBadXRef(file, line, id, text)
         return text
 
 
