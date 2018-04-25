@@ -278,20 +278,39 @@ def FixHTMLFile(src_lang, module, file):
     os.rename(new_file, file)
 
 
-def MakeXRef(module, file, line, id, text):
+def GetXRef(id):
     href = Links.get(id)
+    if href:
+        return (id, href)
 
     # This is a workaround for some inconsistency we have with CreateValidSGMLID
-    if not href and ':' in id:
-        href = Links.get(id.replace(':', '--'))
+    if ':' in id:
+        tid = id.replace(':', '--')
+        href = Links.get(tid)
+        if href:
+            return (tid, href)
+
     # poor mans plural support
-    if not href and id.endswith('s'):
+    if id.endswith('s'):
         tid = id[:-1]
         href = Links.get(tid)
-        if not href:
-            href = Links.get(tid + '-struct')
-    if not href:
-        href = Links.get(id + '-struct')
+        if href:
+            return (tid, href)
+        tid += '-struct'
+        href = Links.get(tid)
+        if href:
+            return (tid, href)
+
+    tid = id + '-struct'
+    href = Links.get(tid)
+    if href:
+        return (tid, href)
+
+    return (id, None)
+
+
+def MakeXRef(module, file, line, id, text):
+    href = GetXRef(id)[1]
 
     if href:
         # if it is a link to same module, remove path to make it work uninstalled
