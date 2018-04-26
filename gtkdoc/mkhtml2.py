@@ -87,6 +87,7 @@ from lxml import etree
 from pygments import highlight
 from pygments.lexers import CLexer
 from pygments.formatters import HtmlFormatter
+from timeit import default_timer as timer
 
 from . import config, fixxref
 
@@ -1562,9 +1563,19 @@ def get_dirs(uninstalled):
 
 
 def main(module, index_file, out_dir, uninstalled):
+
+    # == Loading phase ==
+    # the next 3 steps could be done in paralel
+
+    # 1) load the docuemnt
+    _t = timer()
     tree = etree.parse(index_file)
     tree.xinclude()
+    logging.warning("1: %7.3lf: load doc", timer() - _t)
 
+    # 2) copy datafiles
+    _t = timer()
+    # TODO: handle additional images
     (gtkdocdir, styledir) = get_dirs(uninstalled)
     # copy navigation images and stylesheets to html directory ...
     css_file = os.path.join(styledir, 'style.css')
@@ -1573,30 +1584,44 @@ def main(module, index_file, out_dir, uninstalled):
     css_file = os.path.join(out_dir, 'style.css')
     with open(css_file, 'at', newline='\n', encoding='utf-8') as css:
         css.write(HTML_FORMATTER.get_style_defs())
+    logging.warning("2: %7.3lf: copy datafiles", timer() - _t)
 
+    # 3) load xref targets
+    _t = timer()
     # TODO: migrate options from fixxref
-    # TODO: do in parallel with loading the xml above.
     # TODO: ideally explicity specify the files we need, this will save us the
     # globbing and we'll load less files.
     fixxref.LoadIndicies(out_dir, '/usr/share/gtk-doc/html', [])
+    logging.warning("3: %7.3lf: load xrefs", timer() - _t)
 
-    # We do multiple passes:
-    # 1) recursively walk the tree and chunk it into a python tree so that we
-    #   can generate navigation and link tags.
+    # == Processing phase ==
+
+    # 4) recursively walk the tree and chunk it into a python tree so that we
+    #    can generate navigation and link tags.
+    _t = timer()
     files = chunk(tree.getroot(), module)
     files = [f for f in PreOrderIter(files) if f.anchor is None]
+    logging.warning("4: %7.3lf: chunk doc", timer() - _t)
 
-    # 2) extract tables:
+    # 5) extract tables:
+    _t = timer()
     # TODO: can be done in parallel
     # - find all 'id' attribs and add them to the link map
     add_id_links(files, fixxref.Links)
     # - build glossary dict
     build_glossary(files)
+    logging.warning("5: %7.3lf: extract tables", timer() - _t)
 
-    # 3) create a xxx.devhelp2 file (could be done in parallel with 4
+    # == Output phase ==
+    # the next two step could be done in parllel
+
+    # 6) create a xxx.devhelp2 file
+    _t = timer()
     create_devhelp2(out_dir, module, tree.getroot(), files)
+    logging.warning("6: %7.3lf: create devhelp2", timer() - _t)
 
-    # 4) iterate the tree and output files
+    # 7) iterate the tree and output files
+    _t = timer()
     # TODO: can be done in parallel, figure out why this is not faster
     # from multiprocessing.pool import Pool
     # with Pool(4) as p:
@@ -1606,6 +1631,7 @@ def main(module, index_file, out_dir, uninstalled):
     #     p.apply_async(convert, args=(out_dir, module, files))
     for node in files:
         convert(out_dir, module, files, node)
+    logging.warning("7: %7.3lf: create html", timer() - _t)
 
 
 def run(options):
