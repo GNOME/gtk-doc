@@ -185,11 +185,7 @@ def gen_chunk_name(node, chunk_params):
 
 def get_chunk_titles(module, node):
     tag = node.tag
-    if tag not in TITLE_XPATHS:
-        # Use defaults
-        (title, subtitle) = TITLE_XPATHS['_']
-    else:
-        (title, subtitle) = TITLE_XPATHS[tag]
+    (title, subtitle) = TITLE_XPATHS.get(tag, TITLE_XPATHS['_'])
 
     ctx = {
         'module': module,
