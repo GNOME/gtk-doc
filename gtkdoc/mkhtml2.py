@@ -43,14 +43,10 @@ TODO:
     - the titles will have a generated prefix, such as 'Part I:'
       (locale dependent)
     - in the toc it would only be the label: 'I.'
-  - 'link' adds a 'title' attr to 'a' if the target has a title.
-    - there is an implementation in convert_link() but it is slow
-    - we might need to collect titles as we chunk
-    - if we do this we'd need to keep iterating, but might be able to replace
-      add_id_links()
   - handle the 'xref' tag
     - this needs the title + the type of the target
-    - for the title, see convert_link()
+    - for the title, see add_id_links_and_titles(), we can also store the tag
+      in another map
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
@@ -146,12 +142,14 @@ TITLE_XPATHS = {
     ),
 }
 
-ID_XPATH = etree.XPath('//@id')
+ID_XPATH = etree.XPath('//*[@id]')
 
 GLOSSENTRY_XPATH = etree.XPath('//glossentry')
 glossary = {}
 
 footnote_idx = 1
+
+titles = {}
 
 
 def gen_chunk_name(node, chunk_params):
@@ -258,15 +256,23 @@ def chunk(xml_node, module, depth=0, idx=0, parent=None):
     return parent
 
 
-def add_id_links(files, links):
+def add_id_links_and_titles(files, links):
     for node in files:
         chunk_name = node.filename[:-5]
         chunk_base = node.filename + '#'
-        for attr in ID_XPATH(node.xml):
+        for elem in ID_XPATH(node.xml):
+            attr = elem.attrib['id']
             if attr == chunk_name:
                 links[attr] = node.filename
             else:
                 links[attr] = chunk_base + attr
+
+            title = TITLE_XPATHS.get(elem.tag, TITLE_XPATHS['_'])[0]
+            res = title(elem)
+            if res:
+                # we need the plain text content
+                titles[attr] = etree.tostring(res[0], method="text",
+                                              encoding=str).strip()
 
 
 def build_glossary(files):
@@ -297,7 +303,7 @@ def convert_ignore(ctx, xml):
 
 
 def convert_skip(ctx, xml):
-    return ['']
+    return []
 
 
 def append_text(text, result):
@@ -623,22 +629,12 @@ def convert_link(ctx, xml):
 
         (tid, href) = fixxref.GetXRef(linkend)
         if href:
-            module = ctx['module']
             title_attr = ''
-            # search for a title under id='tid' in all chunks
-            # NOTE: this will only work for local links
-            # TODO: this works but is super slow
-            # id_xpath = etree.XPath('//*[@id="%s"]' % tid)
-            # for c in ctx['files']:
-            #     nodes = id_xpath(c.xml)
-            #     if nodes:
-            #         title = get_chunk_titles(module, nodes[0])['title']
-            #         if title:
-            #             title_attr = ' title="%s"' % title
-            #             logging.debug('Have title node: href=%s%s', tid, title_attr)
-            #         break
+            title = titles.get(tid)
+            if title:
+                title_attr = ' title="%s"' % title
 
-            href = fixxref.MakeRelativeXRef(module, href)
+            href = fixxref.MakeRelativeXRef(ctx['module'], href)
             result = ['<a href="%s"%s>%s</a>' % (href, title_attr, text)]
         else:
             # TODO: filename is for the output and xml.sourceline is on the masterdoc ...
@@ -844,7 +840,6 @@ def convert_table(ctx, xml):
         # TODO(ensonic): Add a 'Table X. ' prefix, needs a table counter
         result.extend(convert_title(ctx, title_tag))
         result.append('</b></p>')
-        xml.remove(title_tag)
     result.append('<div class="table-contents"><table class="table" summary="g_object_new" border="1">')
 
     convert_inner(ctx, xml, result)
@@ -889,7 +884,7 @@ def convert_thead(ctx, xml):
 
 
 def convert_title(ctx, xml):
-    # This is always called from some context
+    # This is always explicitly called from some context
     result = []
     append_text(xml.text, result)
     convert_inner(ctx, xml, result)
@@ -899,8 +894,7 @@ def convert_title(ctx, xml):
 
 def convert_ulink(ctx, xml):
     result = ['<a class="%s" href="%s">%s</a>' % (xml.tag, xml.attrib['url'], xml.text)]
-    if xml.tail:
-        result.append(xml.tail)
+    append_text(xml.tail, result)
     return result
 
 
@@ -1603,7 +1597,8 @@ def main(module, index_file, out_dir, uninstalled):
     _t = timer()
     # TODO: can be done in parallel
     # - find all 'id' attribs and add them to the link map
-    add_id_links(files, fixxref.Links)
+    # - .. get their titles and store them into the titles map
+    add_id_links_and_titles(files, fixxref.Links)
     # - build glossary dict
     build_glossary(files)
     logging.warning("5: %7.3lf: extract tables", timer() - _t)
