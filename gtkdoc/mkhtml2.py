@@ -39,10 +39,6 @@ TODO:
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
-  - handle 'label' attributes on part/chapter/section-types
-    - the titles will have a generated prefix, such as 'Part I:'
-      (locale dependent)
-    - in the toc it would only be the label: 'I.'
   - handle the 'xref' tag
     - this needs the title + the type of the target
     - for the title, see add_id_links_and_titles(), we can also store the tag
@@ -207,8 +203,15 @@ def get_chunk_titles(module, node):
     }
     res = title(node)
     if res:
+        # handle chunk label for tocs
+        label = node.attrib.get('label')
+        if label:
+            label += '. '
+        else:
+            label = ''
+
         xml = res[0]
-        result['title'] = ''.join(convert_title(ctx, xml))
+        result['title'] = label + ''.join(convert_title(ctx, xml))
         if xml.tag != 'title':
             result['title_tag'] = xml.tag
         else:
