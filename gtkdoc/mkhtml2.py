@@ -51,6 +51,16 @@ TODO:
   xml.text
 - consider some perf-warnings flag
   - see 'No "id" attribute on'
+- find a better way to print context for warnings
+  - we use 'xml.sourceline', but this all does not help a lot due to xi:include
+
+DIFFERENCES:
+- titles
+  - we add the chunk label to both title in toc and tile on the page
+  - docbook xsl only sometimes adds the label to the titles and when it does it
+    adds name chunk type too (e.g. 'Part I.' instead of 'I.')
+- navigation
+  - we always add an up-link except on the first page
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
@@ -350,7 +360,6 @@ def xml_get_title(ctx, xml):
     if title_tag is not None:
         return ''.join(convert_title(ctx, title_tag))
     else:
-        # TODO(ensonic): any way to get the file (inlcudes) too?
         logging.warning('%s: Expected title tag under "%s %s"', xml.sourceline, xml.tag, str(xml.attrib))
         return ''
 
