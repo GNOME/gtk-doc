@@ -1223,13 +1223,12 @@ def convert_chunk_with_toc(ctx, div_class, title_tag):
         generate_basic_nav(ctx),
         '<div class="%s">' % div_class,
     ]
-    title = node.xml.find('title')
-    if title is not None:
+    if node.title:
         result.append("""
 <div class="titlepage">
 <%s class="title"><a name="%s"></a>%s</%s>
 </div>""" % (
-            title_tag, get_id(node), title.text, title_tag))
+            title_tag, get_id(node), node.title, title_tag))
 
     toc = generate_toc(ctx, node)
     if toc:
@@ -1337,12 +1336,11 @@ def convert_preface(ctx):
         generate_basic_nav(ctx),
         '<div class="preface">'
     ]
-    title = node.xml.find('title')
-    if title is not None:
+    if node.title:
         result.append("""
 <div class="titlepage">
 <h2 class="title"><a name="%s"></a>%s</h2>
-</div>""" % (get_id(node), title.text))
+</div>""" % (get_id(node), node.title))
     convert_inner(ctx, node.xml, result)
     result.extend(generate_footer(ctx))
     result.append("""</div>
