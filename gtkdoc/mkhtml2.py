@@ -1566,6 +1566,9 @@ def main(module, index_file, out_dir, uninstalled):
 
     # 1) load the docuemnt
     _t = timer()
+    # does not seem to be faster
+    # parser = etree.XMLParser(collect_ids=False)
+    # tree = etree.parse(index_file, parser)
     tree = etree.parse(index_file)
     tree.xinclude()
     logging.warning("1: %7.3lf: load doc", timer() - _t)
