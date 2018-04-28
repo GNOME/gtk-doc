@@ -39,10 +39,6 @@ TODO:
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
-  - handle the 'xref' tag
-    - this needs the title + the type of the target
-    - for the title, see add_id_links_and_titles(), we can also store the tag
-      in another map
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
@@ -155,6 +151,10 @@ glossary = {}
 
 footnote_idx = 1
 
+# nested dict with subkeys:
+# title: textual title
+# tag: chunk tag
+# xml: title xml node
 titles = {}
 
 
@@ -283,9 +283,13 @@ def add_id_links_and_titles(files, links):
             title = TITLE_XPATHS.get(elem.tag, TITLE_XPATHS['_'])[0]
             res = title(elem)
             if res:
-                # we need the plain text content
-                titles[attr] = etree.tostring(res[0], method="text",
-                                              encoding=str).strip()
+                xml = res[0]
+                # TODO: consider to eval those lazily
+                titles[attr] = {
+                    'title': etree.tostring(xml, method="text", encoding=str).strip(),
+                    'xml': xml,
+                    'tag': elem.tag,
+                }
 
 
 def build_glossary(files):
@@ -644,7 +648,7 @@ def convert_link(ctx, xml):
             title_attr = ''
             title = titles.get(tid)
             if title:
-                title_attr = ' title="%s"' % title
+                title_attr = ' title="%s"' % title['title']
 
             href = fixxref.MakeRelativeXRef(ctx['module'], href)
             result = ['<a href="%s"%s>%s</a>' % (href, title_attr, text)]
@@ -954,6 +958,28 @@ def convert_varlistentry(ctx, xml):
     return result
 
 
+def convert_xref(ctx, xml):
+    linkend = xml.attrib['linkend']
+    (tid, href) = fixxref.GetXRef(linkend)
+    title = titles.get(tid)
+    # all sectN need to become 'section
+    tag = title['tag']
+    tag = {
+        'sect1': 'section',
+        'sect2': 'section',
+        'sect3': 'section',
+        'sect4': 'section',
+        'sect5': 'section',
+    }.get(tag, tag)
+    result = [
+        '<a class="xref" href="%s" title="%s">the %s called “%s”</a>' %
+        (href, title['title'], tag, ''.join(convert_title(ctx, title['xml'])))
+    ]
+
+    append_text(xml.tail, result)
+    return result
+
+
 # TODO(ensonic): turn into class with converters as functions and ctx as self
 convert_tags = {
     'abstract': convert_abstract,
@@ -1033,6 +1059,7 @@ convert_tags = {
     'variablelist': convert_variablelist,
     'varlistentry': convert_varlistentry,
     'warning': convert_div,
+    'xref': convert_xref,
 }
 
 # conversion helpers
