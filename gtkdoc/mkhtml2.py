@@ -906,7 +906,11 @@ def convert_title(ctx, xml):
 
 
 def convert_ulink(ctx, xml):
-    result = ['<a class="%s" href="%s">%s</a>' % (xml.tag, xml.attrib['url'], xml.text)]
+    if xml.text:
+        result = ['<a class="%s" href="%s">%s</a>' % (xml.tag, xml.attrib['url'], xml.text)]
+    else:
+        url = xml.attrib['url']
+        result = ['<a class="%s" href="%s">%s</a>' % (xml.tag, url, url)]
     append_text(xml.tail, result)
     return result
 
