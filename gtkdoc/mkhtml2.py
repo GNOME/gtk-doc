@@ -828,6 +828,7 @@ def convert_sect3(ctx, xml):
 def convert_simpara(ctx, xml):
     result = ['<p>']
     append_text(xml.text, result)
+    convert_inner(ctx, xml, result)
     result.append('</p>')
     append_text(xml.tail, result)
     return result
