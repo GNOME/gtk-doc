@@ -49,10 +49,6 @@ NoLinks = {
     'unsigned',
     'va-list',
     'void',
-    'GBoxed',
-    'GEnum',
-    'GFlags',
-    'GInterface'
 }
 
 
@@ -93,6 +89,11 @@ def LoadIndicies(module_dir, html_dir, extra_dirs):
         if dir != html_dir:
             logging.info('Scanning GLib directory: %s', dir)
             ScanIndices(dir, (re.search(prefix_match, dir) is None), dir_cache)
+    else:
+        NoLinks.add('GBoxed')
+        NoLinks.add('GEnum')
+        NoLinks.add('GFlags')
+        NoLinks.add('GInterface')
 
     path = os.environ.get('GNOME2_PATH')
     if path:
