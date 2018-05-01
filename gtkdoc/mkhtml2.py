@@ -350,11 +350,12 @@ def convert__unknown(ctx, xml):
 
 def convert_sect(ctx, xml, h_tag, inner_func=convert_inner):
     result = ['<div class="%s">\n' % xml.tag]
-    title = xml.find('title')
-    if title is not None:
+    title_tag = xml.find('title')
+    if title_tag is not None:
         if 'id' in xml.attrib:
             result.append('<a name="%s"></a>' % xml.attrib['id'])
-        result.append('<%s>%s</%s>' % (h_tag, title.text, h_tag))
+        result.append('<%s>%s</%s>' % (
+            h_tag, ''.join(convert_title(ctx, title_tag)), h_tag))
     append_text(xml.text, result)
     inner_func(ctx, xml, result)
     result.append('</div>')
@@ -538,7 +539,7 @@ def convert_footnote(ctx, xml):
 def convert_formalpara(ctx, xml):
     result = None
     title_tag = xml.find('title')
-    result = ['<p><b>%s</b>' % title_tag.text]
+    result = ['<p><b>%s</b>' % ''.join(convert_title(ctx, title_tag))]
     para_tag = xml.find('para')
     append_text(para_tag.text, result)
     convert_inner(ctx, para_tag, result)
