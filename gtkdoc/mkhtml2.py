@@ -643,8 +643,6 @@ def convert_itemizedlist(ctx, xml):
 
 def convert_link(ctx, xml):
     linkend = xml.attrib['linkend']
-    if linkend in fixxref.NoLinks:
-        linkend = None
     result = []
     if linkend:
         link_text = []
