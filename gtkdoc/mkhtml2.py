@@ -39,6 +39,9 @@ TODO:
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
+- we're missing local anchors in refsect
+  - we should create id attrs on the docbook xml, instead of injecting anchors
+    in our xsl layer
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
@@ -323,8 +326,8 @@ def convert_skip(ctx, xml):
     return []
 
 
-def append_text(text, result):
-    if text and text.strip():
+def append_text(ctx, text, result):
+    if text and ('no-strip' in ctx or text.strip()):
         result.append(text.replace('<', '&lt;').replace('>', '&gt;'))
 
 
@@ -356,10 +359,10 @@ def convert_sect(ctx, xml, h_tag, inner_func=convert_inner):
             result.append('<a name="%s"></a>' % xml.attrib['id'])
         result.append('<%s>%s</%s>' % (
             h_tag, ''.join(convert_title(ctx, title_tag)), h_tag))
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     inner_func(ctx, xml, result)
     result.append('</div>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -378,10 +381,10 @@ def xml_get_title(ctx, xml):
 def convert_abstract(ctx, xml):
     result = ["""<div class="abstract">
     <p class="title"><b>Abstract</b></p>"""]
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</div>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -411,19 +414,19 @@ def convert_bookinfo(ctx, xml):
 
 def convert_blockquote(ctx, xml):
     result = ['<div class="blockquote">\n<blockquote class="blockquote">']
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</blockquote>\n</div>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
 def convert_code(ctx, xml):
     result = ['<code class="%s">' % xml.tag]
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</code>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -441,28 +444,28 @@ def convert_colspec(ctx, xml):
 
 def convert_command(ctx, xml):
     result = ['<strong class="userinput"><code>']
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</code></strong>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
 def convert_corpauthor(ctx, xml):
     result = ['<div><h3 class="corpauthor">\n']
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</h3></div>\n')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
 def convert_div(ctx, xml):
     result = ['<div class="%s">\n' % xml.tag]
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</div>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -473,19 +476,19 @@ def convert_emphasis(ctx, xml):
     else:
         result = ['<span class="emphasis"><em>']
         end = '</em></span>'
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append(end)
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
 def convert_em_class(ctx, xml):
     result = ['<em class="%s"><code>' % xml.tag]
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</code></em>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -497,10 +500,10 @@ def convert_entry(ctx, xml):
     if 'morerows' in xml.attrib:
         result.append(' rowspan="%s"' % (1 + int(xml.attrib['morerows'])))
     result.append('>')
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</' + entry_type + '>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -545,7 +548,7 @@ def convert_formalpara(ctx, xml):
     convert_inner(ctx, para_tag, result)
     append_text(para_tag.tail, result)
     result.append('</p>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -645,7 +648,7 @@ def convert_link(ctx, xml):
     result = []
     if linkend:
         link_text = []
-        append_text(xml.text, link_text)
+        append_text(ctx, xml.text, link_text)
         convert_inner(ctx, xml, link_text)
         text = ''.join(link_text)
 
@@ -663,9 +666,9 @@ def convert_link(ctx, xml):
             fixxref.ReportBadXRef(ctx['node'].filename, 0, linkend, text)
             result = [text]
     else:
-        append_text(xml.text, result)
+        append_text(ctx, xml.text, result)
         convert_inner(ctx, xml, result)
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -679,10 +682,10 @@ def convert_listitem(ctx, xml):
 
 def convert_literallayout(ctx, xml):
     result = ['<div class="literallayout"><p><br>\n']
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</p></div>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -690,7 +693,7 @@ def convert_orderedlist(ctx, xml):
     result = ['<div class="orderedlist"><ol class="orderedlist" type="1">']
     convert_inner(ctx, xml, result)
     result.append('</ol></div>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -702,10 +705,10 @@ def convert_para(ctx, xml):
         result.append('<p>')
     if 'id' in xml.attrib:
         result.append('<a name="%s"></a>' % xml.attrib['id'])
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</p>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -714,10 +717,10 @@ def convert_para_like(ctx, xml):
     if 'id' in xml.attrib:
         result.append('<a name="%s"></a>' % xml.attrib['id'])
     result.append('<p class="%s">' % xml.tag)
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</p>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -727,10 +730,10 @@ def convert_phrase(ctx, xml):
         result.append(' class="%s">' % xml.attrib['role'])
     else:
         result.append('>')
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</span>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -742,11 +745,14 @@ def convert_primaryie(ctx, xml):
 
 
 def convert_pre(ctx, xml):
-    result = ['<pre class="%s">\n' % xml.tag]
-    append_text(xml.text, result)
+    # Since we're inside <pre> don't skip newlines
+    ctx['no-strip'] = True
+    result = ['<pre class="%s">' % xml.tag]
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</pre>')
-    append_text(xml.tail, result)
+    del ctx['no-strip']
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -780,19 +786,19 @@ def convert_programlisting(ctx, xml):
                 result.append('</pre>')
     else:
         result.append('<pre class="programlisting">')
-        append_text(xml.text, result)
+        append_text(ctx, xml.text, result)
         convert_inner(ctx, xml, result)
         result.append('</pre>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
 def convert_quote(ctx, xml):
     result = ['<span class="quote">"<span class="quote">']
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</span>"</span>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -837,19 +843,19 @@ def convert_sect3(ctx, xml):
 
 def convert_simpara(ctx, xml):
     result = ['<p>']
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</p>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
 def convert_span(ctx, xml):
     result = ['<span class="%s">' % xml.tag]
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</span>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -868,7 +874,7 @@ def convert_table(ctx, xml):
     convert_inner(ctx, xml, result)
 
     result.append('</table></div></div>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -909,9 +915,9 @@ def convert_thead(ctx, xml):
 def convert_title(ctx, xml):
     # This is always explicitly called from some context
     result = []
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -921,16 +927,16 @@ def convert_ulink(ctx, xml):
     else:
         url = xml.attrib['url']
         result = ['<a class="%s" href="%s">%s</a>' % (xml.tag, url, url)]
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
 def convert_userinput(ctx, xml):
     result = ['<span class="command"><strong>']
-    append_text(xml.text, result)
+    append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</strong></span>')
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
@@ -982,7 +988,7 @@ def convert_xref(ctx, xml):
         (href, title['title'], tag, ''.join(convert_title(ctx, title['xml'])))
     ]
 
-    append_text(xml.tail, result)
+    append_text(ctx, xml.tail, result)
     return result
 
 
