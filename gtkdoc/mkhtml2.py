@@ -466,10 +466,15 @@ def convert_div(ctx, xml):
 
 
 def convert_emphasis(ctx, xml):
-    result = ['<span class="emphasis"><em>']
+    if 'role' in xml.attrib:
+        result = ['<span class="%s">' % xml.attrib['role']]
+        end = '</span>'
+    else:
+        result = ['<span class="emphasis"><em>']
+        end = '</em></span>'
     append_text(xml.text, result)
     convert_inner(ctx, xml, result)
-    result.append('</em></span>')
+    result.append(end)
     append_text(xml.tail, result)
     return result
 
