@@ -39,9 +39,6 @@ TODO:
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
-- we're missing local anchors in refsect
-  - we should create id attrs on the docbook xml, instead of injecting anchors
-    in our xsl layer
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text
 - consider some perf-warnings flag
@@ -326,6 +323,11 @@ def convert_skip(ctx, xml):
     return []
 
 
+def append_idref(attrib, result):
+    if 'id' in attrib:
+        result.append('<a name="%s"></a>' % attrib['id'])
+
+
 def append_text(ctx, text, result):
     if text and ('no-strip' in ctx or text.strip()):
         result.append(text.replace('<', '&lt;').replace('>', '&gt;'))
@@ -485,6 +487,7 @@ def convert_emphasis(ctx, xml):
 
 def convert_em_class(ctx, xml):
     result = ['<em class="%s"><code>' % xml.tag]
+    append_idref(xml.attrib, result)
     append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</code></em>')
@@ -859,8 +862,7 @@ def convert_span(ctx, xml):
 
 def convert_table(ctx, xml):
     result = ['<div class="table">']
-    if 'id' in xml.attrib:
-        result.append('<a name="%s"></a>' % xml.attrib['id'])
+    append_idref(xml.attrib, result)
     title_tag = xml.find('title')
     if title_tag is not None:
         result.append('<p class="title"><b>')
