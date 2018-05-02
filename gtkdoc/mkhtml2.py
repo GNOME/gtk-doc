@@ -547,9 +547,9 @@ def convert_formalpara(ctx, xml):
     title_tag = xml.find('title')
     result = ['<p><b>%s</b>' % ''.join(convert_title(ctx, title_tag))]
     para_tag = xml.find('para')
-    append_text(para_tag.text, result)
+    append_text(ctx, para_tag.text, result)
     convert_inner(ctx, para_tag, result)
-    append_text(para_tag.tail, result)
+    append_text(ctx, para_tag.tail, result)
     result.append('</p>')
     append_text(ctx, xml.tail, result)
     return result
