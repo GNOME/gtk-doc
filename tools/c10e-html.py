@@ -31,6 +31,7 @@ def prettify(filename):
   </div>
 """, '', html)
         html = re.sub(r'\s*<p>\s*</p>', '', html)
+        html = re.sub(r'\s*<a name="id-[.0-9]+">\s*</a>', '', html)
         html = re.sub(r'\s*<div class="titlepage">\s*</div>', '', html)
         html = re.sub(r'\s*<meta content="DocBook[^>]*>', '', html)
         html = re.sub(r'\s*<meta content="GTK-Doc[^>]*>', '', html)
