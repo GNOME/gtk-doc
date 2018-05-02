@@ -48,11 +48,16 @@ TODO:
 
 DIFFERENCES:
 - titles
-  - we add the chunk label to both title in toc and tile on the page
+  - we add the chunk label to the title in toc, on the page and in nav tooltips
   - docbook xsl only sometimes adds the label to the titles and when it does it
     adds name chunk type too (e.g. 'Part I.' instead of 'I.')
 - navigation
   - we always add an up-link except on the first page
+- footer
+  - we're nov omitting the footer
+- tocs
+  - we always add "Table of Contents' before a toc
+  - docbook does that for some pages, it is configurable
 
 OPTIONAL:
 - minify html: https://pypi.python.org/pypi/htmlmin/
