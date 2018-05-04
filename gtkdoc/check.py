@@ -25,9 +25,6 @@ results. Can be run druring make check, by adding this to the documentations
 Makefile.am: TESTS = $(GTKDOC_CHECK).
 """
 
-# Support both Python 2 and 3
-from __future__ import print_function
-
 import os
 import re
 from glob import glob
@@ -53,17 +50,21 @@ def check_empty(filename):
     return count
 
 
+def read_file(filename):
+    with open(filename, 'r', encoding='utf-8') as f:
+        return f.read().splitlines()
+
+
 def check_includes(filename):
     # Check that each XML file in the xml directory is included in doc_main_file
-    with common.open_text(filename) as f:
-        lines = f.read().splitlines()
-        num_missing = 0
-        for include in glob('xml/*.xml'):
-            try:
-                next(line for line in lines if include in line)
-            except StopIteration:
-                num_missing += 1
-                print('%s:1:E: doesn\'t appear to include "%s"' % (filename, include))
+    lines = read_file(filename)
+    num_missing = 0
+    for include in glob('xml/*.xml'):
+        try:
+            next(line for line in lines if include in line)
+        except StopIteration:
+            num_missing += 1
+            print('%s:1:E: doesn\'t appear to include "%s"' % (filename, include))
 
     return num_missing
 
@@ -72,11 +73,6 @@ def get_variable(env, lines, variable):
     value = env.get(variable,
                     grep(r'^\s*' + variable + r'\s*=\s*(\S+)', lines, variable))
     return value
-
-
-def read_file(filename):
-    with common.open_text(filename) as f:
-        return f.read().splitlines()
 
 
 def run_tests(workdir, doc_module, doc_main_file):

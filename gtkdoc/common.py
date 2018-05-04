@@ -19,42 +19,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-# Support both Python 2 and 3
-from __future__ import print_function
-
 from collections import OrderedDict
 import logging
 import os
 import re
 import subprocess
 import sys
-import six
-import codecs
 
 from . import config
-
-
-def open_text(filename, mode='r', encoding='utf-8'):
-    """An open() which removes some differences between Python 2 and 3 and
-    has saner defaults.
-
-    Unlike the builtin open by default utf-8 is use and not the locale
-    encoding (which is ANSI on Windows for example, not very helpful)
-
-    For Python 2, files are opened in text mode like with Python 3.
-    """
-
-    if mode not in ('r', 'w'):
-        raise ValueError("mode %r not supported, must be 'r' or 'w'" % mode)
-
-    if six.PY3:
-        return open(filename, mode, encoding=encoding)
-    else:
-        # We can't use io.open() here as its write method is too strict and
-        # only allows unicode instances and not everything in the codebase
-        # forces unicode at the moment. codecs.open() on the other hand
-        # happily takes ASCII str and decodes it.
-        return codecs.open(filename, mode, encoding=encoding)
 
 
 def setup_logging():
@@ -69,16 +41,12 @@ def setup_logging():
     logging.basicConfig(stream=sys.stdout,
                         level=logging.getLevelName(log_level.upper()),
                         format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
-    # When redirecting the output on python2 or if run with a non utf-8 locale
+    # When redirecting the output and running with a non utf-8 locale
     # we get UnicodeEncodeError:
     encoding = sys.stdout.encoding
     if 'PYTHONIOENCODING' not in os.environ and (not encoding or encoding != 'UTF-8'):
         sys.stdout.flush()
-        if six.PY3:
-            sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
-        else:
-            import codecs
-            sys.stdout = codecs.getwriter('utf8')(sys.stdout)
+        sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
 
 
 def UpdateFileIfChanged(old_file, new_file, make_backup):

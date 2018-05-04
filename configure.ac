@@ -32,7 +32,7 @@ PKG_PROG_PKG_CONFIG([0.19])
 dnl
 dnl Check for Python.
 dnl
-AM_PATH_PYTHON([2.7])
+AM_PATH_PYTHON([3.2])
 
 dnl
 dnl Check for xsltproc

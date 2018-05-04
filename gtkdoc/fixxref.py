@@ -21,9 +21,6 @@
 
 ''"Fix cross-references in the HTML documentation.''"
 
-# Support both Python 2 and 3
-from __future__ import print_function
-
 import logging
 import os
 import re
@@ -183,7 +180,7 @@ def ReadDevhelp(file, use_absolute_links):
 
     logging.info('Scanning index file=%s, absolute=%d, dir=%s', file, use_absolute_links, dir)
 
-    for line in common.open_text(file):
+    for line in open(file, 'r', encoding='utf-8'):
         m = re.search(r' link="([^#]*)#([^"]*)"', line)
         if m:
             link = m.group(1) + '#' + m.group(2)
@@ -193,7 +190,7 @@ def ReadDevhelp(file, use_absolute_links):
 
 def ReadSections(module):
     """We don't warn on missing links to non-public sysmbols."""
-    for line in common.open_text(module + '-sections.txt'):
+    for line in open(module + '-sections.txt', 'r', encoding='utf-8'):
         m1 = re.search(r'^<SUBSECTION\s*(.*)>', line)
         if line.startswith('#') or line.strip() == '':
             continue
@@ -228,7 +225,7 @@ def FixCrossReferences(module_dir, module, src_lang):
 def FixHTMLFile(src_lang, module, file):
     logging.info('Fixing file: %s', file)
 
-    content = common.open_text(file).read()
+    content = open(file, 'r', encoding='utf-8').read()
 
     if config.highlight:
         # FIXME: ideally we'd pass a clue about the example language to the highligher
@@ -272,7 +269,7 @@ def FixHTMLFile(src_lang, module, file):
 
     new_file = file + '.new'
     content = '\n'.join(lines)
-    with common.open_text(new_file, 'w') as h:
+    with open(new_file, 'w', encoding='utf-8') as h:
         h.write(content)
 
     os.unlink(file)
@@ -412,7 +409,7 @@ def HighlightSourceVim(src_lang, type, source):
         script += "%s -n -e -u NONE -T xterm >/dev/null" % config.highlight
         subprocess.check_call([script], shell=True)
 
-        highlighted_source = common.open_text(temp_source_file + ".html").read()
+        highlighted_source = open(temp_source_file + ".html", 'r', encoding='utf-8').read()
         highlighted_source = re.sub(r'.*<pre\b[^>]*>\n', '', highlighted_source, flags=re.DOTALL)
         highlighted_source = re.sub(r'</pre>.*', '', highlighted_source, flags=re.DOTALL)
 

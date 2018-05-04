@@ -1206,7 +1206,7 @@ def run(options):
     logging.info('options: %s', str(options.__dict__))
 
     c_file = options.module + '-scan.c'
-    output = common.open_text(c_file, 'w')
+    output = open(c_file, 'w', encoding='utf-8')
 
     base_filename = os.path.join(options.output_dir, options.module)
     old_signals_filename = base_filename + '.signals'
@@ -1227,7 +1227,7 @@ def run(options):
     get_types = ""
     ntypes = 1
 
-    for line in common.open_text(options.types):
+    for line in open(options.types, 'r', encoding='utf-8'):
         if line.startswith('#include'):
             includes += line
         elif line.startswith('%') or line.strip() == '':

@@ -24,9 +24,6 @@
 The rebase tool rewrites URI references in installed HTML documentation.
 """
 
-from __future__ import print_function
-from six import iteritems, iterkeys
-
 import logging
 import os
 import re
@@ -136,7 +133,7 @@ gunzip %s/%s
 def ReadDevhelp(dir, file):
     onlinedir = None
 
-    for line in common.open_text(os.path.join(dir, file)):
+    for line in open(os.path.join(dir, file), mode='r', encoding='utf-8'):
         # online must come before chapter/functions
         if '<chapters' in line or '<functions' in line:
             break
@@ -150,7 +147,7 @@ def ReadDevhelp(dir, file):
 def ReadIndex(dir, file):
     onlinedir = None
 
-    for line in common.open_text(os.path.join(dir, file)):
+    for line in open(os.path.join(dir, file), mode='r', encoding='utf-8'):
         # ONLINE must come before any ANCHORs
         if '<ANCHOR' in line:
             break
@@ -207,10 +204,10 @@ def RebaseFile(filename, options):
     def repl_func(match):
         return match.group(1) + RebaseLink(match.group(2), options) + match.group(3)
 
-    contents = common.open_text(filename).read()
+    contents = open(filename, mode='r', encoding='utf-8').read()
     processed = re.sub(regex, repl_func, contents)
     newfilename = filename + '.new'
-    with common.open_text(newfilename, 'w') as h:
+    with open(newfilename, mode='w', encoding='utf-8') as h:
         h.write(processed)
     os.unlink(filename)
     os.rename(newfilename, filename)
@@ -252,6 +249,6 @@ def RebaseLink(href, options):
 
 
 def PrintWhatWeHaveDone():
-    for origdir in sorted(iterkeys(Mapped)):
+    for origdir in sorted(Mapped.keys()):
         info = Mapped[origdir]
         print(origdir, "->", info[0], "(%s)" % info[1])

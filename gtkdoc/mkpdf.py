@@ -19,9 +19,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 
-# Support both Python 2 and 3
-from __future__ import print_function
-
 import logging
 import os
 import sys

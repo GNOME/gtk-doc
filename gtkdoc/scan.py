@@ -33,9 +33,6 @@ This second list file is typically copied to '$MODULE-sections.txt' and
 organized into sections ready to output the XML pages.
 """
 
-from __future__ import print_function
-from six import iteritems, iterkeys
-
 import logging
 import os
 import re
@@ -77,16 +74,16 @@ def Run(options):
     for dir in options.source_dir:
         ScanHeaders(dir, section_list, decl_list, get_types, options)
 
-    with common.open_text(new_decl_list, 'w') as f:
-        for section in sorted(iterkeys(section_list)):
+    with open(new_decl_list, 'w', encoding='utf-8') as f:
+        for section in sorted(section_list.keys()):
             f.write(section_list[section])
 
-    with common.open_text(new_decl, 'w') as f:
+    with open(new_decl, 'w', encoding='utf-8') as f:
         for decl in decl_list:
             f.write(decl)
 
     if options.rebuild_types:
-        with common.open_text(new_types, 'w') as f:
+        with open(new_types, 'w', encoding='utf-8') as f:
             for func in sorted(get_types):
                 f.write(func + '\n')
 
@@ -113,7 +110,7 @@ def Run(options):
     # because EXTRA_DIST in gtk-doc.make requires it.
     overrides_file = base_filename + '-overrides.txt'
     if not os.path.exists(overrides_file):
-        open(overrides_file, 'w').close()
+        open(overrides_file, 'w', encoding='utf-8').close()
 
 
 #
@@ -226,7 +223,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
 
     logging.info('Scanning %s', input_file)
 
-    for line in common.open_text(input_file):
+    for line in open(input_file, 'r', encoding='utf-8'):
         # If this is a private header, skip it.
         if re.search(r'^\s*/\*\s*<\s*private_header\s*>\s*\*/', line):
             return
@@ -773,7 +770,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
         previous_line = line
 
     # print remaining forward declarations
-    for symbol in sorted(iterkeys(forward_decls)):
+    for symbol in sorted(forward_decls.keys()):
         if forward_decls[symbol]:
             AddSymbolToList(slist, symbol)
             decl_list.append(forward_decls[symbol])
