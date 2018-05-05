@@ -2378,9 +2378,8 @@ def OutputExtraFile(file):
 
     contents = open(file, 'r', encoding='utf-8').read()
 
-    OUTPUT = open(new_db_file, 'w', encoding='utf-8')
-    OUTPUT.write(ExpandAbbreviations(basename + " file", contents))
-    OUTPUT.close()
+    with open(new_db_file, 'w', encoding='utf-8') as out:
+        out.write(ExpandAbbreviations(basename + " file", contents))
 
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
@@ -2430,18 +2429,16 @@ def OutputBook(main_file, book_top, book_bottom):
     old_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.top")
     new_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.top.new")
 
-    OUTPUT = open(new_file, 'w', encoding='utf-8')
-    OUTPUT.write(book_top)
-    OUTPUT.close()
+    with open(new_file, 'w', encoding='utf-8') as out:
+        out.write(book_top)
 
     common.UpdateFileIfChanged(old_file, new_file, 0)
 
     old_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.bottom")
     new_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.bottom.new")
 
-    OUTPUT = open(new_file, 'w', encoding='utf-8')
-    OUTPUT.write(book_bottom)
-    OUTPUT.close()
+    with open(new_file, 'w', encoding='utf-8') as out:
+        out.write(book_bottom)
 
     common.UpdateFileIfChanged(old_file, new_file, 0)
 
@@ -4069,14 +4066,11 @@ def OutputUndeclaredSymbols():
     old_undeclared_file = os.path.join(ROOT_DIR, MODULE + "-undeclared.txt")
     new_undeclared_file = os.path.join(ROOT_DIR, MODULE + "-undeclared.new")
 
-    UNDECLARED = open(new_undeclared_file, 'w', encoding='utf-8')
-
-    if UndeclaredSymbols:
-        UNDECLARED.write("\n".join(sorted(UndeclaredSymbols.keys())))
-        UNDECLARED.write("\n")
-        print("See %s-undeclared.txt for the list of undeclared symbols." % MODULE)
-
-    UNDECLARED.close()
+    with open(new_undeclared_file, 'w', encoding='utf-8') as out:
+        if UndeclaredSymbols:
+            out.write("\n".join(sorted(UndeclaredSymbols.keys())))
+            out.write("\n")
+            print("See %s-undeclared.txt for the list of undeclared symbols." % MODULE)
 
     return common.UpdateFileIfChanged(old_undeclared_file, new_undeclared_file, 0)
 
@@ -4094,18 +4088,17 @@ def OutputUnusedSymbols():
     old_unused_file = os.path.join(ROOT_DIR, MODULE + "-unused.txt")
     new_unused_file = os.path.join(ROOT_DIR, MODULE + "-unused.new")
 
-    UNUSED = open(new_unused_file, 'w', encoding='utf-8')
+    with open(new_unused_file, 'w', encoding='utf-8') as out:
 
-    for symbol in sorted(Declarations.keys()):
-        if symbol not in DeclarationOutput:
-            UNUSED.write("%s\n" % symbol)
+        for symbol in sorted(Declarations.keys()):
+            if symbol not in DeclarationOutput:
+                out.write("%s\n" % symbol)
+                num_unused += 1
+
+        for symbol in sorted(AllUnusedSymbols.keys()):
+            out.write(symbol + "(" + AllUnusedSymbols[symbol] + ")\n")
             num_unused += 1
 
-    for symbol in sorted(AllUnusedSymbols.keys()):
-        UNUSED.write(symbol + "(" + AllUnusedSymbols[symbol] + ")\n")
-        num_unused += 1
-
-    UNUSED.close()
     if num_unused != 0:
         common.LogWarning(
             old_unused_file, 1, "%d unused declarations. They should be added to %s-sections.txt in the appropriate place." % (num_unused, MODULE))
@@ -4115,21 +4108,19 @@ def OutputUnusedSymbols():
 
 def OutputAllSymbols():
     """Outputs list of all symbols to a file."""
-    SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-symbols.txt"), 'w', encoding='utf-8')
-
-    for symbol in sorted(AllSymbols.keys()):
-        SYMBOLS.write(symbol + "\n")
-    SYMBOLS.close()
+    new_symbols_file = os.path.join(ROOT_DIR, MODULE + "-symbols.txt")
+    with open(new_symbols_file, 'w', encoding='utf-8') as out:
+        for symbol in sorted(AllSymbols.keys()):
+            out.write(symbol + "\n")
 
 
 def OutputSymbolsWithoutSince():
     """Outputs list of all symbols without a since tag to a file."""
-    SYMBOLS = open(os.path.join(ROOT_DIR, MODULE + "-nosince.txt"), 'w', encoding='utf-8')
-
-    for symbol in sorted(SourceSymbolDocs.keys()):
-        if symbol in Since:
-            SYMBOLS.write(symbol + "\n")
-    SYMBOLS.close()
+    new_nosince_file = os.path.join(ROOT_DIR, MODULE + "-nosince.txt")
+    with open(new_nosince_file, 'w', encoding='utf-8') as out:
+        for symbol in sorted(SourceSymbolDocs.keys()):
+            if symbol in Since:
+                out.write(symbol + "\n")
 
 
 def CheckParamsDocumented(symbol, params):
@@ -4494,9 +4485,11 @@ def ReadObjectHierarchy(ifile):
 
     logging.debug('got %d entries for hierarchy', len(tree))
 
-    OUTPUT = open(new_tree_index, 'w', encoding='utf-8')
-    OUTPUT.write(MakeDocHeader("screen") + "\n<screen>\n" + AddTreeLineArt(tree) + "\n</screen>\n")
-    OUTPUT.close()
+    with open(new_tree_index, 'w', encoding='utf-8') as out:
+        out.write(MakeDocHeader("screen"))
+        out.write("\n<screen>\n")
+        out.write(AddTreeLineArt(tree))
+        out.write("\n</screen>\n")
 
     common.UpdateFileIfChanged(old_tree_index, new_tree_index, 0)
 
