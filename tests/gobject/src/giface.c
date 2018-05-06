@@ -17,6 +17,8 @@
  *
  * Just incase you wonder, special caracters can be escaped with a \ like in \%
  * or \# or even \@.
+ *
+ * We also support verbatim spans - lets test escaping of a `<tag>` block.
  */
 /**
  * SECTION:iface2

@@ -210,6 +210,12 @@ accessed via the following functions.</para>
         output = md_to_db.MarkDownParse(input_, "")
         self.assertEqual(expected, output)
 
+    def test_verbatim(self):
+        input_ = "a `<child>` element"
+        expected = '<para>a <literal>&lt;child&gt;</literal> element</para>\n'
+        output = md_to_db.MarkDownParse(input_, "")
+        self.assertEqual(expected, output)
+
     def test_code(self):
         input_ = """\
 |[<!-- language="C" -->
