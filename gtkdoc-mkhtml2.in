@@ -31,6 +31,9 @@ if __name__ == '__main__':
     parser.add_argument('--version', action='version', version=config.version)
     parser.add_argument('args', nargs='*',
                         help='MODULE DRIVER_FILE')
+    parser.add_argument('--src-lang', default='c',
+                        help='Programing language used for syntax highlighting. This'
+                        'can be any language pygments supports.')
     # TODO: only for testing, replace with env-var
     parser.add_argument('--uninstalled', action='store_true', default=False,
                         help='???')

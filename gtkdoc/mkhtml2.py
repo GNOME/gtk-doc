@@ -45,6 +45,13 @@ TODO:
   - see 'No "id" attribute on'
 - find a better way to print context for warnings
   - we use 'xml.sourceline', but this all does not help a lot due to xi:include
+- copy images
+  - do we need to find them on the respective tags and search them in the path
+    setup by '--path'
+- commandline options
+  - mkhtml:
+    --path 'Extra source directories' - used to find images
+  - fixxref:
 
 DIFFERENCES:
 - titles
@@ -766,7 +773,7 @@ def convert_programlisting(ctx, xml):
     result = []
     if xml.attrib.get('role', '') == 'example':
         if xml.text:
-            lang = xml.attrib.get('language', 'c').lower()
+            lang = xml.attrib.get('language', ctx['src-lang']).lower()
             if lang not in LEXERS:
                 LEXERS[lang] = get_lexer_by_name(lang)
             lexer = LEXERS.get(lang, None)
@@ -1479,7 +1486,7 @@ def generate_nav_nodes(files, node):
     return nav
 
 
-def convert(out_dir, module, files, node):
+def convert(out_dir, module, files, node, src_lang):
     """Convert the docbook chunks to a html file.
 
     Args:
@@ -1495,6 +1502,7 @@ def convert(out_dir, module, files, node):
             'module': module,
             'files': files,
             'node': node,
+            'src-lang': src_lang,
         }
         ctx.update(generate_nav_nodes(files, node))
 
@@ -1611,7 +1619,7 @@ def get_dirs(uninstalled):
     return (gtkdocdir, styledir)
 
 
-def main(module, index_file, out_dir, uninstalled):
+def main(module, index_file, out_dir, uninstalled, src_lang):
 
     # == Loading phase ==
     # the next 3 steps could be done in paralel
@@ -1683,7 +1691,7 @@ def main(module, index_file, out_dir, uninstalled):
     # with ThreadPool(4) as p:
     #     p.apply_async(convert, args=(out_dir, module, files))
     for node in files:
-        convert(out_dir, module, files, node)
+        convert(out_dir, module, files, node, src_lang)
     logging.warning("7: %7.3lf: create html", timer() - _t)
 
 
@@ -1702,4 +1710,4 @@ def run(options):
         if e.errno != errno.EEXIST:
             raise
 
-    sys.exit(main(module, document, out_dir, options.uninstalled))
+    sys.exit(main(module, document, out_dir, options.uninstalled, options.src_lang))
