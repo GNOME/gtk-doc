@@ -28,8 +28,7 @@ done
 
 # test python scripts
 # TODO: also test the module files
-# TODO: test python 2 and 3 (python3 -mcompileall gtkdoc/*.py)
-for file in gtkdoc-check gtkdoc-depscan gtkdoc-fixxref gtkdoc-mkdb gtkdoc-mkhtml gtkdoc-mkman gtkdoc-mkpdf gtkdoc-rebase gtkdoc-scangobj; do
+for file in gtkdoc-check gtkdoc-depscan gtkdoc-fixxref gtkdoc-mkdb gtkdoc-mkhtml gtkdoc-mkhtml2 gtkdoc-mkman gtkdoc-mkpdf gtkdoc-rebase gtkdoc-scangobj; do
     fullfile=`which $file`
     @PYTHON@ -m py_compile $fullfile
     if test $? != 0 ; then failed=`expr $failed + 1`; fi
