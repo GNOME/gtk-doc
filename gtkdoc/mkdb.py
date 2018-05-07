@@ -2556,7 +2556,9 @@ def ConvertSGMLChars(symbol, text):
     # For the simple non-sgml mode, convert to entities everywhere.
 
     text = re.sub(r'&(?![a-zA-Z#]+;)', r'&amp;', text)        # Do this first, or the others get messed up.
-    text = re.sub(r'<', r'&lt;', text)
+    # Allow '<' in verbatim markdown
+    # TODO: we don't want to convert any of them between ``
+    text = re.sub(r'(?<!`)<', r'&lt;', text)
     # Allow '>' at beginning of string for blockquote markdown
     text = re.sub(r'''(?<=[^\w\n"'\/-])>''', r'&gt;', text)
 
