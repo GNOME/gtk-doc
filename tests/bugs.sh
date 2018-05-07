@@ -1,4 +1,6 @@
 #!/bin/sh
 
-gtkdoctest.sh bugs
+set -e
 
+gtkdoctest.sh bugs
+sanity.sh bugs

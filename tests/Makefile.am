@@ -4,8 +4,9 @@ if BUILD_TESTS
 
 TESTS = \
   check.py common.py mk_to_db.py mkhtml2.py \
-  tools.sh gobject.sh bugs.sh annotations.sh fail.sh empty.sh program.sh \
-  sanity.sh
+  tools.sh \
+  annotations.sh bugs.sh empty.sh fail.sh gobject.sh program.sh
+
 TESTS_ENVIRONMENT = \
 	BUILDDIR=$(abs_builddir) \
 	SRCDIR=$(abs_srcdir) \
@@ -14,8 +15,10 @@ TESTS_ENVIRONMENT = \
 	PATH=$(abs_top_builddir):$(srcdir):$(PATH) \
 	PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) \
 	GLIB_PREFIX="$(glib_prefix)"
+
 TEST_EXTENSIONS = .py
 PY_LOG_COMPILER = $(PYTHON)
+
 endif
 
 EXTRA_DIST = gtkdoctest.sh $(TESTS)

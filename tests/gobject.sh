@@ -1,4 +1,6 @@
 #!/bin/sh
 
-gtkdoctest.sh gobject
+set -e
 
+gtkdoctest.sh gobject
+sanity.sh gobject

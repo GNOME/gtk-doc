@@ -1,4 +1,6 @@
 #!/bin/sh
 
-gtkdoctest.sh program
+set -e
 
+gtkdoctest.sh program
+sanity.sh program

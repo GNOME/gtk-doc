@@ -1,17 +1,16 @@
 #!/bin/sh
 
+suite=$1
 dir=$BUILDDIR
-#`dirname $0`
-suite="sanity"
 
 failed=0
 tested=0
 
-echo "Running suite(s): gtk-doc-$suite";
+echo "Running suite(s): gtk-doc-sanity $suite";
 
 # check the presence and non-emptyness of certain files
 nok=0
-for path in $dir/*/docs/html; do
+for path in $dir/$suite/docs/html; do
   if test ! -s $path/index.html ; then
     echo 1>&2 "no or empty $path/index.html"
     nok=`expr $nok + 1`; break;
@@ -29,9 +28,9 @@ done
 if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
 tested=`expr $tested + 1`
 
-# TODO: if we have pdf support check for ./tests/*/docs/tester.pdf
+# TODO: if we have pdf support check for ./tests/$suite/docs/tester.pdf
 nok=0
-for path in $dir/*/docs; do
+for path in $dir/$suite/docs; do
   if test ! -s $path/tester.pdf ; then
     if test -s $path/gtkdoc-mkpdf.log; then
       if ! grep >/dev/null 2>&1 "must be installed to use gtkdoc-mkpdf" $path/gtkdoc-mkpdf.log; then
@@ -46,7 +45,7 @@ tested=`expr $tested + 1`
 
 # check validity of generated xml files
 nok=0
-for file in $dir/*/docs/xml/*.xml; do
+for file in $dir/$suite/docs/xml/*.xml; do
   xmllint --noout --noent $file
   if test $? != 0 ; then
     echo 1>&2 "xml validity check failed for $file"
@@ -59,7 +58,7 @@ tested=`expr $tested + 1`
 
 # check validity of generated sgml files
 nok=0
-for file in $dir/*/docs/xml/*.sgml; do
+for file in $dir/$suite/docs/xml/*.sgml; do
   xmllint --noout --noent $file
   if test $? != 0 ; then
     echo 1>&2 "sgml validity check failed for $file"
@@ -71,7 +70,7 @@ tested=`expr $tested + 1`
 
 # check validity of devhelp2 files
 nok=0
-for file in $dir/*/docs/html/*.devhelp2; do
+for file in $dir/$suite/docs/html/*.devhelp2; do
   xmllint --noout --nonet --schema $ABS_TOP_SRCDIR/devhelp2.xsd $file
   if test $? != 0 ; then
     echo 1>&2 "devhelp2 xml validity check failed for $file"
@@ -88,7 +87,7 @@ DISCARD_PATTERN='Please fix https://bugs.launchpad.net/ubuntu/+source/gtk-doc/+b
 gunzip .*.gz
 
 '
-for file in $dir/*/docs/gtkdoc-*.log; do
+for file in $dir/$suite/docs/gtkdoc-*.log; do
   # skip this in verbose mode as we'll have more text
   if test "x${V}" = "x1"; then
     continue
@@ -96,9 +95,6 @@ for file in $dir/*/docs/gtkdoc-*.log; do
 
   expected_lines="1"
   # adjust for known files
-  if test $file = "$dir/fail/docs/gtkdoc-mkdb.log"; then
-    expected_lines="16"
-  fi
   if test $file = "$dir/bugs/docs/gtkdoc-mkdb.log"; then
     expected_lines="2"
   fi
@@ -125,7 +121,7 @@ tested=`expr $tested + 1`
 
 # check stability of generated xml/html
 nok=0
-for path in $dir/*/docs*; do
+for path in $dir/$suite/docs*; do
   if test -d $path/xml.ref; then
     diff -u $path/xml.ref $path/xml
     if test $? = 1 ; then

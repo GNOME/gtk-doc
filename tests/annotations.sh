@@ -1,4 +1,6 @@
 #!/bin/sh
 
-gtkdoctest.sh annotations
+set -e
 
+gtkdoctest.sh annotations
+sanity.sh annotations
