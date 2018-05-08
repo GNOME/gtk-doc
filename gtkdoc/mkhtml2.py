@@ -507,7 +507,16 @@ def convert_emphasis(ctx, xml):
     return result
 
 
-def convert_em_class(ctx, xml):
+def convert_em(ctx, xml):
+    result = ['<em class="%s">' % xml.tag]
+    append_text(ctx, xml.text, result)
+    convert_inner(ctx, xml, result)
+    result.append('</em>')
+    append_text(ctx, xml.tail, result)
+    return result
+
+
+def convert_em_code(ctx, xml):
     result = ['<em class="%s"><code>' % xml.tag]
     append_idref(xml.attrib, result)
     append_text(ctx, xml.text, result)
@@ -1034,6 +1043,7 @@ convert_tags = {
     'envar': convert_code,
     'footnote': convert_footnote,
     'filename': convert_code,
+    'firstterm': convert_em,
     'formalpara': convert_formalpara,
     'function': convert_code,
     'glossdef': convert_glossdef,
@@ -1060,7 +1070,7 @@ convert_tags = {
     'orderedlist': convert_orderedlist,
     'para': convert_para,
     'partintro': convert_div,
-    'parameter': convert_em_class,
+    'parameter': convert_em_code,
     'phrase': convert_phrase,
     'primaryie': convert_primaryie,
     'programlisting': convert_programlisting,
@@ -1069,7 +1079,7 @@ convert_tags = {
     'refsect1': convert_refsect1,
     'refsect2': convert_refsect2,
     'refsect3': convert_refsect3,
-    'replaceable': convert_em_class,
+    'replaceable': convert_em_code,
     'returnvalue': convert_span,
     'row': convert_row,
     'screen': convert_pre,
@@ -1077,7 +1087,7 @@ convert_tags = {
     'sect2': convert_sect2,
     'sect3': convert_sect3,
     'simpara': convert_simpara,
-    'structfield': convert_em_class,
+    'structfield': convert_em_code,
     'structname': convert_span,
     'synopsis': convert_pre,
     'symbol': convert_span,
