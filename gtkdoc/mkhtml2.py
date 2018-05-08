@@ -310,11 +310,21 @@ def build_glossary(files):
             continue
         for term in GLOSSENTRY_XPATH(node.xml):
             # TODO: there can be all kind of things in a glossary. This only supports
-            # what we commonly use
-            key = etree.tostring(term.find('glossterm'), method="text", encoding=str).strip()
-            value = etree.tostring(term.find('glossdef'), method="text", encoding=str).strip()
-            glossary[key] = value
-            # logging.debug('glosentry: %s:%s', key, value)
+            # what we commonly use, glossterm is mandatory
+            key_node = term.find('glossterm')
+            val_node = term.find('glossdef')
+            if key_node is not None and val_node is not None:
+                key = etree.tostring(key_node, method="text", encoding=str).strip()
+                val = etree.tostring(val_node, method="text", encoding=str).strip()
+                glossary[key] = val
+                # logging.debug('glosentry: %s:%s', key, val)
+            else:
+                debug = []
+                if key_node is None:
+                    debug.append('missing key')
+                if val_node is None:
+                    debug.append('missing val')
+                logging.warning('Unexpected glossentry %s:', term.attrib['id'], ','.join(debug))
 
 
 # conversion helpers
