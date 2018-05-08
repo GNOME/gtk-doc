@@ -861,6 +861,10 @@ def convert_row(ctx, xml):
     return result
 
 
+def convert_sbr(ctx, xml):
+    return ['<br>']
+
+
 def convert_sect1_tag(ctx, xml):
     return convert_sect(ctx, xml, 'h2')
 
@@ -1082,6 +1086,7 @@ convert_tags = {
     'replaceable': convert_em_code,
     'returnvalue': convert_span,
     'row': convert_row,
+    'sbr': convert_sbr,
     'screen': convert_pre,
     'sect1': convert_sect1_tag,
     'sect2': convert_sect2,
