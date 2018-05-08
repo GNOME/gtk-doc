@@ -1022,6 +1022,7 @@ convert_tags = {
     'application': convert_span,
     'bookinfo': convert_bookinfo,
     'blockquote': convert_blockquote,
+    'classname': convert_code,
     'caption': convert_div,
     'code': convert_code,
     'colspec': convert_colspec,
