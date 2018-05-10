@@ -324,7 +324,8 @@ def build_glossary(files):
                     debug.append('missing key')
                 if val_node is None:
                     debug.append('missing val')
-                logging.warning('Unexpected glossentry %s:', term.attrib['id'], ','.join(debug))
+                logging.warning('Broken glossentry "%s": %s',
+                                term.attrib['id'], ','.join(debug))
 
 
 # conversion helpers
