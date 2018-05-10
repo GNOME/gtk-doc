@@ -1069,6 +1069,7 @@ convert_tags = {
     'informaltable': convert_informaltable,
     'inlinegraphic': convert_inlinegraphic,
     'inlinemediaobject': convert_span,
+    'interfacename': convert_code,
     'itemizedlist': convert_itemizedlist,
     'legalnotice': convert_div,
     'link': convert_link,
