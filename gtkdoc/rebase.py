@@ -108,7 +108,7 @@ def ScanDirectory(scan_dir, options):
 
         if onlinedir and entry == "index.sgml":
             log(options, "Reading index from index.sgml")
-            onlinedir = ReadIndex(dir, entry)
+            onlinedir = ReadIndex(scan_dir, entry)
             have_index = True
         elif entry == "index.sgml.gz" and not os.path.exists(os.path.join(scan_dir, 'index.sgml')):
             # debian/ubuntu started to compress this as index.sgml.gz :/
