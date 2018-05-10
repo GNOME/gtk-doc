@@ -1,0 +1,9 @@
+option('autoconf_support',
+       type: 'boolean', value: true,
+       description: 'Install autotools macros')
+option('cmake_support',
+       type: 'boolean', value: true,
+       description: 'Install CMake macros')
+option('yelp_manual',
+       type: 'boolean', value: true,
+       description: 'Build the user manual (requires yelp-tools)')

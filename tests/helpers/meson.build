@@ -1,0 +1,6 @@
+gtkdoc_scan_runner_script = files('gtkdoc_scan_runner.py')
+gtkdoc_scangobj_runner_script = files('gtkdoc_scangobj_runner.py')
+gtkdoc_mkdb_runner_script = files('gtkdoc_mkdb_runner.py')
+gtkdoc_mkhtml_runner_script = files('gtkdoc_mkhtml_runner.py')
+gtkdoc_fixxref_runner_script = files('gtkdoc_fixxref_runner.py')
+gtkdoc_check_runner_script = files('gtkdoc_check_runner.py')
