@@ -154,7 +154,7 @@ def ReadIndex(dir, file):
         match = re.match(r'''^<ONLINE\s+href\s*=\s*"([^"]+)"\s*>''', line)
         if match:
             # Remove trailing non-directory component.
-            onlinedir = re.sub(r'''(.*/).*''', r'\1', match.groups(1))
+            onlinedir = re.sub(r'''(.*/).*''', r'\1', match.group(1))
     return onlinedir
 
 
@@ -226,10 +226,10 @@ def RebaseLink(href, options):
         else:
             match = re.match(r'\.\./([^/]+)', href)
             if match is not None:
-                package = match.groups(1)
+                package = match.group(1)
             elif options.aggressive:
                 match = re.search(r'''([^/]+)/$''', href)
-                package = match.groups(1)
+                package = match.group(1)
 
         if package:
             if options.online and package in OnlineMap:
