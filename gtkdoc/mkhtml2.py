@@ -36,6 +36,8 @@ simplicity.
 
 TODO:
 - tag converters:
+  - 'section'/'simplesect' - the first we convert as a chunk, the nested ones we
+    need to convert as 'sect{2,3,4,...}
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
@@ -1096,10 +1098,12 @@ convert_tags = {
     'row': convert_row,
     'sbr': convert_sbr,
     'screen': convert_pre,
+    'section': convert_sect2,      # FIXME: need tracking of nesting
     'sect1': convert_sect1_tag,
     'sect2': convert_sect2,
     'sect3': convert_sect3,
     'simpara': convert_simpara,
+    'simplesect': convert_sect2,   # FIXME: need tracking of nesting
     'structfield': convert_em_code,
     'structname': convert_span,
     'synopsis': convert_pre,
@@ -1487,6 +1491,10 @@ def convert_refentry(ctx):
     return result
 
 
+def convert_section(ctx):
+    return convert_chunk_with_toc(ctx, 'section', 'h2')
+
+
 def convert_sect1(ctx):
     return convert_chunk_with_toc(ctx, 'sect1', 'h2')
 
@@ -1501,6 +1509,7 @@ convert_chunks = {
     'preface': convert_preface,
     'reference': convert_reference,
     'refentry': convert_refentry,
+    'section': convert_section,
     'sect1': convert_sect1,
 }
 
