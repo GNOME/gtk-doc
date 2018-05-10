@@ -170,6 +170,14 @@ footnote_idx = 1
 titles = {}
 
 
+def encode_entities(text):
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
+
+def raw_text(xml):
+    return etree.tostring(xml, method="text", encoding=str).strip()
+
+
 def gen_chunk_name(node, chunk_params):
     """Generate a chunk file name
 
@@ -223,7 +231,9 @@ def get_chunk_titles(module, node):
             label = ''
 
         xml = res[0]
+        # TODO: consider to eval 'title'/'raw_title' lazily
         result['title'] = label + ''.join(convert_title(ctx, xml))
+        result['raw_title'] = encode_entities(raw_text(xml))
         if xml.tag != 'title':
             result['title_tag'] = xml.tag
         else:
@@ -296,9 +306,9 @@ def add_id_links_and_titles(files, links):
             res = title(elem)
             if res:
                 xml = res[0]
-                # TODO: consider to eval those lazily
+                # TODO: consider to eval 'title' lazily
                 titles[attr] = {
-                    'title': etree.tostring(xml, method="text", encoding=str).strip(),
+                    'title': encode_entities(raw_text(xml)),
                     'xml': xml,
                     'tag': elem.tag,
                 }
@@ -314,10 +324,7 @@ def build_glossary(files):
             key_node = term.find('glossterm')
             val_node = term.find('glossdef')
             if key_node is not None and val_node is not None:
-                key = etree.tostring(key_node, method="text", encoding=str).strip()
-                val = etree.tostring(val_node, method="text", encoding=str).strip()
-                glossary[key] = val
-                # logging.debug('glosentry: %s:%s', key, val)
+                glossary[raw_text(key_node)] = raw_text(val_node)
             else:
                 debug = []
                 if key_node is None:
@@ -353,7 +360,7 @@ def append_idref(attrib, result):
 
 def append_text(ctx, text, result):
     if text and ('no-strip' in ctx or text.strip()):
-        result.append(text.replace('<', '&lt;').replace('>', '&gt;'))
+        result.append(encode_entities(text))
 
 
 missing_tags = {}
@@ -565,8 +572,7 @@ def convert_footnote(ctx, xml):
     if para is not None:
         inner.append(para.text)
     else:
-        logging.warning('%s: Unhandled footnote content: %s', xml.sourceline,
-                        etree.tostring(xml, method="text", encoding=str).strip())
+        logging.warning('%s: Unhandled footnote content: %s', xml.sourceline, raw_text(xml))
     inner.append('</p></div>')
     footnotes.append(inner)
     ctx['footnotes'] = footnotes
@@ -1129,17 +1135,17 @@ HTML_HEADER = """<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 def generate_head_links(ctx):
     n = ctx['nav_home']
     result = [
-        '<link rel="home" href="%s" title="%s">\n' % (n.filename, n.title)
+        '<link rel="home" href="%s" title="%s">\n' % (n.filename, n.raw_title)
     ]
     if 'nav_up' in ctx:
         n = ctx['nav_up']
-        result.append('<link rel="up" href="%s" title="%s">\n' % (n.filename, n.title))
+        result.append('<link rel="up" href="%s" title="%s">\n' % (n.filename, n.raw_title))
     if 'nav_prev' in ctx:
         n = ctx['nav_prev']
-        result.append('<link rel="prev" href="%s" title="%s">\n' % (n.filename, n.title))
+        result.append('<link rel="prev" href="%s" title="%s">\n' % (n.filename, n.raw_title))
     if 'nav_next' in ctx:
         n = ctx['nav_next']
-        result.append('<link rel="next" href="%s" title="%s">\n' % (n.filename, n.title))
+        result.append('<link rel="next" href="%s" title="%s">\n' % (n.filename, n.raw_title))
     return ''.join(result)
 
 
@@ -1544,11 +1550,11 @@ def create_devhelp2_toc(node):
     result = []
     for c in node.children:
         if c.children:
-            result.append('<sub name="%s" link="%s">\n' % (c.title, c.filename))
+            result.append('<sub name="%s" link="%s">\n' % (c.raw_title, c.filename))
             result.extend(create_devhelp2_toc(c))
             result.append('</sub>\n')
         else:
-            result.append('<sub name="%s" link="%s"/>\n' % (c.title, c.filename))
+            result.append('<sub name="%s" link="%s"/>\n' % (c.raw_title, c.filename))
     return result
 
 
@@ -1569,8 +1575,9 @@ def create_devhelp2_condition_attribs(node):
 
 
 def create_devhelp2_refsect2_keyword(node, base_link):
+    node_id = node.attrib['id']
     return'    <keyword type="%s" name="%s" link="%s"%s/>\n' % (
-        node.attrib['role'], xml_get_title({}, node), base_link + node.attrib['id'],
+        node.attrib['role'], titles[node_id]['title'], base_link + node_id,
         create_devhelp2_condition_attribs(node))
 
 
