@@ -37,7 +37,7 @@ simplicity.
 TODO:
 - tag converters:
   - 'section'/'simplesect' - the first we convert as a chunk, the nested ones we
-    need to convert as 'sect{2,3,4,...}
+    need to convert as 'sect{2,3,4,...}, we can track depth in 'ctx'
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
     attr on the <img> tag of the 'imageobject'
@@ -48,12 +48,17 @@ TODO:
 - find a better way to print context for warnings
   - we use 'xml.sourceline', but this all does not help a lot due to xi:include
 - copy images
-  - do we need to find them on the respective tags and search them in the path
-    setup by '--path'
+  - do we need to find them on the respective tags (inlinegraphic, imageobject)
+    and search them in the path setup by '--path'
 - commandline options
   - mkhtml:
     --path 'Extra source directories' - used to find images
   - fixxref:
+- consolidate title handling:
+  - always use the titles-dict
+  - there only store what we have (xml, tag, ...)
+  - when chunking generate 'id's and add entries to titles-dict
+  - add accessors for title and raw_title that lazily get them
 
 DIFFERENCES:
 - titles
