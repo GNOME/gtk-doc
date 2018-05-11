@@ -39,6 +39,7 @@ TODO:
   - 'section'/'simplesect' - the first we convert as a chunk, the nested ones we
     need to convert as 'sect{2,3,4,...}, we can track depth in 'ctx'
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
+  - inside 'glossentry' we're only handling 'glossterm' and 'glossdef'
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text/xml.tail and add a comment (# no PCDATA allowed here)
 - consider some perf-warnings flag
