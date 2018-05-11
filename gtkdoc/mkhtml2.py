@@ -39,10 +39,8 @@ TODO:
   - 'section'/'simplesect' - the first we convert as a chunk, the nested ones we
     need to convert as 'sect{2,3,4,...}, we can track depth in 'ctx'
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
-  - inside 'inlinemediaobject'/'mediaobject' a 'textobject' becomes the 'alt'
-    attr on the <img> tag of the 'imageobject'
 - check each docbook tag if it can contain #PCDATA, if not don't check for
-  xml.text
+  xml.text/xml.tail and add a comment (# no PCDATA allowed here)
 - consider some perf-warnings flag
   - see 'No "id" attribute on'
 - find a better way to print context for warnings
@@ -390,6 +388,25 @@ def convert__unknown(ctx, xml):
         return result
 
 
+def convert_mediaobject_children(ctx, xml, result):
+    # look for textobject/phrase
+    alt_text = ''
+    textobject = xml.find('textobject')
+    if textobject is not None:
+        phrase = textobject.findtext('phrase')
+        if phrase:
+            alt_text = ' alt="%s"' % phrase
+
+    # look for imageobject/imagedata
+    imageobject = xml.find('imageobject')
+    if imageobject is not None:
+        imagedata = imageobject.find('imagedata')
+        if imagedata is not None:
+            # TODO(ensonic): warn on missing fileref attr?
+            result.append('<img src="%s"%s>' % (
+                          imagedata.attrib.get('fileref', ''), alt_text))
+
+
 def convert_sect(ctx, xml, h_tag, inner_func=convert_inner):
     result = ['<div class="%s">\n' % xml.tag]
     title_tag = xml.find('title')
@@ -640,15 +657,6 @@ def convert_glossterm(ctx, xml):
     ]
 
 
-def convert_imageobject(ctx, xml):
-    imagedata = xml.find('imagedata')
-    if imagedata is not None:
-        # TODO(ensonic): warn on missing fileref attr?
-        return ['<img src="%s">' % imagedata.attrib.get('fileref', '')]
-    else:
-        return []
-
-
 def convert_indexdiv(ctx, xml):
     title_tag = xml.find('title')
     title = title_tag.text
@@ -678,6 +686,15 @@ def convert_informaltable(ctx, xml):
 def convert_inlinegraphic(ctx, xml):
     # TODO(ensonic): warn on missing fileref attr?
     return ['<img src="%s">' % xml.attrib.get('fileref', '')]
+
+
+def convert_inlinemediaobject(ctx, xml):
+    result = ['<span class="inlinemediaobject">']
+    # no PCDATA allowed here
+    convert_mediaobject_children(ctx, xml, result)
+    result.append('</span>')
+    append_text(ctx, xml.tail, result)
+    return result
 
 
 def convert_itemizedlist(ctx, xml):
@@ -722,7 +739,7 @@ def convert_listitem(ctx, xml):
     result = ['<li class="listitem">']
     convert_inner(ctx, xml, result)
     result.append('</li>')
-    # is in itemizedlist and there can be no 'text'
+    # no PCDATA allowed here, is in itemizedlist
     return result
 
 
@@ -731,6 +748,15 @@ def convert_literallayout(ctx, xml):
     append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</p></div>')
+    append_text(ctx, xml.tail, result)
+    return result
+
+
+def convert_mediaobject(ctx, xml):
+    result = ['<div class="mediaobject">\n']
+    # no PCDATA allowed here
+    convert_mediaobject_children(ctx, xml, result)
+    result.append('</div>')
     append_text(ctx, xml.tail, result)
     return result
 
@@ -1068,14 +1094,13 @@ convert_tags = {
     'glossdiv': convert_glossdiv,
     'glossentry': convert_glossentry,
     'glossterm': convert_glossterm,
-    'imageobject': convert_imageobject,
     'indexdiv': convert_indexdiv,
     'indexentry': convert_ignore,
     'indexterm': convert_skip,
     'informalexample': convert_div,
     'informaltable': convert_informaltable,
     'inlinegraphic': convert_inlinegraphic,
-    'inlinemediaobject': convert_span,
+    'inlinemediaobject': convert_inlinemediaobject,
     'interfacename': convert_code,
     'itemizedlist': convert_itemizedlist,
     'legalnotice': convert_div,
@@ -1083,7 +1108,7 @@ convert_tags = {
     'listitem': convert_listitem,
     'literal': convert_code,
     'literallayout': convert_literallayout,
-    'mediaobject': convert_div,
+    'mediaobject': convert_mediaobject,
     'note': convert_div,
     'option': convert_code,
     'orderedlist': convert_orderedlist,
