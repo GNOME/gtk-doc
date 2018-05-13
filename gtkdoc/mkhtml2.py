@@ -40,6 +40,7 @@ TODO:
     need to convert as 'sect{2,3,4,...}, we can track depth in 'ctx'
   - inside 'footnote' one can have many tags, we only handle 'para'/'simpara'
   - inside 'glossentry' we're only handling 'glossterm' and 'glossdef'
+  - convert_{figure,table} need counters.
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text/xml.tail and add a comment (# no PCDATA allowed here)
 - consider some perf-warnings flag
@@ -572,6 +573,21 @@ def convert_entry(ctx, xml):
     return result
 
 
+def convert_figure(ctx, xml):
+    result = ['<div class="figure">\n']
+    append_idref(xml.attrib, result)
+    title_tag = xml.find('title')
+    if title_tag is not None:
+        # TODO(ensonic): Add a 'Figure X. ' prefix, needs a figure counter
+        result.append('<p><b>%s</b></p>' % ''.join(convert_title(ctx, title_tag)))
+    result.append('<div class="figure-contents">')
+    # TODO(ensonic): title can become alt on inner 'graphic' element
+    convert_inner(ctx, xml, result)
+    result.append('</div></div><br class="figure-break"/>')
+    append_text(ctx, xml.tail, result)
+    return result
+
+
 def convert_footnote(ctx, xml):
     footnotes = ctx.get('footnotes', [])
     # footnotes idx is not per page, but per doc
@@ -654,6 +670,14 @@ def convert_glossterm(ctx, xml):
         '<dt><span class="glossterm"><a name="%s"></a>%s</span></dt>' % (
             glossid, text)
     ]
+
+
+def convert_graphic(ctx, xml):
+    # TODO(ensonic): warn on missing fileref attr?
+    fileref = xml.attrib.get('fileref', '')
+    if fileref:
+        assets.add(fileref)
+    return ['<div><img src="%s"></div>' % fileref]
 
 
 def convert_indexdiv(ctx, xml):
@@ -1092,6 +1116,7 @@ convert_tags = {
     'entry': convert_entry,
     'envar': convert_code,
     'footnote': convert_footnote,
+    'figure': convert_figure,
     'filename': convert_code,
     'firstterm': convert_em,
     'formalpara': convert_formalpara,
@@ -1100,6 +1125,7 @@ convert_tags = {
     'glossdiv': convert_glossdiv,
     'glossentry': convert_glossentry,
     'glossterm': convert_glossterm,
+    'graphic': convert_graphic,
     'indexdiv': convert_indexdiv,
     'indexentry': convert_ignore,
     'indexterm': convert_skip,
