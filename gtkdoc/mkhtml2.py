@@ -1048,22 +1048,26 @@ def convert_varlistentry(ctx, xml):
 
 
 def convert_xref(ctx, xml):
+    result = []
     linkend = xml.attrib['linkend']
     (tid, href) = fixxref.GetXRef(linkend)
-    title = titles.get(tid)
-    # all sectN need to become 'section
-    tag = title['tag']
-    tag = {
-        'sect1': 'section',
-        'sect2': 'section',
-        'sect3': 'section',
-        'sect4': 'section',
-        'sect5': 'section',
-    }.get(tag, tag)
-    result = [
-        '<a class="xref" href="%s" title="%s">the %s called “%s”</a>' %
-        (href, title['title'], tag, ''.join(convert_title(ctx, title['xml'])))
-    ]
+    try:
+        title = titles[tid]
+        # all sectN need to become 'section
+        tag = title['tag']
+        tag = {
+            'sect1': 'section',
+            'sect2': 'section',
+            'sect3': 'section',
+            'sect4': 'section',
+            'sect5': 'section',
+        }.get(tag, tag)
+        result = [
+            '<a class="xref" href="%s" title="%s">the %s called “%s”</a>' %
+            (href, title['title'], tag, ''.join(convert_title(ctx, title['xml'])))
+        ]
+    except KeyError:
+        logging.warning('invalid linkend "%s"', tid)
 
     append_text(ctx, xml.tail, result)
     return result
