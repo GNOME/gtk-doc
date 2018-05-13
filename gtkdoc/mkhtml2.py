@@ -979,6 +979,19 @@ def convert_table(ctx, xml):
     return result
 
 
+def convert_tag(ctx, xml):
+    attrs = ''
+    try:
+        attrs = ' class="sgmltag-%s"' % xml.attrib['class']
+    except KeyError:
+        pass
+    result = ['<code%s>' % attrs]
+    append_text(ctx, xml.text, result)
+    result.append('</code>')
+    append_text(ctx, xml.tail, result)
+    return result
+
+
 def convert_tbody(ctx, xml):
     result = ['<tbody>']
     ctx['table.entry'] = 'td'
@@ -1171,6 +1184,7 @@ convert_tags = {
     'synopsis': convert_pre,
     'symbol': convert_span,
     'table': convert_table,
+    'tag': convert_tag,
     'tbody': convert_tbody,
     'term': convert_span,
     'tgroup': convert_tgroup,
