@@ -46,13 +46,6 @@ TODO:
   - see 'No "id" attribute on'
 - find a better way to print context for warnings
   - we use 'xml.sourceline', but this all does not help a lot due to xi:include
-- copy images
-  - do we need to find them on the respective tags (inlinegraphic, imageobject)
-    and search them in the path setup by '--path'
-- commandline options
-  - mkhtml:
-    --path 'Extra source directories' - used to find images
-  - fixxref:
 - consolidate title handling:
   - always use the titles-dict
   - there only store what we have (xml, tag, ...)
@@ -174,6 +167,9 @@ footnote_idx = 1
 # tag: chunk tag
 # xml: title xml node
 titles = {}
+
+# files to copy
+assets = set()
 
 
 def encode_entities(text):
@@ -404,8 +400,10 @@ def convert_mediaobject_children(ctx, xml, result):
         imagedata = imageobject.find('imagedata')
         if imagedata is not None:
             # TODO(ensonic): warn on missing fileref attr?
-            result.append('<img src="%s"%s>' % (
-                          imagedata.attrib.get('fileref', ''), alt_text))
+            fileref = imagedata.attrib.get('fileref', '')
+            if fileref:
+                assets.add(fileref)
+            result.append('<img src="%s"%s>' % (fileref, alt_text))
 
 
 def convert_sect(ctx, xml, h_tag, inner_func=convert_inner):
@@ -686,7 +684,10 @@ def convert_informaltable(ctx, xml):
 
 def convert_inlinegraphic(ctx, xml):
     # TODO(ensonic): warn on missing fileref attr?
-    return ['<img src="%s">' % xml.attrib.get('fileref', '')]
+    fileref = xml.attrib.get('fileref', '')
+    if fileref:
+        assets.add(fileref)
+    return ['<img src="%s">' % fileref]
 
 
 def convert_inlinemediaobject(ctx, xml):
@@ -1694,7 +1695,7 @@ def get_dirs(uninstalled):
     return (gtkdocdir, styledir)
 
 
-def main(module, index_file, out_dir, uninstalled, src_lang):
+def main(module, index_file, out_dir, uninstalled, src_lang, paths):
 
     # == Loading phase ==
     # the next 3 steps could be done in paralel
@@ -1769,6 +1770,22 @@ def main(module, index_file, out_dir, uninstalled, src_lang):
         convert(out_dir, module, files, node, src_lang)
     logging.warning("7: %7.3lf: create html", timer() - _t)
 
+    # 8) copy assets over
+    _t = timer()
+    paths = set(paths + [os.getcwd()])
+    for a in assets:
+        logging.info('trying %s in %s', a, str(paths))
+        copied = False
+        for p in paths:
+            try:
+                shutil.copy(os.path.join(p, a), out_dir)
+                copied = True
+            except FileNotFoundError:
+                pass
+        if not copied:
+            logging.warning('file %s not found in path (did you add --path?)', a)
+    logging.warning("8: %7.3lf: copy assets", timer() - _t)
+
 
 def run(options):
     logging.info('options: %s', str(options.__dict__))
@@ -1785,4 +1802,5 @@ def run(options):
         if e.errno != errno.EEXIST:
             raise
 
-    sys.exit(main(module, document, out_dir, options.uninstalled, options.src_lang))
+    sys.exit(main(module, document, out_dir, options.uninstalled, options.src_lang,
+                  options.path))
