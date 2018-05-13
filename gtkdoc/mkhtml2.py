@@ -188,8 +188,9 @@ def gen_chunk_name(node, chunk_params):
     case it uses a prefix from CHUNK_PARAMS and a sequence number for each chunk
     type.
     """
-    if 'id' in node.attrib:
-        return node.attrib['id']
+    idval = node.attrib.get('id')
+    if idval is not None:
+        return idval
 
     name = ('%s%02d' % (chunk_params.prefix, chunk_params.idx))
     chunk_params.idx += 1
@@ -357,8 +358,9 @@ def convert_skip(ctx, xml):
 
 
 def append_idref(attrib, result):
-    if 'id' in attrib:
-        result.append('<a name="%s"></a>' % attrib['id'])
+    idval = attrib.get('id')
+    if idval is not None:
+        result.append('<a name="%s"></a>' % idval)
 
 
 def append_text(ctx, text, result):
@@ -411,8 +413,7 @@ def convert_sect(ctx, xml, h_tag, inner_func=convert_inner):
     result = ['<div class="%s">\n' % xml.tag]
     title_tag = xml.find('title')
     if title_tag is not None:
-        if 'id' in xml.attrib:
-            result.append('<a name="%s"></a>' % xml.attrib['id'])
+        append_idref(xml.attrib, result)
         result.append('<%s>%s</%s>' % (
             h_tag, ''.join(convert_title(ctx, title_tag)), h_tag))
     append_text(ctx, xml.text, result)
@@ -488,11 +489,12 @@ def convert_code(ctx, xml):
 
 def convert_colspec(ctx, xml):
     result = ['<col']
-    a = xml.attrib
-    if 'colname' in a:
-        result.append(' class="%s"' % a['colname'])
-    if 'colwidth' in a:
-        result.append(' width="%s"' % a['colwidth'])
+    colname = xml.attrib.get('colname')
+    if colname is not None:
+        result.append(' class="%s"' % colname)
+    colwidth = xml.attrib.get('colwidth')
+    if colwidth is not None:
+        result.append(' width="%s"' % colwidth)
     result.append('>\n')
     # is in tgroup and there can be no 'text'
     return result
@@ -526,8 +528,9 @@ def convert_div(ctx, xml):
 
 
 def convert_emphasis(ctx, xml):
-    if 'role' in xml.attrib:
-        result = ['<span class="%s">' % xml.attrib['role']]
+    role = xml.attrib.get('role')
+    if role is not None:
+        result = ['<span class="%s">' % role]
         end = '</span>'
     else:
         result = ['<span class="emphasis"><em>']
@@ -561,10 +564,12 @@ def convert_em_code(ctx, xml):
 def convert_entry(ctx, xml):
     entry_type = ctx['table.entry']
     result = ['<' + entry_type]
-    if 'role' in xml.attrib:
-        result.append(' class="%s"' % xml.attrib['role'])
-    if 'morerows' in xml.attrib:
-        result.append(' rowspan="%s"' % (1 + int(xml.attrib['morerows'])))
+    role = xml.attrib.get('role')
+    if role is not None:
+        result.append(' class="%s"' % role)
+    morerows = xml.attrib.get('morerows')
+    if morerows is not None:
+        result.append(' rowspan="%s"' % (1 + int(morerows)))
     result.append('>')
     append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
@@ -693,10 +698,9 @@ def convert_indexdiv(ctx, xml):
 
 def convert_informaltable(ctx, xml):
     result = ['<div class="informaltable"><table class="informaltable"']
-    a = xml.attrib
-    if 'pgwide' in a and a['pgwide'] == '1':
+    if xml.attrib.get('pgwide') == '1':
         result.append(' width="100%"')
-    if 'frame' in a and a['frame'] == 'none':
+    if xml.attrib.get('frame') == 'none':
         result.append(' border="0"')
     result.append('>\n')
     convert_inner(ctx, xml, result)
@@ -797,12 +801,12 @@ def convert_orderedlist(ctx, xml):
 
 def convert_para(ctx, xml):
     result = []
-    if 'role' in xml.attrib:
-        result.append('<p class="%s">' % xml.attrib['role'])
+    role = xml.attrib.get('role')
+    if role is not None:
+        result.append('<p class="%s">' % role)
     else:
         result.append('<p>')
-    if 'id' in xml.attrib:
-        result.append('<a name="%s"></a>' % xml.attrib['id'])
+    append_idref(xml.attrib, result)
     append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
     result.append('</p>')
@@ -812,8 +816,7 @@ def convert_para(ctx, xml):
 
 def convert_para_like(ctx, xml):
     result = []
-    if 'id' in xml.attrib:
-        result.append('<a name="%s"></a>' % xml.attrib['id'])
+    append_idref(xml.attrib, result)
     result.append('<p class="%s">' % xml.tag)
     append_text(ctx, xml.text, result)
     convert_inner(ctx, xml, result)
@@ -824,8 +827,9 @@ def convert_para_like(ctx, xml):
 
 def convert_phrase(ctx, xml):
     result = ['<span']
-    if 'role' in xml.attrib:
-        result.append(' class="%s">' % xml.attrib['role'])
+    role = xml.attrib.get('role')
+    if role is not None:
+        result.append(' class="%s">' % role)
     else:
         result.append('>')
     append_text(ctx, xml.text, result)
@@ -980,12 +984,11 @@ def convert_table(ctx, xml):
 
 
 def convert_tag(ctx, xml):
-    attrs = ''
-    try:
-        attrs = ' class="sgmltag-%s"' % xml.attrib['class']
-    except KeyError:
-        pass
-    result = ['<code%s>' % attrs]
+    classval = xml.attrib.get('class')
+    if classval is not None:
+        result = ['<code class="sgmltag-%s">' % classval]
+    else:
+        result = ['<code>']
     append_text(ctx, xml.text, result)
     result.append('</code>')
     append_text(ctx, xml.tail, result)
@@ -1218,15 +1221,19 @@ def generate_head_links(ctx):
     result = [
         '<link rel="home" href="%s" title="%s">\n' % (n.filename, n.raw_title)
     ]
-    if 'nav_up' in ctx:
-        n = ctx['nav_up']
+
+    n = ctx.get('nav_up')
+    if n is not None:
         result.append('<link rel="up" href="%s" title="%s">\n' % (n.filename, n.raw_title))
-    if 'nav_prev' in ctx:
-        n = ctx['nav_prev']
+
+    n = ctx.get('nav_prev')
+    if n is not None:
         result.append('<link rel="prev" href="%s" title="%s">\n' % (n.filename, n.raw_title))
-    if 'nav_next' in ctx:
-        n = ctx['nav_next']
+
+    n = ctx.get('nav_next')
+    if n is not None:
         result.append('<link rel="next" href="%s" title="%s">\n' % (n.filename, n.raw_title))
+
     return ''.join(result)
 
 
@@ -1235,20 +1242,23 @@ def generate_nav_links(ctx):
     result = [
         '<td><a accesskey="h" href="%s"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>' % n.filename
     ]
-    if 'nav_up' in ctx:
-        n = ctx['nav_up']
+
+    n = ctx.get('nav_up')
+    if n is not None:
         result.append(
             '<td><a accesskey="u" href="%s"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>' % n.filename)
     else:
         result.append('<td><img src="up-insensitive.png" width="16" height="16" border="0"></td>')
-    if 'nav_prev' in ctx:
-        n = ctx['nav_prev']
+
+    n = ctx.get('nav_prev')
+    if n is not None:
         result.append(
             '<td><a accesskey="p" href="%s"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>' % n.filename)
     else:
         result.append('<td><img src="left-insensitive.png" width="16" height="16" border="0"></td>')
-    if 'nav_next' in ctx:
-        n = ctx['nav_next']
+
+    n = ctx.get('nav_next')
+    if n is not None:
         result.append(
             '<td><a accesskey="n" href="%s"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>' % n.filename)
     else:
@@ -1316,10 +1326,10 @@ def generate_refentry_nav(ctx, refsect1s, result):
         if s.attrib.get('role', '').endswith("_proto"):
             continue
         # skip section without 'id' attrs
-        if 'id' not in s.attrib:
+        ref_id = s.attrib.get('id')
+        if ref_id is None:
             continue
 
-        ref_id = s.attrib['id']
         # skip foreign sections
         if '.' not in ref_id:
             continue
@@ -1342,14 +1352,16 @@ def generate_refentry_nav(ctx, refsect1s, result):
 
 
 def generate_footer(ctx):
-    result = []
-    if 'footnotes' in ctx:
-        result.append("""<div class="footnotes">\n
+    footnotes = ctx.get('footnotes')
+    if footnotes is None:
+        return []
+
+    result = ["""<div class="footnotes">\n
 <br><hr style="width:100; text-align:left;margin-left: 0">
-""")
-        for f in ctx['footnotes']:
-            result.extend(f)
-        result.append('</div>\n')
+"""]
+    for f in footnotes:
+        result.extend(f)
+    result.append('</div>\n')
     return result
 
 
@@ -1625,11 +1637,12 @@ def convert(out_dir, module, files, node, src_lang):
         }
         ctx.update(generate_nav_nodes(files, node))
 
-        if node.name in convert_chunks:
-            for line in convert_chunks[node.name](ctx):
+        converter = convert_chunks.get(node.name)
+        if converter is not None:
+            for line in converter(ctx):
                 html.write(line)
         else:
-            logging.warning('Add converter/template for "%s"', node.name)
+            logging.warning('Add chunk converter for "%s"', node.name)
 
 
 def create_devhelp2_toc(node):
@@ -1645,9 +1658,10 @@ def create_devhelp2_toc(node):
 
 
 def create_devhelp2_condition_attribs(node):
-    if 'condition' in node.attrib:
+    condition = node.attrib.get('condition')
+    if condition is not None:
         # condition -> since, deprecated, ... (separated with '|')
-        cond = node.attrib['condition'].replace('"', '&quot;').split('|')
+        cond = condition.replace('"', '&quot;').split('|')
         keywords = []
         for c in cond:
             if ':' in c:
