@@ -186,7 +186,7 @@ if get_option('autoconf_support') == true
 endif
 
 if get_option('cmake_support') == true
-  subdir('cmake')
+  subdir('buildsystems/cmake')
 endif
 
 gtkdoc_pc = configuration_data()
