@@ -41,9 +41,66 @@ The DocBook XSL Stylesheets.
 libxslt & libxml2 >= 2.3.6.
     http://xmlsoft.org/
 
-
 Most distributions now have packages for all of these, so I would strongly
 advise that you grab those.
 
 See the documentation in the help/manual directory for more information. You can
 read it e.g. with yelp file://$PWD/help/manual/C/gtk-doc-manual.xml
+
+
+Building
+========
+
+We are supporting two build systems to build gtk-doc for some transitions time.
+
+
+Build using auto*
+-----------------
+
+In order to build with a the classic auto* system use these commands:
+
+Build from git:
+./autogen.sh; make
+
+Build from dist tarball:
+./configure; make
+
+There are a few parameters one can pass to ./configure, run ./configure --help
+to see them. Also ./autogen.sh can take those settings (and will hand them
+through to ./configure).
+
+To run the tests:
+make check
+
+To install:
+make install
+
+To make a release:
+make distcheck
+or
+make dist
+
+
+Build using meson
+-----------------
+
+Support for meson is new and still experiemntal.
+
+Build it from git:
+meson build .
+ninja -C build
+
+There are some options one can specify too:
+meson build . --prefix=
+meson build . -Dautoconf_support=false
+meson build . -Dcmake_support=false
+meson build . -Dyelp_manual=false
+
+To run tests:
+ninja -C build test
+
+To install:
+ninja -C build install
+
+To make a release:
+ninja -C build dist
