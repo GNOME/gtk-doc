@@ -43,15 +43,25 @@ TODO:
   - convert_{figure,table} need counters.
 - check each docbook tag if it can contain #PCDATA, if not don't check for
   xml.text/xml.tail and add a comment (# no PCDATA allowed here)
-- consider some perf-warnings flag
-  - see 'No "id" attribute on'
 - find a better way to print context for warnings
   - we use 'xml.sourceline', but this all does not help a lot due to xi:include
 - consolidate title handling:
   - always use the titles-dict
+    - convert_title(): uses titles.get(tid)['title']
+    - convert_xref(): uses titles[tid]['tag'], ['title'] and ['xml']
+    - create_devhelp2_refsect2_keyword(): uses titles[tid]['title']
   - there only store what we have (xml, tag, ...)
   - when chunking generate 'id's and add entries to titles-dict
   - add accessors for title and raw_title that lazily get them
+  - see if any of the other ~10 places that call convert_title() could use this
+    cache
+- performance
+  - consider some perf-warnings flag
+    - see 'No "id" attribute on'
+  - xinclude processing in libxml2 is slow
+    - if we disable it, we get '{http://www.w3.org/2003/XInclude}include' tags
+      and we could try handling them ourself, in some cases those are subtrees
+      that we extract for chunking anyway
 
 DIFFERENCES:
 - titles
@@ -1761,11 +1771,13 @@ def main(module, index_file, out_dir, uninstalled, src_lang, paths):
     # 1) load the docuemnt
     _t = timer()
     # does not seem to be faster
-    # parser = etree.XMLParser(collect_ids=False)
+    # parser = etree.XMLParser(dtd_validation=False, collect_ids=False)
     # tree = etree.parse(index_file, parser)
     tree = etree.parse(index_file)
+    logging.warning("1a: %7.3lf: load doc", timer() - _t)
+    _t = timer()
     tree.xinclude()
-    logging.warning("1: %7.3lf: load doc", timer() - _t)
+    logging.warning("1b: %7.3lf: xinclude doc", timer() - _t)
 
     # 2) copy datafiles
     _t = timer()

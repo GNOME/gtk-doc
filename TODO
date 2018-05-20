@@ -414,10 +414,6 @@ grep "gst_caps_is_always_compatible" tags
         0m33.282s   0m29.266s	0m4.012s
       - removing the gentext calls for nav-bar alt tags does not help
 
-
-  - try plain docbook xslt to see if maybe we have bad xslt templates in the
-    customisation layer (gtk-doc.xsl)
-
   - we could do the xinlcude processing once and use it for both html and pdf
     time /usr/bin/xsltproc 2>../xslt4.log --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --xinclude --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ../tester-docs.xml
     real        user       sys
@@ -454,12 +450,35 @@ grep "gst_caps_is_always_compatible" tags
     - unfortunately there is no way to ask xsltproc to pre-transform an xslt, that could
       - strip comments
       - process xsl:import and xsl:include
-  - compile xslt
-    http://sourceforge.net/projects/xsltc/
-    http://www.xmlhack.com/read.php?item=618
   - extra xsltproc options:
     --novalid: saves ~ 0.12 sec
+    
+  - strip DOCTYPES on xincludes
+    - there is a performance bottleneck in libxml, where it parses DTD for each fragment
+    - we're using the dtd to
+      - validate fragments
+      - inject package name/version etc.
+    - 1) we could provide a flags to gtkdoc-mkdb to not put any doctype on 
+         generated file and manually result entities in generated files (and
+         expand_content_files)
+      - to get a list of entities:
+        - we could parse entities from the main doc-file header
+          - tricky as with xml/gtkdocentities.ent, they are in a extra file
+        - we could pass entities as args for gtkdoc-mkdb
+        - if the flag is used, we should warn if entities are in the header
+    - 2) if the doctype on the main doc, does not conatin entities, skip adding
+         the doctype to generated output
+    - 3) if the doctype on the main doc contains entities, only add the doctype
+         if the generated content contains entities ([&%][_a-zA-Z]*;)
+    - a quick check on the gnome modules showed:
+      - quite a few don't use entities
+      - those that use version.xml
+        - seem to mostly use it in the main doc
+        - but a few use it for man pages
+          find . -name "*.xml" -exec grep -Hn "&version;" {} \; | grep -v "\-docs.xml"
 
+find . -name "*.xml" -exec egrep --color -Hn '&[_a-zA-Z]*;' {} \; | egrep -v '&(amp|lt|gt|quot|apos|nbsp);' | egrep --color '&[_a-zA-Z]*;'
+find . -name "*.xml" -exec egrep -o '&[_a-zA-Z]*;' {} \; | sort | uniq -c | sort -n
 
 = python =
 - consider swithcing to this markdown parser
