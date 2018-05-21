@@ -1,2 +1,1 @@
-subdir('src')
 subdir('docs')
