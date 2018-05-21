@@ -111,7 +111,6 @@ gtkdoc_binaires = [
   'gtkdoc-rebase',
   'gtkdoc-scan',
   'gtkdoc-scangobj',
-  'gtkdocize',
 ]
 
 binary_in = configuration_data()

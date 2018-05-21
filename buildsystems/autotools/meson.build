@@ -1,3 +1,11 @@
+configure_file(
+  input: 'gtkdocize.in',
+  output: 'gtkdocize',
+  configuration: binary_in,
+  install: true,
+  install_dir: bindir,
+)
+
 custom_target(
   'gtk-doc.flat.make',
   input: 'gtk-doc.make',
