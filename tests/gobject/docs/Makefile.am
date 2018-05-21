@@ -74,8 +74,7 @@ CLEANFILES += \
 if BUILD_TESTS
 TESTS_ENVIRONMENT = \
 	DOC_MODULE=$(DOC_MODULE) DOC_MAIN_SGML_FILE=$(DOC_MAIN_SGML_FILE) \
-	PATH=$(abs_top_builddir):$(srcdir):$(PATH) \
-	PERL5LIB=$(abs_top_builddir):$(PERL5LIB)
+	PATH=$(abs_top_builddir):$(srcdir):$(PATH)
 endif
 
 -include $(top_srcdir)/git.mk
