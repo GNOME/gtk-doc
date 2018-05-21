@@ -12,7 +12,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='gtkdoc-scangobj runner.')
 
     parser.add_argument("--binary-dir", type=str, required=True,
-                        help='Path to the gtkdoc executables directory to be used')
+                        help='Path to be used as a working directory')
     parser.add_argument("--pkg-config", type=str, required=True,
                         help='Path to the pkg-config executable to be used')
     parser.add_argument("--extra-pkg", type=str, default=[], action='append',

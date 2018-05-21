@@ -12,11 +12,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='gtkdoc-check runner.')
 
     parser.add_argument("--binary-dir", type=str, required=True,
-                        help='Path to the gtkdoc executables directory to be used')
+                        help='Path to be used as a working directory')
     parser.add_argument("--input-dir", type=str, required=True,
-                        help='Path to the gtkdoc executables directory to be used')
+                        help='Path to be used as a working directory')
     parser.add_argument("--output-dir", type=str, required=True,
-                        help='Path to the gtkdoc executables directory to be used')
+                        help='Path to be used as a working directory')
 
     options, arguments = parser.parse_known_args()
 
