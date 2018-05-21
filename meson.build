@@ -152,37 +152,10 @@ install_data(
   install_dir: pkgdatadir,
 )
 
-custom_target(
-  'gtk-doc.flat.make',
-  input: 'gtk-doc.make',
-  output: 'gtk-doc.flat.make',
-  install: true,
-  install_dir: pkgdatadir,
-  capture: true,
-  command: [
-    'sed',
-    '-e',
-    's/EXTRA_DIST =/EXTRA_DIST +=/',
-    '@INPUT@',
-  ]
-)
-
 subdir('style')
 
-if get_option('autoconf_support') == true
-  custom_target(
-    'gtk-doc.m4',
-    input: 'gtk-doc.m4',
-    output: 'gtk-doc.m4',
-    install: true,
-    install_dir: autoconfdatadir,
-    command: [
-      'cp',
-      '-f',
-      '@INPUT@',
-      '@OUTPUT@',
-    ],
-  )
+if get_option('autotools_support') == true
+  subdir('buildsystems/autotools')
 endif
 
 if get_option('cmake_support') == true
@@ -220,7 +193,7 @@ summary = [
   '            datadir: @0@'.format(datadir),
   '',
   'Configuration:',
-  '  Autotools support: @0@'.format(get_option('autoconf_support')),
+  '  Autotools support: @0@'.format(get_option('autotools_support')),
   '      CMake support: @0@'.format(get_option('cmake_support')),
   '         PDF output: @0@'.format(generate_pdf_output),
   '        User manual: @0@'.format(get_option('yelp_manual')),

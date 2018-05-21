@@ -92,7 +92,7 @@ ninja -C build
 
 There are some options one can specify too:
 meson build . --prefix=
-meson build . -Dautoconf_support=false
+meson build . -Dautotools_support=false
 meson build . -Dcmake_support=false
 meson build . -Dyelp_manual=false
 

@@ -213,6 +213,7 @@ AM_CONDITIONAL([HAVE_YELP_TOOLS],[test x$have_yelp_tools = xyes])
 # buildsystems/cmake/GtkDocConfig.cmake is handled in the Makefile, not here.
 AC_CONFIG_FILES([Makefile
 gtk-doc.pc
+buildsystems/autotools/Makefile
 buildsystems/cmake/Makefile
 buildsystems/cmake/GtkDocConfigVersion.cmake
 gtkdoc/config.py
@@ -241,7 +242,7 @@ AC_CONFIG_FILES([gtkdoc-mkpdf],    [chmod +x gtkdoc-mkpdf])
 AC_CONFIG_FILES([gtkdoc-rebase],   [chmod +x gtkdoc-rebase])
 AC_CONFIG_FILES([gtkdoc-scan],     [chmod +x gtkdoc-scan])
 AC_CONFIG_FILES([gtkdoc-scangobj], [chmod +x gtkdoc-scangobj])
-AC_CONFIG_FILES([gtkdocize],       [chmod +x gtkdocize])
+AC_CONFIG_FILES([buildsystems/autotools/gtkdocize],       [chmod +x buildsystems/autotools/gtkdocize])
 AC_CONFIG_FILES([tests/tools.sh],  [chmod +x tests/tools.sh])
 AC_OUTPUT
 

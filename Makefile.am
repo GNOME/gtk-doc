@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 ACLOCAL_AMFLAGS=-I m4 ${ACLOCAL_FLAGS}
 
-SUBDIRS = buildsystems/cmake help tests
+SUBDIRS = buildsystems/autotools buildsystems/cmake help tests
 
 bin_SCRIPTS = \
 	gtkdoc-check    \
@@ -14,8 +14,7 @@ bin_SCRIPTS = \
 	gtkdoc-mkpdf    \
 	gtkdoc-rebase   \
 	gtkdoc-scan     \
-	gtkdoc-scangobj \
-	gtkdocize
+	gtkdoc-scangobj
 
 gtkdocdatadir = $(datadir)/gtk-doc/data
 gtkdocdata_DATA = \
@@ -23,8 +22,6 @@ gtkdocdata_DATA = \
 	version-greater-or-equal.xsl \
 	devhelp2.xsd		\
 	devhelp2.xsl		\
-	gtk-doc.make		\
-	gtk-doc.flat.make	\
 	style/home.png			\
 	style/left.png			\
 	style/left-insensitive.png		\
@@ -54,18 +51,11 @@ pylibdata_DATA = \
 pkgconfigdir = $(datadir)/pkgconfig
 pkgconfig_DATA = gtk-doc.pc
 
-aclocaldir = $(datadir)/aclocal
-aclocal_DATA = gtk-doc.m4
-
-gtk-doc.flat.make: gtk-doc.make
-	@$(SED) -e "s/EXTRA_DIST =/EXTRA_DIST +=/" $< >$@
-
 EXTRA_DIST = \
 	MAINTAINERS     \
 	$(gtkdocdata_DATA) \
 	$(pylibdata_DATA) \
 	gtk-doc.pc.in   \
-	gtk-doc.m4      \
 	gtk-doc.doap \
 	gtk-doc-fo.xsl     \
 	doc/README            \
@@ -81,7 +71,6 @@ EXTRA_DIST = \
 	COPYING-DOCS
 
 CLEANFILES = \
-  gtk-doc.flat.make \
   gtkdoc-checkc \
   gtkdoc-depscanc \
   gtkdoc-fixxrefc \
