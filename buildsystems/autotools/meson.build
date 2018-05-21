@@ -34,3 +34,8 @@ custom_target(
     '@OUTPUT@',
   ],
 )
+
+install_data(
+  ['gtk-doc.make'],
+  install_dir: pkgdatadir,
+)

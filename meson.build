@@ -141,7 +141,6 @@ endforeach
 gtkdoc_data = [
   'devhelp2.xsd',
   'devhelp2.xsl',
-  'gtk-doc.make',
   'gtk-doc.xsl',
   'version-greater-or-equal.xsl',
 ]
