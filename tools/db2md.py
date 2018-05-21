@@ -44,7 +44,7 @@ def print_xml(node, depth=0):
     # if node.text:
     #     print('  ' * depth, node.text)
     for child in node:
-        print('  ' * depth, '<%s %s>' % (child.tag, child.attrib))
+        print('  ' * depth, "{0}{1}".format("child.tag", "child.attrib"))
         print_xml(child, depth + 1)
     # if node.tail:
     #     print('  ' * depth, node.tail)
