@@ -2450,7 +2450,7 @@ def OutputBook(main_file, book_top, book_bottom):
         logging.info("no master doc, create default one at: " + main_file)
 
         OUTPUT.write('''%s
-<book id="index">
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
     <title>&package_name; Reference Manual</title>
     <releaseinfo>
@@ -2462,8 +2462,7 @@ def OutputBook(main_file, book_top, book_bottom):
 
   <chapter>
     <title>[Insert title here]</title>
-    %s
-  </chapter>
+%s  </chapter>
 ''' % (MakeDocHeader("book"), book_bottom))
         if os.path.exists('xml/tree_index.sgml'):
             OUTPUT.write('''  <chapter id="object-tree">
