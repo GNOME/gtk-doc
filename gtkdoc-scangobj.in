@@ -51,6 +51,10 @@ if __name__ == '__main__':
                         help='Command for running the scanner')
     parser.add_argument('--verbose', action='store_true', default=False,
                         help='Print extra output while processing')
+    parser.add_argument('--generate-only', action='store_true', default=False,
+                        help='Only generate <module>-scan.c')
+    parser.add_argument('--postprocess-only', action='store_true', default=False,
+                        help='Only do the post processing after running <module>-scan.c manually')
 
     options = parser.parse_args()
 
