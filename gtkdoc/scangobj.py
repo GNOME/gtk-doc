@@ -1205,7 +1205,7 @@ def execute_command(options, description, command):
 def run(options):
     logging.info('options: %s', str(options.__dict__))
 
-    c_file = options.module + '-scan.c'
+    c_file = os.path.join(options.output_dir, options.module + '-scan.c')
     output = open(c_file, 'w', encoding='utf-8')
 
     base_filename = os.path.join(options.output_dir, options.module)
