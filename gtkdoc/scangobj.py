@@ -1224,6 +1224,17 @@ def run(options):
     old_args_filename = base_filename + '.args'
     new_args_filename = base_filename + '.args.new'
 
+    def postprocess():
+        common.UpdateFileIfChanged(old_signals_filename, new_signals_filename, False)
+        common.UpdateFileIfChanged(old_hierarchy_filename, new_hierarchy_filename, False)
+        common.UpdateFileIfChanged(old_interfaces_filename, new_interfaces_filename, False)
+        common.UpdateFileIfChanged(old_prerequisites_filename, new_prerequisites_filename, False)
+        common.UpdateFileIfChanged(old_args_filename, new_args_filename, False)
+        return 0
+
+    if options.postprocess_only:
+        return postprocess()
+
     # generate a C program to scan the types
 
     includes = ""
@@ -1284,6 +1295,10 @@ def run(options):
 
     output.close()
 
+    if options.generate_only:
+        logging.debug('Only generating source file: %s', c_file)
+        return 0
+
     # Compile and run our file
     if 'libtool' in options.cc:
         o_file = options.module + '-scan.lo'
@@ -1328,10 +1343,4 @@ def run(options):
         logging.debug('Keeping generated sources for analysis: %s, %s, %s',
                       c_file, o_file, x_file)
 
-    common.UpdateFileIfChanged(old_signals_filename, new_signals_filename, False)
-    common.UpdateFileIfChanged(old_hierarchy_filename, new_hierarchy_filename, False)
-    common.UpdateFileIfChanged(old_interfaces_filename, new_interfaces_filename, False)
-    common.UpdateFileIfChanged(old_prerequisites_filename, new_prerequisites_filename, False)
-    common.UpdateFileIfChanged(old_args_filename, new_args_filename, False)
-
-    return 0
+    return postprocess()
