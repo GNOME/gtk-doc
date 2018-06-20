@@ -1267,6 +1267,10 @@ def run(options):
 
     output.close()
 
+    if options.generate_only:
+        logging.debug('Only generating source file: %s', c_file)
+        return 0
+
     # Compile and run our file
     if 'libtool' in options.cc:
         o_file = options.module + '-scan.lo'
