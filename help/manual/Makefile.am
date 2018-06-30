@@ -1,12 +1,25 @@
+NULL =
+
 if HAVE_YELP_TOOLS
 @YELP_HELP_RULES@
 endif
+
+$(srcdir)/C/version.ent: $(srcdir)/version.ent.in Makefile
+	echo "To: $@"
+	echo "From: $<"
+	$(AM_V_GEN)sed \
+               -e "s|\@VERSION\@|$(PACKAGE_VERSION)|" \
+               $< > $@
 
 HELP_ID = gtk-doc-manual
 
 HELP_FILES = \
     index.docbook \
     fdl-appendix.xml
+
+HELP_EXTRA = \
+    version.ent \
+    $(NULL)
 
 HELP_LINGUAS = bn_IN cs de el en_GB es fr gl gu pt_BR sl sv ta te zh_CN
 
