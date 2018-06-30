@@ -8,11 +8,50 @@ HELP_FILES = \
     index.docbook \
     fdl-appendix.xml
 
+C/html/index.html: Makefile
+	$(AM_V_GEN)xsltproc --nonet \
+             --xinclude \
+             --output $(srcdir)/C/html/ \
+             --stringparam gtkdoc.bookname gtk-doc-manual \
+             --stringparam gtkdoc.version $(VERSION) \
+             $(top_srcdir)/gtk-doc.xsl \
+             $(srcdir)/C/index.docbook
+
+HELP_EXTRA = \
+    version.ent \
+    html/index.html \
+    $(NULL)
+
+install-data-local:
+	@installfiles=`echo $(srcdir)/C/html/*`; \
+	if test "$$installfiles" = '$(srcdir)/C/html/*'; \
+	then echo 1>&2 'Nothing to install' ; \
+	else \
+	  installdir="$(DESTDIR)$(datadir)/gtk-doc/html/$(HELP_ID)"; \
+	  $(mkinstalldirs) $${installdir} ; \
+	  for i in $$installfiles; do \
+	    echo ' $(INSTALL_DATA) '$$i $$installdir; \
+	    $(INSTALL_DATA) $$i $${installdir}; \
+	  done; \
+	  for i in $(top_srcdir)/style/*.png $(top_srcdir)/style/*.css; do \
+	    echo ' $(INSTALL_DATA) '$$i $$installdir; \
+	    $(INSTALL_DATA) $$i $${installdir}; \
+	  done; \
+	fi
+
+uninstall-local:
+	@if test -n "$(DOC_MODULE_VERSION)"; then \
+	  installdir="$(DESTDIR)$(TARGET_DIR)-$(DOC_MODULE_VERSION)"; \
+	else \
+	  installdir="$(DESTDIR)$(TARGET_DIR)"; \
+	fi; \
+	rm -rf $${installdir}
+
 HELP_LINGUAS = bn_IN cs de el en_GB es fr gl gu pt_BR sl sv ta te zh_CN
 
 CLEANFILES = $(_HELP_LC_FILES) $(_HELP_LC_STAMPS) $(_HELP_MOFILES)
 
-GITIGNOREFILES = ??_??/$(HELP_ID).xml ??/$(HELP_ID).xml
+GITIGNOREFILES = C/html C/version.ent ??_??/$(HELP_ID).xml ??/$(HELP_ID).xml
 
 EXTRA_DIST = meson.build
 
