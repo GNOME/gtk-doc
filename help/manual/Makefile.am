@@ -42,7 +42,10 @@ install-data-local:
 	    echo ' $(INSTALL_DATA) '$$i $$installdir; \
 	    $(INSTALL_DATA) $$i $${installdir}; \
 	  done; \
-	  $(GTKDOC_REBASE) --relative --dest-dir=$(DESTDIR) --html-dir=$${installdir}; \
+	  for i in $(top_srcdir)/style/*.png $(top_srcdir)/style/*.css; do \
+	    echo ' $(INSTALL_DATA) '$$i $$installdir; \
+	    $(INSTALL_DATA) $$i $${installdir}; \
+	  done; \
 	fi
 
 uninstall-local:
