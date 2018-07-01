@@ -849,13 +849,13 @@ fi
           the <function>GTK_DOC_CHECK</function> macro.
           The <function>GTK_DOC_CHECK</function> macro can be used to pass
           extra arguments to the <application>gtkdocize</application> script.
-          the 2nd parameter in the <symbol>GTK_DOC_CHECK</symbol> macro.
+          the 2nd parameter in the <function>GTK_DOC_CHECK</function> macro.
         </para>
 
         <para>
           Alternatively, additional arguments can also be passed to
           <application>gtkdocize</application> via the
-          <symbol>GTKDOCIZE_FLAGS</symbol> environment variable, or by
+          <function>GTKDOCIZE_FLAGS</function> environment variable, or by
           directly specifying them to <application>gtkdocize</application>
           in <filename>autogen.sh</filename>.
         </para>
