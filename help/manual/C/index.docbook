@@ -1001,25 +1001,10 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
       syntax of the comments.
     </para>
 
-    <note>
-      <title>Documentation placement</title>
-      <para>
-        In the past most documentation had to be filled into files residing
-        inside the <filename>tmpl</filename> directory. This has the
-        disadvantages that the information is often not updated and also that
-        the file tend to cause conflicts with version control systems.
-      </para>
-      <para>
-        The avoid the aforementioned problems we suggest putting the
-        documentation inside the sources. This manual will only describe this
-        way of documenting code.
-      </para>
-    </note>
-
     <para>
-      The scanner can handle the majority of C headers fine. In the case of
-      receiving warnings from the scanner that look like a special case, one can
-      hint GTK-Doc to skip over them.
+      The GTK-Doc scanner can handle the majority of C headers fine. In the
+      case of receiving warnings from the scanner that look like a special
+      case, one can hint GTK-Doc to skip over them.
       <example><title>GTK-Doc comment block</title>
         <programlisting><![CDATA[
 #ifndef __GTK_DOC_IGNORE__
@@ -1225,7 +1210,8 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
         <para>
           As already mentioned earlier GTK-Doc is for documenting public API. Thus
           one cannot write documentation for static symbols. Nevertheless it is good
-          to comment those symbols too. This helps other to understand you code.
+          to comment those symbols too. This helps other developers to understand
+          your code.
           Therefore we recommend to comment these using normal comments (without the
           2nd '*' in the first line).
           If later the function needs to be made public, all one needs to do is to
@@ -2009,7 +1995,7 @@ int main(int argc, char *argv[])
       </para>
 
       <para>
-        <example><title>Example types file snippet</title>
+        <example><title>Example &lt;package&gt;.types file</title>
           <programlisting><![CDATA[
 #include <gtk/gtk.h>
 
@@ -2366,7 +2352,8 @@ endif
         containing entities for e.g. package_name and package_version. You can
         use this e.g. in the main xml file to avoid hardcoding the version
         number. Below is an example that shows how the entity file is included
-        and how the entities are used. The entities can also be used in all
+        in the master template and how the entities are used.
+        The entities can also be used in all
         generated files, GTK-Doc will use the same xml header in generated xml
         files.
         <example><title>Use pre-generated entities</title>
