@@ -254,8 +254,7 @@
             <guilabel>Writing the documentation.</guilabel>
 
             The author fills in the source files with the documentation for each
-            function, macro, union etc. (In the past information was entered in
-            generated template files, which is not recommended anymore).
+            function, macro, structs or unions, etc.
           </para>
         </listitem>
 
@@ -357,11 +356,21 @@
       <title>About GTK-Doc</title>
 
       <para>
+        Historically GTK-Doc was used to generate template files from the soures
+        code. These template files could be used by developers to enter the
+        API documentation. This approach was rather inconvenient because it
+        required to keep the generated files under version control.
+        Since GTK-Doc 1.9 it became possible to place all API information
+        into source comments, which made the template support obsolete.
+        In version 1.26 template support has been.
+      </para>
+
+      <para>
         (FIXME)
       </para>
 
       <para>
-        (History, authors, web pages, mailing list, license, future plans,
+        (authors, web pages, mailing list, license, future plans,
         comparison with other similar systems.)
       </para>
 
