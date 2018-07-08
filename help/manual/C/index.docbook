@@ -1,16 +1,26 @@
 <?xml version="1.0" standalone="no"?>
 <?xml-stylesheet type="text/xml" href="params.xsl"?>
 <!-- vim: set ai tw=80 ts=3 sw=3: -->
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "
-              http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
-
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+    "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 <!ENTITY FDL SYSTEM "fdl-appendix.xml">
 <!ENTITY FDLlink "<link linkend='fdl'>included</link>">
-]><!-- =============Document Header ============================= -->
+<!ENTITY % entities SYSTEM "./version.ent">
+  %entities;
+]>
+
 <book id="index">
   <bookinfo>
     <title>GTK-Doc Manual</title>
-    <edition>1.24.1</edition>
+    <releaseinfo>
+      This document contains version &package_version; of the GTK-Doc user
+      manual.
+      The latest version of this document can be found online at
+      <ulink role="online-location"
+             url="https://developer.gnome.org/gtk-doc-manual/">
+        https://developer.gnome.org/gtk-doc-manual/</ulink>.
+    </releaseinfo>
+    <edition>&package_version;</edition>
     <abstract role="description"><para>User manual for developers with instructions of GTK-Doc usage.</para></abstract>
     <authorgroup>
       <author>
@@ -244,8 +254,7 @@
             <guilabel>Writing the documentation.</guilabel>
 
             The author fills in the source files with the documentation for each
-            function, macro, union etc. (In the past information was entered in
-            generated template files, which is not recommended anymore).
+            function, macro, structs or unions, etc.
           </para>
         </listitem>
 
@@ -347,11 +356,21 @@
       <title>About GTK-Doc</title>
 
       <para>
+        Historically GTK-Doc was used to generate template files from the soures
+        code. These template files could be used by developers to enter the
+        API documentation. This approach was rather inconvenient because it
+        required to keep the generated files under version control.
+        Since GTK-Doc 1.9 it became possible to place all API information
+        into source comments, which made the template support obsolete.
+        In version 1.26 template support has been.
+      </para>
+
+      <para>
         (FIXME)
       </para>
 
       <para>
-        (History, authors, web pages, mailing list, license, future plans,
+        (authors, web pages, mailing list, license, future plans,
         comparison with other similar systems.)
       </para>
 
@@ -373,36 +392,93 @@
   </chapter>
 
   <chapter id="settingup">
-    <title>Setting up your project</title>
+    <title>Project Setup</title>
 
     <para>
-      The next sections describe what steps to perform to integrate GTK-Doc into
-      your project. Theses sections assume we work on a project called 'meep'.
-      This project contains a library called 'libmeep' and
-      an end-user app called 'meeper'. We also assume you will be using autoconf
-      and automake. In addition section <link linkend="plain_makefiles">plain
-      makefiles or other build systems</link> will describe the basics needed to
-      work in a different build setup.
+      This Chapter describes the steps that are necessary to integrate GTK-Doc
+      into your project. The integration of GTK-Doc into a project includes the
+      following steps:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          Preparation of the directory structure and creating required
+          configuration files for your GTK-Doc documentation (see
+          <link linkend="settingup_docfiles">
+            Setting up a skeleton documentation</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Adjusting the build system to build your documentation using the
+          GTK-Doc tools. Multiple build systems are supported, in
+          this manual we describe how to integrate GTK-Doc with
+          <link linkend="settingup_autotools">Autotools</link>,
+          <link linkend="settingup_cmake">CMake</link>, and
+          <link linkend="settingup_plain_makefiles">plain Makefiles</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Adding GTK-Doc specific files to version control and deciding which
+          files to ignore (see <link linkend="settingup_vcs">
+            Integration with version control systems</link>).
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+      The following sections assume we work on a project called
+      <code>meep</code>.
+      This project contains two packages (or modules),
+      a library called <code>libmeep</code> and an end-user app
+      called <code>meeper</code>.
     </para>
 
     <sect1 id="settingup_docfiles">
       <title>Setting up a skeleton documentation</title>
 
       <para>
-        Under your top-level project directory create folders called docs/reference
-        (this way you can also have docs/help for end-user documentation).
-        It is recommended to create another subdirectory with the name of the doc-package.
-        For packages with just one library this step is not necessary.
+        A common convention is to place documentation into a folder called
+        <code>docs</code> inside your top-level project directory.
+        We usually distinguish between <emphasis>reference
+        documentation</emphasis> intended for developers and an
+        <emphasis>user manual</emphasis> intended for end-users.
+        Again the convention is to have separate folders for both.
+        We usually place the reference documentation in a folder named
+        <code>reference</code> and the end-user manual in a folder named
+        <code>help</code> as.
+
+        According to the above convention the documentation for our
+        <code>libmeep</code> package would be placed into:
+        <code>docs/reference/libmeep</code>.
+
+        For packages with just one library or application
+        the documentation could also be placed directly into
+        <code>docs/reference</code>.
+
+        It is not mandatory to use the above convention, but if you
+        choose to use a different directory structure you must adjust
+        your build system configuration to match your directory
+        structure.
       </para>
 
       <para>
-        This can then look as shown below:
-        <example><title>Example directory structure</title>
+        In the following sections we will assume a directory structure
+        for our <emphasis>meep</emphasis> project that uses the above
+        conventions.
+
+        <example>
+          <title>Example directory structure of <emphasis>meep</emphasis>
+            project</title>
           <programlisting><![CDATA[
 meep/
   docs/
-    reference/
+    reference/  # reference documentation
       libmeep/
+      meeper/
+    help/       # optional: user manual
       meeper/
   src/
     libmeep/
@@ -412,203 +488,459 @@ meep/
       </para>
     </sect1>
 
-    <sect1 id="settingup_autoconf">
-      <title>Integration with autoconf</title>
+    <sect1 id="settingup_autotools">
+      <title>Integration with Autotools</title>
+      <para>
+        Integration of GTK-Doc into an autotools-based build system requires the
+        following steps:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Ensure that <application>gtkdocize</application> is run once before
+            the <filename>configure</filename> script. If an
+            <filename>autogen.sh</filename> script is present, adjust it to
+            check for GTK-Doc and add a call to
+            <application>gtkdocize</application>.
+          </para>
+
+          <para>
+            The main purpose of <application>gtkdocize</application> is to
+            make the <filename>gtk-doc.make</filename> Makefile and the
+            <filename>gtk-doc.m4</filename> macro definition file available
+            to the build system, either by copying or linking it
+            into the project.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Add the necessary <application>autoconf</application> macros to
+            <filename>configure.ac</filename> to enable GTK-Doc in your build
+            system to allow configuration of GTK-Doc via the generated
+            <filename>configure</filename> script.
+          </para>
+          <para>
+            Among others with registers the <code>--enable-gtk-doc</code>
+            option with the <filename>configure</filename> script.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Create an <application>automake</application> script for each
+            application or library in your project. In the example used in this
+            documentation this step applies to both <code>meeper</code> and
+            <code>libmeep</code>.
+          </para>
+        </listitem>
+      </itemizedlist>
 
       <para>
-        Very easy! Just add one line to your <filename>configure.ac</filename> script.
+        In the following sections, we will perform the above steps in reverse
+        order. We start with the <application>automake</application> scripts
+        and work our way up to <filename>configure.ac</filename> and
+        <filename>autogen.sh</filename>.
+        Then we show how enable Gtk-Doc in the build system and
+        how to build the documentation.
       </para>
 
-      <para>
-        <example><title>Integration with autoconf</title>
-          <programlisting><![CDATA[
-# check for gtk-doc
-GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
-]]></programlisting>
+      <sect2 id="settingup_automake">
+        <title>Integration with automake</title>
+
+        <para>
+          First copy the <filename>Makefile.am</filename> from the
+          <filename class='directory'>examples</filename> sub-directory of the
+          <ulink url="https://gitlab.gnome.org/GNOME/gtk-doc/raw/master/examples/Makefile.am">
+            gtkdoc-sources</ulink>
+          to your project's reference documentation directory (e.g.
+          <filename class='directory'>docs/reference/&lt;package&gt;</filename>).
+          A local copy should be available under e.g.
+          <filename>/usr/share/doc/gtk-doc-tools/examples/Makefile.am</filename>.
+          If you have multiple packages repeat this for each one.
+        </para>
+
+        <note>
+          <simpara>
+            Do not forget to add each <filename>Makefile.am</filename>
+            to the <function>AC_CONFIG_FILES</function> macro in
+            <filename>configure.ac</filename>. For
+            <filename>docs/reference/libmeep/Makefile.am</filename> you will
+            need to add the entry
+            <filename>docs/reference/libmeep/Makefile</filename>
+            to <function>AC_CONFIG_FILES</function>.
+          </simpara>
+        </note>
+
+        <example>
+          <title>
+            Example directory structure with <filename>Makefiles.am</filename>
+          </title>
+          <programlisting>
+meep/
+  docs/
+    reference/  # reference documentation
+      libmeep/
+        Makefile.am
+      meeper/
+        Makefile.am
+    help/       # optional: user manual
+      meeper/
+  src/
+    libmeep/
+    meeper/
+</programlisting>
         </example>
-      </para>
 
-      <para>
-        This will require all developers to have gtk-doc installed. If it is
-        okay for your project to have optional api-doc build setup, you can
-        solve this as below. Keep it as is, as gtkdocize is looking for
-        <function>GTK_DOC_CHECK</function>  at the start of a line.
-        <example><title>Keep gtk-doc optional</title>
-          <programlisting><![CDATA[
-# check for gtk-doc
+        <para>
+          Next, you need to customize the copied Makefiles
+          and provide values for the various parameters in each
+          <filename>Makefile.am</filename>.
+
+          All settings have a comment above them that describes their purpose
+          and how to customize the setting.
+
+          Most settings are used to supply extra flags to the respective tools
+          to which they apply. Every tool
+          has a variable of the form <option>&lt;TOOLNAME&gt;_OPTIONS</option>
+          (e.g. the tool <application>gtkdoc-mkhtml</application> has
+          an option named <code>MKHTML_OPTIONS</code>).
+
+          All the tools support <option>--help</option> to list the supported
+          options.
+        </para>
+
+        <para>
+          The following list explains the most relevant options. Check the
+          example <filename>Makefile.am</filename> for additional options.
+
+          <itemizedlist>
+            <listitem>
+              <para>
+                <option>DOC_MODULE</option> is used to provide the name of the
+                package that is being documentated (e.g. <code>meeper</code>, or
+                <code>libmeep</code>).
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <option>DOC_SOURCE_DIR</option>
+                is used to specify the location
+                of source directory which GTK-Doc searches for your API
+                documentation. This will usually be
+                <code>
+                  DOC_SOURCE_DIR=$(top_srcdir)/src
+                </code>
+                or a sub-directory of that directory.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <option>HFILE_GLOB</option>
+                and
+                <option>CFILE_GLOB</option>
+                are used for dependencies. Each option take a file-glob (e.g.
+                <code>HFILE_GLOB=$(top_srcdir)/src/*.c</code>).
+                The documentation will be rebuilt if any of the matched files
+                change.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <option>EXTRA_HFILES</option>
+                allows to specify extra header files
+                to include when scanning for API documentation, which are not
+                found under <code>DOC_SOURCE_DIR</code> (e.g. <code>
+                EXTRA_HFILES=$(top_srcdir}/contrib/extra.h</code>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <option>IGNORE_HFILES</option>
+                allows to specify header files
+                or directories to ignore when scanning for API documentation.
+                Use the basename of the file or directory (e.g. <code>
+                IGNORE_HFILES=gtkdebug.h gtkintl.h private_code_folder</code>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <option>HTML_IMAGES</option>
+                allows to specify images files which
+                will be copied into the <filename>html/</filename> directory of
+                the generated documentation.
+                If your API documentation includes any images they need to be
+                added to this
+                option (e.g. <code>
+                HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/stock_about_24.png</code>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <option>content_files</option>
+                allows to specify extra files
+                that are included by
+                <code>$(DOC_MAIN_SGML_FILE)</code>
+                (e.g. <code>
+                content_files=running.xml building.xml changes-2.0.xml</code>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <option>expand_content_files</option>
+                allows to specify files
+                where <emphasis>gtk-doc abbrevations</emphasis> such as
+                <code>#GtkWidget</code>
+                are expanded (e.g. <code>
+                expand_content_files=running.xml</code>).
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+
+      </sect2>
+
+      <sect2 id="settingup_autoconf">
+        <title>Integration with autoconf</title>
+
+        <para>
+          Integration with <application>autoconf</application> is very simple
+          and includes one required step and an additional optional
+          (but recommended) step.
+
+          The first step is to add the <function>GTK_DOC_CHECK</function> macro
+          to your <filename>configure.ac</filename> script. This registers
+          several configure options to enable GTK-Doc and allows you
+          to set default arguments for <application>gtkdocize</application>.
+        </para>
+
+        <warning>
+          <simpara>
+            Make sure that the <code>GTK_DOC_CHECK</code> macro is not indented.
+            The macro must start at the beginning of the line and should not
+            start with whitespace.
+          </simpara>
+        </warning>
+
+        <para>
+          The second step is to add the <code>AC_CONFIG_MACRO_DIR(m4)</code>
+          to your <filename>configure.ac</filename>. This is not required
+          but helps <application>gtkdocize</application> to automatically copy
+          the macro definition (e.g <filename>gtk-doc.m4</filename>) which
+          contains the <function>GTK_DOC_CHECK</function> macro to your
+          project's macro directory. Without this, the GTK_DOC_CHECK macro
+          might not be found and you would need to explicitly tell the
+          <application>aclocal</application> tool where to find the macro
+          definition file.
+        </para>
+
+        <para>
+          <example><title>Minimal integration with autoconf</title>
+            <programlisting><![CDATA[
+# recommended: set m4 directory
+AC_CONFIG_MACRO_DIR(m4)
+# optional: register gtk-doc in configure
+GTK_DOC_CHECK([1.28])
+]]></programlisting>
+          </example>
+        </para>
+
+        <para>
+          The above example works, but will require all developers to have
+          gtk-doc installed. A better way is to make building the documentation
+          optional as shown in the next example:
+
+          <example>
+            <title>Integration with optional gtk-doc dependency</title>
+            <programlisting><![CDATA[
 m4_ifdef([GTK_DOC_CHECK], [
-GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+# recommended: set m4 directory
+AC_CONFIG_MACRO_DIR(m4)
+# optional: register gtk-doc in configure
+GTK_DOC_CHECK([1.28])
 ],[
 AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 ])
 ]]></programlisting>
-        </example>
-      </para>
-
-      <para>
-        The first argument is used to check for the gtkdocversion at configure time.
-        The 2nd, optional argument is used by <application>gtkdocize</application>.
-        The <symbol>GTK_DOC_CHECK</symbol> macro also adds several configure switches:
-      </para>
-      <orderedlist>
-        <listitem><para>--with-html-dir=PATH : path to installed docs</para></listitem>
-        <listitem><para>--enable-gtk-doc : use gtk-doc to build documentation [default=no]</para></listitem>
-        <listitem><para>--enable-gtk-doc-html : build documentation in html format [default=yes]</para></listitem>
-        <listitem><para>--enable-gtk-doc-pdf : build documentation in pdf format [default=no]</para></listitem>
-      </orderedlist>
-
-      <important>
-      	<para>
-          GTK-Doc is disabled by default! Remember to pass the option
-          <option>'--enable-gtk-doc'</option> to the next
-          <filename>configure</filename> run. Otherwise pregenerated documentation is installed
-          (which makes sense for users but not for developers).
+          </example>
         </para>
-      </important>
 
-      <para>
-        Furthermore it is recommended that you have the following line inside
-        your <filename>configure.ac</filename> script.
-        This allows <application>gtkdocize</application> to automatically copy the
-        macro definition for <function>GTK_DOC_CHECK</function> to your project.
-      </para>
+        <para>
+          The first argument is used to check for the Gtk-Doc version at
+          configure time. The 2nd, optional argument is used by
+          <application>gtkdocize</application>.
+          The <symbol>GTK_DOC_CHECK</symbol> macro also adds several configure
+          switches:
+        </para>
 
-      <para>
-        <example><title>Preparation for gtkdocize</title>
-          <programlisting><![CDATA[
-AC_CONFIG_MACRO_DIR(m4)
-]]></programlisting>
-        </example>
-      </para>
-      <para>
-        After all changes to <filename>configure.ac</filename> are made, update
-        the <filename>configure</filename> file. This can be done by re-running
-        <code>autoreconf -i</code> or <code>autogen.sh</code>.
-      </para>
-    </sect1>
+        <orderedlist>
+          <listitem><para>--with-html-dir=PATH : path to installed docs</para></listitem>
+          <listitem><para>--enable-gtk-doc : use gtk-doc to build documentation [default=no]</para></listitem>
+          <listitem><para>--enable-gtk-doc-html : build documentation in html format [default=yes]</para></listitem>
+          <listitem><para>--enable-gtk-doc-pdf : build documentation in pdf format [default=no]</para></listitem>
+        </orderedlist>
 
-    <sect1 id="settingup_automake">
-      <title>Integration with automake</title>
+        <important>
+          <para>
+            GTK-Doc is disabled by default! Remember to pass the option
+            <option>'--enable-gtk-doc'</option> to the next
+            <filename>configure</filename> run. Otherwise pregenerated documentation is installed
+            (which makes sense for users but not for developers).
+          </para>
+        </important>
 
-      <para>
-        First copy the <filename>Makefile.am</filename> from the
-        <filename class='directory'>examples</filename> sub directory of the
-        <ulink url="https://git.gnome.org/browse/gtk-doc/tree/examples/Makefile.am">gtkdoc-sources</ulink>
-        to your project's API documentation directory (
-        <filename class='directory'>./docs/reference/&lt;package&gt;</filename>).
-        A local copy should be available under e.g.
-        <filename>/usr/share/doc/gtk-doc-tools/examples/Makefile.am</filename>.
-        If you have multiple doc-packages repeat this for each one.
-      </para>
+        <para>
+          After all changes to <filename>configure.ac</filename> are made,
+          update the <filename>configure</filename> file. This can be done by
+          re-running <code>autogen.sh</code>.
+        </para>
+      </sect2>
 
-      <para>
-        The next step is to edit the settings inside the <filename>Makefile.am</filename>.
-        All the settings have a comment above that describes their purpose.
-        Most settings are extra flags passed to the respective tools. Every tool
-        has a variable of the form <option>&lt;TOOLNAME&gt;_OPTIONS</option>.
-        All the tools support <option>--help</option> to list the supported
-        parameters.
-      </para>
+      <sect2 id="settingup_autogen">
+        <title>Integration with autogen</title>
 
-      <!-- FIXME: explain options ? -->
+        <para>
+          Most projects will have an <filename>autogen.sh</filename> script to
+          setup the build infrastructure after the project was checked out from
+          a version control system (such as git or svn). GTK-Doc comes with a
+          script called <application>gtkdocize</application> which can be used
+          to copy the necessary files needed by Gtk-Doc to the source directory.
+        </para>
 
-    </sect1>
+        <para>
+          It should be run before autoreconf, autoheader, automake or autoconf.
+        </para>
 
-    <sect1 id="settingup_autogen">
-      <title>Integration with autogen</title>
-
-      <para>
-        Most projects will have an <filename>autogen.sh</filename> script to
-        setup the build infrastructure after a checkout from version control
-        system (such as cvs/svn/git). GTK-Doc comes with a tool called
-        <application>gtkdocize</application> which can be used in such a script.
-        It should be run before autoheader, automake or autoconf.
-      </para>
-
-      <para>
-        <example><title>Running gtkdocize from autogen.sh</title>
-          <programlisting><![CDATA[
+        <para>
+          <example><title>Running gtkdocize from autogen.sh</title>
+            <programlisting><![CDATA[
 gtkdocize || exit 1
 ]]></programlisting>
-        </example>
-      </para>
+          </example>
+        </para>
 
-      <para>
-        When running <application>gtkdocize</application> it copies
-        <filename>gtk-doc.make</filename> to your project root (or any directory
-        specified by the <option>--docdir</option> option).
-        It also checks you configure script for the <function>GTK_DOC_CHECK</function>
-        invocation. This macro can be used to pass extra parameters to
-        <application>gtkdocize</application>.
-      </para>
+        <para>
+          <example>
+            <title>Conditionally run gtkdocize from autogen.sh</title>
+            <programlisting><![CDATA[
+GTKDOCIZE=$(which gtkdocize 2>/dev/null)
+if test $? -ne 0; then
+  echo "No gtk-doc support found. You can't build the docs."
+else
+  $GTKDOCIZE || exit 1
+fi
+]]></programlisting>
+          </example>
+        </para>
 
-      <para>
-        Historically GTK-Doc was generating template files where developers entered the docs.
-        This turned out to be not so good (e.g. the need for having generated
-        files under version control).
-        Since GTK-Doc 1.9 the tools can get all the information from source comments
-        and thus the templates can be avoided. We encourage people to keep
-        documentation in the code. <application>gtkdocize</application> supports now
-        a <option>--flavour no-tmpl</option> option that chooses a makefile that skips
-        tmpl usage totally. Besides adding the option directly to the command
-        invocation, they can be added also to an environment variable called <symbol>GTKDOCIZE_FLAGS</symbol>
-        or set as a 2nd parameter in <symbol>GTK_DOC_CHECK</symbol> macro in the configure script.
-        If you have never changed file in tmpl by hand and migrating from older gtkdoc versions,
-        please remove the directory (e.g. from version control system).
-      </para>
-    </sect1>
+        <para>
+          When running <application>gtkdocize</application> it copies
+          <filename>gtk-doc.make</filename> to your project root (or any
+          directory specified by the <option>--docdir</option> option).
+        </para>
 
-    <sect1 id="settingup_firstrun">
-      <title>Running the doc build</title>
+        <para>
+          <application>gtkdocize</application> checks your
+          <filename>configure.ac</filename> script for
+          the <function>GTK_DOC_CHECK</function> macro.
+          The <function>GTK_DOC_CHECK</function> macro can be used to pass
+          extra arguments to the <application>gtkdocize</application> script.
+          the 2nd parameter in the <function>GTK_DOC_CHECK</function> macro.
+        </para>
 
-      <para>
-        After the previous steps it's time to run the build. First we need to
-	rerun <filename>autogen.sh</filename>. If this script runs configure for
-	you, then give it the <option>--enable-gtk-doc</option> option.
-	Otherwise manually run <filename>configure</filename> with this option
-	afterwards.
-      </para>
-      <para>
-        The first make run generates several additional files in the doc-directories.
-        The important ones are:
-        <filename>&lt;package&gt;.types</filename>,
-        <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml),
-        <filename>&lt;package&gt;-sections.txt</filename>.
-      </para>
-      <para>
-        <example><title>Running the doc build</title>
-          <programlisting><![CDATA[
+        <para>
+          Alternatively, additional arguments can also be passed to
+          <application>gtkdocize</application> via the
+          <function>GTKDOCIZE_FLAGS</function> environment variable, or by
+          directly specifying them to <application>gtkdocize</application>
+          in <filename>autogen.sh</filename>.
+        </para>
+
+      </sect2>
+
+      <sect2 id="settingup_firstrun">
+        <title>Executing GTK-Doc from the Build System</title>
+
+        <para>
+          After the previous steps it's time to run the build. First we need to
+          rerun <filename>autogen.sh</filename>. If this script runs configure
+          for you, then give it the <option>--enable-gtk-doc</option> option.
+          Otherwise manually run <filename>configure</filename> with this option
+          afterwards.
+        </para>
+        <para>
+          The first make run generates several additional files in the doc-directories.
+          The important ones are:
+          <filename>&lt;package&gt;.types</filename>,
+          <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml),
+          <filename>&lt;package&gt;-sections.txt</filename>.
+        </para>
+        <para>
+          <example><title>Running the doc build</title>
+            <programlisting><![CDATA[
 ./autogen.sh --enable-gtk-doc
 make
 ]]></programlisting>
+          </example>
+        </para>
+
+        <para>
+          Now you can point your browser to
+          <filename>docs/reference/&lt;package&gt;/index.html</filename>.
+          With this initial setup you will only see a very simple document.
+          The next chapter will teach you how to add API documentation to your
+          code via special comment blocks. The Chapter afterwards introduces
+          <link linkend="metafiles">additional files</link> and shows how to
+          edit the <link linkend="metafiles_master">master template</link> to
+          add additional chapters and sections to your documentation files.
+        </para>
+
+      </sect2>
+
+    </sect1>
+
+    <sect1 id="settingup_cmake">
+      <title>Integration with CMake build systems</title>
+
+      <para>
+        GTK-Doc now provides a <filename>GtkDocConfig.cmake</filename> module
+        (and the corresponding <filename>GtkDocConfigVersion.cmake</filename>
+        module). This provides a <literal>gtk_doc_add_module</literal>
+        command that you can set in your <filename>CMakeLists.txt</filename>
+        file.
+      </para>
+
+      <para>
+        The following example shows how to use this command.
+        <example><title>Example of using GTK-Doc from CMake</title>
+          <programlisting><![CDATA[
+find_package(GtkDoc 1.25 REQUIRED)
+
+# Create the doc-libmeep target.
+gtk_doc_add_module(
+   libmeep ${CMAKE_SOURCE_DIR}/libmeep
+      XML meep-docs.xml
+      LIBRARIES libmeep
+)
+
+# Build doc-libmeep as part of the default target. Without this, you would
+# have to explicitly run something like `make doc-libmeep` to build the docs.
+add_custom_target(documentation ALL DEPENDS doc-libmeep)
+
+# Install the docs. (This assumes you're using the GNUInstallDirs CMake module
+# to set the CMAKE_INSTALL_DOCDIR variable correctly).
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html
+        DESTINATION ${CMAKE_INSTALL_DOCDIR})
+]]></programlisting>
         </example>
       </para>
-      <para>
-        Now you can point your browser to <filename>docs/reference/&lt;package&gt;/index.html</filename>.
-        Yes, it's a bit disappointing still. But hang-on, during the next chapter we
-        tell you how to fill the pages with life.
-      </para>
     </sect1>
 
-    <sect1 id="settingup_vcs">
-      <title>Integration with version control systems</title>
-
-      <para>
-        As a rule of thumb, it's the files you edit which should go under
-        version control. For typical projects it's these files:
-        <filename>&lt;package&gt;.types</filename>,
-        <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml),
-        <filename>&lt;package&gt;-sections.txt</filename>,
-        <filename>Makefile.am</filename>.
-      </para>
-      <para>
-        Files in the <filename>xml/</filename> and <filename>html/</filename>
-        directories should not go under version control. Neither should any of
-        the <filename>.stamp</filename> files.
-      </para>
-    </sect1>
-
-    <sect1 id="plain_makefiles">
+    <sect1 id="settingup_plain_makefiles">
       <title>Integration with plain makefiles or other build systems</title>
 
       <para>
@@ -639,42 +971,24 @@ gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html
       </para>
     </sect1>
 
-    <sect1 id="cmake">
-       <title>Integration with CMake build systems</title>
+    <sect1 id="settingup_vcs">
+      <title>Integration with version control systems</title>
 
-       <para>
-          GTK-Doc now provides a <filename>GtkDocConfig.cmake</filename> module
-          (and the corresponding <filename>GtkDocConfigVersion.cmake</filename>
-          module). This provides a <literal>gtk_doc_add_module</literal>
-          command that you can set in your <filename>CMakeLists.txt</filename>
-          file.
-       </para>
+      <para>
+        As a rule of thumb, it's the files you edit which should go under
+        version control. For typical projects it's these files:
+        <filename>&lt;package&gt;.types</filename>,
+        <filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml),
+        <filename>&lt;package&gt;-sections.txt</filename>,
+        <filename>Makefile.am</filename>.
+      </para>
+      <para>
+        Files in the <filename>xml/</filename> and <filename>html/</filename>
+        directories should not go under version control. Neither should any of
+        the <filename>.stamp</filename> files.
+      </para>
+    </sect1>
 
-       <para>
-          The following example shows how to use this command.
-          <example><title>Example of using GTK-Doc from CMake</title>
-             <programlisting><![CDATA[
-find_package(GtkDoc 1.25 REQUIRED)
-
-# Create the doc-libmeep target.
-gtk_doc_add_module(
-   libmeep ${CMAKE_SOURCE_DIR}/libmeep
-      XML meep-docs.xml
-      LIBRARIES libmeep
-)
-
-# Build doc-libmeep as part of the default target. Without this, you would
-# have to explicitly run something like `make doc-libmeep` to build the docs.
-add_custom_target(documentation ALL DEPENDS doc-libmeep)
-
-# Install the docs. (This assumes you're using the GNUInstallDirs CMake module
-# to set the CMAKE_INSTALL_DOCDIR variable correctly).
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html
-        DESTINATION ${CMAKE_INSTALL_DOCDIR})
-]]></programlisting>
-         </example>
-       </para>
-     </sect1>
   </chapter>
 
   <chapter id="documenting">
@@ -687,25 +1001,10 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html
       syntax of the comments.
     </para>
 
-    <note>
-      <title>Documentation placement</title>
-      <para>
-        In the past most documentation had to be filled into files residing
-        inside the <filename>tmpl</filename> directory. This has the
-        disadvantages that the information is often not updated and also that
-        the file tend to cause conflicts with version control systems.
-      </para>
-      <para>
-        The avoid the aforementioned problems we suggest putting the
-        documentation inside the sources. This manual will only describe this
-        way of documenting code.
-      </para>
-    </note>
-
     <para>
-      The scanner can handle the majority of C headers fine. In the case of
-      receiving warnings from the scanner that look like a special case, one can
-      hint GTK-Doc to skip over them.
+      The GTK-Doc scanner can handle the majority of C headers fine. In the
+      case of receiving warnings from the scanner that look like a special
+      case, one can hint GTK-Doc to skip over them.
       <example><title>GTK-Doc comment block</title>
         <programlisting><![CDATA[
 #ifndef __GTK_DOC_IGNORE__
@@ -911,7 +1210,8 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html
         <para>
           As already mentioned earlier GTK-Doc is for documenting public API. Thus
           one cannot write documentation for static symbols. Nevertheless it is good
-          to comment those symbols too. This helps other to understand you code.
+          to comment those symbols too. This helps other developers to understand
+          your code.
           Therefore we recommend to comment these using normal comments (without the
           2nd '*' in the first line).
           If later the function needs to be made public, all one needs to do is to
@@ -1695,7 +1995,7 @@ int main(int argc, char *argv[])
       </para>
 
       <para>
-        <example><title>Example types file snippet</title>
+        <example><title>Example &lt;package&gt;.types file</title>
           <programlisting><![CDATA[
 #include <gtk/gtk.h>
 
@@ -2052,7 +2352,8 @@ endif
         containing entities for e.g. package_name and package_version. You can
         use this e.g. in the main xml file to avoid hardcoding the version
         number. Below is an example that shows how the entity file is included
-        and how the entities are used. The entities can also be used in all
+        in the master template and how the entities are used.
+        The entities can also be used in all
         generated files, GTK-Doc will use the same xml header in generated xml
         files.
         <example><title>Use pre-generated entities</title>

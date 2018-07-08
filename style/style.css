@@ -34,6 +34,11 @@ span.nowrap {
   white-space: nowrap;
 }
 
+.application {
+  font-family: monospace;
+  font-weight: bold;
+}
+
 div.gallery-float
 {
   float: left;
@@ -315,6 +320,10 @@ acronym,abbr
 .listing_code .programlisting .usertype,
 .listing_code .programlisting .type,
 .listing_code .programlisting .type a     { color: #4e9a06; } /* tango: chameleon 3  */
+
+.seglistitem {
+  margin-bottom: 0.5em;
+}
 
 .listing_frame {
   /* tango:sky blue 1 */
