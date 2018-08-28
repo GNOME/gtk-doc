@@ -3,7 +3,7 @@ AC_PREREQ([2.63])
 
 dnl We're using a two digit number for the releases and
 dnl a three digit number for the development version
-m4_define(gtk_doc_version, 1.28.1)
+m4_define(gtk_doc_version, 1.29)
 
 AC_INIT([gtk-doc],[gtk_doc_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc],[gtk-doc])
 
