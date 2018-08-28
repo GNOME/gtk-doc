@@ -1,5 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
+# we need to run '.' last so that sanity processes the generated docs
+# maybe move it to a subdir?
+SUBDIRS = annotations bugs empty fail gobject program repro .
+
 if BUILD_TESTS
 
 TESTS = \
@@ -22,6 +26,11 @@ PY_LOG_COMPILER = $(PYTHON)
 endif
 
 EXTRA_DIST = gtkdoctest.sh $(TESTS)
+
+# run any given test by running make <test>.check
+%.check: %
+	@$(TESTS_ENVIRONMENT)	\
+	./$*
 
 snapshot:
 	@for dir in $(SUBDIRS); do \
