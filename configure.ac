@@ -220,13 +220,26 @@ gtkdoc/config.py
 help/Makefile
 help/manual/Makefile
 tests/Makefile
+tests/annotations/Makefile
+tests/annotations/src/Makefile
 tests/annotations/docs/Makefile
+tests/bugs/Makefile
+tests/bugs/src/Makefile
 tests/bugs/docs/Makefile
+tests/empty/Makefile
+tests/empty/src/Makefile
 tests/empty/docs/Makefile
+tests/fail/Makefile
+tests/fail/src/Makefile
 tests/fail/docs/Makefile
+tests/gobject/Makefile
 tests/gobject/src/Makefile
 tests/gobject/docs/Makefile
+tests/program/Makefile
+tests/program/src/Makefile
 tests/program/docs/Makefile
+tests/repro/Makefile
+tests/repro/src/Makefile
 tests/repro/docs/Makefile
 ])
 
