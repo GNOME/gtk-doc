@@ -736,7 +736,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                 deprecated_conditional_nest = int(deprecated_conditional_nest)
                 in_declaration = ''
 
-        # We try to handle nested stucts/unions, but unmatched brackets in
+        # We try to handle nested structs/unions, but unmatched brackets in
         # comments will cause problems.
         if in_declaration == 'struct' or in_declaration == 'union':
             sm = re.search(r'\n\}\s*(\w*);\s*$', decl)
