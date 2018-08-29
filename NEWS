@@ -43,7 +43,7 @@ Bug fixes.
 
  o 791928 : gtk-doc doesn't understand 'stability: Obsolete'
  o 792148 : cmake: Installed GtkDocConfig.cmake has incorrect bindir path
- o 792661 : use pygments to do syntax highlighing
+ o 792661 : use pygments to do syntax highlighting
  o 793599 : Please run testsuite with V=0
  o 794051 : rebase: fix on-line location extraction from devhelp files
  o 794182 : private_header regex is broken
@@ -751,7 +751,7 @@ GTK-Doc 1.11    (Nov 16 2008)
  o 554718 : gtk-doc needs to allow versioned TARGET_DIR
  o 554833 : Be more careful with &quot; struct _ &lt; struct_name &gt;  &quot;
  o 558082 : evince docs build fails with GTK_DISABLE_SINGLE_INCLUDES
- o 559281 : Correct check for existance of gtkdoc-rebase
+ o 559281 : Correct check for existence of gtkdoc-rebase
 
  Contributors
 
@@ -908,7 +908,7 @@ GTK-Doc 1.7     (Jul 29 2006)
 GTK-Doc 1.6     (Apr 9 2006)
 ===========
 
- o Removed the hard dependancy on openjade or jade, since XML is used mainly
+ o Removed the hard dependency on openjade or jade, since XML is used mainly
    now rather than SGML.
  o Install the .pc file in $(datadir) rather than $(libdir) since gtk-doc is
    architecture-independant.
