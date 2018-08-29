@@ -6,7 +6,7 @@
 
   <!-- import the chunked XSL stylesheet -->
   <!-- http://www.sagehill.net/docbookxsl/Chunking.html#FastChunking says we should use
-       "chunkfast.xsl", but I can't see a difference. Also it is not clear wheter
+       "chunkfast.xsl", but I can't see a difference. Also it is not clear whether
        one should still set "chunk.fast". Again, no meassuable difference. -->
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
   <xsl:include href="devhelp2.xsl"/>
@@ -66,7 +66,7 @@
   <!-- ========================================================= -->
 
   <!-- l10n is slow, we don't ue it, so we'd like to turn it off
-       this atleast avoid the re-evaluation -->
+       this at least avoid the re-evaluation -->
   <xsl:template name="l10n.language">en</xsl:template>
 
   <xsl:param name="gtkdoc.l10n.xml" select="document('http://docbook.sourceforge.net/release/xsl/current/common/en.xml')"/>
@@ -484,7 +484,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
               </xsl:when>
               <!-- this is not yet very nice, as it requires all glossdic/indexdiv
                    elements having a anchor element. maybe we can customize the xsl
-                   to automaticaly create local anchors
+                   to automatically create local anchors
               -->
               <xsl:when test="count($glssections) > 0">
                 <span id="nav_glossary">
