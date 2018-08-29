@@ -2942,7 +2942,7 @@ def MakeIndexterms(symbol, sid):
     terms = ''
     sortas = ''
 
-    # make the index useful, by ommitting the namespace when sorting
+    # make the index useful, by omitting the namespace when sorting
     if NAME_SPACE != '':
         m = re.search(r'^%s\_?(.*)' % NAME_SPACE, symbol, flags=re.I)
         if m:
