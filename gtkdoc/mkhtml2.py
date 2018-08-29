@@ -31,7 +31,7 @@ and source-highlight.
 
 Please note, that we're not aiming for complete docbook-xml support. All tags
 used in the generated xml are of course handled. More tags used in handwritten
-xml can be easilly supported, but for some combinations of tags we prefer
+xml can be easily supported, but for some combinations of tags we prefer
 simplicity.
 
 TODO:
@@ -135,7 +135,7 @@ DONT_CHUNK = float('inf')
 # docbook xsl does.
 #
 # For toc levels see http://www.sagehill.net/docbookxsl/TOCcontrol.html
-# TODO: this list has also a flag that controls wheter we add the
+# TODO: this list has also a flag that controls whether we add the
 # 'Table of Contents' heading in convert_chunk_with_toc()
 CHUNK_PARAMS = {
     'appendix': ChunkParams('app', 'book'),
@@ -1766,7 +1766,7 @@ def get_dirs(uninstalled):
 def main(module, index_file, out_dir, uninstalled, src_lang, paths):
 
     # == Loading phase ==
-    # the next 3 steps could be done in paralel
+    # the next 3 steps could be done in parallel
 
     # 1) load the docuemnt
     _t = timer()
@@ -1795,7 +1795,7 @@ def main(module, index_file, out_dir, uninstalled, src_lang, paths):
     # 3) load xref targets
     _t = timer()
     # TODO: migrate options from fixxref
-    # TODO: ideally explicity specify the files we need, this will save us the
+    # TODO: ideally explicitly specify the files we need, this will save us the
     # globbing and we'll load less files.
     fixxref.LoadIndicies(out_dir, '/usr/share/gtk-doc/html', [])
     logging.warning("3: %7.3lf: load xrefs", timer() - _t)
