@@ -1,10 +1,9 @@
-
 The TODO list for the gtk-doc project is at Bugzilla,
 the bugtracking system of the GNOME project.
 
 Visit
  http://bugzilla.gnome.org/buglist.cgi?product=gtk-doc&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
-to see what is allready requested, or where you can help. :-)
+to see what is already requested, or where you can help. :-)
 
 To put an other request on the TODO list, visit
  http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc
@@ -47,9 +46,9 @@ https://bugzilla.gnome.org/show_bug.cgi?id=646094
 * if one has "@InSection: xxxx" in a section comment we could patch the
   main.xml file and insert then xi:include line (would possibly rely on a
   special comment-pair there, we might also need to rewrite these
-  auto-generated xi:includes everytime as the placements could have been
-  changed, or we have a xi:inlcude for each chapter, that we regenerate).
-* we need a way to specify subsections (Standart, Private)
+  auto-generated xi:includes every time as the placements could have been
+  changed, or we have a xi:include for each chapter, that we regenerate).
+* we need a way to specify subsections (Standard, Private)
   this could be done in the SECTION comment
   e.g.: "@HideSymbols: <list-of-symbols-to-hide>
   * we could allow to have a SUBSECTION:xxx comment block too
@@ -392,7 +391,7 @@ grep "gst_caps_is_always_compatible" tags
     - l10n.language is slow
       bug: https://sourceforge.net/tracker/index.php?func=detail&aid=2918673&group_id=21935&atid=373750
       see: http://www.mail-archive.com/docbook-apps@lists.oasis-open.org/msg05412.html
-      - overide l10n.language
+      - override l10n.language
         glib/gobject
         real        user        sys
         2m15.221s   1m58.740s   0m1.456s
@@ -458,7 +457,7 @@ grep "gst_caps_is_always_compatible" tags
           - tricky as with xml/gtkdocentities.ent, they are in a extra file
         - we could pass entities as args for gtkdoc-mkdb
         - if the flag is used, we should warn if entities are in the header
-    - 2) if the doctype on the main doc, does not conatin entities, skip adding
+    - 2) if the doctype on the main doc, does not cotnain entities, skip adding
          the doctype to generated output
     - 3) if the doctype on the main doc contains entities, only add the doctype
          if the generated content contains entities ([&%][_a-zA-Z]*;)
@@ -476,7 +475,7 @@ find . -name "*.xml" -exec egrep -o '&[_a-zA-Z]*;' {} \; | sort | uniq -c | sort
 - consider swithcing to this markdown parser
   https://pythonhosted.org/Markdown/index.html
 - switch intermediate files to json/yaml
-  - we need to pick something, that we can easilly output from plain c (produced by gtkdoc-scangobj)
+  - we need to pick something, that we can easily output from plain c (produced by gtkdoc-scangobj)
   - decl-list.txt and .types would need to stay
   - maybe maintain one file per sourcefile (in a subdir) to eventually be able to
     do incremental builds
