@@ -14,8 +14,8 @@ g-doc, gapi-doc, gnome-api-doc, ...
   sgml.stamp -> db.stamp
 
 == design fixes ==
-=== proper xml-id namesspaces ===
-We need proper xml-id namesspaces for document structure and symbols to avoid
+=== proper xml-id namespaces ===
+We need proper xml-id namespaces for document structure and symbols to avoid
 clashes e.g. between GtkWidget as a section and as a struct. Normal symbols
 should only be mangled to be a valid xml-id. Document structure ids should
 contain a prefix.
@@ -109,7 +109,7 @@ tools/db2md.py).
 Add the new makefile flavour to run gtkdoc-mkhtml2 instead. Add --flavour
 options for gtkdocize. Create a stub  gtkdoc-mkhtml2 tool.
 
-3.) [in progress] refactor gtkdoc/mkdb.py to exctract reusable code
+3.) [in progress] refactor gtkdoc/mkdb.py to extract reusable code
 - gtkdoc/md_to_db.py
   - only have the parse there
 
