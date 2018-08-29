@@ -1208,7 +1208,7 @@ def OutputMacro(symbol, declaration):
         declaration (str): the declaration of the macro.
 
     Returns:
-        str: the formated docs
+        str: the formatted docs
     """
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
@@ -1273,7 +1273,7 @@ def OutputTypedef(symbol, declaration):
                            e.g. 'typedef unsigned int guint;'
 
     Returns:
-        str: the formated docs
+        str: the formatted docs
     """
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
@@ -1311,7 +1311,7 @@ def OutputStruct(symbol, declaration):
         declaration (str): the declaration of the struct.
 
     Returns:
-        str: the formated docs
+        str: the formatted docs
     """
     is_gtype = False
     default_to_public = True
@@ -1508,7 +1508,7 @@ def OutputUnion(symbol, declaration):
         declaration (str): the declaration of the union.
 
     Returns:
-        str: the formated docs
+        str: the formatted docs
     """
     is_gtype = False
     if CheckIsObject(symbol):
@@ -1645,7 +1645,7 @@ def OutputEnum(symbol, declaration):
         declaration (str): the declaration of the enum.
 
     Returns:
-        str: the formated docs
+        str: the formatted docs
     """
     is_gtype = False
     if CheckIsObject(symbol):
@@ -1762,7 +1762,7 @@ def OutputVariable(symbol, declaration):
         declaration (str): the declaration of the variable.
 
     Returns:
-        str: the formated docs
+        str: the formatted docs
     """
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
@@ -1826,7 +1826,7 @@ def OutputFunction(symbol, declaration, symbol_type):
         declaration (str): the declaration of the function.
 
     Returns:
-        str: the formated docs
+        str: the formatted docs
     """
     sid = common.CreateValidSGMLID(symbol)
     condition = MakeConditionDescription(symbol)
@@ -1924,7 +1924,7 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
                        undocumented/unused entries
 
     Returns:
-        str: the formated parameter docs
+        str: the formatted parameter docs
     """
     output = ''
     num_params = 0
@@ -2942,7 +2942,7 @@ def MakeIndexterms(symbol, sid):
     terms = ''
     sortas = ''
 
-    # make the index useful, by ommiting the namespace when sorting
+    # make the index useful, by ommitting the namespace when sorting
     if NAME_SPACE != '':
         m = re.search(r'^%s\_?(.*)' % NAME_SPACE, symbol, flags=re.I)
         if m:
@@ -3000,10 +3000,10 @@ def MakeDeprecationNote(symbol):
 
 
 def MakeConditionDescription(symbol):
-    """This returns a sumary of conditions for the given symbol.
+    """This returns a summary of conditions for the given symbol.
 
     Args:
-        symbol (str): the symbol to create the sumary for.
+        symbol (str): the symbol to create the summary for.
 
     Returns:
         str: formatted text or empty string if no special conditions apply.
@@ -3076,7 +3076,7 @@ def GetHierarchy(gobject, hierarchy):
     if not found:
         return hierarchy
 
-    logging.info("=== Hierachy for: %s (%d existing entries) ===", gobject, len(hierarchy))
+    logging.info("=== Hierarchy for: %s (%d existing entries) ===", gobject, len(hierarchy))
 
     # Walk up the hierarchy, pushing ancestors onto the ancestors array.
     ancestors = [gobject]
@@ -3358,7 +3358,7 @@ def GetSignals(gobject):
                             if j < len(sourceparam_names):
                                 param_name = sourceparam_names[j]
                                 logging.info('from sourceparams: "%s" (%d: %s)', param_name, j, params[j])
-                            # we're mssing the docs for this param, don't warn here though
+                            # we're missing the docs for this param, don't warn here though
                         else:
                             param_name = m.group(3)
                             logging.info('from params: "%s" (%d: %s)', param_name, j, params[j])
@@ -4166,7 +4166,7 @@ def MergeSourceDocumentation():
     the template files.
     """
 
-    # add whats found in the source
+    # add what's found in the source
     symbols = set(SourceSymbolDocs.keys())
 
     # and add known symbols from -sections.txt
