@@ -690,10 +690,12 @@ describe_unsigned_constant (gsize size, guint64 value)
         else if (value == G_MAXUINT)
           desc = g_strdup ("G_MAXUINT");
       }
-      if (value == (guint64)G_MAXLONG)
-        desc = g_strdup ("G_MAXLONG");
-      else if (value == G_MAXULONG)
-        desc = g_strdup ("G_MAXULONG");
+      if (desc == NULL) {
+        if (value == (guint64)G_MAXLONG)
+          desc = g_strdup ("G_MAXLONG");
+        else if (value == G_MAXULONG)
+          desc = g_strdup ("G_MAXULONG");
+      }
       break;
     case 8:
       if (value == G_MAXINT64)
