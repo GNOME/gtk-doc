@@ -43,8 +43,10 @@ if __name__ == '__main__':
                         help='The directory where the results are stored')
     parser.add_argument('--cc', default='', help='The compiler to use')
     parser.add_argument('--ld', default='', help='The linker to use')
-    parser.add_argument('--cflags', default='', help='Compiler flags')
-    parser.add_argument('--ldflags', default='', help='Linker flags')
+    parser.add_argument('--cflags', type=str, default=[], help='Compiler flags',
+                        action='append')
+    parser.add_argument('--ldflags', type=str, default=[], help='Linker flags',
+                        action='append')
     parser.add_argument('--run', default='',
                         help='Command for running the scanner')
     parser.add_argument('--verbose', action='store_true', default=False,
@@ -54,6 +56,10 @@ if __name__ == '__main__':
 
     if options.types == '':
         options.types = os.path.join(options.output_dir, options.module + '.types')
+    if options.cflags:
+        options.cflags = ' '.join(options.cflags)
+    if options.ldflags:
+        options.ldflags = ' '.join(options.ldflags)
 
     if not options.cc:
         options.cc = os.environ.get('CC', 'gcc')
