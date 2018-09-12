@@ -17,6 +17,8 @@ if __name__ == '__main__':
                         help='Path to the pkg-config executable to be used')
     parser.add_argument("--extra-pkg", type=str, default=[], action='append',
                         help='Extra package to be use while scanning')
+    parser.add_argument("--extra-cflags", type=str, default=[], action='append',
+                        help='Extra Cflags to be use while scanning')
     parser.add_argument("--extra-lib", type=str, default=[], action='append',
                         help='Extra library to be use while scanning')
 
@@ -33,6 +35,7 @@ if __name__ == '__main__':
     if process.returncode == 0:
         cflags += output.rstrip().decode('utf-8').split(' ')
 
+    cflags += options.extra_cflags
     arguments.append('--cflags={0}'.format(' '.join(cflags)))
 
     process = Popen([options.pkg_config,
