@@ -7,13 +7,7 @@ project('gtk-doc', 'c',
 gnome = import('gnome')
 python = import('python3')
 
-# Versioning
 version = meson.project_version()
-version_arr = version.split('.')
-version_major = version_arr[0].to_int()
-version_minor = version_arr[1].to_int()
-version_micro = version_arr[2].to_int()
-
 package_name = meson.project_name()
 
 # Paths
