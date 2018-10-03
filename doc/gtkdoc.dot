@@ -37,7 +37,7 @@ digraph gtkdoc {
     module_undocumented [label="*-undocumented.txt" ];
     module_unused [label="*-unused.txt" ];
  
-    /* tool invokation */
+    /* tool invocation */
     gtkdoc_scan -> gtkdoc_scangobj -> gtkdoc_mkdb -> gtkdoc_mkhtml -> gtkdoc_fixxref -> gtkdoc_rebase -> gtkdoc_check [style="dotted"];
 
     /* file usage */
