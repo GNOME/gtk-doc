@@ -62,7 +62,7 @@ if fop_prg.found()
 endif
 
 highlight_prg_path = ''
-highlight_prg_args = ''
+highlight_prg_args = []
 if source_highlight_prg.found()
   highlight_prg_path = join_paths(source_highlight_prg.path())
   highlight_prg_args = [
