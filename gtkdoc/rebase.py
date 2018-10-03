@@ -53,7 +53,7 @@ def run(options):
     other_dirs = []
 
     # We scan the directory containing GLib and any directories in GNOME2_PATH
-    # first, but these will be overriden by any later scans.
+    # first, but these will be overridden by any later scans.
     if "GNOME2_PATH" in os.environ:
         for dir in os.environ["GNOME2_PATH"].split(':'):
             dir = os.path.join(dir, "share/gtk-doc/html")

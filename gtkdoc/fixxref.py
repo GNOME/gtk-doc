@@ -73,7 +73,7 @@ def LoadIndicies(module_dir, html_dir, extra_dirs):
     prefix_match = r'^' + re.escape(path_prefix) + r'/'
 
     # We scan the directory containing GLib and any directories in GNOME2_PATH
-    # first, but these will be overriden by any later scans.
+    # first, but these will be overridden by any later scans.
     dir = common.GetModuleDocDir('glib-2.0')
     if dir and os.path.exists(dir):
         # Some predefined link targets to get links into type hierarchies as these
@@ -357,7 +357,7 @@ def MakeXRef(module, file, line, id, text):
 def MakeGtkDocLink(pre, symbol, post):
     id = common.CreateValidSGMLID(symbol)
 
-    # these are implicitely created links in highlighed sources
+    # these are implicitly created links in highlighted sources
     # we don't want warnings for those if the links cannot be resolved.
     NoLinks.add(id)
 

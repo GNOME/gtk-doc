@@ -6,7 +6,7 @@
 
 /**
  * GtkdocAnnotation:
- * @that: (allow-none): eventualy points to something
+ * @that: (allow-none): eventually points to something
  *
  * small struct
  */

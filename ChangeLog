@@ -643,7 +643,7 @@
 	  
 	* configure.in:
 	  Add automake support for more distcheck. Use a real sourcefile for the
-	  srcdir (something that we wont remove one day).
+	  srcdir (something that we won't remove one day).
 	  
 	* tests/annotations/docs/Makefile.am:
 	* tests/annotations/src/Makefile.am:
@@ -658,7 +658,7 @@
 2009-01-07  Stefan Kost  <ensonic@users.sf.net>
 
 	* TODO:
-	  Ideas about syntax highlighing.
+	  Ideas about syntax highlighting.
 
 	* style-classic.css:
 	  Old color scheme.
@@ -705,7 +705,7 @@
 2008-12-05  Stefan Kost  <ensonic@users.sf.net>
 
 	* style.css:
-	  Hightlight deprecation warnings.
+	  Highlight deprecation warnings.
 
 2008-12-04  Stefan Kost  <ensonic@users.sf.net>
 
@@ -799,7 +799,7 @@
 	* gtk-doc.notmpl.make:
 	* tests/gtk-doc.make:
 	* tests/gtk-doc.notmpl.make:
-	  Correct check for existance of gtkdoc-rebase (better fix than the
+	  Correct check for existence of gtkdoc-rebase (better fix than the
 	  previous one #508897). Fixes #559281.
 
 2008-10-27  Stefan Kost  <ensonic@users.sf.net>
@@ -950,7 +950,7 @@
 2008-09-04  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkhtml.in:
-	  Fix comparision.
+	  Fix comparison.
 
 	* TODO:
 	  ideas.
@@ -1110,7 +1110,7 @@
   
 	* tests/gobject/examples/gobject.c:
 	* tests/gobject/src/gobject.c:
-	  Demostrate how to include source fragments from external files.
+	  Demonstrate how to include source fragments from external files.
 
 	* tests/gobject/src/giface.h:
 	* tests/gobject/src/gobject.h:
@@ -1146,13 +1146,13 @@
 
 	* gtkdoc-mkdb.in:
 	  Warn about repeated symbols in sections. Also give line of previous
-	  occurrance. Also give that info for double file entries. Fixes #473342
-          Give correct error locate for one warning. Fixes #532395 partialy
+	  occurrence. Also give that info for double file entries. Fixes #473342
+          Give correct error locate for one warning. Fixes #532395 partially
 
 2008-06-04  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtkdoc-mkdb.in:
-	  Don't warn about overriden docs comment if its the same text.
+	  Don't warn about overridden docs comment if its the same text.
 
 2008-06-03  Stefan Kost  <ensonic@users.sf.net>
 
@@ -1185,7 +1185,7 @@
 	  tody up and add some comments regarding HTML_DIR.
 
 	* gtkdoc-fixxref.in:
-	  HTML_DIR is not neccesarily set.
+	  HTML_DIR is not necessarily set.
 
 	* gtkdoc-mkhtml.in:
 	  Fix uninstalled.
@@ -1197,7 +1197,7 @@
 2008-06-02  Stefan Kost  <ensonic@users.sf.net>
 
 	* style.css:
-	  Improve spacing on indicies and glossaries.
+	  Improve spacing on indices and glossaries.
 
 2008-06-02  Stefan Kost  <ensonic@users.sf.net>
 
@@ -1464,7 +1464,7 @@
 2007-12-17  Mathias Hasselmann  <mathias@openismus.com>
 
 	* configure.in:
-	  Use AM_PATH_PYTHON instread of AC_PATH_PROG to find Python.
+	  Use AM_PATH_PYTHON instead of AC_PATH_PROG to find Python.
 	  (#503710)
 
 2007-12-17  Stefan Kost  <ensonic@users.sf.net>
@@ -1513,7 +1513,7 @@
 	patch by: Kouhei Sutou <kou@cozmixng.org>
 
 	* gtk-doc.xsl:
-	  Consitently use UTF-8 instead of US-ASCII for output encoding.
+	  Consistently use UTF-8 instead of US-ASCII for output encoding.
 	  Fixes #497367
 
 2007-12-10  Mathias Hasselmann  <mathias@openismus.com>
@@ -1681,7 +1681,7 @@
 2007-09-26  Stefan Kost  <ensonic@users.sf.net>
 
 	* gtk-doc.make:
-	  And actually saving before commiting might greatly help.
+	  And actually saving before committing might greatly help.
 
 2007-09-26  Stefan Kost  <ensonic@users.sf.net>
 
@@ -2574,7 +2574,7 @@
 	* Makefile.am (pkgconfigdir): put the .pc file in $(datadir) rather
 	than $(libdir), since gtk-doc is architecture-independant. (#120950)
 
-	* configure.in: removed the hard dependancy on openjade or jade, since
+	* configure.in: removed the hard dependency on openjade or jade, since
 	XML is used mostly now rather than SGML. We just output a warning
 	rather than an error if neither openjade or jade are found.
 
@@ -2678,7 +2678,7 @@
 	* gtkdoc-mkdb.in:
 	  fix parsing const after type (#322556)
 	* gtkdoc-mktmpl.in:
-	  fix parseing multiline macro heads (#320588)
+	  fix parsing multiline macro heads (#320588)
 	* gtkdoc-scangobj.in:
 	  allow additional root types (#323581)
 
@@ -3173,7 +3173,7 @@ Fri Jul 23 13:21:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 2004-05-10  Geert Stappers  <stappers@stappers.nl>
 
-	* TODO: new file, basicly a reference to bugzilla.
+	* TODO: new file, basically a reference to bugzilla.
 
 	* examples/README: tell about gtk-doc.make.
 
@@ -3568,7 +3568,7 @@ Thu Jun 12 15:55:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 2003-02-12  James Henstridge  <james@daa.com.au>
 
-	* gtk-doc.make: add some chmod calls to work arround distcheck on
+	* gtk-doc.make: add some chmod calls to work around distcheck on
 	automake >= 1.6.
 	(install-data-local): copy the images as well as the html files
 	during install.
@@ -3967,7 +3967,7 @@ Tue Sep 17 01:07:51 2002  Jonathan Blandford  <jrb@gnome.org>
 	than a <literallayout>, since the Docbook XSL stylesheets don't
 	handle <link>s inside <literallayout>.
 
-	* gtkdoc-mkdb.in: Decide wether to generate standalone documents
+	* gtkdoc-mkdb.in: Decide whether to generate standalone documents
 	for XIncluding or entities based on the presence of the XInclude
 	namespace declaration on the document element.
 
@@ -4284,7 +4284,7 @@ Thu Jun 21 11:57:16 2001  Owen Taylor  <otaylor@redhat.com>
 2001-05-19  Damon Chaplin  <damon@ximian.com>
 
 	* gtkdoc-mkdb.in: added --help option and changed output slightly to
-	make more compatable with XML. Patch from Toshio Kuratomi
+	make more compatible with XML. Patch from Toshio Kuratomi
 	<badger@prtr-13.ucsc.edu>
 
 2001-05-19  Damon Chaplin  <damon@ximian.com>
@@ -4643,7 +4643,7 @@ Wed Feb  9 11:29:25 2000  Owen Taylor  <otaylor@redhat.com>
 1999-12-15  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* gtk-doc.dsl.in ($generate-chapter-toc$): Add missing close
-	paranthesis.
+	parenthesis.
 
 1999-11-23  Raja R Harinath  <harinath@cs.umn.edu>
 
@@ -4754,7 +4754,7 @@ Wed Aug  4 04:04:55 1999  Owen Taylor  <otaylor@redhat.com>
 Wed Aug  4 03:30:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* doc/style-guide.txt: Removed references to creating
-	tables explicitely in favor of demonstrating new
+	tables explicitly in favor of demonstrating new
 	syntax. Added a short section on /<* public >*/
 	and /*< private *>/.
 
@@ -4772,12 +4772,12 @@ Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
 	enumeration have a description in a @... line, then
 	we don't generate the table at all.
 
-	Also, gtkdoc-mktmpl now loads up the object heirarchy,
+	Also, gtkdoc-mktmpl now loads up the object hierarchy,
 	because we need to be able to check if structures
 	are widget structures.
 
 	In general, the coding here is pretty clean, though
-	the style is a little different. (I'm interating
+	the style is a little different. (I'm iterating
 	through strings with m/.../msg; instead of
 	s/^...//; for one thing.) However, there are a some
 	of FIXME's where I've whimped out on try to handle
@@ -4975,7 +4975,7 @@ Wed Aug  4 03:15:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 1998-12-16  Damon Chaplin  <DAChaplin@msn.com>
 
-	* gtkdoc-mkdb (ExpandAbbreviations): Allow -ve contants, e.g. %-1.
+	* gtkdoc-mkdb (ExpandAbbreviations): Allow -ve contents, e.g. %-1.
 	(ScanSourceFile): Try to handle function descriptions that start
 	with 'Returns'. It was assuming that they were describing the return
 	value before.

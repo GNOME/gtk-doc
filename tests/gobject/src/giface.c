@@ -15,8 +15,8 @@
  *   <caption><para>Home sweet home.</para></caption>
  * </mediaobject>
  *
- * Just incase you wonder, special caracters can be escaped with a \ like in \%
- * or \# or even \@.
+ * Just in case you wonder, special characters can be escaped with a \ like 
+ * in \% or \# or even \@.
  *
  * We also support verbatim spans - lets test escaping of a `<tag>` block.
  */
@@ -41,7 +41,7 @@
  *
  * Configure a new instance
  *
- * Returns: %TRUE for sucess or %FALSE in case of an error
+ * Returns: %TRUE for success or %FALSE in case of an error
  *
  * Since: 0.1
  */
