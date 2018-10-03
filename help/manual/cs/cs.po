@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc master\n"
-"POT-Creation-Date: 2018-08-28 14:29+0000\n"
-"PO-Revision-Date: 2018-09-05 16:32+0200\n"
+"POT-Creation-Date: 2018-10-03 08:17+0000\n"
+"PO-Revision-Date: 2018-10-03 14:43+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -565,7 +565,7 @@ msgstr "O aplikaci GTK-Doc"
 #. (itstool) path: sect1/para
 #: C/index.docbook:354
 msgid ""
-"Historically GTK-Doc was used to generate template files from the soures "
+"Historically GTK-Doc was used to generate template files from the sources "
 "code. These template files could be used by developers to enter the API "
 "documentation. This approach was rather inconvenient because it required to "
 "keep the generated files under version control. Since GTK-Doc 1.9 it became "
@@ -694,16 +694,16 @@ msgstr ""
 "Zaběhnutým zvykem je umístit dokumentaci do složky nazvané <code>docs</code> "
 "ve složce nejvyšší úrovně projektu. Obvykle rozlišujeme mezi "
 "<emphasis>referenční dokumentací</emphasis> zaměřenou na vývojáře a "
-"<emphasis>uživatelskou příručkou</emphasis> zaměřenou na koncového uživatele. "
-"Opět je zvykem mít zvláštní složku pro každou z obou zmíněných. Obvykle umisťujeme "
-"referenční dokumentaci do složky nazvané <code>reference</code> a "
-"uživatelskou příručku do složky nazvané <code>help</code>. V souladu se "
-"zmíněnými zvyky by dokumentace pro naši knihovnu <code>libmeep</code> byla "
-"umístěna do <code>docs/reference/libmeep</code>. U balíčků s jedinou "
+"<emphasis>uživatelskou příručkou</emphasis> zaměřenou na koncového "
+"uživatele. Opět je zvykem mít zvláštní složku pro každou z obou zmíněných. "
+"Obvykle umisťujeme referenční dokumentaci do složky nazvané <code>reference</"
+"code> a uživatelskou příručku do složky nazvané <code>help</code>. V souladu "
+"se zmíněnými zvyky by dokumentace pro naši knihovnu <code>libmeep</code> "
+"byla umístěna do <code>docs/reference/libmeep</code>. U balíčků s jedinou "
 "knihovnou nebo referenční dokumentací by bylo možné ji umístit přímo do "
 "<code>docs/reference</code>. Není povinné použít uvedenou konvenci, ale "
-"pokud se rozhodnete použít jinou strukturu složek, musíte upravit konfiguraci "
-"sestavovacího systému, aby se s ní shodoval."
+"pokud se rozhodnete použít jinou strukturu složek, musíte upravit "
+"konfiguraci sestavovacího systému, aby se s ní shodoval."
 
 #. (itstool) path: example/title
 #: C/index.docbook:469
@@ -980,8 +980,8 @@ msgid ""
 "extra.h</code>)."
 msgstr ""
 "<option>EXTRA_HFILES</option> umožňuje určit dodatečné hlavičkové soubory, "
-"které se mají zahrnout při procházení pro dokumentaci k API, a které nejsou k "
-"nalezení pod složkou <code>DOC_SOURCE_DIR</code> (např. <code>EXTRA_HFILES="
+"které se mají zahrnout při procházení pro dokumentaci k API, a které nejsou "
+"k nalezení pod složkou <code>DOC_SOURCE_DIR</code> (např. <code>EXTRA_HFILES="
 "$(top_srcdir}/contrib/extra.h</code>)."
 
 #. (itstool) path: listitem/para
@@ -1027,7 +1027,7 @@ msgstr ""
 #: C/index.docbook:689
 msgid ""
 "<option>expand_content_files</option> allows to specify files where "
-"<emphasis>gtk-doc abbrevations</emphasis> such as <code>#GtkWidget</code> "
+"<emphasis>gtk-doc abbreviations</emphasis> such as <code>#GtkWidget</code> "
 "are expanded (e.g. <code> expand_content_files=running.xml</code>)."
 msgstr ""
 "<option>expand_content_files</option> umožňuje určit soubory, ve kterých "
@@ -2792,7 +2792,7 @@ msgstr "Úplný popis programu."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1773
-msgid "Specificy what value(s) the program returns. (Optional)"
+msgid "Specify what value(s) the program returns. (Optional)"
 msgstr "Specifikuje, jakou hodnotu či více hodnot program vrací. (volitelné)"
 
 #. (itstool) path: sect2/title
