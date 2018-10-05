@@ -36,11 +36,11 @@ include(CMakeParseArguments)
 
 set(GTKDOC_FOUND 1)
 
-set(GTKDOC_SCAN_EXE @bindir@/gtkdoc-scan)
-set(GTKDOC_SCANGOBJ_EXE @bindir@/gtkdoc-scangobj)
-set(GTKDOC_MKDB_EXE @bindir@/gtkdoc-mkdb)
-set(GTKDOC_MKHTML_EXE @bindir@/gtkdoc-mkhtml)
-set(GTKDOC_FIXXREF_EXE @bindir@/gtkdoc-fixxref)
+find_program(GTKDOC_SCAN_EXE gtkdoc-scan)
+find_program(GTKDOC_SCANGOBJ_EXE gtkdoc-scangobj)
+find_program(GTKDOC_MKDB_EXE gtkdoc-mkdb)
+find_program(GTKDOC_MKHTML_EXE gtkdoc-mkhtml)
+find_program(GTKDOC_FIXXREF_EXE gtkdoc-fixxref)
 
 get_filename_component(_this_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 find_file(GTKDOC_SCANGOBJ_WRAPPER GtkDocScanGObjWrapper.cmake PATH ${_this_dir})
