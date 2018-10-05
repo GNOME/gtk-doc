@@ -14,7 +14,7 @@ CLEANFILES = \
 GtkDocConfig.cmake: GtkDocConfig.cmake.in
 	$(SED) -e 's|[@]bindir@|$(bindir)|g' < "$<" > "$@"
 
-cmakedir = $(libdir)/cmake/GtkDoc
+cmakedir = $(datadir)/cmake/GtkDoc
 cmake_DATA = \
 	GtkDocConfig.cmake \
 	GtkDocConfigVersion.cmake \
