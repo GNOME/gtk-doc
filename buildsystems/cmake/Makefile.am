@@ -6,7 +6,7 @@ EXTRA_DIST = \
 CLEANFILES = \
   GtkDocConfigVersion.cmake
 
-cmakedir = $(libdir)/cmake/GtkDoc
+cmakedir = $(datadir)/cmake/GtkDoc
 cmake_DATA = \
 	GtkDocConfig.cmake \
 	GtkDocConfigVersion.cmake \
