@@ -52,7 +52,8 @@ find_file(GTKDOC_SCANGOBJ_WRAPPER GtkDocScanGObjWrapper.cmake PATH ${_this_dir})
 #                    XML xmlfile
 #                    [LIBRARIES depend1...]
 #                    [FIXXREFOPTS fixxrefoption1...]
-#                    [IGNOREHEADERS header1...])
+#                    [IGNOREHEADERS header1...]
+#                    [CONTENT_FILES example1...])
 #
 # Add a module with documentation to be processed with GTK-Doc.
 #
@@ -71,6 +72,9 @@ find_file(GTKDOC_SCANGOBJ_WRAPPER GtkDocScanGObjWrapper.cmake PATH ${_this_dir})
 # can also manually add additional targets as dependencies of the
 # documentation build with the DEPENDS option.
 #
+# The 'CONTENT_FILES' option is here to copy the files extending the documentation
+# such as exemples and custom xml files.
+#
 # This function a target named "doc-${doc_prefix}". You will need to manually
 # add it to the ALL target if you want it to be built by default, you can do
 # something like this:
@@ -85,7 +89,7 @@ find_file(GTKDOC_SCANGOBJ_WRAPPER GtkDocScanGObjWrapper.cmake PATH ${_this_dir})
 function(gtk_doc_add_module _doc_prefix)
     set(_one_value_args "XML")
     set(_multi_value_args "FIXXREFOPTS" "IGNOREHEADERS" "LIBRARIES" "LIBRARY_DIRS" "SOURCE" "SUFFIXES"
-                          "CFLAGS" "DEPENDS" "LDFLAGS" "LDPATH")
+                          "CFLAGS" "DEPENDS" "LDFLAGS" "LDPATH" "CONTENT_FILES")
     cmake_parse_arguments("GTK_DOC" "" "${_one_value_args}" "${_multi_value_args}" ${ARGN})
 
     if(NOT GTK_DOC_SOURCE)
@@ -99,6 +103,8 @@ function(gtk_doc_add_module _doc_prefix)
     set(_libraries ${GTK_DOC_LIBRARIES})
     set(_library_dirs ${GTK_DOC_LIBRARY_DIRS})
     set(_suffixes ${GTK_DOC_SUFFIXES})
+
+    set(_content_files ${GTK_DOC_CONTENT_FILES})
 
     set(_extra_cflags ${GTK_DOC_CFLAGS})
     set(_depends ${GTK_DOC_DEPENDS})
@@ -167,6 +173,11 @@ function(gtk_doc_add_module _doc_prefix)
     set(_output_sgml_stamp "${_output_dir}/sgml.stamp")
 
     set(_output_html_stamp "${_output_dir}/html.stamp")
+
+    # we depend on the content files being there before doing anything
+    if(_content_files)
+        list(APPEND _depends ${_content_files})
+    endif(_content_files)
 
     # add a command to create output directory
     add_custom_command(
@@ -240,6 +251,38 @@ function(gtk_doc_add_module _doc_prefix)
             COMMAND ${CMAKE_COMMAND} -E remove ${_default_xml_file})
     endif(_xml_file)
 
+    set(_copy_content_files_if_needed "")
+    if(_content_files)
+        foreach(_content_file ${_content_files})
+            # We need to copy the content files to the build directory.
+            # We respect the folder tree if the file comes from the current
+            # source or binary directory but copy the file to the current binary
+            # directory if it comes from somewhere else.
+            get_filename_component(_content_file ${_content_file} ABSOLUTE)
+            string(REGEX MATCH "^${CMAKE_CURRENT_SOURCE_DIR}" _is_in_source ${_content_file})
+            string(REGEX MATCH "^${CMAKE_CURRENT_BINARY_DIR}" _is_in_binary ${_content_file})
+            if (_is_in_source OR _is_in_binary)
+                if(_is_in_source)
+                    file(RELATIVE_PATH _content_file_relative ${CMAKE_CURRENT_SOURCE_DIR} ${_content_file})
+                else(_is_in_source)
+                    file(RELATIVE_PATH _content_file_relative ${CMAKE_CURRENT_BINARY_DIR} ${_content_file})
+                endif(_is_in_source)
+                set(_content_file_destination
+                    "${_output_dir}/${_content_file_relative}")
+            else(_is_in_source OR _is_in_binary)
+                get_filename_component(_content_file_name ${_content_file} NAME)
+                set(_content_file_destination
+                    "${_output_dir}/${_content_file_name}")
+            endif(_is_in_source OR _is_in_binary)
+            get_filename_component(_content_file_destination ${_content_file_destination} ABSOLUTE)
+            if(NOT ${_content_file_destination} EQUAL ${_content_file})
+                set(_copy_content_files_if_needed
+                    ${_copy_content_files_if_needed}
+                    COMMAND ${CMAKE_COMMAND} -E copy "${_content_file}" "${_content_file_destination}")
+            endif(NOT ${_content_file_destination} EQUAL ${_content_file})
+        endforeach(_content_file)
+    endif(_content_files)
+
     # add a command to make the database
     add_custom_command(
         OUTPUT
@@ -253,6 +296,7 @@ function(gtk_doc_add_module _doc_prefix)
             ${_depends}
         ${_remove_xml_if_needed}
         COMMAND ${CMAKE_COMMAND} -E remove_directory ${_output_xml_dir}
+        ${_copy_content_files_if_needed}
         COMMAND ${GTKDOC_MKDB_EXE}
             --module=${_doc_prefix}
             ${_source_dirs_opt}
