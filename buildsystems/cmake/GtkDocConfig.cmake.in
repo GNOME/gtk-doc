@@ -290,7 +290,7 @@ function(gtk_doc_add_module _doc_prefix)
             cd ${_output_dir} && ${GTKDOC_FIXXREF_EXE}
                 --module=${_doc_prefix}
                 --module-dir=${_output_html_dir}
-                ${_fixxref_opts}
+                ${_fixxrefopts}
         COMMENT
             "Generating HTML documentation for ${_doc_prefix} module with gtkdoc-mkhtml"
         VERBATIM)
