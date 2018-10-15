@@ -434,6 +434,12 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                 forward_decls[m9.group(2)] = '<%s>\n<NAME>%s</NAME>\n%s</%s>\n' % (
                     structsym, m9.group(2), deprecated, structsym)
 
+                bm = re.search(r'^(\S+)(Class|Iface|Interface)\b', m9.group(2))
+                if bm:
+                    objectname = bm.group(1)
+                    logging.info('Found object: "%s"', objectname)
+                    title = '<TITLE>%s</TITLE>' % objectname
+
             elif re.search(r'^\s*(?:struct|union)\s+_(\w+)\s*;', line):
                 # Skip private structs/unions.
                 logging.info('private struct/union')
