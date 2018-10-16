@@ -25,10 +25,12 @@ dropped.
 Requirements
 ============
 
-Python 2.7, 3.x - the secondary scripts are written in Python
+Python 3.x
     http:///www.python.org
 
-Python-six - for python 2,3 compatibility
+Additional python modules:
+    For the tests: nose
+    For mkhtml2 (experimental): anytree, lxml and pygments
 
 For XML output (recommended):
 
