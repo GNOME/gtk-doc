@@ -25,7 +25,7 @@ PY_LOG_COMPILER = $(PYTHON)
 
 endif
 
-EXTRA_DIST = gtkdoctest.sh $(TESTS)
+EXTRA_DIST = gtkdoctest.sh sanity.sh $(TESTS)
 
 # run any given test by running make <test>.check
 %.check: %
