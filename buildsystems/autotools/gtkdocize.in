@@ -118,6 +118,12 @@ case "$flavour" in
   legacy-flat|no-tmpl-flat)
     makefile=gtk-doc.flat.make
     ;;
+  no-xslt)
+    makefile=gtk-doc.no-xslt.make
+    ;;
+  no-xslt-flat)
+    makefile=gtk-doc.no-xslt-flat.make
+    ;;
   legacy|no-tmpl)
     ;;
   *)

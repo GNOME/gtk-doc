@@ -31,6 +31,9 @@ if __name__ == '__main__':
     parser.add_argument('--version', action='version', version=config.version)
     parser.add_argument('--path', default=[], action='append',
                         help='Extra source directories')
+    parser.add_argument('--extra-dir', default=[], action='append',
+                        help='Directories to recursively scan for indices (*.devhelp2)'
+                        'in addition to HTML_DIR')
     parser.add_argument('--src-lang', default='c',
                         help='Programing language used for syntax highlighting. This'
                         'can be any language pygments supports.')
