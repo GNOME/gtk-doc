@@ -1203,6 +1203,12 @@ def execute_command(options, description, command):
         return 1
     return 0
 
+def split_with_quote(string):
+    lex = shlex.shlex(string)
+    lex.quotes = '"'
+    lex.whitespace_split = True
+    lex.commenters = ''
+    return list(lex)
 
 def run(options):
     logging.info('options: %s', str(options.__dict__))
@@ -1280,14 +1286,15 @@ def run(options):
     logging.debug('Intermediate scanner files: %s, %s, %s', c_file, o_file, x_file)
 
     res = execute_command(options, 'Compiling',
-                          shlex.split(options.cc) + shlex.split(options.cflags) +
+                          shlex.split(options.cc) +
+                          split_with_quote(options.cflags) +
                           ["-c", "-o", o_file, c_file])
     if res:
         return res
 
     res = execute_command(options, 'Linking',
                           shlex.split(options.ld) + [o_file] +
-                          shlex.split(options.ldflags) + ['-o', x_file])
+                          split_with_quote(options.ldflags) + ['-o', x_file])
     if res:
         return res
 
