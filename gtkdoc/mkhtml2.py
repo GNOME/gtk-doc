@@ -221,13 +221,14 @@ def gen_chunk_name(node, chunk_params):
     return name
 
 
-def get_chunk_titles(module, node):
+def get_chunk_titles(module, node, tree_node):
     tag = node.tag
     (title, subtitle) = TITLE_XPATHS.get(tag, TITLE_XPATHS['_'])
 
     ctx = {
         'module': module,
         'files': [],
+        'node': tree_node,
     }
     result = {
         'title': None,
@@ -272,7 +273,7 @@ def chunk(xml_node, module, depth=0, idx=0, parent=None):
     tag = xml_node.tag
     chunk_params = CHUNK_PARAMS.get(tag)
     if chunk_params:
-        title_args = get_chunk_titles(module, xml_node)
+        title_args = get_chunk_titles(module, xml_node, parent)
         chunk_name = gen_chunk_name(xml_node, chunk_params)
 
         # check idx to handle 'sect1'/'section' special casing and title-only
