@@ -1203,12 +1203,15 @@ def execute_command(options, description, command):
         return 1
     return 0
 
+
 def split_with_quote(string):
+    # This is required to handle CFLAGS such as -DG_LOG_DOMAIN="tester"
     lex = shlex.shlex(string)
     lex.quotes = '"'
     lex.whitespace_split = True
     lex.commenters = ''
     return list(lex)
+
 
 def run(options):
     logging.info('options: %s', str(options.__dict__))
