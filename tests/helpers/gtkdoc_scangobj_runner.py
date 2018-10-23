@@ -17,6 +17,8 @@ if __name__ == '__main__':
                         help='Path to the pkg-config executable to be used')
     parser.add_argument("--extra-pkg", type=str, default=[], action='append',
                         help='Extra package to be use while scanning')
+    parser.add_argument("--extra-cflags", type=str, default=[], action='append',
+                        help='Extra Cflags to be use while scanning')
     parser.add_argument("--extra-lib", type=str, default=[], action='append',
                         help='Extra library to be use while scanning')
 
@@ -28,27 +30,25 @@ if __name__ == '__main__':
                     '--cflags'] + options.extra_pkg,
                     stdout=PIPE, stderr=PIPE)
 
-    cflags = []
     output, error = process.communicate()
     if process.returncode == 0:
-        cflags += output.rstrip().decode('utf-8').split(' ')
+        cflags = output.rstrip().decode('utf-8')
+        arguments.append('--cflags={0}'.format(cflags))
 
-    arguments.append('--cflags={0}'.format(' '.join(cflags)))
+    for flag in options.extra_cflags:
+        arguments.append('--cflags={0}'.format(flag))
 
     process = Popen([options.pkg_config,
                     '--libs'] + options.extra_pkg,
                     stdout=PIPE, stderr=PIPE)
 
-    libs = []
     output, error = process.communicate()
     if process.returncode == 0:
-        libs += output.rstrip().decode('utf-8').split(' ')
+        arguments.append('--ldflags={0}'.format(output.rstrip().decode('utf-8')))
 
     for lib in options.extra_lib:
-        libs.append('-l{0}'.format(os.path.basename(lib).split('.')[0].lstrip('lib')))
-        libs.append('-L{0}'.format(os.path.dirname(lib)))
-        libs.append('-Wl,-rpath,{0}'.format(os.path.dirname(lib)))
-
-    arguments.append('--ldflags={0}'.format(' '.join(libs)))
+        arguments.append('--ldflags=-l{0}'.format(os.path.basename(lib).split('.')[0].lstrip('lib')))
+        arguments.append('--ldflags=-L{0}'.format(os.path.dirname(lib)))
+        arguments.append('--ldflags=-Wl,-rpath,{0}'.format(os.path.dirname(lib)))
 
     sys.exit(call(arguments))

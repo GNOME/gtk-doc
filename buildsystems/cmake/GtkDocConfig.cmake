@@ -296,6 +296,7 @@ function(gtk_doc_add_module _doc_prefix)
             ${_depends}
         ${_remove_xml_if_needed}
         COMMAND ${CMAKE_COMMAND} -E remove_directory ${_output_xml_dir}
+        ${_copy_xml_if_needed}
         ${_copy_content_files_if_needed}
         COMMAND ${GTKDOC_MKDB_EXE}
             --module=${_doc_prefix}
@@ -303,7 +304,6 @@ function(gtk_doc_add_module _doc_prefix)
             --source-suffixes=${_doc_source_suffixes}
             --output-format=xml
             --main-sgml-file=${_default_xml_file}
-        ${_copy_xml_if_needed}
         WORKING_DIRECTORY "${_output_dir}"
         VERBATIM)
 

@@ -84,7 +84,10 @@ sudo pip3 install anytree lxml pygments
 
 Example invocation:
 cd tests/bugs/docs/
-../../../gtkdoc-mkhtml2 tester tester-docs.xml
+mkdir -p db2html
+cd dbhtml
+../../../../gtkdoc-mkhtml2 tester ../tester-docs.xml
+cd ..
 xdg-open db2html/index.html
 meld html db2html
 
@@ -221,13 +224,14 @@ def gen_chunk_name(node, chunk_params):
     return name
 
 
-def get_chunk_titles(module, node):
+def get_chunk_titles(module, node, tree_node):
     tag = node.tag
     (title, subtitle) = TITLE_XPATHS.get(tag, TITLE_XPATHS['_'])
 
     ctx = {
         'module': module,
         'files': [],
+        'node': tree_node,
     }
     result = {
         'title': None,
@@ -272,7 +276,7 @@ def chunk(xml_node, module, depth=0, idx=0, parent=None):
     tag = xml_node.tag
     chunk_params = CHUNK_PARAMS.get(tag)
     if chunk_params:
-        title_args = get_chunk_titles(module, xml_node)
+        title_args = get_chunk_titles(module, xml_node, parent)
         chunk_name = gen_chunk_name(xml_node, chunk_params)
 
         # check idx to handle 'sect1'/'section' special casing and title-only
@@ -1862,15 +1866,6 @@ def run(options):
     module = options.args[0]
     document = options.args[1]
 
-    # TODO: rename to 'html' later on
-    # - right now in mkhtml, the dir is created by the Makefile and mkhtml
-    #   outputs into the working directory
-    out_dir = os.path.join(os.path.dirname(document), 'db2html')
-    try:
-        os.mkdir(out_dir)
-    except OSError as e:
-        if e.errno != errno.EEXIST:
-            raise
-
-    sys.exit(main(module, document, out_dir, options.uninstalled, options.src_lang,
+    # TODO: pass options.extra_dir
+    sys.exit(main(module, document, os.getcwd(), options.uninstalled, options.src_lang,
                   options.path))
