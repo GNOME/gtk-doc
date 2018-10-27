@@ -55,23 +55,6 @@ test(
 )
 
 test(
-  'test-gobject-scangobj-quoted-cflags',
-  python_prg,
-  workdir: gobject_test_output_dir,
-  is_parallel: false,
-  args: [
-    gtkdoc_scangobj_runner_script,
-    '--binary-dir=@0@'.format(builddir),
-    '--pkg-config=@0@'.format(pkgconfig_prg_path),
-    '--extra-pkg=@0@'.format('glib-2.0'),
-    '--extra-pkg=@0@'.format('gobject-2.0'),
-    '--extra-cflags=@0@'.format('-DG_LOG_DOMAIN="tester"'),
-    '--extra-lib=@0@'.format(gobject_test_lib.full_path()),
-    '--module=@0@'.format('tester'),
-  ],
-)
-
-test(
   'test-gobject-mkdb',
   python_prg,
   workdir: gobject_test_output_dir,
