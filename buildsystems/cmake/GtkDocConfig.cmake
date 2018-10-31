@@ -352,7 +352,10 @@ endfunction(gtk_doc_add_module)
 function(_gtk_doc_get_cflags_for_target result_var target)
     get_target_property(target_definitions ${target} COMPILE_DEFINITIONS)
     if(target_definitions)
-        list(APPEND cflags ${target_definitions})
+        foreach(target_definition ${target_definitions})
+            # We need to prepend -D to the definition flag
+            list(APPEND cflags -D${target_definition})
+        endforeach()
     endif()
 
     get_target_property(target_options ${target} COMPILE_OPTIONS)
@@ -383,16 +386,12 @@ function(_gtk_doc_get_ldflags_for_target result_var target all_targets)
         list(FIND all_targets ${target_library} target_library_is_explicit_dependency)
         if(NOT ${target_library_is_explicit_dependency} EQUAL -1)
             # This target is part of the current project. We will add it to
-            # LDFLAGS explicitly, so don't try to add it with -l<target> as
-            # well. In fact, we can't do that, as the containing directory
+            # LDFLAGS explicitly, so don't try to add it as well.
+            # In fact, we can't do that, as the containing directory
             # probably won't be in the linker search path, and we can't find
             # that out and add it ourselves.
-        elseif(EXISTS ${target_library})
-            # Pass the filename directly to the linker.
-            list(APPEND ldflags "${target_library}")
         else()
-            # Pass -l<filename> to the linker.
-            list(APPEND ldflags "${CMAKE_LINK_LIBRARY_FLAG}${target_library}")
+            list(APPEND ldflags "${target_library}")
         endif()
     endforeach()
 
