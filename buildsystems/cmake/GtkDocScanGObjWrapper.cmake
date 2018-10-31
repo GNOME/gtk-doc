@@ -53,6 +53,7 @@ execute_process(COMMAND ${GTKDOC_SCANGOBJ_EXE}
     "--module=${doc_prefix}"
     "--types=${output_types}"
     "--output-dir=${output_dir}"
+    ${_scanobjopts}
     WORKING_DIRECTORY "${output_dir}"
     RESULT_VARIABLE _scan_result)
 
