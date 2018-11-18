@@ -53,7 +53,11 @@ find_file(GTKDOC_SCANGOBJ_WRAPPER GtkDocScanGObjWrapper.cmake PATH ${_this_dir})
 #                    [LIBRARIES depend1...]
 #                    [FIXXREFOPTS fixxrefoption1...]
 #                    [IGNOREHEADERS header1...]
-#                    [CONTENT_FILES example1...])
+#                    [CONTENT_FILES example1...]
+#                    [SCANOPTS scanoption1...]
+#                    [SCANOBJOPTS scanobjoption1...]
+#                    [MKDBOPTS mkdboption1...]
+#                    [HTMLOPTS htmloption1...])
 #
 # Add a module with documentation to be processed with GTK-Doc.
 #
@@ -75,6 +79,11 @@ find_file(GTKDOC_SCANGOBJ_WRAPPER GtkDocScanGObjWrapper.cmake PATH ${_this_dir})
 # The 'CONTENT_FILES' option is here to copy the files extending the documentation
 # such as exemples and custom xml files.
 #
+# The 'SCANOPTS' option is here to pass arguments to 'gtkdoc-scan'
+# The 'SCANOBJOPTS' option is here to pass arguments to 'gtkdoc-scangobj'
+# The 'MKDBOPTS' option is here to pass arguments to 'gtkdoc-mkdb'
+# The 'HTMLOPTS' option is here to pass arguments to 'gtkdoc-mkhtml'
+#
 # This function a target named "doc-${doc_prefix}". You will need to manually
 # add it to the ALL target if you want it to be built by default, you can do
 # something like this:
@@ -89,7 +98,8 @@ find_file(GTKDOC_SCANGOBJ_WRAPPER GtkDocScanGObjWrapper.cmake PATH ${_this_dir})
 function(gtk_doc_add_module _doc_prefix)
     set(_one_value_args "XML")
     set(_multi_value_args "FIXXREFOPTS" "IGNOREHEADERS" "LIBRARIES" "LIBRARY_DIRS" "SOURCE" "SUFFIXES"
-                          "CFLAGS" "DEPENDS" "LDFLAGS" "LDPATH" "CONTENT_FILES")
+                          "CFLAGS" "DEPENDS" "LDFLAGS" "LDPATH" "CONTENT_FILES" "SCANOPTS" "SCANOBJOPTS"
+                          "MKDBOPTS" "HTMLOPTS")
     cmake_parse_arguments("GTK_DOC" "" "${_one_value_args}" "${_multi_value_args}" ${ARGN})
 
     if(NOT GTK_DOC_SOURCE)
@@ -105,6 +115,10 @@ function(gtk_doc_add_module _doc_prefix)
     set(_suffixes ${GTK_DOC_SUFFIXES})
 
     set(_content_files ${GTK_DOC_CONTENT_FILES})
+    set(_scanopts ${GTK_DOC_SCANOPTS})
+    set(_scanobjopts ${GTK_DOC_SCANOBJOPTS})
+    set(_mkdbopts ${GTK_DOC_MKDBOPTS})
+    set(_htmlopts ${GTK_DOC_HTMLOPTS})
 
     set(_extra_cflags ${GTK_DOC_CFLAGS})
     set(_depends ${GTK_DOC_DEPENDS})
@@ -216,6 +230,7 @@ function(gtk_doc_add_module _doc_prefix)
             ${_source_dirs_opt}
             --rebuild-sections
             --rebuild-types
+            ${_scanopts}
         WORKING_DIRECTORY ${_output_dir}
         VERBATIM)
 
@@ -228,6 +243,7 @@ function(gtk_doc_add_module _doc_prefix)
             ${_output_types}
         COMMAND ${CMAKE_COMMAND}
             -D "GTKDOC_SCANGOBJ_EXE:STRING=${GTKDOC_SCANGOBJ_EXE}"
+            -D "_scanobjopts:STRING=${_scanobjopts}"
             -D "doc_prefix:STRING=${_doc_prefix}"
             -D "output_types:STRING=${_output_types}"
             -D "output_dir:STRING=${_output_dir}"
@@ -304,6 +320,7 @@ function(gtk_doc_add_module _doc_prefix)
             --source-suffixes=${_doc_source_suffixes}
             --output-format=xml
             --main-sgml-file=${_default_xml_file}
+            ${_mkdbopts}
         WORKING_DIRECTORY "${_output_dir}"
         VERBATIM)
 
@@ -330,6 +347,7 @@ function(gtk_doc_add_module _doc_prefix)
             cd ${_output_html_dir} && ${GTKDOC_MKHTML_EXE}
                 ${_doc_prefix}
                 ${_default_xml_file}
+                ${_htmlopts}
         COMMAND
             cd ${_output_dir} && ${GTKDOC_FIXXREF_EXE}
                 --module=${_doc_prefix}
