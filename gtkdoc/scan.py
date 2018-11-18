@@ -40,10 +40,6 @@ import shutil
 
 from . import common
 
-# do not read files twice; checking it here permits to give both srcdir and
-# builddir as --source-dir without fear of duplicities
-seen_headers = {}
-
 
 def Run(options):
     logging.info('options: %s', str(options.__dict__))
@@ -68,11 +64,15 @@ def Run(options):
     decl_list = []
     get_types = []
 
+    # do not read files twice; checking it here permits to give both srcdir and
+    # builddir as --source-dir without fear of duplicities
+    seen_headers = {}
+
     for file in options.headers:
-        ScanHeader(file, section_list, decl_list, get_types, options)
+        ScanHeader(file, section_list, decl_list, get_types, seen_headers, options)
 
     for dir in options.source_dir:
-        ScanHeaders(dir, section_list, decl_list, get_types, options)
+        ScanHeaders(dir, section_list, decl_list, get_types, seen_headers, options)
 
     with open(new_decl_list, 'w', encoding='utf-8') as f:
         for section in sorted(section_list.keys()):
@@ -117,11 +117,12 @@ def Run(options):
 # Function    : ScanHeaders
 # Description : This scans a directory tree looking for header files.
 #
-# Arguments   : $source_dir - the directory to scan.
-#               $section_list - a reference to the hashmap of sections.
+# Arguments   : source_dir - the directory to scan.
+#               section_list - a reference to the hashmap of sections.
+#               seen_headers - set to avoid scanning headers twice
 #
 
-def ScanHeaders(source_dir, section_list, decl_list, get_types, options):
+def ScanHeaders(source_dir, section_list, decl_list, get_types, seen_headers, options):
     logging.info('Scanning source directory: %s', source_dir)
 
     # This array holds any subdirectories found.
@@ -134,7 +135,8 @@ def ScanHeaders(source_dir, section_list, decl_list, get_types, options):
         if os.path.isdir(fullname):
             subdirs.append(file)
         elif file.endswith('.h'):
-            ScanHeader(fullname, section_list, decl_list, get_types, options)
+            ScanHeader(fullname, section_list, decl_list, get_types,
+                       seen_headers, options)
 
     # Now recursively scan the subdirectories.
     for dir in subdirs:
@@ -142,7 +144,7 @@ def ScanHeaders(source_dir, section_list, decl_list, get_types, options):
         if re.search(matchstr, options.ignore_headers):
             continue
         ScanHeaders(os.path.join(source_dir, dir), section_list, decl_list,
-                    get_types, options)
+                    get_types, seen_headers, options)
 
 
 #
@@ -150,51 +152,13 @@ def ScanHeaders(source_dir, section_list, decl_list, get_types, options):
 # Description : This scans a header file, looking for declarations of
 #                functions, macros, typedefs, structs and unions, which it
 #                outputs to the decl_list.
-# Arguments   : $input_file - the header file to scan.
-#               $section_list - a map of sections.
-#               $decl_list - a list of declarations
+# Arguments   : input_file - the header file to scan.
+#               section_list - a map of sections.
+#               decl_list - a list of declarations
+#               seen_headers - set to avoid scanning headers twice
 # Returns     : it adds declarations to the appropriate list.
 #
-
-def ScanHeader(input_file, section_list, decl_list, get_types, options):
-    global seen_headers
-    slist = []                 # Holds the resulting list of declarations.
-    title = ''                 # Holds the title of the section
-    in_comment = 0             # True if we are in a comment.
-    in_declaration = ''        # The type of declaration we are in, e.g.
-                               #   'function' or 'macro'.
-    skip_block = 0             # True if we should skip a block.
-    symbol = None              # The current symbol being declared.
-    decl = ''                  # Holds the declaration of the current symbol.
-    ret_type = None            # For functions and function typedefs this
-                               #   holds the function's return type.
-    pre_previous_line = ''     # The pre-previous line read in - some Gnome
-                               #   functions have the return type on one
-                               #   line, the function name on the next,
-                               #   and the rest of the declaration after.
-    previous_line = ''         # The previous line read in - some Gnome
-                               #   functions have the return type on one line
-                               #   and the rest of the declaration after.
-    first_macro = 1            # Used to try to skip the standard #ifdef XXX
-                               # define XXX at the start of headers.
-    level = None               # Used to handle structs/unions which contain
-                               #   nested structs or unions.
-    internal = 0               # Set to 1 for internal symbols, we need to
-                               #   fully parse, but don't add them to docs
-    forward_decls = {}         # Dict of forward declarations, we skip
-                               #   them if we find the real declaration
-                               #   later.
-    doc_comments = {}          # Dict of doc-comments we found.
-                               # The key is lowercase symbol name, val=1.
-
-    file_basename = None
-
-    deprecated_conditional_nest = 0
-    ignore_conditional_nest = 0
-
-    deprecated = ''
-    doc_comment = ''
-
+def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, options):
     # Don't scan headers twice
     canonical_input_file = os.path.realpath(input_file)
     if canonical_input_file in seen_headers:
@@ -223,7 +187,139 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
 
     logging.info('Scanning %s', input_file)
 
-    for line in open(input_file, 'r', encoding='utf-8'):
+    with open(input_file, 'r', encoding='utf-8') as hdr:
+        input_lines = hdr.readlines()
+
+    slist, doc_comments = ScanHeaderContent(input_lines, decl_list, get_types, options)
+
+    logging.info("Scanning %s done", input_file)
+
+    # Try to separate the standard macros and functions, placing them at the
+    # end of the current section, in a subsection named 'Standard'.
+    # do this in a loop to catch object, enums and flags
+    klass = lclass = prefix = lprefix = None
+    standard_decl = []
+    liststr = '\n'.join(s for s in slist if s) + '\n'
+    while True:
+        m = re.search(r'^(\S+)_IS_(\S*)_CLASS\n', liststr, flags=re.MULTILINE)
+        m2 = re.search(r'^(\S+)_IS_(\S*)\n', liststr, flags=re.MULTILINE)
+        m3 = re.search(r'^(\S+?)_(\S*)_get_type\n', liststr, flags=re.MULTILINE)
+        if m:
+            prefix = m.group(1)
+            lprefix = prefix.lower()
+            klass = m.group(2)
+            lclass = klass.lower()
+            logging.info("Found gobject type '%s_%s' from is_class macro", prefix, klass)
+        elif m2:
+            prefix = m2.group(1)
+            lprefix = prefix.lower()
+            klass = m2.group(2)
+            lclass = klass.lower()
+            logging.info("Found gobject type '%s_%s' from is_ macro", prefix, klass)
+        elif m3:
+            lprefix = m3.group(1)
+            prefix = lprefix.upper()
+            lclass = m3.group(2)
+            klass = lclass.upper()
+            logging.info("Found gobject type '%s_%s' from get_type function", prefix, klass)
+        else:
+            break
+
+        cclass = lclass
+        cclass = cclass.replace('_', '')
+        mtype = lprefix + cclass
+
+        liststr, standard_decl = replace_once(liststr, standard_decl, r'^%sPrivate\n' % mtype)
+
+        # We only leave XxYy* in the normal section if they have docs
+        if mtype not in doc_comments:
+            logging.info("  Hide instance docs for %s", mtype)
+            liststr, standard_decl = replace_once(liststr, standard_decl, r'^%s\n' % mtype)
+
+        if mtype + 'class' not in doc_comments:
+            logging.info("  Hide class docs for %s", mtype)
+            liststr, standard_decl = replace_once(liststr, standard_decl, r'^%sClass\n' % mtype)
+
+        if mtype + 'interface' not in doc_comments:
+            logging.info("  Hide iface docs for %s", mtype)
+            liststr, standard_decl = replace_once(liststr, standard_decl, r'%sInterface\n' % mtype)
+
+        if mtype + 'iface' not in doc_comments:
+            logging.info("  Hide iface docs for " + mtype)
+            liststr, standard_decl = replace_once(liststr, standard_decl, r'%sIface\n' % mtype)
+
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_IS_%s\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_TYPE_%s\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_get_type\n' % lclass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_CLASS\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_IS_%s_CLASS\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_CLASS\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_IFACE\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_INTERFACE\n' % klass)
+        # We do this one last, otherwise it tends to be caught by the IS_$class macro
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s\n' % klass)
+
+    logging.info('Decl:%s---', liststr)
+    logging.info('Std :%s---', ''.join(sorted(standard_decl)))
+    if len(standard_decl):
+        # sort the symbols
+        liststr += '<SUBSECTION Standard>\n' + ''.join(sorted(standard_decl))
+
+    if liststr != '':
+        if file_basename not in section_list:
+            section_list[file_basename] = ''
+        section_list[file_basename] += "<SECTION>\n<FILE>%s</FILE>\n%s</SECTION>\n\n" % (file_basename, liststr)
+
+# Scan the the given content lines.
+# Returns: a list of symbols found and a set of symbols for which we have a
+#          doc-comment
+
+
+def ScanHeaderContent(input_lines, decl_list, get_types, options):
+    # Holds the resulting list of declarations.
+    slist = []
+    # Holds the title of the section
+    title = ''
+    # True if we are in a comment.
+    in_comment = 0
+    # The type of declaration we are in, e.g. 'function' or 'macro'.
+    in_declaration = ''
+    # True if we should skip a block.
+    skip_block = 0
+    # The current symbol being declared.
+    symbol = None
+    # Holds the declaration of the current symbol.
+    decl = ''
+    # For functions and function typedefs this holds the function's return type.
+    ret_type = None
+    # The pre-previous line read in - some Gnome functions have the return type
+    # on one line, the function name on the next, and the rest of the
+    # declaration after.
+    pre_previous_line = ''
+    # The previous line read in - some Gnome functions have the return type on
+    # one line and the rest of the declaration after.
+    previous_line = ''
+    # Used to try to skip the standard #ifdef XXX #define XXX at the start of
+    # headers.
+    first_macro = 1
+    # Used to handle structs/unions which contain nested structs or unions.
+    level = None
+    # Set to 1 for internal symbols, we need to fully parse, but don't add them
+    # to docs
+    internal = 0
+    # Dict of forward declarations, we skip them if we find the real declaration
+    # later.
+    forward_decls = {}
+    # Dict of doc-comments we found. The key is lowercase symbol name, val=1.
+    doc_comments = {}
+
+    deprecated_conditional_nest = 0
+    ignore_conditional_nest = 0
+
+    deprecated = ''
+    doc_comment = ''
+
+    for line in input_lines:
         # If this is a private header, skip it.
         if re.search(r'^\s*/\*\s*<\s*private_header\s*>\s*\*/', line):
             return
@@ -705,7 +801,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
                             # check if this looks like a get_type function and if so remember
                             if symbol.endswith('_get_type') and 'GType' in ret_type and re.search(r'^(void|)$', decl):
                                 logging.info(
-                                    "Adding get-type: [%s] [%s] [%s]\tfrom %s", ret_type, symbol, decl, input_file)
+                                    "Adding get-type: [%s] [%s] [%s]", ret_type, symbol, decl)
                                 get_types.append(symbol)
                 else:
                     internal = 0
@@ -783,84 +879,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, options):
 
     # add title
     slist = [title] + slist
-
-    logging.info("Scanning %s done", input_file)
-
-    # Try to separate the standard macros and functions, placing them at the
-    # end of the current section, in a subsection named 'Standard'.
-    # do this in a loop to catch object, enums and flags
-    klass = lclass = prefix = lprefix = None
-    standard_decl = []
-    liststr = '\n'.join(s for s in slist if s) + '\n'
-    while True:
-        m = re.search(r'^(\S+)_IS_(\S*)_CLASS\n', liststr, flags=re.MULTILINE)
-        m2 = re.search(r'^(\S+)_IS_(\S*)\n', liststr, flags=re.MULTILINE)
-        m3 = re.search(r'^(\S+?)_(\S*)_get_type\n', liststr, flags=re.MULTILINE)
-        if m:
-            prefix = m.group(1)
-            lprefix = prefix.lower()
-            klass = m.group(2)
-            lclass = klass.lower()
-            logging.info("Found gobject type '%s_%s' from is_class macro", prefix, klass)
-        elif m2:
-            prefix = m2.group(1)
-            lprefix = prefix.lower()
-            klass = m2.group(2)
-            lclass = klass.lower()
-            logging.info("Found gobject type '%s_%s' from is_ macro", prefix, klass)
-        elif m3:
-            lprefix = m3.group(1)
-            prefix = lprefix.upper()
-            lclass = m3.group(2)
-            klass = lclass.upper()
-            logging.info("Found gobject type '%s_%s' from get_type function", prefix, klass)
-        else:
-            break
-
-        cclass = lclass
-        cclass = cclass.replace('_', '')
-        mtype = lprefix + cclass
-
-        liststr, standard_decl = replace_once(liststr, standard_decl, r'^%sPrivate\n' % mtype)
-
-        # We only leave XxYy* in the normal section if they have docs
-        if mtype not in doc_comments:
-            logging.info("  Hide instance docs for %s", mtype)
-            liststr, standard_decl = replace_once(liststr, standard_decl, r'^%s\n' % mtype)
-
-        if mtype + 'class' not in doc_comments:
-            logging.info("  Hide class docs for %s", mtype)
-            liststr, standard_decl = replace_once(liststr, standard_decl, r'^%sClass\n' % mtype)
-
-        if mtype + 'interface' not in doc_comments:
-            logging.info("  Hide iface docs for %s", mtype)
-            liststr, standard_decl = replace_once(liststr, standard_decl, r'%sInterface\n' % mtype)
-
-        if mtype + 'iface' not in doc_comments:
-            logging.info("  Hide iface docs for " + mtype)
-            liststr, standard_decl = replace_once(liststr, standard_decl, r'%sIface\n' % mtype)
-
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_IS_%s\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_TYPE_%s\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_get_type\n' % lclass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_CLASS\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_IS_%s_CLASS\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_CLASS\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_IFACE\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_INTERFACE\n' % klass)
-        # We do this one last, otherwise it tends to be caught by the IS_$class macro
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s\n' % klass)
-
-    logging.info('Decl:%s---', liststr)
-    logging.info('Std :%s---', ''.join(sorted(standard_decl)))
-    if len(standard_decl):
-        # sort the symbols
-        liststr += '<SUBSECTION Standard>\n' + ''.join(sorted(standard_decl))
-
-    if liststr != '':
-        if file_basename not in section_list:
-            section_list[file_basename] = ''
-        section_list[file_basename] += "<SECTION>\n<FILE>%s</FILE>\n%s</SECTION>\n\n" % (file_basename, liststr)
+    return slist, doc_comments
 
 
 def replace_once(liststr, standard_decl, regex):
