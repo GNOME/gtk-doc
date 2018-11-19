@@ -279,7 +279,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     # Holds the resulting list of declarations.
     slist = []
     # Holds the title of the section
-    title = ''
+    title = None
     # True if we are in a comment.
     in_comment = 0
     # The type of declaration we are in, e.g. 'function' or 'macro'.
@@ -878,7 +878,8 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
             decl_list.append(forward_decls[symbol])
 
     # add title
-    slist = [title] + slist
+    if title:
+        slist = [title] + slist
     return slist, doc_comments
 
 
