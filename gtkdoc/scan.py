@@ -270,11 +270,10 @@ def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, opt
             section_list[file_basename] = ''
         section_list[file_basename] += "<SECTION>\n<FILE>%s</FILE>\n%s</SECTION>\n\n" % (file_basename, liststr)
 
+
 # Scan the the given content lines.
 # Returns: a list of symbols found and a set of symbols for which we have a
 #          doc-comment
-
-
 def ScanHeaderContent(input_lines, decl_list, get_types, options):
     # Holds the resulting list of declarations.
     slist = []
@@ -321,6 +320,8 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
     for line in input_lines:
         # If this is a private header, skip it.
+        # TODO: consider scanning this first, so that we don't modify: decl_list
+        # and get_types
         if re.search(r'^\s*/\*\s*<\s*private_header\s*>\s*\*/', line):
             return
 
