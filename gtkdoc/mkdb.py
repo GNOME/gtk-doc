@@ -3657,7 +3657,7 @@ def ScanSourceFile(ifile, ignore_files):
     suppressed/ignored.
 
     Args:
-        file (str): the file to scan.
+        ifile (str): the file to scan.
     """
     m = re.search(r'^.*[\/\\]([^\/\\]*)$', ifile)
     if m:
@@ -3671,9 +3671,29 @@ def ScanSourceFile(ifile, ignore_files):
         logging.info("Skipping source file: %s", ifile)
         return
 
-    logging.info("Scanning source file: %s", ifile)
+    logging.info("Scanning %s", ifile)
 
-    SRCFILE = open(ifile, 'r', encoding='utf-8')
+    with open(ifile, 'r', encoding='utf-8') as src:
+        input_lines = src.readlines()
+
+    ScanSourceContent(input_lines, ifile)
+
+    logging.info("Scanning %s done", ifile)
+
+
+def ScanSourceContent(input_lines, ifile=''):
+    """Scans the source code lines for specially-formatted comment blocks.
+
+    Updates global state in SourceSymbolDocs, SourceSymbolSourceFile,
+    SourceSymbolSourceLine. Since, StabilityLevel, Deprecated,
+    SymbolAnnotations.
+
+    Might read from global state in DeclarationTypes
+
+    Args:
+        input_lines (list): list of source code lines
+        ifile (str): file name of the source file (for reporting)
+    """
     in_comment_block = False
     symbol = None
     in_part = ''
@@ -3683,7 +3703,7 @@ def ScanSourceFile(ifile, ignore_files):
     params = OrderedDict()
     param_name = None
     line_number = 0
-    for line in SRCFILE:
+    for line in input_lines:
         line_number += 1
         # Look for the start of a comment block.
         if not in_comment_block:
@@ -3969,8 +3989,6 @@ def ScanSourceFile(ifile, ignore_files):
             common.LogWarning(file, line_number, "Parsing comment block file : parameter expected, but got '%s'" % line)
         else:
             params[param_name] += line
-
-    SRCFILE.close()
 
 
 def OutputMissingDocumentation():
