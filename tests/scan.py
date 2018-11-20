@@ -1,7 +1,7 @@
 # -*- python -*-
 #
 # gtk-doc - GTK DocBook documentation generator.
-# Copyright (C) 2017  Stefan Sauer
+# Copyright (C) 2018  Stefan Sauer
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ import unittest
 from gtkdoc import scan
 
 
-class ScanHeaderContetTestCase(unittest.TestCase):
+class ScanHeaderContentTestCase(unittest.TestCase):
     """Baseclass for the header scanner tests."""
 
     def setUp(self):
@@ -46,7 +46,7 @@ class ScanHeaderContetTestCase(unittest.TestCase):
         self.assertNoDeclFound(slist)
 
 
-class ScanHeaderContent(ScanHeaderContetTestCase):
+class ScanHeaderContent(ScanHeaderContentTestCase):
     """Test generic scanner behaviour."""
 
     def test_EmptyInput(self):
@@ -85,7 +85,7 @@ class ScanHeaderContent(ScanHeaderContetTestCase):
 # FUNCTION
 
 
-class ScanHeaderContentMacros(ScanHeaderContetTestCase):
+class ScanHeaderContentMacros(ScanHeaderContentTestCase):
     """Test parsing of macro declarations."""
 
     def assertDecl(self, name, decl):
