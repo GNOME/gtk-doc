@@ -35,7 +35,6 @@ from . import common, md_to_db
 MODULE = None
 DB_OUTPUT_DIR = None
 INLINE_MARKUP_MODE = None
-DEFAULT_STABILITY = None
 NAME_SPACE = ''
 ROOT_DIR = '.'
 
@@ -229,8 +228,7 @@ ${args_desc}${signals_desc}${see_also}
 
 
 def Run(options):
-    global MODULE, INLINE_MARKUP_MODE, DEFAULT_STABILITY, NAME_SPACE, \
-        DB_OUTPUT_DIR, doctype_header
+    global MODULE, INLINE_MARKUP_MODE, NAME_SPACE, DB_OUTPUT_DIR, doctype_header
 
     logging.info('options: %s', str(options.__dict__))
 
@@ -238,7 +236,6 @@ def Run(options):
     # but too much of the code expects these to be around. Fix this once the transition is done.
     MODULE = options.module
     INLINE_MARKUP_MODE = options.xml_mode or options.sgml_mode
-    DEFAULT_STABILITY = options.default_stability
     NAME_SPACE = options.name_space
 
     main_sgml_file = options.main_sgml_file
@@ -670,7 +667,8 @@ def OutputDB(file, options):
                                             hierarchy_str, interfaces,
                                             implementations,
                                             prerequisites, derived,
-                                            file_objects)
+                                            file_objects,
+                                            options.default_stability)
                 if file_changed:
                     changed = True
 
@@ -2050,7 +2048,7 @@ def ParseStabilityLevel(stability, file, line, message):
     return str(stability)
 
 
-def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop, functions_details, other_details, signals_synop, signals_desc, args_synop, args_desc, hierarchy, interfaces, implementations, prerequisites, derived, file_objects):
+def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop, functions_details, other_details, signals_synop, signals_desc, args_synop, args_desc, hierarchy, interfaces, implementations, prerequisites, derived, file_objects, default_stability):
     """Outputs the final DocBook file for one section.
 
     Args:
@@ -2073,6 +2071,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
         prerequisites (str): the DocBook for the Prerequisites part
         derived (str): the DocBook for the Derived Interfaces part
         file_objects (list): objects in this file
+        default_stability (str): fallback if no api-stability is set (optional)
 
     Returns:
         bool: True if the docs where updated
@@ -2120,7 +2119,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
         logging.info("Found stability: %s", stability)
 
     if not stability:
-        stability = DEFAULT_STABILITY or ''
+        stability = default_stability or ''
 
     if stability:
         if stability in AnnotationDefinition:
