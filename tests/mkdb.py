@@ -26,11 +26,20 @@ from gtkdoc import mkdb
 class ScanSourceContent(unittest.TestCase):
 
     def setUp(self):
-        pass
+        mkdb.MODULE = 'test'
 
     def test_EmptyInput(self):
         mkdb.ScanSourceContent([])
-        self.assertEquals({}, mkdb.SourceSymbolDocs)
+        self.assertEqual({}, mkdb.SourceSymbolDocs)
+
+    def test_FindsDocComment(self):
+        mkdb.ScanSourceContent("""\
+            /**
+             * symbol:
+             *
+             * Description.
+             */""".splitlines(keepends=True))
+        self.assertEqual({'symbol': 'Description.\n'}, mkdb.SourceSymbolDocs)
 
 
 if __name__ == '__main__':

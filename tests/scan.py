@@ -54,28 +54,27 @@ class ScanHeaderContent(ScanHeaderContentTestCase):
         self.assertNothingFound(slist, doc_comments)
 
     def test_FindsDocComment(self):
-        slist, doc_comments = self.scanHeaderContent([
-            '/** FooBar:',
-            ' */'
-        ])
+        slist, doc_comments = self.scanHeaderContent("""\
+            /**
+             * Symbol:
+             */""".splitlines(keepends=True))
         self.assertEqual(1, len(doc_comments))
-        self.assertIn('foobar', doc_comments)
+        self.assertIn('symbol', doc_comments)
 
     def test_DocDoesNotChangeSlistDeclAndTypes(self):
-        slist, doc_comments = self.scanHeaderContent([
-            '/** FooBar:',
-            ' */'
-        ])
+        slist, doc_comments = self.scanHeaderContent("""\
+            /**
+             * Symbol:
+             */""".splitlines(keepends=True))
         self.assertNoDeclFound(slist)
 
     # TODO: test /* < private_header > */ maker
 
     def test_SkipSymbolWithPreprocessor(self):
-        slist, doc_comments = self.scanHeaderContent([
-            '#ifndef __GTK_DOC_IGNORE__',
-            'extern int bug_512565(void);'
-            '#endif'
-        ])
+        slist, doc_comments = self.scanHeaderContent("""\
+            #ifndef __GTK_DOC_IGNORE__
+            extern int bug_512565(void);
+            #endif""".splitlines(keepends=True))
         self.assertNoDeclFound(slist)
 
 
