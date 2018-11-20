@@ -333,13 +333,8 @@ const char * const * bug_624200a(void);
 const char ** const bug_624200b(void);
 
 
-/* internal function and macro */
+/* internal function */
 gchar *_bug_000000a (const gchar *name);
-#define _BUG_000000b (a) (a*a);
-
-#ifndef __GTK_DOC_IGNORE__
-extern int bug_512565(void);
-#endif
 
 void (*bug_638330) (void *arg1,
      const unsigned char *data,

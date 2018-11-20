@@ -24,23 +24,34 @@ import unittest
 from gtkdoc import scan
 
 
-class ScanHeaderContent(unittest.TestCase):
+class ScanHeaderContetTestCase(unittest.TestCase):
+    """Baseclass for the header scanner tests."""
 
     def setUp(self):
         self.decls = []
         self.types = []
-        self.options = argparse.Namespace(deprecated_guards='')
+        self.options = argparse.Namespace(deprecated_guards='', ignore_decorators='')
 
     def scanHeaderContent(self, content):
         return scan.ScanHeaderContent(content, self.decls, self.types,
                                       self.options)
 
-    def test_EmptyInput(self):
-        slist, doc_comments = self.scanHeaderContent([])
+    def assertNoDeclFound(self, slist):
         self.assertEqual([], slist)
-        self.assertEqual({}, doc_comments)
         self.assertEqual([], self.decls)
         self.assertEqual([], self.types)
+
+    def assertNothingFound(self, slist, doc_comments):
+        self.assertEqual({}, doc_comments)
+        self.assertNoDeclFound(slist)
+
+
+class ScanHeaderContent(ScanHeaderContetTestCase):
+    """Test generic scanner behaviour."""
+
+    def test_EmptyInput(self):
+        slist, doc_comments = self.scanHeaderContent([])
+        self.assertNothingFound(slist, doc_comments)
 
     def test_FindsDocComment(self):
         slist, doc_comments = self.scanHeaderContent([
@@ -55,11 +66,9 @@ class ScanHeaderContent(unittest.TestCase):
             '/** FooBar:',
             ' */'
         ])
-        self.assertEqual([], slist)
-        self.assertEqual([], self.decls)
-        self.assertEqual([], self.types)
+        self.assertNoDeclFound(slist)
 
-    # test /* < private_header > */ maker
+    # TODO: test /* < private_header > */ maker
 
     def test_SkipSymbolWithPreprocessor(self):
         slist, doc_comments = self.scanHeaderContent([
@@ -67,9 +76,46 @@ class ScanHeaderContent(unittest.TestCase):
             'extern int bug_512565(void);'
             '#endif'
         ])
-        self.assertEqual([], slist)
-        self.assertEqual([], self.decls)
+        self.assertNoDeclFound(slist)
+
+
+# ENUM
+
+
+# FUNCTION
+
+
+class ScanHeaderContentMacros(ScanHeaderContetTestCase):
+    """Test parsing of macro declarations."""
+
+    def assertDecl(self, name, decl):
+        d = '<MACRO>\n<NAME>%s</NAME>\n%s</MACRO>\n' % (name, decl)
+        self.assertEqual([d], self.decls)
         self.assertEqual([], self.types)
+
+    def test_FindsMacroNumber(self):
+        slist, doc_comments = self.scanHeaderContent([
+            '#define FOO 1'
+        ])
+        self.assertEqual(['FOO'], slist)
+        self.assertDecl('FOO', '#define FOO 1')
+
+    def test_FindsMacroExpression(self):
+        slist, doc_comments = self.scanHeaderContent([
+            '#define FOO (1 << 1)'
+        ])
+        self.assertEqual(['FOO'], slist)
+        self.assertDecl('FOO', '#define FOO (1 << 1)')
+
+    # TODO: test for a few variants
+    def test_IgnoresInternalMacro(self):
+        slist, doc_comments = self.scanHeaderContent([
+            '#define _BUG_000000b (a) (a*a)'
+        ])
+        self.assertNoDeclFound(slist)
+
+
+# STRUCT
 
 
 if __name__ == '__main__':
