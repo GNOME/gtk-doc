@@ -285,11 +285,20 @@ def Run(options):
     # If any of the DocBook files have changed, update the timestamp file (so
     # it can be used for Makefile dependencies).
     if changed or not os.path.exists(os.path.join(ROOT_DIR, "sgml.stamp")):
+        # TODO: MakeIndexterms() uses NAME_SPACE, but also fills IndexEntriesFull
+        # which DetermineNamespace is using
+        # Can we use something else?
+        # no: AllSymbols, KnownSymbols
+        # IndexEntriesFull: consist of all symbols from sections file + signals and properties
+        #
+        # logging.info('# index_entries_full=%d, # declarations=%d',
+        #     len(IndexEntriesFull), len(Declarations))
+        # logging.info('known_symbols - index_entries_full: ' + str(Declarations.keys() - IndexEntriesFull.keys()))
 
         # try to detect the common prefix
         # GtkWidget, GTK_WIDGET, gtk_widget -> gtk
         if NAME_SPACE == '':
-            NAME_SPACE = DetermineNamespace()
+            NAME_SPACE = DetermineNamespace(IndexEntriesFull.keys())
 
         logging.info('namespace prefix ="%s"', NAME_SPACE)
 
@@ -804,15 +813,22 @@ def OutputDB(file, options):
     return (changed, book_top, book_bottom)
 
 
-def DetermineNamespace():
-    """Find common set of characters."""
+def DetermineNamespace(symbols):
+    """Find common set of characters.
+
+    Args:
+         symbols (list): a list of symbols to scan for a common prefix
+
+    Returns:
+        str: a common namespace prefix (might be empty)
+    """
     name_space = ''
     pos = 0
     ratio = 0.0
     while True:
         prefix = {}
         letter = ''
-        for symbol in IndexEntriesFull.keys():
+        for symbol in symbols:
             if name_space == '' or name_space.lower() in symbol.lower():
                 if len(symbol) > pos:
                     letter = symbol[pos:pos + 1]
@@ -840,7 +856,7 @@ def DetermineNamespace():
                     maxletter = letter
                     maxsymbols = prefix[letter]
 
-            ratio = float(len(IndexEntriesFull)) / prefix[maxletter]
+            ratio = float(len(symbols)) / prefix[maxletter]
             logging.debug('most symbols start with %s, that is %f', maxletter, (100 * ratio))
             if ratio > 0.9:
                 # do another round
