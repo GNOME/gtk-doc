@@ -2546,7 +2546,7 @@ def CreateValidSGML(text):
     return text
 
 
-def ConvertSGMLChars(symbol, text):
+def ConvertXMLChars(symbol, text):
     """Escape XML chars.
 
     This is used for text in source code comment blocks, to turn
@@ -2562,11 +2562,11 @@ def ConvertSGMLChars(symbol, text):
     """
 
     if INLINE_MARKUP_MODE:
-        # For the XML/SGML mode only convert to entities outside CDATA sections.
+        # For the XML mode only convert to entities outside CDATA sections.
         return ModifyXMLElements(text, symbol,
                                  "<!\\[CDATA\\[|<programlisting[^>]*>",
-                                 ConvertSGMLCharsEndTag,
-                                 ConvertSGMLCharsCallback)
+                                 ConvertXMLCharsEndTag,
+                                 ConvertXMLCharsCallback)
     # For the simple non-sgml mode, convert to entities everywhere.
 
     text = re.sub(r'&(?![a-zA-Z#]+;)', r'&amp;', text)        # Do this first, or the others get messed up.
@@ -2579,20 +2579,20 @@ def ConvertSGMLChars(symbol, text):
     return text
 
 
-def ConvertSGMLCharsEndTag(start_tag):
+def ConvertXMLCharsEndTag(start_tag):
     if start_tag == '<![CDATA[':
         return "]]>"
     return "</programlisting>"
 
 
-def ConvertSGMLCharsCallback(text, symbol, tag):
+def ConvertXMLCharsCallback(text, symbol, tag):
     if re.search(r'^<programlisting', tag):
         logging.debug('call modifyXML')
         # We can handle <programlisting> specially here.
         return ModifyXMLElements(text, symbol,
                                  "<!\\[CDATA\\[",
-                                 ConvertSGMLCharsEndTag,
-                                 ConvertSGMLCharsCallback2)
+                                 ConvertXMLCharsEndTag,
+                                 ConvertXMLCharsCallback2)
     elif tag == '':
         logging.debug('replace entities')
         # If we're not in CDATA convert to entities.
@@ -2607,7 +2607,7 @@ def ConvertSGMLCharsCallback(text, symbol, tag):
     return text
 
 
-def ConvertSGMLCharsCallback2(text, symbol, tag):
+def ConvertXMLCharsCallback2(text, symbol, tag):
     # If we're not in CDATA convert to entities.
     # We could handle <programlisting> differently, though I'm not sure it helps.
     if tag == '':
@@ -3756,9 +3756,9 @@ def ScanSourceContent(input_lines, ifile=''):
                     params['Returns'] = return_desc
 
                 # Convert special characters
-                description = ConvertSGMLChars(symbol, description)
+                description = ConvertXMLChars(symbol, description)
                 for (param_name, param_desc) in params.items():
-                    params[param_name] = ConvertSGMLChars(symbol, param_desc)
+                    params[param_name] = ConvertXMLChars(symbol, param_desc)
 
                 # Handle Section docs
                 m = re.search(r'SECTION:\s*(.*)', symbol)
@@ -3864,14 +3864,14 @@ def ScanSourceContent(input_lines, ifile=''):
                     since_desc = arr[0].strip()
                     extra_lines = arr[1:]
                     logging.info("Since(%s) : [%s]", symbol, since_desc)
-                    Since[symbol] = ConvertSGMLChars(symbol, since_desc)
+                    Since[symbol] = ConvertXMLChars(symbol, since_desc)
                     if len(extra_lines) > 1:
                         common.LogWarning(ifile, line_number, "multi-line since docs found")
 
                 if stability_desc:
                     stability_desc = ParseStabilityLevel(
                         stability_desc, ifile, line_number, "Stability level for %s" % symbol)
-                    StabilityLevel[symbol] = ConvertSGMLChars(symbol, stability_desc)
+                    StabilityLevel[symbol] = ConvertXMLChars(symbol, stability_desc)
 
                 if deprecated_desc:
                     if symbol not in Deprecated:
@@ -3881,7 +3881,7 @@ def ScanSourceContent(input_lines, ifile=''):
                             common.LogWarning(ifile, line_number,
                                               "%s is deprecated in the inline comments, but no deprecation guards were found around the declaration. (See the --deprecated-guards option for gtkdoc-scan.)" % symbol)
 
-                    Deprecated[symbol] = ConvertSGMLChars(symbol, deprecated_desc)
+                    Deprecated[symbol] = ConvertXMLChars(symbol, deprecated_desc)
 
             in_comment_block = False
             continue
