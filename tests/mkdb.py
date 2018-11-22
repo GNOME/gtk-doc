@@ -41,6 +41,73 @@ class ScanSourceContent(unittest.TestCase):
              */""".splitlines(keepends=True))
         self.assertEqual({'symbol': 'Description.\n'}, mkdb.SourceSymbolDocs)
 
+    def test_FindsDocCommentWithParam(self):
+        mkdb.ScanSourceContent("""\
+            /**
+             * symbol:
+             * @par: value
+             *
+             * Description.
+             */""".splitlines(keepends=True))
+        self.assertEqual({'symbol': 'Description.\n'}, mkdb.SourceSymbolDocs)
+        self.assertIn('symbol', mkdb.SourceSymbolParams)
+        self.assertEqual({'par': 'value\n'}, mkdb.SourceSymbolParams['symbol'])
+
+    def test_FindsDocCommentWithReturns(self):
+        mkdb.ScanSourceContent("""\
+            /**
+             * symbol:
+             *
+             * Description.
+             *
+             * Returns: result
+             */""".splitlines(keepends=True))
+        # TODO: trim multiple newlines in code
+        self.assertEqual({'symbol': 'Description.\n\n'}, mkdb.SourceSymbolDocs)
+        self.assertIn('symbol', mkdb.SourceSymbolParams)
+        # TODO: trim whitespace in code
+        self.assertEqual({'Returns': ' result\n'}, mkdb.SourceSymbolParams['symbol'])
+
+    def test_FindsDocCommentWithSince(self):
+        mkdb.ScanSourceContent("""\
+            /**
+             * symbol:
+             *
+             * Since: 0.1
+             */""".splitlines(keepends=True))
+        self.assertIn('symbol', mkdb.Since)
+        self.assertEqual('0.1', mkdb.Since['symbol'])
+
+    def test_FindsDocCommentWithDeprecated(self):
+        mkdb.ScanSourceContent("""\
+            /**
+             * symbol:
+             *
+             * Deprecated: use function() instead
+             */""".splitlines(keepends=True))
+        self.assertIn('symbol', mkdb.Deprecated)
+        # TODO: trim whitespace in code
+        self.assertEqual(' use function() instead\n', mkdb.Deprecated['symbol'])
+
+    def test_FindsDocCommentWithStability(self):
+        mkdb.ScanSourceContent("""\
+            /**
+             * symbol:
+             *
+             * Stability: stable
+             */""".splitlines(keepends=True))
+        self.assertIn('symbol', mkdb.StabilityLevel)
+        self.assertEqual('Stable', mkdb.StabilityLevel['symbol'])
+
+    def test_HandlesHTMLEntities(self):
+        mkdb.ScanSourceContent("""\
+            /**
+             * symbol:
+             *
+             * < & >.
+             */""".splitlines(keepends=True))
+        self.assertEqual({'symbol': '&lt; &amp; &gt;.\n'}, mkdb.SourceSymbolDocs)
+
 
 if __name__ == '__main__':
     unittest.main()
