@@ -1432,16 +1432,9 @@ def OutputStruct(symbol, declaration):
     def pfunc(*args):
         return '<structfield id="%s">%s</structfield>' % (common.CreateValidSGMLID(sid + '.' + args[0]), args[0])
     fields = common.ParseStructDeclaration(declaration, not default_to_public, 0, MakeXRef, pfunc)
-    params = SymbolParams.get(symbol)
-
-    # If no parameters are filled in, we don't generate the description
-    # table, for backwards compatibility.
-    found = False
-    if params:
-        found = next((True for p in params.values() if p.strip() != ''), False)
+    field_descrs, found = GetSymbolParams(symbol)
 
     if found:
-        field_descrs = params
         missing_parameters = ''
         unused_parameters = ''
         sid = common.CreateValidSGMLID(symbol + ".members")
@@ -1572,18 +1565,11 @@ def OutputUnion(symbol, declaration):
     def pfunc(*args):
         return '<structfield id="%s">%s</structfield>' % (common.CreateValidSGMLID(sid + '.' + args[0]), args[0])
     fields = common.ParseStructDeclaration(declaration, 0, 0, MakeXRef, pfunc)
-    params = SymbolParams.get(symbol)
-
-    # If no parameters are filled in, we don't generate the description
-    # table, for backwards compatibility
-    found = False
-    if params:
-        found = next((True for p in params.values() if p.strip() != ''), False)
+    field_descrs, found = GetSymbolParams(symbol)
 
     logging.debug('Union %s has %d entries, found=%d, has_typedef=%d', symbol, len(fields), found, has_typedef)
 
     if found:
-        field_descrs = params
         missing_parameters = ''
         unused_parameters = ''
         sid = common.CreateValidSGMLID('%s.members' % symbol)
@@ -1690,17 +1676,7 @@ def OutputEnum(symbol, declaration):
     # Create a table of fields and descriptions
 
     fields = common.ParseEnumDeclaration(declaration)
-    params = SymbolParams.get(symbol)
-
-    # If nothing at all is documented log a single summary warning at the end.
-    # Otherwise, warn about each undocumented item.
-
-    found = False
-    if params:
-        found = next((True for p in params.values() if p.strip() != ''), False)
-        field_descrs = params
-    else:
-        field_descrs = {}
+    field_descrs, found = GetSymbolParams(symbol)
 
     missing_parameters = ''
     unused_parameters = ''
@@ -4749,6 +4725,25 @@ def CheckIsObject(name):
     # Let GBoxed pass as an object here to get -struct appended to the id
     # and prevent conflicts with sections.
     return root and root != 'GEnum' and root != 'GFlags'
+
+
+def GetSymbolParams(symbol):
+    """Get the symbol params and check that they are not empty.
+
+    If no parameters are filled in, we don't generate the description table,
+    for backwards compatibility.
+
+    Args:
+        symbol: the symbol to check the parameters for
+
+    Returns:
+        dict: The parameters
+        bool: True if empty
+    """
+    params = SymbolParams.get(symbol, {})
+    # TODO: strip at parsing stage?
+    found = next((True for p in params.values() if p.strip() != ''), False)
+    return (params, found)
 
 
 def GetSymbolSourceFile(symbol):
