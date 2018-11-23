@@ -98,7 +98,7 @@ Prerequisites = {}
 
 # holds the symbols which are mentioned in <MODULE>-sections.txt and in which
 # section they are defined
-KnownSymbols = {}
+KnownSymbols = {}  # values are 1 for public symbols and 0 otherwise
 SymbolSection = {}
 SymbolSectionId = {}
 
@@ -246,24 +246,30 @@ def Run(options):
         else:
             main_sgml_file = MODULE + "-docs.xml"
 
+    # -- phase 1: read files produced by previous tools and scane sources
+
     # extract docbook header or define default
     doctype_header = GetDocbookHeader(main_sgml_file)
-
-    # This is where we put all the DocBook output.
-    DB_OUTPUT_DIR = DB_OUTPUT_DIR if DB_OUTPUT_DIR else os.path.join(ROOT_DIR, "xml")
-    if not os.path.isdir(DB_OUTPUT_DIR):
-        os.mkdir(DB_OUTPUT_DIR)
 
     ReadKnownSymbols(os.path.join(ROOT_DIR, MODULE + "-sections.txt"))
     ReadSignalsFile(os.path.join(ROOT_DIR, MODULE + ".signals"))
     ReadArgsFile(os.path.join(ROOT_DIR, MODULE + ".args"))
-    ReadObjectHierarchy(os.path.join(ROOT_DIR, MODULE + ".hierarchy"))
+    obj_tree = ReadObjectHierarchy(os.path.join(ROOT_DIR, MODULE + ".hierarchy"))
     ReadInterfaces(os.path.join(ROOT_DIR, MODULE + ".interfaces"))
     ReadPrerequisites(os.path.join(ROOT_DIR, MODULE + ".prerequisites"))
 
     ReadDeclarationsFile(os.path.join(ROOT_DIR, MODULE + "-decl.txt"), 0)
     if os.path.isfile(os.path.join(ROOT_DIR, MODULE + "-overrides.txt")):
         ReadDeclarationsFile(os.path.join(ROOT_DIR, MODULE + "-overrides.txt"), 1)
+
+    logging.info("Data files read")
+
+    # -- phase 2: scan sources
+
+    # TODO: move this to phase 3 once we fixed the call to OutputProgramDBFile()
+    DB_OUTPUT_DIR = DB_OUTPUT_DIR if DB_OUTPUT_DIR else os.path.join(ROOT_DIR, "xml")
+    if not os.path.isdir(DB_OUTPUT_DIR):
+        os.mkdir(DB_OUTPUT_DIR)
 
     # Scan sources
     if options.source_suffixes:
@@ -277,10 +283,12 @@ def Run(options):
     for sdir in source_dirs:
         ReadSourceDocumentation(sdir, suffix_list, source_dirs, ignore_files)
 
-    changed, book_top, book_bottom = OutputDB(os.path.join(ROOT_DIR, MODULE + "-sections.txt"), options)
-    OutputBook(main_sgml_file, book_top, book_bottom)
+    logging.info("Sources scanned")
 
-    logging.info("All files created: %d", changed)
+    # -- phase 3: write docbook files
+
+    changed, book_top, book_bottom = OutputDB(os.path.join(ROOT_DIR, MODULE + "-sections.txt"), options)
+    OutputBook(main_sgml_file, book_top, book_bottom, obj_tree)
 
     # If any of the DocBook files have changed, update the timestamp file (so
     # it can be used for Makefile dependencies).
@@ -302,6 +310,9 @@ def Run(options):
 
         logging.info('namespace prefix ="%s"', NAME_SPACE)
 
+        OutputObjectTree(obj_tree)
+        OutputObjectList()
+
         OutputIndex("api-index-full", IndexEntriesFull)
         OutputIndex("api-index-deprecated", IndexEntriesDeprecated)
         OutputSinceIndexes()
@@ -309,6 +320,8 @@ def Run(options):
 
         with open(os.path.join(ROOT_DIR, 'sgml.stamp'), 'w') as h:
             h.write('timestamp')
+
+    logging.info("All files created: %d", changed)
 
 
 def OutputObjectList():
@@ -1053,6 +1066,23 @@ def OutputAnnotationGlossary():
     OUTPUT.close()
 
     common.UpdateFileIfChanged(old_glossary, new_glossary, 0)
+
+
+def OutputObjectTree(tree):
+    if not tree:
+        return
+
+    # FIXME: use xml
+    old_tree_index = os.path.join(DB_OUTPUT_DIR, "tree_index.sgml")
+    new_tree_index = os.path.join(DB_OUTPUT_DIR, "tree_index.new")
+
+    with open(new_tree_index, 'w', encoding='utf-8') as out:
+        out.write(MakeDocHeader("screen"))
+        out.write("\n<screen>\n")
+        out.write(AddTreeLineArt(tree))
+        out.write("\n</screen>\n")
+
+    common.UpdateFileIfChanged(old_tree_index, new_tree_index, 0)
 
 
 def ReadKnownSymbols(file):
@@ -2406,7 +2436,7 @@ def GetDocbookHeader(main_file):
     return header
 
 
-def OutputBook(main_file, book_top, book_bottom):
+def OutputBook(main_file, book_top, book_bottom, obj_tree):
     """Outputs the entities that need to be included into the main docbook file for the module.
 
     Args:
@@ -2414,6 +2444,7 @@ def OutputBook(main_file, book_top, book_bottom):
                         at the top of the main docbook file.
         book_bottom (str): the entities, which are added in the main docbook
                            file at the desired position.
+        obj_tree (list): object tree list
     """
 
     old_file = os.path.join(DB_OUTPUT_DIR, MODULE + "-doc.top")
@@ -2454,7 +2485,7 @@ def OutputBook(main_file, book_top, book_bottom):
     <title>[Insert title here]</title>
 %s  </chapter>
 ''' % (MakeDocHeader("book"), book_bottom))
-        if os.path.exists('xml/tree_index.sgml'):
+        if obj_tree:
             OUTPUT.write('''  <chapter id="object-tree">
     <title>Object Hierarchy</title>
     <xi:include href="xml/tree_index.sgml"/>
@@ -3776,7 +3807,6 @@ def ScanSourceContent(input_lines, ifile=''):
                     SourceSymbolSourceLine[long_descr] = line_number
                 elif m2:
                     real_symbol = m2.group(1)
-                    key = None
                     section_id = None
 
                     logging.info("PROGRAM DOCS found in source for '%s'", real_symbol)
@@ -4209,7 +4239,7 @@ def MergeSourceDocumentation():
         else:
             logging.info("[%s] undocumented", symbol)
 
-    logging.info("num doc entries: %d", len(SymbolDocs))
+    logging.info("num doc entries: %d / %d", len(SymbolDocs), len(SourceSymbolDocs))
 
 
 def IsEmptyDoc(doc):
@@ -4422,7 +4452,7 @@ def ReadSignalsFile(ifile):
 
 
 def ReadObjectHierarchy(ifile):
-    """Reads the $MODULE-hierarchy.txt file.
+    """Reads the $MODULE-hierarchy file.
 
     This contains all the GObject subclasses described in this module (and their
     ancestors).
@@ -4430,18 +4460,16 @@ def ReadObjectHierarchy(ifile):
     in the object hierarchy in the ObjectLevels array, at the
     same index. GObject, the root object, has a level of 1.
 
-    This also generates tree_index.sgml as it goes along.
-
     Args:
         ifile (str): the input filename.
     """
 
+    if not os.path.isfile(ifile):
+        logging.debug('no %s file found', ifile)
+        return
+
     Objects[:] = []
     ObjectLevels[:] = []
-
-    if not os.path.isfile(ifile):
-        logging.debug('no *-hierarchy.tx')
-        return
 
     INPUT = open(ifile, 'r', encoding='utf-8')
 
@@ -4486,23 +4514,8 @@ def ReadObjectHierarchy(ifile):
         #
 
     INPUT.close()
-
-    # FIXME: use xml
-    # my $old_tree_index = "$DB_OUTPUT_DIR/tree_index.$xml"
-    old_tree_index = os.path.join(DB_OUTPUT_DIR, "tree_index.sgml")
-    new_tree_index = os.path.join(DB_OUTPUT_DIR, "tree_index.new")
-
     logging.debug('got %d entries for hierarchy', len(tree))
-
-    with open(new_tree_index, 'w', encoding='utf-8') as out:
-        out.write(MakeDocHeader("screen"))
-        out.write("\n<screen>\n")
-        out.write(AddTreeLineArt(tree))
-        out.write("\n</screen>\n")
-
-    common.UpdateFileIfChanged(old_tree_index, new_tree_index, 0)
-
-    OutputObjectList()
+    return tree
 
 
 def ReadInterfaces(ifile):
