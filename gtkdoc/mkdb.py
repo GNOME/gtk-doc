@@ -1453,7 +1453,7 @@ def OutputStruct(symbol, declaration):
 
             desc += "<row role=\"member\"><entry role=\"struct_member_name\"><para>%s</para></entry>\n" % text
             if field_name in field_descrs:
-                (field_descr, param_annotations) = ExpandAnnotation(symbol, field_descrs[field_name])
+                field_descr, param_annotations = ExpandAnnotation(symbol, field_descrs[field_name])
                 field_descr = ConvertMarkDown(symbol, field_descr)
                 # trim
                 field_descr = re.sub(r'^(\s|\n)+', '', field_descr, flags=re.M | re.S)
@@ -1588,7 +1588,7 @@ def OutputUnion(symbol, declaration):
 
             desc += "<row><entry role=\"union_member_name\"><para>%s</para></entry>\n" % text
             if field_name in field_descrs:
-                (field_descr, param_annotations) = ExpandAnnotation(symbol, field_descrs[field_name])
+                field_descr, param_annotations = ExpandAnnotation(symbol, field_descrs[field_name])
                 field_descr = ConvertMarkDown(symbol, field_descr)
 
                 # trim
@@ -1798,8 +1798,7 @@ def OutputVariable(symbol, declaration):
 
     if symbol in SymbolAnnotations:
         param_desc = SymbolAnnotations[symbol]
-        param_annotations = ''
-        (param_desc, param_annotations) = ExpandAnnotation(symbol, param_desc)
+        param_desc, param_annotations = ExpandAnnotation(symbol, param_desc)
         if param_annotations != '':
             desc += "\n<para>%s</para>" % param_annotations
 
@@ -1891,7 +1890,7 @@ def OutputFunction(symbol, declaration, symbol_type):
 
     if symbol in SymbolAnnotations:
         param_desc = SymbolAnnotations[symbol]
-        (param_desc, param_annotations) = ExpandAnnotation(symbol, param_desc)
+        param_desc, param_annotations = ExpandAnnotation(symbol, param_desc)
         if param_annotations != '':
             desc += "\n<para>%s</para>" % param_annotations
 
@@ -1936,7 +1935,7 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
         unused_parameters = ''
 
         for param_name, param_desc in params.items():
-            (param_desc, param_annotations) = ExpandAnnotation(symbol, param_desc)
+            param_desc, param_annotations = ExpandAnnotation(symbol, param_desc)
             param_desc = ConvertMarkDown(symbol, param_desc)
             # trim
             param_desc = re.sub(r'^(\s|\n)+', '', param_desc, flags=re.M | re.S)
@@ -3428,7 +3427,7 @@ def GetSignals(gobject):
 
             if symbol in SymbolAnnotations:
                 param_desc = SymbolAnnotations[symbol]
-                (param_desc, param_annotations) = ExpandAnnotation(symbol, param_desc)
+                param_desc, param_annotations = ExpandAnnotation(symbol, param_desc)
                 if param_annotations != '':
                     desc += "\n<para>%s</para>" % param_annotations
 
@@ -3554,7 +3553,7 @@ def GetArgs(gobject):
             arg_desc += blurb
             if symbol in SymbolAnnotations:
                 param_desc = SymbolAnnotations[symbol]
-                (param_desc, param_annotations) = ExpandAnnotation(symbol, param_desc)
+                param_desc, param_annotations = ExpandAnnotation(symbol, param_desc)
                 if param_annotations != '':
                     arg_desc += "\n<para>%s</para>" % param_annotations
 
