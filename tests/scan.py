@@ -81,7 +81,44 @@ class ScanHeaderContent(ScanHeaderContentTestCase):
         self.assertNoDeclFound(slist)
 
 
-# ENUM
+class ScanHeaderContentEnum(ScanHeaderContentTestCase):
+    """Test parsing of enum declarations."""
+
+    def assertDecl(self, name, decl):
+        d = '<ENUM>\n<NAME>%s</NAME>\n%s</ENUM>\n' % (name, decl)
+        self.assertEqual([d], self.decls)
+        self.assertEqual([], self.types)
+
+    def test_FindsEnum(self):
+        header = textwrap.dedent("""\
+            enum data {
+              TEST,
+            };""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('data', header)
+
+    def test_FindsTypedefEnum(self):
+        header = textwrap.dedent("""\
+            typedef enum {
+              ENUM
+            } Data;""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('Data', header)
+
+    def test_HandleEnumWithDeprecatedMember(self):
+        header = textwrap.dedent("""\
+            enum data {
+              TEST_A,
+            #ifndef GTKDOC_TESTER_DISABLE_DEPRECATED
+              TEST_B,
+            #endif
+              TEST_C
+            };""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('data', header)
 
 
 # FUNCTION
