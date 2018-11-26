@@ -194,8 +194,44 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
         self.assertDecl('data', header)
 
 
+class ScanHeaderContentUnions(ScanHeaderContentTestCase):
+    """Test parsing of Union declarations."""
+
+    def assertDecl(self, name, decl):
+        d = '<UNION>\n<NAME>%s</NAME>\n%s</UNION>\n' % (name, decl)
+        self.assertEqual([d], self.decls)
+        self.assertEqual([], self.types)
+
+    def test_FindsUnion(self):
+        header = textwrap.dedent("""\
+            union data {
+              int i;
+              float f;
+            };""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('data', header)
+
+    def test_FindsTypedefUnion(self):
+        header = textwrap.dedent("""\
+            typedef union {
+              int i;
+              float f;
+            } Data;""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('Data', header)
+
+
 # VARIABLE
 
 
 if __name__ == '__main__':
     unittest.main()
+
+    # from gtkdoc import common
+    # common.setup_logging()
+    #
+    # t = ScanHeaderContentUnions()
+    # t.setUp()
+    # t.test_FindsUnion()

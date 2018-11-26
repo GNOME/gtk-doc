@@ -437,7 +437,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
             m19 = re.search(r'^\s*([A-Za-z]\w*)\s*\(', line)
             m20 = re.search(r'^\s*\(', line)
             m21 = re.search(r'^\s*struct\s+_?(\w+)', line)
-            m22 = re.search(r'^\s*union\s+_(\w+)', line)
+            m22 = re.search(r'^\s*union\s+_?(\w+)', line)
 
             # MACROS
 
