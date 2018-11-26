@@ -77,10 +77,12 @@ def Run(options):
     with open(new_decl_list, 'w', encoding='utf-8') as f:
         for section in sorted(section_list.keys()):
             f.write(section_list[section])
+    common.UpdateFileIfChanged(old_decl_list, new_decl_list, True)
 
     with open(new_decl, 'w', encoding='utf-8') as f:
         for decl in decl_list:
             f.write(decl)
+    common.UpdateFileIfChanged(old_decl, new_decl, True)
 
     if options.rebuild_types:
         with open(new_types, 'w', encoding='utf-8') as f:
@@ -94,9 +96,6 @@ def Run(options):
                 os.rename(old_types, old_types + '.bak')
         else:
             common.UpdateFileIfChanged(old_types, new_types, True)
-
-    common.UpdateFileIfChanged(old_decl_list, new_decl_list, True)
-    common.UpdateFileIfChanged(old_decl, new_decl, True)
 
     # If there is no MODULE-sections.txt file yet or we are asked to rebuild it,
     # we copy the MODULE-decl-list.txt file into its place. The user can tweak it
