@@ -19,6 +19,7 @@
 #
 
 import argparse
+import textwrap
 import unittest
 
 from gtkdoc import scan
@@ -30,7 +31,9 @@ class ScanHeaderContentTestCase(unittest.TestCase):
     def setUp(self):
         self.decls = []
         self.types = []
-        self.options = argparse.Namespace(deprecated_guards='', ignore_decorators='')
+        self.options = argparse.Namespace(
+            deprecated_guards='GTKDOC_TESTER_DISABLE_DEPRECATED',
+            ignore_decorators='')
 
     def scanHeaderContent(self, content):
         return scan.ScanHeaderContent(content, self.decls, self.types,
@@ -114,7 +117,47 @@ class ScanHeaderContentMacros(ScanHeaderContentTestCase):
         self.assertNoDeclFound(slist)
 
 
-# STRUCT
+class ScanHeaderContentStructs(ScanHeaderContentTestCase):
+    """Test parsing of struct declarations."""
+
+    def assertDecl(self, name, decl):
+        d = '<STRUCT>\n<NAME>%s</NAME>\n%s</STRUCT>\n' % (name, decl)
+        self.assertEqual([d], self.decls)
+        self.assertEqual([], self.types)
+
+    def test_FindsStruct(self):
+        header = textwrap.dedent("""\
+            struct data {
+              int test;
+            };""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('data', header)
+
+    def test_FindsTypedefStruct(self):
+        header = textwrap.dedent("""\
+            typedef struct {
+              int test;
+            } Data;""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('Data', header)
+
+    def test_HandleStructWithDeprecatedMember(self):
+        header = textwrap.dedent("""\
+            struct data {
+              int test_a;
+            #ifndef GTKDOC_TESTER_DISABLE_DEPRECATED
+              int deprecated;
+            #endif
+              int test_b;
+            };""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('data', header)
+
+
+# VARIABLE
 
 
 if __name__ == '__main__':
