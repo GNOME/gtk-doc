@@ -120,6 +120,16 @@ class ScanHeaderContentEnum(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('data', header)
 
+    def test_HandleDeprecatedInMemberName(self):
+        header = textwrap.dedent("""\
+            typedef enum {
+              VAL_DEFAULT,
+              VAL_DEPRECATED,
+            } Data;""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('Data', header)
+
 
 # FUNCTION
 
@@ -145,6 +155,13 @@ class ScanHeaderContentMacros(ScanHeaderContentTestCase):
         ])
         self.assertEqual(['FOO'], slist)
         self.assertDecl('FOO', '#define FOO (1 << 1)')
+
+    def test_FindsMacroFunction(self):
+        slist, doc_comments = self.scanHeaderContent([
+            '#define FOO(x) (x << 1)'
+        ])
+        self.assertEqual(['FOO'], slist)
+        self.assertDecl('FOO', '#define FOO(x) (x << 1)')
 
     # TODO: test for a few variants
     def test_IgnoresInternalMacro(self):
@@ -237,6 +254,9 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertDecl('Data', header)
+
+
+# USER FUNCTION (aka function pointer types)
 
 
 class ScanHeaderContentVariabless(ScanHeaderContentTestCase):

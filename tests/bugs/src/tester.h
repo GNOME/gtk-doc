@@ -3,23 +3,6 @@
 
 #include <glib.h>
 
-/**
- * Bug324535:
- * @BUG_324535_A: enum 1
- * @BUG_324535_B: enum 2
- * @BUG_324535_C: enum 3
- *
- * http://bugzilla.gnome.org/show_bug.cgi?id=324535
- */
-typedef enum {
-  BUG_324535_A,
-#ifdef GTK_DISABLE_DEPRECATED
-  BUG_324535_B,
-#endif
-  BUG_324535_C
-} Bug324535;
-
-
 
 /**
  * bug_481811:
@@ -342,21 +325,6 @@ void (*bug_638330) (void *arg1,
 
 
 /**
- * Bug642998:
- * @red: red color intensity, from 0–255
- * @green: green color intensity, from 0–255
- * @blue: blue color intensity, from 0–255
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=642998
- */
-typedef struct {
-    guint16 red;
-    guint16 green;
-    guint16 blue;
-} Bug642998;
-
-
-/**
  * Bug644291:
  * @BUG_644291_START: foo
  * @BUG_644291_TEXT: bar
@@ -474,21 +442,6 @@ void bug_732689 (const gchar *spec);
 void bug_749142 (void);
 
 void bug_783420 (int in, int *out);
-
-/**
- * Bug730658:
- * @BUG_730658_CAN_READ: Can read
- * @BUG_730658_CAN_WRITE: Can write
- * @BUG_730658_IS_DEPRECATED: Is deprecated
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=730658
- */
-typedef enum
-{
-  BUG_730658_CAN_READ = 1 << 0,
-  BUG_730658_CAN_WRITE = 1 << 1,
-  BUG_730658_IS_DEPRECATED = 1 << 2
-} Bug730658;
 
 /**
  * MACRO_VALUE:
