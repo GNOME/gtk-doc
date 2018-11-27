@@ -153,6 +153,22 @@ class ScanHeaderContentMacros(ScanHeaderContentTestCase):
         ])
         self.assertNoDeclFound(slist)
 
+    def test_FindsDocCommentForDeprecationGuard(self):
+        header = textwrap.dedent("""\
+            /**
+             * GTKDOC_TESTER_DISABLE_DEPRECATED:
+             *
+             * Documentation for a deprecation guard.
+             */
+            #define GTKDOC_TESTER_DISABLE_DEPRECATED 1""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertEqual(1, len(doc_comments))
+        self.assertIn('gtkdoc_tester_disable_deprecated', doc_comments)
+        self.assertEqual(['GTKDOC_TESTER_DISABLE_DEPRECATED'], slist)
+        self.assertDecl('GTKDOC_TESTER_DISABLE_DEPRECATED',
+                        '#define GTKDOC_TESTER_DISABLE_DEPRECATED 1')
+
 
 class ScanHeaderContentStructs(ScanHeaderContentTestCase):
     """Test parsing of struct declarations."""

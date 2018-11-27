@@ -504,13 +504,6 @@ void bug_749142 (void);
 void bug_783420 (int in, int *out);
 
 /**
- * BUG_731417_DEPRECATED:
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=731417
- */
-#define BUG_731417_DEPRECATED   1
-
-/**
  * Bug730658:
  * @BUG_730658_CAN_READ: Can read
  * @BUG_730658_CAN_WRITE: Can write
