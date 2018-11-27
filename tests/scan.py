@@ -211,7 +211,7 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
 
 
 class ScanHeaderContentUnions(ScanHeaderContentTestCase):
-    """Test parsing of Union declarations."""
+    """Test parsing of union declarations."""
 
     def assertDecl(self, name, decl):
         d = '<UNION>\n<NAME>%s</NAME>\n%s</UNION>\n' % (name, decl)
@@ -239,7 +239,37 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
         self.assertDecl('Data', header)
 
 
-# VARIABLE
+class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
+    """Test parsing of variable declarations."""
+
+    def assertDecl(self, name, decl):
+        d = '<VARIABLE>\n<NAME>%s</NAME>\n%s</VARIABLE>\n' % (name, decl)
+        self.assertEqual([d], self.decls)
+        self.assertEqual([], self.types)
+
+    def test_FindsExternInt(self):
+        header = 'extern int var;'
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('var', header)
+
+    def test_FindsConstInt(self):
+        header = 'const int var = 42;'
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('var', header)
+
+    def test_FindsExernCharPtr(self):
+        header = 'extern char* var;'
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('var', header)
+
+    def test_FindConstCharPtr(self):
+        header = 'const char* var = "foo";'
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('var', header)
 
 
 if __name__ == '__main__':

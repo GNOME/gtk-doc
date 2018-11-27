@@ -434,34 +434,6 @@ gst_play_marshal_BUFFER__BOXED (gint * closure,
     gpointer marshal_data);
 
 
-/**
- * BUG_656773a:
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=656773
- */
-extern const char* const BUG_656773a;
-
-/**
- * BUG_656773b:
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=656773
- */
-extern const char* BUG_656773b;
-
-/**
- * BUG_656773c:
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=656773
- */
-const char* const BUG_656773c = "bug";
-
-/**
- * BUG_656946:
- *
- * https://bugzilla.gnome.org/show_bug.cgi?id=656946
- */
-extern short int BUG_656946;
-
 #ifndef G_GNUC_DEPRECATED
 #define G_GNUC_DEPRECATED
 #endif
