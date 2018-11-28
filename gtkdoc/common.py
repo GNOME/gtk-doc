@@ -538,7 +538,7 @@ def ParseFunctionDeclaration(declaration, typefunc, namefunc):
             param_num += 1
             continue
 
-        logging.warning('Cannnot parse args for function in "%s"', declaration)
+        logging.warning('Cannot parse args for function in "%s"', declaration)
         break
 
     return result
