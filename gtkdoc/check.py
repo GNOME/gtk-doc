@@ -70,8 +70,9 @@ def check_includes(filename):
 
 
 def get_variable(env, lines, variable):
-    value = env.get(variable,
-                    grep(r'^\s*' + variable + r'\s*=\s*(\S+)', lines, variable))
+    value = env.get(variable, None)
+    if value is None:
+        value = grep(r'^\s*' + variable + r'\s*=\s*(\S+)', lines, variable)
     return value
 
 
