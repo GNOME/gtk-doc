@@ -793,7 +793,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                     decl = re.sub(r'\s*\n\s*(?!$)', ' ', decl, flags=re.MULTILINE)
                     # consolidate whitespace at start/end of lines.
                     decl = decl.strip()
-                    ret_type = re.sub(r'/\*.*?\*/', '', ret_type)               # remove comments in ret type.
+                    ret_type = re.sub(r'/\*.*?\*/', '', ret_type).strip()       # remove comments in ret type.
                     if AddSymbolToList(slist, symbol):
                         decl_list.append('<FUNCTION>\n<NAME>%s</NAME>\n%s<RETURNS>%s</RETURNS>\n%s\n</FUNCTION>\n' %
                                          (symbol, deprecated, ret_type, decl))

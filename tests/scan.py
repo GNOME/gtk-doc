@@ -33,7 +33,8 @@ class ScanHeaderContentTestCase(unittest.TestCase):
         self.types = []
         self.options = argparse.Namespace(
             deprecated_guards='GTKDOC_TESTER_DISABLE_DEPRECATED',
-            ignore_decorators='')
+            ignore_decorators='',
+            rebuild_types=False)
 
     def scanHeaderContent(self, content):
         return scan.ScanHeaderContent(content, self.decls, self.types,
@@ -84,7 +85,8 @@ class ScanHeaderContent(ScanHeaderContentTestCase):
 class ScanHeaderContentEnum(ScanHeaderContentTestCase):
     """Test parsing of enum declarations."""
 
-    def assertDecl(self, name, decl):
+    def assertDecl(self, name, decl, slist):
+        self.assertEqual([name], slist)
         d = '<ENUM>\n<NAME>%s</NAME>\n%s</ENUM>\n' % (name, decl)
         self.assertEqual([d], self.decls)
         self.assertEqual([], self.types)
@@ -96,7 +98,7 @@ class ScanHeaderContentEnum(ScanHeaderContentTestCase):
             };""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('data', header)
+        self.assertDecl('data', header, slist)
 
     def test_FindsTypedefEnum(self):
         header = textwrap.dedent("""\
@@ -105,7 +107,7 @@ class ScanHeaderContentEnum(ScanHeaderContentTestCase):
             } Data;""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('Data', header)
+        self.assertDecl('Data', header, slist)
 
     def test_HandleEnumWithDeprecatedMember(self):
         header = textwrap.dedent("""\
@@ -118,7 +120,7 @@ class ScanHeaderContentEnum(ScanHeaderContentTestCase):
             };""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('data', header)
+        self.assertDecl('data', header, slist)
 
     def test_HandleDeprecatedInMemberName(self):
         header = textwrap.dedent("""\
@@ -128,16 +130,43 @@ class ScanHeaderContentEnum(ScanHeaderContentTestCase):
             } Data;""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('Data', header)
+        self.assertDecl('Data', header, slist)
 
 
-# FUNCTION
+class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
+    """Test parsing of function declarations."""
+
+    def assertDecl(self, name, ret, params, slist):
+        self.assertEqual([name], slist)
+        d = '<FUNCTION>\n<NAME>%s</NAME>\n<RETURNS>%s</RETURNS>\n%s\n</FUNCTION>\n' % (name, ret, params)
+        self.assertEqual([d], self.decls)
+        self.assertEqual([], self.types)
+
+    def test_FindsFunctionVoid(self):
+        header = 'void func();'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', 'void', '', slist)
+
+    def test_FindsFunctionVoidVoid(self):
+        header = 'void func(void);'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', 'void', 'void', slist)
+
+    # TODO: get rid of extra spaces
+    def test_FindsFunctionStrucVoidMultiline(self):
+        header = textwrap.dedent("""\
+            struct ret *
+            func (void);""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'struct ret  *', 'void', slist)
 
 
 class ScanHeaderContentMacros(ScanHeaderContentTestCase):
     """Test parsing of macro declarations."""
 
-    def assertDecl(self, name, decl):
+    def assertDecl(self, name, decl, slist):
+        self.assertEqual([name], slist)
         d = '<MACRO>\n<NAME>%s</NAME>\n%s</MACRO>\n' % (name, decl)
         self.assertEqual([d], self.decls)
         self.assertEqual([], self.types)
@@ -146,22 +175,19 @@ class ScanHeaderContentMacros(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([
             '#define FOO 1'
         ])
-        self.assertEqual(['FOO'], slist)
-        self.assertDecl('FOO', '#define FOO 1')
+        self.assertDecl('FOO', '#define FOO 1', slist)
 
     def test_FindsMacroExpression(self):
         slist, doc_comments = self.scanHeaderContent([
             '#define FOO (1 << 1)'
         ])
-        self.assertEqual(['FOO'], slist)
-        self.assertDecl('FOO', '#define FOO (1 << 1)')
+        self.assertDecl('FOO', '#define FOO (1 << 1)', slist)
 
     def test_FindsMacroFunction(self):
         slist, doc_comments = self.scanHeaderContent([
             '#define FOO(x) (x << 1)'
         ])
-        self.assertEqual(['FOO'], slist)
-        self.assertDecl('FOO', '#define FOO(x) (x << 1)')
+        self.assertDecl('FOO', '#define FOO(x) (x << 1)', slist)
 
     # TODO: test for a few variants
     def test_IgnoresInternalMacro(self):
@@ -182,15 +208,15 @@ class ScanHeaderContentMacros(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertEqual(1, len(doc_comments))
         self.assertIn('gtkdoc_tester_disable_deprecated', doc_comments)
-        self.assertEqual(['GTKDOC_TESTER_DISABLE_DEPRECATED'], slist)
         self.assertDecl('GTKDOC_TESTER_DISABLE_DEPRECATED',
-                        '#define GTKDOC_TESTER_DISABLE_DEPRECATED 1')
+                        '#define GTKDOC_TESTER_DISABLE_DEPRECATED 1', slist)
 
 
 class ScanHeaderContentStructs(ScanHeaderContentTestCase):
     """Test parsing of struct declarations."""
 
-    def assertDecl(self, name, decl):
+    def assertDecl(self, name, decl, slist):
+        self.assertEqual([name], slist)
         d = '<STRUCT>\n<NAME>%s</NAME>\n%s</STRUCT>\n' % (name, decl)
         self.assertEqual([d], self.decls)
         self.assertEqual([], self.types)
@@ -202,7 +228,7 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
             };""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('data', header)
+        self.assertDecl('data', header, slist)
 
     def test_FindsTypedefStruct(self):
         header = textwrap.dedent("""\
@@ -211,7 +237,7 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
             } Data;""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('Data', header)
+        self.assertDecl('Data', header, slist)
 
     def test_HandleStructWithDeprecatedMember(self):
         header = textwrap.dedent("""\
@@ -224,13 +250,14 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
             };""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('data', header)
+        self.assertDecl('data', header, slist)
 
 
 class ScanHeaderContentUnions(ScanHeaderContentTestCase):
     """Test parsing of union declarations."""
 
-    def assertDecl(self, name, decl):
+    def assertDecl(self, name, decl, slist):
+        self.assertEqual([name], slist)
         d = '<UNION>\n<NAME>%s</NAME>\n%s</UNION>\n' % (name, decl)
         self.assertEqual([d], self.decls)
         self.assertEqual([], self.types)
@@ -243,7 +270,7 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
             };""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('data', header)
+        self.assertDecl('data', header, slist)
 
     def test_FindsTypedefUnion(self):
         header = textwrap.dedent("""\
@@ -253,7 +280,7 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
             } Data;""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('Data', header)
+        self.assertDecl('Data', header, slist)
 
 
 # USER FUNCTION (aka function pointer types)
@@ -262,7 +289,8 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
 class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
     """Test parsing of variable declarations."""
 
-    def assertDecl(self, name, decl):
+    def assertDecl(self, name, decl, slist):
+        self.assertEqual([name], slist)
         d = '<VARIABLE>\n<NAME>%s</NAME>\n%s</VARIABLE>\n' % (name, decl)
         self.assertEqual([d], self.decls)
         self.assertEqual([], self.types)
@@ -271,25 +299,25 @@ class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
         header = 'extern int var;'
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('var', header)
+        self.assertDecl('var', header, slist)
 
     def test_FindsConstInt(self):
         header = 'const int var = 42;'
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('var', header)
+        self.assertDecl('var', header, slist)
 
     def test_FindsExernCharPtr(self):
         header = 'extern char* var;'
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('var', header)
+        self.assertDecl('var', header, slist)
 
     def test_FindConstCharPtr(self):
         header = 'const char* var = "foo";'
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('var', header)
+        self.assertDecl('var', header, slist)
 
 
 if __name__ == '__main__':
