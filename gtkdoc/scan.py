@@ -642,13 +642,13 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
                 if not previous_line_strip.startswith('G_INLINE_FUNC'):
                     if not previous_line_words or previous_line_words[0] != 'static':
-                        #                                          $ 1                                                                                                   $2
+                        #                                          $1                                                                                                    $2
                         pm = re.search(r'^\s*(?:\b(?:extern%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
                                        ignore_decorators, previous_line)
                         if pm:
                             ret_type = pm.group(1)
                             if pm.group(2):
-                                ret_type += ' ' + pm.group(2)
+                                ret_type += ' ' + pm.group(2).strip()
                             logging.info('Function  (2): "%s", Returns: "%s"', symbol, ret_type)
                             in_declaration = 'function'
                     else:

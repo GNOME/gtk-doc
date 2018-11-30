@@ -152,14 +152,13 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('func', 'void', 'void', slist)
 
-    # TODO: get rid of extra spaces
     def test_FindsFunctionStrucVoidMultiline(self):
         header = textwrap.dedent("""\
             struct ret *
             func (void);""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('func', 'struct ret  *', 'void', slist)
+        self.assertDecl('func', 'struct ret *', 'void', slist)
 
 
 class ScanHeaderContentMacros(ScanHeaderContentTestCase):
@@ -326,6 +325,6 @@ if __name__ == '__main__':
     # from gtkdoc import common
     # common.setup_logging()
     #
-    # t = ScanHeaderContentUnions()
+    # t = ScanHeaderContentFunctions()
     # t.setUp()
-    # t.test_FindsUnion()
+    # t.test_FindsFunctionStrucVoidMultiline()
