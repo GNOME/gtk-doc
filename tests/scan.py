@@ -147,18 +147,32 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('func', 'void', '', slist)
 
-    def test_FindsFunctionVoidVoid(self):
+    def test_FindsFunctionVoid_Void(self):
         header = 'void func(void);'
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('func', 'void', 'void', slist)
 
-    def test_FindsFunctionStrucVoidMultiline(self):
+    def test_FindsFunctionStruct_Void(self):
         header = textwrap.dedent("""\
             struct ret *
             func (void);""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertDecl('func', 'struct ret *', 'void', slist)
+
+    def test_FindsFunctionVoid_IntWithLinebreak(self):
+        header = textwrap.dedent("""\
+            void func (int
+              pid);""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'void', 'int pid', slist)
+
+    def test_FindsFunctionConstCharPtConstPtr_Void(self):
+        header = 'const char* const * func(void);'
+        slist, doc_comments = self.scanHeaderContent([header])
+        # TODO: remove the *
+        self.assertDecl('func', 'const char * const *', 'void', slist)
 
 
 class ScanHeaderContentMacros(ScanHeaderContentTestCase):
@@ -188,10 +202,9 @@ class ScanHeaderContentMacros(ScanHeaderContentTestCase):
         ])
         self.assertDecl('FOO', '#define FOO(x) (x << 1)', slist)
 
-    # TODO: test for a few variants
     def test_IgnoresInternalMacro(self):
         slist, doc_comments = self.scanHeaderContent([
-            '#define _BUG_000000b (a) (a*a)'
+            '#define _INTERNAL (a) (a)'
         ])
         self.assertNoDeclFound(slist)
 
@@ -327,4 +340,4 @@ if __name__ == '__main__':
     #
     # t = ScanHeaderContentFunctions()
     # t.setUp()
-    # t.test_FindsFunctionStrucVoidMultiline()
+    # t.test_FindsFunctionConstCharPtConstPtr_Void()

@@ -68,24 +68,7 @@ GLIB_VAR guint64 (*bug_477532) (void);
 void bug_141869_a (unsigned pid);
 void bug_141869_b (signed pid);
 
-void bug_379466 (int
-  pid);
-
 int bug_380824 (int arg);
-
-
-/**
- * bug_411739_rettype:
- * @test: field
- *
- * http://bugzilla.gnome.org/show_bug.cgi?id=411739
- */
-struct bug_411739_rettype {
-  int test;
-};
-
-struct bug_411739_rettype *
-bug_411739 (void);
 
 void bug_419997 (int const_values);
 
@@ -93,8 +76,6 @@ void bug_445693 (unsigned long pid);
 
 G_CONST_RETURN gchar* G_CONST_RETURN *
 bug_471014 (void);
-
-const char* const * bug_552602 (void);
 
 /**
  * Bug446648:
