@@ -48,7 +48,7 @@ class TestCheck(unittest.TestCase):
 
     def test_get_variable_empty_file(self):
         with self.assertRaises(check.FileFormatError) as ctx:
-            check.get_variable({'foo': 'bar'}, [], 'foo')
+            check.get_variable({}, [], 'foo')
         self.assertEqual(str(ctx.exception), 'foo')
 
 
