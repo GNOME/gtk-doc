@@ -45,6 +45,8 @@ BASIC_TYPES = [
     "long int",
     "signed long int",
     "unsigned long int",
+    "signed",
+    "unsigned",
     "float",
     "double",
     "long double",

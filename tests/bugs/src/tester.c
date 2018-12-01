@@ -21,38 +21,6 @@
 #include "tester.h"
 
 /**
- * bug_141869_a:
- * @pid: arg
- *
- * http://bugzilla.gnome.org/show_bug.cgi?id=141869
- */
-void bug_141869_a (unsigned pid) {
-  /* just silence a compiler warning */
-  bug_481811((double)pid);
-}
-
-/**
- * bug_141869_b:
- * @pid: arg
- *
- * http://bugzilla.gnome.org/show_bug.cgi?id=141869
- */
-void bug_141869_b (signed pid) {
-}
-
-
-/**
- * bug_379466:
- * @pid: arg
- *
- * http://bugzilla.gnome.org/show_bug.cgi?id=379466
- */
-void bug_379466 (int
-  pid) {
-}
-
-
-/**
  * bug_380824:
  * @arg: arg
  *
@@ -65,19 +33,6 @@ void bug_379466 (int
  */
 int bug_380824 (int arg) {
   return 0;
-}
-
-
-/**
- * bug_411739:
- *
- * http://bugzilla.gnome.org/show_bug.cgi?id=411739
- *
- * Returns: result
- */
-struct bug_411739_rettype *
-bug_411739 (void) {
-  return NULL;
 }
 
 
@@ -109,18 +64,6 @@ void bug_445693 (unsigned long pid) {
  * Returns: result
  */
 G_CONST_RETURN gchar* G_CONST_RETURN * bug_471014 (void) {
-  return NULL;
-}
-
-
-/**
- * bug_552602:
- *
- * http://bugzilla.gnome.org/show_bug.cgi?id=552602
- *
- * Returns: result
- */
-const char* const * bug_552602 (void) {
   return NULL;
 }
 

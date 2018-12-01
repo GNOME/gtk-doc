@@ -63,11 +63,6 @@ struct _bug_460127 {
  */
 GLIB_VAR guint64 (*bug_477532) (void);
 
-
-
-void bug_141869_a (unsigned pid);
-void bug_141869_b (signed pid);
-
 int bug_380824 (int arg);
 
 void bug_419997 (int const_values);
