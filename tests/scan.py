@@ -23,6 +23,34 @@ import textwrap
 import unittest
 
 from gtkdoc import scan
+from parameterized import parameterized
+
+
+BASIC_TYPES = [
+    "char",
+    "signed char",
+    "unsigned char",
+    "short",
+    "signed short",
+    "unsigned short",
+    "long",
+    "signed long",
+    "unsigned long",
+    "int",
+    "signed int",
+    "unsigned int",
+    "short int",
+    "signed short int",
+    "unsigned short int",
+    "long int",
+    "signed long int",
+    "unsigned long int",
+    "float",
+    "double",
+    "long double",
+]
+
+BASIC_TYPES_WITH_VOID = ['void'] + BASIC_TYPES
 
 
 class ScanHeaderContentTestCase(unittest.TestCase):
@@ -147,10 +175,35 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('func', 'void', '', slist)
 
-    def test_FindsFunctionVoid_Void(self):
-        header = 'void func(void);'
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES_WITH_VOID])
+    def test_HandlesReturnValue(self, _, ret_type):
+        header = '%s func(void);' % ret_type
         slist, doc_comments = self.scanHeaderContent([header])
-        self.assertDecl('func', 'void', 'void', slist)
+        self.assertDecl('func', ret_type, 'void', slist)
+
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES_WITH_VOID])
+    def test_HandlesReturnValuePtr(self, _, ret_type):
+        header = '%s* func(void);' % ret_type
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', ret_type + ' *', 'void', slist)
+
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES_WITH_VOID])
+    def test_HandlesReturnValueConstPtr(self, _, ret_type):
+        header = 'const %s* func(void);' % ret_type
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', 'const ' + ret_type + ' *', 'void', slist)
+
+    # TODO: also do parametrized?
+    def test_FindsFunctionConstCharPtConstPtr_Void(self):
+        header = 'const char* const * func(void);'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', 'const char * const *', 'void', slist)
+
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES])
+    def test_HandlesParameter(self, _, param_type):
+        header = 'void func(%s);' % param_type
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', 'void', param_type, slist)
 
     def test_FindsFunctionStruct_Void(self):
         header = textwrap.dedent("""\
@@ -163,16 +216,10 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
     def test_FindsFunctionVoid_IntWithLinebreak(self):
         header = textwrap.dedent("""\
             void func (int
-              pid);""")
+              a);""")
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
-        self.assertDecl('func', 'void', 'int pid', slist)
-
-    def test_FindsFunctionConstCharPtConstPtr_Void(self):
-        header = 'const char* const * func(void);'
-        slist, doc_comments = self.scanHeaderContent([header])
-        # TODO: remove the *
-        self.assertDecl('func', 'const char * const *', 'void', slist)
+        self.assertDecl('func', 'void', 'int a', slist)
 
 
 class ScanHeaderContentMacros(ScanHeaderContentTestCase):
