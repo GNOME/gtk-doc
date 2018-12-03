@@ -51,6 +51,10 @@ BASIC_TYPES = [
     "double",
     "long double",
 ]
+# TODO(ensonic): fix for variables
+#     "enum e",
+#    "struct s",
+#    "union u",
 
 BASIC_TYPES_WITH_VOID = ['void'] + BASIC_TYPES
 
@@ -207,6 +211,17 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('func', 'void', param_type, slist)
 
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES])
+    def test_HandlesNamedParameter(self, _, param_type):
+        header = 'void func(%s a);' % param_type
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', 'void', param_type + ' a', slist)
+
+    def test_HandlesMultipleParameterd(self):
+        header = 'int func(char c, long l);'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', 'int', 'char c, long l', slist)
+
     def test_FindsFunctionStruct_Void(self):
         header = textwrap.dedent("""\
             struct ret *
@@ -356,8 +371,16 @@ class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
         self.assertEqual([d], self.decls)
         self.assertEqual([], self.types)
 
-    def test_FindsExternInt(self):
-        header = 'extern int var;'
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES])
+    def test_FindsExternVar(self, _, var_type):
+        header = 'extern %s var;' % var_type
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('var', header, slist)
+
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES])
+    def test_FindsExternPtrVar(self, _, var_type):
+        header = 'extern %s* var;' % var_type
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertDecl('var', header, slist)
@@ -368,14 +391,15 @@ class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('var', header, slist)
 
-    def test_FindsExernCharPtr(self):
-        header = 'extern char* var;'
+    def test_FindConstCharPtr(self):
+        header = 'const char* var = "foo";'
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertDecl('var', header, slist)
 
-    def test_FindConstCharPtr(self):
-        header = 'const char* var = "foo";'
+    def debug(self):
+        # for test_FindsExternVar + test_FindsExternPtrVar
+        header = 'extern struct s var;'
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertDecl('var', header, slist)
@@ -387,6 +411,6 @@ if __name__ == '__main__':
     # from gtkdoc import common
     # common.setup_logging()
     #
-    # t = ScanHeaderContentFunctions()
+    # t = ScanHeaderContentVariabless()
     # t.setUp()
-    # t.test_FindsFunctionConstCharPtConstPtr_Void()
+    # t.debug()
