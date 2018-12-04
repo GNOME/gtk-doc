@@ -40,6 +40,126 @@ import shutil
 
 from . import common
 
+# Matchers for current line
+CLINE_MATCHER = [
+    # 0: MACROS
+    re.compile(
+        r"""^\s*\#\s*define\s+
+        (\w+)               # 1: name
+        """, re.VERBOSE),
+    # 1-4: TYPEDEF'D FUNCTIONS
+    re.compile(
+        r"""^\s*typedef\s+
+        ((?:const\s+|G_CONST_RETURN\s+)?\w+) # 1: 1st const
+        (\s+const)?\s*                       # 2: 2nd const
+        (\**)\s*                             # 3: ptr
+        \(\*\s*
+          (\w+)                              # 4: name
+        \)\s*\(""", re.VERBOSE),
+    re.compile(
+        r"""^\s*
+        ((?:const\s+|G_CONST_RETURN\s+)?\w+) # 1: 1st const
+        (\s+const)?\s*                       # 2: 2nd const
+        (\**)\s*                             # 3: ptr
+        \(\*\s*
+          (\w+)                              # 4: name
+        \)\s*\(""", re.VERBOSE),
+    re.compile(
+        r"""^\s*
+        (\**)\s*                             # 1: ptr
+        \(\*\s*
+          (\w+)                              # 2: name
+        \)\s*\(""", re.VERBOSE),
+    # 4: FUNCTION POINTER VARIABLES
+    None,  # in ScanHeaderContent()
+    # 5-7: ENUMS
+    re.compile(
+        r"""^\s*enum\s+
+        _?(\w+)                              # 1: name
+        \s+\{""", re.VERBOSE),
+    re.compile(r'^\s*typedef\s+enum\s+_?(\w+)\s+\1\s*;'),
+    re.compile(r'^\s*typedef\s+enum'),
+    # 8-12: STRUCTS AND UNIONS
+    re.compile(
+        r"""^\s*typedef\s+
+        (struct|union)\s+                    # 1: struct/union
+        _(\w+)                               # 2: name
+        \s+\2\s*;""", re.VERBOSE),
+    re.compile(r'^\s*(?:struct|union)\s+_(\w+)\s*;'),
+    re.compile(
+        r"""^\s*
+        (struct|union)\s+                    # 1: struct/union
+        (\w+)                                # 2: name
+        \s*;""", re.VERBOSE),
+    re.compile(
+        r"""^\s*typedef\s+
+        (struct|union)\s*
+        \w*\s*{""", re.VERBOSE),
+    # 13-15: OTHER TYPEDEFS
+    re.compile(
+        r"""^\s*typedef\s+
+        (?:struct|union)\s+\w+[\s\*]+
+        (\w+)                                # 1: name
+        \s*;""", re.VERBOSE),
+    re.compile(
+        r"""^\s*
+        (?:G_GNUC_EXTENSION\s+)?
+        typedef\s+
+        (.+[\s\*])                           # 1:
+        (\w+)                                # 2: name
+        (?:\s*\[[^\]]+\])*
+        \s*;""", re.VERBOSE),
+    re.compile(r'^\s*typedef\s+'),
+    # 16: VARIABLES (extern'ed variables)
+    None,  # in ScanHeaderContent()
+    # 17: VARIABLES
+    re.compile(
+        r"""^\s*
+        (?:(?:const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)
+        (?:\s+\*+|\*+|\s)\s*
+        (?:const\s+)*
+        ([A-Za-z]\w*)                        # 1: name
+        \s*\=""", re.VERBOSE),
+    # 18: G_DECLARE_*
+    re.compile(
+        r""".*G_DECLARE_
+        (FINAL_TYPE|DERIVABLE_TYPE|INTERFACE) # 1: variant
+        \s*\(""", re.VERBOSE),
+    # 19-22: FUNCTIONS
+    None,  # in ScanHeaderContent()
+    None,  # in ScanHeaderContent()
+    re.compile(r'^\s*([A-Za-z]\w*)\s*\('),
+    re.compile(r'^\s*\('),
+    # 23-24: STRUCTS
+    re.compile(r'^\s*struct\s+_?(\w+)\s*\*'),
+    re.compile(r'^\s*struct\s+_?(\w+)'),
+    # 25-26: UNIONS
+    re.compile(r'^\s*union\s+_(\w+)\s*\*'),
+    re.compile(r'^\s*union\s+_?(\w+)'),
+]
+
+# Matchers for previous line
+PLINE_MATCHER = [
+    # 0-1: TYPEDEF'D FUNCTIONS
+    re.compile(
+        r"""^\s*typedef\s*
+        ((?:const\s+|G_CONST_RETURN\s+)?\w+) # 1: 1st const
+        (\s+const)?\s*                       # 2: 2nd const
+        """, re.VERBOSE),
+    re.compile(r'^\s*typedef\s*'),
+    # 2-5 :FUNCTIONS
+    None,  # in ScanHeaderContent()
+    None,  # in ScanHeaderContent()
+    None,  # in ScanHeaderContent()
+    None,  # in ScanHeaderContent()
+]
+
+# Matchers for sub expressions
+SUB_MATCHER = [
+    # 0: STRUCTS AND UNIONS
+    re.compile(r'^(\S+)(Class|Iface|Interface)\b'),
+]
+
 
 def Run(options):
     logging.info('options: %s', str(options.__dict__))
@@ -317,6 +437,68 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     deprecated = ''
     doc_comment = ''
 
+    # avoid generating regex with |'' (matching no string)
+    ignore_decorators = ''
+    if options.ignore_decorators:
+        ignore_decorators = '|' + options.ignore_decorators
+
+    CLINE_MATCHER[4] = re.compile(
+        r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+        ((?:const\s+|G_CONST_RETURN\s+)?\w+)           # 1: 1st const
+        (\s+const)?\s*                                 # 2: 2nd const
+        (\**)\s*                                       # 3: ptr
+        \(\*\s*
+          (\w+)                                        # 4: name
+        \)\s*\(""" % ignore_decorators, re.VERBOSE)
+    CLINE_MATCHER[15] = re.compile(
+        r"""^\s*
+        (?:extern|[A-Za-z_]+VAR%s)\s+
+        (?:(?:const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)
+        (?:\s+\*+|\*+|\s)\s*
+        (?:const\s+)*
+        ([A-Za-z]\w*)                                  # 1: name
+        \s*;""" % ignore_decorators, re.VERBOSE)
+    CLINE_MATCHER[18] = re.compile(
+        r"""^\s*
+        (?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: return type
+        ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*                                                 # 2: .. cont'
+        (_[A-Za-z]\w*)                                                                                          # 3: name
+        \s*\(""" % ignore_decorators, re.VERBOSE)
+    CLINE_MATCHER[19] = re.compile(
+        r"""^\s*
+        (?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: return type
+        ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*                                                 # 2: .. cont'
+        ([A-Za-z]\w*)                                                                                           # 3: name
+        \s*\(""" % ignore_decorators, re.VERBOSE)
+
+    PLINE_MATCHER[2] = re.compile(
+        r"""^\s*
+        (?:\b(?:extern%s)\s*)*
+        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: ret type
+        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)                                                          # 2: .. cont'
+        \s*$""" % ignore_decorators, re.VERBOSE)
+
+    PLINE_MATCHER[3] = re.compile(
+        r"""^\s*(?:\b(?:extern|static|inline%s)\s*)*
+        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: ret type
+        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)                                                          # 2: .. cont'
+        \s*$""" % ignore_decorators, re.VERBOSE)
+
+    PLINE_MATCHER[4] = re.compile(
+        r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: ret type
+        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)                                                          # 2: .. cont'
+        \s*$""" % ignore_decorators, re.VERBOSE)
+
+    PLINE_MATCHER[5] = re.compile(
+        r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)
+        (\s+\*+|\*+|\s)\s*
+        ([A-Za-z]\w*)
+        \s*$""" % ignore_decorators, re.VERBOSE)
+
     for line in input_lines:
         # If this is a private header, skip it.
         # TODO: consider scanning this first, so that we don't modify: decl_list
@@ -398,51 +580,13 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
             logging.info('no decl: %s', line.strip())
 
-            # avoid generating regex with |'' (matching no string)
-            ignore_decorators = ''
-            if options.ignore_decorators:
-                ignore_decorators = '|' + options.ignore_decorators
-
-            m = re.search(r'^\s*#\s*define\s+(\w+)', line)
-            #                   $1                                $3            $4             $5
-            m2 = re.search(
-                r'^\s*typedef\s+((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(', line)
-            #                    $1                                $3            $4             $5
-            m3 = re.search(r'^\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(', line)
-            #                    $1            $2
-            m4 = re.search(r'^\s*(\**)\s*\(\*\s*(\w+)\)\s*\(', line)
-            #                              $1                                $3
-            m5 = re.search(r'^\s*typedef\s*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*', previous_line)
-            #                                              $1                                $3            $4             $5
-            m6 = re.search(
-                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((const\s+|G_CONST_RETURN\s+)?\w+)(\s+const)?\s*(\**)\s*\(\*\s*(\w+)\)\s*\(' % ignore_decorators, line)
-            m7 = re.search(r'^\s*enum\s+_?(\w+)\s+\{', line)
-            m8 = re.search(r'^\s*typedef\s+enum', line)
-            m9 = re.search(r'^\s*typedef\s+(struct|union)\s+_(\w+)\s+\2\s*;', line)
-            m10 = re.search(r'^\s*(struct|union)\s+(\w+)\s*;', line)
-            m11 = re.search(r'^\s*typedef\s+(struct|union)\s*\w*\s*{', line)
-            m12 = re.search(r'^\s*typedef\s+(?:struct|union)\s+\w+[\s\*]+(\w+)\s*;', line)
-            m13 = re.search(r'^\s*(G_GNUC_EXTENSION\s+)?typedef\s+(.+[\s\*])(\w+)(\s*\[[^\]]+\])*\s*;', line)
-            m14 = re.search(
-                r'^\s*(extern|[A-Za-z_]+VAR%s)\s+((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*;' % ignore_decorators, line)
-            m15 = re.search(
-                r'^\s*((const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)(\s+\*+|\*+|\s)\s*(const\s+)*([A-Za-z]\w*)\s*\=', line)
-            m16 = re.search(r'.*G_DECLARE_(FINAL_TYPE|DERIVABLE_TYPE|INTERFACE)\s*\(', line)
-            #                                             $1                                                                                                    $2                                                     $3
-            m17 = re.search(
-                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*(_[A-Za-z]\w*)\s*\(' % ignore_decorators, line)
-            #                                             $1                                                                                                    $2                                                     $3
-            m18 = re.search(
-                r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*([A-Za-z]\w*)\s*\(' % ignore_decorators, line)
-            m19 = re.search(r'^\s*([A-Za-z]\w*)\s*\(', line)
-            m20 = re.search(r'^\s*\(', line)
-            m21 = re.search(r'^\s*struct\s+_?(\w+)', line)
-            m22 = re.search(r'^\s*union\s+_?(\w+)', line)
+            cm = [m.match(line) for m in CLINE_MATCHER]
+            pm = [m.match(previous_line) for m in PLINE_MATCHER]
 
             # MACROS
 
-            if m:
-                symbol = m.group(1)
+            if cm[0]:
+                symbol = cm[0].group(1)
                 decl = line
                 # We assume all macros which start with '_' are private.
                 # We also try to skip the first macro if it looks like the
@@ -462,57 +606,58 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 first_macro = 0
 
             # TYPEDEF'D FUNCTIONS (i.e. user functions)
-            elif m2:
-                p3 = m2.group(3) or ''
-                ret_type = "%s%s %s" % (m2.group(1), p3, m2.group(4))
-                symbol = m2.group(5)
-                decl = line[m2.end():]
+            elif cm[1]:
+                p2 = cm[1].group(2) or ''
+                ret_type = "%s%s %s" % (cm[1].group(1), p2, cm[1].group(3))
+                symbol = cm[1].group(4)
+                decl = line[cm[1].end():]
                 in_declaration = 'user_function'
                 logging.info('user function (1): "%s", Returns: "%s"', symbol, ret_type)
 
-            elif re.search(r'^\s*typedef\s*', previous_line) and m3:
-                p3 = m3.group(3) or ''
-                ret_type = '%s%s %s' % (m3.group(1), p3, m3.group(4))
-                symbol = m3.group(5)
-                decl = line[m3.end():]
+            elif pm[1] and cm[2]:
+                p2 = cm[2].group(2) or ''
+                ret_type = '%s%s %s' % (cm[2].group(1), p2, cm[2].group(3))
+                symbol = cm[2].group(4)
+                decl = line[cm[2].end():]
                 in_declaration = 'user_function'
                 logging.info('user function (2): "%s", Returns: "%s"', symbol, ret_type)
 
-            elif re.search(r'^\s*typedef\s*', previous_line) and m4:
-                ret_type = m4.group(1)
-                symbol = m4.group(2)
-                decl = line[m4.end():]
-                if m5:
-                    p3 = m5.group(3) or ''
-                    ret_type = "%s%s %s" % (m5.group(1), p3, ret_type)
+            elif pm[1] and cm[3]:
+                ret_type = cm[3].group(1)
+                symbol = cm[3].group(2)
+                decl = line[cm[3].end():]
+                if pm[0]:
+                    p2 = pm[0].group(2) or ''
+                    ret_type = "%s%s %s" % (pm[0].group(1), p2, ret_type)
                     in_declaration = 'user_function'
                     logging.info('user function (3): "%s", Returns: "%s"', symbol, ret_type)
 
             # FUNCTION POINTER VARIABLES
-            elif m6:
-                p3 = m6.group(3) or ''
-                ret_type = '%s%s %s' % (m6.group(1), p3, m6.group(4))
-                symbol = m6.group(5)
-                decl = line[m6.end():]
+            elif cm[4]:
+                p2 = cm[4].group(2) or ''
+                ret_type = '%s%s %s' % (cm[4].group(1), p2, cm[4].group(3))
+                symbol = cm[4].group(4)
+                decl = line[cm[4].end():]
                 in_declaration = 'user_function'
                 logging.info('function pointer variable: "%s", Returns: "%s"', symbol, ret_type)
 
             # ENUMS
 
-            elif m7:
+            elif cm[5]:
                 re.sub(r'^\s*enum\s+_?(\w+)\s+\{', r'enum \1 {', line)
                 # We assume that 'enum _<enum_name> {' is really the
                 # declaration of enum <enum_name>.
-                symbol = m7.group(1)
+                symbol = cm[5].group(1)
                 decl = line
                 in_declaration = 'enum'
                 logging.info('plain enum: "%s"', symbol)
 
-            elif re.search(r'^\s*typedef\s+enum\s+_?(\w+)\s+\1\s*;', line):
+            elif cm[6]:
                 # We skip 'typedef enum <enum_name> _<enum_name>;' as the enum will
                 # be declared elsewhere.
                 logging.info('skipping enum typedef: "%s"', line)
-            elif m8:
+
+            elif cm[7]:
                 symbol = ''
                 decl = line
                 in_declaration = 'enum'
@@ -520,62 +665,63 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
             # STRUCTS AND UNIONS
 
-            elif m9:
+            elif cm[8]:
                 # We've found a 'typedef struct _<name> <name>;'
                 # This could be an opaque data structure, so we output an
                 # empty declaration. If the structure is actually found that
                 # will override this.
-                structsym = m9.group(1).upper()
-                logging.info('%s typedef: "%s"', structsym, m9.group(2))
-                forward_decls[m9.group(2)] = '<%s>\n<NAME>%s</NAME>\n%s</%s>\n' % (
-                    structsym, m9.group(2), deprecated, structsym)
+                structsym = cm[8].group(1).upper()
+                logging.info('%s typedef: "%s"', structsym, cm[8].group(2))
+                forward_decls[cm[8].group(2)] = '<%s>\n<NAME>%s</NAME>\n%s</%s>\n' % (
+                    structsym, cm[8].group(2), deprecated, structsym)
 
-                bm = re.search(r'^(\S+)(Class|Iface|Interface)\b', m9.group(2))
-                if bm:
-                    objectname = bm.group(1)
+                m = SUB_MATCHER[0].match(cm[8].group(2))
+                if m:
+                    objectname = m.group(1)
                     logging.info('Found object: "%s"', objectname)
                     title = '<TITLE>%s</TITLE>' % objectname
 
-            elif re.search(r'^\s*(?:struct|union)\s+_(\w+)\s*;', line):
+            elif cm[9]:
                 # Skip private structs/unions.
                 logging.info('private struct/union')
 
-            elif m10:
+            elif cm[10]:
                 # Do a similar thing for normal structs as for typedefs above.
                 # But we output the declaration as well in this case, so we
                 # can differentiate it from a typedef.
-                structsym = m10.group(1).upper()
-                logging.info('%s:%s', structsym, m10.group(2))
-                forward_decls[m10.group(2)] = '<%s>\n<NAME>%s</NAME>\n%s%s</%s>\n' % (
-                    structsym, m10.group(2), line, deprecated, structsym)
+                structsym = cm[10].group(1).upper()
+                logging.info('%s:%s', structsym, cm[10].group(2))
+                forward_decls[cm[10].group(2)] = '<%s>\n<NAME>%s</NAME>\n%s%s</%s>\n' % (
+                    structsym, cm[10].group(2), line, deprecated, structsym)
 
-            elif m11:
+            elif cm[11]:
                 symbol = ''
                 decl = line
                 level = 0
-                in_declaration = m11.group(1)
+                in_declaration = cm[11].group(1)
                 logging.info('typedef struct/union "%s"', in_declaration)
 
             # OTHER TYPEDEFS
 
-            elif m12:
-                logging.info('Found struct/union(*) typedef "%s": "%s"', m12.group(1), line)
-                if AddSymbolToList(slist, m12.group(1)):
-                    decl_list.append('<TYPEDEF>\n<NAME>%s</NAME>\n%s%s</TYPEDEF>\n' % (m12.group(1), deprecated, line))
+            elif cm[12]:
+                logging.info('Found struct/union(*) typedef "%s": "%s"', cm[12].group(1), line)
+                if AddSymbolToList(slist, cm[12].group(1)):
+                    decl_list.append('<TYPEDEF>\n<NAME>%s</NAME>\n%s%s</TYPEDEF>\n' %
+                                     (cm[12].group(1), deprecated, line))
 
-            elif m13:
-                if m13.group(2).split()[0] not in ('struct', 'union'):
+            elif cm[13]:
+                if cm[13].group(1).split()[0] not in ('struct', 'union'):
                     logging.info('Found typedef: "%s"', line)
-                    if AddSymbolToList(slist, m13.group(3)):
+                    if AddSymbolToList(slist, cm[13].group(2)):
                         decl_list.append(
-                            '<TYPEDEF>\n<NAME>%s</NAME>\n%s%s</TYPEDEF>\n' % (m13.group(3), deprecated, line))
-            elif re.search(r'^\s*typedef\s+', line):
+                            '<TYPEDEF>\n<NAME>%s</NAME>\n%s%s</TYPEDEF>\n' % (cm[13].group(2), deprecated, line))
+            elif cm[14]:
                 logging.info('Skipping typedef: "%s"', line)
 
             # VARIABLES (extern'ed variables)
 
-            elif m14:
-                symbol = m14.group(6)
+            elif cm[15]:
+                symbol = cm[15].group(1)
                 line = re.sub(r'^\s*([A-Za-z_]+VAR)\b', r'extern', line)
                 decl = line
                 logging.info('Possible extern var "%s": "%s"', symbol, decl)
@@ -584,8 +730,8 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
             # VARIABLES
 
-            elif m15:
-                symbol = m15.group(5)
+            elif cm[16]:
+                symbol = cm[16].group(1)
                 decl = line
                 logging.info('Possible global var" %s": "%s"', symbol, decl)
                 if AddSymbolToList(slist, symbol):
@@ -593,22 +739,21 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
             # G_DECLARE_*
 
-            elif m16:
+            elif cm[17]:
                 in_declaration = 'g-declare'
-                symbol = 'G_DECLARE_' + m16.group(1)
-                decl = line[m16.end():]
+                symbol = 'G_DECLARE_' + cm[17].group(1)
+                decl = line[cm[17].end():]
 
             # FUNCTIONS
 
-            # We assume that functions which start with '_' are private, so
-            # we skip them.
-            elif m17:
-                ret_type = m17.group(1)
-                if m17.group(2):
-                    ret_type += ' ' + m17.group(2)
-                symbol = m17.group(3)
-                decl = line[m17.end():]
-                logging.info('internal Function: "%s", Returns: "%s""%s"', symbol, m17.group(1), m17.group(2))
+            elif cm[18]:
+                # We assume that functions starting with '_' are private and skip them.
+                ret_type = cm[18].group(1)
+                if cm[18].group(2):
+                    ret_type += ' ' + cm[18].group(2)
+                symbol = cm[18].group(3)
+                decl = line[cm[18].end():]
+                logging.info('internal Function: "%s", Returns: "%s""%s"', symbol, cm[18].group(1), cm[18].group(2))
                 in_declaration = 'function'
                 internal = 1
                 if line.strip().startswith('G_INLINE_FUNC'):
@@ -616,13 +761,13 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                     # now we we need to skip a whole { } block
                     skip_block = 1
 
-            elif m18:
-                ret_type = m18.group(1)
-                if m18.group(2):
-                    ret_type += ' ' + m18.group(2)
-                symbol = m18.group(3)
-                decl = line[m18.end():]
-                logging.info('Function (1): "%s", Returns: "%s""%s"', symbol, m18.group(1), m18.group(2))
+            elif cm[19]:
+                ret_type = cm[19].group(1)
+                if cm[19].group(2):
+                    ret_type += ' ' + cm[19].group(2)
+                symbol = cm[19].group(3)
+                decl = line[cm[19].end():]
+                logging.info('Function (1): "%s", Returns: "%s""%s"', symbol, cm[19].group(1), cm[19].group(2))
                 in_declaration = 'function'
                 if line.strip().startswith('G_INLINE_FUNC'):
                     logging.info('skip block after inline function')
@@ -633,35 +778,29 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
             # the previous line. But we don't want to catch complete functions
             # which have been declared G_INLINE_FUNC, e.g. g_bit_nth_lsf in
             # glib, or 'static inline' functions.
-            elif m19:
-                symbol = m19.group(1)
-                decl = line[m19.end():]
+            elif cm[20]:
+                symbol = cm[20].group(1)
+                decl = line[cm[20].end():]
 
                 previous_line_strip = previous_line.strip()
                 previous_line_words = previous_line_strip.split()
 
                 if not previous_line_strip.startswith('G_INLINE_FUNC'):
                     if not previous_line_words or previous_line_words[0] != 'static':
-                        #                                          $1                                                                                                    $2
-                        pm = re.search(r'^\s*(?:\b(?:extern%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
-                                       ignore_decorators, previous_line)
-                        if pm:
-                            ret_type = pm.group(1)
-                            if pm.group(2):
-                                ret_type += ' ' + pm.group(2).strip()
+                        if pm[2]:
+                            ret_type = pm[2].group(1)
+                            if pm[2].group(2):
+                                ret_type += ' ' + pm[2].group(2).strip()
                             logging.info('Function  (2): "%s", Returns: "%s"', symbol, ret_type)
                             in_declaration = 'function'
                     else:
                         logging.info('skip block after inline function')
                         # now we we need to skip a whole { } block
                         skip_block = 1
-                        #                                                        $1                                                                                                    $2
-                        pm = re.search(r'^\s*(?:\b(?:extern|static|inline%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
-                                       ignore_decorators, previous_line)
-                        if pm:
-                            ret_type = pm.group(1)
-                            if pm.group(2):
-                                ret_type += ' ' + pm.group(2)
+                        if pm[3]:
+                            ret_type = pm[3].group(1)
+                            if pm[3].group(2):
+                                ret_type += ' ' + pm[3].group(2)
                             logging.info('Function  (3): "%s", Returns: "%s"', symbol, ret_type)
                             in_declaration = 'function'
                 else:
@@ -669,27 +808,29 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                         logging.info('skip block after inline function')
                         # now we we need to skip a whole { } block
                         skip_block = 1
-                        #                                                         $1                                                                                                   $2
-                        pm = re.search(r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*$' %
-                                       ignore_decorators, previous_line)
-                        if pm:
-                            ret_type = pm.group(1)
-                            if pm.group(2):
-                                ret_type += ' ' + pm.group(2)
+                        if pm[4]:
+                            ret_type = pm[4].group(1)
+                            if pm[4].group(2):
+                                ret_type += ' ' + pm[4].group(2)
                             logging.info('Function (4): "%s", Returns: "%s"', symbol, ret_type)
                             in_declaration = 'function'
 
             # Try to catch function declarations with the return type and name
             # on the previous line(s), and the start of the parameters on this.
-            elif m20:
-                decl = line[m20.end():]
-                pm = re.search(
-                    r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)(\s+\*+|\*+|\s)\s*([A-Za-z]\w*)\s*$' % ignore_decorators, previous_line)
-                ppm = re.search(r'^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*\w+(?:\**\s+\**(?:const|G_CONST_RETURN))?(?:\s+|\s*\*+))\s*$' %
-                                ignore_decorators, pre_previous_line)
-                if pm:
-                    ret_type = pm.group(1) + ' ' + pm.group(2)
-                    symbol = pm.group(3)
+            elif cm[21]:
+                decl = line[cm[21].end():]
+                ppm = re.search(
+                    r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+                    (
+                      (?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*
+                      \w+
+                      (?:\**\s+\**(?:const|G_CONST_RETURN))?
+                      (?:\s+|\s*\*+)
+                    )\s*$""" % ignore_decorators, pre_previous_line, re.VERBOSE)
+
+                if pm[5]:
+                    ret_type = pm[5].group(1) + ' ' + pm[5].group(2)
+                    symbol = pm[5].group(3)
                     in_declaration = 'function'
                     logging.info('Function (5): "%s", Returns: "%s"', symbol, ret_type)
 
@@ -707,14 +848,14 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 # print "DEBUG: Skipping extern: $_"
 
             # STRUCTS
-            elif re.search(r'^\s*struct\s+_?(\w+)\s*\*', line):
+            elif cm[22]:
                 # Skip 'struct _<struct_name> *', since it could be a
                 # return type on its own line.
                 pass
-            elif m21:
+            elif cm[23]:
                 # We assume that 'struct _<struct_name>' is really the
                 # declaration of struct <struct_name>.
-                symbol = m21.group(1)
+                symbol = cm[23].group(1)
                 decl = line
                 # we will find the correct level as below we do $level += tr/{//
                 level = 0
@@ -722,11 +863,11 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 logging.info('Struct(_): "%s"', symbol)
 
             # UNIONS
-            elif re.search(r'^\s*union\s+_(\w+)\s*\*', line):
+            elif cm[24]:
                 # Skip 'union _<union_name> *' (see above)
                 pass
-            elif m22:
-                symbol = m22.group(1)
+            elif cm[25]:
+                symbol = cm[25].group(1)
                 decl = line
                 level = 0
                 in_declaration = 'union'
