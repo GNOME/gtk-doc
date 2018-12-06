@@ -82,7 +82,7 @@ CLINE_MATCHER = [
         \s+\{""", re.VERBOSE),
     re.compile(r'^\s*typedef\s+enum\s+_?(\w+)\s+\1\s*;'),
     re.compile(r'^\s*typedef\s+enum'),
-    # 8-12: STRUCTS AND UNIONS
+    # 8-11: STRUCTS AND UNIONS
     re.compile(
         r"""^\s*typedef\s+
         (struct|union)\s+                    # 1: struct/union
@@ -98,7 +98,7 @@ CLINE_MATCHER = [
         r"""^\s*typedef\s+
         (struct|union)\s*
         \w*\s*{""", re.VERBOSE),
-    # 13-15: OTHER TYPEDEFS
+    # 12-14: OTHER TYPEDEFS
     re.compile(
         r"""^\s*typedef\s+
         (?:struct|union)\s+\w+[\s\*]+
@@ -113,9 +113,9 @@ CLINE_MATCHER = [
         (?:\s*\[[^\]]+\])*
         \s*;""", re.VERBOSE),
     re.compile(r'^\s*typedef\s+'),
-    # 16: VARIABLES (extern'ed variables)
+    # 15: VARIABLES (extern'ed variables)
     None,  # in ScanHeaderContent()
-    # 17: VARIABLES
+    # 16: VARIABLES
     re.compile(
         r"""^\s*
         (?:(?:const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)
@@ -123,20 +123,20 @@ CLINE_MATCHER = [
         (?:const\s+)*
         ([A-Za-z]\w*)                        # 1: name
         \s*\=""", re.VERBOSE),
-    # 18: G_DECLARE_*
+    # 17: G_DECLARE_*
     re.compile(
         r""".*G_DECLARE_
         (FINAL_TYPE|DERIVABLE_TYPE|INTERFACE) # 1: variant
         \s*\(""", re.VERBOSE),
-    # 19-22: FUNCTIONS
+    # 18-21: FUNCTIONS
     None,  # in ScanHeaderContent()
     None,  # in ScanHeaderContent()
     re.compile(r'^\s*([A-Za-z]\w*)\s*\('),
     re.compile(r'^\s*\('),
-    # 23-24: STRUCTS
+    # 22-23: STRUCTS
     re.compile(r'^\s*struct\s+_?(\w+)\s*\*'),
     re.compile(r'^\s*struct\s+_?(\w+)'),
-    # 25-26: UNIONS
+    # 24-25: UNIONS
     re.compile(r'^\s*union\s+_(\w+)\s*\*'),
     re.compile(r'^\s*union\s+_?(\w+)'),
 ]
@@ -445,6 +445,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     if options.ignore_decorators:
         ignore_decorators = '|' + options.ignore_decorators
 
+    # FUNCTION POINTER VARIABLES
     CLINE_MATCHER[4] = re.compile(
         r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
         ((?:const\s+|G_CONST_RETURN\s+)?\w+)           # 1: 1st const
@@ -453,6 +454,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         \(\*\s*
           (\w+)                                        # 4: name
         \)\s*\(""" % ignore_decorators, re.VERBOSE)
+    # OTHER TYPEDEFS
     CLINE_MATCHER[15] = re.compile(
         r"""^\s*
         (?:extern|[A-Za-z_]+VAR%s)\s+
@@ -461,6 +463,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         (?:const\s+)*
         ([A-Za-z]\w*)                                  # 1: name
         \s*;""" % ignore_decorators, re.VERBOSE)
+    # FUNCTIONS
     CLINE_MATCHER[18] = re.compile(
         r"""^\s*
         (?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
