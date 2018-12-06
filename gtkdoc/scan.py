@@ -40,6 +40,9 @@ import shutil
 
 from . import common
 
+TYPE_MODIFIERS = ['const', 'G_CONST_RETURN', 'signed', 'unsigned', 'long', 'short', 'struct', 'union', 'enum']
+TYPE_MODIFIER = '(?:' + '|'.join([t + '\s+' for t in TYPE_MODIFIERS]) + ')*'
+
 # Matchers for current line
 CLINE_MATCHER = [
     # 0: MACROS
@@ -461,36 +464,36 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     CLINE_MATCHER[18] = re.compile(
         r"""^\s*
         (?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
-        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: return type
-        ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*                                                 # 2: .. cont'
-        (_[A-Za-z]\w*)                                                                                          # 3: name
-        \s*\(""" % ignore_decorators, re.VERBOSE)
+        (%s\w+)                                                     # 1: return type
+        ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*     # 2: .. cont'
+        (_[A-Za-z]\w*)                                              # 3: name
+        \s*\(""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
     CLINE_MATCHER[19] = re.compile(
         r"""^\s*
         (?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
-        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: return type
-        ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*                                                 # 2: .. cont'
-        ([A-Za-z]\w*)                                                                                           # 3: name
-        \s*\(""" % ignore_decorators, re.VERBOSE)
+        (%s\w+)                                                     # 1: return type
+        ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*     # 2: .. cont'
+        ([A-Za-z]\w*)                                               # 3: name
+        \s*\(""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[2] = re.compile(
         r"""^\s*
         (?:\b(?:extern%s)\s*)*
-        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: ret type
-        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)                                                          # 2: .. cont'
-        \s*$""" % ignore_decorators, re.VERBOSE)
+        (%s\w+)                                                     # 1: retun type
+        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)              # 2: .. cont'
+        \s*$""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[3] = re.compile(
         r"""^\s*(?:\b(?:extern|static|inline%s)\s*)*
-        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: ret type
-        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)                                                          # 2: .. cont'
-        \s*$""" % ignore_decorators, re.VERBOSE)
+        (%s\w+)                                                     # 1: return type
+        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)              # 2: .. cont'
+        \s*$""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[4] = re.compile(
         r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
-        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|long\s+|short\s+|struct\s+|union\s+|enum\s+)*\w+)  # 1: ret type
-        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)                                                          # 2: .. cont'
-        \s*$""" % ignore_decorators, re.VERBOSE)
+        (%s\w+)                                                     # 1: return type
+        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)              # 2: .. cont'
+        \s*$""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[5] = re.compile(
         r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
