@@ -50,11 +50,10 @@ BASIC_TYPES = [
     "float",
     "double",
     "long double",
+    "enum e",
+    "struct s",
+    "union u",
 ]
-# TODO(ensonic): fix for variables
-#     "enum e",
-#    "struct s",
-#    "union u",
 
 BASIC_TYPES_WITH_VOID = ['void'] + BASIC_TYPES
 

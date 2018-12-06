@@ -40,8 +40,9 @@ import shutil
 
 from . import common
 
-TYPE_MODIFIERS = ['const', 'G_CONST_RETURN', 'signed', 'unsigned', 'long', 'short', 'struct', 'union', 'enum']
-TYPE_MODIFIER = '(?:' + '|'.join([t + '\s+' for t in TYPE_MODIFIERS]) + ')*'
+TYPE_MODIFIERS = ['const', 'signed', 'unsigned', 'long', 'short', 'struct', 'union', 'enum']
+VAR_TYPE_MODIFIER = '(?:' + '|'.join([t + '\s+' for t in TYPE_MODIFIERS]) + ')*'
+RET_TYPE_MODIFIER = '(?:' + '|'.join([t + '\s+' for t in TYPE_MODIFIERS + ['G_CONST_RETURN']]) + ')*'
 
 # Matchers for current line
 CLINE_MATCHER = [
@@ -118,11 +119,11 @@ CLINE_MATCHER = [
     # 16: VARIABLES
     re.compile(
         r"""^\s*
-        (?:(?:const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)
+        (?:%s\w+)
         (?:\s+\*+|\*+|\s)\s*
         (?:const\s+)*
         ([A-Za-z]\w*)                        # 1: name
-        \s*\=""", re.VERBOSE),
+        \s*\=""" % RET_TYPE_MODIFIER, re.VERBOSE),
     # 17: G_DECLARE_*
     re.compile(
         r""".*G_DECLARE_
@@ -458,11 +459,11 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     CLINE_MATCHER[15] = re.compile(
         r"""^\s*
         (?:extern|[A-Za-z_]+VAR%s)\s+
-        (?:(?:const\s+|signed\s+|unsigned\s+|long\s+|short\s+)*\w+)
+        (?:%s\w+)
         (?:\s+\*+|\*+|\s)\s*
         (?:const\s+)*
         ([A-Za-z]\w*)                                  # 1: name
-        \s*;""" % ignore_decorators, re.VERBOSE)
+        \s*;""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
     # FUNCTIONS
     CLINE_MATCHER[18] = re.compile(
         r"""^\s*
@@ -470,40 +471,40 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         (%s\w+)                                                     # 1: return type
         ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*     # 2: .. cont'
         (_[A-Za-z]\w*)                                              # 3: name
-        \s*\(""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
+        \s*\(""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
     CLINE_MATCHER[19] = re.compile(
         r"""^\s*
         (?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
         (%s\w+)                                                     # 1: return type
         ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*     # 2: .. cont'
         ([A-Za-z]\w*)                                               # 3: name
-        \s*\(""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
+        \s*\(""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[2] = re.compile(
         r"""^\s*
         (?:\b(?:extern%s)\s*)*
         (%s\w+)                                                     # 1: retun type
         ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)              # 2: .. cont'
-        \s*$""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
+        \s*$""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[3] = re.compile(
         r"""^\s*(?:\b(?:extern|static|inline%s)\s*)*
         (%s\w+)                                                     # 1: return type
         ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)              # 2: .. cont'
-        \s*$""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
+        \s*$""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[4] = re.compile(
         r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
         (%s\w+)                                                     # 1: return type
         ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)              # 2: .. cont'
-        \s*$""" % (ignore_decorators, TYPE_MODIFIER), re.VERBOSE)
+        \s*$""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[5] = re.compile(
         r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
-        ((?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|enum\s+)*\w+)
+        (%s\w+)                                                     # 1: return type
         (\s+\*+|\*+|\s)\s*
         ([A-Za-z]\w*)
-        \s*$""" % ignore_decorators, re.VERBOSE)
+        \s*$""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
     for line in input_lines:
         # If this is a private header, skip it.
