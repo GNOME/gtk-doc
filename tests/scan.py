@@ -359,6 +359,19 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
 
 
 # USER FUNCTION (aka function pointer types)
+class ScanHeaderContentUserFunction(ScanHeaderContentTestCase):
+    """Test parsing of function pointer declarations."""
+
+    def assertDecl(self, name, ret, params, slist):
+        self.assertEqual([name], slist)
+        d = '<USER_FUNCTION>\n<NAME>%s</NAME>\n<RETURNS>%s</RETURNS>\n%s</USER_FUNCTION>\n' % (name, ret, params)
+        self.assertEqual([d], self.decls)
+        self.assertEqual([], self.types)
+
+    def test_FindsFunctionVoid(self):
+        header = 'typedef void (*func)();'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', 'void', '', slist)
 
 
 class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
@@ -396,13 +409,6 @@ class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('var', header, slist)
 
-    def debug(self):
-        # for test_FindsExternVar + test_FindsExternPtrVar
-        header = 'extern struct s var;'
-        slist, doc_comments = self.scanHeaderContent(
-            header.splitlines(keepends=True))
-        self.assertDecl('var', header, slist)
-
 
 if __name__ == '__main__':
     unittest.main()
@@ -410,6 +416,6 @@ if __name__ == '__main__':
     # from gtkdoc import common
     # common.setup_logging()
     #
-    # t = ScanHeaderContentVariabless()
+    # t = ScanHeaderContentUserFunction()
     # t.setUp()
-    # t.debug()
+    # t.test_FindsFunctionVoid()
