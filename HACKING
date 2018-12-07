@@ -73,7 +73,7 @@ export NEW_VER_TAG=$(echo ${NEW_VER} | tr '.' '_')
 - if we want a icon on the newsfeed, we should copy a icon like on
   http://ftp.acc.umu.se/pub/GNOME/sources/rhythmbox/rhythmbox.png
   e.g. /usr/share/icons/hicolor/48x48/apps/devhelp.png
-  
+
 Optimizing & Meassuring
 =======================
 
@@ -111,3 +111,8 @@ Troubles with parsing regexps
 Test regexps online:
 http://www.solmetra.com/scripts/regex/index.php
 
+Test Coverage
+=============
+sudo apt-get install python3-coverage
+PYTHONPATH=$PWD python3-coverage run tests/scan.py
+python3-coverage html
