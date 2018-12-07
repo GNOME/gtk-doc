@@ -54,7 +54,7 @@ CLINE_MATCHER = [
     # 1-4: TYPEDEF'D FUNCTIONS
     re.compile(
         r"""^\s*typedef\s+
-        ((?:const\s+|G_CONST_RETURN\s+)?\w+) # 1: 1st const
+        ((?:const\s+|G_CONST_RETURN\s+)?\w+) # 1: 1st const + type
         (\s+const)?\s*                       # 2: 2nd const
         (\**)\s*                             # 3: ptr
         \(\*\s*
@@ -614,16 +614,14 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
             # TYPEDEF'D FUNCTIONS (i.e. user functions)
             elif cm[1]:
-                p2 = cm[1].group(2) or ''
-                ret_type = "%s%s %s" % (cm[1].group(1), p2, cm[1].group(3))
+                ret_type = format_ret_type(cm[1].group(1), cm[1].group(2), cm[1].group(3))
                 symbol = cm[1].group(4)
                 decl = line[cm[1].end():]
                 in_declaration = 'user_function'
                 logging.info('user function (1): "%s", Returns: "%s"', symbol, ret_type)
 
             elif pm[1] and cm[2]:
-                p2 = cm[2].group(2) or ''
-                ret_type = '%s%s %s' % (cm[2].group(1), p2, cm[2].group(3))
+                ret_type = format_ret_type(cm[2].group(1), cm[2].group(2), cm[2].group(3))
                 symbol = cm[2].group(4)
                 decl = line[cm[2].end():]
                 in_declaration = 'user_function'
@@ -634,15 +632,13 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 symbol = cm[3].group(2)
                 decl = line[cm[3].end():]
                 if pm[0]:
-                    p2 = pm[0].group(2) or ''
-                    ret_type = "%s%s %s" % (pm[0].group(1), p2, ret_type)
+                    ret_type = format_ret_type(pm[0].group(1), pm[0].group(2), ret_type)
                     in_declaration = 'user_function'
                     logging.info('user function (3): "%s", Returns: "%s"', symbol, ret_type)
 
             # FUNCTION POINTER VARIABLES
             elif cm[4]:
-                p2 = cm[4].group(2) or ''
-                ret_type = '%s%s %s' % (cm[4].group(1), p2, cm[4].group(3))
+                ret_type = format_ret_type(cm[4].group(1), cm[4].group(2), cm[4].group(3))
                 symbol = cm[4].group(4)
                 decl = line[cm[4].end():]
                 in_declaration = 'user_function'
@@ -1029,6 +1025,15 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     if title:
         slist = [title] + slist
     return slist, doc_comments
+
+
+def format_ret_type(const_type, const, ptr):
+    ret_type = const_type
+    if const:
+        ret_type += const
+    if ptr:
+        ret_type += ' ' + ptr
+    return ret_type
 
 
 def replace_once(liststr, standard_decl, regex):
