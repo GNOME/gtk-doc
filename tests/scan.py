@@ -373,6 +373,24 @@ class ScanHeaderContentUserFunction(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('func', 'void', '', slist)
 
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES_WITH_VOID])
+    def test_HandlesReturnValue(self, _, ret_type):
+        header = 'typedef %s (*func)(void);' % ret_type
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', ret_type, 'void', slist)
+
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES_WITH_VOID])
+    def test_HandlesReturnValuePtr(self, _, ret_type):
+        header = 'typedef %s* (*func)(void);' % ret_type
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', ret_type + ' *', 'void', slist)
+
+    @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES_WITH_VOID])
+    def test_HandlesReturnValueConstPtr(self, _, ret_type):
+        header = 'typedef const %s* (*func)(void);' % ret_type
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', 'const ' + ret_type + ' *', 'void', slist)
+
 
 class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
     """Test parsing of variable declarations."""
@@ -418,4 +436,4 @@ if __name__ == '__main__':
     #
     # t = ScanHeaderContentUserFunction()
     # t.setUp()
-    # t.test_FindsFunctionVoid()
+    # t.debug()

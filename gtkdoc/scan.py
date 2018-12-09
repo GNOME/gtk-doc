@@ -54,20 +54,20 @@ CLINE_MATCHER = [
     # 1-4: TYPEDEF'D FUNCTIONS
     re.compile(
         r"""^\s*typedef\s+
-        ((?:const\s+|G_CONST_RETURN\s+)?\w+) # 1: 1st const + type
+        (%s\w+)                              # 1: return type
         (\s+const)?\s*                       # 2: 2nd const
         (\**)\s*                             # 3: ptr
         \(\*\s*
           (\w+)                              # 4: name
-        \)\s*\(""", re.VERBOSE),
+        \)\s*\(""" % RET_TYPE_MODIFIER, re.VERBOSE),
     re.compile(
         r"""^\s*
-        ((?:const\s+|G_CONST_RETURN\s+)?\w+) # 1: 1st const
+        (%s?\w+)                             # 1: return type
         (\s+const)?\s*                       # 2: 2nd const
         (\**)\s*                             # 3: ptr
         \(\*\s*
           (\w+)                              # 4: name
-        \)\s*\(""", re.VERBOSE),
+        \)\s*\(""" % RET_TYPE_MODIFIER, re.VERBOSE),
     re.compile(
         r"""^\s*
         (\**)\s*                             # 1: ptr
@@ -147,9 +147,9 @@ PLINE_MATCHER = [
     # 0-1: TYPEDEF'D FUNCTIONS
     re.compile(
         r"""^\s*typedef\s*
-        ((?:const\s+|G_CONST_RETURN\s+)?\w+) # 1: 1st const
+        (%s\w+)                              # 1: return type
         (\s+const)?\s*                       # 2: 2nd const
-        """, re.VERBOSE),
+        """ % RET_TYPE_MODIFIER, re.VERBOSE),
     re.compile(r'^\s*typedef\s*'),
     # 2-5 :FUNCTIONS
     None,  # in ScanHeaderContent()
