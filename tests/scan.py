@@ -327,6 +327,11 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('data', header, slist)
 
+    def test_IgnoresInternalStruct(self):
+        header = 'struct _internal *x;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertNoDeclFound(slist)
+
 
 class ScanHeaderContentUnions(ScanHeaderContentTestCase):
     """Test parsing of union declarations."""
@@ -356,6 +361,11 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertDecl('Data', header, slist)
+
+    def test_IgnoresInternalUnion(self):
+        header = 'union _internal *x;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertNoDeclFound(slist)
 
 
 # USER FUNCTION (aka function pointer types)
