@@ -221,7 +221,7 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('func', 'int', 'char c, long l', slist)
 
-    def test_FindsFunctionStruct_Void(self):
+    def test_FindsFunctionStruct_Void_WithLinebreakAfterRetType(self):
         header = textwrap.dedent("""\
             struct ret *
             func (void);""")
@@ -229,7 +229,15 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('func', 'struct ret *', 'void', slist)
 
-    def test_FindsFunctionVoid_IntWithLinebreak(self):
+    def test_FindsFunctionStruct_Void_WithLinebreakAfterFuncName(self):
+        header = textwrap.dedent("""\
+            struct ret * func
+            (void);""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'struct ret *', 'void', slist)
+
+    def test_FindsFunctionVoid_Int_WithLinebreakAfterParamType(self):
         header = textwrap.dedent("""\
             void func (int
               a);""")
@@ -368,7 +376,6 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
         self.assertNoDeclFound(slist)
 
 
-# USER FUNCTION (aka function pointer types)
 class ScanHeaderContentUserFunction(ScanHeaderContentTestCase):
     """Test parsing of function pointer declarations."""
 

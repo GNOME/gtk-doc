@@ -502,8 +502,8 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     PLINE_MATCHER[5] = re.compile(
         r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
         (%s\w+)                                                     # 1: return type
-        (\s+\*+|\*+|\s)\s*
-        ([A-Za-z]\w*)
+        (\s+\*+|\*+|\s)\s*                                          # 2: ptr?
+        ([A-Za-z]\w*)                                               # 3: symbols
         \s*$""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
     for line in input_lines:
@@ -832,7 +832,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                     )\s*$""" % ignore_decorators, pre_previous_line, re.VERBOSE)
 
                 if pm[5]:
-                    ret_type = pm[5].group(1) + ' ' + pm[5].group(2)
+                    ret_type = pm[5].group(1) + ' ' + pm[5].group(2).strip()
                     symbol = pm[5].group(3)
                     in_declaration = 'function'
                     logging.info('Function (5): "%s", Returns: "%s"', symbol, ret_type)
