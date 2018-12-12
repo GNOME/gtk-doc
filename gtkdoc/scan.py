@@ -511,7 +511,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         # TODO: consider scanning this first, so that we don't modify: decl_list
         # and get_types
         if re.search(r'^\s*/\*\s*<\s*private_header\s*>\s*\*/', line):
-            return
+            return [], {}
 
         # Skip to the end of the current comment.
         if in_comment:

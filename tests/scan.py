@@ -90,6 +90,14 @@ class ScanHeaderContent(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([])
         self.assertNothingFound(slist, doc_comments)
 
+    def test_IgnoresOneLineComments(self):
+        slist, doc_comments = self.scanHeaderContent(['/* test */'])
+        self.assertNothingFound(slist, doc_comments)
+
+    def test_IgnoresOneLineCommentsDoubleStar(self):
+        slist, doc_comments = self.scanHeaderContent(['/** test */'])
+        self.assertNothingFound(slist, doc_comments)
+
     def test_FindsDocComment(self):
         slist, doc_comments = self.scanHeaderContent("""\
             /**
@@ -105,7 +113,16 @@ class ScanHeaderContent(ScanHeaderContentTestCase):
              */""".splitlines(keepends=True))
         self.assertNoDeclFound(slist)
 
-    # TODO: test /* < private_header > */ maker
+    def test_SkipInternalHeaders(self):
+        header = textwrap.dedent("""\
+            /* < private_header > */
+            /**
+             * symbol:
+             */
+            void symbols(void);""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertNothingFound(slist, doc_comments)
 
     def test_SkipSymbolWithPreprocessor(self):
         slist, doc_comments = self.scanHeaderContent("""\
