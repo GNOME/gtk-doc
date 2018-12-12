@@ -44,6 +44,14 @@ snapshot:
     fi; \
 	done
 
+coverage:
+	@python3-coverage erase; \
+	for f in *.py; do \
+	  $(TESTS_ENVIRONMENT) python3-coverage run -a $$f; \
+	done; \
+	python3-coverage html --include="*/gtkdoc/*.py"
+
+
 .PHONY: snapshot
 
 -include $(top_srcdir)/git.mk

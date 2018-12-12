@@ -115,4 +115,8 @@ Test Coverage
 =============
 sudo apt-get install python3-coverage
 PYTHONPATH=$PWD python3-coverage run tests/scan.py
-python3-coverage html
+python3-coverage html --include="gtkdoc/*.py"
+
+or
+
+cd test; make coverage
