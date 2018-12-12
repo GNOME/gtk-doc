@@ -149,6 +149,7 @@ PLINE_MATCHER = [
         r"""^\s*typedef\s*
         (%s\w+)                              # 1: return type
         (\s+const)?\s*                       # 2: 2nd const
+        (\**)\s*                             # 3: ptr
         """ % RET_TYPE_MODIFIER, re.VERBOSE),
     re.compile(r'^\s*typedef\s*'),
     # 2-5 :FUNCTIONS
@@ -632,7 +633,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 symbol = cm[3].group(2)
                 decl = line[cm[3].end():]
                 if pm[0]:
-                    ret_type = format_ret_type(pm[0].group(1), pm[0].group(2), ret_type)
+                    ret_type = format_ret_type(pm[0].group(1), pm[0].group(2), pm[0].group(3)) + ret_type
                     in_declaration = 'user_function'
                     logging.info('user function (3): "%s", Returns: "%s"', symbol, ret_type)
 
@@ -934,7 +935,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 logging.info('scrubbed:[%s]', decl.strip())
                 if internal == 0:
                     decl = re.sub(r'/\*.*?\*/', '', decl, flags=re.MULTILINE)   # remove comments.
-                    decl = re.sub(r'\s*\n\s*(?!$)', ' ', decl, flags=re.MULTILINE)
+                    decl = re.sub(r'\s*\n\s*(?!$)', ' ', decl, flags=re.MULTILINE)  # remove newlines
                     # consolidate whitespace at start/end of lines.
                     decl = decl.strip()
                     ret_type = re.sub(r'/\*.*?\*/', '', ret_type).strip()       # remove comments in ret type.
@@ -956,6 +957,12 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         if in_declaration == 'user_function':
             if re.search(r'\).*$', decl):
                 decl = re.sub(r'\).*$', '', decl)
+                # TODO: same as above
+                decl = re.sub(r'/\*.*?\*/', '', decl, flags=re.MULTILINE)   # remove comments.
+                decl = re.sub(r'\s*\n\s*(?!$)', ' ', decl, flags=re.MULTILINE)  # remove newlines
+                # TODO: don't stip here (it works above, but fails some test
+                # consolidate whitespace at start/end of lines.
+                # decl = decl.strip()
                 if AddSymbolToList(slist, symbol):
                     decl_list.append('<USER_FUNCTION>\n<NAME>%s</NAME>\n%s<RETURNS>%s</RETURNS>\n%s</USER_FUNCTION>\n' %
                                      (symbol, deprecated, ret_type, decl))

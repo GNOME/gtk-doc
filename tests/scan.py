@@ -425,6 +425,39 @@ class ScanHeaderContentUserFunction(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('func', 'const ' + ret_type + ' *', 'void', slist)
 
+    def test_FindsFunctionVoid_Int_WithLinebreakAfterTypedef(self):
+        header = textwrap.dedent("""\
+            typedef
+            void (*func) (int a);""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'void', 'int a', slist)
+
+    def test_FindsFunctionStruct_Void_WithLinebreakAfterRetType(self):
+        header = textwrap.dedent("""\
+            typedef struct ret *
+            (*func) (void);""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'struct ret *', 'void', slist)
+
+    # TODO: not found
+    # def test_FindsFunctionStruct_Void_WithLinebreakAfterFuncName(self):
+    #     header = textwrap.dedent("""\
+    #         typedef struct ret * (*func)
+    #         (void);""")
+    #     slist, doc_comments = self.scanHeaderContent(
+    #         header.splitlines(keepends=True))
+    #     self.assertDecl('func', 'struct ret *', 'void', slist)
+
+    def test_FindsFunctionVoid_Int_WithLinebreakAfterParamType(self):
+        header = textwrap.dedent("""\
+            typedef void (*func) (int
+              a);""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'void', 'int a', slist)
+
 
 class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
     """Test parsing of variable declarations."""
@@ -470,4 +503,4 @@ if __name__ == '__main__':
     #
     # t = ScanHeaderContentUserFunction()
     # t.setUp()
-    # t.debug()
+    # t.test_FindsFunctionStruct_Void_WithLinebreakAfterRetType()
