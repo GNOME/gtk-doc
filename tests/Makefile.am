@@ -46,7 +46,8 @@ coverage:
 	for f in *.py; do \
 	  $(TESTS_ENVIRONMENT) python3-coverage run -a $$f; \
 	done; \
-	python3-coverage html --include="*/gtkdoc/*.py"
+	python3-coverage html --include="*/gtkdoc/*.py"; \
+	python3-coverage report --include="*/gtkdoc/*.py"
 
 
 .PHONY: snapshot

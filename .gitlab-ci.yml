@@ -1,11 +1,16 @@
 image: debian:unstable
 
+# TODO: tune dependencies
+# - maybe install dblatex for pdf, we skip it now since this installs tons of
+#   latex and thats slow
+# - gtkdoc-mkhtml2 needs the anytree python module - install through pip3
 before_script:
   - apt update -qq
-  - apt install -y -qq autoconf automake build-essential libtool make pkg-config
-                       dblatex docbook-xsl libxml2-utils xsltproc libglib2.0-dev
-                       python3-lxml python3-parameterized python3-pip
-                       python3-pygments python3-unittest2
+  - apt install -y -qq --no-install-recommends
+                autoconf automake build-essential libtool make meson pkg-config
+                docbook-xsl libxml2-utils xsltproc libglib2.0-dev
+                python3-lxml python3-parameterized python3-pip
+                python3-pygments python3-unittest2
   - export LANG=C.UTF-8
 
 stages:
@@ -13,7 +18,9 @@ stages:
   - test
   - deploy
 
-build-job:
+# autotools
+
+autotools-build:
   stage: build
   script:
     - ./autogen.sh --prefix=/usr
@@ -21,13 +28,25 @@ build-job:
   except:
     - tags
 
-test:
+autotools-test:
   stage: test
   script:
+    - ./autogen.sh --prefix=/usr
     - make check
     - make -C tests coverage
-    - cd test && python3-coverage report --include="*/gtkdoc/*.py"
-  coverage: '/^TOTAL\s+[\d\s]*?\s+([\d.]+\%)\s+/'
+  coverage: '/^TOTAL\s+\d+\s+\d+\s+([\d.]+\%)/'
+
+# meson
+
+meson-build:
+  stage: build
+  script:
+    - meson --prefix /usr _build .
+    - ninja -C _build
+  except:
+    - tags
+
+# common
 
 pages:
   stage: deploy
