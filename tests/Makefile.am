@@ -1,15 +1,14 @@
 ## Process this file with automake to produce Makefile.in
 
-# we need to run '.' last so that sanity processes the generated docs
-# maybe move it to a subdir?
-SUBDIRS = annotations bugs empty fail gobject program repro .
+SUBDIRS =
+TESTS = tools.sh check.py common.py mkdb.py mk_to_db.py mkhtml2.py scan.py
 
 if BUILD_TESTS
-
-TESTS = \
-  check.py common.py mkdb.py mk_to_db.py mkhtml2.py scan.py \
-  tools.sh \
-  annotations.sh bugs.sh empty.sh fail.sh gobject.sh program.sh
+# we need to run '.' last so that sanity processes the generated docs
+# maybe move it to a subdir?
+SUBDIRS += annotations bugs empty fail gobject program repro .
+TESTS += annotations.sh bugs.sh empty.sh fail.sh gobject.sh program.sh
+endif
 
 TESTS_ENVIRONMENT = \
 	BUILDDIR=$(abs_builddir) \
@@ -22,8 +21,6 @@ TESTS_ENVIRONMENT = \
 
 TEST_EXTENSIONS = .py
 PY_LOG_COMPILER = $(PYTHON)
-
-endif
 
 EXTRA_DIST = gtkdoctest.sh sanity.sh $(TESTS)
 
