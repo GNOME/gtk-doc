@@ -1,0 +1,44 @@
+image: debian:unstable
+
+before_script:
+  - apt update -qq
+  - apt install -y -qq autoconf automake build-essential pkg-config
+                       libxml2-utils xsltproc
+                       python3-lxml python3-parameterized python3-pip
+                       python3-pygments python3-unittest2
+  - export LANG=C.UTF-8
+
+stages:
+  - build
+  - test
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - ./autogen.sh --prefix=/usr
+    - make
+  except:
+    - tags
+
+test:
+  stage: test
+  script:
+    - make check
+    - cd test && make coverage
+    - cd test && python3-coverage report --include="*/gtkdoc/*.py"
+  coverage: '/^TOTAL\s+[\d\s]*?\s+([\d.]+\%)\s+/'
+
+pages:
+  stage: deploy
+  only:
+    - master
+  script:
+    - ./autogen.sh --prefix=/usr
+    - make
+    - cd test && make coverage
+    - mkdir -p public/
+    - mv tests/htmlcov public/
+  artifacts:
+    paths:
+      - public
