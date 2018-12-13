@@ -3,7 +3,7 @@ image: debian:unstable
 before_script:
   - apt update -qq
   - apt install -y -qq autoconf automake build-essential libtool make pkg-config
-                       libxml2-utils xsltproc
+                       docbook-xsl libxml2-utils xsltproc
                        python3-lxml python3-parameterized python3-pip
                        python3-pygments python3-unittest2
   - export LANG=C.UTF-8
