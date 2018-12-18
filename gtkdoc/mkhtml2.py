@@ -97,7 +97,6 @@ rm html-build.stamp; time make html-build.stamp
 """
 
 import argparse
-import errno
 import logging
 import os
 import shutil

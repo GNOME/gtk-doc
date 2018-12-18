@@ -120,3 +120,8 @@ python3-coverage html --include="gtkdoc/*.py"
 or
 
 cd test; make coverage
+
+Find Dead Code
+==============
+sudo pip3 install vulture
+PYTHONPATH=$PWD vulture gtkdoc/*.py gtkdoc-*.in

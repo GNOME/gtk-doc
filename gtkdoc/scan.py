@@ -123,7 +123,7 @@ CLINE_MATCHER = [
         (?:\s+\*+|\*+|\s)\s*
         (?:const\s+)*
         ([A-Za-z]\w*)                        # 1: name
-        \s*\=""" % RET_TYPE_MODIFIER, re.VERBOSE),
+        \s*\=""" % VAR_TYPE_MODIFIER, re.VERBOSE),
     # 17: G_DECLARE_*
     re.compile(
         r""".*G_DECLARE_
