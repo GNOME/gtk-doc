@@ -262,6 +262,35 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('func', 'void', 'int a', slist)
 
+    @parameterized.expand([('g_inline', 'G_INLINE_FUNC'), ('static_inline', 'static inline')])
+    def test_FindsInlineFunction(self, _, modifier):
+        header = textwrap.dedent("""\
+            %s void
+            func (void)
+            {
+            }
+            """ % modifier)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'void', 'void', slist)
+
+    @parameterized.expand([('g_inline', 'G_INLINE_FUNC'), ('static_inline', 'static inline')])
+    def test_FindsInlineFunctionWithConditionalBody(self, _, modifier):
+        header = textwrap.dedent("""\
+            %s int
+            func (int a)
+            {
+            #if defined(__GNUC__) && (__GNUC__ >= 4) && defined(__OPTIMIZE__)
+              return a;
+            #else
+              return 0;
+            #endif
+            }
+            """ % modifier)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'int', 'int a', slist)
+
 
 class ScanHeaderContentMacros(ScanHeaderContentTestCase):
     """Test parsing of macro declarations."""
