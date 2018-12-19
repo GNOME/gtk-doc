@@ -57,6 +57,8 @@ BASIC_TYPES = [
 
 BASIC_TYPES_WITH_VOID = ['void'] + BASIC_TYPES
 
+INLINE_MODIFIERS = [('g_inline', 'G_INLINE_FUNC'), ('static_inline', 'static inline')]
+
 
 class ScanHeaderContentTestCase(unittest.TestCase):
     """Baseclass for the header scanner tests."""
@@ -197,6 +199,21 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('func', 'void', '', slist)
 
+    def test_IgnoresInternalFunction(self):
+        slist, doc_comments = self.scanHeaderContent([
+            'void _internal(void);'
+        ])
+        self.assertNoDeclFound(slist)
+
+    @parameterized.expand(INLINE_MODIFIERS)
+    def test_IgnoresInternalInlineFunction(self, _, modifier):
+        header = textwrap.dedent("""\
+            %s void _internal(void) {
+            }""" % modifier)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertNoDeclFound(slist)
+
     @parameterized.expand([(t.replace(' ', '_'), t) for t in BASIC_TYPES_WITH_VOID])
     def test_HandlesReturnValue(self, _, ret_type):
         header = '%s func(void);' % ret_type
@@ -262,7 +279,7 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('func', 'void', 'int a', slist)
 
-    @parameterized.expand([('g_inline', 'G_INLINE_FUNC'), ('static_inline', 'static inline')])
+    @parameterized.expand(INLINE_MODIFIERS)
     def test_FindsInlineFunction(self, _, modifier):
         header = textwrap.dedent("""\
             %s void
@@ -274,7 +291,7 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('func', 'void', 'void', slist)
 
-    @parameterized.expand([('g_inline', 'G_INLINE_FUNC'), ('static_inline', 'static inline')])
+    @parameterized.expand(INLINE_MODIFIERS)
     def test_FindsInlineFunctionWithConditionalBody(self, _, modifier):
         header = textwrap.dedent("""\
             %s int
