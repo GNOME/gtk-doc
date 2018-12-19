@@ -752,9 +752,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
             elif cm[18]:
                 # We assume that functions starting with '_' are private and skip them.
-                ret_type = cm[18].group(1)
-                if cm[18].group(2):
-                    ret_type += ' ' + cm[18].group(2)
+                ret_type = format_ret_type(cm[18].group(1), None, cm[18].group(2))
                 symbol = cm[18].group(3)
                 decl = line[cm[18].end():]
                 logging.info('internal Function: "%s", Returns: "%s""%s"', symbol, cm[18].group(1), cm[18].group(2))
@@ -766,9 +764,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                     skip_block = 1
 
             elif cm[19]:
-                ret_type = cm[19].group(1)
-                if cm[19].group(2):
-                    ret_type += ' ' + cm[19].group(2)
+                ret_type = format_ret_type(cm[19].group(1), None, cm[19].group(2))
                 symbol = cm[19].group(3)
                 decl = line[cm[19].end():]
                 logging.info('Function (1): "%s", Returns: "%s""%s"', symbol, cm[19].group(1), cm[19].group(2))
@@ -792,9 +788,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 if not previous_line_strip.startswith('G_INLINE_FUNC'):
                     if not previous_line_words or previous_line_words[0] != 'static':
                         if pm[2]:
-                            ret_type = pm[2].group(1)
-                            if pm[2].group(2):
-                                ret_type += ' ' + pm[2].group(2).strip()
+                            ret_type = format_ret_type(pm[2].group(1), None, pm[2].group(2))
                             logging.info('Function  (2): "%s", Returns: "%s"', symbol, ret_type)
                             in_declaration = 'function'
                     else:
@@ -802,9 +796,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                         # now we we need to skip a whole { } block
                         skip_block = 1
                         if pm[3]:
-                            ret_type = pm[3].group(1)
-                            if pm[3].group(2):
-                                ret_type += ' ' + pm[3].group(2)
+                            ret_type = format_ret_type(pm[3].group(1), None, pm[3].group(2))
                             logging.info('Function  (3): "%s", Returns: "%s"', symbol, ret_type)
                             in_declaration = 'function'
                 else:
@@ -813,9 +805,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                         # now we we need to skip a whole { } block
                         skip_block = 1
                         if pm[4]:
-                            ret_type = pm[4].group(1)
-                            if pm[4].group(2):
-                                ret_type += ' ' + pm[4].group(2)
+                            ret_type = format_ret_type(pm[4].group(1), None, pm[4].group(2))
                             logging.info('Function (4): "%s", Returns: "%s"', symbol, ret_type)
                             in_declaration = 'function'
 
@@ -1034,12 +1024,12 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     return slist, doc_comments
 
 
-def format_ret_type(const_type, const, ptr):
-    ret_type = const_type
+def format_ret_type(base_type, const, ptr):
+    ret_type = base_type
     if const:
         ret_type += const
     if ptr:
-        ret_type += ' ' + ptr
+        ret_type += ' ' + ptr.strip()
     return ret_type
 
 
