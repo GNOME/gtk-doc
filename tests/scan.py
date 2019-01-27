@@ -133,6 +133,41 @@ class ScanHeaderContent(ScanHeaderContentTestCase):
             #endif""".splitlines(keepends=True))
         self.assertNoDeclFound(slist)
 
+    def test_AddDeprecatedFlagForSymbolsWithinDeprecationGuards(self):
+        header = textwrap.dedent("""\
+            #ifndef GTKDOC_TESTER_DISABLE_DEPRECATED
+            /**
+             * SYMBOL:
+             *
+             * Deprecated: 1.1. Use NEW_SYMBOL instead.
+             */
+            #define SYMBOL "value"
+            #endif /* GTKDOC_TESTER_DISABLE_DEPRECATED */""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertEqual(1, len(self.decls))
+        self.assertIn('<DEPRECATED/>', self.decls[0])
+
+    def test_NoDeprecatedFlagForSymbolsOutsideDeprecationGuards(self):
+        header = textwrap.dedent("""\
+            #ifndef GTKDOC_TESTER_DISABLE_DEPRECATED
+            /**
+             * SYMBOL1:
+             *
+             * Deprecated: 1.1. Use NEW_SYMBOL1 instead.
+             */
+            #define SYMBOL1 "value"
+            #endif /* GTKDOC_TESTER_DISABLE_DEPRECATED */
+            /**
+             * SYMBOL2:
+             */
+            #define SYMBOL2 "value"
+            """)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertEqual(2, len(self.decls))
+        self.assertNotIn('<DEPRECATED/>', self.decls[1])
+
 
 class ScanHeaderContentEnum(ScanHeaderContentTestCase):
     """Test parsing of enum declarations."""

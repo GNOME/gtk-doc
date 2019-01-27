@@ -544,21 +544,20 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         elif re.search(r'^\s*#\sif', line):
             if deprecated_conditional_nest >= 1:
                 deprecated_conditional_nest += 1
-
             if ignore_conditional_nest > 0:
                 ignore_conditional_nest += 1
         elif re.search(r'^\s*#endif', line):
             if deprecated_conditional_nest >= 1:
                 deprecated_conditional_nest -= 1
-
             if ignore_conditional_nest > 0:
                 ignore_conditional_nest -= 1
 
         # If we find a line containing _DEPRECATED, we hope that this is
         # attribute based deprecation and also treat this as a deprecation
-        # guard, unless it's a macro definition.
+        # guard, unless it's a macro definition or the end of a deprecation
+        # section (#endif /* XXX_DEPRECATED */
         if deprecated_conditional_nest == 0 and '_DEPRECATED' in line:
-            m = re.search(r'^\s*#\s*(if*|define)', line)
+            m = re.search(r'^\s*#\s*(if*|define|endif)', line)
             if not (m or in_declaration == 'enum'):
                 logging.info('Found deprecation annotation (decl: "%s"): "%s"',
                              in_declaration, line.strip())
