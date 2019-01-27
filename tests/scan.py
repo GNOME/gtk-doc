@@ -317,6 +317,17 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
     @parameterized.expand(INLINE_MODIFIERS)
     def test_FindsInlineFunction(self, _, modifier):
         header = textwrap.dedent("""\
+            %s void func (void)
+            {
+            }
+            """ % modifier)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'void', 'void', slist)
+
+    @parameterized.expand(INLINE_MODIFIERS)
+    def test_FindsInlineFunctionWithNewlineAfterType(self, _, modifier):
+        header = textwrap.dedent("""\
             %s void
             func (void)
             {

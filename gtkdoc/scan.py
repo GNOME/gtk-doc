@@ -152,8 +152,7 @@ PLINE_MATCHER = [
         (\**)\s*                             # 3: ptr
         """ % RET_TYPE_MODIFIER, re.VERBOSE),
     re.compile(r'^\s*typedef\s*'),
-    # 2-5 :FUNCTIONS
-    None,  # in ScanHeaderContent()
+    # 2-4 :FUNCTIONS
     None,  # in ScanHeaderContent()
     None,  # in ScanHeaderContent()
     None,  # in ScanHeaderContent()
@@ -449,7 +448,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
     # FUNCTION POINTER VARIABLES
     CLINE_MATCHER[4] = re.compile(
-        r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+        r"""^\s*(?:\b(?:extern|static|inline|G_INLINE_FUNC%s)\s*)*
         ((?:const\s+|G_CONST_RETURN\s+)?\w+)           # 1: 1st const
         (\s+const)?\s*                                 # 2: 2nd const
         (\**)\s*                                       # 3: ptr
@@ -468,14 +467,14 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     # FUNCTIONS
     CLINE_MATCHER[18] = re.compile(
         r"""^\s*
-        (?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+        (?:\b(?:extern|static|inline|G_INLINE_FUNC%s)\s*)*
         (%s\w+)                                                     # 1: return type
         ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*     # 2: .. cont'
         (_[A-Za-z]\w*)                                              # 3: name
         \s*\(""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
     CLINE_MATCHER[19] = re.compile(
         r"""^\s*
-        (?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+        (?:\b(?:extern|static|inline|G_INLINE_FUNC%s)\s*)*
         (%s\w+)                                                     # 1: return type
         ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*     # 2: .. cont'
         ([A-Za-z]\w*)                                               # 3: name
@@ -489,19 +488,13 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         \s*$""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[3] = re.compile(
-        r"""^\s*(?:\b(?:extern|static|inline%s)\s*)*
+        r"""^\s*(?:\b(?:extern|static|inline|G_INLINE_FUNC%s)\s*)*
         (%s\w+)                                                     # 1: return type
         ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)              # 2: .. cont'
         \s*$""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[4] = re.compile(
-        r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
-        (%s\w+)                                                     # 1: return type
-        ((?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)              # 2: .. cont'
-        \s*$""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
-
-    PLINE_MATCHER[5] = re.compile(
-        r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+        r"""^\s*(?:\b(?:extern|static|inline|G_INLINE_FUNC%s)\s*)*
         (%s\w+)                                                     # 1: return type
         (\s+\*+|\*+|\s)\s*                                          # 2: ptr?
         ([A-Za-z]\w*)                                               # 3: symbols
@@ -757,10 +750,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 logging.info('internal Function: "%s", Returns: "%s""%s"', symbol, cm[18].group(1), cm[18].group(2))
                 in_declaration = 'function'
                 internal = 1
-                if line.strip().startswith('G_INLINE_FUNC'):
-                    logging.info('skip block after inline function')
-                    # now we we need to skip a whole { } block
-                    skip_block = 1
+                skip_block |= is_inline_func(line)
 
             elif cm[19]:
                 ret_type = format_ret_type(cm[19].group(1), None, cm[19].group(2))
@@ -768,10 +758,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 decl = line[cm[19].end():]
                 logging.info('Function (1): "%s", Returns: "%s""%s"', symbol, cm[19].group(1), cm[19].group(2))
                 in_declaration = 'function'
-                if line.strip().startswith('G_INLINE_FUNC'):
-                    logging.info('skip block after inline function')
-                    # now we we need to skip a whole { } block
-                    skip_block = 1
+                skip_block |= is_inline_func(line)
 
             # Try to catch function declarations which have the return type on
             # the previous line. But we don't want to catch complete functions
@@ -781,39 +768,24 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 symbol = cm[20].group(1)
                 decl = line[cm[20].end():]
 
-                previous_line_strip = previous_line.strip()
-                previous_line_words = previous_line_strip.split()
-
-                if not previous_line_strip.startswith('G_INLINE_FUNC'):
-                    if not previous_line_words or previous_line_words[0] != 'static':
-                        if pm[2]:
-                            ret_type = format_ret_type(pm[2].group(1), None, pm[2].group(2))
-                            logging.info('Function  (2): "%s", Returns: "%s"', symbol, ret_type)
-                            in_declaration = 'function'
-                    else:
-                        logging.info('skip block after inline function')
-                        # now we we need to skip a whole { } block
-                        skip_block = 1
-                        if pm[3]:
-                            ret_type = format_ret_type(pm[3].group(1), None, pm[3].group(2))
-                            logging.info('Function  (3): "%s", Returns: "%s"', symbol, ret_type)
-                            in_declaration = 'function'
+                if is_inline_func(previous_line):
+                    skip_block = 1
+                    if pm[3]:
+                        ret_type = format_ret_type(pm[3].group(1), None, pm[3].group(2))
+                        logging.info('Function  (3): "%s", Returns: "%s"', symbol, ret_type)
+                        in_declaration = 'function'
                 else:
-                    if not previous_line_words or previous_line_words[0] != 'static':
-                        logging.info('skip block after inline function')
-                        # now we we need to skip a whole { } block
-                        skip_block = 1
-                        if pm[4]:
-                            ret_type = format_ret_type(pm[4].group(1), None, pm[4].group(2))
-                            logging.info('Function (4): "%s", Returns: "%s"', symbol, ret_type)
-                            in_declaration = 'function'
+                    if pm[2]:
+                        ret_type = format_ret_type(pm[2].group(1), None, pm[2].group(2))
+                        logging.info('Function  (2): "%s", Returns: "%s"', symbol, ret_type)
+                        in_declaration = 'function'
 
             # Try to catch function declarations with the return type and name
             # on the previous line(s), and the start of the parameters on this.
             elif cm[21]:
                 decl = line[cm[21].end():]
                 ppm = re.search(
-                    r"""^\s*(?:\b(?:extern|G_INLINE_FUNC%s)\s*)*
+                    r"""^\s*(?:\b(?:extern|static|inline|G_INLINE_FUNC%s)\s*)*
                     (
                       (?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*
                       \w+
@@ -821,9 +793,9 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                       (?:\s+|\s*\*+)
                     )\s*$""" % ignore_decorators, pre_previous_line, re.VERBOSE)
 
-                if pm[5]:
-                    ret_type = pm[5].group(1) + ' ' + pm[5].group(2).strip()
-                    symbol = pm[5].group(3)
+                if pm[4]:
+                    ret_type = pm[4].group(1) + ' ' + pm[4].group(2).strip()
+                    symbol = pm[4].group(3)
                     in_declaration = 'function'
                     logging.info('Function (5): "%s", Returns: "%s"', symbol, ret_type)
 
@@ -1021,6 +993,17 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     if title:
         slist = [title] + slist
     return slist, doc_comments
+
+
+def is_inline_func(line):
+    line = line.strip()
+    if line.startswith('G_INLINE_FUNC'):
+        logging.info('skip block after G_INLINE_FUNC function')
+        return 1
+    if re.search(r'static\s+inline', line):
+        logging.info('skip block after static inline function')
+        return 1
+    return 0
 
 
 def format_ret_type(base_type, const, ptr):
