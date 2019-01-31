@@ -449,6 +449,21 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertNoDeclFound(slist)
 
+    def test_IgnoresPrivteStruct(self):
+        header = 'struct _x;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertNoDeclFound(slist)
+
+    def test_OpaqueStructTypedefGeneratesEmptyDecl(self):
+        header = 'typedef struct _data data;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('data', '', slist)
+
+    def test_OpaqueStructGeneratesEmptyDecl(self):
+        header = 'struct data;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('data', header, slist)
+
 
 class ScanHeaderContentUnions(ScanHeaderContentTestCase):
     """Test parsing of union declarations."""
@@ -483,6 +498,21 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
         header = 'union _internal *x;'
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertNoDeclFound(slist)
+
+    def test_IgnoresPrivteStruct(self):
+        header = 'union _x x;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertNoDeclFound(slist)
+
+    def test_OpaqueUnionTypedefGeneratesEmptyDecl(self):
+        header = 'typedef union _data data;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('data', '', slist)
+
+    def test_OpaqueUnionGeneratesEmptyDecl(self):
+        header = 'union data;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('data', header, slist)
 
 
 class ScanHeaderContentUserFunction(ScanHeaderContentTestCase):
