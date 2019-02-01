@@ -617,6 +617,36 @@ class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
         self.assertDecl('var', header, slist)
 
 
+class ScanHeaderContentTypedefs(ScanHeaderContentTestCase):
+    """Test parsing of typedef declarations."""
+
+    def assertDecl(self, name, decl, slist):
+        self.assertEqual([name], slist)
+        d = '<TYPEDEF>\n<NAME>%s</NAME>\n%s</TYPEDEF>\n' % (name, decl)
+        self.assertEqual([d], self.decls)
+        self.assertEqual([], self.types)
+
+    def test_FindsTypedefStructPointer(self):
+        header = 'typedef struct data *dataptr;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('dataptr', header, slist)
+
+    def test_FindsTypedefUnionPointer(self):
+        header = 'typedef union data *dataptr;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('dataptr', header, slist)
+
+    def test_FindsTypedef(self):
+        header = 'typedef unsigned int uint;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('uint', header, slist)
+
+    def test_SkipsEnumTypedef(self):
+        header = 'typedef enum data dateenum;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertNoDeclFound(slist)
+
+
 if __name__ == '__main__':
     unittest.main()
 

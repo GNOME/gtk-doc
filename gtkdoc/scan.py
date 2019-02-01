@@ -109,7 +109,7 @@ CLINE_MATCHER = [
         r"""^\s*
         (?:G_GNUC_EXTENSION\s+)?
         typedef\s+
-        (.+[\s\*])                           # 1:
+        (.+[\s\*])                           # 1: e.g. 'unsigned int'
         (\w+)                                # 2: name
         (?:\s*\[[^\]]+\])*
         \s*;""", re.VERBOSE),
