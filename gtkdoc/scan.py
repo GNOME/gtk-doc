@@ -665,7 +665,8 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 # We've found a 'typedef struct _<name> <name>;'
                 # This could be an opaque data structure, so we output an
                 # empty declaration. If the structure is actually found that
-                # will override this.
+                # will override this (technically if will just be another entry
+                # in the output file and will be joined when reading the file).
                 structsym = cm[8].group(1).upper()
                 logging.info('%s typedef: "%s"', structsym, cm[8].group(2))
                 forward_decls[cm[8].group(2)] = '<%s>\n<NAME>%s</NAME>\n%s</%s>\n' % (
