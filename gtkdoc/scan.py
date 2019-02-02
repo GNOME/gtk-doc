@@ -317,77 +317,7 @@ def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, opt
 
     logging.info("Scanning %s done", input_file)
 
-    # Try to separate the standard macros and functions, placing them at the
-    # end of the current section, in a subsection named 'Standard'.
-    # do this in a loop to catch object, enums and flags
-    klass = lclass = prefix = lprefix = None
-    standard_decl = []
-    liststr = '\n'.join(s for s in slist if s) + '\n'
-    while True:
-        m = re.search(r'^(\S+)_IS_(\S*)_CLASS\n', liststr, flags=re.MULTILINE)
-        m2 = re.search(r'^(\S+)_IS_(\S*)\n', liststr, flags=re.MULTILINE)
-        m3 = re.search(r'^(\S+?)_(\S*)_get_type\n', liststr, flags=re.MULTILINE)
-        if m:
-            prefix = m.group(1)
-            lprefix = prefix.lower()
-            klass = m.group(2)
-            lclass = klass.lower()
-            logging.info("Found gobject type '%s_%s' from is_class macro", prefix, klass)
-        elif m2:
-            prefix = m2.group(1)
-            lprefix = prefix.lower()
-            klass = m2.group(2)
-            lclass = klass.lower()
-            logging.info("Found gobject type '%s_%s' from is_ macro", prefix, klass)
-        elif m3:
-            lprefix = m3.group(1)
-            prefix = lprefix.upper()
-            lclass = m3.group(2)
-            klass = lclass.upper()
-            logging.info("Found gobject type '%s_%s' from get_type function", prefix, klass)
-        else:
-            break
-
-        cclass = lclass
-        cclass = cclass.replace('_', '')
-        mtype = lprefix + cclass
-
-        liststr, standard_decl = replace_once(liststr, standard_decl, r'^%sPrivate\n' % mtype)
-
-        # We only leave XxYy* in the normal section if they have docs
-        if mtype not in doc_comments:
-            logging.info("  Hide instance docs for %s", mtype)
-            liststr, standard_decl = replace_once(liststr, standard_decl, r'^%s\n' % mtype)
-
-        if mtype + 'class' not in doc_comments:
-            logging.info("  Hide class docs for %s", mtype)
-            liststr, standard_decl = replace_once(liststr, standard_decl, r'^%sClass\n' % mtype)
-
-        if mtype + 'interface' not in doc_comments:
-            logging.info("  Hide iface docs for %s", mtype)
-            liststr, standard_decl = replace_once(liststr, standard_decl, r'%sInterface\n' % mtype)
-
-        if mtype + 'iface' not in doc_comments:
-            logging.info("  Hide iface docs for " + mtype)
-            liststr, standard_decl = replace_once(liststr, standard_decl, r'%sIface\n' % mtype)
-
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_IS_%s\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_TYPE_%s\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_get_type\n' % lclass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_CLASS\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_IS_%s_CLASS\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_CLASS\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_IFACE\n' % klass)
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_INTERFACE\n' % klass)
-        # We do this one last, otherwise it tends to be caught by the IS_$class macro
-        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s\n' % klass)
-
-    logging.info('Decl:%s---', liststr)
-    logging.info('Std :%s---', ''.join(sorted(standard_decl)))
-    if len(standard_decl):
-        # sort the symbols
-        liststr += '<SUBSECTION Standard>\n' + ''.join(sorted(standard_decl))
-
+    liststr = SeparateSubSections(slist, doc_comments)
     if liststr != '':
         if file_basename not in section_list:
             section_list[file_basename] = ''
@@ -1014,6 +944,80 @@ def format_ret_type(base_type, const, ptr):
     if ptr:
         ret_type += ' ' + ptr.strip()
     return ret_type
+
+
+# Separate the standard macros and functions, placing them at the
+# end of the current section, in a subsection named 'Standard'.
+# do this in a loop to catch object, enums and flags
+def SeparateSubSections(slist, doc_comments):
+    klass = lclass = prefix = lprefix = None
+    standard_decl = []
+    liststr = '\n'.join(s for s in slist if s) + '\n'
+    while True:
+        m = re.search(r'^(\S+)_IS_(\S*)_CLASS\n', liststr, flags=re.MULTILINE)
+        m2 = re.search(r'^(\S+)_IS_(\S*)\n', liststr, flags=re.MULTILINE)
+        m3 = re.search(r'^(\S+?)_(\S*)_get_type\n', liststr, flags=re.MULTILINE)
+        if m:
+            prefix = m.group(1)
+            lprefix = prefix.lower()
+            klass = m.group(2)
+            lclass = klass.lower()
+            logging.info("Found gobject type '%s_%s' from is_class macro", prefix, klass)
+        elif m2:
+            prefix = m2.group(1)
+            lprefix = prefix.lower()
+            klass = m2.group(2)
+            lclass = klass.lower()
+            logging.info("Found gobject type '%s_%s' from is_ macro", prefix, klass)
+        elif m3:
+            lprefix = m3.group(1)
+            prefix = lprefix.upper()
+            lclass = m3.group(2)
+            klass = lclass.upper()
+            logging.info("Found gobject type '%s_%s' from get_type function", prefix, klass)
+        else:
+            break
+
+        cclass = lclass
+        cclass = cclass.replace('_', '')
+        mtype = lprefix + cclass
+
+        liststr, standard_decl = replace_once(liststr, standard_decl, r'^%sPrivate\n' % mtype)
+
+        # We only leave XxYy* in the normal section if they have docs
+        if mtype not in doc_comments:
+            logging.info("  Hide instance docs for %s", mtype)
+            liststr, standard_decl = replace_once(liststr, standard_decl, r'^%s\n' % mtype)
+
+        if mtype + 'class' not in doc_comments:
+            logging.info("  Hide class docs for %s", mtype)
+            liststr, standard_decl = replace_once(liststr, standard_decl, r'^%sClass\n' % mtype)
+
+        if mtype + 'interface' not in doc_comments:
+            logging.info("  Hide iface docs for %s", mtype)
+            liststr, standard_decl = replace_once(liststr, standard_decl, r'%sInterface\n' % mtype)
+
+        if mtype + 'iface' not in doc_comments:
+            logging.info("  Hide iface docs for " + mtype)
+            liststr, standard_decl = replace_once(liststr, standard_decl, r'%sIface\n' % mtype)
+
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_IS_%s\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_TYPE_%s\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_get_type\n' % lclass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_CLASS\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_IS_%s_CLASS\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_CLASS\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_IFACE\n' % klass)
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s_GET_INTERFACE\n' % klass)
+        # We do this one last, otherwise it tends to be caught by the IS_$class macro
+        liststr, standard_decl = replace_all(liststr, standard_decl, r'^\S+_%s\n' % klass)
+
+    logging.info('Decl:%s---', liststr)
+    logging.info('Std :%s---', ''.join(sorted(standard_decl)))
+    if len(standard_decl):
+        # sort the symbols
+        liststr += '<SUBSECTION Standard>\n' + ''.join(sorted(standard_decl))
+    return liststr
 
 
 def replace_once(liststr, standard_decl, regex):

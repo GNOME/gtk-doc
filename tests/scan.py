@@ -658,6 +658,13 @@ class ScanHeaderContentTypedefs(ScanHeaderContentTestCase):
         self.assertNoDeclFound(slist)
 
 
+class SeparateSubSectionsTestCase(unittest.TestCase):
+
+    def test_NoSymbolsGiveEmptyResult(self):
+        liststr = scan.SeparateSubSections([], {})
+        self.assertEqual('\n', liststr)
+
+
 if __name__ == '__main__':
     unittest.main()
 
