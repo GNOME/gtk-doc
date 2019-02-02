@@ -461,6 +461,15 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('data', header, slist)
 
+    def test_GetTitleFromGObjectClassStruct(self):
+        header = textwrap.dedent("""\
+            struct _GtkdocObjectClass {
+              GObjectClass parent;
+            };""")
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertIn('<TITLE>GtkdocObject</TITLE>', slist)
+
 
 class ScanHeaderContentUnions(ScanHeaderContentTestCase):
     """Test parsing of union declarations."""
