@@ -641,8 +641,13 @@ class ScanHeaderContentTypedefs(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('uint', header, slist)
 
-    def test_SkipsEnumTypedef(self):
+    def test_SkipsEnumTypedefDifferentName(self):
         header = 'typedef enum data dateenum;'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertNoDeclFound(slist)
+
+    def test_SkipsEnumTypedefUnderscoreName(self):
+        header = 'typedef enum _data data;'
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertNoDeclFound(slist)
 
