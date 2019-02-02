@@ -580,6 +580,12 @@ class ScanHeaderContentUserFunction(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('func', 'void', 'int a', slist)
 
+    @parameterized.expand([('void', 'void'), ('const_int', 'const int')])
+    def test_FindsFunctionPointerVar(self, _, ret_type):
+        header = '%s (*func)();' % ret_type
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('func', ret_type, '', slist)
+
 
 class ScanHeaderContentVariabless(ScanHeaderContentTestCase):
     """Test parsing of variable declarations."""
