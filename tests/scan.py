@@ -655,11 +655,82 @@ class ScanHeaderContentTypedefs(ScanHeaderContentTestCase):
         self.assertNoDeclFound(slist)
 
 
-class SeparateSubSectionsTestCase(unittest.TestCase):
+class SeparateSubSectionsTestCase(ScanHeaderContentTestCase):
 
     def test_NoSymbolsGiveEmptyResult(self):
         liststr = scan.SeparateSubSections([], {})
         self.assertEqual('\n', liststr)
+
+    def test_CreatesStandardSectionFromIsObjectMacro(self):
+        header = textwrap.dedent("""\
+            #define GTKDOC_IS_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTKDOC_TYPE_OBJECT))
+            void gtkdoc_object_function(void);
+            """)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        liststr = scan.SeparateSubSections(slist, doc_comments)
+        self.assertEqual(
+            ['gtkdoc_object_function', '<SUBSECTION Standard>', 'GTKDOC_IS_OBJECT'],
+            liststr.splitlines())
+
+    def test_CreatesStandardSectionFromIsObjectClassMacro(self):
+        header = textwrap.dedent("""\
+            #define GTKDOC_IS_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTKDOC_TYPE_OBJECT))
+            void gtkdoc_object_function(void);
+            """)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        liststr = scan.SeparateSubSections(slist, doc_comments)
+        self.assertEqual(
+            ['gtkdoc_object_function', '<SUBSECTION Standard>', 'GTKDOC_IS_OBJECT_CLASS'],
+            liststr.splitlines())
+
+    def test_CreatesStandardSectionFromGetTypeFunction(self):
+        header = textwrap.dedent("""\
+            GType gtkdoc_object_get_type(void) G_GNUC_CONST;
+            void gtkdoc_object_function(void);
+            """)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        liststr = scan.SeparateSubSections(slist, doc_comments)
+        self.assertEqual(
+            ['gtkdoc_object_function', '<SUBSECTION Standard>', 'gtkdoc_object_get_type'],
+            liststr.splitlines())
+
+    def test_MovesSymbolIfUndocumented(self):
+        header = textwrap.dedent("""\
+            struct _GtkdocObject {
+              GObject parent;
+            };
+            GType gtkdoc_object_get_type(void) G_GNUC_CONST;
+            void gtkdoc_object_function(void);
+            """)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        liststr = scan.SeparateSubSections(slist, doc_comments)
+        self.assertEqual(
+            ['gtkdoc_object_function', '<SUBSECTION Standard>', 'GtkdocObject', 'gtkdoc_object_get_type'],
+            liststr.splitlines())
+
+    def test_DoesNotMoveSymbolIfDocumented(self):
+        header = textwrap.dedent("""\
+            /**
+             * GtkdocObject:
+             *
+             * instance data of gtk-doc unit test class
+             */
+            struct _GtkdocObject {
+              GObject parent;
+            };
+            GType gtkdoc_object_get_type(void) G_GNUC_CONST;
+            void gtkdoc_object_function(void);
+            """)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        liststr = scan.SeparateSubSections(slist, doc_comments)
+        self.assertEqual(
+            ['GtkdocObject', 'gtkdoc_object_function', '<SUBSECTION Standard>', 'gtkdoc_object_get_type'],
+            liststr.splitlines())
 
 
 if __name__ == '__main__':
