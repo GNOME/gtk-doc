@@ -664,7 +664,7 @@ class ScanHeaderContentTypedefs(ScanHeaderContentTestCase):
         self.assertNoDeclFound(slist)
 
 
-class SeparateSubSectionsTestCase(ScanHeaderContentTestCase):
+class SeparateSubSections(ScanHeaderContentTestCase):
 
     def test_NoSymbolsGiveEmptyResult(self):
         liststr = scan.SeparateSubSections([], {})
