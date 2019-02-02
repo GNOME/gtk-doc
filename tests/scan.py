@@ -365,22 +365,19 @@ class ScanHeaderContentMacros(ScanHeaderContentTestCase):
         self.assertEqual([], self.types)
 
     def test_FindsMacroNumber(self):
-        slist, doc_comments = self.scanHeaderContent([
-            '#define FOO 1'
-        ])
-        self.assertDecl('FOO', '#define FOO 1', slist)
+        header = '#define FOO 1'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('FOO', header, slist)
 
     def test_FindsMacroExpression(self):
-        slist, doc_comments = self.scanHeaderContent([
-            '#define FOO (1 << 1)'
-        ])
-        self.assertDecl('FOO', '#define FOO (1 << 1)', slist)
+        header = '#define FOO (1 << 1)'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('FOO', header, slist)
 
     def test_FindsMacroFunction(self):
-        slist, doc_comments = self.scanHeaderContent([
-            '#define FOO(x) (x << 1)'
-        ])
-        self.assertDecl('FOO', '#define FOO(x) (x << 1)', slist)
+        header = '#define FOO(x) (x << 1)'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('FOO', header, slist)
 
     def test_IgnoresInternalMacro(self):
         slist, doc_comments = self.scanHeaderContent([
