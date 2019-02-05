@@ -19,8 +19,10 @@
 #
 
 import logging
+import textwrap
 import unittest
 
+from anytree import PreOrderIter
 from lxml import etree
 
 from gtkdoc import mkhtml2
@@ -59,6 +61,49 @@ class TestChunking(unittest.TestCase):
         descendants = [f for f in files.descendants if f.anchor is None]
         logging.info('descendants : %s', str(descendants))
         self.assertEqual(2, len(descendants))
+
+
+class TestXrefs(unittest.TestCase):
+
+    def setUp(self):
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+
+    def chunk_db(self, xml):
+        root = etree.XML(xml)
+        files = mkhtml2.chunk(root, 'test')
+        return [f for f in PreOrderIter(files) if f.anchor is None]
+
+    def test_extract_ids(self):
+        files = self.chunk_db('<book><chapter id="chap1"></chapter></book>')
+        links = {}
+        mkhtml2.add_id_links_and_titles(files, links)
+        self.assertIn('chap1', links)
+
+    def test_extract_titles(self):
+        files = self.chunk_db('<book><chapter id="chap1"><title>Intro</title></chapter></book>')
+        links = {}
+        mkhtml2.add_id_links_and_titles(files, links)
+        self.assertIn('chap1', mkhtml2.titles)
+        self.assertEqual('Intro', mkhtml2.titles['chap1']['title'])
+        self.assertEqual('chapter', mkhtml2.titles['chap1']['tag'])
+
+    def test_extract_glossaries(self):
+        files = self.chunk_db(textwrap.dedent("""\
+            <book>
+              <glossary id="glossary">
+                <glossentry>
+                  <glossterm><anchor id="glossterm-API"/>API</glossterm>
+                  <glossdef>
+                    <para>Application Programming Interface</para>
+                  </glossdef>
+                </glossentry>
+              </glossary>
+            </book>"""))
+        mkhtml2.build_glossary(files)
+        self.assertIn('API', mkhtml2.glossary)
+        self.assertEquals('Application Programming Interface', mkhtml2.glossary['API'])
 
 
 if __name__ == '__main__':
