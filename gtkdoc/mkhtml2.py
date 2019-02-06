@@ -1710,7 +1710,8 @@ def create_devhelp2_content(module, xml, files):
         online_url = bookinfo.xpath('./releaseinfo/ulink[@role="online-location"]/@url')[0]
         if online_url:
             online_attr = ' online="' + online_url + '"'
-        # TODO: support author too (see devhelp2.xsl)
+        # TODO: support author too (see devhelp2.xsl), it is hardly used though
+        # locate *.devhelp2 | xargs grep -Hn --color ' author="[^"]'
     # TODO: fixxref uses '--src-lang' to set the language, we have this in options too
     result = [
         """<?xml version="1.0" encoding="utf-8" standalone="no"?>
