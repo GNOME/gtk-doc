@@ -1700,54 +1700,61 @@ def create_devhelp2_refsect3_keyword(node, base_link, title, name):
         create_devhelp2_condition_attribs(node))
 
 
+def create_devhelp2_content(module, xml, files):
+    title = ''
+    online_attr = ''
+    bookinfo_nodes = xml.xpath('/book/bookinfo')
+    if len(bookinfo_nodes):
+        bookinfo = bookinfo_nodes[0]
+        title = bookinfo.xpath('./title/text()')[0]
+        online_url = bookinfo.xpath('./releaseinfo/ulink[@role="online-location"]/@url')[0]
+        if online_url:
+            online_attr = ' online="' + online_url + '"'
+        # TODO: support author too (see devhelp2.xsl)
+    # TODO: fixxref uses '--src-lang' to set the language, we have this in options too
+    result = [
+        """<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<book xmlns="http://www.devhelp.net/book" title="%s" link="index.html" author="" name="%s" version="2" language="c"%s>
+  <chapters>
+""" % (title, module, online_attr)
+    ]
+    # toc
+    result.extend(create_devhelp2_toc(files[0].root))
+    result.append("""  </chapters>
+  <functions>
+""")
+    # keywords from all refsect2 and refsect3
+    refsect2 = etree.XPath('//refsect2[@role]')
+    refsect3_enum = etree.XPath('refsect3[@role="enum_members"]/informaltable/tgroup/tbody/row[@role="constant"]')
+    refsect3_enum_details = etree.XPath('entry[@role="enum_member_name"]/para')
+    refsect3_struct = etree.XPath('refsect3[@role="struct_members"]/informaltable/tgroup/tbody/row[@role="member"]')
+    refsect3_struct_details = etree.XPath('entry[@role="struct_member_name"]/para/structfield')
+    for node in files:
+        base_link = node.filename + '#'
+        refsect2_nodes = refsect2(node.xml)
+        for refsect2_node in refsect2_nodes:
+            result.append(create_devhelp2_refsect2_keyword(refsect2_node, base_link))
+            refsect3_nodes = refsect3_enum(refsect2_node)
+            for refsect3_node in refsect3_nodes:
+                details_node = refsect3_enum_details(refsect3_node)[0]
+                name = details_node.attrib['id']
+                result.append(create_devhelp2_refsect3_keyword(refsect3_node, base_link, details_node.text, name))
+            refsect3_nodes = refsect3_struct(refsect2_node)
+            for refsect3_node in refsect3_nodes:
+                details_node = refsect3_struct_details(refsect3_node)[0]
+                name = details_node.attrib['id']
+                result.append(create_devhelp2_refsect3_keyword(refsect3_node, base_link, name, name))
+
+    result.append("""  </functions>
+</book>
+""")
+    return result
+
+
 def create_devhelp2(out_dir, module, xml, files):
     with open(os.path.join(out_dir, module + '.devhelp2'), 'wt',
               newline='\n', encoding='utf-8') as idx:
-        bookinfo_nodes = xml.xpath('/book/bookinfo')
-        title = ''
-        if bookinfo_nodes is not None:
-            bookinfo = bookinfo_nodes[0]
-            title = bookinfo.xpath('./title/text()')[0]
-            online_url = bookinfo.xpath('./releaseinfo/ulink[@role="online-location"]/@url')[0]
-            # TODO: support author too (see devhelp2.xsl)
-        # TODO: fixxref uses '--src-lang' to set the language
-        result = [
-            """<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<book xmlns="http://www.devhelp.net/book" title="%s" link="index.html" author="" name="%s" version="2" language="c" online="%s">
-  <chapters>
-""" % (title, module, online_url)
-        ]
-        # toc
-        result.extend(create_devhelp2_toc(files[0].root))
-        result.append("""  </chapters>
-  <functions>
-""")
-        # keywords from all refsect2 and refsect3
-        refsect2 = etree.XPath('//refsect2[@role]')
-        refsect3_enum = etree.XPath('refsect3[@role="enum_members"]/informaltable/tgroup/tbody/row[@role="constant"]')
-        refsect3_enum_details = etree.XPath('entry[@role="enum_member_name"]/para')
-        refsect3_struct = etree.XPath('refsect3[@role="struct_members"]/informaltable/tgroup/tbody/row[@role="member"]')
-        refsect3_struct_details = etree.XPath('entry[@role="struct_member_name"]/para/structfield')
-        for node in files:
-            base_link = node.filename + '#'
-            refsect2_nodes = refsect2(node.xml)
-            for refsect2_node in refsect2_nodes:
-                result.append(create_devhelp2_refsect2_keyword(refsect2_node, base_link))
-                refsect3_nodes = refsect3_enum(refsect2_node)
-                for refsect3_node in refsect3_nodes:
-                    details_node = refsect3_enum_details(refsect3_node)[0]
-                    name = details_node.attrib['id']
-                    result.append(create_devhelp2_refsect3_keyword(refsect3_node, base_link, details_node.text, name))
-                refsect3_nodes = refsect3_struct(refsect2_node)
-                for refsect3_node in refsect3_nodes:
-                    details_node = refsect3_struct_details(refsect3_node)[0]
-                    name = details_node.attrib['id']
-                    result.append(create_devhelp2_refsect3_keyword(refsect3_node, base_link, name, name))
-
-        result.append("""  </functions>
-</book>
-""")
-        for line in result:
+        for line in create_devhelp2_content(module, xml, files):
             idx.write(line)
 
 

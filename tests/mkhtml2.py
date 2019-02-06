@@ -30,10 +30,10 @@ from gtkdoc import mkhtml2
 
 class TestChunking(unittest.TestCase):
 
-    def setUp(self):
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+    # def setUp(self):
+    #     logging.basicConfig(
+    #         level=logging.INFO,
+    #         format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
 
     def test_chunk_only_root_gives_single_chunk(self):
         root = etree.XML('<book />')
@@ -63,12 +63,12 @@ class TestChunking(unittest.TestCase):
         self.assertEqual(2, len(descendants))
 
 
-class TestXrefs(unittest.TestCase):
+class TestDataExtraction(unittest.TestCase):
 
-    def setUp(self):
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+    # def setUp(self):
+    #     logging.basicConfig(
+    #         level=logging.INFO,
+    #         format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
 
     def chunk_db(self, xml):
         root = etree.XML(xml)
@@ -103,7 +103,44 @@ class TestXrefs(unittest.TestCase):
             </book>"""))
         mkhtml2.build_glossary(files)
         self.assertIn('API', mkhtml2.glossary)
-        self.assertEquals('Application Programming Interface', mkhtml2.glossary['API'])
+        self.assertEqual('Application Programming Interface', mkhtml2.glossary['API'])
+
+
+class TestDevhelp(unittest.TestCase):
+
+    def setUp(self):
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+
+    def chunk_db(self, xml):
+        root = etree.XML(xml)
+        files = mkhtml2.chunk(root, 'test')
+        return root, [f for f in PreOrderIter(files) if f.anchor is None]
+
+    def test_create_devhelp_without_bookinfo(self):
+        root, files = self.chunk_db(textwrap.dedent("""\
+            <book>
+              <chapter id="chap1"><title>Intro</title></chapter>
+            </book>"""))
+        devhelp = mkhtml2.create_devhelp2_content('test', root, files)
+        self.assertNotIn('online', devhelp[0])
+
+    def test_create_devhelp_with_bookinfo(self):
+        root, files = self.chunk_db(textwrap.dedent("""\
+            <book>
+              <bookinfo>
+                <title>test Reference Manual</title>
+                <releaseinfo>
+                  The latest version of this documentation can be found on-line at
+                  <ulink role="online-location" url="http://www.example.com/tester/index.html">online-site</ulink>.
+                </releaseinfo>
+              </bookinfo>
+              <chapter id="chap1"><title>Intro</title></chapter>
+            </book>"""))
+        devhelp = mkhtml2.create_devhelp2_content('test', root, files)
+        self.assertIn('online="http://www.example.com/tester/index.html"', devhelp[0])
+        self.assertIn('title="test Reference Manual"', devhelp[0])
 
 
 if __name__ == '__main__':
