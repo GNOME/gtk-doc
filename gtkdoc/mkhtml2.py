@@ -1707,9 +1707,9 @@ def create_devhelp2_content(module, xml, files):
     if len(bookinfo_nodes):
         bookinfo = bookinfo_nodes[0]
         title = bookinfo.xpath('./title/text()')[0]
-        online_url = bookinfo.xpath('./releaseinfo/ulink[@role="online-location"]/@url')[0]
-        if online_url:
-            online_attr = ' online="' + online_url + '"'
+        online_url = bookinfo.xpath('./releaseinfo/ulink[@role="online-location"]/@url')
+        if len(online_url):
+            online_attr = ' online="' + online_url[0] + '"'
         # TODO: support author too (see devhelp2.xsl), it is hardly used though
         # locate *.devhelp2 | xargs grep -Hn --color ' author="[^"]'
     # TODO: fixxref uses '--src-lang' to set the language, we have this in options too
