@@ -145,10 +145,10 @@ class TestDevhelp(unittest.TestCase):
 
 class TestNavNodes(unittest.TestCase):
 
-    def setUp(self):
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+    # def setUp(self):
+    #     logging.basicConfig(
+    #         level=logging.INFO,
+    #         format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
 
     def chunk_db(self, xml):
         root = etree.XML(xml)
@@ -183,6 +183,37 @@ class TestNavNodes(unittest.TestCase):
         nav = mkhtml2.generate_nav_nodes(files, files[1])
         self.assertEqual(4, len(nav))
         self.assertIn('nav_next', nav)
+
+
+class TestConverter(unittest.TestCase):
+
+    xml_book = textwrap.dedent("""\
+        <book>
+          <bookinfo>
+            <title>test Reference Manual</title>
+          </bookinfo>
+        </book>""")
+
+    # def setUp(self):
+    #     logging.basicConfig(
+    #         level=logging.INFO,
+    #         format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+
+    def convert(self, xml, ix):
+        root = etree.XML(xml)
+        files = mkhtml2.chunk(root, 'test')
+        nodes = [f for f in PreOrderIter(files) if f.anchor is None]
+        return '\n'.join(mkhtml2.convert_content('test', nodes, nodes[ix], 'c'))
+
+    def test_convert_bool_is_html(self):
+        html = self.convert(self.xml_book, 0)
+        self.assertIn('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">', html)
+        self.assertIn('<html>', html)
+        self.assertIn('</html>', html)
+
+    def test_convert_bool_has_title(self):
+        html = self.convert(self.xml_book, 0)
+        self.assertIn('<title>test Reference Manual</title>', html)
 
 
 if __name__ == '__main__':

@@ -1630,6 +1630,22 @@ def generate_nav_nodes(files, node):
     return nav
 
 
+def convert_content(module, files, node, src_lang):
+    converter = convert_chunks.get(node.name)
+    if converter is None:
+        logging.warning('Add chunk converter for "%s"', node.name)
+        return []
+
+    ctx = {
+        'module': module,
+        'files': files,
+        'node': node,
+        'src-lang': src_lang,
+    }
+    ctx.update(generate_nav_nodes(files, node))
+    return converter(ctx)
+
+
 def convert(out_dir, module, files, node, src_lang):
     """Convert the docbook chunks to a html file.
 
@@ -1642,20 +1658,8 @@ def convert(out_dir, module, files, node, src_lang):
     logging.info('Writing: %s', node.filename)
     with open(os.path.join(out_dir, node.filename), 'wt',
               newline='\n', encoding='utf-8') as html:
-        ctx = {
-            'module': module,
-            'files': files,
-            'node': node,
-            'src-lang': src_lang,
-        }
-        ctx.update(generate_nav_nodes(files, node))
-
-        converter = convert_chunks.get(node.name)
-        if converter is not None:
-            for line in converter(ctx):
-                html.write(line)
-        else:
-            logging.warning('Add chunk converter for "%s"', node.name)
+        for line in convert_content(module, files, node, src_lang):
+            html.write(line)
 
 
 def create_devhelp2_toc(node):
