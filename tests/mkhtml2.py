@@ -108,10 +108,10 @@ class TestDataExtraction(unittest.TestCase):
 
 class TestDevhelp(unittest.TestCase):
 
-    def setUp(self):
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+    # def setUp(self):
+    #     logging.basicConfig(
+    #         level=logging.INFO,
+    #         format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
 
     def chunk_db(self, xml):
         root = etree.XML(xml)
@@ -141,6 +141,48 @@ class TestDevhelp(unittest.TestCase):
         devhelp = mkhtml2.create_devhelp2_content('test', root, files)
         self.assertIn('online="http://www.example.com/tester/index.html"', devhelp[0])
         self.assertIn('title="test Reference Manual"', devhelp[0])
+
+
+class TestNavNodes(unittest.TestCase):
+
+    def setUp(self):
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
+
+    def chunk_db(self, xml):
+        root = etree.XML(xml)
+        files = mkhtml2.chunk(root, 'test')
+        return [f for f in PreOrderIter(files) if f.anchor is None]
+
+    def test_nav_nodes_contains_home(self):
+        files = self.chunk_db(textwrap.dedent("""\
+            <book>
+            </book>"""))
+        nav = mkhtml2.generate_nav_nodes(files, files[0])
+        self.assertEqual(1, len(nav))
+        self.assertIn('nav_home', nav)
+
+    def test_nav_nodes_contains_up_and_prev(self):
+        files = self.chunk_db(textwrap.dedent("""\
+            <book>
+              <chapter id="chap1"><title>Intro</title></chapter>
+            </book>"""))
+        nav = mkhtml2.generate_nav_nodes(files, files[1])
+        self.assertEqual(3, len(nav))
+        self.assertIn('nav_up', nav)
+        self.assertIn('nav_prev', nav)
+        self.assertNotIn('nav_next', nav)
+
+    def test_nav_nodes_contains_next(self):
+        files = self.chunk_db(textwrap.dedent("""\
+            <book>
+              <chapter id="chap1"><title>Intro</title></chapter>
+              <chapter id="chap2"><title>Content</title></chapter>
+            </book>"""))
+        nav = mkhtml2.generate_nav_nodes(files, files[1])
+        self.assertEqual(4, len(nav))
+        self.assertIn('nav_next', nav)
 
 
 if __name__ == '__main__':
