@@ -108,39 +108,90 @@ class TestDataExtraction(unittest.TestCase):
 
 class TestDevhelp(unittest.TestCase):
 
+    xml_minimal = textwrap.dedent("""\
+      <book>
+        <chapter id="chap1"><title>Intro</title></chapter>
+      </book>""")
+
+    xml_basic = textwrap.dedent("""\
+      <book>
+        <bookinfo>
+          <title>test Reference Manual</title>
+          <releaseinfo>
+            The latest version of this documentation can be found on-line at
+            <ulink role="online-location" url="http://www.example.com/tester/index.html">online-site</ulink>.
+          </releaseinfo>
+        </bookinfo>
+        <chapter id="chap1"><title>Intro</title></chapter>
+      </book>""")
+
+    xml_full = textwrap.dedent("""\
+      <book>
+        <bookinfo>
+          <title>test Reference Manual</title>
+        </bookinfo>
+        <chapter id="chap1">
+          <title>Reference</title>
+          <refentry id="GtkdocObject">
+            <refmeta>
+              <refentrytitle role="top_of_page" id="GtkdocObject.top_of_page">GtkdocObject</refentrytitle>
+              <refmiscinfo>TESTER Library</refmiscinfo>
+            </refmeta>
+            <refnamediv>
+              <refname>GtkdocObject</refname>
+              <refpurpose>class for gtk-doc unit test</refpurpose>
+            </refnamediv>
+            <refsect1 id="GtkdocObject.functions" role="functions_proto">
+              <title role="functions_proto.title">Functions</title>
+            </refsect1>
+            <refsect1 id="GtkdocObject.functions_details" role="details">
+              <title role="details.title">Functions</title>
+              <refsect2 id="gtkdoc-object-new" role="function" condition="since:0.1">
+                <title>gtkdoc_object_new&#160;()</title>
+              </refsect2>
+            </refsect1>
+          </refentry>
+        </chapter>
+      </book>""")
+
     # def setUp(self):
     #     logging.basicConfig(
     #         level=logging.INFO,
     #         format='%(asctime)s:%(filename)s:%(funcName)s:%(lineno)d:%(levelname)s:%(message)s')
 
-    def chunk_db(self, xml):
+    def convert(self, xml):
         root = etree.XML(xml)
         files = mkhtml2.chunk(root, 'test')
-        return root, [f for f in PreOrderIter(files) if f.anchor is None]
+        files = [f for f in PreOrderIter(files) if f.anchor is None]
+        mkhtml2.add_id_links_and_titles(files, {})
+        return '\n'.join(mkhtml2.create_devhelp2_content('test', root, files))
+
+    def test_create_devhelp_has_minimal_structure(self):
+        devhelp = self.convert(self.xml_minimal)
+        self.assertIn('<book xmlns', devhelp)
+        self.assertIn('<chapters', devhelp)
+        self.assertIn('<functions', devhelp)
 
     def test_create_devhelp_without_bookinfo(self):
-        root, files = self.chunk_db(textwrap.dedent("""\
-            <book>
-              <chapter id="chap1"><title>Intro</title></chapter>
-            </book>"""))
-        devhelp = mkhtml2.create_devhelp2_content('test', root, files)
-        self.assertNotIn('online', devhelp[0])
+        devhelp = self.convert(self.xml_minimal)
+        self.assertNotIn('online', devhelp)
 
     def test_create_devhelp_with_bookinfo(self):
-        root, files = self.chunk_db(textwrap.dedent("""\
-            <book>
-              <bookinfo>
-                <title>test Reference Manual</title>
-                <releaseinfo>
-                  The latest version of this documentation can be found on-line at
-                  <ulink role="online-location" url="http://www.example.com/tester/index.html">online-site</ulink>.
-                </releaseinfo>
-              </bookinfo>
-              <chapter id="chap1"><title>Intro</title></chapter>
-            </book>"""))
-        devhelp = mkhtml2.create_devhelp2_content('test', root, files)
-        self.assertIn('online="http://www.example.com/tester/index.html"', devhelp[0])
-        self.assertIn('title="test Reference Manual"', devhelp[0])
+        devhelp = self.convert(self.xml_basic)
+        self.assertIn('online="http://www.example.com/tester/index.html"', devhelp)
+        self.assertIn('title="test Reference Manual"', devhelp)
+
+    def test_create_devhelp_with_refentry_has_chapters(self):
+        devhelp = self.convert(self.xml_full)
+        self.assertIn('<sub name="Reference" link="chap1.html">', devhelp)
+        self.assertIn('<sub name="GtkdocObject" link="GtkdocObject.html"/>', devhelp)
+
+    def test_create_devhelp_with_refentry_has_keywords(self):
+        devhelp = self.convert(self.xml_full)
+        self.assertIn(
+            '<keyword type="function" name="gtkdoc_object_new ()" '
+            'link="GtkdocObject.html#gtkdoc-object-new" since="0.1"/>',
+            devhelp)
 
 
 class TestNavNodes(unittest.TestCase):
