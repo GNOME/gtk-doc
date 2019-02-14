@@ -17,7 +17,7 @@ flavour=no-tmpl
 
 # mini help
 usage="\
-usage: $progname [ --copy ] [ --docdir DIR ] [ --flavour {legacy|legacy-flat|no-tmpl|no-tmpl-flat} ] [ --srcdir DIR ]"
+usage: $progname [ --copy ] [ --docdir DIR ] [ --flavour {legacy|legacy-flat|no-tmpl|no-tmpl-flat|no-xslt|no-xslt-flat} ] [ --srcdir DIR ]"
 
 # Find the srcdir early (and ignore a srcdir set in configure).
 # https://bugzilla.gnome.org/show_bug.cgi?id=707426
