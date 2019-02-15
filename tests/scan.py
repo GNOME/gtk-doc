@@ -22,8 +22,9 @@ import argparse
 import textwrap
 import unittest
 
-from gtkdoc import scan
 from parameterized import parameterized
+
+from gtkdoc import scan
 
 
 BASIC_TYPES = [
