@@ -24,6 +24,7 @@ import unittest
 
 from anytree import PreOrderIter
 from lxml import etree
+from parameterized import parameterized
 
 from gtkdoc import mkhtml2
 
@@ -245,6 +246,40 @@ class TestConverter(unittest.TestCase):
           </bookinfo>
         </book>""")
 
+    xml_book_chapter = textwrap.dedent("""\
+        <book>
+          <bookinfo>
+            <title>test Reference Manual</title>
+          </bookinfo>
+          <chapter id="chap1"><title>Intro</title></chapter>
+        </book>""")
+
+    xml_book_part_chapter = textwrap.dedent("""\
+        <book>
+          <bookinfo>
+            <title>test Reference Manual</title>
+          </bookinfo>
+          <part label="1" id="paer.i">
+            <title>Overview</title>
+            <chapter id="chap1"><title>Intro</title></chapter>
+          </part>
+        </book>""")
+
+    xml_book_chapter_refentry = textwrap.dedent("""\
+        <book>
+          <bookinfo>
+            <title>test Reference Manual</title>
+          </bookinfo>
+          <chapter id="chap1">
+            <title>Reference</title>
+            <refentry id="GtkdocObject">
+              <refmeta>
+                <refentrytitle role="top_of_page" id="GtkdocObject.top_of_page">GtkdocObject</refentrytitle>
+              </refmeta>
+            </refentry>
+          </chapter>
+        </book>""")
+
     # def setUp(self):
     #     logging.basicConfig(
     #         level=logging.INFO,
@@ -256,13 +291,19 @@ class TestConverter(unittest.TestCase):
         nodes = [f for f in PreOrderIter(files) if f.anchor is None]
         return '\n'.join(mkhtml2.convert_content('test', nodes, nodes[ix], 'c'))
 
-    def test_convert_bool_is_html(self):
-        html = self.convert(self.xml_book, 0)
+    @parameterized.expand([
+      ('book', (xml_book, 0)),
+      ('chapter', (xml_book_chapter, 1)),
+      ('part', (xml_book_part_chapter, 1)),
+      ('refentry', (xml_book_chapter_refentry, 2)),
+    ])
+    def test_convert_produces_html(self, _, params):
+        html = self.convert(params[0], params[1])
         self.assertIn('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">', html)
         self.assertIn('<html>', html)
         self.assertIn('</html>', html)
 
-    def test_convert_bool_has_title(self):
+    def test_convert_book_has_title(self):
         html = self.convert(self.xml_book, 0)
         self.assertIn('<title>test Reference Manual</title>', html)
 
