@@ -1504,7 +1504,10 @@ def convert_glossary(ctx):
 def convert_index(ctx):
     node = ctx['node']
     # Get all indexdivs under indexdiv
-    indexdivs = node.xml.find('indexdiv').findall('indexdiv')
+    indexdivs = []
+    indexdiv = node.xml.find('indexdiv')
+    if indexdiv is not None:
+        indexdivs = indexdiv.findall('indexdiv')
 
     result = [
         HTML_HEADER % (node.title + ": " + node.root.title, generate_head_links(ctx)),

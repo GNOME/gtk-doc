@@ -246,6 +246,14 @@ class TestConverter(unittest.TestCase):
           </bookinfo>
         </book>""")
 
+    xml_book_preface = textwrap.dedent("""\
+        <book>
+          <bookinfo>
+            <title>test Reference Manual</title>
+          </bookinfo>
+          <preface id="intro"><title>Intro</title></preface>
+        </book>""")
+
     xml_book_chapter = textwrap.dedent("""\
         <book>
           <bookinfo>
@@ -280,6 +288,65 @@ class TestConverter(unittest.TestCase):
           </chapter>
         </book>""")
 
+    xml_book_index_empty = textwrap.dedent("""\
+        <book>
+          <bookinfo>
+            <title>test Reference Manual</title>
+          </bookinfo>
+          <index id="api-index-full">
+            <title>API Index</title>
+          </index>
+        </book>""")
+
+    xml_book_index = textwrap.dedent("""\
+        <book>
+          <bookinfo>
+            <title>test Reference Manual</title>
+          </bookinfo>
+          <index id="api-index-full">
+            <title>API Index</title>
+            <indexdiv id="api-index-full">
+              <indexdiv><title>O</title>
+                <!-- we get a link warning, since we we don't include the 'refentry' -->
+                <!--indexentry>
+                  <primaryie linkends="gtkdoc-object-new">
+                    <link linkend="gtkdoc-object-new">gtkdoc_object_new</link>,
+                    function in <link linkend="GtkdocObject">GtkdocObject</link>
+                  </primaryie>
+                </indexentry-->
+              </indexdiv>
+            </indexdiv>
+          </index>
+        </book>""")
+
+    xml_book_glossary_empty = textwrap.dedent("""\
+        <book>
+          <bookinfo>
+            <title>test Reference Manual</title>
+          </bookinfo>
+          <glossary id="glossary">
+            <title>Glossary</title>
+          </glossary>
+        </book>""")
+
+    xml_book_glossary = textwrap.dedent("""\
+        <book>
+          <bookinfo>
+            <title>test Reference Manual</title>
+          </bookinfo>
+          <glossary id="glossary">
+            <title>Glossary</title>
+            <glossdiv><title>A</title>
+              <glossentry>
+                <glossterm><anchor id="glossterm-API"/>API</glossterm>
+                <glossdef>
+                  <para>Application Programming Interface</para>
+                </glossdef>
+              </glossentry>
+            </glossdiv>
+          </glossary>
+        </book>""")
+
     # def setUp(self):
     #     logging.basicConfig(
     #         level=logging.INFO,
@@ -292,10 +359,15 @@ class TestConverter(unittest.TestCase):
         return '\n'.join(mkhtml2.convert_content('test', nodes, nodes[ix], 'c'))
 
     @parameterized.expand([
-      ('book', (xml_book, 0)),
-      ('chapter', (xml_book_chapter, 1)),
-      ('part', (xml_book_part_chapter, 1)),
-      ('refentry', (xml_book_chapter_refentry, 2)),
+        ('book', (xml_book, 0)),
+        ('preface', (xml_book_preface, 1)),
+        ('chapter', (xml_book_chapter, 1)),
+        ('part', (xml_book_part_chapter, 1)),
+        ('refentry', (xml_book_chapter_refentry, 2)),
+        ('index', (xml_book_index, 1)),
+        ('index_empty', (xml_book_index_empty, 1)),
+        ('glossary', (xml_book_glossary, 1)),
+        ('glossary_empty', (xml_book_glossary_empty, 1)),
     ])
     def test_convert_produces_html(self, _, params):
         html = self.convert(params[0], params[1])
