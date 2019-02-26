@@ -239,45 +239,37 @@ class TestNavNodes(unittest.TestCase):
 
 class TestConverter(unittest.TestCase):
 
-    xml_book = textwrap.dedent("""\
+    xml_book_beg = textwrap.dedent("""\
         <book>
           <bookinfo>
             <title>test Reference Manual</title>
-          </bookinfo>
+          </bookinfo>""")
+    xml_book_end = textwrap.dedent("""\
         </book>""")
+    xml_book = '\n'.join([xml_book_beg, xml_book_end])
 
-    xml_book_preface = textwrap.dedent("""\
-        <book>
-          <bookinfo>
-            <title>test Reference Manual</title>
-          </bookinfo>
-          <preface id="intro"><title>Intro</title></preface>
-        </book>""")
+    xml_book_preface = '\n'.join([
+        xml_book_beg,
+        '  <preface id="intro"><title>Intro</title></preface>',
+        xml_book_end])
 
-    xml_book_chapter = textwrap.dedent("""\
-        <book>
-          <bookinfo>
-            <title>test Reference Manual</title>
-          </bookinfo>
-          <chapter id="chap1"><title>Intro</title></chapter>
-        </book>""")
+    xml_book_chapter = '\n'.join([
+        xml_book_beg,
+        '  <chapter id="chap1"><title>Intro</title></chapter>',
+        xml_book_end])
 
-    xml_book_part_chapter = textwrap.dedent("""\
-        <book>
-          <bookinfo>
-            <title>test Reference Manual</title>
-          </bookinfo>
+    xml_book_part_chapter = '\n'.join([
+        xml_book_beg,
+        textwrap.dedent("""\
           <part label="1" id="paer.i">
             <title>Overview</title>
             <chapter id="chap1"><title>Intro</title></chapter>
-          </part>
-        </book>""")
+          </part>"""),
+        xml_book_end])
 
-    xml_book_chapter_refentry = textwrap.dedent("""\
-        <book>
-          <bookinfo>
-            <title>test Reference Manual</title>
-          </bookinfo>
+    xml_book_chapter_refentry = '\n'.join([
+        xml_book_beg,
+        textwrap.dedent("""\
           <chapter id="chap1">
             <title>Reference</title>
             <refentry id="GtkdocObject">
@@ -285,24 +277,17 @@ class TestConverter(unittest.TestCase):
                 <refentrytitle role="top_of_page" id="GtkdocObject.top_of_page">GtkdocObject</refentrytitle>
               </refmeta>
             </refentry>
-          </chapter>
-        </book>""")
+          </chapter>"""),
+        xml_book_end])
 
-    xml_book_index_empty = textwrap.dedent("""\
-        <book>
-          <bookinfo>
-            <title>test Reference Manual</title>
-          </bookinfo>
-          <index id="api-index-full">
-            <title>API Index</title>
-          </index>
-        </book>""")
+    xml_book_index_empty = '\n'.join([
+        xml_book_beg,
+        '  <index id="api-index-full"><title>API Index</title></index>',
+        xml_book_end])
 
-    xml_book_index = textwrap.dedent("""\
-        <book>
-          <bookinfo>
-            <title>test Reference Manual</title>
-          </bookinfo>
+    xml_book_index = '\n'.join([
+        xml_book_beg,
+        textwrap.dedent("""\
           <index id="api-index-full">
             <title>API Index</title>
             <indexdiv id="api-index-full">
@@ -316,24 +301,17 @@ class TestConverter(unittest.TestCase):
                 </indexentry-->
               </indexdiv>
             </indexdiv>
-          </index>
-        </book>""")
+          </index>"""),
+        xml_book_end])
 
-    xml_book_glossary_empty = textwrap.dedent("""\
-        <book>
-          <bookinfo>
-            <title>test Reference Manual</title>
-          </bookinfo>
-          <glossary id="glossary">
-            <title>Glossary</title>
-          </glossary>
-        </book>""")
+    xml_book_glossary_empty = '\n'.join([
+        xml_book_beg,
+        '  <glossary id="glossary"><title>Glossary</title></glossary>',
+        xml_book_end])
 
-    xml_book_glossary = textwrap.dedent("""\
-        <book>
-          <bookinfo>
-            <title>test Reference Manual</title>
-          </bookinfo>
+    xml_book_glossary = '\n'.join([
+        xml_book_beg,
+        textwrap.dedent("""\
           <glossary id="glossary">
             <title>Glossary</title>
             <glossdiv><title>A</title>
@@ -344,8 +322,8 @@ class TestConverter(unittest.TestCase):
                 </glossdef>
               </glossentry>
             </glossdiv>
-          </glossary>
-        </book>""")
+          </glossary>"""),
+        xml_book_end])
 
     # def setUp(self):
     #     logging.basicConfig(
