@@ -258,14 +258,31 @@ class TestConverter(unittest.TestCase):
         '  <chapter id="chap1"><title>Intro</title></chapter>',
         xml_book_end])
 
+    xml_book_reference = '\n'.join([
+        xml_book_beg,
+        '  <reference id="part.i"><title>Reference</title></reference>',
+        xml_book_end])
+
     xml_book_part_chapter = '\n'.join([
         xml_book_beg,
         textwrap.dedent("""\
-          <part label="1" id="paer.i">
+          <part label="1" id="part.i">
             <title>Overview</title>
             <chapter id="chap1"><title>Intro</title></chapter>
           </part>"""),
         xml_book_end])
+
+    # 2 sections since the first one is not chunked
+    xml_book_chapter_secton = '\n'.join([
+        xml_book_beg,
+        textwrap.dedent("""\
+          <chapter id="chap1">
+            <title>Overview</title>
+            <section id="s1"><title>Intro</title></section>
+            <section id="s2"><title>getting started</title></section>
+          </chapter>"""),
+        xml_book_end])
+    xml_book_chapter_sect1 = xml_book_chapter_secton.replace('section', 'sect1')
 
     xml_book_chapter_refentry_beg = '\n'.join([
         xml_book_beg,
@@ -343,8 +360,11 @@ class TestConverter(unittest.TestCase):
     @parameterized.expand([
         ('book', (xml_book, 0)),
         ('preface', (xml_book_preface, 1)),
+        ('reference', (xml_book_reference, 1)),
         ('chapter', (xml_book_chapter, 1)),
         ('part', (xml_book_part_chapter, 1)),
+        ('section', (xml_book_chapter_secton, 2)),
+        ('sect1', (xml_book_chapter_sect1, 2)),
         ('refentry', (xml_book_chapter_refentry, 2)),
         ('index', (xml_book_index, 1)),
         ('index_empty', (xml_book_index_empty, 1)),
