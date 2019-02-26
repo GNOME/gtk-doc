@@ -267,7 +267,7 @@ class TestConverter(unittest.TestCase):
           </part>"""),
         xml_book_end])
 
-    xml_book_chapter_refentry = '\n'.join([
+    xml_book_chapter_refentry_beg = '\n'.join([
         xml_book_beg,
         textwrap.dedent("""\
           <chapter id="chap1">
@@ -275,10 +275,14 @@ class TestConverter(unittest.TestCase):
             <refentry id="GtkdocObject">
               <refmeta>
                 <refentrytitle role="top_of_page" id="GtkdocObject.top_of_page">GtkdocObject</refentrytitle>
-              </refmeta>
+              </refmeta>""")])
+
+    xml_book_chapter_refentry_end = '\n'.join([
+        textwrap.dedent("""\
             </refentry>
           </chapter>"""),
         xml_book_end])
+    xml_book_chapter_refentry = '\n'.join([xml_book_chapter_refentry_beg, xml_book_chapter_refentry_end])
 
     xml_book_index_empty = '\n'.join([
         xml_book_beg,
@@ -356,6 +360,30 @@ class TestConverter(unittest.TestCase):
     def test_convert_book_has_title(self):
         html = self.convert(self.xml_book, 0)
         self.assertIn('<title>test Reference Manual</title>', html)
+
+    def test_refnav_includes_normal_refsect1(self):
+        xml = '\n'.join([
+            self.xml_book_chapter_refentry_beg,
+            textwrap.dedent("""\
+                  <refsect1 id="GtkdocObject.description" role="desc">
+                     <title role="desc.title">Description</title>
+                  </refsect1>
+                """),
+            self.xml_book_chapter_refentry_end])
+        html = self.convert(xml, 2)
+        self.assertIn('class="shortcut">Description</a>', html)
+
+    def test_refnav_skips_protos_refsect1(self):
+        xml = '\n'.join([
+            self.xml_book_chapter_refentry_beg,
+            textwrap.dedent("""\
+                  <refsect1 id="GtkdocObject.functions" role="functions_proto">
+                    <title role="functions_proto.title">Functions</title>
+                  </refsect1>
+                """),
+            self.xml_book_chapter_refentry_end])
+        html = self.convert(xml, 2)
+        self.assertNotIn('class="shortcut">Functions</a>', html)
 
 
 if __name__ == '__main__':
