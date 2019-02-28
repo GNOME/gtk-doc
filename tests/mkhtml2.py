@@ -149,6 +149,30 @@ class TestDevhelp(unittest.TestCase):
               <title role="details.title">Functions</title>
               <refsect2 id="gtkdoc-object-new" role="function" condition="since:0.1">
                 <title>gtkdoc_object_new&#160;()</title>
+                <refsect3 id="GtkdocObjectClass.members" role="struct_members">
+                  <title>Members</title>
+                  <informaltable role="struct_members_table" pgwide="1" frame="none">
+                    <tgroup cols="3">
+                      <colspec colname="struct_members_name" colwidth="300px"/>
+                      <colspec colname="struct_members_description"/>
+                      <colspec colname="struct_members_annotations" colwidth="200px"/>
+                      <tbody>
+                        <row role="member">
+                          <entry role="struct_member_name">
+                            <para>
+                              GtkdocObjectClass
+                              <structfield id="GtkdocObjectClass.parent">parent</structfield>;
+                            </para>
+                          </entry>
+                          <entry role="struct_member_description">
+                            <para>parent/</para>
+                          </entry>
+                          <entry role="struct_member_annotations"></entry>
+                        </row>
+                      </tbody>
+                    </tgroup>
+                  </informaltable>
+                </refsect3>
               </refsect2>
             </refsect1>
           </refentry>
@@ -192,6 +216,13 @@ class TestDevhelp(unittest.TestCase):
         self.assertIn(
             '<keyword type="function" name="gtkdoc_object_new ()" '
             'link="GtkdocObject.html#gtkdoc-object-new" since="0.1"/>',
+            devhelp)
+
+    def test_create_devhelp_with_refesect3_has_member_keywords(self):
+        devhelp = self.convert(self.xml_full)
+        self.assertIn(
+            '<keyword type="member" name="GtkdocObjectClass.parent" '
+            'link="GtkdocObject.html#GtkdocObjectClass.parent"/>',
             devhelp)
 
 
