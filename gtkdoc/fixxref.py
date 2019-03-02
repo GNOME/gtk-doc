@@ -399,31 +399,51 @@ def HighlightSource(src_lang, type, source):
 
 def HighlightSourceVim(src_lang, type, source):
     # write source to a temp file
-    with tempfile.NamedTemporaryFile(mode='w+', suffix='.h') as f:
+    f = tempfile.NamedTemporaryFile(mode='w+', suffix='.h', delete=False, encoding='utf-8')
+    try:
         temp_source_file = HighlightSourcePreProcess(f, source)
+        if os.name == 'nt':
+          temp_source_file = temp_source_file.replace ('\\', '/')
+        f.close ()
 
         # format source
-        # TODO(ensonic): use p.communicate()
-        script = "echo 'let html_number_lines=0|let html_use_css=1|let html_use_xhtml=1|e %s|syn on|set syntax=%s|run! plugin/tohtml.vim|run! syntax/2html.vim|w! %s.html|qa!' | " % (
-            temp_source_file, src_lang, temp_source_file)
-        script += "%s -n -e -u NONE -T xterm >/dev/null" % config.highlight
-        subprocess.check_call([script], shell=True)
+        script = "echo 'let html_number_lines=0|" + \
+                 "let html_use_css=1|" + \
+                 "let html_use_xhtml=1|" + \
+                 "set encoding=utf-8|" \
+                 "e {}|".format(temp_source_file) + \
+                 "syn on|" + \
+                 "set syntax={}|".format(src_lang) + \
+                 "run! plugin/tohtml.vim|" + \
+                 "run! syntax/2html.vim|" + \
+                 "w! {}.html|".format(temp_source_file) + \
+                 "qa' | " + \
+                 "{} -n -e -u NONE -T xterm".format (config.highlight)
+        p = subprocess.Popen([os.getenv ('SHELL', 'sh')], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        output = p.communicate(script.encode ('utf-8'))
+        if p.returncode != 0:
+            raise Exception("Highlighter failed. The command was: {}".format(script))
 
-        highlighted_source = open(temp_source_file + ".html", 'r', encoding='utf-8').read()
-        highlighted_source = re.sub(r'.*<pre\b[^>]*>\n', '', highlighted_source, flags=re.DOTALL)
-        highlighted_source = re.sub(r'</pre>.*', '', highlighted_source, flags=re.DOTALL)
+        html_filename = temp_source_file + ".html"
+        try:
+            with open(html_filename, 'rb') as html_file:
+                highlighted_source = html_file.read().decode ('utf-8')
+            highlighted_source = re.sub(r'.*<pre\b[^>]*>\n', '', highlighted_source, flags=re.DOTALL)
+            highlighted_source = re.sub(r'</pre>.*', '', highlighted_source, flags=re.DOTALL)
 
-        # need to rewrite the stylesheet classes
-        highlighted_source = highlighted_source.replace('<span class="Comment">', '<span class="comment">')
-        highlighted_source = highlighted_source.replace('<span class="PreProc">', '<span class="preproc">')
-        highlighted_source = highlighted_source.replace('<span class="Statement">', '<span class="keyword">')
-        highlighted_source = highlighted_source.replace('<span class="Identifier">', '<span class="function">')
-        highlighted_source = highlighted_source.replace('<span class="Constant">', '<span class="number">')
-        highlighted_source = highlighted_source.replace('<span class="Special">', '<span class="symbol">')
-        highlighted_source = highlighted_source.replace('<span class="Type">', '<span class="type">')
-
-        # remove temp files
-        os.unlink(temp_source_file + '.html')
+            # need to rewrite the stylesheet classes
+            highlighted_source = highlighted_source.replace('<span class="Comment">', '<span class="comment">')
+            highlighted_source = highlighted_source.replace('<span class="PreProc">', '<span class="preproc">')
+            highlighted_source = highlighted_source.replace('<span class="Statement">', '<span class="keyword">')
+            highlighted_source = highlighted_source.replace('<span class="Identifier">', '<span class="function">')
+            highlighted_source = highlighted_source.replace('<span class="Constant">', '<span class="number">')
+            highlighted_source = highlighted_source.replace('<span class="Special">', '<span class="symbol">')
+            highlighted_source = highlighted_source.replace('<span class="Type">', '<span class="type">')
+        finally:
+            # remove temp files
+            os.unlink(html_filename)
+    finally:
+        os.unlink(f.name)
 
     return HighlightSourcePostprocess(type, highlighted_source)
 
