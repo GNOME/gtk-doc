@@ -668,7 +668,7 @@ def OutputDB(file, options):
                 if other_synop != '':
                     other_synop = '''<refsect1 id="%s.other" role="other_proto">
 <title role="other_proto.title">Types and Values</title>
-<informaltable role="enum_members_table" pgwide="1" frame="none">
+<informaltable pgwide="1" frame="none">
 <tgroup cols="2">
 <colspec colname="name" colwidth="150px"/>
 <colspec colname="description"/>
