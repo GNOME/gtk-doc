@@ -126,6 +126,7 @@ class TestDevhelp(unittest.TestCase):
         <chapter id="chap1"><title>Intro</title></chapter>
       </book>""")
 
+    # TODO: need one with multiple conditions
     xml_full = textwrap.dedent("""\
       <book>
         <bookinfo>
@@ -168,6 +169,47 @@ class TestDevhelp(unittest.TestCase):
                             <para>parent/</para>
                           </entry>
                           <entry role="struct_member_annotations"></entry>
+                        </row>
+                      </tbody>
+                    </tgroup>
+                  </informaltable>
+                </refsect3>
+              </refsect2>
+            </refsect1>
+            <refsect1 id="tester-GtkdocTypes.other_details" role="details">
+              <title role="details.title">Types and Values</title>
+              <refsect2 id="GtkdocEnum" role="enum">
+                <title>enum GtkdocEnum</title>
+                <indexterm zone="GtkdocEnum">
+                  <primary>GtkdocEnum</primary>
+                </indexterm>
+                <para>Enum values for the <link linkend="GtkdocEnum"><type>GtkdocEnum</type>
+                  </link> type.</para>
+                <refsect3 id="GtkdocEnum.members" role="enum_members">
+                  <title>Members</title>
+                  <informaltable role="enum_members_table" pgwide="1" frame="none">
+                    <tgroup cols="3">
+                      <colspec colname="enum_members_name" colwidth="300px"/>
+                      <colspec colname="enum_members_description"/>
+                      <colspec colname="enum_members_annotations" colwidth="200px"/>
+                      <tbody>
+                        <row role="constant">
+                          <entry role="enum_member_name">
+                            <para id="GTKDOC-ENUM-V1:CAPS">GTKDOC_ENUM_V1</para>
+                          </entry>
+                          <entry role="enum_member_description">
+                            <para>first</para>
+                          </entry>
+                          <entry role="enum_member_annotations"></entry>
+                        </row>
+                        <row role="constant">
+                          <entry role="enum_member_name">
+                            <para id="GTKDOC-ENUM-V2:CAPS">GTKDOC_ENUM_V2</para>
+                          </entry>
+                          <entry role="enum_member_description">
+                            <para>second Since: 0.5</para>
+                          </entry>
+                          <entry role="enum_member_annotations"></entry>
                         </row>
                       </tbody>
                     </tgroup>
@@ -223,6 +265,13 @@ class TestDevhelp(unittest.TestCase):
         self.assertIn(
             '<keyword type="member" name="GtkdocObjectClass.parent" '
             'link="GtkdocObject.html#GtkdocObjectClass.parent"/>',
+            devhelp)
+
+    def test_create_devhelp_with_refesect3_has_constant_keywords(self):
+        devhelp = self.convert(self.xml_full)
+        self.assertIn(
+            '<keyword type="constant" name="GTKDOC_ENUM_V1" '
+            'link="GtkdocObject.html#GTKDOC-ENUM-V1:CAPS"/>',
             devhelp)
 
 
