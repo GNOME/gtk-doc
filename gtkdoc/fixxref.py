@@ -289,7 +289,16 @@ def GetXRef(id):
             return (tid, href)
 
     # poor mans plural support
-    if id.endswith('s'):
+    if id.endswith('es'):
+        tid = id[:-2]
+        href = Links.get(tid)
+        if href:
+            return (tid, href)
+        tid += '-struct'
+        href = Links.get(tid)
+        if href:
+            return (tid, href)
+    elif id.endswith('s'):
         tid = id[:-1]
         href = Links.get(tid)
         if href:
