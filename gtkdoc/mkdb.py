@@ -131,7 +131,7 @@ AnnotationDefinition = {
     'closure': "This parameter is a 'user_data', for callbacks; many bindings can pass NULL here.",
     'constructor': "This symbol is a constructor, not a static method.",
     'destroy': "This parameter is a 'destroy_data', for callbacks.",
-    'default': "Default parameter value (for in case the <acronym>shadows</acronym>-to function has less parameters).",
+    'default': "Default parameter value (in case a function which shadows this one via <acronym>rename-to</acronym> has fewer parameters).",
     'element-type': "Generics and defining elements of containers and arrays.",
     'error-domains': "Typed errors. Similar to throws in Java.",
     'foreign': "This is a foreign struct.",
