@@ -159,7 +159,7 @@ function(gtk_doc_add_module _doc_prefix)
     endforeach()
 
     # a directory to store output.
-    set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/${_doc_prefix}")
+    set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}")
     set(_output_dir_stamp "${_output_dir}/dir.stamp")
 
     # set default sgml file if not specified
