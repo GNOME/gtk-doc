@@ -158,6 +158,15 @@ function(gtk_doc_add_module _doc_prefix)
         list(APPEND _extra_ldpath ${library_dir})
     endforeach()
 
+    list(REMOVE_DUPLICATES _extra_cflags)
+    list(SORT _extra_cflags)
+
+    list(REMOVE_DUPLICATES _extra_ldflags)
+    list(SORT _extra_ldflags)
+
+    list(REMOVE_DUPLICATES _extra_ldpath)
+    list(SORT _extra_ldpath)
+
     # a directory to store output.
     set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/${_doc_prefix}")
     set(_output_dir_stamp "${_output_dir}/dir.stamp")
