@@ -707,6 +707,24 @@ class SeparateSubSections(ScanHeaderContentTestCase):
             ['gtkdoc_object_function', '<SUBSECTION Standard>', 'gtkdoc_object_get_type'],
             liststr.splitlines())
 
+    def test_CreatesStandardSectionAllMacros(self):
+        header = textwrap.dedent("""\
+            #define GTKDOC_TYPE_OBJECT            (gtkdoc_object_get_type())
+            #define GTKDOC_OBJECT(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTKDOC_TYPE_OBJECT, GtkdocObject))
+            #define GTKDOC_OBJECT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),  GTKDOC_TYPE_OBJECT, GtkdocObjectClass))
+            #define GTKDOC_IS_OBJECT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTKDOC_TYPE_OBJECT))
+            #define GTKDOC_IS_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  GTKDOC_TYPE_OBJECT))
+            #define GTKDOC_OBJECT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  GTKDOC_TYPE_OBJECT, GtkdocObjectClass))
+            """)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        liststr = scan.SeparateSubSections(slist, doc_comments)
+        self.assertEqual(
+            ['<SUBSECTION Standard>', 'GTKDOC_IS_OBJECT', 'GTKDOC_IS_OBJECT_CLASS',
+             'GTKDOC_OBJECT', 'GTKDOC_OBJECT_CLASS', 'GTKDOC_OBJECT_GET_CLASS',
+             'GTKDOC_TYPE_OBJECT'],
+            liststr.splitlines())
+
     def test_MovesSymbolIfUndocumented(self):
         header = textwrap.dedent("""\
             struct _GtkdocObject {
