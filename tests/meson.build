@@ -9,6 +9,7 @@ gtkdoc_unit_tests = [
   'common',
   'mk-to-db',
   'mkhtml2',
+  'scan',
 ]
 
 foreach test_name: gtkdoc_unit_tests
