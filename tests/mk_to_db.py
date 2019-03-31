@@ -148,6 +148,29 @@ bla</para>
         output = md_to_db.MarkDownParse(input_, "")
         self.assertEqual(expected, output)
 
+    # like previous, but no newlines beweteen items
+    def test_lists_in_paragraphs(self):
+        input_ = """\
+before:
+- item 1
+- item 2
+
+after
+"""
+        # TODO(ensonic): figure out why we insert '\n' for 2nd listitem
+        expected = """\
+<para>before:</para>
+<itemizedlist>
+<listitem><para>item 1</para></listitem>
+<listitem>
+<para>item 2</para>
+</listitem>
+</itemizedlist>
+<para>after</para>
+"""
+        output = md_to_db.MarkDownParse(input_, "")
+        self.assertEqual(expected, output)
+
     def test_paragraphs(self):
         input_ = """\
 foo,
