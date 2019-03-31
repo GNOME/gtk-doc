@@ -398,5 +398,38 @@ void bug_783420 (int in, int *out);
  */
 #define BUG_791928   1
 
+/**
+ * Bug76:
+ * @arg: The type of the option, as a #GOptionArg
+ * @arg_data: If the @arg type is %G_OPTION_ARG_CALLBACK, then @arg_data
+ *     must point to a #GOptionArgFunc callback function, which will be
+ *     called to handle the extra argument. Otherwise, @arg_data is a
+ *     pointer to a location to store the value, the required type of
+ *     the location depends on the @arg type:
+ *     - %G_OPTION_ARG_NONE: %gboolean
+ *     - %G_OPTION_ARG_STRING: %gchar*
+ *     - %G_OPTION_ARG_INT: %gint
+ *     - %G_OPTION_ARG_FILENAME: %gchar*
+ *     - %G_OPTION_ARG_STRING_ARRAY: %gchar**
+ *     - %G_OPTION_ARG_FILENAME_ARRAY: %gchar**
+ *     - %G_OPTION_ARG_DOUBLE: %gdouble
+ *     If @arg type is %G_OPTION_ARG_STRING or %G_OPTION_ARG_FILENAME,
+ *     the location will contain a newly allocated string if the option
+ *     was given. That string needs to be freed by the callee using g_free().
+ *     Likewise if @arg type is %G_OPTION_ARG_STRING_ARRAY or
+ *     %G_OPTION_ARG_FILENAME_ARRAY, the data should be freed using g_strfreev().
+ * @description: the description for the option in `--help`
+ *     output. The @description is translated using the @translate_func
+ *     of the group, see g_option_group_set_translation_domain().
+ *
+ * https://gitlab.gnome.org/GNOME/gtk-doc/issues/76
+ */
+struct _Bug76
+{
+  int    arg;
+  void * arg_data;
+  char * description;
+};
+typedef struct _Bug76   Bug76;
 
 #endif // GTKDOC_TESTER_H
