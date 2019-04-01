@@ -412,8 +412,8 @@ def HighlightSourceVim(src_lang, type, source):
     try:
         temp_source_file = HighlightSourcePreProcess(f, source)
         if os.name == 'nt':
-          temp_source_file = temp_source_file.replace ('\\', '/')
-        f.close ()
+            temp_source_file = temp_source_file.replace('\\', '/')
+        f.close()
 
         # format source
         script = "echo 'let html_number_lines=0|" + \
@@ -427,16 +427,16 @@ def HighlightSourceVim(src_lang, type, source):
                  "run! syntax/2html.vim|" + \
                  "w! {}.html|".format(temp_source_file) + \
                  "qa' | " + \
-                 "{} -n -e -u NONE -T xterm".format (config.highlight)
-        p = subprocess.Popen([os.getenv ('SHELL', 'sh')], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        output = p.communicate(script.encode ('utf-8'))
+                 "{} -n -e -u NONE -T xterm".format(config.highlight)
+        p = subprocess.Popen([os.getenv('SHELL', 'sh')], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        p.communicate(script.encode('utf-8'))
         if p.returncode != 0:
             raise Exception("Highlighter failed. The command was: {}".format(script))
 
         html_filename = temp_source_file + ".html"
         try:
             with open(html_filename, 'rb') as html_file:
-                highlighted_source = html_file.read().decode ('utf-8')
+                highlighted_source = html_file.read().decode('utf-8')
             highlighted_source = re.sub(r'.*<pre\b[^>]*>\n', '', highlighted_source, flags=re.DOTALL)
             highlighted_source = re.sub(r'</pre>.*', '', highlighted_source, flags=re.DOTALL)
 

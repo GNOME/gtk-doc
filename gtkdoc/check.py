@@ -29,8 +29,6 @@ import os
 import re
 from glob import glob
 
-from . import common
-
 
 class FileFormatError(Exception):
     pass

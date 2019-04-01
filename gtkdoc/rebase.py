@@ -27,7 +27,6 @@ The rebase tool rewrites URI references in installed HTML documentation.
 import logging
 import os
 import re
-import subprocess
 
 from . import common
 

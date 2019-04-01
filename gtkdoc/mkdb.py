@@ -2791,7 +2791,7 @@ def ExpandAbbreviationsCallback2(text, symbol, tag):
         text = re.sub(r'#(\w+)', lambda m: '%s;' % MakeHashXRef(m.group(1), ''), text)
     elif tag == "<![CDATA[":
         # NOTE: this is a fallback. It is normally done by the Markdown parser.
-        text = ReplaceEntities(text, symbol)
+        text = md_to_db.ReplaceEntities(text, symbol)
 
     return text
 
@@ -3879,7 +3879,7 @@ def ParseCommentBlock(lines, line_number=0, ifile=''):
         # We must be in the middle of a parameter description, so add it on
         # to the last element in @params.
         if not param_name:
-            common.LogWarning(file, line_number, "Parsing comment block file : parameter expected, but got '%s'" % line)
+            common.LogWarning(ifile, line_number, "Parsing comment block file : parameter expected, but got '%s'" % line)
         else:
             params[param_name] += line
 

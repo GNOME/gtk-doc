@@ -96,7 +96,6 @@ cd tests/bugs/docs/;
 rm html-build.stamp; time make html-build.stamp
 """
 
-import argparse
 import logging
 import os
 import shutil
@@ -108,6 +107,7 @@ from glob import glob
 from lxml import etree
 from pygments import highlight
 from pygments.lexers import CLexer
+from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 from timeit import default_timer as timer
 
