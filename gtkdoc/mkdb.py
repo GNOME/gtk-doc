@@ -478,7 +478,7 @@ def OutputDB(file, options):
                 common.LogWarning(file, line_number, "Double <FILE>%s</FILE> entry. Previous occurrence on line %s." %
                                   (filename, file_def_line[filename]))
             if title == '':
-                key = filename + ":Title"
+                key = filename + ":title"
                 if key in SourceSymbolDocs:
                     title = SourceSymbolDocs[key].rstrip()
 
@@ -494,12 +494,12 @@ def OutputDB(file, options):
         elif re.search(r'^<\/SECTION>', line):
             logging.info("End of section: %s", title)
             # TODO: also output if we have sections docs?
-            # long_desc = SymbolDocs.get(filename + ":Long_Description")
+            # long_desc = SymbolDocs.get(filename + ":long_description")
             if num_symbols > 0:
                 # collect documents
                 book_bottom += "    <xi:include href=\"xml/%s.xml\"/>\n" % filename
 
-                key = filename + ":Include"
+                key = filename + ":include"
                 if key in SourceSymbolDocs:
                     if section_includes:
                         common.LogWarning(file, line_number, "Section <INCLUDE> being overridden by inline comments.")
@@ -790,7 +790,7 @@ def OutputDB(file, options):
 
                     filename = filename.replace(' ', '_')
 
-                    section_id = SourceSymbolDocs.get(filename + ":Section_Id")
+                    section_id = SourceSymbolDocs.get(filename + ":section_id")
                     if section_id and section_id.strip() != '':
                         # Remove trailing blanks and use as is
                         section_id = section_id.rstrip()
@@ -1117,8 +1117,8 @@ def ReadKnownSymbols(file):
 
         m = re.search(r'^<FILE>(.*)<\/FILE>', line)
         if m:
-            KnownSymbols[m.group(1) + ":Long_Description"] = 1
-            KnownSymbols[m.group(1) + ":Short_Description"] = 1
+            KnownSymbols[m.group(1) + ":long_description"] = 1
+            KnownSymbols[m.group(1) + ":short_description"] = 1
             continue
 
         m = re.search(r'^<INCLUDE>(.*)<\/INCLUDE>', line)
@@ -2101,41 +2101,41 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     logging.info("Output docbook for file %s with title '%s'", file, title)
 
     # The edited title overrides the one from the sections file.
-    new_title = SymbolDocs.get(file + ":Title")
+    new_title = SymbolDocs.get(file + ":title")
     if new_title and not new_title.strip() == '':
         title = new_title
         logging.info("Found title: %s", title)
 
-    short_desc = SymbolDocs.get(file + ":Short_Description")
+    short_desc = SymbolDocs.get(file + ":short_description")
     if not short_desc or short_desc.strip() == '':
         short_desc = ''
     else:
         # Don't use ConvertMarkDown here for now since we don't want blocks
-        short_desc = ExpandAbbreviations(title + ":Short_description", short_desc)
+        short_desc = ExpandAbbreviations(title + ":short_description", short_desc)
         logging.info("Found short_desc: %s", short_desc)
 
-    long_desc = SymbolDocs.get(file + ":Long_Description")
+    long_desc = SymbolDocs.get(file + ":long_description")
     if not long_desc or long_desc.strip() == '':
         long_desc = ''
     else:
-        long_desc = ConvertMarkDown(title + ":Long_description", long_desc)
+        long_desc = ConvertMarkDown(title + ":long_description", long_desc)
         logging.info("Found long_desc: %s", long_desc)
 
-    see_also = SymbolDocs.get(file + ":See_Also")
+    see_also = SymbolDocs.get(file + ":see_also")
     if not see_also or re.search(r'^\s*(<para>)?\s*(</para>)?\s*$', see_also):
         see_also = ''
     else:
-        see_also = ConvertMarkDown(title + ":See_Also", see_also)
+        see_also = ConvertMarkDown(title + ":see_also", see_also)
         logging.info("Found see_also: %s", see_also)
 
     if see_also:
         see_also = "<refsect1 id=\"%s.see-also\">\n<title>See Also</title>\n%s\n</refsect1>\n" % (section_id, see_also)
 
-    stability = SymbolDocs.get(file + ":Stability_Level")
+    stability = SymbolDocs.get(file + ":stability")
     if not stability or re.search(r'^\s*$', stability):
         stability = ''
     else:
-        line_number = GetSymbolSourceLine(file + ":Stability_Level")
+        line_number = GetSymbolSourceLine(file + ":stability")
         stability = ParseStabilityLevel(stability, file, line_number, "Section stability level")
         logging.info("Found stability: %s", stability)
 
@@ -2149,7 +2149,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
         stability = "<refsect1 id=\"%s.stability-level\">\n<title>Stability Level</title>\n%s, unless otherwise indicated\n</refsect1>\n" % (
             section_id, stability)
 
-    image = SymbolDocs.get(file + ":Image")
+    image = SymbolDocs.get(file + ":image")
     if not image or re.search(r'^\s*$', image):
         image = ''
     else:
@@ -2248,7 +2248,7 @@ def OutputProgramDBFile(program, section_id):
     """
     logging.info("Output program docbook for %s", program)
 
-    short_desc = SourceSymbolDocs.get(program + ":Short_Description")
+    short_desc = SourceSymbolDocs.get(program + ":short_description")
     if not short_desc or short_desc.strip() == '':
         short_desc = ''
     else:
@@ -2256,7 +2256,7 @@ def OutputProgramDBFile(program, section_id):
         short_desc = ExpandAbbreviations(program, short_desc)
         logging.info("Found short_desc: %s", short_desc)
 
-    synopsis = SourceSymbolDocs.get(program + ":Synopsis")
+    synopsis = SourceSymbolDocs.get(program + ":synopsis")
     if synopsis and synopsis.strip() != '':
         items = synopsis.split(' ')
         for i in range(0, len(items)):
@@ -2297,15 +2297,15 @@ def OutputProgramDBFile(program, section_id):
     else:
         synopsis = "<command>%s</command>" % program
 
-    long_desc = SourceSymbolDocs.get(program + ":Long_Description")
+    long_desc = SourceSymbolDocs.get(program + ":long_description")
     if not long_desc or long_desc.strip() == '':
         long_desc = ''
     else:
-        long_desc = ConvertMarkDown("%s:Long_description" % program, long_desc)
+        long_desc = ConvertMarkDown("%s:long_description" % program, long_desc)
         logging.info("Found long_desc: %s", long_desc)
 
     options = ''
-    o = program + ":Options"
+    o = program + ":options"
     if o in SourceSymbolDocs:
         opts = SourceSymbolDocs[o].split('\t')
 
@@ -2332,19 +2332,19 @@ def OutputProgramDBFile(program, section_id):
 
         options += "</variablelist></refsect1>\n"
 
-    exit_status = SourceSymbolDocs.get(program + ":Returns")
+    exit_status = SourceSymbolDocs.get(program + ":returns")
     if exit_status and exit_status != '':
-        exit_status = ConvertMarkDown("%s:Returns" % program, exit_status)
+        exit_status = ConvertMarkDown("%s:returns" % program, exit_status)
         exit_status = "<refsect1 id=\"%s.exit-status\">\n<title>Exit Status</title>\n%s\n</refsect1>\n" % (
             section_id, exit_status)
     else:
         exit_status = ''
 
-    see_also = SourceSymbolDocs.get(program + ":See_Also")
+    see_also = SourceSymbolDocs.get(program + ":see_also")
     if not see_also or re.search(r'^\s*(<para>)?\s*(</para>)?\s*$', see_also):
         see_also = ''
     else:
-        see_also = ConvertMarkDown("%s:See_Also" % program, see_also)
+        see_also = ConvertMarkDown("%s:see_also" % program, see_also)
         logging.info("Found see_also: %s", see_also)
 
     if see_also:
@@ -3900,7 +3900,7 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
     m2 = re.search(r'PROGRAM:\s*(.*)', symbol)
     if m:
         real_symbol = m.group(1)
-        long_descr = real_symbol + ":Long_Description"
+        long_descr = real_symbol + ":long_description"
 
         if long_descr not in KnownSymbols or KnownSymbols[long_descr] != 1:
             common.LogWarning(
@@ -3912,19 +3912,19 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
             param_name = param_name.lower()
             key = None
             if param_name == "short_description":
-                key = real_symbol + ":Short_Description"
+                key = real_symbol + ":short_description"
             elif param_name == "see_also":
-                key = real_symbol + ":See_Also"
+                key = real_symbol + ":see_also"
             elif param_name == "title":
-                key = real_symbol + ":Title"
+                key = real_symbol + ":title"
             elif param_name == "stability":
-                key = real_symbol + ":Stability_Level"
+                key = real_symbol + ":stability"
             elif param_name == "section_id":
-                key = real_symbol + ":Section_Id"
+                key = real_symbol + ":section_id"
             elif param_name == "include":
-                key = real_symbol + ":Include"
+                key = real_symbol + ":include"
             elif param_name == "image":
-                key = real_symbol + ":Image"
+                key = real_symbol + ":image"
 
             if key:
                 SourceSymbolDocs[key] = param_desc
@@ -3944,18 +3944,18 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
             param_name = param_name.lower()
             key = None
             if param_name == "short_description":
-                key = real_symbol + ":Short_Description"
+                key = real_symbol + ":short_description"
             elif param_name == "see_also":
-                key = real_symbol + ":See_Also"
+                key = real_symbol + ":see_also"
             elif param_name == "section_id":
-                key = real_symbol + ":Section_Id"
+                key = real_symbol + ":section_id"
             elif param_name == "synopsis":
-                key = real_symbol + ":Synopsis"
+                key = real_symbol + ":synopsis"
             elif param_name == "returns":
-                key = real_symbol + ":Returns"
+                key = real_symbol + ":returns"
             elif re.search(r'^(-.*)', param_name):
                 logging.info("PROGRAM opts: '%s': '%s'", param_name, param_desc)
-                key = real_symbol + ":Options"
+                key = real_symbol + ":options"
                 opts = []
                 opts_str = SourceSymbolDocs.get(key)
                 if opts_str:
@@ -3973,12 +3973,12 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
                 SourceSymbolSourceFile[key] = ifile
                 SourceSymbolSourceLine[key] = line_number
 
-        long_descr = real_symbol + ":Long_Description"
+        long_descr = real_symbol + ":long_description"
         SourceSymbolDocs[long_descr] = segments["body"]
         SourceSymbolSourceFile[long_descr] = ifile
         SourceSymbolSourceLine[long_descr] = line_number
 
-        section_id = SourceSymbolDocs.get(real_symbol + ":Section_Id")
+        section_id = SourceSymbolDocs.get(real_symbol + ":section_id")
         if section_id and section_id.strip() != '':
             # Remove trailing blanks and use as is
             section_id = section_id.rstrip()
@@ -4061,8 +4061,8 @@ def OutputMissingDocumentation():
         # location = "defined at " + GetSymbolSourceFile(symbol) + ":" + GetSymbolSourceLine(symbol) + "\n"
         # DEBUG
         m = re.search(
-            r':(Title|Long_Description|Short_Description|See_Also|Stability_Level|Include|Section_Id|Image)', symbol)
-        m2 = re.search(r':(Long_Description|Short_Description)', symbol)
+            r':(title|long_description|short_description|see_also|stability|include|section_id|image)', symbol)
+        m2 = re.search(r':(long_description|short_description)', symbol)
         if not m:
             total += 1
             if symbol in AllDocumentedSymbols:
