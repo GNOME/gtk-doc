@@ -3757,25 +3757,25 @@ def ScanSourceContent(input_lines, ifile=''):
     return comments
 
 
-def ParseCommentBlock(lines, line_number=0, ifile=''):
-    """Parse a single comment block.
+def SegmentCommentBlock(lines, line_number=0, ifile=''):
+    """Cut a single comment block into segments.
 
     Args:
         lines (list): the comment block
         line_number (int): the first line of the block (for reporting)
         ifile (str): file name of the source file (for reporting)
+
+    Returns:
+        (str, dict): symbol name and dict of comment segments
     """
     symbol = None
     in_part = ''
-    description = ''
-    return_desc = ''
-    since_desc = stability_desc = deprecated_desc = ''
+    segments = {'body': ''}
     params = OrderedDict()
     param_name = None
     line_number -= 1
     for line in lines:
         line_number += 1
-
         logging.info("scanning[%s] :%s", in_part, line.strip())
 
         # If we haven't found the symbol name yet, look for it.
@@ -3791,17 +3791,16 @@ def ParseCommentBlock(lines, line_number=0, ifile=''):
                 logging.info("PROGRAM DOCS found in source for : '%s'", symbol)
             elif m3:
                 symbol = m3.group(1)
-                annotation = m3.group(2)
                 logging.info("SYMBOL DOCS found in source for : '%s'", symbol)
-                if annotation:
-                    annotation = annotation.strip()
+                if m3.group(2):
+                    annotation = m3.group(2).strip()
                     if annotation != '':
                         SymbolAnnotations[symbol] = annotation
                         logging.info("remaining text for %s: '%s'", symbol, annotation)
 
             continue
 
-        if in_part == "description":
+        if in_part == "body":
             # Get rid of 'Description:'
             line = re.sub(r'^\s*Description:', '', line)
 
@@ -3812,43 +3811,32 @@ def ParseCommentBlock(lines, line_number=0, ifile=''):
 
         if m1:
             if in_part != '':
-                return_desc = line[m1.end():]
                 in_part = "return"
+                segments[in_part] = line[m1.end():]
                 continue
         if m2:
             if in_part != "param":
-                since_desc = line[m2.end():]
                 in_part = "since"
+                segments[in_part] = line[m2.end():]
                 continue
         elif m3:
             if in_part != "param":
-                deprecated_desc = line[m3.end():]
                 in_part = "deprecated"
+                segments[in_part] = line[m3.end():]
                 continue
         elif m4:
-            stability_desc = line[m4.end():]
             in_part = "stability"
+            segments[in_part] = line[m4.end():]
             continue
 
-        if in_part == "description":
-            description += line
-            continue
-        elif in_part == "return":
-            return_desc += line
-            continue
-        elif in_part == "since":
-            since_desc += line
-            continue
-        elif in_part == "stability":
-            stability_desc += line
-            continue
-        elif in_part == "deprecated":
-            deprecated_desc += line
+        if in_part in ["body", "return", "since", "stability", "deprecated"]:
+            segments[in_part] += line
             continue
 
         # We must be in the parameters. Check for the empty line below them.
         if re.search(r'^\s*$', line):
-            in_part = "description"
+            # TODO: only switch if next line starts without indent?
+            in_part = "body"
             continue
 
         # Look for a parameter name.
@@ -3857,13 +3845,11 @@ def ParseCommentBlock(lines, line_number=0, ifile=''):
             param_name = m.group(1)
             param_desc = line[m.end():]
 
-            logging.info("Found parameter: %s", param_name)
             # Allow varargs variations
             if re.search(r'^\.\.\.$', param_name):
                 param_name = "..."
 
             logging.info("Found param for symbol %s : '%s'= '%s'", symbol, param_name, line)
-
             params[param_name] = param_desc
             in_part = "param"
             continue
@@ -3879,147 +3865,174 @@ def ParseCommentBlock(lines, line_number=0, ifile=''):
         # We must be in the middle of a parameter description, so add it on
         # to the last element in @params.
         if not param_name:
-            common.LogWarning(ifile, line_number, "Parsing comment block file : parameter expected, but got '%s'" % line)
+            common.LogWarning(ifile, line_number,
+                              "Parsing comment block file : parameter expected, but got '%s'" % line)
         else:
             params[param_name] += line
 
-    # We parsed all lines.
+    return (symbol, segments, params)
+
+
+def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile=''):
+    """Parse the comemnts block segments.
+
+    Args:
+        symbol (str): the symbol name
+        segments(dict): the comment block segments (except params)
+        parans (dict): the comment block params
+        line_number (int): the first line of the block (for reporting)
+        ifile (str): file name of the source file (for reporting)
+
+    """
+    # Add the return value description to the end of the params.
+    if "return" in segments:
+        # TODO(ensonic): check for duplicated Return docs
+        # common.LogWarning(file, line_number, "Multiple Returns for %s." % symbol)
+        params['Returns'] = segments["return"]
+
+    # Convert special characters
+    segments["body"] = ConvertXMLChars(symbol, segments["body"])
+    for (param_name, param_desc) in params.items():
+        params[param_name] = ConvertXMLChars(symbol, param_desc)
+
+    # Handle Section docs
+    m = re.search(r'SECTION:\s*(.*)', symbol)
+    m2 = re.search(r'PROGRAM:\s*(.*)', symbol)
+    if m:
+        real_symbol = m.group(1)
+        long_descr = real_symbol + ":Long_Description"
+
+        if long_descr not in KnownSymbols or KnownSymbols[long_descr] != 1:
+            common.LogWarning(
+                ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
+
+        logging.info("SECTION DOCS found in source for : '%s'", real_symbol)
+        for param_name, param_desc in params.items():
+            logging.info("   '" + param_name + "'")
+            param_name = param_name.lower()
+            key = None
+            if param_name == "short_description":
+                key = real_symbol + ":Short_Description"
+            elif param_name == "see_also":
+                key = real_symbol + ":See_Also"
+            elif param_name == "title":
+                key = real_symbol + ":Title"
+            elif param_name == "stability":
+                key = real_symbol + ":Stability_Level"
+            elif param_name == "section_id":
+                key = real_symbol + ":Section_Id"
+            elif param_name == "include":
+                key = real_symbol + ":Include"
+            elif param_name == "image":
+                key = real_symbol + ":Image"
+
+            if key:
+                SourceSymbolDocs[key] = param_desc
+                SourceSymbolSourceFile[key] = ifile
+                SourceSymbolSourceLine[key] = line_number
+
+        SourceSymbolDocs[long_descr] = segments["body"]
+        SourceSymbolSourceFile[long_descr] = ifile
+        SourceSymbolSourceLine[long_descr] = line_number
+    elif m2:
+        real_symbol = m2.group(1)
+        section_id = None
+
+        logging.info("PROGRAM DOCS found in source for '%s'", real_symbol)
+        for param_name, param_desc in params.items():
+            logging.info("PROGRAM key %s: '%s'", real_symbol, param_name)
+            param_name = param_name.lower()
+            key = None
+            if param_name == "short_description":
+                key = real_symbol + ":Short_Description"
+            elif param_name == "see_also":
+                key = real_symbol + ":See_Also"
+            elif param_name == "section_id":
+                key = real_symbol + ":Section_Id"
+            elif param_name == "synopsis":
+                key = real_symbol + ":Synopsis"
+            elif param_name == "returns":
+                key = real_symbol + ":Returns"
+            elif re.search(r'^(-.*)', param_name):
+                logging.info("PROGRAM opts: '%s': '%s'", param_name, param_desc)
+                key = real_symbol + ":Options"
+                opts = []
+                opts_str = SourceSymbolDocs.get(key)
+                if opts_str:
+                    opts = opts_str.split('\t')
+                opts.append(param_name)
+                opts.append(param_desc)
+
+                logging.info("Setting options for symbol: %s: '%s'", real_symbol, '\t'.join(opts))
+                SourceSymbolDocs[key] = '\t'.join(opts)
+                continue
+
+            if key:
+                logging.info("PROGRAM value %s: '%s'", real_symbol, param_desc.rstrip())
+                SourceSymbolDocs[key] = param_desc.rstrip()
+                SourceSymbolSourceFile[key] = ifile
+                SourceSymbolSourceLine[key] = line_number
+
+        long_descr = real_symbol + ":Long_Description"
+        SourceSymbolDocs[long_descr] = segments["body"]
+        SourceSymbolSourceFile[long_descr] = ifile
+        SourceSymbolSourceLine[long_descr] = line_number
+
+        section_id = SourceSymbolDocs.get(real_symbol + ":Section_Id")
+        if section_id and section_id.strip() != '':
+            # Remove trailing blanks and use as is
+            section_id = section_id.rstrip()
+        else:
+            section_id = common.CreateValidSGMLID('%s-%s' % (MODULE, real_symbol))
+        OutputProgramDBFile(real_symbol, section_id)
+
+    else:
+        logging.info("SYMBOL DOCS found in source for : '%s'", symbol)
+        SourceSymbolDocs[symbol] = segments["body"]
+        SourceSymbolParams[symbol] = params
+        SourceSymbolSourceFile[symbol] = ifile
+        SourceSymbolSourceLine[symbol] = line_number
+
+    if "since" in segments:
+        arr = segments["since"].splitlines()
+        desc = arr[0].strip()
+        extra_lines = arr[1:]
+        logging.info("Since(%s) : [%s]", symbol, desc)
+        Since[symbol] = ConvertXMLChars(symbol, desc)
+        if len(extra_lines) > 1:
+            common.LogWarning(ifile, line_number, "multi-line since docs found")
+
+    if "stability" in segments:
+        desc = ParseStabilityLevel(
+            segments["stability"], ifile, line_number, "Stability level for %s" % symbol)
+        StabilityLevel[symbol] = ConvertXMLChars(symbol, desc)
+
+    if "deprecated" in segments:
+        if symbol not in Deprecated:
+            # don't warn for signals and properties
+            # if ($symbol !~ m/::?(.*)/)
+            if symbol in DeclarationTypes:
+                common.LogWarning(ifile, line_number,
+                                  "%s is deprecated in the inline comments, but no deprecation guards were found around the declaration. (See the --deprecated-guards option for gtkdoc-scan.)" % symbol)
+
+        Deprecated[symbol] = ConvertXMLChars(symbol, segments["deprecated"])
+
+
+def ParseCommentBlock(lines, line_number=0, ifile=''):
+    """Parse a single comment block.
+
+    Args:
+        lines (list): the comment block
+        line_number (int): the first line of the block (for reporting)
+        ifile (str): file name of the source file (for reporting)
+    """
+    (symbol, segments, params) = SegmentCommentBlock(lines, line_number, ifile)
     if not symbol:
         # maybe its not even meant to be a gtk-doc comment?
         common.LogWarning(ifile, line_number, "Symbol name not found at the start of the comment block.")
-    else:
-        # Add the return value description onto the end of the params.
-        if return_desc:
-            # TODO(ensonic): check for duplicated Return docs
-            # common.LogWarning(file, line_number, "Multiple Returns for %s." % symbol)
-            params['Returns'] = return_desc
+        return
 
-        # Convert special characters
-        description = ConvertXMLChars(symbol, description)
-        for (param_name, param_desc) in params.items():
-            params[param_name] = ConvertXMLChars(symbol, param_desc)
-
-        # Handle Section docs
-        m = re.search(r'SECTION:\s*(.*)', symbol)
-        m2 = re.search(r'PROGRAM:\s*(.*)', symbol)
-        if m:
-            real_symbol = m.group(1)
-            long_descr = real_symbol + ":Long_Description"
-
-            if long_descr not in KnownSymbols or KnownSymbols[long_descr] != 1:
-                common.LogWarning(
-                    ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
-
-            logging.info("SECTION DOCS found in source for : '%s'", real_symbol)
-            for param_name, param_desc in params.items():
-                logging.info("   '" + param_name + "'")
-                param_name = param_name.lower()
-                key = None
-                if param_name == "short_description":
-                    key = real_symbol + ":Short_Description"
-                elif param_name == "see_also":
-                    key = real_symbol + ":See_Also"
-                elif param_name == "title":
-                    key = real_symbol + ":Title"
-                elif param_name == "stability":
-                    key = real_symbol + ":Stability_Level"
-                elif param_name == "section_id":
-                    key = real_symbol + ":Section_Id"
-                elif param_name == "include":
-                    key = real_symbol + ":Include"
-                elif param_name == "image":
-                    key = real_symbol + ":Image"
-
-                if key:
-                    SourceSymbolDocs[key] = param_desc
-                    SourceSymbolSourceFile[key] = ifile
-                    SourceSymbolSourceLine[key] = line_number
-
-            SourceSymbolDocs[long_descr] = description
-            SourceSymbolSourceFile[long_descr] = ifile
-            SourceSymbolSourceLine[long_descr] = line_number
-        elif m2:
-            real_symbol = m2.group(1)
-            section_id = None
-
-            logging.info("PROGRAM DOCS found in source for '%s'", real_symbol)
-            for param_name, param_desc in params.items():
-                logging.info("PROGRAM key %s: '%s'", real_symbol, param_name)
-                param_name = param_name.lower()
-                key = None
-                if param_name == "short_description":
-                    key = real_symbol + ":Short_Description"
-                elif param_name == "see_also":
-                    key = real_symbol + ":See_Also"
-                elif param_name == "section_id":
-                    key = real_symbol + ":Section_Id"
-                elif param_name == "synopsis":
-                    key = real_symbol + ":Synopsis"
-                elif param_name == "returns":
-                    key = real_symbol + ":Returns"
-                elif re.search(r'^(-.*)', param_name):
-                    logging.info("PROGRAM opts: '%s': '%s'", param_name, param_desc)
-                    key = real_symbol + ":Options"
-                    opts = []
-                    opts_str = SourceSymbolDocs.get(key)
-                    if opts_str:
-                        opts = opts_str.split('\t')
-                    opts.append(param_name)
-                    opts.append(param_desc)
-
-                    logging.info("Setting options for symbol: %s: '%s'", real_symbol, '\t'.join(opts))
-                    SourceSymbolDocs[key] = '\t'.join(opts)
-                    continue
-
-                if key:
-                    logging.info("PROGRAM value %s: '%s'", real_symbol, param_desc.rstrip())
-                    SourceSymbolDocs[key] = param_desc.rstrip()
-                    SourceSymbolSourceFile[key] = ifile
-                    SourceSymbolSourceLine[key] = line_number
-
-            long_descr = real_symbol + ":Long_Description"
-            SourceSymbolDocs[long_descr] = description
-            SourceSymbolSourceFile[long_descr] = ifile
-            SourceSymbolSourceLine[long_descr] = line_number
-
-            section_id = SourceSymbolDocs.get(real_symbol + ":Section_Id")
-            if section_id and section_id.strip() != '':
-                # Remove trailing blanks and use as is
-                section_id = section_id.rstrip()
-            else:
-                section_id = common.CreateValidSGMLID('%s-%s' % (MODULE, real_symbol))
-            OutputProgramDBFile(real_symbol, section_id)
-
-        else:
-            logging.info("SYMBOL DOCS found in source for : '%s'", symbol)
-            SourceSymbolDocs[symbol] = description
-            SourceSymbolParams[symbol] = params
-            SourceSymbolSourceFile[symbol] = ifile
-            SourceSymbolSourceLine[symbol] = line_number
-
-        if since_desc:
-            arr = since_desc.splitlines()
-            since_desc = arr[0].strip()
-            extra_lines = arr[1:]
-            logging.info("Since(%s) : [%s]", symbol, since_desc)
-            Since[symbol] = ConvertXMLChars(symbol, since_desc)
-            if len(extra_lines) > 1:
-                common.LogWarning(ifile, line_number, "multi-line since docs found")
-
-        if stability_desc:
-            stability_desc = ParseStabilityLevel(
-                stability_desc, ifile, line_number, "Stability level for %s" % symbol)
-            StabilityLevel[symbol] = ConvertXMLChars(symbol, stability_desc)
-
-        if deprecated_desc:
-            if symbol not in Deprecated:
-                # don't warn for signals and properties
-                # if ($symbol !~ m/::?(.*)/)
-                if symbol in DeclarationTypes:
-                    common.LogWarning(ifile, line_number,
-                                      "%s is deprecated in the inline comments, but no deprecation guards were found around the declaration. (See the --deprecated-guards option for gtkdoc-scan.)" % symbol)
-
-            Deprecated[symbol] = ConvertXMLChars(symbol, deprecated_desc)
+    ParseCommentBlockSegments(symbol, segments, params, line_number, ifile)
 
 
 def OutputMissingDocumentation():
