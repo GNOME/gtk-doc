@@ -3900,40 +3900,24 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
     m2 = re.search(r'PROGRAM:\s*(.*)', symbol)
     if m:
         real_symbol = m.group(1)
-        long_descr = real_symbol + ":long_description"
-
-        if long_descr not in KnownSymbols or KnownSymbols[long_descr] != 1:
-            common.LogWarning(
-                ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
 
         logging.info("SECTION DOCS found in source for : '%s'", real_symbol)
         for param_name, param_desc in params.items():
             logging.info("   '" + param_name + "'")
             param_name = param_name.lower()
-            key = None
-            if param_name == "short_description":
-                key = real_symbol + ":short_description"
-            elif param_name == "see_also":
-                key = real_symbol + ":see_also"
-            elif param_name == "title":
-                key = real_symbol + ":title"
-            elif param_name == "stability":
-                key = real_symbol + ":stability"
-            elif param_name == "section_id":
-                key = real_symbol + ":section_id"
-            elif param_name == "include":
-                key = real_symbol + ":include"
-            elif param_name == "image":
-                key = real_symbol + ":image"
-
-            if key:
+            if param_name in ['image', 'include', 'section_id', 'see_also', 'short_description', 'stability', 'title']:
+                key = real_symbol + ':' + param_name
                 SourceSymbolDocs[key] = param_desc
                 SourceSymbolSourceFile[key] = ifile
                 SourceSymbolSourceLine[key] = line_number
 
-        SourceSymbolDocs[long_descr] = segments["body"]
-        SourceSymbolSourceFile[long_descr] = ifile
-        SourceSymbolSourceLine[long_descr] = line_number
+        key = real_symbol + ":long_description"
+        if key not in KnownSymbols or KnownSymbols[key] != 1:
+            common.LogWarning(
+                ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
+        SourceSymbolDocs[key] = segments["body"]
+        SourceSymbolSourceFile[key] = ifile
+        SourceSymbolSourceLine[key] = line_number
     elif m2:
         real_symbol = m2.group(1)
         section_id = None
@@ -3942,17 +3926,12 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
         for param_name, param_desc in params.items():
             logging.info("PROGRAM key %s: '%s'", real_symbol, param_name)
             param_name = param_name.lower()
-            key = None
-            if param_name == "short_description":
-                key = real_symbol + ":short_description"
-            elif param_name == "see_also":
-                key = real_symbol + ":see_also"
-            elif param_name == "section_id":
-                key = real_symbol + ":section_id"
-            elif param_name == "synopsis":
-                key = real_symbol + ":synopsis"
-            elif param_name == "returns":
-                key = real_symbol + ":returns"
+            if param_name in ['returns', 'section_id', 'see_also', 'short_description', 'synopsis']:
+                key = real_symbol + ':' + param_name
+                logging.info("PROGRAM value %s: '%s'", real_symbol, param_desc.rstrip())
+                SourceSymbolDocs[key] = param_desc.rstrip()
+                SourceSymbolSourceFile[key] = ifile
+                SourceSymbolSourceLine[key] = line_number
             elif re.search(r'^(-.*)', param_name):
                 logging.info("PROGRAM opts: '%s': '%s'", param_name, param_desc)
                 key = real_symbol + ":options"
@@ -3965,18 +3944,11 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
 
                 logging.info("Setting options for symbol: %s: '%s'", real_symbol, '\t'.join(opts))
                 SourceSymbolDocs[key] = '\t'.join(opts)
-                continue
 
-            if key:
-                logging.info("PROGRAM value %s: '%s'", real_symbol, param_desc.rstrip())
-                SourceSymbolDocs[key] = param_desc.rstrip()
-                SourceSymbolSourceFile[key] = ifile
-                SourceSymbolSourceLine[key] = line_number
-
-        long_descr = real_symbol + ":long_description"
-        SourceSymbolDocs[long_descr] = segments["body"]
-        SourceSymbolSourceFile[long_descr] = ifile
-        SourceSymbolSourceLine[long_descr] = line_number
+        key = real_symbol + ":long_description"
+        SourceSymbolDocs[key] = segments["body"]
+        SourceSymbolSourceFile[key] = ifile
+        SourceSymbolSourceLine[key] = line_number
 
         section_id = SourceSymbolDocs.get(real_symbol + ":section_id")
         if section_id and section_id.strip() != '':
