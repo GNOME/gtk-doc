@@ -3950,6 +3950,8 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
         SourceSymbolSourceFile[key] = ifile
         SourceSymbolSourceLine[key] = line_number
 
+        # TODO(ensonic): we need to track these somehow and output the files
+        # later, see comment in Run()
         section_id = SourceSymbolDocs.get(real_symbol + ":section_id")
         if section_id and section_id.strip() != '':
             # Remove trailing blanks and use as is

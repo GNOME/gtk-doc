@@ -24,10 +24,15 @@ import unittest
 from gtkdoc import mkdb
 
 
-class ScanSourceContent(unittest.TestCase):
+class ScanSourceContentTestCase(unittest.TestCase):
+    """Baseclass for the source scanner tests."""
 
     def setUp(self):
         mkdb.MODULE = 'test'
+        mkdb.SymbolDocs = {}
+
+
+class ScanSourceContent(ScanSourceContentTestCase):
 
     def test_EmptyInput(self):
         blocks = mkdb.ScanSourceContent([])
@@ -47,10 +52,7 @@ class ScanSourceContent(unittest.TestCase):
         self.assertEqual(1, len(blocks))
 
 
-class ParseCommentBlock(unittest.TestCase):
-
-    def setUp(self):
-        mkdb.MODULE = 'test'
+class ParseCommentBlock(ScanSourceContentTestCase):
 
     def test_EmptyInput(self):
         mkdb.ParseCommentBlock([])
@@ -126,10 +128,43 @@ class ParseCommentBlock(unittest.TestCase):
         self.assertEqual({'symbol': '&lt; &amp; &gt;.\n'}, mkdb.SourceSymbolDocs)
 
 
-class ScanSourceContentAnnotations(unittest.TestCase):
+class ParseSectionCommentBlock(ScanSourceContentTestCase):
 
-    def setUp(self):
-        mkdb.MODULE = 'test'
+    def test_FindsSectionBlock(self):
+        # TODO: maybe override common.LogWarning() instead and capture the messages
+        # Suppress: 'Section symbol is not defined in the test-sections.txt file'
+        mkdb.KnownSymbols['symbol:long_description'] = 1
+        mkdb.ParseCommentBlock(textwrap.dedent("""\
+             SECTION:symbol
+             @short_description: short module description
+
+             Module description.
+             """).splitlines(keepends=True))
+        self.assertIn('symbol:short_description', mkdb.SourceSymbolDocs)
+        self.assertEqual('short module description\n', mkdb.SourceSymbolDocs['symbol:short_description'])
+        self.assertIn('symbol:long_description', mkdb.SourceSymbolDocs)
+        self.assertEqual('Module description.\n', mkdb.SourceSymbolDocs['symbol:long_description'])
+
+    # TODO(ensonic): we need to refactor the code first (see comment there)
+    # def test_FindsProgramBlock(self):
+    #     mkdb.ParseCommentBlock(textwrap.dedent("""\
+    #         PROGRAM:symbol
+    #         @short_description: short program description
+    #         @synopsis: test-program [*OPTIONS*...] --arg1 *arg* *FILE*
+    #         @see_also: test(1)
+    #         @--arg1 *arg*: set arg1 to *arg*
+    #         @-v, --version: Print the version number
+    #         @-h, --help: Print the help message
+    #
+    #         Program description.
+    #          """).splitlines(keepends=True))
+    #     self.assertIn('symbol:short_description', mkdb.SourceSymbolDocs)
+    #     self.assertEqual('short program description\n', mkdb.SourceSymbolDocs['symbol:short_description'])
+    #     self.assertIn('symbol:long_description', mkdb.SourceSymbolDocs)
+    #     self.assertEqual('Program description.\n', mkdb.SourceSymbolDocs['symbol:long_description'])
+
+
+class ScanSourceContentAnnotations(ScanSourceContentTestCase):
 
     def test_ParamAnnotation(self):
         mkdb.ParseCommentBlock(textwrap.dedent("""\
