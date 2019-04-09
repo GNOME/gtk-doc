@@ -3773,6 +3773,7 @@ def SegmentCommentBlock(lines, line_number=0, ifile=''):
     segments = {'body': ''}
     params = OrderedDict()
     param_name = None
+    param_indent = None
     line_number -= 1
     for line in lines:
         line_number += 1
@@ -3840,6 +3841,7 @@ def SegmentCommentBlock(lines, line_number=0, ifile=''):
         if m:
             param_name = m.group(1)
             param_desc = line[m.end():]
+            param_indent = None
 
             # Allow varargs variations
             if re.search(r'^\.\.\.$', param_name):
@@ -3864,6 +3866,20 @@ def SegmentCommentBlock(lines, line_number=0, ifile=''):
             common.LogWarning(ifile, line_number,
                               "Parsing comment block file : parameter expected, but got '%s'" % line)
         else:
+            if not param_indent:
+                # determine indentation of first continuation line
+                spc = len(line) - len(line.lstrip(' '))
+                if spc > 0:
+                    param_indent = spc
+                    logging.debug("Found param-indentation of %d", param_indent)
+            if param_indent:
+                # cut common indentation (after double checking that it is all spaces)
+                if line[:param_indent].strip() == '':
+                    line = line[param_indent:]
+                else:
+                    logging.warning("Not cutting param-indentation for %s: '%s'",
+                                    param_name, line[:param_indent])
+
             params[param_name] += line
 
     return (symbol, segments, params)

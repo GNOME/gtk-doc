@@ -77,6 +77,18 @@ class ParseCommentBlock(ScanSourceContentTestCase):
         self.assertIn('symbol', mkdb.SourceSymbolParams)
         self.assertEqual({'par': 'value\n'}, mkdb.SourceSymbolParams['symbol'])
 
+    def test_FindsDocCommentWithMultilineParam(self):
+        mkdb.ParseCommentBlock(textwrap.dedent("""\
+             symbol:
+             @par: value docs with
+               two lines
+
+             Description.
+             """).splitlines(keepends=True))
+        self.assertEqual({'symbol': 'Description.\n'}, mkdb.SourceSymbolDocs)
+        self.assertIn('symbol', mkdb.SourceSymbolParams)
+        self.assertEqual({'par': 'value docs with\ntwo lines\n'}, mkdb.SourceSymbolParams['symbol'])
+
     def test_FindsDocCommentWithReturns(self):
         mkdb.ParseCommentBlock(textwrap.dedent("""\
              symbol:
