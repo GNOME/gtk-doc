@@ -3780,20 +3780,16 @@ def SegmentCommentBlock(lines, line_number=0, ifile=''):
 
         # If we haven't found the symbol name yet, look for it.
         if not symbol:
-            m1 = re.search(r'^\s*(SECTION:\s*\S+)', line)
-            m2 = re.search(r'^\s*(PROGRAM:\s*\S+)', line)
-            m3 = re.search(r'^\s*([\w:-]*\w)\s*:?\s*(\(.+?\)\s*)*$', line)
+            m1 = re.search(r'^\s*((SECTION|PROGRAM):\s*\S+)', line)
+            m2 = re.search(r'^\s*([\w:-]*\w)\s*:?\s*(\(.+?\)\s*)*$', line)
             if m1:
                 symbol = m1.group(1)
-                logging.info("SECTION DOCS found in source for : '%s'", symbol)
+                logging.info("docs found in source for : '%s'", symbol)
             elif m2:
                 symbol = m2.group(1)
-                logging.info("PROGRAM DOCS found in source for : '%s'", symbol)
-            elif m3:
-                symbol = m3.group(1)
-                logging.info("SYMBOL DOCS found in source for : '%s'", symbol)
-                if m3.group(2):
-                    annotation = m3.group(2).strip()
+                logging.info("docs found in source for : '%s'", symbol)
+                if m2.group(2):
+                    annotation = m2.group(2).strip()
                     if annotation != '':
                         SymbolAnnotations[symbol] = annotation
                         logging.info("remaining text for %s: '%s'", symbol, annotation)
