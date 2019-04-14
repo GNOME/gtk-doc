@@ -38,6 +38,7 @@ pylibdata_DATA = \
   gtkdoc/common.py \
   gtkdoc/config.py \
   gtkdoc/fixxref.py \
+  gtkdoc/highlight.py \
   gtkdoc/md_to_db.py \
   gtkdoc/mkdb.py \
   gtkdoc/mkhtml.py \

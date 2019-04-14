@@ -24,12 +24,8 @@
 import logging
 import os
 import re
-import shlex
-import subprocess
-import sys
-import tempfile
 
-from . import common, config
+from . import common, highlight
 
 # This contains all the entities and their relative URLs.
 Links = {}
@@ -55,6 +51,7 @@ def Run(options):
     LoadIndicies(options.module_dir, options.html_dir, options.extra_dir)
     ReadSections(options.module)
     FixCrossReferences(options.module_dir, options.module, options.src_lang)
+    highlight.append_style_defs(os.path.join(options.module_dir, 'style.css'))
 
 
 # TODO(ensonic): try to refactor so that we get a list of path's and then just
@@ -227,33 +224,24 @@ def FixHTMLFile(src_lang, module, file):
 
     content = open(file, 'r', encoding='utf-8').read()
 
-    if config.highlight:
-        # FIXME: ideally we'd pass a clue about the example language to the highligher
-        # unfortunately the "language" attribute is not appearing in the html output
-        # we could patch the customization to have <code class="xxx"> inside of <pre>
-        if config.highlight.endswith('vim'):
-            def repl_func(m):
-                return HighlightSourceVim(src_lang, m.group(1), m.group(2))
-            content = re.sub(
-                r'<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>',
-                repl_func, content, flags=re.DOTALL)
-        else:
-            def repl_func(m):
-                return HighlightSource(src_lang, m.group(1), m.group(2))
-            content = re.sub(
-                r'<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>',
-                repl_func, content, flags=re.DOTALL)
+    # FIXME: ideally we'd pass a clue about the example language to the highligher
+    # unfortunately the "language" attribute is not appearing in the html output
+    # we could patch the customization to have <code class="xxx"> inside of <pre>
+    def repl_func(m):
+        return HighlightSourcePygments(src_lang, m.group(1), m.group(2))
+    content = re.sub(
+        r'<div class=\"(example-contents|informalexample)\"><pre class=\"programlisting\">(.*?)</pre></div>',
+        repl_func, content, flags=re.DOTALL)
+    content = re.sub(r'\&lt;GTKDOCLINK\s+HREF=\&quot;(.*?)\&quot;\&gt;(.*?)\&lt;/GTKDOCLINK\&gt;',
+                     r'\<GTKDOCLINK\ HREF=\"\1\"\>\2\</GTKDOCLINK\>', content, flags=re.DOTALL)
 
-        content = re.sub(r'\&lt;GTKDOCLINK\s+HREF=\&quot;(.*?)\&quot;\&gt;(.*?)\&lt;/GTKDOCLINK\&gt;',
-                         r'\<GTKDOCLINK\ HREF=\"\1\"\>\2\</GTKDOCLINK\>', content, flags=re.DOTALL)
-
-        # From the highlighter we get all the functions marked up. Now we can turn them into GTKDOCLINK items
-        def repl_func(m):
-            return MakeGtkDocLink(m.group(1), m.group(2), m.group(3))
-        content = re.sub(r'(<span class=\"function\">)(.*?)(</span>)', repl_func, content, flags=re.DOTALL)
-        # We can also try the first item in stuff marked up as 'normal'
-        content = re.sub(
-            r'(<span class=\"normal\">\s*)(.+?)((\s+.+?)?\s*</span>)', repl_func, content, flags=re.DOTALL)
+    # From the highlighter we get all the functions marked up. Now we can turn them into GTKDOCLINK items
+    def repl_func(m):
+        return MakeGtkDocLink(m.group(1), m.group(2), m.group(3))
+    content = re.sub(r'(<span class=\"function\">)(.*?)(</span>)', repl_func, content, flags=re.DOTALL)
+    # We can also try the first item in stuff marked up as 'normal'
+    content = re.sub(
+        r'(<span class=\"normal\">\s*)(.+?)((\s+.+?)?\s*</span>)', repl_func, content, flags=re.DOTALL)
 
     lines = content.rstrip().split('\n')
 
@@ -373,91 +361,7 @@ def MakeGtkDocLink(pre, symbol, post):
     return pre + '<GTKDOCLINK HREF="' + id + '">' + symbol + '</GTKDOCLINK>' + post
 
 
-def HighlightSource(src_lang, type, source):
-    # write source to a temp file
-    # FIXME: use .c for now to hint the language to the highlighter
-    with tempfile.NamedTemporaryFile(mode='w+', suffix='.c') as f:
-        temp_source_file = HighlightSourcePreProcess(f, source)
-        highlight_options = config.highlight_options.replace('$SRC_LANG', src_lang)
-
-        logging.info('running %s %s %s', config.highlight, highlight_options, temp_source_file)
-
-        # format source
-        highlighted_source = subprocess.check_output(
-            [config.highlight] + shlex.split(highlight_options) + [temp_source_file]).decode('utf-8')
-        logging.debug('result: [%s]', highlighted_source)
-        if config.highlight.endswith('/source-highlight'):
-            highlighted_source = re.sub(r'^<\!-- .*? -->', '', highlighted_source, flags=re.MULTILINE | re.DOTALL)
-            highlighted_source = re.sub(
-                r'<pre><tt>(.*?)</tt></pre>', r'\1', highlighted_source, flags=re.MULTILINE | re.DOTALL)
-        elif config.highlight.endswith('/highlight'):
-            # need to rewrite the stylesheet classes
-            highlighted_source = highlighted_source.replace('<span class="gtkdoc com">', '<span class="comment">')
-            highlighted_source = highlighted_source.replace('<span class="gtkdoc dir">', '<span class="preproc">')
-            highlighted_source = highlighted_source.replace('<span class="gtkdoc kwd">', '<span class="function">')
-            highlighted_source = highlighted_source.replace('<span class="gtkdoc kwa">', '<span class="keyword">')
-            highlighted_source = highlighted_source.replace('<span class="gtkdoc line">', '<span class="linenum">')
-            highlighted_source = highlighted_source.replace('<span class="gtkdoc num">', '<span class="number">')
-            highlighted_source = highlighted_source.replace('<span class="gtkdoc str">', '<span class="string">')
-            highlighted_source = highlighted_source.replace('<span class="gtkdoc sym">', '<span class="symbol">')
-            # maybe also do
-            # highlighted_source = re.sub(r'</span>(.+)<span', '</span><span class="normal">\1</span><span')
-
-    return HighlightSourcePostprocess(type, highlighted_source)
-
-
-def HighlightSourceVim(src_lang, type, source):
-    # write source to a temp file
-    f = tempfile.NamedTemporaryFile(mode='w+', suffix='.h', delete=False, encoding='utf-8')
-    try:
-        temp_source_file = HighlightSourcePreProcess(f, source)
-        if os.name == 'nt':
-            temp_source_file = temp_source_file.replace('\\', '/')
-        f.close()
-
-        # format source
-        script = "echo 'let html_number_lines=0|" + \
-                 "let html_use_css=1|" + \
-                 "let html_use_xhtml=1|" + \
-                 "set encoding=utf-8|" \
-                 "e {}|".format(temp_source_file) + \
-                 "syn on|" + \
-                 "set syntax={}|".format(src_lang) + \
-                 "run! plugin/tohtml.vim|" + \
-                 "run! syntax/2html.vim|" + \
-                 "w! {}.html|".format(temp_source_file) + \
-                 "qa' | " + \
-                 "{} -n -e -u NONE -T xterm".format(config.highlight)
-        p = subprocess.Popen([os.getenv('SHELL', 'sh')], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        p.communicate(script.encode('utf-8'))
-        if p.returncode != 0:
-            raise Exception("Highlighter failed. The command was: {}".format(script))
-
-        html_filename = temp_source_file + ".html"
-        try:
-            with open(html_filename, 'rb') as html_file:
-                highlighted_source = html_file.read().decode('utf-8')
-            highlighted_source = re.sub(r'.*<pre\b[^>]*>\n', '', highlighted_source, flags=re.DOTALL)
-            highlighted_source = re.sub(r'</pre>.*', '', highlighted_source, flags=re.DOTALL)
-
-            # need to rewrite the stylesheet classes
-            highlighted_source = highlighted_source.replace('<span class="Comment">', '<span class="comment">')
-            highlighted_source = highlighted_source.replace('<span class="PreProc">', '<span class="preproc">')
-            highlighted_source = highlighted_source.replace('<span class="Statement">', '<span class="keyword">')
-            highlighted_source = highlighted_source.replace('<span class="Identifier">', '<span class="function">')
-            highlighted_source = highlighted_source.replace('<span class="Constant">', '<span class="number">')
-            highlighted_source = highlighted_source.replace('<span class="Special">', '<span class="symbol">')
-            highlighted_source = highlighted_source.replace('<span class="Type">', '<span class="type">')
-        finally:
-            # remove temp files
-            os.unlink(html_filename)
-    finally:
-        os.unlink(f.name)
-
-    return HighlightSourcePostprocess(type, highlighted_source)
-
-
-def HighlightSourcePreProcess(f, source):
+def HighlightSourcePygments(src_lang, div_class, source):
     # chop of leading and trailing empty lines, leave leading space in first real line
     source = source.strip(' ')
     source = source.strip('\n')
@@ -471,14 +375,11 @@ def HighlightSourcePreProcess(f, source):
     source = source.replace('&lt;', '<')
     source = source.replace('&gt;', '>')
     source = source.replace('&amp;', '&')
-    if sys.version_info < (3,):
-        source = source.encode('utf-8')
-    f.write(source)
-    f.flush()
-    return f.name
 
+    highlighted_source = highlight.highlight_code(source, src_lang)
+    if not highlighted_source:
+        highlighted_source = source
 
-def HighlightSourcePostprocess(type, highlighted_source):
     # chop of leading and trailing empty lines
     highlighted_source = highlighted_source.strip()
 
@@ -501,4 +402,4 @@ def HighlightSourcePostprocess(type, highlighted_source):
     </tbody>
   </table>
 </div>
-""" % (type, source_lines, highlighted_source)
+""" % (div_class, source_lines, highlighted_source)

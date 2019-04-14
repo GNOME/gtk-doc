@@ -58,66 +58,6 @@ JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.3//EN], [DocBook XML DTD V4.3
 JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl], [DocBook XSL Stylesheets])
 
 dnl
-dnl Check for syntax highlighters
-dnl
-AC_ARG_WITH([highlight],
-	AS_HELP_STRING([--with-highlight], [Select source code syntax highlighter (no|source-highlight|highlight|vim|auto)]),
-	, [with_highlight=auto])
-
-case $with_highlight in
-	no|source-highlight|highlight|vim|auto) ;;
-	*) AC_MSG_ERROR([Invalid value for syntax highlighting option.]) ;;
-esac
-
-HIGHLIGHT_OPTIONS=""
-if test "$with_highlight" = "auto"; then
-	AC_PATH_PROG([HIGHLIGHT], [source-highlight])
-	if test -n "$HIGHLIGHT"; then
-		HIGHLIGHT_OPTIONS="-t4 -s\$SRC_LANG -cstyle.css --no-doc -i"
-	else
-		AC_PATH_PROG([HIGHLIGHT], [highlight])
-		if test -n "$HIGHLIGHT"; then
-			HIGHLIGHT_OPTIONS="--syntax=\$SRC_LANG --out-format=xhtml -f --class-name=gtkdoc "
-		else
-			AC_PATH_PROG([HIGHLIGHT], [vim])
-			if test -n "$HIGHLIGHT"; then
-				dnl vim is useless if it does not support syntax highlighting
-				AC_MSG_CHECKING([whether vim has +syntax feature])
-				if $HIGHLIGHT --version | grep '+syntax' >/dev/null; then
-					AC_MSG_RESULT([yes])
-				else
-					AC_MSG_RESULT([no])
-					HIGHLIGHT=
-				fi
-			fi
-		fi
-	fi
-else
-	if test "$with_highlight" != "no"; then
-		AC_PATH_PROG([HIGHLIGHT], [$with_highlight], [no])
-	fi
-
-	case $with_highlight in
-		source-highlight) HIGHLIGHT_OPTIONS="-t4 -s\$SRC_LANG -cstyle.css --no-doc -i";;
-		highlight) HIGHLIGHT_OPTIONS="--syntax=\$SRC_LANG --out-format=xhtml -f --class-name=gtkdoc ";;
-		vim)
-			AC_MSG_CHECKING([whether vim has +syntax feature])
-			if $HIGHLIGHT --version | grep '+syntax' >/dev/null; then
-				AC_MSG_RESULT([yes])
-			else
-				AC_MSG_RESULT([no])
-				HIGHLIGHT=no
-			fi
-		;;
-	esac
-
-	if test "$HIGHLIGHT" = "no" && test "$with_highlight" != "no"; then
-		AC_MSG_ERROR([Could not find requested syntax highlighter])
-	fi
-fi
-AC_SUBST([HIGHLIGHT_OPTIONS])
-
-dnl
 dnl Set runtime package dirs so we can find the script containing common routines.
 dnl
 dnl From Autoconf Macro Archive:
@@ -265,9 +205,6 @@ gtk-doc was configured with the following options:
 test -n "$DBLATEX$FOP" \
     && AC_MSG_NOTICE([** PDF support enabled, using $DBLATEX$FOP]) \
     || AC_MSG_NOTICE([   PDF support disabled, no dblatex or fop available])
-test -n "$HIGHLIGHT" \
-    && AC_MSG_NOTICE([** Syntax highlighting of examples enabled, using $HIGHLIGHT]) \
-    || AC_MSG_NOTICE([   Syntax highlighting of examples disabled])
 test "x$build_tests" != "xno" \
     && AC_MSG_NOTICE([** Building regression tests]) \
     || AC_MSG_NOTICE([   Skipping regression tests])

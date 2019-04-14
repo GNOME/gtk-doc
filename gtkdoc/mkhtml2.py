@@ -105,20 +105,9 @@ from anytree import Node, PreOrderIter
 from copy import deepcopy
 from glob import glob
 from lxml import etree
-from pygments import highlight
-from pygments.lexers import CLexer
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
 from timeit import default_timer as timer
 
-from . import config, fixxref
-
-# pygments setup
-# lazily constructed lexer cache
-LEXERS = {
-    'c': CLexer()
-}
-HTML_FORMATTER = HtmlFormatter(nowrap=True)
+from . import config, highlight, fixxref
 
 
 class ChunkParams(object):
@@ -876,12 +865,8 @@ def convert_programlisting(ctx, xml):
     if xml.attrib.get('role', '') == 'example':
         if xml.text:
             lang = xml.attrib.get('language', ctx['src-lang']).lower()
-            if lang not in LEXERS:
-                LEXERS[lang] = get_lexer_by_name(lang)
-            lexer = LEXERS.get(lang, None)
-            if lexer:
-                highlighted = highlight(xml.text, lexer, HTML_FORMATTER)
-
+            highlighted = highlight.highlight_code(xml.text, lang)
+            if highlighted:
                 # we do own line-numbering
                 line_count = highlighted.count('\n')
                 source_lines = '\n'.join([str(i) for i in range(1, line_count + 1)])
@@ -1805,9 +1790,7 @@ def main(module, index_file, out_dir, uninstalled, src_lang, paths):
     css_file = os.path.join(styledir, 'style.css')
     for f in glob(os.path.join(styledir, '*.png')) + [css_file]:
         shutil.copy(f, out_dir)
-    css_file = os.path.join(out_dir, 'style.css')
-    with open(css_file, 'at', newline='\n', encoding='utf-8') as css:
-        css.write(HTML_FORMATTER.get_style_defs())
+    highlight.append_style_defs(os.path.join(out_dir, 'style.css'))
     logging.warning("2: %7.3lf: copy datafiles", timer() - _t)
 
     # 3) load xref targets

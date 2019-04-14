@@ -293,28 +293,10 @@ h2 .extralinks, h3 .extralinks
   font-weight: normal;
 }
 
-acronym,abbr 
+acronym,abbr
 {
   border-bottom: 1px dotted gray;
 }
-
-/* code listings */
-
-.listing_code .programlisting .normal,
-.listing_code .programlisting .normal a,
-.listing_code .programlisting .number,
-.listing_code .programlisting .cbracket,
-.listing_code .programlisting .symbol     { color: #555753; }
-.listing_code .programlisting .comment,
-.listing_code .programlisting .linenum    { color: #babdb6; } /* tango: aluminium 3 */
-.listing_code .programlisting .function,
-.listing_code .programlisting .function a,
-.listing_code .programlisting .preproc    { color: #204a87; } /* tango: sky blue 3  */
-.listing_code .programlisting .string     { color: #ad7fa8; } /* tango: plum */
-.listing_code .programlisting .keyword,
-.listing_code .programlisting .usertype,
-.listing_code .programlisting .type,
-.listing_code .programlisting .type a     { color: #4e9a06; } /* tango: chameleon 3  */
 
 .listing_frame {
   /* tango:sky blue 1 */
