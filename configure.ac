@@ -150,6 +150,11 @@ if test "x$have_yelp_tools" != "xyes"; then
 fi
 AM_CONDITIONAL([HAVE_YELP_TOOLS],[test x$have_yelp_tools = xyes])
 
+dnl
+dnl Python modules
+dnl
+AX_PYTHON_MODULE("pygments")
+
 AC_CONFIG_FILES([Makefile
 gtk-doc.pc
 buildsystems/autotools/Makefile
