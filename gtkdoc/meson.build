@@ -29,6 +29,7 @@ gtkdoc_sources = [
   'check.py',
   'common.py',
   'fixxref.py',
+  'highlight.py',
   'md_to_db.py',
   'mkdb.py',
   'mkhtml.py',
