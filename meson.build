@@ -43,10 +43,6 @@ xsltproc_prg = find_program('xsltproc', required: true)
 dblatex_prg = find_program('dblatex', required: false)
 fop_prg = find_program('fop', required: false)
 
-source_highlight_prg = find_program('source-highlight', required: false)
-highlight_prg = find_program('highlight', required: false)
-vim_prg = find_program('vim', required: false)
-
 python_prg_path = join_paths(python_prg.path())
 pkgconfig_prg_path = join_paths(pkgconfig_prg.path())
 xsltproc_prg_path = join_paths(xsltproc_prg.path())
@@ -59,29 +55,6 @@ endif
 fop_prg_path = ''
 if fop_prg.found()
   fop_prg_path = join_paths(fop_prg.path())
-endif
-
-highlight_prg_path = ''
-highlight_prg_args = []
-if source_highlight_prg.found()
-  highlight_prg_path = join_paths(source_highlight_prg.path())
-  highlight_prg_args = [
-    '-t4',
-    '-s$SRC_LANG',
-    '-cstyle.css',
-    '--no-doc',
-    '-i',
-  ]
-elif highlight_prg.found()
-  highlight_prg_path = join_paths(highlight_prg.path())
-  highlight_prg_args = [
-    '--syntax=$SRC_LANG',
-    '--out-format=xhtml',
-    '-f',
-    '--class-name=gtkdoc',
-  ]
-elif vim_prg.found()
-  highlight_prg_path = join_paths(vim_prg.path())
 endif
 
 # Options

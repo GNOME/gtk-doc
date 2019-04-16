@@ -5,8 +5,6 @@ config_py.set('datadir', '${datarootdir}')
 
 config_py.set('DBLATEX', dblatex_prg_path)
 config_py.set('FOP', fop_prg_path)
-config_py.set('HIGHLIGHT', highlight_prg_path)
-config_py.set('HIGHLIGHT_OPTIONS', ' '.join(highlight_prg_args))
 config_py.set('PKG_CONFIG', pkgconfig_prg_path)
 config_py.set('XSLTPROC', xsltproc_prg_path)
 
