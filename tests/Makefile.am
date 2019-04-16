@@ -1,7 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
 SUBDIRS =
-TESTS = tools.sh check.py common.py mkdb.py mk_to_db.py mkhtml2.py scan.py
+TESTS = \
+  tools.sh check.py common.py highlight.py mkdb.py mk_to_db.py mkhtml2.py \
+  scan.py
 
 if BUILD_TESTS
 # we need to run '.' last so that sanity processes the generated docs

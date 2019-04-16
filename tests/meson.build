@@ -7,6 +7,8 @@ gobject_docpath = join_paths(gobject_prefix, 'share', 'gtk-doc', 'html')
 gtkdoc_unit_tests = [
   'check',
   'common',
+  'highlight',
+  'mkdb',
   'mk-to-db',
   'mkhtml2',
   'scan',
