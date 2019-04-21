@@ -32,8 +32,6 @@ pkgconfigdir = join_paths(datadir, 'pkgconfig')
 glib_req = '>= 2.38.0'
 python3_req = '>= 3.4.0'
 
-glib_dep = dependency('glib-2.0', version: glib_req)
-gobject_dep = dependency('gobject-2.0', version: glib_req)
 python3_dep = dependency('python3', version: python3_req)
 
 python_prg = python.find_python()
@@ -144,7 +142,10 @@ configure_file(
 )
 
 subdir('help')
-subdir('tests')
+
+if get_option('tests') == true
+  subdir('tests')
+endif
 
 summary = [
   '',
@@ -162,6 +163,7 @@ summary = [
   '      CMake support: @0@'.format(get_option('cmake_support')),
   '         PDF output: @0@'.format(generate_pdf_output),
   '        User manual: @0@'.format(get_option('yelp_manual')),
+  '         Test suite: @0@'.format(get_option('tests')),
   '------',
 ]
 

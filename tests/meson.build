@@ -1,3 +1,6 @@
+glib_dep = dependency('glib-2.0', version: glib_req)
+gobject_dep = dependency('gobject-2.0', version: glib_req)
+
 glib_prefix = glib_dep.get_pkgconfig_variable('prefix')
 glib_docpath = join_paths(glib_prefix, 'share', 'gtk-doc', 'html')
 
