@@ -1,7 +1,7 @@
 project('gtk-doc', 'c',
   version: '1.29.1',
   license: 'GPL2+',
-  meson_version: '>= 0.41.0',
+  meson_version: '>= 0.48.0',
 )
 
 gnome = import('gnome')
