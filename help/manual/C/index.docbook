@@ -1843,7 +1843,7 @@ int main(int argc, char *argv[])
           <programlisting><![CDATA[
 <example>
   <title>Using a GHashTable.</title>
-  <programlisting>
+  <programlisting language="C">
       ...
   </programlisting>
 </example>
@@ -1853,18 +1853,22 @@ int main(int argc, char *argv[])
         <informalexample>
           <programlisting><![CDATA[
 <informalexample>
-  <programlisting>
+  <programlisting language="C">
   ...
   </programlisting>
 </informalexample>
 ]]></programlisting>
         </informalexample>
+        In both cases, the language attribute is optional and is used as a hint
+        to the syntax highlighting engine (pygments for html output).
         For the latter GTK-Doc also supports an abbreviation:
-<![CDATA[
-|[
+        <informalexample>
+          <programlisting><![CDATA[
+|[<!-- language="C" -->
   ...
 ]|
-]]>
+]]></programlisting>
+        </informalexample>
       </para>
 
       <para>
