@@ -7,3 +7,6 @@ option('cmake_support',
 option('yelp_manual',
        type: 'boolean', value: true,
        description: 'Build the user manual (requires yelp-tools)')
+option('tests',
+       type: 'boolean', value: true,
+       description: 'Build the test suite (requires glib)')
