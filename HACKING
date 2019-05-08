@@ -27,7 +27,7 @@ export NEW_VER_TAG=$(echo ${NEW_VER} | tr '.' '_')
 - bump release date in:
   help/manual/C/index.docbook
 - bump version in (x.y.1 -> x.y+1)
-  configure.ac
+  configure.ac meson.build
 
 - update NEWS
   ./bugzilla.py general ${NEW_VER} gtk-doc >RELNOTES.txt
@@ -36,7 +36,7 @@ export NEW_VER_TAG=$(echo ${NEW_VER} | tr '.' '_')
   and then copy to NEWS
 
 - commit
-  git add configure.ac NEWS help/manual/C/index.docbook
+  git add configure.ac meson.build NEWS help/manual/C/index.docbook
   git commit -m"release: update news and date in manual"
   git push
 
@@ -56,12 +56,12 @@ export NEW_VER_TAG=$(echo ${NEW_VER} | tr '.' '_')
   exit
 
 - bump versions in:
-  configure.ac
+  configure.ac meson.build
   help/manual/C/index.docbook
   NEWS
 
 - commit
-  git add configure.ac NEWS help/manual/C/index.docbook
+  git add configure.ac meson.build NEWS help/manual/C/index.docbook
   git commit -m"release: bump versions and back to development"
   git push
 
