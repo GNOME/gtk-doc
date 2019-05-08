@@ -59,7 +59,7 @@ MAIN_CODE = """
 #ifdef GTK_IS_WIDGET_CLASS
 #include <gtk/gtk.h>
 #endif
-static GType object_types[$ntypes];
+static GType object_types[${ntypes}];
 
 static GType *
 get_object_types (void)
@@ -95,11 +95,11 @@ ${get_types}
  */
 
 /* The output files */
-const gchar *signals_filename = "$new_signals_filename";
-const gchar *hierarchy_filename = "$new_hierarchy_filename";
-const gchar *interfaces_filename = "$new_interfaces_filename";
-const gchar *prerequisites_filename = "$new_prerequisites_filename";
-const gchar *args_filename = "$new_args_filename";
+const gchar *signals_filename = "${new_signals_filename}";
+const gchar *hierarchy_filename = "${new_hierarchy_filename}";
+const gchar *interfaces_filename = "${new_interfaces_filename}";
+const gchar *prerequisites_filename = "${new_prerequisites_filename}";
+const gchar *args_filename = "${new_args_filename}";
 
 static void output_signals (void);
 static void output_object_signals (FILE *fp,
@@ -413,7 +413,7 @@ output_object_hierarchy (void)
   FILE *fp;
   gint i,j;
   GType root, type;
-  GType root_types[$ntypes] = { G_TYPE_INVALID, };
+  GType root_types[${ntypes}] = { G_TYPE_INVALID, };
 
   fp = fopen (hierarchy_filename, "w");
   if (fp == NULL) {
@@ -1260,6 +1260,19 @@ def run(options):
     elif "argc" not in type_init_func and "argv" not in type_init_func:
         main_func_params = "void"
 
+    # TODO: we should explicitly reference the vars that we substitute
+    # template_vars = {
+    #     'get_types': get_types,
+    #     'ntypes': ntypes,
+    #     'main_func_params', main_func_params,
+    #     'new_args_filename': new_args_filename,
+    #     'new_hierarchy_filename': new_hierarchy_filename,
+    #     'new_interfaces_filename': new_interfaces_filename,
+    #     'new_prerequisites_filename': new_prerequisites_filename,
+    #     'new_signals_filename': new_signals_filename,
+    #     'type_init_func': type_init_func
+    # }
+    # output.write(string.Template(MAIN_CODE).substitute(template_vars))
     output.write(string.Template(MAIN_CODE).substitute(locals()))
 
     if options.query_child_properties:
