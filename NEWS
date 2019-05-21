@@ -46,7 +46,7 @@ Note that this is a nonmaintainer release and that tests are known to be broken.
 
  Changes
 
- o 674163 :  &ndash;  &nbsp; html-build.stamp rule broken for out-of-tree builds with absolute paths
+ o 674163 : html-build.stamp rule broken for out-of-tree builds with absolute paths
  o 795744 : Too much escaped string - &quot;  &amp; lt;child &gt;  &quot; in description of &quot; GtkOverlay as GtkBuildable &quot; section
  o 796011 : Crash in ScanDirectory caused by overlooked use of renamed `dir` variable
  o 796012 : Several places in rebase.py incorrectly use `match.groups(1)` instead of `match.group(1)`, one causes a crash
