@@ -22,7 +22,6 @@
 """
 Highlight sourcecode snippets.
 """
-import os, stat
 
 from pygments import highlight
 from pygments.lexers import CLexer
@@ -46,6 +45,5 @@ def highlight_code(code, lang='c'):
 
 
 def append_style_defs(css_file_name):
-    os.chmod(css_file_name, stat.S_IWRITE)
     with open(css_file_name, 'at', newline='\n', encoding='utf-8') as css:
         css.write(HTML_FORMATTER.get_style_defs())
