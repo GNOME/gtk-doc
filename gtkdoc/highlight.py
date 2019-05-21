@@ -22,8 +22,7 @@
 """
 Highlight sourcecode snippets.
 """
-import os
-import stat
+import os, stat
 
 from pygments import highlight
 from pygments.lexers import CLexer
