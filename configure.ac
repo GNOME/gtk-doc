@@ -5,7 +5,7 @@ dnl We're using a two digit number for the releases and
 dnl a three digit number for the development version
 m4_define(gtk_doc_version, 1.30.1)
 
-AC_INIT([gtk-doc],[gtk_doc_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc],[gtk-doc])
+AC_INIT([gtk-doc],[gtk_doc_version],[https://gitlab.gnome.org/GNOME/gtk-doc/issues],[gtk-doc])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([gtk-doc.pc.in])
