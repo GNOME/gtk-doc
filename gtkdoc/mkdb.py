@@ -75,8 +75,7 @@ SymbolAnnotations = {}
 # These global hashes store documentation scanned from the source files.
 SourceSymbolDocs = {}
 SourceSymbolParams = {}
-SourceSymbolSourceFile = {}
-SourceSymbolSourceLine = {}
+SymbolSourceLocation = {}
 
 # all documentation goes in here, so we can do coverage analysis
 AllSymbols = {}
@@ -1435,7 +1434,7 @@ def OutputStruct(symbol, declaration):
                     decl_out = "struct %s {\n%s};\n" % (symbol, new_declaration)
 
         else:
-            common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+            common.LogWarning(*GetSymbolSourceLocation(symbol),
                               "Couldn't parse struct:\n%s" % declaration)
 
         # If we couldn't parse the struct or it was all private, output an
@@ -1492,7 +1491,7 @@ def OutputStruct(symbol, declaration):
                     field_descr, param_annotations)
                 del field_descrs[field_name]
             else:
-                common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                common.LogWarning(*GetSymbolSourceLocation(symbol),
                                   "Field description for %s::%s is missing in source code comment block." % (symbol, field_name))
                 if missing_parameters != '':
                     missing_parameters += ", " + field_name
@@ -1511,7 +1510,7 @@ def OutputStruct(symbol, declaration):
             if m:
                 continue
 
-            common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+            common.LogWarning(*GetSymbolSourceLocation(symbol),
                               "Field description for %s::%s is not used from source code comment block." % (symbol, field_name))
             if unused_parameters != '':
                 unused_parameters += ", " + field_name
@@ -1528,7 +1527,7 @@ def OutputStruct(symbol, declaration):
         if fields:
             if symbol not in AllIncompleteSymbols:
                 AllIncompleteSymbols[symbol] = "<items>"
-                common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                common.LogWarning(*GetSymbolSourceLocation(symbol),
                                   "Field descriptions for struct %s are missing in source code comment block." % symbol)
                 logging.info("Remaining structs fields: " + ':'.join(fields) + "\n")
 
@@ -1628,7 +1627,7 @@ def OutputUnion(symbol, declaration):
                     field_descr, param_annotations)
                 del field_descrs[field_name]
             else:
-                common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                common.LogWarning(*GetSymbolSourceLocation(symbol),
                                   "Field description for %s::%s is missing in source code comment block." % (symbol, field_name))
                 if missing_parameters != '':
                     missing_parameters += ", " + field_name
@@ -1641,7 +1640,7 @@ def OutputUnion(symbol, declaration):
 
         desc += "</tbody></tgroup></informaltable>\n</refsect3>"
         for field_name in field_descrs:
-            common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+            common.LogWarning(*GetSymbolSourceLocation(symbol),
                               "Field description for %s::%s is not used from source code comment block." % (symbol, field_name))
             if unused_parameters != '':
                 unused_parameters += ", " + field_name
@@ -1658,7 +1657,7 @@ def OutputUnion(symbol, declaration):
         if len(fields) > 0:
             if symbol not in AllIncompleteSymbols:
                 AllIncompleteSymbols[symbol] = "<items>"
-                common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                common.LogWarning(*GetSymbolSourceLocation(symbol),
                                   "Field descriptions for union %s are missing in source code comment block." % symbol)
                 logging.info("Remaining union fields: " + ':'.join(fields) + "\n")
 
@@ -1737,7 +1736,7 @@ def OutputEnum(symbol, declaration):
             del field_descrs[field_name]
         else:
             if found:
-                common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                common.LogWarning(*GetSymbolSourceLocation(symbol),
                                   "Value description for %s::%s is missing in source code comment block." % (symbol, field_name))
                 if missing_parameters != '':
                     missing_parameters += ", " + field_name
@@ -1748,7 +1747,7 @@ def OutputEnum(symbol, declaration):
 
     desc += "</tbody></tgroup></informaltable>\n</refsect3>"
     for field_name in field_descrs:
-        common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+        common.LogWarning(*GetSymbolSourceLocation(symbol),
                           "Value description for %s::%s is not used from source code comment block." % (symbol, field_name))
         if unused_parameters != '':
             unused_parameters += ", " + field_name
@@ -1766,7 +1765,7 @@ def OutputEnum(symbol, declaration):
         if len(fields) > 0:
             if symbol not in AllIncompleteSymbols:
                 AllIncompleteSymbols[symbol] = "<items>"
-                common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                common.LogWarning(*GetSymbolSourceLocation(symbol),
                                   "Value descriptions for %s are missing in source code comment block." % symbol)
 
     desc += OutputSymbolTraits(symbol)
@@ -1981,7 +1980,7 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
             else:
                 if fields:
                     if param_name not in field_descrs:
-                        common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                        common.LogWarning(*GetSymbolSourceLocation(symbol),
                                           "Parameter description for %s::%s is not used from source code comment block." % (symbol, param_name))
                         if unused_parameters != '':
                             unused_parameters += ", " + param_name
@@ -1996,7 +1995,7 @@ def OutputParamDescriptions(symbol_type, symbol, fields):
                     num_params += 1
 
         for param_name in field_descrs:
-            common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+            common.LogWarning(*GetSymbolSourceLocation(symbol),
                               "Parameter description for %s::%s is missing in source code comment block." % (symbol, param_name))
             if missing_parameters != '':
                 missing_parameters += ", " + param_name
@@ -2135,7 +2134,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     if not stability or re.search(r'^\s*$', stability):
         stability = ''
     else:
-        line_number = GetSymbolSourceLine(file + ":stability")
+        line_number = GetSymbolSourceLocation(file + ":stability")[1]
         stability = ParseStabilityLevel(stability, file, line_number, "Section stability level")
         logging.info("Found stability: %s", stability)
 
@@ -2667,7 +2666,7 @@ def ExpandAnnotation(symbol, param_desc):
                 AnnotationsUsed[match_annotation] = 1
                 param_annotations += "[<acronym>%s</acronym>%s]" % (match_annotation, annotation_extra)
             else:
-                common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                common.LogWarning(*GetSymbolSourceLocation(symbol),
                                   "unknown annotation \"%s\" in documentation for %s." % (annotation, symbol))
                 param_annotations += "[%s]" % annotation
 
@@ -2883,7 +2882,7 @@ def ModifyXMLElements(text, symbol, start_tag_regexp, end_tag_func, callback):
             result += callback(before_tag, symbol, start_tag)
             result += end_tag
         else:
-            common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+            common.LogWarning(*GetSymbolSourceLocation(symbol),
                               "Can't find tag end: %s in docs for: %s." % (end_tag_regexp, symbol))
             # Just assume it is all inside the tag.
             result += callback(text, symbol, start_tag)
@@ -3400,7 +3399,7 @@ def GetSignals(gobject):
                             desc += indentation
 
                     else:
-                        common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                        common.LogWarning(*GetSymbolSourceLocation(symbol),
                                           "Can't parse arg: %s\nArgs:%s" % (params[j], SignalPrototypes[i]))
 
             xref = MakeXRef("gpointer", tagify("gpointer", "type"))
@@ -3706,9 +3705,8 @@ def ScanSourceFile(ifile, ignore_files):
 def ScanSourceContent(input_lines, ifile=''):
     """Scans the source code lines for specially-formatted comment blocks.
 
-    Updates global state in SourceSymbolDocs, SourceSymbolSourceFile,
-    SourceSymbolSourceLine. Since, StabilityLevel, Deprecated,
-    SymbolAnnotations.
+    Updates global state in SourceSymbolDocs, SymbolSourceLocation,
+    Since, StabilityLevel, Deprecated, SymbolAnnotations.
 
     Might read from global state in DeclarationTypes
 
@@ -3920,16 +3918,14 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
             if param_name in ['image', 'include', 'section_id', 'see_also', 'short_description', 'stability', 'title']:
                 key = real_symbol + ':' + param_name
                 SourceSymbolDocs[key] = param_desc
-                SourceSymbolSourceFile[key] = ifile
-                SourceSymbolSourceLine[key] = line_number
+                SymbolSourceLocation[key] = (ifile, line_number)
 
         key = real_symbol + ":long_description"
         if key not in KnownSymbols or KnownSymbols[key] != 1:
             common.LogWarning(
                 ifile, line_number, "Section %s is not defined in the %s-sections.txt file." % (real_symbol, MODULE))
         SourceSymbolDocs[key] = segments["body"]
-        SourceSymbolSourceFile[key] = ifile
-        SourceSymbolSourceLine[key] = line_number
+        SymbolSourceLocation[key] = (ifile, line_number)
     elif m2:
         real_symbol = m2.group(1)
         section_id = None
@@ -3942,8 +3938,7 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
                 key = real_symbol + ':' + param_name
                 logging.info("PROGRAM value %s: '%s'", real_symbol, param_desc.rstrip())
                 SourceSymbolDocs[key] = param_desc.rstrip()
-                SourceSymbolSourceFile[key] = ifile
-                SourceSymbolSourceLine[key] = line_number
+                SymbolSourceLocation[key] = (ifile, line_number)
             elif re.search(r'^(-.*)', param_name):
                 logging.info("PROGRAM opts: '%s': '%s'", param_name, param_desc)
                 key = real_symbol + ":options"
@@ -3959,8 +3954,7 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
 
         key = real_symbol + ":long_description"
         SourceSymbolDocs[key] = segments["body"]
-        SourceSymbolSourceFile[key] = ifile
-        SourceSymbolSourceLine[key] = line_number
+        SymbolSourceLocation[key] = (ifile, line_number)
 
         # TODO(ensonic): we need to track these somehow and output the files
         # later, see comment in Run()
@@ -3976,8 +3970,7 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
         logging.info("SYMBOL DOCS found in source for : '%s'", symbol)
         SourceSymbolDocs[symbol] = segments["body"]
         SourceSymbolParams[symbol] = params
-        SourceSymbolSourceFile[symbol] = ifile
-        SourceSymbolSourceLine[symbol] = line_number
+        SymbolSourceLocation[symbol] = (ifile, line_number)
 
     if "since" in segments:
         arr = segments["since"].splitlines()
@@ -4043,9 +4036,6 @@ def OutputMissingDocumentation():
 
     for symbol in sorted(AllSymbols.keys()):
         # FIXME: should we print common.LogWarnings for undocumented stuff?
-        # DEBUG
-        # location = "defined at " + GetSymbolSourceFile(symbol) + ":" + GetSymbolSourceLine(symbol) + "\n"
-        # DEBUG
         m = re.search(
             r':(title|long_description|short_description|see_also|stability|include|section_id|image)', symbol)
         m2 = re.search(r':(long_description|short_description)', symbol)
@@ -4197,12 +4187,12 @@ def CheckParamsDocumented(symbol, params):
                 else:
                     AllIncompleteSymbols[symbol] = param_name
 
-                common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+                common.LogWarning(*GetSymbolSourceLocation(symbol),
                                   "%s description for %s::%s is missing in source code comment block." % (item, symbol, param_name))
 
     elif len(params) == 0:
         AllIncompleteSymbols[symbol] = "<items>"
-        common.LogWarning(GetSymbolSourceFile(symbol), GetSymbolSourceLine(symbol),
+        common.LogWarning(*GetSymbolSourceLocation(symbol),
                           "%s descriptions for %s are missing in source code comment block." % (item, symbol))
 
 
@@ -4768,11 +4758,6 @@ def GetSymbolParams(symbol):
     return (params, found)
 
 
-def GetSymbolSourceFile(symbol):
-    """Get the filename where the symbol docs where taken from."""
-    return SourceSymbolSourceFile.get(symbol, '')
-
-
-def GetSymbolSourceLine(symbol):
-    """Get the file line where the symbol docs where taken from."""
-    return SourceSymbolSourceLine.get(symbol, 0)
+def GetSymbolSourceLocation(symbol):
+    """Get the filename and line where the symbol docs where taken from."""
+    return SymbolSourceLocation.get(symbol, ('', 0))
