@@ -100,6 +100,7 @@ const gchar *hierarchy_filename = "${new_hierarchy_filename}";
 const gchar *interfaces_filename = "${new_interfaces_filename}";
 const gchar *prerequisites_filename = "${new_prerequisites_filename}";
 const gchar *args_filename = "${new_args_filename}";
+const gchar *actions_filename = "${new_actions_filename}";
 
 static void output_signals (void);
 static void output_object_signals (FILE *fp,
@@ -125,6 +126,9 @@ static void output_prerequisites (FILE *fp,
 static void output_args (void);
 static void output_object_args (FILE *fp, GType object_type);
 
+static void output_actions (void);
+static void output_object_actions (FILE *fp, GType object_type);
+
 int
 main (${main_func_params})
 {
@@ -137,6 +141,7 @@ main (${main_func_params})
   output_object_interfaces ();
   output_interface_prerequisites ();
   output_args ();
+  output_actions ();
 
   return 0;
 }
@@ -561,6 +566,71 @@ output_prerequisites (FILE  *fp,
     output_prerequisites (fp, children[i]);
 
   g_free (children);
+#endif
+}
+
+static void
+output_actions (void)
+{
+  FILE *fp;
+  gint i;
+
+  fp = fopen (actions_filename, "w");
+  if (fp == NULL) {
+    g_warning ("Couldn't open output file: %s : %s", actions_filename, g_strerror(errno));
+    return;
+  }
+
+  for (i = 0; object_types[i]; i++) {
+    output_object_actions (fp, object_types[i]);
+  }
+
+  fclose (fp);
+}
+
+static void
+output_object_actions (FILE *fp, GType object_type)
+{
+  gpointer class;
+  const gchar *object_class_name;
+
+  if (!G_TYPE_IS_OBJECT (object_type))
+    return;
+
+  class = g_type_class_peek (object_type);
+  if (!class)
+    return;
+
+  object_class_name = g_type_name (object_type);
+
+#ifdef GTK_IS_WIDGET_CLASS
+#if GTK_CHECK_VERSION(3,96,0)
+  if (GTK_IS_WIDGET_CLASS (class)) {
+    guint i = 0;
+    const char *action_name;
+    GType owner;
+    const GVariantType *parameter_type;
+    const char *property_name;
+    while (gtk_widget_class_query_action (GTK_WIDGET_CLASS (class),
+                                          i,
+                                          &owner,
+                                          &action_name,
+                                          &parameter_type,
+                                          &property_name)) {
+      i++;
+      if (owner == G_TYPE_FROM_CLASS (class))
+        fprintf (fp, "<ACTION>\\n"
+                     "<NAME>%s:::%s</NAME>\\n"
+                     "<PARAMETER>%s</PARAMETER>\\n"
+                     "<PROPERTY>%s</PROPERTY>\\n"
+                     "</ACTION>\\n\\n",
+                 object_class_name,
+                 action_name,
+                 parameter_type ? g_variant_type_peek_string (parameter_type) : "",
+                 property_name ? property_name : "");
+    }
+  }
+#endif
 #endif
 }
 
@@ -1151,11 +1221,13 @@ output_object_args (FILE *fp, GType object_type)
     g_free (properties);
 
 #ifdef GTK_IS_CONTAINER_CLASS
+#if !GTK_CHECK_VERSION(3,96,0)
     if (!child_prop && GTK_IS_CONTAINER_CLASS (class)) {
       properties = gtk_container_class_list_child_properties (class, &n_properties);
       child_prop = TRUE;
       continue;
     }
+#endif
 #endif
 
 #ifdef GTK_IS_CELL_AREA_CLASS
@@ -1221,6 +1293,8 @@ def run(options):
     new_prerequisites_filename = base_filename + '.prerequisites.new'
     old_args_filename = base_filename + '.args'
     new_args_filename = base_filename + '.args.new'
+    old_actions_filename = base_filename + '.actions'
+    new_actions_filename = base_filename + '.actions.new'
 
     # generate a C program to scan the types
 
@@ -1327,5 +1401,6 @@ def run(options):
     common.UpdateFileIfChanged(old_interfaces_filename, new_interfaces_filename, False)
     common.UpdateFileIfChanged(old_prerequisites_filename, new_prerequisites_filename, False)
     common.UpdateFileIfChanged(old_args_filename, new_args_filename, False)
+    common.UpdateFileIfChanged(old_actions_filename, new_actions_filename, False)
 
     return 0
