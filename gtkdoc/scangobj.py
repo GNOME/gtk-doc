@@ -1151,11 +1151,13 @@ output_object_args (FILE *fp, GType object_type)
     g_free (properties);
 
 #ifdef GTK_IS_CONTAINER_CLASS
+#if !GTK_CHECK_VERSION(3,96,0)
     if (!child_prop && GTK_IS_CONTAINER_CLASS (class)) {
       properties = gtk_container_class_list_child_properties (class, &n_properties);
       child_prop = TRUE;
       continue;
     }
+#endif
 #endif
 
 #ifdef GTK_IS_CELL_AREA_CLASS
