@@ -3550,7 +3550,7 @@ def GetArgs(gobject):
             if 'X' in flags:
                 if flags_string:
                     flags_string += " / "
-                flags_string += "Construct Only"
+                flags_string += "Construct&#160;Only"
 
             AllSymbols[symbol] = 1
             blurb = ''
@@ -3588,6 +3588,8 @@ def GetArgs(gobject):
                     arg_desc += "\n<para>%s</para>" % param_annotations
 
             arg_desc += MakeDeprecationNote(symbol)
+
+            arg_desc += "<para>Owner: %s</para>\n" % gobject
 
             if flags_string:
                 arg_desc += "<para>Flags: %s</para>\n" % flags_string
