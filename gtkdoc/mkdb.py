@@ -970,6 +970,7 @@ def OutputIndex(basename, apiindex):
             logging.info("trying symbol %s", symbol)
             m1 = re.search(r'(.*)::(.*)', symbol)
             m2 = re.search(r'(.*):(.*)', symbol)
+            m3 = re.search(r'(.*)\|(.*)', symbol)
             if m1:
                 oname = m1.group(1)
                 osym = m1.group(2)
@@ -990,6 +991,18 @@ def OutputIndex(basename, apiindex):
                     logging.info("    " + name)
                     if name == osym:
                         symbol_type = "object property"
+                        if oname in SymbolSection:
+                            symbol_section = SymbolSection[oname]
+                            symbol_section_id = SymbolSectionId[oname]
+                        break
+            elif m3:
+                oname = m3.group(1)
+                osym = m3.group(2)
+                logging.info("  trying action %s|%s in %d actions", oname, osym, len(ActionNames))
+                for name in ActionNames:
+                    logging.info("    " + name)
+                    if name == osym:
+                        symbol_type = "action"
                         if oname in SymbolSection:
                             symbol_section = SymbolSection[oname]
                             symbol_section_id = SymbolSectionId[oname]
