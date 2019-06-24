@@ -66,7 +66,35 @@ class ParseCommentBlock(ScanSourceContentTestCase):
              """).splitlines(keepends=True))
         self.assertEqual({'symbol': 'Description.\n'}, mkdb.SourceSymbolDocs)
 
+    def test_FindsDocCommentForSignal(self):
+        mkdb.SourceSymbolDocs = {}
+        mkdb.ParseCommentBlock(textwrap.dedent("""\
+             Class::signal-with-dashes:
+
+             Description.
+             """).splitlines(keepends=True))
+        self.assertEqual({'Class::signal-with-dashes': 'Description.\n'}, mkdb.SourceSymbolDocs)
+
+    def test_FindsDocCommentForProperty(self):
+        mkdb.SourceSymbolDocs = {}
+        mkdb.ParseCommentBlock(textwrap.dedent("""\
+             Class:property-with-dashes:
+
+             Description.
+             """).splitlines(keepends=True))
+        self.assertEqual({'Class:property-with-dashes': 'Description.\n'}, mkdb.SourceSymbolDocs)
+
+    def test_FindsDocCommentForActions(self):
+        mkdb.SourceSymbolDocs = {}
+        mkdb.ParseCommentBlock(textwrap.dedent("""\
+             Class|action.with.dots-and-dashes:
+
+             Description.
+             """).splitlines(keepends=True))
+        self.assertEqual({'Class|action.with.dots-and-dashes': 'Description.\n'}, mkdb.SourceSymbolDocs)
+
     def test_FindsDocCommentWithParam(self):
+        mkdb.SourceSymbolDocs = {}
         mkdb.ParseCommentBlock(textwrap.dedent("""\
              symbol:
              @par: value
@@ -78,6 +106,7 @@ class ParseCommentBlock(ScanSourceContentTestCase):
         self.assertEqual({'par': 'value\n'}, mkdb.SourceSymbolParams['symbol'])
 
     def test_FindsDocCommentWithMultilineParam(self):
+        mkdb.SourceSymbolDocs = {}
         mkdb.ParseCommentBlock(textwrap.dedent("""\
              symbol:
              @par: value docs with
@@ -90,6 +119,7 @@ class ParseCommentBlock(ScanSourceContentTestCase):
         self.assertEqual({'par': 'value docs with\ntwo lines\n'}, mkdb.SourceSymbolParams['symbol'])
 
     def test_FindsDocCommentWithReturns(self):
+        mkdb.SourceSymbolDocs = {}
         mkdb.ParseCommentBlock(textwrap.dedent("""\
              symbol:
 
@@ -104,6 +134,7 @@ class ParseCommentBlock(ScanSourceContentTestCase):
         self.assertEqual({'Returns': ' result\n'}, mkdb.SourceSymbolParams['symbol'])
 
     def test_FindsDocCommentWithSince(self):
+        mkdb.SourceSymbolDocs = {}
         mkdb.ParseCommentBlock(textwrap.dedent("""\
              symbol:
 
@@ -113,6 +144,7 @@ class ParseCommentBlock(ScanSourceContentTestCase):
         self.assertEqual('0.1', mkdb.Since['symbol'])
 
     def test_FindsDocCommentWithDeprecated(self):
+        mkdb.SourceSymbolDocs = {}
         mkdb.ParseCommentBlock(textwrap.dedent("""\
              symbol:
 
@@ -123,6 +155,7 @@ class ParseCommentBlock(ScanSourceContentTestCase):
         self.assertEqual(' use function() instead\n', mkdb.Deprecated['symbol'])
 
     def test_FindsDocCommentWithStability(self):
+        mkdb.SourceSymbolDocs = {}
         mkdb.ParseCommentBlock(textwrap.dedent("""\
              symbol:
 
@@ -132,6 +165,7 @@ class ParseCommentBlock(ScanSourceContentTestCase):
         self.assertEqual('Stable', mkdb.StabilityLevel['symbol'])
 
     def test_HandlesHTMLEntities(self):
+        mkdb.SourceSymbolDocs = {}
         mkdb.ParseCommentBlock(textwrap.dedent("""\
              symbol:
 
