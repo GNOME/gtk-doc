@@ -3899,6 +3899,15 @@ def SegmentCommentBlock(lines, line_number=0, ifile=''):
         logging.info("scanning[%s] :%s", in_part, line.strip())
 
         # If we haven't found the symbol name yet, look for it.
+        # We need to allow for the following cases:
+        # function:
+        # Class::signal:
+        # Class:property:
+        # Class|action:
+        # Signal and property names can contain dashes, action names
+        # can contain period.
+        # In all cases, there might be annotations in parentheses
+        # following the symbol name.
         if not symbol:
             m1 = re.search(r'^\s*((SECTION|PROGRAM):\s*\S+)', line)
             m2 = re.search(r'^\s*([\w:.|-]*\w)\s*:?\s*(\(.+?\)\s*)*$', line)
