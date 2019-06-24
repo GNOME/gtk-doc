@@ -592,7 +592,6 @@ static void
 output_object_actions (FILE *fp, GType object_type)
 {
   gpointer class;
-  const gchar *object_class_name;
 
   if (!G_TYPE_IS_OBJECT (object_type))
     return;
@@ -600,8 +599,6 @@ output_object_actions (FILE *fp, GType object_type)
   class = g_type_class_peek (object_type);
   if (!class)
     return;
-
-  object_class_name = g_type_name (object_type);
 
 #ifdef GTK_IS_WIDGET_CLASS
 #if GTK_CHECK_VERSION(3,96,0)
@@ -611,6 +608,9 @@ output_object_actions (FILE *fp, GType object_type)
     GType owner;
     const GVariantType *parameter_type;
     const char *property_name;
+    const gchar *object_class_name;
+
+    object_class_name = g_type_name (object_type);
     while (gtk_widget_class_query_action (GTK_WIDGET_CLASS (class),
                                           i,
                                           &owner,
