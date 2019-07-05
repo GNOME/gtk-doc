@@ -872,7 +872,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 in_declaration = ''
 
         if in_declaration == 'enum':
-            em = re.search(r'\}\s*(\w+)?;\s*$', decl)
+            em = re.search(r'\}\s*(\w+)?[^;]*;\s*$', decl)
             if em:
                 if symbol == '':
                     symbol = em.group(1)
@@ -884,7 +884,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         # We try to handle nested structs/unions, but unmatched brackets in
         # comments will cause problems.
         if in_declaration == 'struct' or in_declaration == 'union':
-            sm = re.search(r'\n\}\s*(\w*);\s*$', decl)
+            sm = re.search(r'\n\}\s*(\w*)[^;]*;\s*$', decl)
             if level <= 1 and sm:
                 if symbol == '':
                     symbol = sm.group(1)

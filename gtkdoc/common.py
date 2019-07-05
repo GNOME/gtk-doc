@@ -411,7 +411,7 @@ def ParseEnumDeclaration(declaration):
         # ignore preprocessor directives
         line = re.sub(r'^#.*?\n\s*', '', line, flags=re.MULTILINE | re.DOTALL)
 
-        m1 = re.search(r'^(\w+)\s*(=.*)?$', line, flags=re.MULTILINE | re.DOTALL)
+        m1 = re.search(r'^(\w+)[^=]*(=.*)?$', line, flags=re.MULTILINE | re.DOTALL)
         # Special case for GIOCondition, where the values are specified by
         # macros which expand to include the equal sign like '=1'.
         m2 = re.search(r'^(\w+)\s*GLIB_SYSDEF_POLL', line, flags=re.MULTILINE | re.DOTALL)
