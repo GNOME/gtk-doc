@@ -128,6 +128,9 @@ static void output_object_args (FILE *fp, GType object_type);
 int
 main (${main_func_params})
 {
+  g_unsetenv ("LC_ALL");
+  g_setenv ("LC_MESSAGES", "C", TRUE);
+
   ${type_init_func};
 
   get_object_types ();
