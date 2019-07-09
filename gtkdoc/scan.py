@@ -527,7 +527,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 # We also try to skip the first macro if it looks like the
                 # standard #ifndef HEADER_FILE #define HEADER_FILE etc.
                 # And we only want TRUE & FALSE defined in GLib.
-                if not symbol.startswith('_') \
+                if (not symbol.startswith('_') or symbol == '_') \
                     and (not re.search(r'#ifndef\s+' + symbol, previous_line)
                          or first_macro == 0) \
                     and ((symbol != 'TRUE' and symbol != 'FALSE')
