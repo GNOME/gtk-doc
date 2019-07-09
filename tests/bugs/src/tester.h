@@ -479,4 +479,20 @@ typedef struct {
   guint index_plop;
 } MyNotDeprecatedStruct;
 
+/**
+ * inline_func_with_macro:
+ * @obj: arg
+ *
+ * GLib has a few inline functions with a macro that has the same name. It puts
+ * the inline function name into parenthesis to avoid macro expansion.
+ * See g_set_object().
+ */
+static inline gboolean
+(inline_func_with_macro) (void *obj)
+{
+  return TRUE;
+}
+
+#define inline_func_with_macro(obj)
+
 #endif // GTKDOC_TESTER_H
