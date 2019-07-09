@@ -34,7 +34,7 @@ test(
     '--source-dir=@0@'.format(bugs_test_source_dir),
     '--ignore-headers=config.h',
     '--deprecated-guards=GTKDOC_TESTER_DISABLE_DEPRECATED',
-    '--ignore-decorators=GLIB_VAR|GTKDOC_GNUC_CONST|BUG_711598_DEPRECATED_FOR()',
+    '--ignore-decorators=GLIB_VAR|GTKDOC_GNUC_CONST|BUG_711598_DEPRECATED_FOR()|DEPRECATED_FOR()',
     '--rebuild-types',
   ],
 )
