@@ -128,7 +128,7 @@ CLINE_MATCHER = [
     # 18-21: FUNCTIONS
     None,  # in ScanHeaderContent()
     None,  # in ScanHeaderContent()
-    re.compile(r'^\s*([A-Za-z]\w*)\s*\('),
+    re.compile(r'^\s*\(?([A-Za-z]\w*)\)?\s*\('),
     re.compile(r'^\s*\('),
     # 22-23: STRUCTS
     re.compile(r'^\s*struct\s+_?(\w+)\s*\*'),
@@ -412,7 +412,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         (?:\b(?:extern|static|inline|G_INLINE_FUNC%s)\s*)*
         (%s\w+)                                                     # 1: return type
         ([\s*]+(?:\s*(?:\*+|\bconst\b|\bG_CONST_RETURN\b))*)\s*     # 2: .. cont'
-        ([A-Za-z]\w*)                                               # 3: name
+        \(?([A-Za-z]\w*)\)?                                         # 3: name
         \s*\(""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
     PLINE_MATCHER[2] = re.compile(
