@@ -432,4 +432,51 @@ struct _Bug76
 };
 typedef struct _Bug76   Bug76;
 
+#define DEPRECATED_FOR(t)
+
+/**
+ * MyNotDeprecatedEnum:
+ * @MY_NOT_DEPRECATED_ENUM_VAL1: new value
+ *
+ * some description
+ */
+typedef enum {
+  MY_NOT_DEPRECATED_ENUM_VAL1,
+} MyNotDeprecatedEnum;
+
+/**
+ * MyDeprecatedEnum:
+ * @MY_DEPRECATED_ENUM_VAL1: deprecated, use instead %MY_DEPRECATED_VAL2
+ * @MY_DEPRECATED_ENUM_VAL2: val2
+ *
+ * some description
+ * Deprecated: Use #MyNotDeprecatedEnum instead
+ */
+typedef enum {
+  MY_DEPRECATED_ENUM_VAL1 DEPRECATED_FOR(MY_DEPRECATED_ENUM_VAL2),
+  MY_DEPRECATED_ENUM_VAL2,
+} MyDeprecatedEnum DEPRECATED_FOR(MyNotDeprecatedEnum);
+
+/**
+ * MyDeprecatedStruct:
+ *
+ * some description
+ * Deprecated: Use #MyNotDeprecatedStruct instead
+ */
+typedef struct _MyDeprecatedStruct  MyDeprecatedStruct DEPRECATED_FOR(MyNotDeprecatedStruct);
+struct _MyDeprecatedStruct {
+  /*< private >*/
+  guint index;
+} DEPRECATED_FOR(MyNotDeprecatedStruct);
+
+/**
+ * MyNotDeprecatedStruct:
+ *
+ * some description
+ */
+typedef struct {
+  /*< private >*/
+  guint index_plop;
+} MyNotDeprecatedStruct;
+
 #endif // GTKDOC_TESTER_H
