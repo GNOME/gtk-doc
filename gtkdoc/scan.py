@@ -374,7 +374,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     # avoid generating regex with |'' (matching no string)
     ignore_decorators = ''
     if options.ignore_decorators:
-        ignore_decorators = '|' + options.ignore_decorators
+        ignore_decorators = '|' + options.ignore_decorators.replace('()', '\(\w*\)')
 
     # FUNCTION POINTER VARIABLES
     CLINE_MATCHER[4] = re.compile(
