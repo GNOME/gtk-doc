@@ -81,14 +81,10 @@ CLINE_MATCHER = [
         r"""^\s*enum\s+
         _?(\w+)                              # 1: name
         \s+\{""", re.VERBOSE),
-    re.compile(r'^\s*typedef\s+enum\s+_?(\w+)\s+\1\s*;'),
+    None,  # in ScanHeaderContent()
     re.compile(r'^\s*typedef\s+enum'),
     # 8-11: STRUCTS AND UNIONS
-    re.compile(
-        r"""^\s*typedef\s+
-        (struct|union)\s+                    # 1: struct/union
-        _(\w+)                               # 2: name
-        \s+\2\s*;""", re.VERBOSE),
+    None,  # in ScanHeaderContent()
     re.compile(r'^\s*(?:struct|union)\s+_(\w+)\s*;'),
     re.compile(
         r"""^\s*
@@ -375,6 +371,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     ignore_decorators = ''
     if options.ignore_decorators:
         ignore_decorators = '|' + options.ignore_decorators.replace('()', '\(\w*\)')
+    optional_decorators_regex = '(?:\s+(?:%s))?' % ignore_decorators[1:]
 
     # FUNCTION POINTER VARIABLES
     CLINE_MATCHER[4] = re.compile(
@@ -385,6 +382,14 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         \(\*\s*
           (\w+)                                        # 4: name
         \)\s*\(""" % ignore_decorators, re.VERBOSE)
+
+    CLINE_MATCHER[6] = re.compile(r'^\s*typedef\s+enum\s+_?(\w+)\s+\1%s\s*;' % optional_decorators_regex)
+    CLINE_MATCHER[8] = re.compile(
+        r"""^\s*typedef\s+
+        (struct|union)\s+                    # 1: struct/union
+        _(\w+)\s+\2                          # 2: name
+        %s                                   # 3: optional decorator
+        \s*;""" % optional_decorators_regex, re.VERBOSE)
     # OTHER TYPEDEFS
     CLINE_MATCHER[15] = re.compile(
         r"""^\s*
@@ -872,19 +877,33 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 in_declaration = ''
 
         if in_declaration == 'enum':
-            em = re.search(r'\}\s*(\w+)?;\s*$', decl)
+            # Examples:
+            # "};"
+            # "} MyEnum;"
+            # "} MyEnum DEPRECATED_FOR(NewEnum);"
+            # "} DEPRECATED_FOR(NewEnum);"
+            em = re.search(r'\n\s*\}\s*(?:(\w+)?%s)?;\s*$' % optional_decorators_regex, decl)
             if em:
                 if symbol == '':
                     symbol = em.group(1)
+                # Enums could contain deprecated values and that doesn't mean
+                # the whole enum is deprecated, so they are ignored when setting
+                # deprecated_conditional_nest above. Here we can check if the
+                # _DEPRECATED is between '}' and ';' which would mean the enum
+                # as a whole is deprecated.
+                if re.search(r'\n\s*\}.*_DEPRECATED.*;\s*$', decl):
+                    deprecated = '<DEPRECATED/>\n'
                 if AddSymbolToList(slist, symbol):
-                    decl_list.append('<ENUM>\n<NAME>%s</NAME>\n%s%s</ENUM>\n' % (symbol, deprecated, decl))
+                    stripped_decl = re.sub(optional_decorators_regex, '', decl)
+                    decl_list.append('<ENUM>\n<NAME>%s</NAME>\n%s%s</ENUM>\n' % (symbol, deprecated, stripped_decl))
                 deprecated_conditional_nest = int(deprecated_conditional_nest)
                 in_declaration = ''
 
         # We try to handle nested structs/unions, but unmatched brackets in
         # comments will cause problems.
         if in_declaration == 'struct' or in_declaration == 'union':
-            sm = re.search(r'\n\}\s*(\w*);\s*$', decl)
+            # Same regex as for enum
+            sm = re.search(r'\n\}\s*(?:(\w+)?%s)?;\s*$' % optional_decorators_regex, decl)
             if level <= 1 and sm:
                 if symbol == '':
                     symbol = sm.group(1)
@@ -898,8 +917,9 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 logging.info('Store struct: "%s"', symbol)
                 if AddSymbolToList(slist, symbol):
                     structsym = in_declaration.upper()
+                    stripped_decl = re.sub('(%s)' % optional_decorators_regex, '', decl)
                     decl_list.append('<%s>\n<NAME>%s</NAME>\n%s%s</%s>\n' %
-                                     (structsym, symbol, deprecated, decl, structsym))
+                                     (structsym, symbol, deprecated, stripped_decl, structsym))
                     if symbol in forward_decls:
                         del forward_decls[symbol]
                 deprecated_conditional_nest = int(deprecated_conditional_nest)
