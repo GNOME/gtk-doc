@@ -1,15 +1,4 @@
-image: debian:unstable
-
-before_script:
-  - apt update -qq
-  - apt install -y -qq --no-install-recommends
-                autoconf automake bc build-essential libtool make meson pkg-config
-                dblatex docbook docbook-xml docbook-xsl libxml2-utils xsltproc
-                libglib2.0-dev
-                python3 python3-coverage python3-dev python3-lxml python3-parameterized
-                python3-pip python3-pygments python3-setuptools python3-unittest2
-  - pip3 install anytree
-  - export LANG=C.UTF-8
+image: registry.gitlab.gnome.org/gnome/gtk-doc/debian:v1
 
 stages:
   - build
