@@ -242,10 +242,19 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
         self.assertNoDeclFound(slist)
 
     @parameterized.expand(INLINE_MODIFIERS)
-    def test_IgnoresInternalInlineFunction(self, _, modifier):
+    def test_IgnoresInternalInlineVoidFunction(self, _, modifier):
         header = textwrap.dedent("""\
             %s void _internal(void) {
             }""" % modifier)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertNoDeclFound(slist)
+
+    @parameterized.expand(INLINE_MODIFIERS)
+    def test_IgnoresInternalInlineFunction(self, _, modifier):
+        header = textwrap.dedent("""\
+            %s int _internal(int a) {
+              return a + a; }""" % modifier)
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertNoDeclFound(slist)
@@ -767,6 +776,6 @@ if __name__ == '__main__':
     # from gtkdoc import common
     # common.setup_logging()
     #
-    # t = ScanHeaderContentUserFunction()
+    # t = ScanHeaderContentFunctions()
     # t.setUp()
-    # t.test_FindsFunctionStruct_Void_WithLinebreakAfterRetType()
+    # t.test_IgnoresInternalInlineFunction()
