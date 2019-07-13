@@ -41,6 +41,7 @@
   <xsl:param name="html.ext" select="'.html'"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
+  <xsl:param name="abstract.notitle.enabled" select="1"/>
   <!-- don't generate all those link tags (very slow and hardly used)
        it does not show much effect as we have a user.head.content template
   <xsl:param name="html.extra.head.links" select="0" />
