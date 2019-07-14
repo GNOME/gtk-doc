@@ -1187,14 +1187,14 @@ MAIN_CODE_END = """
 """
 
 
-def execute_command(options, description, command):
+def execute_command(options, description, command, env=None):
     if options.verbose:
         call = subprocess.check_call
     else:
         call = subprocess.check_output
 
     try:
-        call(command)
+        call(command, env=env)
     except subprocess.CalledProcessError as e:
         logging.warning('%s scanner failed: %d, command: %s', description,
                         e.returncode, ' '.join(command))
@@ -1306,8 +1306,12 @@ def run(options):
     if res:
         return res
 
+    run_env = os.environ.copy()
+    run_env['LC_MESSAGES'] = 'C'
+    run_env.pop('LC_ALL', None)
     res = execute_command(options, 'Running',
-                          shlex.split(options.run) + ['./' + x_file])
+                          shlex.split(options.run) + ['./' + x_file],
+                          env=run_env)
     if res:
         return res
 
