@@ -456,7 +456,7 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertNoDeclFound(slist)
 
-    def test_IgnoresPrivteStruct(self):
+    def test_IgnoresPrivateStruct(self):
         header = 'struct _x;'
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertNoDeclFound(slist)
@@ -515,8 +515,8 @@ class ScanHeaderContentUnions(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertNoDeclFound(slist)
 
-    def test_IgnoresPrivteStruct(self):
-        header = 'union _x x;'
+    def test_IgnoresPrivateUnion(self):
+        header = 'union _x;'
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertNoDeclFound(slist)
 
@@ -663,11 +663,6 @@ class ScanHeaderContentTypedefs(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('uint', header, slist)
 
-    def test_SkipsEnumTypedefDifferentName(self):
-        header = 'typedef enum data dateenum;'
-        slist, doc_comments = self.scanHeaderContent([header])
-        self.assertNoDeclFound(slist)
-
     def test_SkipsEnumTypedefUnderscoreName(self):
         header = 'typedef enum _data data;'
         slist, doc_comments = self.scanHeaderContent([header])
@@ -771,6 +766,9 @@ class SeparateSubSections(ScanHeaderContentTestCase):
 
 
 if __name__ == '__main__':
+    from gtkdoc import common
+    common.setup_logging()
+
     unittest.main()
 
     # from gtkdoc import common

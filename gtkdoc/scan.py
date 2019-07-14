@@ -313,20 +313,24 @@ def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, opt
     with open(input_file, 'r', encoding='utf-8') as hdr:
         input_lines = hdr.readlines()
 
-    slist, doc_comments = ScanHeaderContent(input_lines, decl_list, get_types, options)
+    try:
+        slist, doc_comments = ScanHeaderContent(input_lines, decl_list, get_types, options)
+        logging.info("Scanning %s done", input_file)
 
-    logging.info("Scanning %s done", input_file)
+        liststr = SeparateSubSections(slist, doc_comments)
+        if liststr != '':
+            if file_basename not in section_list:
+                section_list[file_basename] = ''
+            section_list[file_basename] += "<SECTION>\n<FILE>%s</FILE>\n%s</SECTION>\n\n" % (file_basename, liststr)
 
-    liststr = SeparateSubSections(slist, doc_comments)
-    if liststr != '':
-        if file_basename not in section_list:
-            section_list[file_basename] = ''
-        section_list[file_basename] += "<SECTION>\n<FILE>%s</FILE>\n%s</SECTION>\n\n" % (file_basename, liststr)
-
+    except RuntimeError as e:
+        common.LogWarning(input_file, 0, str(e))
 
 # Scan the the given content lines.
 # Returns: a list of symbols found and a set of symbols for which we have a
 #          doc-comment
+
+
 def ScanHeaderContent(input_lines, decl_list, get_types, options):
     # Holds the resulting list of declarations.
     slist = []
@@ -918,10 +922,9 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         pre_previous_line = previous_line
         previous_line = line
 
-    # here we want in_declaration=='', otherwise we have a partial symbol
-    # TODO: this breaks two tests, fix that first and then enable
-    #if in_declaration != '':
-    #    raise RuntimeError('partial declaration (%s) : %s ' % (in_declaration, decl))
+    # here we want in_declaration=='', otherwise we have a partial declaration
+    if in_declaration != '':
+        raise RuntimeError('partial declaration (%s) : %s ' % (in_declaration, decl))
 
     # print remaining forward declarations
     for symbol in sorted(forward_decls.keys()):
