@@ -794,6 +794,10 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                         decl += ';'
                         skip_block = 0
                         logging.info('2: ---')
+                    # we found the last '}' of an internal decl, go back
+                    # scanning for symbols
+                    if skip_block == 0 and internal:
+                        in_declaration = ''
 
                 else:
                     if skip_block == 1:
@@ -913,6 +917,11 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
         pre_previous_line = previous_line
         previous_line = line
+
+    # here we want in_declaration=='', otherwise we have a partial symbol
+    # TODO: this breaks two tests, fix that first and then enable
+    #if in_declaration != '':
+    #    raise RuntimeError('partial declaration (%s) : %s ' % (in_declaration, decl))
 
     # print remaining forward declarations
     for symbol in sorted(forward_decls.keys()):
