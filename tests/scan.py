@@ -220,6 +220,39 @@ class ScanHeaderContentEnum(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('Data', header, slist)
 
+    def test_HandleDeprecatedMemberDecorator(self):
+        header = textwrap.dedent("""\
+            typedef enum {
+              VAL_DEFAULT,
+              OTHER_VAL MY_DEPRECATED_FOR(VAL_DEFAULT),
+            } Data;""")
+        expected = textwrap.dedent("""\
+            typedef enum {
+              VAL_DEFAULT,
+              OTHER_VAL,
+            } Data;""")
+        self.options.ignore_decorators = 'MY_DEPRECATED_FOR()'
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('Data', expected, slist)
+
+    def test_HandleDeprecatedDecorator(self):
+        header = textwrap.dedent("""\
+            typedef enum {
+              VAL_DEFAULT,
+              OTHER_VAL,
+            } Data MY_DEPRECATED_FOR(OtherEnum);""")
+        expected = textwrap.dedent("""\
+            <DEPRECATED/>
+            typedef enum {
+              VAL_DEFAULT,
+              OTHER_VAL,
+            } Data;""")
+        self.options.ignore_decorators = 'MY_DEPRECATED_FOR()'
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('Data', expected, slist)
+
 
 class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
     """Test parsing of function declarations."""
@@ -364,6 +397,18 @@ class ScanHeaderContentFunctions(ScanHeaderContentTestCase):
             header.splitlines(keepends=True))
         self.assertDecl('func', 'int', 'int a', slist)
 
+    @parameterized.expand(INLINE_MODIFIERS)
+    def test_FindsInlineFunctionWithParenthesisName(self, _, modifier):
+        header = textwrap.dedent("""\
+            %s void
+            (func) (void)
+            {
+            }
+            """ % modifier)
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('func', 'void', 'void', slist)
+
 
 class ScanHeaderContentMacros(ScanHeaderContentTestCase):
     """Test parsing of macro declarations."""
@@ -479,6 +524,28 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertIn('<TITLE>GtkdocObject</TITLE>', slist)
+
+    def test_DeprecatedDecorator(self):
+        header = textwrap.dedent("""\
+            typedef struct {
+              int x;
+            } Data MY_DEPRECATED_FOR(OtherStruct);""")
+        expected = textwrap.dedent("""\
+            <DEPRECATED/>
+            typedef struct {
+              int x;
+            } Data;""")
+        self.options.ignore_decorators = 'MY_DEPRECATED_FOR()'
+        slist, doc_comments = self.scanHeaderContent(
+            header.splitlines(keepends=True))
+        self.assertDecl('Data', expected, slist)
+
+    def test_DeprecatedOpaqueStructTypedef(self):
+        header = 'typedef struct _data data MY_DEPRECATED_FOR(OtherData);'
+        expected = '<DEPRECATED/>\n'
+        self.options.ignore_decorators = 'MY_DEPRECATED_FOR()'
+        slist, doc_comments = self.scanHeaderContent([header])
+        self.assertDecl('data', expected, slist)
 
 
 class ScanHeaderContentUnions(ScanHeaderContentTestCase):
