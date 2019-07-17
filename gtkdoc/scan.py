@@ -522,15 +522,17 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
             if cm[0]:
                 symbol = cm[0].group(1)
                 decl = line
-                # We assume all macros which start with '_' are private.
+                # We assume all macros which start with '_' are private, but
+                # we accept '_' itself which is the standard gettext macro.
                 # We also try to skip the first macro if it looks like the
                 # standard #ifndef HEADER_FILE #define HEADER_FILE etc.
                 # And we only want TRUE & FALSE defined in GLib.
                 if not symbol.startswith('_') \
-                    and (not re.search(r'#ifndef\s+' + symbol, previous_line)
-                         or first_macro == 0) \
-                    and ((symbol != 'TRUE' and symbol != 'FALSE')
-                         or options.module == 'glib'):
+                        and (not re.search(r'#ifndef\s+' + symbol, previous_line)
+                             or first_macro == 0) \
+                        and ((symbol != 'TRUE' and symbol != 'FALSE')
+                             or options.module == 'glib') \
+                        or symbol == '_':
                     in_declaration = 'macro'
                     logging.info('Macro: "%s"', symbol)
                 else:
