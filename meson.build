@@ -1,11 +1,13 @@
 project('gtk-doc', 'c',
   version: '1.30.1',
   license: 'GPL2+',
-  meson_version: '>= 0.48.0',
+  meson_version: '>= 0.50.0', # needed for https://mesonbuild.com/Python-module.html#path
 )
 
 gnome = import('gnome')
-python = import('python3')
+python = import('python') # Meson new Python module https://mesonbuild.com/Python-module.html
+
+python3 = python.find_installation('python3')
 
 version = meson.project_version()
 package_name = meson.project_name()
@@ -34,7 +36,18 @@ python3_req = '>= 3.4.0'
 
 python3_dep = dependency('python3', version: python3_req)
 
-python_prg = python.find_python()
+python_prg = python3
+
+# Python 3 required modules
+python3_required_modules = ['pygments']
+
+foreach p : python3_required_modules
+  # Source: https://docs.python.org/3/library/importlib.html#checking-if-a-module-can-be-imported
+  script = 'import importlib.util; import sys; exit(1) if importlib.util.find_spec(\''+ p +'\') is None else exit(0)'
+  if run_command(python3, '-c', script).returncode() != 0
+    error('Required Python3 module \'' + p + '\' not found')
+  endif
+endforeach
 
 pkgconfig_prg = find_program('pkg-config', required: true)
 xsltproc_prg = find_program('xsltproc', required: true)
