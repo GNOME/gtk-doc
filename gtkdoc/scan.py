@@ -782,38 +782,24 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 logging.info('Union(_): "%s"', symbol)
         else:
             logging.info('in decl: skip=%s %s', skip_block, line.strip())
-            # If we were already in the middle of a declaration, we simply add
-            # the current line onto the end of it.
-            if skip_block == 0:
-                decl += line
-            else:
+            decl += line
+
+            if skip_block == 1:
                 # Remove all nested pairs of curly braces.
                 brace_remover = r'{[^{]*}'
-                bm = re.search(brace_remover, line)
+                bm = re.search(brace_remover, decl)
                 while bm:
-                    line = re.sub(brace_remover, '', line)
-                    bm = re.search(brace_remover, line)
-                # Then hope at most one remains in the line...
-                bm = re.search(r'(.*?){', line)
-                if bm:
-                    if skip_block == 1:
-                        decl += bm.group(1)
-                    skip_block += 1
-                elif '}' in line:
-                    skip_block -= 1
-                    if skip_block == 1:
-                        # this is a hack to detect the end of declaration
-                        decl += ';'
-                        skip_block = 0
-                        logging.info('2: ---')
-                    # we found the last '}' of an internal decl, go back
-                    # scanning for symbols
-                    if skip_block == 0 and internal:
-                        in_declaration = ''
+                    decl= re.sub(brace_remover, '', decl)
+                    bm = re.search(brace_remover, decl)
+                logging.info('in decl: skip=%s decl=[%s]', skip_block, decl)
 
-                else:
-                    if skip_block == 1:
-                        decl += line
+                # If all '{' have been matched and removed, we're done
+                bm = re.search(r'(.*?){', decl)
+                if not bm:
+                    # this is a hack to detect the end of declaration
+                    decl += ';'
+                    skip_block = 0
+                    logging.info('skip_block done')
 
         if in_declaration == "g-declare":
             dm = re.search(r'\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\).*$', decl)
@@ -883,9 +869,12 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                     if AddSymbolToList(slist, symbol):
                         decl_list.append('<MACRO>\n<NAME>%s</NAME>\n%s%s</MACRO>\n' % (symbol, deprecated, decl))
                 else:
+                    logging.info('skip internal macro: [%s]', symbol)
                     internal = 0
                 deprecated_conditional_nest = int(deprecated_conditional_nest)
                 in_declaration = ''
+            else:
+                logging.info('skip empty macro: [%s]', symbol)
 
         if in_declaration == 'enum':
             # Examples:
