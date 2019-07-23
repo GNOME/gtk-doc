@@ -142,7 +142,7 @@ AnnotationDefinition = {
     'not-error': "A GError parameter is not to be handled like a normal GError.",
     'out': "Parameter for returning results. Default is <acronym>transfer full</acronym>.",
     'out caller-allocates': "Out parameter, where caller must allocate storage.",
-    'out callee-allocates': "Out parameter, where caller must allocate storage.",
+    'out callee-allocates': "Out parameter, where callee must allocate storage.",
     'ref-func': "The specified function is used to ref a struct, must be a GTypeInstance.",
     'rename-to': "Rename the original symbol's name to SYMBOL.",
     'scope call': "The callback is valid only during the call to the method.",
