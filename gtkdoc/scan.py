@@ -232,16 +232,15 @@ def Run(options):
         open(overrides_file, 'w', encoding='utf-8').close()
 
 
-#
-# Function    : ScanHeaders
-# Description : This scans a directory tree looking for header files.
-#
-# Arguments   : source_dir - the directory to scan.
-#               section_list - a reference to the hashmap of sections.
-#               seen_headers - set to avoid scanning headers twice
-#
-
 def ScanHeaders(source_dir, section_list, decl_list, get_types, seen_headers, options):
+    """Scans a directory tree looking for header files.
+
+    Args:
+      source_dir (str): the directory to scan.
+      section_list (dict): map of section to filenames.
+      seen_headers (set): set to avoid scanning headers twice
+    """
+
     logging.info('Scanning source directory: %s', source_dir)
 
     # This array holds any subdirectories found.
@@ -266,18 +265,19 @@ def ScanHeaders(source_dir, section_list, decl_list, get_types, seen_headers, op
                     get_types, seen_headers, options)
 
 
-#
-# Function    : ScanHeader
-# Description : This scans a header file, looking for declarations of
-#                functions, macros, typedefs, structs and unions, which it
-#                outputs to the decl_list.
-# Arguments   : input_file - the header file to scan.
-#               section_list - a map of sections.
-#               decl_list - a list of declarations
-#               seen_headers - set to avoid scanning headers twice
-# Returns     : it adds declarations to the appropriate list.
-#
 def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, options):
+    """Scan a header file for doc commants.
+
+    Look for doc comments and extract them. Parse each doc comments and the
+    symbol declaration.
+
+    Args:
+      input_file (str): the header file to scan.
+      section_list (dict): a map of section per filename
+      decl_list (list): a list of declarations
+      seen_headers (set): set to avoid scanning headers twice
+    """
+
     # Don't scan headers twice
     canonical_input_file = os.path.realpath(input_file)
     if canonical_input_file in seen_headers:
@@ -322,12 +322,22 @@ def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, opt
     except RuntimeError as e:
         common.LogWarning(input_file, 0, str(e))
 
-# Scan the the given content lines.
-# Returns: a list of symbols found and a set of symbols for which we have a
-#          doc-comment
-
 
 def ScanHeaderContent(input_lines, decl_list, get_types, options):
+    """Scan the the given content lines.
+
+
+    Args:
+      input_lines (list):
+      decl_list (list): symbols declarations
+      get_types (list): lst of symbols that have a get_type function
+      options: commandline options
+
+    Returns:
+      list: a list of symbols found and a set of symbols for which we have a
+            doc-comment
+    """
+
     # Holds the resulting list of declarations.
     slist = []
     # Holds the title of the section
@@ -789,7 +799,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 brace_remover = r'{[^{]*}'
                 bm = re.search(brace_remover, decl)
                 while bm:
-                    decl= re.sub(brace_remover, '', decl)
+                    decl = re.sub(brace_remover, '', decl)
                     bm = re.search(brace_remover, decl)
                 logging.info('in decl: skip=%s decl=[%s]', skip_block, decl)
 
@@ -970,10 +980,20 @@ def format_ret_type(base_type, const, ptr):
     return ret_type
 
 
-# Separate the standard macros and functions, placing them at the
-# end of the current section, in a subsection named 'Standard'.
-# do this in a loop to catch object, enums and flags
 def SeparateSubSections(slist, doc_comments):
+    """Separate the standard macros and functions.
+
+    Place them at the end of the current section, in a subsection named
+    'Standard'. Do this in a loop to catch objects, enums and flags.
+
+    Args:
+      slist (list): list of symbols
+      doc_comments (dict): comments for each symbol
+
+    Returns:
+      str: the section doc xml fomatted as string
+    """
+
     klass = lclass = prefix = lprefix = None
     standard_decl = []
     liststr = '\n'.join(s for s in slist if s) + '\n'
