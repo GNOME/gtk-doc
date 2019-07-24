@@ -347,7 +347,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     # The type of declaration we are in, e.g. 'function' or 'macro'.
     in_declaration = ''
     # True if we should skip a block.
-    skip_block = 0
+    skip_block = False
     # The current symbol being declared.
     symbol = None
     # Holds the declaration of the current symbol.
@@ -722,7 +722,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 decl = line[cm[20].end():]
 
                 if is_inline_func(previous_line):
-                    skip_block = 1
+                    skip_block = True
                     if pm[3]:
                         ret_type = format_ret_type(pm[3].group(1), None, pm[3].group(2))
                         logging.info('Function  (3): "%s", Returns: "%s"', symbol, ret_type)
@@ -794,22 +794,9 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
             logging.info('in decl: skip=%s %s', skip_block, line.strip())
             decl += line
 
-            if skip_block == 1:
-                # Remove all nested pairs of curly braces.
-                brace_remover = r'{[^{]*}'
-                bm = re.search(brace_remover, decl)
-                while bm:
-                    decl = re.sub(brace_remover, '', decl)
-                    bm = re.search(brace_remover, decl)
+            if skip_block:
+                (skip_block, decl) = remove_braced_content(decl)
                 logging.info('in decl: skip=%s decl=[%s]', skip_block, decl)
-
-                # If all '{' have been matched and removed, we're done
-                bm = re.search(r'(.*?){', decl)
-                if not bm:
-                    # this is a hack to detect the end of declaration
-                    decl += ';'
-                    skip_block = 0
-                    logging.info('skip_block done')
 
         if in_declaration == "g-declare":
             dm = re.search(r'\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\).*$', decl)
@@ -856,7 +843,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                     internal = 0
                 deprecated_conditional_nest = int(deprecated_conditional_nest)
                 in_declaration = ''
-                skip_block = 0
+                skip_block = False
 
         if in_declaration == 'user_function':
             if re.search(r'\).*$', decl):
@@ -960,15 +947,44 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     return slist, doc_comments
 
 
+def remove_braced_content(decl):
+    """Remove all nested pairs of curly braces.
+
+    Args:
+      decl (str): the decl
+
+    Returns:
+      str: a declaration stripped of braced content
+    """
+
+    skip_block = True
+    # Remove all nested pairs of curly braces.
+    brace_remover = r'{[^{]*}'
+    bm = re.search(brace_remover, decl)
+    while bm:
+        decl = re.sub(brace_remover, '', decl)
+        bm = re.search(brace_remover, decl)
+
+    # If all '{' have been matched and removed, we're done
+    bm = re.search(r'(.*?){', decl)
+    if not bm:
+        # this is a hack to detect the end of declaration
+        decl += ';'
+        skip_block = False
+        logging.info('skip_block done')
+
+    return skip_block, decl
+
+
 def is_inline_func(line):
     line = line.strip()
     if line.startswith('G_INLINE_FUNC'):
         logging.info('skip block after G_INLINE_FUNC function')
-        return 1
+        return True
     if re.search(r'static\s+inline', line):
         logging.info('skip block after static inline function')
-        return 1
-    return 0
+        return True
+    return False
 
 
 def format_ret_type(base_type, const, ptr):
