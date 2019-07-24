@@ -791,12 +791,19 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 in_declaration = 'union'
                 logging.info('Union(_): "%s"', symbol)
         else:
-            logging.info('in decl: skip=%s %s', skip_block, line.strip())
+            logging.info('in decl %s: skip=%s %s', in_declaration, skip_block, line.strip())
             decl += line
 
-            if skip_block:
+            if skip_block and '{' in decl:
                 (skip_block, decl) = remove_braced_content(decl)
                 logging.info('in decl: skip=%s decl=[%s]', skip_block, decl)
+
+        pre_previous_line = previous_line
+        previous_line = line
+
+        if skip_block:
+            logging.info('skipping, in decl %s, decl=[%s]', in_declaration, decl)
+            continue
 
         if in_declaration == "g-declare":
             dm = re.search(r'\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\).*$', decl)
@@ -928,9 +935,6 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 level -= line.count('}')
                 logging.info('struct/union level : %d', level)
 
-        pre_previous_line = previous_line
-        previous_line = line
-
     # here we want in_declaration=='', otherwise we have a partial declaration
     if in_declaration != '':
         raise RuntimeError('partial declaration (%s) : %s ' % (in_declaration, decl))
@@ -959,17 +963,18 @@ def remove_braced_content(decl):
 
     skip_block = True
     # Remove all nested pairs of curly braces.
-    brace_remover = r'{[^{]*}'
+    brace_remover = r'{[^{]*?}'
     bm = re.search(brace_remover, decl)
     while bm:
         decl = re.sub(brace_remover, '', decl)
+        logging.info('decl=[%s]' % decl)
         bm = re.search(brace_remover, decl)
 
     # If all '{' have been matched and removed, we're done
     bm = re.search(r'(.*?){', decl)
     if not bm:
         # this is a hack to detect the end of declaration
-        decl += ';'
+        decl = decl.rstrip() + ';'
         skip_block = False
         logging.info('skip_block done')
 

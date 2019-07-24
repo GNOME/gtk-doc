@@ -832,15 +832,95 @@ class SeparateSubSections(ScanHeaderContentTestCase):
             liststr.splitlines())
 
 
+class RemoveBracedContent(ScanHeaderContentTestCase):
+
+    def test_OneLineFunctionBodyIsRemoved(self):
+        decl = textwrap.dedent("""\
+            static inline int function(int a) { return a + a; }""")
+        (skip, decl) = scan.remove_braced_content(decl)
+        self.assertEqual("static inline int function(int a);", decl)
+        self.assertEqual(skip, False)
+
+    def test_SimpleFunctionBodyIsRemoved(self):
+        decl = textwrap.dedent("""\
+            static inline int function(int a) {
+              return a + a;
+            }""")
+        (skip, decl) = scan.remove_braced_content(decl)
+        self.assertEqual("static inline int function(int a);", decl)
+        self.assertEqual(skip, False)
+
+    def test_SimpleFunctionWithNewlineBodyIsRemoved(self):
+        decl = textwrap.dedent("""\
+            static inline int function(int a)
+            {
+              return a + a;
+            }""")
+        (skip, decl) = scan.remove_braced_content(decl)
+        self.assertEqual("static inline int function(int a);", decl)
+        self.assertEqual(skip, False)
+
+    def test_NestedFunctionBodyIsRemoved(self):
+        decl = textwrap.dedent("""\
+            static inline int function(int a) {
+              if (a > 0) {
+                return a + a;
+              } else {
+                return a - a;
+              }
+            }""")
+        (skip, decl) = scan.remove_braced_content(decl)
+        self.assertEqual("static inline int function(int a);", decl)
+        self.assertEqual(skip, False)
+
+    def test_NestedFunctionWithNewlinesBodyIsRemoved(self):
+        decl = textwrap.dedent("""\
+            static inline int function(int a)
+            {
+              if (a > 0)
+              {
+                return a + a;
+              }
+              else
+              {
+                return a - a;
+              }
+            }""")
+        (skip, decl) = scan.remove_braced_content(decl)
+        self.assertEqual("static inline int function(int a);", decl)
+        self.assertEqual(skip, False)
+
+    def test_SimpleFunctionWithParenthesisBodyIsRemoved(self):
+        decl = textwrap.dedent("""\
+            static inline int
+            (function) (int a)
+            {
+              return a + a;
+            }""")
+        (skip, decl) = scan.remove_braced_content(decl)
+        self.assertEqual("static inline int\n(function) (int a);", decl)
+        self.assertEqual(skip, False)
+
+    def test_FunctionWithMultilineParamsBodyIsRemoved(self):
+        decl = textwrap.dedent("""\
+            static inline int
+            function (int a,
+                      int b)
+            {
+              return a + b;
+            }""")
+        (skip, decl) = scan.remove_braced_content(decl)
+        self.assertEqual(
+            "static inline int\nfunction (int a,\n          int b);", decl)
+        self.assertEqual(skip, False)
+
+
 if __name__ == '__main__':
     from gtkdoc import common
     common.setup_logging()
 
     unittest.main()
 
-    # from gtkdoc import common
-    # common.setup_logging()
-    #
-    # t = ScanHeaderContentFunctions()
+    # t = RemoveBracedContent()
     # t.setUp()
-    # t.test_IgnoresInternalInlineFunction()
+    # t.test_NestedFunctionBodyIsRemoved()
