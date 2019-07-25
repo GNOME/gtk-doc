@@ -71,6 +71,7 @@ class ScanHeaderContentTestCase(unittest.TestCase):
             deprecated_guards='GTKDOC_TESTER_DISABLE_DEPRECATED',
             ignore_decorators='',
             rebuild_types=False)
+        scan.InitScanner(self.options)
 
     def scanHeaderContent(self, content):
         return scan.ScanHeaderContent(content, self.decls, self.types,
@@ -232,6 +233,7 @@ class ScanHeaderContentEnum(ScanHeaderContentTestCase):
               OTHER_VAL,
             } Data;""")
         self.options.ignore_decorators = 'MY_DEPRECATED_FOR()'
+        scan.InitScanner(self.options)
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertDecl('Data', expected, slist)
@@ -249,6 +251,7 @@ class ScanHeaderContentEnum(ScanHeaderContentTestCase):
               OTHER_VAL,
             } Data;""")
         self.options.ignore_decorators = 'MY_DEPRECATED_FOR()'
+        scan.InitScanner(self.options)
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertDecl('Data', expected, slist)
@@ -536,6 +539,7 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
               int x;
             } Data;""")
         self.options.ignore_decorators = 'MY_DEPRECATED_FOR()'
+        scan.InitScanner(self.options)
         slist, doc_comments = self.scanHeaderContent(
             header.splitlines(keepends=True))
         self.assertDecl('Data', expected, slist)
@@ -544,6 +548,7 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
         header = 'typedef struct _data data MY_DEPRECATED_FOR(OtherData);'
         expected = '<DEPRECATED/>\n'
         self.options.ignore_decorators = 'MY_DEPRECATED_FOR()'
+        scan.InitScanner(self.options)
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('data', expected, slist)
 
