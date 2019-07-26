@@ -154,6 +154,9 @@ PLINE_MATCHER = [
     None,  # in InitScanner()
 ]
 
+# Matchers for 2nd previous line
+PPLINE_MATCHER = None
+
 # Matchers for sub expressions
 SUB_MATCHER = [
     # 0: STRUCTS AND UNIONS
@@ -308,6 +311,20 @@ def InitScanner(options):
         ([A-Za-z]\w*)                                               # 3: symbols
         \s*$""" % (ignore_decorators, RET_TYPE_MODIFIER), re.VERBOSE)
 
+    # Matchers for 2nd previous line
+    global PPLINE_MATCHER
+    PPLINE_MATCHER = [
+        # 0: FUNCTIONS
+        re.compile(
+            r"""^\s*(?:\b(?:extern|static|inline|G_INLINE_FUNC%s)\s*)*
+            (
+              (?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*
+              \w+
+              (?:\**\s+\**(?:const|G_CONST_RETURN))?
+              (?:\s+|\s*\*+)
+            )\s*$""" % ignore_decorators, re.VERBOSE)
+        ]
+
 
 def ScanHeaders(source_dir, section_list, decl_list, get_types, seen_headers, options):
     """Scans a directory tree looking for header files.
@@ -460,7 +477,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     # avoid generating regex with |'' (matching no string)
     # TODO(ensonic): keep in sync with InitScanner()
     # TODO(ensonic): extract the remaining regexps
-    ignore_decorators = ''          # 2 uses
+    ignore_decorators = ''          # 1 uses
     optional_decorators_regex = ''  # 4 uses
     if options.ignore_decorators:
         ignore_decorators = '|' + options.ignore_decorators.replace('()', '\(\w*\)')
@@ -548,6 +565,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
             cm = [m.match(line) for m in CLINE_MATCHER]
             pm = [m.match(previous_line) for m in PLINE_MATCHER]
+            ppm = [m.match(pre_previous_line) for m in PPLINE_MATCHER]
 
             # MACROS
 
@@ -753,23 +771,14 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
             # on the previous line(s), and the start of the parameters on this.
             elif cm[21]:
                 decl = line[cm[21].end():]
-                ppm = re.search(
-                    r"""^\s*(?:\b(?:extern|static|inline|G_INLINE_FUNC%s)\s*)*
-                    (
-                      (?:const\s+|G_CONST_RETURN\s+|signed\s+|unsigned\s+|struct\s+|union\s+|enum\s+)*
-                      \w+
-                      (?:\**\s+\**(?:const|G_CONST_RETURN))?
-                      (?:\s+|\s*\*+)
-                    )\s*$""" % ignore_decorators, pre_previous_line, re.VERBOSE)
-
                 if pm[4]:
                     ret_type = pm[4].group(1) + ' ' + pm[4].group(2).strip()
                     symbol = pm[4].group(3)
                     in_declaration = 'function'
                     logging.info('Function (5): "%s", Returns: "%s"', symbol, ret_type)
 
-                elif re.search(r'^\s*\w+\s*$', previous_line) and ppm:
-                    ret_type = ppm.group(1)
+                elif re.search(r'^\s*\w+\s*$', previous_line) and ppm[0]:
+                    ret_type = ppm[0].group(1)
                     ret_type = re.sub(r'\s*\n', '', ret_type, flags=re.MULTILINE)
                     in_declaration = 'function'
 
@@ -838,9 +847,9 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                         ModuleObjName, deprecated)
                 in_declaration = ''
 
-        # Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);' or
-        # ') __attribute__ (...);'.
         if in_declaration == 'function':
+            # Note that sometimes functions end in ') G_GNUC_PRINTF (2, 3);' or
+            # ') __attribute__ (...);'.
             regex = r'\)\s*(G_GNUC_.*|.*DEPRECATED.*%s\s*|__attribute__\s*\(.*\)\s*)*;.*$' % ignore_decorators
             pm = re.search(regex, decl, flags=re.MULTILINE)
             if pm:
