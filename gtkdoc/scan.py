@@ -75,16 +75,16 @@ CLINE_MATCHER = [
           (\w+)                              # 2: name
         \)\s*\(""", re.VERBOSE),
     # 4: FUNCTION POINTER VARIABLES
-    None,  # in ScanHeaderContent()
+    None,  # in InitScanner()
     # 5-7: ENUMS
     re.compile(
         r"""^\s*enum\s+
         _?(\w+)                              # 1: name
         \s+\{""", re.VERBOSE),
-    None,  # in ScanHeaderContent()
+    None,  # in InitScanner()
     re.compile(r'^\s*typedef\s+enum'),
     # 8-11: STRUCTS AND UNIONS
-    None,  # in ScanHeaderContent()
+    None,  # in InitScanner()
     re.compile(r'^\s*(?:struct|union)\s+_(\w+)\s*;'),
     re.compile(
         r"""^\s*
@@ -111,7 +111,7 @@ CLINE_MATCHER = [
         \s*;""", re.VERBOSE),
     re.compile(r'^\s*typedef\s+'),
     # 15: VARIABLES (extern'ed variables)
-    None,  # in ScanHeaderContent()
+    None,  # in InitScanner()
     # 16: VARIABLES
     re.compile(
         r"""^\s*
@@ -126,8 +126,8 @@ CLINE_MATCHER = [
         (FINAL_TYPE|DERIVABLE_TYPE|INTERFACE) # 1: variant
         \s*\(""", re.VERBOSE),
     # 18-21: FUNCTIONS
-    None,  # in ScanHeaderContent()
-    None,  # in ScanHeaderContent()
+    None,  # in InitScanner()
+    None,  # in InitScanner()
     re.compile(r'^\s*\(?([A-Za-z]\w*)\)?\s*\('),
     re.compile(r'^\s*\('),
     # 22-23: STRUCTS
@@ -149,9 +149,9 @@ PLINE_MATCHER = [
         """ % RET_TYPE_MODIFIER, re.VERBOSE),
     re.compile(r'^\s*typedef\s*'),
     # 2-4 :FUNCTIONS
-    None,  # in ScanHeaderContent()
-    None,  # in ScanHeaderContent()
-    None,  # in ScanHeaderContent()
+    None,  # in InitScanner()
+    None,  # in InitScanner()
+    None,  # in InitScanner()
 ]
 
 # Matchers for sub expressions
