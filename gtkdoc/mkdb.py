@@ -194,8 +194,8 @@ MAX_SYMBOL_FIELD_WIDTH = 40
 # XML header
 doctype_header = None
 
-# refentry template
-REFENTRY = string.Template('''${header}
+# docbook templates
+DB_REFENTRY = string.Template('''${header}
 <refentry id="${section_id}">
 <refmeta>
 <refentrytitle role="top_of_page" id="${section_id}.top_of_page">${title}</refentrytitle>
@@ -219,6 +219,27 @@ ${functions_details}
 </refsect1>
 ${other_desc}${args_desc}${signals_desc}${see_also}
 </refentry>
+''')
+
+DB_REFSECT1_SYNOPSIS = string.Template('''<refsect1 id="${section_id}.${type}" role="${role}">
+<title role="${role}.title">${title}</title>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="${role}_type" colwidth="150px"/>
+<colspec colname="${role}_name" colwidth="300px"/>
+<colspec colname="${role}_flags" colwidth="200px"/>
+<tbody>
+${content}
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+''')
+
+DB_REFSECT1_DESC = string.Template('''<refsect1 id="${section_id}.${type}" role="${role}">
+<title role="${role}.title">${title}</title>
+${content}
+</refsect1>
 ''')
 
 
@@ -365,7 +386,7 @@ def OutputObjectList():
     common.UpdateFileIfChanged(old_object_index, new_object_index, 0)
 
 
-def TrimTextBlock(desc):
+def trim_text_block(desc):
     """Trims extra whitespace.
 
     Empty lines inside a block are preserved.
@@ -375,6 +396,40 @@ def TrimTextBlock(desc):
 
     # strip trailing spaces on every line
     return re.sub(r'\s+$', '\n', desc.lstrip(), flags=re.MULTILINE)
+
+
+def make_refsect1_synopsis(content, title, section_id, section_type, role=None):
+    # TODO(ensonic): canonicalize xml to use the same string for section_type
+    # and role. Needs fixes on gtk-doc.xsl
+    if role is None:
+        role = section_type.replace('-', '_')
+
+    return DB_REFSECT1_SYNOPSIS.substitute({
+        'content': content,
+        'role': role,
+        'section_id': section_id,
+        'title': title,
+        'type': section_type,
+    })
+
+
+def make_refsect1_desc(content, title, section_id, section_type, role=None):
+    content = trim_text_block(content)
+    if content == '':
+        return ''
+
+    # TODO(ensonic): canonicalize xml to use the same string for section_type
+    # and role. Needs fixes on gtk-doc.xsl
+    if role is None:
+        role = section_type.replace('-', '_')
+
+    return DB_REFSECT1_DESC.substitute({
+        'content': content,
+        'role': role,
+        'section_id': section_id,
+        'title': title,
+        'type': section_type,
+    })
 
 
 def OutputDB(file, options):
@@ -508,139 +563,44 @@ def OutputDB(file, options):
                 signals_synop = re.sub(r'\n+$', '\n', signals_synop)
 
                 if signals_synop != '':
-                    signals_synop = '''<refsect1 id="%s.signals" role="signal_proto">
-<title role="signal_proto.title">Signals</title>
-<informaltable frame="none">
-<tgroup cols="3">
-<colspec colname="signals_return" colwidth="150px"/>
-<colspec colname="signals_name" colwidth="300px"/>
-<colspec colname="signals_flags" colwidth="200px"/>
-<tbody>
-%s
-</tbody>
-</tgroup>
-</informaltable>
-</refsect1>
-''' % (section_id, signals_synop)
-                    signals_desc = TrimTextBlock(signals_desc)
-                    signals_desc = '''<refsect1 id="%s.signal-details" role="signals">
-<title role="signals.title">Signal Details</title>
-%s
-</refsect1>
-''' % (section_id, signals_desc)
+                    signals_synop = make_refsect1_synopsis(
+                        signals_synop, 'Signals', section_id, 'signals', 'signal_proto')
+                    signals_desc = make_refsect1_desc(signals_desc, 'Signal Details',
+                                                      section_id, 'signal-details', 'signals')
 
                 args_synop = re.sub(r'^\n*', '', args_synop)
                 args_synop = re.sub(r'\n+$', '\n', args_synop)
                 if args_synop != '':
-                    args_synop = '''<refsect1 id="%s.properties" role="properties">
-<title role="properties.title">Properties</title>
-<informaltable frame="none">
-<tgroup cols="3">
-<colspec colname="properties_type" colwidth="150px"/>
-<colspec colname="properties_name" colwidth="300px"/>
-<colspec colname="properties_flags" colwidth="200px"/>
-<tbody>
-%s
-</tbody>
-</tgroup>
-</informaltable>
-</refsect1>
-''' % (section_id, args_synop)
-                    args_desc = TrimTextBlock(args_desc)
-                    args_desc = '''<refsect1 id="%s.property-details" role="property_details">
-<title role="property_details.title">Property Details</title>
-%s
-</refsect1>
-''' % (section_id, args_desc)
+                    args_synop = make_refsect1_synopsis(args_synop, 'Properties', section_id, 'properties')
+                    args_desc = make_refsect1_desc(args_desc, 'Property Details', section_id, 'property-details')
 
                 child_args_synop = re.sub(r'^\n*', '', child_args_synop)
                 child_args_synop = re.sub(r'\n+$', '\n', child_args_synop)
                 if child_args_synop != '':
-                    args_synop += '''<refsect1 id="%s.child-properties" role="child_properties">
-<title role="child_properties.title">Child Properties</title>
-<informaltable frame="none">
-<tgroup cols="3">
-<colspec colname="child_properties_type" colwidth="150px"/>
-<colspec colname="child_properties_name" colwidth="300px"/>
-<colspec colname="child_properties_flags" colwidth="200px"/>
-<tbody>
-%s
-</tbody>
-</tgroup>
-</informaltable>
-</refsect1>
-''' % (section_id, child_args_synop)
-                    child_args_desc = TrimTextBlock(child_args_desc)
-                    args_desc += '''<refsect1 id="%s.child-property-details" role="child_property_details">
-<title role="child_property_details.title">Child Property Details</title>
-%s
-</refsect1>
-''' % (section_id, child_args_desc)
+                    args_synop += make_refsect1_synopsis(child_args_synop,
+                                                         'Child Properties', section_id, 'child-properties')
+                    args_desc += make_refsect1_desc(child_args_desc, 'Child Property Details',
+                                                    section_id, 'child-property-details')
 
                 style_args_synop = re.sub(r'^\n*', '', style_args_synop)
                 style_args_synop = re.sub(r'\n+$', '\n', style_args_synop)
                 if style_args_synop != '':
-                    args_synop += '''<refsect1 id="%s.style-properties" role="style_properties">
-<title role="style_properties.title">Style Properties</title>
-<informaltable frame="none">
-<tgroup cols="3">
-<colspec colname="style_properties_type" colwidth="150px"/>
-<colspec colname="style_properties_name" colwidth="300px"/>
-<colspec colname="style_properties_flags" colwidth="200px"/>
-<tbody>
-%s
-</tbody>
-</tgroup>
-</informaltable>
-</refsect1>
-''' % (section_id, style_args_synop)
-                    style_args_desc = TrimTextBlock(style_args_desc)
-                    args_desc += '''<refsect1 id="%s.style-property-details" role="style_properties_details">
-<title role="style_properties_details.title">Style Property Details</title>
-%s
-</refsect1>
-''' % (section_id, style_args_desc)
+                    args_synop += make_refsect1_synopsis(style_args_synop,
+                                                         'Style Properties', section_id, 'style-properties')
+                    args_desc += make_refsect1_desc(style_args_desc, 'Style Property Details',
+                                                    section_id, 'style-property-details')
 
                 hierarchy_str = AddTreeLineArt(hierarchy)
                 if hierarchy_str != '':
-                    hierarchy_str = '''<refsect1 id="%s.object-hierarchy" role="object_hierarchy">
-<title role="object_hierarchy.title">Object Hierarchy</title>
-<screen>%s
-</screen>
-</refsect1>
-''' % (section_id, hierarchy_str)
+                    hierarchy_str = make_refsect1_desc('<screen>' + hierarchy_str + '\n</screen>',
+                                                       'Object Hierarchy', section_id, 'object-hierarchy')
 
-                interfaces = TrimTextBlock(interfaces)
-                if interfaces != '':
-                    interfaces = '''<refsect1 id="%s.implemented-interfaces" role="impl_interfaces">
-<title role="impl_interfaces.title">Implemented Interfaces</title>
-%s
-</refsect1>
-''' % (section_id, interfaces)
-
-                implementations = TrimTextBlock(implementations)
-                if implementations != '':
-                    implementations = '''<refsect1 id="%s.implementations" role="implementations">
-<title role="implementations.title">Known Implementations</title>
-%s
-</refsect1>
-''' % (section_id, implementations)
-
-                prerequisites = TrimTextBlock(prerequisites)
-                if prerequisites != '':
-                    prerequisites = '''<refsect1 id="%s.prerequisites" role="prerequisites">
-<title role="prerequisites.title">Prerequisites</title>
-%s
-</refsect1>
-''' % (section_id, prerequisites)
-
-                derived = TrimTextBlock(derived)
-                if derived != '':
-                    derived = '''<refsect1 id="%s.derived-interfaces" role="derived_interfaces">
-<title role="derived_interfaces.title">Known Derived Interfaces</title>
-%s
-</refsect1>
-''' % (section_id, derived)
+                interfaces = make_refsect1_desc(interfaces, 'Implemented Interfaces', section_id,
+                                                'implemented-interfaces', 'impl_interfaces')
+                implementations = make_refsect1_desc(
+                    implementations, 'Known Implementations', section_id, 'implementations')
+                prerequisites = make_refsect1_desc(prerequisites, 'Prerequisites', section_id, 'prerequisites')
+                derived = make_refsect1_desc(derived, 'Known Derived Interfaces', section_id, 'derived-interfaces')
 
                 functions_synop = re.sub(r'^\n*', '', functions_synop)
                 functions_synop = re.sub(r'\n+$', '\n', functions_synop)
@@ -675,11 +635,8 @@ def OutputDB(file, options):
 </informaltable>
 </refsect1>
 ''' % (section_id, other_synop)
-                    other_desc += '''<refsect1 id="%s.other_details" role="details">
-<title role="details.title">Types and Values</title>
-%s
-</refsect1>
-''' % (section_id, other_details)
+                    other_desc += make_refsect1_desc(other_details, 'Types and Values',
+                                                     section_id, 'other_details', 'details')
 
                 file_changed = OutputDBFile(filename, title, section_id,
                                             section_includes,
@@ -2216,7 +2173,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     # since it changes every day (and it is only used in the man pages):
     # "<refentry id="$section_id" revision="$mday $month $year">"
 
-    OUTPUT.write(REFENTRY.substitute({
+    OUTPUT.write(DB_REFENTRY.substitute({
         'args_desc': args_desc,
         'args_synop': args_synop,
         'derived': derived,
