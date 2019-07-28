@@ -217,11 +217,7 @@ ${extralinks}${long_desc}
 <title role="details.title">Functions</title>
 ${functions_details}
 </refsect1>
-<refsect1 id="${section_id}.other_details" role="details">
-<title role="details.title">Types and Values</title>
-${other_details}
-</refsect1>
-${args_desc}${signals_desc}${see_also}
+${other_desc}${args_desc}${signals_desc}${see_also}
 </refentry>
 ''')
 
@@ -411,6 +407,7 @@ def OutputDB(file, options):
     other_synop = ''
     functions_details = ''
     other_details = ''
+    other_desc = ''
     signals_synop = ''
     signals_desc = ''
     args_synop = ''
@@ -678,11 +675,16 @@ def OutputDB(file, options):
 </informaltable>
 </refsect1>
 ''' % (section_id, other_synop)
+                    other_desc += '''<refsect1 id="%s.other_details" role="details">
+<title role="details.title">Types and Values</title>
+%s
+</refsect1>
+''' % (section_id, other_details)
 
                 file_changed = OutputDBFile(filename, title, section_id,
                                             section_includes,
                                             functions_synop, other_synop,
-                                            functions_details, other_details,
+                                            functions_details, other_desc,
                                             signals_synop, signals_desc,
                                             args_synop, args_desc,
                                             hierarchy_str, interfaces,
@@ -702,6 +704,7 @@ def OutputDB(file, options):
             other_synop = ''
             functions_details = ''
             other_details = ''
+            other_desc = ''
             signals_synop = ''
             signals_desc = ''
             args_synop = ''
@@ -2078,7 +2081,7 @@ def ParseStabilityLevel(stability, file, line, message):
     return str(stability)
 
 
-def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop, functions_details, other_details, signals_synop, signals_desc, args_synop, args_desc, hierarchy, interfaces, implementations, prerequisites, derived, file_objects, default_stability):
+def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop, functions_details, other_desc, signals_synop, signals_desc, args_synop, args_desc, hierarchy, interfaces, implementations, prerequisites, derived, file_objects, default_stability):
     """Outputs the final DocBook file for one section.
 
     Args:
@@ -2090,7 +2093,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
         functions_synop (str): the DocBook for the Functions Synopsis part.
         other_synop (str): the DocBook for the Types and Values Synopsis part.
         functions_details (str): the DocBook for the Functions Details part.
-        other_details (str): the DocBook for the Types and Values Details part.
+        other_desc (str): the DocBook for the Types and Values Details part.
         signal_synop (str): the DocBook for the Signal Synopsis part
         signal_desc (str): the DocBook for the Signal Description part
         args_synop (str): the DocBook for the Arg Synopsis part
@@ -2228,7 +2231,7 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
         'implementations': implementations,
         'long_desc': long_desc,
         'object_anchors': object_anchors,
-        'other_details': other_details,
+        'other_desc': other_desc,
         'other_synop': other_synop,
         'prerequisites': prerequisites,
         'section_id': section_id,
