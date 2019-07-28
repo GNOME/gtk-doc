@@ -1209,6 +1209,55 @@ def uri_escape(text):
     return re.sub(r"([^A-Za-z0-9\-_.!~*'()]", do_escape, text)
 
 
+def extract_struct_body(symbol, decl, has_typedef, public):
+    """Returns a normalized struct body.
+
+    Normalizes whitespace and newlines and supresses non public members.
+
+    Returns:
+      str: the nomalized struct declaration
+    """
+    decl_out = ''
+
+    m = re.search(
+        r'^\s*(typedef\s+)?struct\s*\w*\s*(?:\/\*.*\*\/)?\s*{(.*)}\s*\w*\s*;\s*$', decl, flags=re.DOTALL)
+    if m:
+        new_boby = ''
+        for line in m.group(2).splitlines():
+            logging.info("Struct line: %s", line)
+            m2 = re.search(r'/\*\s*<\s*public\s*>\s*\*/', line)
+            m3 = re.search(r'/\*\s*<\s*(private|protected)\s*>\s*\*/', line)
+            if m2:
+                public = True
+            elif m3:
+                public = False
+            elif public:
+                new_boby += line + "\n"
+
+        if new_boby:
+            # Strip any blank lines off the ends.
+            new_boby = re.sub(r'^\s*\n', '', new_boby)
+            new_boby = re.sub(r'\n\s*$', r'\n', new_boby)
+
+            if has_typedef:
+                decl_out = "typedef struct {\n%s} %s;\n" % (new_boby, symbol)
+            else:
+                decl_out = "struct %s {\n%s};\n" % (symbol, new_boby)
+    else:
+        common.LogWarning(*GetSymbolSourceLocation(symbol),
+                          "Couldn't parse struct:\n%s" % decl)
+
+    if decl_out == '':
+        # If we couldn't parse the struct or it was all private, output an
+        # empty struct declaration.
+        if has_typedef:
+            decl_out = "typedef struct _%s %s;" % (symbol, symbol)
+        else:
+            decl_out = "struct %s;" % symbol
+
+    return decl_out
+
+
 def OutputSymbolExtraLinks(symbol):
     """Returns extralinks for the symbol (if enabled).
 
@@ -1404,46 +1453,7 @@ def OutputStruct(symbol, declaration):
         logging.info("Found opaque struct: %s", symbol)
         decl_out = "struct %s;" % symbol
     else:
-        m = re.search(
-            r'^\s*(typedef\s+)?struct\s*\w*\s*(?:\/\*.*\*\/)?\s*{(.*)}\s*\w*\s*;\s*$', declaration, flags=re.S)
-        if m:
-            struct_contents = m.group(2)
-
-            public = default_to_public
-            new_declaration = ''
-
-            for decl_line in struct_contents.splitlines():
-                logging.info("Struct line: %s", decl_line)
-                m2 = re.search(r'/\*\s*<\s*public\s*>\s*\*/', decl_line)
-                m3 = re.search(r'/\*\s*<\s*(private|protected)\s*>\s*\*/', decl_line)
-                if m2:
-                    public = True
-                elif m3:
-                    public = False
-                elif public:
-                    new_declaration += decl_line + "\n"
-
-            if new_declaration:
-                # Strip any blank lines off the ends.
-                new_declaration = re.sub(r'^\s*\n', '', new_declaration)
-                new_declaration = re.sub(r'\n\s*$', r'\n', new_declaration)
-
-                if has_typedef:
-                    decl_out = "typedef struct {\n%s} %s;\n" % (new_declaration, symbol)
-                else:
-                    decl_out = "struct %s {\n%s};\n" % (symbol, new_declaration)
-
-        else:
-            common.LogWarning(*GetSymbolSourceLocation(symbol),
-                              "Couldn't parse struct:\n%s" % declaration)
-
-        # If we couldn't parse the struct or it was all private, output an
-        # empty struct declaration.
-        if decl_out == '':
-            if has_typedef:
-                decl_out = "typedef struct _%s %s;" % (symbol, symbol)
-            else:
-                decl_out = "struct %s;" % symbol
+        decl_out = extract_struct_body(symbol, declaration, has_typedef, default_to_public)
 
     decl_out = CreateValidSGML(decl_out)
     desc += "<programlisting language=\"C\">%s</programlisting>\n" % decl_out

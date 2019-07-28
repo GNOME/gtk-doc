@@ -203,5 +203,52 @@ class ScanSourceContentAnnotations(ScanSourceContentTestCase):
     # multiple annotations, multiline annotations, symbol-level ...
 
 
+class OutputStruct(unittest.TestCase):
+
+    def test_SimpleStructGetNormalized(self):
+        res = mkdb.extract_struct_body('data', textwrap.dedent("""\
+            struct data
+            {
+                int i;
+                char *c;
+            };
+            """), False, True)
+        self.assertEqual(textwrap.dedent("""\
+            struct data {
+                int i;
+                char *c;
+            };
+            """), res)
+
+    def test_SimpleTypedefStructGetNormalized(self):
+        res = mkdb.extract_struct_body('data', textwrap.dedent("""\
+            typedef struct _data
+            {
+                int i;
+                char *c;
+            } data;
+            """), True, True)
+        self.assertEqual(textwrap.dedent("""\
+            typedef struct {
+                int i;
+                char *c;
+            } data;
+            """), res)
+
+    def test_InternalStructNameIsNormalized(self):
+        res = mkdb.extract_struct_body('data', textwrap.dedent("""\
+            struct _data {
+                int i;
+                char *c;
+            };
+            """), False, True)
+        self.assertEqual(textwrap.dedent("""\
+            struct data {
+                int i;
+                char *c;
+            };
+            """), res)
+
+
 if __name__ == '__main__':
     unittest.main()
