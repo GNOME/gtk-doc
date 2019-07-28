@@ -47,7 +47,7 @@ RUN locale-gen de_DE.UTF-8 \
 
 ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
 
-RUN pip3 install meson==0.48.0 anytree
+RUN pip3 install meson==0.50.0 anytree
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
 RUN useradd -u $HOST_USER_ID -ms /bin/bash user
