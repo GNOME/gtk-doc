@@ -39,15 +39,6 @@ gtkdoc_sources = [
   'scangobj.py',
 ]
 
-custom_target(
-  'gtkdoc',
-  input: gtkdoc_sources,
-  output: gtkdoc_sources,
-  build_by_default: true,
-  command: ['cp', '-f', '@INPUT@', '@OUTDIR@'],
-  install: true,
-  install_dir: join_paths(
-    pkgpythondir,
-    'gtkdoc',
-  ),
+install_data(gtkdoc_sources,
+  install_dir: join_paths(pkgpythondir, 'gtkdoc')
 )

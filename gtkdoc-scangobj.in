@@ -23,7 +23,11 @@
 import argparse
 import os
 import sys
-sys.path.append('@PYTHON_PACKAGE_DIR@')
+
+try:
+  import gtkdoc_uninstalled
+except ModuleNotFoundError:
+  sys.path.append('@PYTHON_PACKAGE_DIR@')
 
 from gtkdoc import common, config, scangobj
 
