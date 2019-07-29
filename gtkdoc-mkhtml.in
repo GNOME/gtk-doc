@@ -41,6 +41,8 @@ if __name__ == '__main__':
     # TODO: only for testing, replace with env-var
     parser.add_argument('--uninstalled', action='store_true', default=False,
                         help='???')
+    parser.add_argument('--output-dir', default='.',
+                        help='The directory where the results are stored')
 
     options = parser.parse_args()
     if len(options.args) < 2:
