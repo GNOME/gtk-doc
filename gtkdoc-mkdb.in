@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('--source-dir', action='append', dest='source_dir', default=[])
     parser.add_argument('--source-suffixes', dest='source_suffixes', default='')
     parser.add_argument('--ignore-files', dest='ignore_files', default='')
-    parser.add_argument('--output-dir', dest='output_dir', default='')
+    parser.add_argument('--output-dir', dest='output_dir', default='.')
     parser.add_argument('--tmpl-dir', dest='tmpl_dir', help="DEPRECATED")
     parser.add_argument('--main-sgml-file', dest='main_sgml_file', default='')
     parser.add_argument('--expand-content-files', dest='expand_content_files', default='')
