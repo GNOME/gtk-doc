@@ -32,20 +32,17 @@ from . import config
 
 
 def run_xsltproc(options, args):
+    stderr = None
     command = [config.xsltproc]
+    if len(options.path):
+        command += ['--path', ':'.join(options.path)]
     # we could do "$path_option $PWD " to avoid needing rewriting entities that
     # are copied from the header into docs under xml
-    if os.environ.get("GTKDOC_PROFILE", '') == '':
-        if len(options.path):
-            command += ['--path', ':'.join(options.path)]
-        logging.info('running "%s"', ' '.join(command + args))
-        return subprocess.call(command + args)
-    else:
+    if os.environ.get("GTKDOC_PROFILE", '') != '':
         command += ['--profile']
-        if len(options.path):
-            command += ['--path', ':'.join(options.path)]
-        logging.info('running "%s"', ' '.join(command + args))
-        return subprocess.call(command + args, stderr=open('profile.txt', 'w'))
+        stderr = open('profile.txt', 'w')
+    logging.info('running "%s"', ' '.join(command + args))
+    return subprocess.call(command + args, stderr=stderr, cwd=options.output_dir)
 
 
 def get_dirs(uninstalled):
@@ -98,8 +95,8 @@ def run(options):
 
     # copy navigation images and stylesheets to html directory ...
     for f in glob(styledir + '/*.png') + glob(styledir + '/*.css'):
-        shutil.copy(f, '.')
+        shutil.copy(f, options.output_dir)
 
-    with open('../html.stamp', 'w') as h:
+    with open(os.path.join(options.output_dir, '../html.stamp'), 'w') as h:
         h.write('timestamp')
     return res
