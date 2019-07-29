@@ -386,16 +386,36 @@ def OutputObjectList():
     common.UpdateFileIfChanged(old_object_index, new_object_index, 0)
 
 
-def trim_text_block(desc):
+def trim_leading_and_trailing_nl(text):
+    """Trims extra newlines.
+
+    Leaves a single trailing newline.
+
+    Args:
+        text (str): the text block to trim. May contain newlines.
+
+    Returns:
+       (str): trimmed text
+    """
+    text = re.sub(r'^\n*', '', text)
+    return re.sub(r'\n+$', '\n', text)
+
+
+def trim_white_spaces(text):
     """Trims extra whitespace.
 
-    Empty lines inside a block are preserved.
+    Empty lines inside a block are preserved. All whitespace and the end is
+    replaced with a single newline.
+
     Args:
-        desc (str): the text block to trim. May contain newlines.
+        text (str): the text block to trim. May contain newlines.
+
+    Returns:
+       (str): trimmed text
     """
 
     # strip trailing spaces on every line
-    return re.sub(r'\s+$', '\n', desc.lstrip(), flags=re.MULTILINE)
+    return re.sub(r'\s+$', '\n', text.lstrip(), flags=re.MULTILINE)
 
 
 def make_refsect1_synopsis(content, title, section_id, section_type, role=None):
@@ -414,7 +434,7 @@ def make_refsect1_synopsis(content, title, section_id, section_type, role=None):
 
 
 def make_refsect1_desc(content, title, section_id, section_type, role=None):
-    content = trim_text_block(content)
+    content = trim_white_spaces(content)
     if content == '':
         return ''
 
@@ -559,31 +579,26 @@ def OutputDB(file, options):
                 if section_includes == '':
                     section_includes = includes
 
-                signals_synop = re.sub(r'^\n*', '', signals_synop)
-                signals_synop = re.sub(r'\n+$', '\n', signals_synop)
-
+                signals_synop = trim_leading_and_trailing_nl(signals_synop)
                 if signals_synop != '':
                     signals_synop = make_refsect1_synopsis(
                         signals_synop, 'Signals', section_id, 'signals', 'signal_proto')
                     signals_desc = make_refsect1_desc(signals_desc, 'Signal Details',
                                                       section_id, 'signal-details', 'signals')
 
-                args_synop = re.sub(r'^\n*', '', args_synop)
-                args_synop = re.sub(r'\n+$', '\n', args_synop)
+                args_synop = trim_leading_and_trailing_nl(args_synop)
                 if args_synop != '':
                     args_synop = make_refsect1_synopsis(args_synop, 'Properties', section_id, 'properties')
                     args_desc = make_refsect1_desc(args_desc, 'Property Details', section_id, 'property-details')
 
-                child_args_synop = re.sub(r'^\n*', '', child_args_synop)
-                child_args_synop = re.sub(r'\n+$', '\n', child_args_synop)
+                child_args_synop = trim_leading_and_trailing_nl(child_args_synop)
                 if child_args_synop != '':
                     args_synop += make_refsect1_synopsis(child_args_synop,
                                                          'Child Properties', section_id, 'child-properties')
                     args_desc += make_refsect1_desc(child_args_desc, 'Child Property Details',
                                                     section_id, 'child-property-details')
 
-                style_args_synop = re.sub(r'^\n*', '', style_args_synop)
-                style_args_synop = re.sub(r'\n+$', '\n', style_args_synop)
+                style_args_synop = trim_leading_and_trailing_nl(style_args_synop)
                 if style_args_synop != '':
                     args_synop += make_refsect1_synopsis(style_args_synop,
                                                          'Style Properties', section_id, 'style-properties')
@@ -602,8 +617,7 @@ def OutputDB(file, options):
                 prerequisites = make_refsect1_desc(prerequisites, 'Prerequisites', section_id, 'prerequisites')
                 derived = make_refsect1_desc(derived, 'Known Derived Interfaces', section_id, 'derived-interfaces')
 
-                functions_synop = re.sub(r'^\n*', '', functions_synop)
-                functions_synop = re.sub(r'\n+$', '\n', functions_synop)
+                functions_synop = trim_leading_and_trailing_nl(functions_synop)
                 if functions_synop != '':
                     functions_synop = '''<refsect1 id="%s.functions" role="functions_proto">
 <title role="functions_proto.title">Functions</title>
@@ -619,8 +633,7 @@ def OutputDB(file, options):
 </refsect1>
 ''' % (section_id, functions_synop)
 
-                other_synop = re.sub(r'^\n*', '', other_synop)
-                other_synop = re.sub(r'\n+$', '\n', other_synop)
+                other_synop = trim_leading_and_trailing_nl(other_synop)
                 if other_synop != '':
                     other_synop = '''<refsect1 id="%s.other" role="other_proto">
 <title role="other_proto.title">Types and Values</title>
