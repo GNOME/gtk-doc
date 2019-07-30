@@ -106,13 +106,14 @@ binary_in.set('PACKAGE', package_name)
 binary_in.set('VERSION', version)
 
 foreach binary: gtkdoc_binaires
-  configure_file(
+  prog = configure_file(
     input: '@0@.in'.format(binary),
     output: binary,
     configuration: binary_in,
     install: true,
     install_dir: bindir,
   )
+  meson.override_find_program(binary, prog)
 endforeach
 
 configure_file(
@@ -165,6 +166,10 @@ configure_file(
 
 subdir('help')
 subdir('tests')
+
+# A dummy dependency object that to use gtkdoc as subproject fallback
+# To be used as: dependency('gtk-doc', fallback : ['gtk-doc', 'dummy_dep'])
+dummy_dep = declare_dependency()
 
 summary = [
   '',
