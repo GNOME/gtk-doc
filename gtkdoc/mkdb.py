@@ -221,13 +221,27 @@ ${other_desc}${args_desc}${signals_desc}${see_also}
 </refentry>
 ''')
 
-DB_REFSECT1_SYNOPSIS = string.Template('''<refsect1 id="${section_id}.${type}" role="${role}">
+DB_REFSECT1_SYNOPSIS3 = string.Template('''<refsect1 id="${section_id}.${type}" role="${role}">
 <title role="${role}.title">${title}</title>
 <informaltable frame="none">
 <tgroup cols="3">
 <colspec colname="${role}_type" colwidth="150px"/>
 <colspec colname="${role}_name" colwidth="300px"/>
 <colspec colname="${role}_flags" colwidth="200px"/>
+<tbody>
+${content}
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+''')
+
+DB_REFSECT1_SYNOPSIS2 = string.Template('''<refsect1 id="${section_id}.${type}" role="${role}">
+<title role="${role}.title">${title}</title>
+<informaltable pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="${role}_type" colwidth="150px"/>
+<colspec colname="${role}_name"/>
 <tbody>
 ${content}
 </tbody>
@@ -418,19 +432,27 @@ def trim_white_spaces(text):
     return re.sub(r'\s+$', '\n', text.lstrip(), flags=re.MULTILINE)
 
 
-def make_refsect1_synopsis(content, title, section_id, section_type, role=None):
+def make_refsect1_synopsis(tmpl, content, title, section_id, section_type, role=None):
     # TODO(ensonic): canonicalize xml to use the same string for section_type
     # and role. Needs fixes on gtk-doc.xsl
     if role is None:
         role = section_type.replace('-', '_')
 
-    return DB_REFSECT1_SYNOPSIS.substitute({
+    return tmpl.substitute({
         'content': content,
         'role': role,
         'section_id': section_id,
         'title': title,
         'type': section_type,
     })
+
+
+def make_refsect1_synopsis2(content, title, section_id, section_type, role=None):
+    return make_refsect1_synopsis(DB_REFSECT1_SYNOPSIS2, content, title, section_id, section_type, role)
+
+
+def make_refsect1_synopsis3(content, title, section_id, section_type, role=None):
+    return make_refsect1_synopsis(DB_REFSECT1_SYNOPSIS3, content, title, section_id, section_type, role)
 
 
 def make_refsect1_desc(content, title, section_id, section_type, role=None):
@@ -581,27 +603,27 @@ def OutputDB(file, options):
 
                 signals_synop = trim_leading_and_trailing_nl(signals_synop)
                 if signals_synop != '':
-                    signals_synop = make_refsect1_synopsis(
+                    signals_synop = make_refsect1_synopsis3(
                         signals_synop, 'Signals', section_id, 'signals', 'signal_proto')
                     signals_desc = make_refsect1_desc(signals_desc, 'Signal Details',
                                                       section_id, 'signal-details', 'signals')
 
                 args_synop = trim_leading_and_trailing_nl(args_synop)
                 if args_synop != '':
-                    args_synop = make_refsect1_synopsis(args_synop, 'Properties', section_id, 'properties')
+                    args_synop = make_refsect1_synopsis3(args_synop, 'Properties', section_id, 'properties')
                     args_desc = make_refsect1_desc(args_desc, 'Property Details', section_id, 'property-details')
 
                 child_args_synop = trim_leading_and_trailing_nl(child_args_synop)
                 if child_args_synop != '':
-                    args_synop += make_refsect1_synopsis(child_args_synop,
-                                                         'Child Properties', section_id, 'child-properties')
+                    args_synop += make_refsect1_synopsis3(child_args_synop,
+                                                          'Child Properties', section_id, 'child-properties')
                     args_desc += make_refsect1_desc(child_args_desc, 'Child Property Details',
                                                     section_id, 'child-property-details')
 
                 style_args_synop = trim_leading_and_trailing_nl(style_args_synop)
                 if style_args_synop != '':
-                    args_synop += make_refsect1_synopsis(style_args_synop,
-                                                         'Style Properties', section_id, 'style-properties')
+                    args_synop += make_refsect1_synopsis3(style_args_synop,
+                                                          'Style Properties', section_id, 'style-properties')
                     args_desc += make_refsect1_desc(style_args_desc, 'Style Property Details',
                                                     section_id, 'style-property-details')
 
@@ -619,35 +641,13 @@ def OutputDB(file, options):
 
                 functions_synop = trim_leading_and_trailing_nl(functions_synop)
                 if functions_synop != '':
-                    functions_synop = '''<refsect1 id="%s.functions" role="functions_proto">
-<title role="functions_proto.title">Functions</title>
-<informaltable pgwide="1" frame="none">
-<tgroup cols="2">
-<colspec colname="functions_return" colwidth="150px"/>
-<colspec colname="functions_name"/>
-<tbody>
-%s
-</tbody>
-</tgroup>
-</informaltable>
-</refsect1>
-''' % (section_id, functions_synop)
+                    functions_synop = make_refsect1_synopsis2(
+                        functions_synop, 'Functions', section_id, 'functions', 'functions_proto')
 
                 other_synop = trim_leading_and_trailing_nl(other_synop)
                 if other_synop != '':
-                    other_synop = '''<refsect1 id="%s.other" role="other_proto">
-<title role="other_proto.title">Types and Values</title>
-<informaltable pgwide="1" frame="none">
-<tgroup cols="2">
-<colspec colname="name" colwidth="150px"/>
-<colspec colname="description"/>
-<tbody>
-%s
-</tbody>
-</tgroup>
-</informaltable>
-</refsect1>
-''' % (section_id, other_synop)
+                    other_synop = make_refsect1_synopsis2(
+                        other_synop, 'Types and Values', section_id, 'other', 'other_proto')
                     other_desc += make_refsect1_desc(other_details, 'Types and Values',
                                                      section_id, 'other_details', 'details')
 
