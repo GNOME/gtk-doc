@@ -160,7 +160,7 @@ gtk-doc.pc
 buildsystems/autotools/Makefile
 buildsystems/cmake/Makefile
 buildsystems/cmake/GtkDocConfigVersion.cmake
-gtkdoc/config.py
+gtkdoc/config_data.py
 help/Makefile
 help/manual/Makefile
 tests/Makefile

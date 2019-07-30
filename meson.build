@@ -115,6 +115,15 @@ foreach binary: gtkdoc_binaires
   )
 endforeach
 
+configure_file(
+  input: 'gtkdoc_uninstalled.py.in',
+  output: 'gtkdoc_uninstalled.py',
+  configuration: {
+    'sourcedir': meson.current_source_dir(),
+    'builddir': meson.current_build_dir(),
+  },
+)
+
 # Data
 gtkdoc_data = [
   'devhelp2.xsd',

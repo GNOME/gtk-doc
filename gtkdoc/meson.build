@@ -12,8 +12,8 @@ config_py.set('VERSION', version)
 config_py.set('EXEEXT', '')
 
 configure_file(
-  input: 'config.py.in',
-  output: 'config.py',
+  input: 'config_data.py.in',
+  output: 'config_data.py',
   configuration: config_py,
   install: true,
   install_dir: join_paths(
@@ -26,6 +26,7 @@ gtkdoc_sources = [
   '__init__.py',
   'check.py',
   'common.py',
+  'config.py',
   'fixxref.py',
   'highlight.py',
   'md_to_db.py',
@@ -39,15 +40,6 @@ gtkdoc_sources = [
   'scangobj.py',
 ]
 
-custom_target(
-  'gtkdoc',
-  input: gtkdoc_sources,
-  output: gtkdoc_sources,
-  build_by_default: true,
-  command: ['cp', '-f', '@INPUT@', '@OUTDIR@'],
-  install: true,
-  install_dir: join_paths(
-    pkgpythondir,
-    'gtkdoc',
-  ),
+install_data(gtkdoc_sources,
+  install_dir: join_paths(pkgpythondir, 'gtkdoc')
 )

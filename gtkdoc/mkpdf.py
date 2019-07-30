@@ -47,13 +47,7 @@ def run(options):
     module = options.args[0]
     document = options.args[1]
 
-    if options.uninstalled:
-        # this does not work from buiddir!=srcdir
-        # we could try this
-        # MAKE_SCRDIR=$(abs_srcdir) MAKE_BUILDDIR=$(abs_builddir) gtkdoc-mkpdf ...
-        gtkdocdir = os.path.split(sys.argv[0])[0]
-    else:
-        gtkdocdir = os.path.join(config.datadir, 'gtk-doc/data')
+    gtkdocdir, _ = config.get_dirs(options.uninstalled)
 
     if config.dblatex != '':
         # extra options to consider
