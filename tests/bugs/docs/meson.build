@@ -88,7 +88,7 @@ test(
     gtkdoc_fixxref_runner_script,
     '--binary-dir=@0@'.format(builddir),
     '--module=@0@'.format('tester'),
-    '--module-dir=@0@'.format('.'),
+    '--module-dir=@0@'.format('html'),
     '--extra-dir=@0@'.format(glib_docpath),
   ],
 )
