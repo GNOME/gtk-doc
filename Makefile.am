@@ -121,8 +121,17 @@ MAINTAINERCLEANFILES = \
 	RELNOTES.txt \
 	ChangeLog-?.?? \
 	gtk-doc-*.tar.xz \
-	build-aux \
-	__pycache__ gtkdoc/__pycache__ tests/__pycache__
+	build-aux
+
+clean-local:
+	-find . -name "__pycache__" -type d -exec rm -r "{}" \;
+
+## We get warnings for left-over files when doing 'make distcheck'
+distuninstallcheck_listfiles = find . -type f -print
+
+# Workaround for automake 1.61
+# https://lists.gnu.org/archive/html/bug-automake/2018-04/msg00002.html
+distuninstallcheck_listfiles += | grep -v '__pycache__'
 
 -include $(top_srcdir)/git.mk
 
