@@ -1751,21 +1751,6 @@ def create_devhelp2(out_dir, module, xml, files):
             idx.write(line)
 
 
-def get_dirs(uninstalled):
-    if uninstalled:
-        # this does not work from buiddir!=srcdir
-        gtkdocdir = os.path.split(sys.argv[0])[0]
-        if not os.path.exists(gtkdocdir + '/gtk-doc.xsl'):
-            # try 'srcdir' (set from makefiles) too
-            if os.path.exists(os.environ.get("ABS_TOP_SRCDIR", '') + '/gtk-doc.xsl'):
-                gtkdocdir = os.environ['ABS_TOP_SRCDIR']
-        styledir = gtkdocdir + '/style'
-    else:
-        gtkdocdir = os.path.join(config.datadir, 'gtk-doc/data')
-        styledir = gtkdocdir
-    return (gtkdocdir, styledir)
-
-
 def main(module, index_file, out_dir, uninstalled, src_lang, paths):
 
     # == Loading phase ==
@@ -1785,7 +1770,7 @@ def main(module, index_file, out_dir, uninstalled, src_lang, paths):
     # 2) copy datafiles
     _t = timer()
     # TODO: handle additional images
-    (gtkdocdir, styledir) = get_dirs(uninstalled)
+    (gtkdocdir, styledir) = config.get_dirs(uninstalled)
     # copy navigation images and stylesheets to html directory ...
     css_file = os.path.join(styledir, 'style.css')
     for f in glob(os.path.join(styledir, '*.png')) + [css_file]:
