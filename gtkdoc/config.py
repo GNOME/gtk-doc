@@ -7,6 +7,7 @@ try:
 except ModuleNotFoundError:
     from gtkdoc.config_data import *
 
+
 def get_dirs(uninstalled):
     try:
         from gtkdoc_uninstalled import sourcedir
@@ -22,6 +23,6 @@ def get_dirs(uninstalled):
                     gtkdocdir = os.environ['ABS_TOP_SRCDIR']
             styledir = gtkdocdir + '/style'
         else:
-            gtkdocdir = os.path.join(config.datadir, 'gtk-doc/data')
+            gtkdocdir = os.path.join(datadir, 'gtk-doc/data')
             styledir = gtkdocdir
     return (gtkdocdir, styledir)
