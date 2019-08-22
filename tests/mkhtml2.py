@@ -22,11 +22,11 @@ import logging
 import textwrap
 import unittest
 
-from anytree import PreOrderIter
 from lxml import etree
 from parameterized import parameterized
 
 from gtkdoc import mkhtml2
+from gtkdoc.mkhtml2 import PreOrderIter
 
 
 class TestChunking(unittest.TestCase):
