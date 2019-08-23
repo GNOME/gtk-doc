@@ -258,7 +258,7 @@ ${content}
 
 
 def Run(options):
-    global MODULE, INLINE_MARKUP_MODE, NAME_SPACE, DB_OUTPUT_DIR, doctype_header
+    global MODULE, INLINE_MARKUP_MODE, NAME_SPACE, DB_OUTPUT_DIR, ROOT_DIR, doctype_header
 
     logging.info('options: %s', str(options.__dict__))
 
@@ -267,6 +267,7 @@ def Run(options):
     MODULE = options.module
     INLINE_MARKUP_MODE = options.xml_mode or options.sgml_mode
     NAME_SPACE = options.name_space
+    ROOT_DIR = options.output_dir
 
     main_sgml_file = options.main_sgml_file
     if not main_sgml_file:

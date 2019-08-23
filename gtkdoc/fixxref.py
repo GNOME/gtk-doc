@@ -27,6 +27,8 @@ import re
 
 from . import common, highlight
 
+ROOT_DIR = '.'
+
 # This contains all the entities and their relative URLs.
 Links = {}
 
@@ -46,12 +48,17 @@ NoLinks = {
 
 
 def Run(options):
+    global ROOT_DIR
+
     logging.info('options: %s', str(options.__dict__))
 
+    ROOT_DIR = options.output_dir
     LoadIndicies(options.module_dir, options.html_dir, options.extra_dir)
     ReadSections(options.module)
     FixCrossReferences(options.module_dir, options.module, options.src_lang)
     highlight.append_style_defs(os.path.join(options.module_dir, 'style.css'))
+    with open(os.path.join(options.output_dir, 'fixxref.stamp'), 'w') as h:
+        h.write('timestamp')
 
 
 # TODO(ensonic): try to refactor so that we get a list of path's and then just
@@ -187,7 +194,7 @@ def ReadDevhelp(file, use_absolute_links):
 
 def ReadSections(module):
     """We don't warn on missing links to non-public sysmbols."""
-    for line in open(module + '-sections.txt', 'r', encoding='utf-8'):
+    for line in open(os.path.join(ROOT_DIR, module + '-sections.txt'), 'r', encoding='utf-8'):
         m1 = re.search(r'^<SUBSECTION\s*(.*)>', line)
         if line.startswith('#') or line.strip() == '':
             continue
