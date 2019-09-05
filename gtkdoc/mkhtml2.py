@@ -1849,6 +1849,8 @@ def run(options):
     document = options.args[1]
 
     output_dir = options.output_dir or os.getcmd()
+    if options.output_dir and not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
 
     # TODO: pass options.extra_dir
     sys.exit(main(module, document, output_dir, options.uninstalled, options.src_lang,
