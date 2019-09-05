@@ -267,6 +267,7 @@ def Run(options):
     MODULE = options.module
     INLINE_MARKUP_MODE = options.xml_mode or options.sgml_mode
     NAME_SPACE = options.name_space
+    DB_OUTPUT_DIR = options.output_dir or os.path.join(ROOT_DIR, "xml")
 
     main_sgml_file = options.main_sgml_file
     if not main_sgml_file:
@@ -297,7 +298,6 @@ def Run(options):
     # -- phase 2: scan sources
 
     # TODO: move this to phase 3 once we fixed the call to OutputProgramDBFile()
-    DB_OUTPUT_DIR = DB_OUTPUT_DIR if DB_OUTPUT_DIR else os.path.join(ROOT_DIR, "xml")
     if not os.path.isdir(DB_OUTPUT_DIR):
         os.mkdir(DB_OUTPUT_DIR)
 
