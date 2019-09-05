@@ -33,6 +33,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='gtkdoc-mkhtml version %s - generate documentation in html format' % config.version)
     parser.add_argument('--version', action='version', version=config.version)
+    parser.add_argument('--output-dir', default='.',
+                        help='The directory where the results are stored')
     parser.add_argument('--path', default=[], action='append',
                         help='Extra source directories')
     parser.add_argument('--extra-dir', default=[], action='append',

@@ -1848,6 +1848,8 @@ def run(options):
     module = options.args[0]
     document = options.args[1]
 
+    output_dir = options.output_dir or os.getcmd()
+
     # TODO: pass options.extra_dir
-    sys.exit(main(module, document, os.getcwd(), options.uninstalled, options.src_lang,
+    sys.exit(main(module, document, output_dir, options.uninstalled, options.src_lang,
                   options.path))
