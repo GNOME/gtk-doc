@@ -341,7 +341,7 @@ def Run(options):
         logging.info('namespace prefix ="%s"', NAME_SPACE)
 
         OutputObjectTree(obj_tree)
-        OutputObjectList()
+        OutputObjectList(Objects)
 
         OutputIndex("api-index-full", IndexEntriesFull)
         OutputIndex("api-index-deprecated", IndexEntriesDeprecated)
@@ -354,10 +354,15 @@ def Run(options):
     logging.info("All files created: %d", changed)
 
 
-def OutputObjectList():
+def OutputObjectList(obj_list):
     """This outputs the alphabetical list of objects, in a columned table."""
     # FIXME: Currently this also outputs ancestor objects which may not actually
     # be in this module.
+
+    # TODO(ensonic): consider not writing this unconditionally
+    if not obj_list:
+        return
+
     cols = 3
 
     # FIXME: use .xml
@@ -386,13 +391,8 @@ def OutputObjectList():
             OUTPUT.write("</row>\n")
         count += 1
 
-    if count == 0:
-        # emit an empty row, since empty tables are invalid
-        OUTPUT.write("<row><entry> </entry></row>\n")
-
-    else:
-        if count % cols > 0:
-            OUTPUT.write("</row>\n")
+    if count % cols > 0:
+        OUTPUT.write("</row>\n")
 
     OUTPUT.write('''</tbody></tgroup></informaltable>\n''')
     OUTPUT.close()

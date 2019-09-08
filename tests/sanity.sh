@@ -56,17 +56,19 @@ if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
 tested=`expr $tested + 1`
 
 
-# check validity of generated sgml files
-nok=0
-for file in $dir/$suite/docs/xml/*.sgml; do
-  xmllint --noout --noent $file
-  if test $? != 0 ; then
-    echo 1>&2 "sgml validity check failed for $file"
-    nok=`expr $nok + 1`;
-  fi
-done
-if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
-tested=`expr $tested + 1`
+# check validity of generated sgml files (if any)
+if ls $dir/$suite/docs/xml/*.sgml 1> /dev/null 2>&1; then
+  nok=0
+  for file in $dir/$suite/docs/xml/*.sgml; do
+    xmllint --noout --noent $file
+    if test $? != 0 ; then
+      echo 1>&2 "sgml validity check failed for $file"
+      nok=`expr $nok + 1`;
+    fi
+  done
+  if test $nok -gt 0 ; then failed=`expr $failed + 1`; fi
+  tested=`expr $tested + 1`
+fi
 
 # check validity of devhelp2 files
 nok=0
