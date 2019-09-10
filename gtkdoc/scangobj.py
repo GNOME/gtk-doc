@@ -68,7 +68,7 @@ get_object_types (void)
   gint i = 0;
 
 ${get_types}
-  object_types[i] = G_TYPE_INVALID;
+  object_types[i] = G_TYPE_NONE;
 
   /* reference the GObjectClass to initialize the param spec pool
    * potentially needed by interfaces. See http://bugs.gnome.org/571820 */
@@ -77,7 +77,9 @@ ${get_types}
   /* Need to make sure all the types are loaded in and initialize
    * their signals and properties.
    */
-  for (i=0; object_types[i]; i++) {
+  for (i=0; object_types[i] != G_TYPE_NONE; i++) {
+    if (object_types[i] == G_TYPE_INVALID)
+      continue;
     if (G_TYPE_IS_CLASSED (object_types[i]))
       g_type_class_ref (object_types[i]);
     if (G_TYPE_IS_INTERFACE (object_types[i]))
@@ -153,8 +155,10 @@ output_signals (void)
     return;
   }
 
-  for (i = 0; object_types[i]; i++)
-    output_object_signals (fp, object_types[i]);
+  for (i = 0; object_types[i] != G_TYPE_NONE; i++) {
+    if (object_types[i] != G_TYPE_INVALID)
+      output_object_signals (fp, object_types[i]);
+  }
 
   fclose (fp);
 }
@@ -423,7 +427,9 @@ output_object_hierarchy (void)
   output_hierarchy (fp, G_TYPE_OBJECT, 0);
   output_hierarchy (fp, G_TYPE_INTERFACE, 0);
 
-  for (i=0; object_types[i]; i++) {
+  for (i=0; object_types[i] != G_TYPE_NONE; i++) {
+    if (object_types[i] == G_TYPE_INVALID)
+      continue;
     root = object_types[i];
     while ((type = g_type_parent (root))) {
       root = type;
@@ -481,7 +487,9 @@ static void output_object_interfaces (void)
   }
   output_interfaces (fp, G_TYPE_OBJECT);
 
-  for (i = 0; object_types[i]; i++) {
+  for (i = 0; object_types[i] != G_TYPE_NONE; i++) {
+    if (object_types[i] == G_TYPE_INVALID)
+      continue;
     if (!g_type_parent (object_types[i]) &&
         (object_types[i] != G_TYPE_OBJECT) &&
         G_TYPE_IS_INSTANTIATABLE (object_types[i])) {
@@ -576,8 +584,9 @@ output_args (void)
     return;
   }
 
-  for (i = 0; object_types[i]; i++) {
-    output_object_args (fp, object_types[i]);
+  for (i = 0; object_types[i] != G_TYPE_NONE; i++) {
+    if (object_types[i] != G_TYPE_INVALID)
+      output_object_args (fp, object_types[i]);
   }
 
   fclose (fp);
