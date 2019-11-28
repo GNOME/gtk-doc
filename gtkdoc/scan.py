@@ -978,8 +978,8 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                 logging.info('struct/union level : %d', level)
 
     # here we want in_declaration=='', otherwise we have a partial declaration
-    if in_declaration != '':
-        raise RuntimeError('partial declaration (%s) : %s ' % (in_declaration, decl))
+    #if in_declaration != '':
+    #    raise RuntimeError('partial declaration (%s) : %s ' % (in_declaration, decl))
 
     # print remaining forward declarations
     for symbol in sorted(forward_decls.keys()):
