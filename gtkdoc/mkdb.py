@@ -2491,7 +2491,7 @@ def OutputBook(main_file, book_top, book_bottom, obj_tree):
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
   </index>
 ''')
-        for version in set(Since.values()):
+        for version in sorted(set(Since.values())):
             dash_version = version.replace('.', '-')
             OUTPUT.write('''  <index id="api-index-%s" role="%s">
     <title>Index of new API in %s</title>
