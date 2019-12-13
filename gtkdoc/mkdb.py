@@ -2381,7 +2381,10 @@ def OutputExtraFile(file):
     contents = open(file, 'r', encoding='utf-8').read()
 
     with open(new_db_file, 'w', encoding='utf-8') as out:
-        out.write(ExpandAbbreviations(basename + " file", contents))
+        if old_db_file.endswith(".md"):
+            out.write(ConvertMarkDown(basename + " file", contents))
+        else:
+           out.write(ExpandAbbreviations(basename + " file", contents))
 
     return common.UpdateFileIfChanged(old_db_file, new_db_file, 0)
 
