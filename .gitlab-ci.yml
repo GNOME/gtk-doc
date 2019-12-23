@@ -35,6 +35,7 @@ meson-build:
   script:
     - meson --prefix /usr _build .
     - ninja -C _build
+    - meson test -C _build
   except:
     - tags
 

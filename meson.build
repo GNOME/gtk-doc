@@ -13,8 +13,8 @@ version = meson.project_version()
 package_name = meson.project_name()
 
 # Paths
-srcdir = meson.source_root()
-builddir = meson.build_root()
+srcdir = meson.current_source_dir()
+builddir = meson.current_build_dir()
 
 prefix = get_option('prefix')
 
@@ -165,7 +165,9 @@ configure_file(
 )
 
 subdir('help')
-subdir('tests')
+if get_option('tests')
+  subdir('tests')
+endif
 
 # A dummy dependency object that to use gtkdoc as subproject fallback
 # To be used as: dependency('gtk-doc', fallback : ['gtk-doc', 'dummy_dep'])
