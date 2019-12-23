@@ -969,7 +969,7 @@ def OutputIndex(basename, apiindex):
 
 def OutputSinceIndexes():
     """Generate the 'since' api index files."""
-    for version in set(Since.values()):
+    for version in sorted(set(Since.values())):
         logging.info("Since : [%s]", version)
         index = {x: IndexEntriesSince[x] for x in IndexEntriesSince.keys() if Since[x] == version}
         OutputIndex("api-index-" + version, index)
