@@ -1751,6 +1751,21 @@ def create_devhelp2(out_dir, module, xml, files):
             idx.write(line)
 
 
+class FakeDTDResolver(etree.Resolver):
+    """Don't load the docbookx.dtd since we disable the validation anyway.
+
+    libxsml2 does not cache DTDs. If we produce a docbook file with 100 chunks
+    loading such a doc with xincluding will load and parse the docbook DTD 100
+    times. This cases tons of memory allocations and is slow.
+    """
+
+    def resolve(self, url, id, context):
+        if not url.endswith('.dtd'):
+            return None
+        # http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd
+        return self.resolve_string('', context)
+
+
 def main(module, index_file, out_dir, uninstalled, src_lang, paths):
 
     # == Loading phase ==
@@ -1758,10 +1773,9 @@ def main(module, index_file, out_dir, uninstalled, src_lang, paths):
 
     # 1) load the docuemnt
     _t = timer()
-    # does not seem to be faster
-    # parser = etree.XMLParser(dtd_validation=False, collect_ids=False)
-    # tree = etree.parse(index_file, parser)
-    tree = etree.parse(index_file)
+    parser = etree.XMLParser(dtd_validation=False, collect_ids=False)
+    parser.resolvers.add(FakeDTDResolver())
+    tree = etree.parse(index_file, parser)
     logging.warning("1a: %7.3lf: load doc", timer() - _t)
     _t = timer()
     tree.xinclude()
