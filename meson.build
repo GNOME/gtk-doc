@@ -32,9 +32,6 @@ pkgconfigdir = join_paths(datadir, 'pkgconfig')
 
 # Dependencies
 glib_req = '>= 2.38.0'
-python3_req = '>= 3.4.0'
-
-python3_dep = dependency('python3', version: python3_req)
 
 python_prg = python3
 
