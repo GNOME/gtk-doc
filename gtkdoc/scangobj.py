@@ -611,11 +611,11 @@ describe_double_constant (gdouble value)
     desc = g_strdup ("G_MINDOUBLE");
   else if (GTKDOC_COMPARE_FLOAT (value, -G_MAXDOUBLE))
     desc = g_strdup ("-G_MAXDOUBLE");
-  else if (GTKDOC_COMPARE_FLOAT (value, G_MAXFLOAT))
+  else if (GTKDOC_COMPARE_FLOAT (value, (gdouble)G_MAXFLOAT))
     desc = g_strdup ("G_MAXFLOAT");
-  else if (GTKDOC_COMPARE_FLOAT (value, G_MINFLOAT))
+  else if (GTKDOC_COMPARE_FLOAT (value, (gdouble)G_MINFLOAT))
     desc = g_strdup ("G_MINFLOAT");
-  else if (GTKDOC_COMPARE_FLOAT (value, -G_MAXFLOAT))
+  else if (GTKDOC_COMPARE_FLOAT (value, (gdouble)-G_MAXFLOAT))
     desc = g_strdup ("-G_MAXFLOAT");
   else{
     /* make sure floats are output with a decimal dot irrespective of
