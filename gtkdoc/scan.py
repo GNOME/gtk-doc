@@ -96,19 +96,8 @@ CLINE_MATCHER = [
         (struct|union)\s*
         \w*\s*{""", re.VERBOSE),
     # 12-14: OTHER TYPEDEFS
-    re.compile(
-        r"""^\s*typedef\s+
-        (?:struct|union)\s+\w+[\s\*]+
-        (\w+)                                # 1: name
-        \s*;""", re.VERBOSE),
-    re.compile(
-        r"""^\s*
-        (?:G_GNUC_EXTENSION\s+)?
-        typedef\s+
-        (.+[\s\*])                           # 1: e.g. 'unsigned int'
-        (\w+)                                # 2: name
-        (?:\s*\[[^\]]+\])*
-        \s*;""", re.VERBOSE),
+    None,  # in InitScanner()
+    None,  # in InitScanner()
     re.compile(r'^\s*typedef\s+'),
     # 15: VARIABLES (extern'ed variables)
     None,  # in InitScanner()
@@ -267,6 +256,21 @@ def InitScanner(options):
         %s                                   # 3: optional decorator
         \s*;""" % optional_decorators_regex, re.VERBOSE)
     # OTHER TYPEDEFS
+    CLINE_MATCHER[12] = re.compile(
+        r"""^\s*typedef\s+
+        (?:struct|union)\s+\w+[\s\*]+
+        (\w+)                                # 1: name
+        %s                                   # 2: optional decorator
+        \s*;""" % optional_decorators_regex, re.VERBOSE)
+    CLINE_MATCHER[13] = re.compile(
+        r"""^\s*
+        (?:G_GNUC_EXTENSION\s+)?
+        typedef\s+
+        (.+?[\s\*])                          # 1: e.g. 'unsigned int'
+        (\w+)                                # 2: name
+        (?:\s*\[[^\]]+\])*
+        %s                                   # 3: optional decorator
+        \s*;""" % optional_decorators_regex, re.VERBOSE)
     CLINE_MATCHER[15] = re.compile(
         r"""^\s*
         (?:extern|[A-Za-z_]+VAR%s)\s+
