@@ -561,6 +561,11 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                     logging.info('Found start of comment: %s', line.strip())
                 continue
 
+            # Skip begin/end deprecation macros.
+            m = re.search(r'^\s*G_GNUC_(BEGIN|END)_IGNORE_DEPRECATIONS', line)
+            if m:
+                continue
+
             logging.info('no decl: %s', line.strip())
 
             cm = [m.match(line) for m in CLINE_MATCHER]
