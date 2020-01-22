@@ -3,13 +3,13 @@
 # Jorge Gonzalez <jorgegonz@svn.gnome.org>, 2009.
 # Jorge González <jorgegonz@svn.gnome.org>, 2009, 2010, 2011.
 # 
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2019.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2019-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2019-08-15 19:15+0000\n"
-"PO-Revision-Date: 2019-10-02 10:09+0200\n"
+"POT-Creation-Date: 2019-10-02 10:49+0000\n"
+"PO-Revision-Date: 2020-01-22 13:37+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgctxt "_"
 msgid "translator-credits"
 msgstr ""
-"Daniel Mustieles <daniel.mustieles@gmail.com>, 2009 - 2019\n"
+"Daniel Mustieles <daniel.mustieles@gmail.com>, 2009 - 2020\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2009 - 2011\n"
 "Francisco Javier F. Serrador <serrrador@svn.gnome.org>, 2009, 2010"
 
@@ -125,9 +125,6 @@ msgstr ""
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:83
-#| msgid ""
-#| "<revnumber>1.29</revnumber> <date>28 Aug 2018</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>development</revremark>"
 msgid ""
 "<revnumber>1.32.1</revnumber> <date>15 Aug 2019</date> <authorinitials>ss</"
 "authorinitials> <revremark>dev version</revremark>"
@@ -137,9 +134,6 @@ msgstr ""
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:89
-#| msgid ""
-#| "<revnumber>1.29</revnumber> <date>28 Aug 2018</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>bug fixes</revremark>"
 msgid ""
 "<revnumber>1.32</revnumber> <date>15 Aug 2019</date> <authorinitials>ss</"
 "authorinitials> <revremark>hotfix release</revremark>"
@@ -150,9 +144,6 @@ msgstr ""
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:95
-#| msgid ""
-#| "<revnumber>1.30</revnumber> <date>08 May 2019</date> <authorinitials>ss</"
-#| "authorinitials> <revremark>more test coverage</revremark>"
 msgid ""
 "<revnumber>1.31</revnumber> <date>05 Aug 2019</date> <authorinitials>ss</"
 "authorinitials> <revremark>refactorings and more test coverage</revremark>"
@@ -631,6 +622,14 @@ msgid ""
 "possible to place all API information into source comments, which made the "
 "template support obsolete. In version 1.26 template support has been removed."
 msgstr ""
+"Históricamente, GTK-Doc se utilizaba para generar archivos de plantilla a "
+"partir del código fuente. Los desarrolladores pueden usar estos archivos de "
+"plantilla para introducir la documentación de la API. Este enfoque era "
+"bastante incómodo porque requería mantener los archivos generados bajo "
+"control de versiones. Desde GTK-Doc 1.9 se hizo posible colocar toda la "
+"información de la API en los comentarios de origen, lo que dejó obsoleto el "
+"soporte de la plantilla. En la versión 1.26 se ha eliminado el soporte de "
+"plantillas."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:382 C/index.docbook:396
@@ -706,6 +705,9 @@ msgid ""
 "ignore (see <link linkend=\"settingup_vcs\"> Integration with version "
 "control systems</link>)."
 msgstr ""
+"Añadir archivos específicos de GTK-Doc al control de versiones y decidir qué "
+"archivos ignorar (consulte <link linkend=\"settingup_vcs\">Integración con "
+"sistemas de control de versiones</link>)."
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:445
@@ -870,6 +872,11 @@ msgid ""
 "filename>. Then we show how enable Gtk-Doc in the build system and how to "
 "build the documentation."
 msgstr ""
+"En las siguientes secciones, se realizan los pasos anteriores en orden "
+"inverso. Comienza con los scripts <application>automake</application> y "
+"avanza hasta <filename>configure.ac</filename> y <filename> autogen.sh </"
+"filename>. Luego se muestra cómo activar Gtk-Doc en el sistema de "
+"compilación y cómo compilar la documentación."
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:561
@@ -994,6 +1001,10 @@ msgid ""
 "usually be <code> DOC_SOURCE_DIR=$(top_srcdir)/src </code> or a sub-"
 "directory of that directory."
 msgstr ""
+"<option>DOC_SOURCE_DIR</option> se utiliza para especificar la ubicación de "
+"la carpeta de origen en el que GTK-Doc busca la documentación de su API. "
+"Esto generalmente será <code>DOC_SOURCE_DIR=$(top_srcdir)/src</code> o una "
+"subcarpeta de ese carpeta."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:651
@@ -1062,6 +1073,9 @@ msgid ""
 "The following list explains the most relevant options. Check the example "
 "<filename>Makefile.am</filename> for additional options. <_:itemizedlist-1/>"
 msgstr ""
+"La siguiente lista explica las opciones más relevantes. Consulte el ejemplo "
+"<filename>Makefile.am</filename> para obtener opciones adicionales. <_: "
+"itemizedlist-1 />"
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:722
@@ -1086,6 +1100,9 @@ msgid ""
 "macro must start at the beginning of the line and should not start with "
 "whitespace."
 msgstr ""
+"Asegúrese de que la macro <code>GTK_DOC_CHECK</code> no esté sangrada. La "
+"macro debe comenzar al principio de la línea y no debe comenzar con espacios "
+"en blanco."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:743
@@ -1220,10 +1237,6 @@ msgstr ""
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:810
-#| msgid ""
-#| "After all changes to <filename>configure.ac</filename> are made, update "
-#| "the <filename>configure</filename> file. This can be done by re-running "
-#| "<code>autoreconf -i</code> or <code>autogen.sh</code>."
 msgid ""
 "After all changes to <filename>configure.ac</filename> are made, update the "
 "<filename>configure</filename> file. This can be done by re-running "
@@ -3921,7 +3934,6 @@ msgstr ""
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2368
-#, fuzzy
 #| msgid ""
 #| "The makefiles shipped with this version generate an entity file at "
 #| "<filename>xml/gtkdocentities.ent</filename>, containing entities for e.g. "
@@ -3939,14 +3951,15 @@ msgid ""
 "used. The entities can also be used in all generated files, GTK-Doc will use "
 "the same xml header in generated xml files. <_:example-1/>"
 msgstr ""
-"El makefile distribuído con esta versión genera un archivo de entidad en "
-"<filename>xml/gtkdocentities.ent</filename>, que contiene las entidades "
-"para, por ejemplo nombre_paquete y versión_paquete. Puede usar este ejemplo "
-"en el archivo main.xml para evitar escribir a mano el número de versión. A "
-"continuación se muestra un ejemplo que muestra cómo se incluye el archivo de "
-"entidad y cómo se usan las entidades. Las entidades también se pueden usar "
-"en todos los archivos generados, GTK-Doc usará la misma cabecera XML en los "
-"archivos XML generados. <_:example-1/>"
+"Los makefiles distribuidos con esta versión generan un archivo de entidad en "
+"<filename>xml/gtkdocentities.ent</filename>, que contiene entidades para, "
+"por ejemplo, nombre_paquete y versión_paquete. Puedes usar esto, por "
+"ejemplo, en el archivo xml principal para evitar codificar el número de "
+"versión. A continuación se muestra un ejemplo que muestra cómo se incluye el "
+"archivo de entidad en la plantilla maestra y cómo se utilizan las entidades. "
+"Las entidades también se pueden usar en todos los archivos generados, GTK-"
+"Doc usará el mismo encabezado xml en los archivos xml generados. <_:"
+"ejemplo-1/>"
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:2403
