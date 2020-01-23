@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2019-10-02 10:49+0000\n"
-"PO-Revision-Date: 2020-01-22 13:37+0100\n"
+"POT-Creation-Date: 2020-01-22 12:38+0000\n"
+"PO-Revision-Date: 2020-01-23 13:26+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -744,6 +744,21 @@ msgid ""
 "you must adjust your build system configuration to match your directory "
 "structure."
 msgstr ""
+"Un convenio común es colocar la documentación en una carpeta llamada "
+"<code>docs</code> dentro de su carpeta de proyecto de nivel superior. "
+"Normalmente se distingue entre <emphasis>documentación de referencia</"
+"emphasis> destinada a desarrolladores y un <emphasis>manual de usuario</"
+"emphasis> destinado a usuarios finales. Nuevamente, el convenio es tener "
+"carpetas separadas para ambos. Por lo general, colocamos la documentación de "
+"referencia en una carpeta llamada <code>reference</code> y el manual del "
+"usuario final en una carpeta llamada <code>help</code> como. De acuerdo con "
+"el convenio anterior, la documentación de nuestro paquete <code>libmeep</"
+"code> se colocaría en: <code>docs/reference/libmeep</code>. Para paquetes "
+"con una sola biblioteca o aplicación, la documentación también se puede "
+"colocar directamente en <code>docs/reference </code>. No es obligatorio usar "
+"el convenio anterior, pero si elige usar una estructura de carpetas "
+"diferente, debe ajustar la configuración del sistema de compilación para que "
+"coincida con la estructura de su carpeta."
 
 #. (itstool) path: example/title
 #: C/index.docbook:487
@@ -959,7 +974,6 @@ msgstr ""
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:607
-#, fuzzy
 #| msgid ""
 #| "The next step is to edit the settings inside the <filename>Makefile.am</"
 #| "filename>. All the settings have a comment above that describes their "
@@ -977,12 +991,16 @@ msgid ""
 "application> has an option named <code>MKHTML_OPTIONS</code>). All the tools "
 "support <option>--help</option> to list the supported options."
 msgstr ""
-"El siguiente paso es editar la configuración dentro de <filename>Makefile."
-"am</filename>. Todos los ajustes tienen un comentario encima que describe su "
-"propósito. Muchos ajustes son opciones adicionales pasadas a las respectivas "
-"herramientas. Cada herramienta tiene una variable de la forma <option>&lt;"
-"NOMBRE_DE_LA_HERRAMIENTA&gt;_OPCIONES</option>. Todas las herramientas "
-"soportan <option>--help</option> para listar los parámetros que soportan."
+"A continuación, debe personalizar los Makefiles copiados y proporcionar "
+"valores para los distintos parámetros en cada <filename>Makefile.am</"
+"filename>. Todas las configuraciones tienen un comentario sobre ellas que "
+"describe su propósito y cómo personalizar la configuración. La mayoría de "
+"las configuraciones se utilizan para proporcionar indicadores adicionales a "
+"las herramientas respectivas a las que se aplican. Cada herramienta tiene "
+"una variable de la forma <option> &lt;TOOLNAME&gt;_OPTIONS </option> (por "
+"ejemplo, la herramienta <application>gtkdoc-mkhtml</application> tiene una "
+"opción llamada <code>MKHTML_OPTIONS</code>). Todas las herramientas admiten "
+"<option>--help</option> para enumerar las opciones admitidas."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:631
@@ -1014,6 +1032,10 @@ msgid ""
 "$(top_srcdir)/src/*.c</code>). The documentation will be rebuilt if any of "
 "the matched files change."
 msgstr ""
+"<option>HFILE_GLOB</option> y <option>CFILE_GLOB</option> se usan para "
+"dependencias. Cada opción toma un archivo glob (por ejemplo, "
+"<code>HFILE_GLOB=$(top_srcdir)/src/*.C</code>). La documentación se "
+"reconstruirá si alguno de los archivos coincidentes cambia."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:663
@@ -1050,6 +1072,11 @@ msgid ""
 "added to this option (e.g. <code> HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/"
 "stock_about_24.png</code>)."
 msgstr ""
+"<option>HTML_IMAGES</option> permite especificar archivos de imágenes que se "
+"copiarán en la carpeta <filename>html/</filename> de la documentación "
+"generada. Si su documentación de la API incluye imágenes, deben agregarse a "
+"esta opción (por ejemplo, <code>HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/"
+"stock_about_24.png</code>)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:696
@@ -1058,6 +1085,9 @@ msgid ""
 "included by <code>$(DOC_MAIN_SGML_FILE)</code> (e.g. <code> "
 "content_files=running.xml building.xml changes-2.0.xml</code>)."
 msgstr ""
+"<option>content_files</option> permite especificar archivos adicionales que "
+"están incluidos en <code>$(DOC_MAIN_SGML_FILE)</code> (por ejemplo, "
+"<code>content_files=running.xml building.xml changes-2.0.xml</code>)"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:707
@@ -1066,6 +1096,9 @@ msgid ""
 "<emphasis>gtk-doc abbreviations</emphasis> such as <code>#GtkWidget</code> "
 "are expanded (e.g. <code> expand_content_files=running.xml</code>)."
 msgstr ""
+"<option>expand_content_files</option> permite especificar archivos donde "
+"<emphasis>gtk-doc abbreviations</emphasis> como <code>#GtkWidget</code> se "
+"expanden (por ejemplo, <code>expand_content_files=running.xml</code>)."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:625
@@ -1092,6 +1125,12 @@ msgid ""
 "configure options to enable GTK-Doc and allows you to set default arguments "
 "for <application>gtkdocize</application>."
 msgstr ""
+"La integración con <application>autoconf</application> es muy simple e "
+"incluye un paso requerido y un paso opcional adicional (pero recomendado). "
+"El primer paso es agregar la macro <function>GTK_DOC_CHECK</function> a su "
+"script <filename>configure.ac</filename>. Esto registra varias opciones de "
+"configuración para habilitar GTK-Doc y le permite establecer argumentos "
+"predeterminados para <application>gtkdocize</application>."
 
 #. (itstool) path: warning/simpara
 #: C/index.docbook:736
@@ -1116,6 +1155,14 @@ msgid ""
 "to explicitly tell the <application>aclocal</application> tool where to find "
 "the macro definition file."
 msgstr ""
+"El segundo paso es agregar el <code>AC_CONFIG_MACRO_DIR (m4)</code> a su "
+"<filename>configure.ac</filename>. Esto no es obligatorio, pero ayuda a "
+"<application>gtkdocize</application> a copiar automáticamente la definición "
+"de macro (Ej., <filename>gtk-doc.m4</filename>) que contiene la macro "
+"<function>GTK_DOC_CHECK</function> en la carpeta de macros de su proyecto. "
+"Sin esto, es posible que no se encuentre la macro GTK_DOC_CHECK y "
+"necesitaría decirle explícitamente a la herramienta <application>aclocal</"
+"application> dónde encontrar el archivo de definición de macro."
 
 #. (itstool) path: example/title
 #: C/index.docbook:756
@@ -1174,10 +1221,13 @@ msgid ""
 "installed. A better way is to make building the documentation optional as "
 "shown in the next example: <_:example-1/>"
 msgstr ""
+"El ejemplo anterior funciona, pero requerirá que todos los desarrolladores "
+"tengan instalado gtk-doc. Una mejor manera es hacer que la creación de la "
+"documentación sea opcional como se muestra en el siguiente ejemplo: <_:"
+"example-1/>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:786
-#, fuzzy
 #| msgid ""
 #| "The first argument is used to check for the gtkdocversion at configure "
 #| "time. The 2nd, optional argument is used by <application>gtkdocize</"
@@ -1189,10 +1239,10 @@ msgid ""
 "application>. The <symbol>GTK_DOC_CHECK</symbol> macro also adds several "
 "configure switches:"
 msgstr ""
-"El primer argumento se usa para comprobar gtkdocversion durante la "
-"configuración. El segundo, y opcional, argumento lo usa "
+"El primer argumento se utiliza para verificar la versión de Gtk-Doc en el "
+"momento de la configuración. El segundo argumento opcional es usado por "
 "<application>gtkdocize</application>. La macro <symbol>GTK_DOC_CHECK</"
-"symbol> también añade diversas opciones de configuración:"
+"symbol> también agrega varios modificadores de configuración:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:795
@@ -1253,7 +1303,6 @@ msgstr "Integración con autogen"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:820
-#, fuzzy
 #| msgid ""
 #| "Most projects will have an <filename>autogen.sh</filename> script to "
 #| "setup the build infrastructure after a checkout from version control "
@@ -1267,12 +1316,12 @@ msgid ""
 "<application>gtkdocize</application> which can be used to copy the necessary "
 "files needed by Gtk-Doc to the source directory."
 msgstr ""
-"La mayoría de los proyectos tienen un script <filename>autogen.sh</filename> "
-"para configurar la infraestructura de construcción después de hacer un "
-"«checkout» desde los sistemas de control de versiones (tales como cvs/svn/"
-"git). GTK-Doc tiene una herramienta llamada <filename>gtkdocize</filename> "
-"que se puede usar en tal script. Se debería ejecutar antes que autoheader, "
-"automake o autoconf."
+"La mayoría de los proyectos tendrán un script <filename>autogen.sh</"
+"filename> para configurar la infraestructura de compilación después de que "
+"el proyecto se haya extraído de un sistema de control de versiones (como git "
+"o svn). GTK-Doc viene con un script llamado <application>gtkdocize</"
+"application> que puede usarse para copiar los archivos necesarios que "
+"necesita Gtk-Doc en la carpeta fuente."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:828
@@ -1321,7 +1370,6 @@ msgstr ""
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:854
-#, fuzzy
 #| msgid ""
 #| "When running <application>gtkdocize</application> it copies <filename>gtk-"
 #| "doc.make</filename> to your project root (or any directory specified by "
@@ -1336,14 +1384,10 @@ msgid ""
 msgstr ""
 "Al ejecutar <filename>gtkdocize</filename> copia <filename>gtk-doc.make</"
 "filename> a la raíz de su proyecto (o cualquier carpeta especificada por la "
-"opción <option>--docdir</option>). También comprueba su script de "
-"configuración para la invocación de <function>GTK_DOC_CHECK</function>. Esta "
-"macro se puede usar para pasar parámetros adicionales a "
-"<application>gtkdocize</application>."
+"opción <option>--docdir</option>)."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:860
-#, fuzzy
 #| msgid ""
 #| "When running <application>gtkdocize</application> it copies <filename>gtk-"
 #| "doc.make</filename> to your project root (or any directory specified by "
@@ -1358,12 +1402,11 @@ msgid ""
 "to the <application>gtkdocize</application> script. the 2nd parameter in the "
 "<function>GTK_DOC_CHECK</function> macro."
 msgstr ""
-"Al ejecutar <filename>gtkdocize</filename> copia <filename>gtk-doc.make</"
-"filename> a la raíz de su proyecto (o cualquier carpeta especificada por la "
-"opción <option>--docdir</option>). También comprueba su script de "
-"configuración para la invocación de <function>GTK_DOC_CHECK</function>. Esta "
-"macro se puede usar para pasar parámetros adicionales a "
-"<application>gtkdocize</application>."
+"<application>gtkdocize</application> comprueba su script <filename> "
+"configure.ac </filename> para la macro <function> GTK_DOC_CHECK</function>. "
+"La macro <function> GTK_DOC_CHECK </function> se puede usar para pasar "
+"argumentos adicionales al script <application>gtkdocize</application>. el "
+"segundo parámetro en la macro <function>GTK_DOC_CHECK</function>."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:869
@@ -1373,6 +1416,10 @@ msgid ""
 "function> environment variable, or by directly specifying them to "
 "<application>gtkdocize</application> in <filename>autogen.sh</filename>."
 msgstr ""
+"Alternativamente, también se pueden pasar argumentos adicionales a "
+"<application>gtkdocize</application> a través de la variable de entorno "
+"<function>GTKDOCIZE_FLAGS</function>, o especificándolos directamente a "
+"<application>gtkdocize</application> en <filename>autogen.sh</filename>."
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:880
@@ -1435,6 +1482,14 @@ msgid ""
 "template</link> to add additional chapters and sections to your "
 "documentation files."
 msgstr ""
+"Ahora puede apuntar su navegador a <filename>docs/reference/&lt;package&gt;/"
+"index.html</filename>. Con esta configuración inicial, solo verá un "
+"documento muy simple. El siguiente capítulo le enseñará cómo agregar "
+"documentación API a su código a través de bloques de comentarios especiales. "
+"Posteriormente, el Capítulo presenta <link linkend=\"metafiles\">archivos "
+"adicionales</link> y muestra cómo editar la plantilla maestra <link linkend="
+"\"metafiles_master\"></link> para agregar capítulos y secciones adicionales "
+"a sus archivos de documentación."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:921
@@ -1633,7 +1688,6 @@ msgstr ""
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:1018
-#, fuzzy
 #| msgid ""
 #| "The scanner can handle the majority of C headers fine. In the case of "
 #| "receiving warnings from the scanner that look like a special case, one "
@@ -1643,9 +1697,9 @@ msgid ""
 "of receiving warnings from the scanner that look like a special case, one "
 "can hint GTK-Doc to skip over them. <_:example-1/>"
 msgstr ""
-"El analizador puede manejar bien la mayoría de cabeceras de C. En el caso de "
-"recibir avisos del analizador que parecen casos especiales, puede sugerir a "
-"GTK-Doc que los omita. <_:example-1/>"
+"El escáner GTK-Doc puede manejar bien la mayoría de los encabezados C. En el "
+"caso de recibir advertencias del escáner que se vean como un caso especial, "
+"uno puede indicarle a GTK-Doc que las omita. <_:ejemplo-1/>"
 
 #. (itstool) path: note/title
 #: C/index.docbook:1032
@@ -1957,7 +2011,6 @@ msgstr ""
 
 #. (itstool) path: tip/para
 #: C/index.docbook:1224
-#, fuzzy
 #| msgid ""
 #| "As already mentioned earlier GTK-Doc is for documenting public API. Thus "
 #| "one cannot write documentation for static symbols. Nevertheless it is "
@@ -1976,15 +2029,14 @@ msgid ""
 "public, all one needs to do is to add another '*' in the comment block and "
 "insert the symbol name at the right place inside the sections file."
 msgstr ""
-"Tal y como se ha mencionado antes, la documentación anterior de GTK-Doc es "
-"para documentar la API pública .Por ello, no se puede escribir documentación "
-"para los símbolos estáticos. No obstante es una buena práctica comentar los "
-"símbolos. Esto ayuda a que otros entiendan su código. Por ello se recomienda "
+"Como ya se mencionó anteriormente, GTK-Doc es para documentar API públicas. "
+"Por lo tanto, no se puede escribir documentación para símbolos estáticos. "
+"Sin embargo, también es bueno comentar esos símbolos. Esto ayuda a otros "
+"desarrolladores a comprender su código. Por lo tanto, recomendamos "
 "comentarlos usando comentarios normales (sin el segundo «*» en la primera "
-"línea). Si la función, posteriormente, se debe hacer pública, todo lo que el "
-"programador debe hacer es añadir otro «*» en el bloque de comentario e "
-"introducir el nombre del símbolo en la parte derecha dentro del archivo de "
-"secciones."
+"línea). Si luego la función necesita hacerse pública, todo lo que se debe "
+"hacer es agregar otro «*» en el bloque de comentarios e insertar el nombre "
+"del símbolo en el lugar correcto dentro del archivo de secciones."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1239
@@ -2868,7 +2920,6 @@ msgstr "Una descripción más larga del programa."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1791
-#, fuzzy
 #| msgid "Specificy what value(s) the program returns. (Optional)"
 msgid "Specify what value(s) the program returns. (Optional)"
 msgstr "Especifique qué valores devuelve el programa. (Opcional)"
@@ -3038,7 +3089,6 @@ msgstr ""
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1858
-#, fuzzy
 #| msgid ""
 #| "To include example code: <_:informalexample-1/> or possibly this, for "
 #| "very short code fragments which don't need a title: <_:informalexample-2/"
@@ -3050,9 +3100,12 @@ msgid ""
 "syntax highlighting engine (pygments for html output). For the latter GTK-"
 "Doc also supports an abbreviation: <_:informalexample-3/>"
 msgstr ""
-"Para incluir un código de ejemplo: <_:informalexample-1/> o posiblemente "
-"este, para fragmentos de código muy cortos que no necesitan título: <_:"
-"informalexample-2/>. El último GTK-Doc también soporta abreviación: |[ ... ]|"
+"Para incluir código de ejemplo: <_:informalexample-1/> o posiblemente esto, "
+"para fragmentos de código muy cortos que no necesitan un título: <_:"
+"informalexample-2/> En ambos casos, el atributo de lenguaje es opcional y se "
+"utiliza como una pista para el motor de resaltado de sintaxis (pygments para "
+"salida html). Para este último, GTK-Doc también admite una abreviatura: <_:"
+"informalexample-3/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1895
@@ -3934,14 +3987,6 @@ msgstr ""
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2368
-#| msgid ""
-#| "The makefiles shipped with this version generate an entity file at "
-#| "<filename>xml/gtkdocentities.ent</filename>, containing entities for e.g. "
-#| "package_name and package_version. You can use this e.g. in the main xml "
-#| "file to avoid hardcoding the version number. Below is an example that "
-#| "shows how the entity file is included and how the entities are used. The "
-#| "entities can also be used in all generated files, GTK-Doc will use the "
-#| "same xml header in generated xml files. <_:example-1/>"
 msgid ""
 "The makefiles shipped with this version generate an entity file at "
 "<filename>xml/gtkdocentities.ent</filename>, containing entities for e.g. "
