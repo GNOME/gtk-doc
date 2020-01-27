@@ -552,6 +552,23 @@ class ScanHeaderContentStructs(ScanHeaderContentTestCase):
         slist, doc_comments = self.scanHeaderContent([header])
         self.assertDecl('data', expected, slist)
 
+    def test_HandleDeprecatedMemberDecorator(self):
+        """Struct with deprecated members."""
+        header = textwrap.dedent("""\
+            struct data {
+              int x1 G_GNUC_DEPRECATED;
+              int x2 G_GNUC_DEPRECATED_FOR(replacement);
+            };""")
+        expected = textwrap.dedent("""\
+            struct data {
+              int x1;
+              int x2;
+            };""")
+        scan.InitScanner(self.options)
+        slist, doc_comments = self.scanHeaderContent(
+                header.splitlines(keepends=True))
+        self.assertDecl('data', expected, slist)
+
 
 class ScanHeaderContentUnions(ScanHeaderContentTestCase):
     """Test parsing of union declarations."""

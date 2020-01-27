@@ -538,7 +538,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
         # section (#endif /* XXX_DEPRECATED */
         if deprecated_conditional_nest == 0 and '_DEPRECATED' in line:
             m = re.search(r'^\s*#\s*(if*|define|endif)', line)
-            if not (m or in_declaration == 'enum'):
+            if not (m or in_declaration == 'enum' or in_declaration == 'struct'):
                 logging.info('Found deprecation annotation (decl: "%s"): "%s"',
                              in_declaration, line.strip())
                 deprecated_conditional_nest += 0.1
@@ -953,9 +953,17 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
                     title = '<TITLE>%s</TITLE>' % objectname
 
                 logging.info('Store struct: "%s"', symbol)
+                # Structs could contain deprecated members and that doesn't
+                # mean the whole struct is deprecated, so they are ignored when
+                # setting deprecated_conditional_nest above. Here we can check
+                # if the _DEPRECATED is between '}' and ';' which would mean
+                # the struct as a whole is deprecated.
+                if re.search(r'\n\s*\}.*_DEPRECATED.*;\s*$', decl):
+                    deprecated = '<DEPRECATED/>\n'
                 if AddSymbolToList(slist, symbol):
                     structsym = in_declaration.upper()
-                    stripped_decl = re.sub('(%s)' % optional_decorators_regex, '', decl)
+                    regex = r'(?:\s+(?:G_GNUC_\w+(?:\(\w*\))?%s))' % ignore_decorators
+                    stripped_decl = re.sub(regex, '', decl)
                     decl_list.append('<%s>\n<NAME>%s</NAME>\n%s%s</%s>\n' %
                                      (structsym, symbol, deprecated, stripped_decl, structsym))
                     if symbol in forward_decls:
