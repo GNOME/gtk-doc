@@ -3,13 +3,14 @@
 # Jorge Gonzalez <jorgegonz@svn.gnome.org>, 2009.
 # Jorge González <jorgegonz@svn.gnome.org>, 2009, 2010, 2011.
 # 
+# 
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2019-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc-help.master\n"
-"POT-Creation-Date: 2020-01-22 12:38+0000\n"
-"PO-Revision-Date: 2020-01-23 13:26+0100\n"
+"POT-Creation-Date: 2020-02-01 19:18+0000\n"
+"PO-Revision-Date: 2020-02-12 12:11+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -974,13 +975,6 @@ msgstr ""
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:607
-#| msgid ""
-#| "The next step is to edit the settings inside the <filename>Makefile.am</"
-#| "filename>. All the settings have a comment above that describes their "
-#| "purpose. Most settings are extra flags passed to the respective tools. "
-#| "Every tool has a variable of the form <option>&lt;TOOLNAME&gt;_OPTIONS</"
-#| "option>. All the tools support <option>--help</option> to list the "
-#| "supported parameters."
 msgid ""
 "Next, you need to customize the copied Makefiles and provide values for the "
 "various parameters in each <filename>Makefile.am</filename>. All settings "
@@ -1107,7 +1101,7 @@ msgid ""
 "<filename>Makefile.am</filename> for additional options. <_:itemizedlist-1/>"
 msgstr ""
 "La siguiente lista explica las opciones más relevantes. Consulte el ejemplo "
-"<filename>Makefile.am</filename> para obtener opciones adicionales. <_: "
+"<filename>Makefile.am</filename> para obtener opciones adicionales. <_:"
 "itemizedlist-1/>"
 
 #. (itstool) path: sect2/title
@@ -1228,11 +1222,6 @@ msgstr ""
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:786
-#| msgid ""
-#| "The first argument is used to check for the gtkdocversion at configure "
-#| "time. The 2nd, optional argument is used by <application>gtkdocize</"
-#| "application>. The <symbol>GTK_DOC_CHECK</symbol> macro also adds several "
-#| "configure switches:"
 msgid ""
 "The first argument is used to check for the Gtk-Doc version at configure "
 "time. The 2nd, optional argument is used by <application>gtkdocize</"
@@ -1303,12 +1292,6 @@ msgstr "Integración con autogen"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:820
-#| msgid ""
-#| "Most projects will have an <filename>autogen.sh</filename> script to "
-#| "setup the build infrastructure after a checkout from version control "
-#| "system (such as cvs/svn/git). GTK-Doc comes with a tool called "
-#| "<application>gtkdocize</application> which can be used in such a script. "
-#| "It should be run before autoheader, automake or autoconf."
 msgid ""
 "Most projects will have an <filename>autogen.sh</filename> script to setup "
 "the build infrastructure after the project was checked out from a version "
@@ -1370,13 +1353,6 @@ msgstr ""
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:854
-#| msgid ""
-#| "When running <application>gtkdocize</application> it copies <filename>gtk-"
-#| "doc.make</filename> to your project root (or any directory specified by "
-#| "the <option>--docdir</option> option). It also checks you configure "
-#| "script for the <function>GTK_DOC_CHECK</function> invocation. This macro "
-#| "can be used to pass extra parameters to <application>gtkdocize</"
-#| "application>."
 msgid ""
 "When running <application>gtkdocize</application> it copies <filename>gtk-"
 "doc.make</filename> to your project root (or any directory specified by the "
@@ -1388,13 +1364,6 @@ msgstr ""
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:860
-#| msgid ""
-#| "When running <application>gtkdocize</application> it copies <filename>gtk-"
-#| "doc.make</filename> to your project root (or any directory specified by "
-#| "the <option>--docdir</option> option). It also checks you configure "
-#| "script for the <function>GTK_DOC_CHECK</function> invocation. This macro "
-#| "can be used to pass extra parameters to <application>gtkdocize</"
-#| "application>."
 msgid ""
 "<application>gtkdocize</application> checks your <filename>configure.ac</"
 "filename> script for the <function>GTK_DOC_CHECK</function> macro. The "
@@ -1688,10 +1657,6 @@ msgstr ""
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:1018
-#| msgid ""
-#| "The scanner can handle the majority of C headers fine. In the case of "
-#| "receiving warnings from the scanner that look like a special case, one "
-#| "can hint GTK-Doc to skip over them. <_:example-1/>"
 msgid ""
 "The GTK-Doc scanner can handle the majority of C headers fine. In the case "
 "of receiving warnings from the scanner that look like a special case, one "
@@ -2011,15 +1976,6 @@ msgstr ""
 
 #. (itstool) path: tip/para
 #: C/index.docbook:1224
-#| msgid ""
-#| "As already mentioned earlier GTK-Doc is for documenting public API. Thus "
-#| "one cannot write documentation for static symbols. Nevertheless it is "
-#| "good to comment those symbols too. This helps other to understand you "
-#| "code. Therefore we recommend to comment these using normal comments "
-#| "(without the 2nd '*' in the first line). If later the function needs to "
-#| "be made public, all one needs to do is to add another '*' in the comment "
-#| "block and insert the symbol name at the right place inside the sections "
-#| "file."
 msgid ""
 "As already mentioned earlier GTK-Doc is for documenting public API. Thus one "
 "cannot write documentation for static symbols. Nevertheless it is good to "
@@ -2920,7 +2876,6 @@ msgstr "Una descripción más larga del programa."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1791
-#| msgid "Specificy what value(s) the program returns. (Optional)"
 msgid "Specify what value(s) the program returns. (Optional)"
 msgstr "Especifique qué valores devuelve el programa. (Opcional)"
 
@@ -3089,10 +3044,6 @@ msgstr ""
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1858
-#| msgid ""
-#| "To include example code: <_:informalexample-1/> or possibly this, for "
-#| "very short code fragments which don't need a title: <_:informalexample-2/"
-#| "> For the latter GTK-Doc also supports an abbreviation: |[ ... ]|"
 msgid ""
 "To include example code: <_:informalexample-1/> or possibly this, for very "
 "short code fragments which don't need a title: <_:informalexample-2/> In "
