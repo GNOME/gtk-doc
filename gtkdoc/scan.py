@@ -179,14 +179,23 @@ def Run(options):
     get_types = []
 
     # do not read files twice; checking it here permits to give both srcdir and
-    # builddir as --source-dir without fear of duplicities
+    # builddir as --source-dir without fear of duplicates
     seen_headers = {}
 
+    # split all the ignored files and directories
+    ignored_headers = options.ignore_headers and options.ignore_headers.split(' ') or []
+
     for file in options.headers:
-        ScanHeader(file, section_list, decl_list, get_types, seen_headers, options)
+        # We assume that the specific headers we have been told to scan
+        # are not going to be placed in a blocklist
+        ScanHeader(file, section_list, decl_list, get_types, seen_headers, [], options)
 
     for dir in options.source_dir:
-        ScanHeaders(dir, section_list, decl_list, get_types, seen_headers, options)
+        # Ignored headers are relative to a source directory; since we
+        # pass the full path of each header to ScanHeader(), we need to
+        # build a list of absolute paths from the ignored headers list
+        src_ignored_headers = [os.path.join(dir, x) for x in ignored_headers]
+        ScanHeaders(dir, section_list, decl_list, get_types, seen_headers, src_ignored_headers, options)
 
     with open(new_decl_list, 'w', encoding='utf-8') as f:
         for section in sorted(section_list.keys()):
@@ -330,13 +339,17 @@ def InitScanner(options):
         ]
 
 
-def ScanHeaders(source_dir, section_list, decl_list, get_types, seen_headers, options):
+def ScanHeaders(source_dir, section_list, decl_list, get_types, seen_headers, ignored_headers, options):
     """Scans a directory tree looking for header files.
 
     Args:
       source_dir (str): the directory to scan.
       section_list (dict): map of section to filenames.
+      decl_list (list): list of declarations
+      get_types (list): list of symbols that have a get_type function
       seen_headers (set): set to avoid scanning headers twice
+      ignored_headers (list): list of ignored headers
+      options: command line options
     """
 
     logging.info('Scanning source directory: %s', source_dir)
@@ -344,26 +357,29 @@ def ScanHeaders(source_dir, section_list, decl_list, get_types, seen_headers, op
     # This array holds any subdirectories found.
     subdirs = []
 
-    for file in sorted(os.listdir(source_dir)):
-        if file.startswith('.'):
+    for filename in sorted(os.listdir(source_dir)):
+        if filename.startswith('.'):
             continue
-        fullname = os.path.join(source_dir, file)
+        fullname = os.path.join(source_dir, filename)
         if os.path.isdir(fullname):
-            subdirs.append(file)
-        elif file.endswith('.h'):
+            subdirs.append(fullname)
+        elif filename.endswith('.h'):
+            if fullname in ignored_headers:
+                logging.info(f"File {fullname} matches ignored headers")
+                continue
             ScanHeader(fullname, section_list, decl_list, get_types,
-                       seen_headers, options)
+                       seen_headers, ignored_headers, options)
 
     # Now recursively scan the subdirectories.
-    for dir in subdirs:
-        matchstr = r'(\s|^)' + re.escape(dir) + r'(\s|$)'
-        if re.search(matchstr, options.ignore_headers):
+    for d in subdirs:
+        if d in ignored_headers:
+            logging.info(f"Directory {d} matches ignored headers")
             continue
-        ScanHeaders(os.path.join(source_dir, dir), section_list, decl_list,
-                    get_types, seen_headers, options)
+        ScanHeaders(d, section_list, decl_list,
+                    get_types, seen_headers, ignored_headers, options)
 
 
-def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, options):
+def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, ignored_headers, options):
     """Scan a header file for doc commants.
 
     Look for doc comments and extract them. Parse each doc comments and the
@@ -373,8 +389,16 @@ def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, opt
       input_file (str): the header file to scan.
       section_list (dict): a map of section per filename
       decl_list (list): a list of declarations
+      get_types (list): list of symbols that have a get_type function
       seen_headers (set): set to avoid scanning headers twice
+      ignored_headers (list): a list of ignored headers
+      options: command line options
     """
+
+    # Skip ignored headers
+    if input_file in ignored_headers:
+        logging.info(f"File {input_file} matches ignored headers")
+        return
 
     # Don't scan headers twice
     canonical_input_file = os.path.realpath(input_file)
@@ -385,18 +409,6 @@ def ScanHeader(input_file, section_list, decl_list, get_types, seen_headers, opt
     seen_headers[canonical_input_file] = 1
 
     file_basename = os.path.split(input_file)[1][:-2]  # filename ends in .h
-
-    # Check if the basename is in the list of headers to ignore.
-    matchstr = r'(\s|^)' + re.escape(file_basename) + r'\.h(\s|$)'
-    if re.search(matchstr, options.ignore_headers):
-        logging.info('File ignored: %s', input_file)
-        return
-
-    # Check if the full name is in the list of headers to ignore.
-    matchstr = r'(\s|^)' + re.escape(input_file) + r'(\s|$)'
-    if re.search(matchstr, options.ignore_headers):
-        logging.info('File ignored: %s', input_file)
-        return
 
     if not os.path.exists(input_file):
         logging.warning('File does not exist: %s', input_file)
@@ -427,7 +439,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     Args:
       input_lines (list):
       decl_list (list): symbols declarations
-      get_types (list): lst of symbols that have a get_type function
+      get_types (list): list of symbols that have a get_type function
       options: commandline options
 
     Returns:
