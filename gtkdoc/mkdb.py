@@ -3899,6 +3899,7 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
         logging.info("SECTION DOCS found in source for : '%s'", real_symbol)
         for param_name, param_desc in params.items():
             logging.info("   '" + param_name + "'")
+            #TODO: fix cases where real symbol uses one of those names
             param_name = param_name.lower()
             if param_name in ['image', 'include', 'section_id', 'see_also', 'short_description', 'stability', 'title']:
                 key = real_symbol + ':' + param_name
