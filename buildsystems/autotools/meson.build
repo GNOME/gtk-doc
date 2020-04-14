@@ -15,6 +15,15 @@ foreach mode : ['', 'no-xslt']
     flat = nested + '-flat'
   endif
 
+  replace_string_cmd = '''
+import fileinput
+import sys
+
+with open(sys.argv[1], 'r') as f:
+    for l in f:
+        print(l.replace('EXTRA_DIST =', 'EXTRA_DIST +='), end='')
+'''
+
   custom_target(
     'gtk-doc' + flat + '.make',
     input: 'gtk-doc' + nested + '.make',
@@ -23,9 +32,8 @@ foreach mode : ['', 'no-xslt']
     install_dir: pkgdatadir,
     capture: true,
     command: [
-      'sed',
-      '-e',
-      's/EXTRA_DIST =/EXTRA_DIST +=/',
+      python3, '-c',
+      replace_string_cmd,
       '@INPUT@',
     ]
   )
@@ -36,6 +44,13 @@ foreach mode : ['', 'no-xslt']
   )
 endforeach
 
+copy_file_cmd = '''
+import shutil
+import sys
+
+shutil.copyfile(sys.argv[1], sys.argv[2])
+'''
+
 custom_target(
   'gtk-doc.m4',
   input: 'gtk-doc.m4',
@@ -43,8 +58,8 @@ custom_target(
   install: true,
   install_dir: autoconfdatadir,
   command: [
-    'cp',
-    '-f',
+    python3, '-c',
+    copy_file_cmd,
     '@INPUT@',
     '@OUTPUT@',
   ],
