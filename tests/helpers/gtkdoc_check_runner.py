@@ -20,7 +20,12 @@ if __name__ == '__main__':
 
     options, arguments = parser.parse_known_args()
 
-    arguments.insert(0, os.path.join(options.binary_dir, 'gtkdoc-check'))
+    arg_pos = 0
+    if os.name == 'nt':
+        arguments.insert(arg_pos, sys.executable)
+        arg_pos += 1
+
+    arguments.insert(arg_pos, os.path.join(options.binary_dir, 'gtkdoc-check'))
 
     environ = os.environ.copy()
 

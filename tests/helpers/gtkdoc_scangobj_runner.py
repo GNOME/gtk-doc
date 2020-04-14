@@ -24,7 +24,12 @@ if __name__ == '__main__':
 
     options, arguments = parser.parse_known_args()
 
-    arguments.insert(0, os.path.join(options.binary_dir, 'gtkdoc-scangobj'))
+    arg_pos = 0
+    if os.name == 'nt':
+        arguments.insert(arg_pos, sys.executable)
+        arg_pos += 1
+
+    arguments.insert(arg_pos, os.path.join(options.binary_dir, 'gtkdoc-scangobj'))
 
     process = Popen([options.pkg_config,
                     '--cflags'] + options.extra_pkg,
