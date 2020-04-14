@@ -15,10 +15,17 @@ gobject_test_deps = [
   gobject_dep,
 ]
 
+extra_cflags = []
+if cc.get_id() == 'msvc'
+  extra_cflags += '/FImsvc_recommended_pragmas.h'
+  extra_cflags += cc.get_supported_arguments(['/utf-8'])
+endif
+
 gobject_test_lib = shared_library(
   'gobjecttester',
   sources: gobject_test_c,
   dependencies: gobject_test_deps,
+  c_args: extra_cflags,
   install: false,
 )
 
