@@ -30,7 +30,6 @@ if __name__ == '__main__':
         arg_pos += 1
 
     arguments.insert(arg_pos, os.path.join(options.binary_dir, 'gtkdoc-scangobj'))
-
     process = Popen([options.pkg_config,
                     '--cflags'] + options.extra_pkg,
                     stdout=PIPE, stderr=PIPE)
@@ -53,7 +52,7 @@ if __name__ == '__main__':
 
     for lib in options.extra_lib:
         arguments.append('--ldflags=-l{0}'.format(os.path.basename(lib).split('.')[0].lstrip('lib')))
-        arguments.append('--ldflags=-L{0}'.format(os.path.dirname(lib)))
-        arguments.append('--ldflags=-Wl,-rpath,{0}'.format(os.path.dirname(lib)))
+        arguments.append('--ldflags=-L{0}'.format(os.path.dirname(lib).replace('\\', '/')))
+        arguments.append('--ldflags=-Wl,-rpath,{0}'.format(os.path.dirname(lib).replace('\\', '/')))
 
     sys.exit(call(arguments))
