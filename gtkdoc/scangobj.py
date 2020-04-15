@@ -25,11 +25,17 @@ compiling and running a small C program. CFLAGS and LDFLAGS must be set
 appropriately before running this script.
 """
 
+import distutils
 import logging
 import os
 import string
 import subprocess
 import shlex
+
+from distutils import ccompiler
+from distutils.cygwinccompiler import Mingw32CCompiler
+from distutils.msvccompiler import MSVCCompiler
+from distutils.sysconfig import customize_compiler
 
 from . import common, config
 
@@ -1302,7 +1308,7 @@ def run(options):
     c_file = options.module + '-scan.c'
     output = open(c_file, 'w', encoding='utf-8')
 
-    base_filename = os.path.join(options.output_dir, options.module)
+    base_filename = os.path.join(options.output_dir, options.module).replace('\\', '/')
     old_signals_filename = base_filename + '.signals'
     new_signals_filename = base_filename + '.signals.new'
     old_hierarchy_filename = base_filename + '.hierarchy'
@@ -1380,30 +1386,68 @@ def run(options):
     if 'libtool' in options.cc:
         o_file = options.module + '-scan.lo'
     else:
-        o_file = options.module + '-scan.o'
+        obj_ext = '.o'
+        if options.cc == 'cl':
+            obj_ext = '.obj'
+        o_file = options.module + '-scan' + obj_ext
 
     x_file = options.module + '-scan' + config.exeext
 
     logging.debug('Intermediate scanner files: %s, %s, %s', c_file, o_file, x_file)
 
+    # For Visual Studio, the intermediate compiled object files have the extension '.obj'
+    # and we ought to use '-Fo$(o_file)' instead of '-o $(o_file)', since although -o is
+    # supported on Visual Studio but is considered deprecated usage
+    compile_outfile_flag = ['-o', o_file]
+    if options.cc == 'cl':
+        compile_outfile_flag = ['-Fo' + o_file]
+
     res = execute_command(options, 'Compiling',
                           shlex.split(options.cc) + shlex.split(options.cflags) +
-                          ["-c", "-o", o_file, c_file])
+                          ["-c"] + compile_outfile_flag + [c_file])
     if res:
         return res
 
+    ldflags = shlex.split(options.ldflags)
+
+    # Make the GCC-style linker flags into what Visual Studio understands,
+    # (akin to what pkg-config --msvc-syntax does).  For '-Wl,rpath,', we
+    # prepend these items in order to %PATH%; for '-l' we drop the '-l' flag
+    # and append that argument with '.lib'; for '-L' we replace '-L' with '/libpath:'
+    if options.cc == 'cl':
+        path_index = 0
+        path_env = os.environ['PATH'].split(os.pathsep)
+        for idx,flag in enumerate(ldflags):
+            if flag.startswith('-L'):
+                ldflags[idx] = '/libpath:' + flag[2:]
+            elif flag.startswith('-l'):
+                ldflags[idx] = flag[2:] + '.lib'
+            elif flag.startswith('-Wl,-rpath,'):
+                path_env.insert(path_index, flag[11:].replace('/', '\\'))
+                path_index += 1
+
+        os.environ['PATH'] = os.pathsep.join(path_env)
+        o_flag = ['-out:' + x_file]
+    else:
+        o_flag = ['-o', x_file]
+
     res = execute_command(options, 'Linking',
                           shlex.split(options.ld) + [o_file] +
-                          shlex.split(options.ldflags) + ['-o', x_file])
+                          ldflags + o_flag)
     if res:
         return res
 
     run_env = os.environ.copy()
     run_env['LC_MESSAGES'] = 'C'
     run_env.pop('LC_ALL', None)
-    res = execute_command(options, 'Running',
-                          shlex.split(options.run) + ['./' + x_file],
-                          env=run_env)
+    if options.cc == 'cl':
+        res = execute_command(options, 'Running',
+                              shlex.split(options.run) + [x_file],
+                              env=run_env)
+    else:
+        res = execute_command(options, 'Running',
+                              shlex.split(options.run) + ['./' + x_file],
+                              env=run_env)
     if res:
         return res
 
@@ -1428,3 +1472,41 @@ def run(options):
     common.UpdateFileIfChanged(old_actions_filename, new_actions_filename, False)
 
     return 0
+
+# Used by gtkdoc-scangobj
+def check_is_msvc():
+    compiler = None
+    is_msvc = False
+    if os.name == 'nt':
+        # The compiler used here on Windows may well not be
+        # the same compiler that was used to build Python,
+        # as the official Python binaries are built with
+        # Visual Studio
+        compiler_name = os.environ.get('CC')
+        if compiler_name is None:
+            if os.environ.get('MSYSTEM') == 'MINGW32' or os.environ.get('MSYSTEM') == 'MINGW64':
+                compiler_name = 'mingw32'
+            else:
+                compiler_name = distutils.ccompiler.get_default_compiler()
+
+        if compiler_name != 'msvc' and \
+           compiler_name != 'mingw32' and \
+           compiler_name != 'clang' and \
+           compiler_name != 'clang-cl':
+            raise SystemExit('Specified Compiler \'%s\' is unsupported.' % compiler_name)
+    else:
+        # XXX: Is it common practice to use a non-Unix compiler
+        #      class instance on non-Windows on platforms g-i supports?
+        compiler_name = distutils.ccompiler.get_default_compiler()
+
+    # Now, create the distutils ccompiler instance based on the info we have.
+    if compiler_name == 'msvc':
+        # For MSVC, we need to create a instance of a subclass of distutil's
+        # MSVC9Compiler class, as it does not provide a preprocess()
+        # implementation
+        compiler = distutils.msvccompiler.MSVCCompiler()
+    else:
+        compiler = distutils.ccompiler.new_compiler(compiler=compiler_name)
+        customize_compiler(compiler)
+
+    return isinstance(compiler, distutils.msvccompiler.MSVCCompiler)

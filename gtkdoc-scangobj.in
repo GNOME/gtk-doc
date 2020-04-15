@@ -32,6 +32,7 @@ except ModuleNotFoundError:
 from gtkdoc import common, config, scangobj
 
 if __name__ == '__main__':
+    is_msvc = scangobj.check_is_msvc()
     parser = argparse.ArgumentParser(
         description='gtkdoc-rebase version %s - introspect g-objects' % config.version)
     parser.add_argument('--version', action='version', version=config.version)
@@ -66,9 +67,15 @@ if __name__ == '__main__':
         options.ldflags = ' '.join(options.ldflags)
 
     if not options.cc:
-        options.cc = os.environ.get('CC', 'gcc')
+        if is_msvc:
+            options.cc = os.environ.get('CC', 'cl')
+        else:
+            options.cc = os.environ.get('CC', 'gcc')
     if not options.ld:
-        options.ld = os.environ.get('LD', options.cc)
+        if is_msvc:
+            options.ld = os.environ.get('LD', 'link')
+        else:
+            options.ld = os.environ.get('LD', options.cc)
     if not options.cflags:
         options.cflags = os.environ.get('CFLAGS', '')
     if not options.ldflags:
