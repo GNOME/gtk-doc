@@ -9,7 +9,7 @@ config_py.set('PKG_CONFIG', pkgconfig_prg_path)
 config_py.set('XSLTPROC', xsltproc_prg_path)
 
 config_py.set('VERSION', version)
-config_py.set('EXEEXT', '')
+config_py.set('EXEEXT', host_machine.system() == 'windows' ? '.exe' : '')
 
 configure_file(
   input: 'config_data.py.in',
