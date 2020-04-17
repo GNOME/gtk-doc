@@ -16,9 +16,12 @@ gobject_test_deps = [
 ]
 
 extra_cflags = []
-if cc.get_id() == 'msvc'
-  extra_cflags += '/FImsvc_recommended_pragmas.h'
-  extra_cflags += cc.get_supported_arguments(['/utf-8'])
+if cc.get_argument_syntax() == 'msvc'
+  if cc.get_id() == 'msvc'
+    extra_cflags += '/FImsvc_recommended_pragmas.h'
+    extra_cflags += cc.get_supported_arguments(['/utf-8'])
+  endif
+  extra_cflags += '/D_GTKDOC_TESTER_API=__declspec(dllexport)'
 endif
 
 gobject_test_lib = shared_library(
