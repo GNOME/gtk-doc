@@ -4,6 +4,10 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#ifndef _GTKDOC_TESTER_API
+#define _GTKDOC_TESTER_API
+#endif
+
 /* type macros */
 
 #define GTKDOC_TYPE_OBJECT            (gtkdoc_object_get_type ())
@@ -117,15 +121,25 @@ enum GtkdocHelperEnum {
   GTKDOC_HELPER_ENUM_B
 };
 
+_GTKDOC_TESTER_API
 GType  gtkdoc_object_get_type(void) G_GNUC_CONST;
+
+_GTKDOC_TESTER_API
 GType  gtkdoc_object2_get_type(void) G_GNUC_CONST;
+
+_GTKDOC_TESTER_API
 GType  gtkdoc_object3_get_type(void) G_GNUC_CONST;
 
+_GTKDOC_TESTER_API
 GtkdocObject *gtkdoc_object_new(void);
 #ifndef GTKDOC_TESTER_DISABLE_DEPRECATED
+_GTKDOC_TESTER_API
 void gtkdoc_object_set_otest (GObject *self, const gchar *value);
+
+_GTKDOC_TESTER_API
 void gtkdoc_object_do_not_use (GObject *self);
 #endif
+_GTKDOC_TESTER_API
 void gtkdoc_object_frobnicate (GObject *self, gint n);
 gboolean gtkdoc_object_fooify (GObject *self, ...);
 

@@ -4,6 +4,10 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#ifndef _GTKDOC_TESTER_API
+#define _GTKDOC_TESTER_API
+#endif
+
 /* type macros */
 
 #define GTKDOC_TYPE_IFACE               (gtkdoc_iface_get_type ())
@@ -44,9 +48,13 @@ struct _GtkdocIfaceInterface {
   void (*test)(const GtkdocIface * const self, gconstpointer const user_data);
 };
 
+_GTKDOC_TESTER_API
 GType  gtkdoc_iface_get_type(void) G_GNUC_CONST;
+
+_GTKDOC_TESTER_API
 GType  gtkdoc_iface2_get_type(void) G_GNUC_CONST;
 
+_GTKDOC_TESTER_API
 gboolean gtkdoc_iface_configure (gchar *config);
 
 /**

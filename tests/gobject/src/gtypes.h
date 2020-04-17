@@ -4,6 +4,10 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#ifndef _GTKDOC_TESTER_API
+#define _GTKDOC_TESTER_API
+#endif
+
 /* type macros */
 
 #define GTKDOC_TYPE_ENUM              (gtkdoc_enum_get_type ())
@@ -37,8 +41,13 @@ typedef enum {
   GTKDOC_ENUM2_V2,
 } GtkdocEnum2;
 
+_GTKDOC_TESTER_API
 GType  gtkdoc_enum_get_type(void) G_GNUC_CONST;
+
+_GTKDOC_TESTER_API
 GType  gtkdoc_enum2_get_type(void) G_GNUC_CONST;
+
+_GTKDOC_TESTER_API
 GType  gtkdoc_boxed_get_type(void) G_GNUC_CONST;
 
 
@@ -72,6 +81,7 @@ typedef struct {
     gpointer priv;
 } GtkdocBoxedPlainOldData;
 
+_GTKDOC_TESTER_API
 GType  gtkdoc_boxed_plain_old_data_get_type(void) G_GNUC_CONST;
 
 #endif // GTKDOC_TYPES_H
