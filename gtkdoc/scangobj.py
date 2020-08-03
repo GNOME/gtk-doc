@@ -339,29 +339,37 @@ get_type_name (GType type, gboolean * is_pointer)
 
   switch (type) {
   case G_TYPE_NONE:
-  case G_TYPE_CHAR:
   case G_TYPE_UCHAR:
   case G_TYPE_BOOLEAN:
-  case G_TYPE_INT:
   case G_TYPE_UINT:
   case G_TYPE_LONG:
   case G_TYPE_ULONG:
-  case G_TYPE_FLOAT:
-  case G_TYPE_DOUBLE:
   case G_TYPE_POINTER:
     /* These all have normal C type names so they are OK. */
     return type_name;
 
+  case G_TYPE_CHAR:
+    return "char";
+
+  case G_TYPE_INT:
+    return "int";
+
+  case G_TYPE_FLOAT:
+    return "float";
+
+  case G_TYPE_DOUBLE:
+    return "double";
+
   case G_TYPE_STRING:
     /* A GtkString is really a gchar*. */
     *is_pointer = TRUE;
-    return "gchar";
+    return "char";
 
   case G_TYPE_ENUM:
   case G_TYPE_FLAGS:
     /* We use a gint for both of these. Hopefully a subtype with a decent
        name will be registered and used instead, as GTK+ does itself. */
-    return "gint";
+    return "int";
 
   case G_TYPE_BOXED:
     /* The boxed type shouldn't be used itself, only subtypes. Though we
