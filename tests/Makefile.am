@@ -8,8 +8,8 @@ TESTS = \
 if BUILD_TESTS
 # we need to run '.' last so that sanity processes the generated docs
 # maybe move it to a subdir?
-SUBDIRS += annotations bugs empty fail gobject program repro .
-TESTS += annotations.sh bugs.sh empty.sh fail.sh gobject.sh program.sh
+SUBDIRS += annotations bugs empty fail gobject gobject-mkhtml2 program repro .
+TESTS += annotations.sh bugs.sh empty.sh fail.sh gobject.sh gobject-mkhtml2.sh program.sh
 endif
 
 TESTS_ENVIRONMENT = \

@@ -179,6 +179,8 @@ tests/fail/docs/Makefile
 tests/gobject/Makefile
 tests/gobject/src/Makefile
 tests/gobject/docs/Makefile
+tests/gobject-mkhtml2/Makefile
+tests/gobject-mkhtml2/docs/Makefile
 tests/program/Makefile
 tests/program/src/Makefile
 tests/program/docs/Makefile

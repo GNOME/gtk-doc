@@ -168,19 +168,28 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	if test "x$(V)" = "x1"; then \
 	  mkhtml_options="$$mkhtml_options --verbose"; \
 	fi; \
-	echo "gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)" >gtkdoc-mkhtml.log; \
+	if test -n "$(MKHTML2)"; then \
+	  mkhtml="gtkdoc-mkhtml2"; \
+	  mkhtml_fixxref_options="$(FIXXREF_OPTIONS)"; \
+	else \
+	  mkhtml="gtkdoc-mkhtml"; \
+	  mkhtml_fixxref_options=""; \
+	fi; \
+	echo "$$mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(MKHTML_OPTIONS) $$mkhtml_fixxref_options $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)" >$$mkhtml.log; \
 	cd html && PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) ABS_TOP_SRCDIR=$(abs_top_srcdir) \
-	gtkdoc-mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(MKHTML_OPTIONS) $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE) 2>&1 | tee -a ../gtkdoc-mkhtml.log
+	$$mkhtml --uninstalled --path="$(abs_srcdir)" $$mkhtml_options $(MKHTML_OPTIONS) $$mkhtml_fixxref_options $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE) 2>&1 | tee -a ../$$mkhtml.log
 	-@test "x$(HTML_IMAGES)" = "x" || \
 	for file in $(HTML_IMAGES) ; do \
 	  test -f $(abs_srcdir)/$$file && cp $(abs_srcdir)/$$file $(abs_builddir)/html; \
 	  test -f $(abs_builddir)/$$file && cp $(abs_builddir)/$$file $(abs_builddir)/html; \
 	done;
-	@ts=`cat ts`;tsd=`date -d "now - $$ts seconds" $(TS_FMT)`; \
-	echo "  DOC   `$(DATE_FMT_CMD)$$tsd`: Fixing cross-references"
-	@echo "gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)" >gtkdoc-fixxref.log; \
-	PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) \
-	gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS) 2>&1 | tee -a gtkdoc-fixxref.log
+	@if test -z "$(MKHTML2)"; then \
+	  ts=`cat ts`;tsd=`date -d "now - $$ts seconds" $(TS_FMT)`; \
+	  echo "  DOC   `$(DATE_FMT_CMD)$$tsd`: Fixing cross-references"; \
+	  echo "gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)" >gtkdoc-fixxref.log; \
+	  PATH=$(abs_top_builddir):$(PATH) PYTHONPATH=$(abs_top_builddir):$(abs_top_srcdir):$(PYTHONPATH) \
+	  gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS) 2>&1 | tee -a gtkdoc-fixxref.log; \
+	fi
 	@touch html-build.stamp
 
 #### pdf ####
