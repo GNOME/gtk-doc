@@ -99,7 +99,12 @@ binary_in.set('datarootdir', join_paths('${prefix}', get_option('datadir')))
 binary_in.set('datadir', '${datarootdir}')
 
 binary_in.set('PACKAGE', package_name)
-
+binary_in.set('PACKAGE_BUGREPORT', 'https://gitlab.gnome.org/GNOME/gtk-doc/issues')
+binary_in.set('PACKAGE_NAME', package_name)
+binary_in.set('PACKAGE_STRING', package_name)
+binary_in.set('PACKAGE_TARNAME', package_name)
+binary_in.set('PACKAGE_URL', 'https://gitlab.gnome.org/GNOME/gtk-doc')
+binary_in.set('PACKAGE_VERSION', version)
 binary_in.set('VERSION', version)
 
 foreach binary: gtkdoc_binaires

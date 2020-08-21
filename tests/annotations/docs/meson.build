@@ -21,6 +21,8 @@ annotations_test_output_dir = join_paths(
 
 annotations_test_html_data = []
 
+subdir('xml')
+
 test(
   'test-annotations-scan',
   python_prg,

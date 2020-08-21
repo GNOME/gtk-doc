@@ -21,6 +21,8 @@ repro_test_output_dir = join_paths(
 
 repro_test_html_data = []
 
+subdir('xml')
+
 test(
   'test-repro-scan',
   python_prg,

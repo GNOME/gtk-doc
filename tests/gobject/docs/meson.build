@@ -21,6 +21,14 @@ gobject_test_output_dir = join_paths(
 
 gobject_test_html_data = []
 
+subdir('xml')
+
+configure_file(
+  input: join_paths(gobject_test_docs_dir, 'tester-sections.txt'),
+  output: 'tester-sections.txt',
+  copy: true,
+)
+
 test(
   'test-gobject-scan',
   python_prg,
