@@ -8,6 +8,8 @@ check-local: clean
 
 endif
 
-EXTRA_DIST = examples/gobject.c
+EXTRA_DIST = \
+	examples/gobject.c \
+	meson.build
 
 -include $(top_srcdir)/git.mk

@@ -1,7 +1,8 @@
 EXTRA_DIST = \
 	GtkDocConfig.cmake \
 	GtkDocConfigVersion.cmake.in	 \
-	GtkDocScanGObjWrapper.cmake
+	GtkDocScanGObjWrapper.cmake \
+	meson.build
 
 CLEANFILES = \
   GtkDocConfigVersion.cmake

@@ -77,4 +77,8 @@ TESTS_ENVIRONMENT = \
 	PATH=$(abs_top_builddir):$(srcdir):$(PATH)
 endif
 
+EXTRA_DIST += meson.build
+EXTRA_DIST += images/meson.build
+EXTRA_DIST += xml/meson.build
+
 -include $(top_srcdir)/git.mk
