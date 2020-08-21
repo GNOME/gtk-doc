@@ -38,6 +38,22 @@ test(
   ],
 )
 
+sanitizer_args = []
+
+if get_option('b_sanitize') == 'address' or get_option('b_sanitize') == 'address,undefined'
+  sanitizer_args += [
+    '--extra-cflags=-fsanitize=address',
+    '--ldflags=-fsanitize=address',
+  ]
+endif
+
+if get_option('b_sanitize') == 'undefined' or get_option('b_sanitize') == 'address,undefined'
+  sanitizer_args += [
+    '--extra-cflags=-fsanitize=undefined',
+    '--ldflags=-fsanitize=undefined',
+  ]
+endif
+
 test(
   'test-gobject-scangobj',
   python_prg,
@@ -51,6 +67,9 @@ test(
     '--extra-pkg=@0@'.format('gobject-2.0'),
     '--extra-lib=@0@'.format(gobject_test_lib.full_path()),
     '--module=@0@'.format('tester'),
+  ] + sanitizer_args,
+  env: [
+    'ASAN_OPTIONS=detect_leaks=0',
   ],
 )
 
