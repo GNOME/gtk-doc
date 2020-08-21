@@ -38,6 +38,10 @@ meson-build:
     - meson test -C _build
   except:
     - tags
+  artifacts:
+    when: always
+    paths:
+      - _build/meson-logs/*
 
 # common
 
