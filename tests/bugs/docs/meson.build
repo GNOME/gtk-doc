@@ -21,6 +21,8 @@ bugs_test_output_dir = join_paths(
 
 bugs_test_html_data = []
 
+subdir('xml')
+
 test(
   'test-bugs-scan',
   python_prg,

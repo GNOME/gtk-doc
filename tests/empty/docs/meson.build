@@ -21,6 +21,8 @@ empty_test_output_dir = join_paths(
 
 empty_test_html_data = []
 
+subdir('xml')
+
 test(
   'test-empty-scan',
   python_prg,

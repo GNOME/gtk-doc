@@ -21,6 +21,8 @@ program_test_output_dir = join_paths(
 
 program_test_html_data = []
 
+subdir('xml')
+
 test(
   'test-program-scan',
   python_prg,

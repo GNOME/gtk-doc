@@ -21,6 +21,8 @@ fail_test_output_dir = join_paths(
 
 fail_test_html_data = []
 
+subdir('xml')
+
 test(
   'test-fail-scan',
   python_prg,
