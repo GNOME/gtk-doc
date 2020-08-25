@@ -51,6 +51,16 @@ coverage:
 	python3-coverage html --include="*/gtkdoc/*.py"; \
 	python3-coverage report --include="*/gtkdoc/*.py"
 
+EXTRA_DIST += \
+	gtkdocentities.ent.in \
+	helpers/gtkdoc_check_runner.py \
+	helpers/gtkdoc_fixxref_runner.py \
+	helpers/gtkdoc_mkdb_runner.py \
+	helpers/gtkdoc_mkhtml_runner.py \
+	helpers/gtkdoc_scan_runner.py \
+	helpers/gtkdoc_scangobj_runner.py \
+	helpers/meson.build \
+	meson.build
 
 .PHONY: snapshot
 

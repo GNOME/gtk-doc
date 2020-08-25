@@ -1,6 +1,7 @@
 EXTRA_DIST = \
 	$(autotoolsdata_DATA) \
-	gtk-doc.m4
+	gtk-doc.m4 \
+	meson.build
 
 CLEANFILES = gtk-doc.flat.make gtk-doc.no-xslt-flat.make
 

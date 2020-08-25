@@ -75,4 +75,6 @@ endif
 CLEANFILES += \
 	tester-sections.txt
 
+EXTRA_DIST += meson.build
+
 -include $(top_srcdir)/git.mk

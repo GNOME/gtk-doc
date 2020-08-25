@@ -83,4 +83,7 @@ CLEANFILES += \
 	tester-docs.xml \
 	tester-sections.txt
 
+EXTRA_DIST += meson.build
+EXTRA_DIST += xml/meson.build
+
 -include $(top_srcdir)/git.mk

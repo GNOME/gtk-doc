@@ -12,8 +12,12 @@ autotools-build:
   script:
     - ./autogen.sh --prefix=/usr
     - make
+    - make dist
   except:
     - tags
+  artifacts:
+    paths:
+      - gtk-doc-*.tar.*
 
 autotools-test:
   stage: test
@@ -33,11 +37,35 @@ autotools-test:
 meson-build:
   stage: build
   script:
+    - find . -name .git -prune -o -print | LC_ALL=C sort -u > git-filelist.txt
     - meson --prefix /usr _build .
     - ninja -C _build
     - meson test -C _build
   except:
     - tags
+  artifacts:
+    when: always
+    paths:
+      - _build/meson-logs/*
+      - git-filelist.txt
+
+meson-from-tarball:
+  stage: test
+  dependencies:
+    - autotools-build
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - tar -xvf gtk-doc-*.tar.*
+    - ( cd gtk-doc-*/; find . -name .git -prune -o -print ) | LC_ALL=C sort -u > tar-filelist.txt
+    - ( cd gtk-doc-*/; meson --prefix /usr ../_build . )
+    - ninja -C _build
+    - meson test -C _build
+  artifacts:
+    when: on_failure
+    paths:
+      - _build/meson-logs/*.log
+      - tar-filelist.txt
 
 # common
 

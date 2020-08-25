@@ -57,9 +57,13 @@ EXTRA_DIST = \
 	MAINTAINERS     \
 	$(gtkdocdata_DATA) \
 	$(pylibdata_DATA) \
+	autogen.sh \
 	gtk-doc.pc.in   \
 	gtk-doc.doap \
 	gtk-doc-fo.xsl     \
+	meson.build           \
+	meson_options.txt     \
+	requirements.txt      \
 	doc/README            \
 	doc/authors.txt       \
 	doc/gnome.txt         \
@@ -68,6 +72,12 @@ EXTRA_DIST = \
 	doc/style-guide.txt   \
 	examples/README       \
 	examples/Makefile.am  \
+	gtkdoc/meson.build \
+	gtkdoc_uninstalled.py.in \
+	style/COPYING \
+	style/meson.build \
+	tools/c10e-html.py \
+	tools/db2md.py \
 	tools/docpercentages.pl \
 	tools/gtk-doc.el \
 	COPYING-DOCS
