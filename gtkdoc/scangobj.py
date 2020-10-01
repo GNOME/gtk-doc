@@ -182,7 +182,8 @@ output_object_signals (FILE *fp, GType object_type)
     object_class_name = g_type_name (object_type);
 
     signals = g_signal_list_ids (object_type, &n_signals);
-    qsort (signals, n_signals, sizeof (guint), compare_signals);
+    if (n_signals > 0)
+      qsort (signals, n_signals, sizeof (guint), compare_signals);
 
     for (sig = 0; sig < n_signals; sig++) {
        output_object_signal (fp, object_class_name, signals[sig]);
@@ -1095,7 +1096,8 @@ output_object_args (FILE *fp, GType object_type)
   style_prop = FALSE;
 
   while (TRUE) {
-    qsort (properties, n_properties, sizeof (GParamSpec *), compare_param_specs);
+    if (n_properties > 0)
+      qsort (properties, n_properties, sizeof (GParamSpec *), compare_param_specs);
     for (arg = 0; arg < n_properties; arg++) {
       GParamSpec *spec = properties[arg];
       const gchar *nick, *blurb, *dot;
