@@ -57,6 +57,11 @@ ArgBlurbs = []          # Docstring of the Arg.
 ArgDefaults = []        # Default value of the Arg.
 ArgRanges = []                # The range of the Arg type
 
+ActionObjects = []
+ActionNames = []
+ActionParams = []
+ActionProperties = []
+
 # These global hashes store declaration info keyed on a symbol name.
 Declarations = {}
 DeclarationTypes = {}
@@ -207,7 +212,7 @@ DB_REFENTRY = string.Template('''${header}
 <refpurpose>${short_desc}</refpurpose>
 </refnamediv>
 ${stability}
-${functions_synop}${args_synop}${signals_synop}${object_anchors}${other_synop}${hierarchy}${prerequisites}${derived}${interfaces}${implementations}
+${functions_synop}${args_synop}${signals_synop}${actions_synop}${object_anchors}${other_synop}${hierarchy}${prerequisites}${derived}${interfaces}${implementations}
 ${include_output}
 <refsect1 id="${section_id}.description" role="desc">
 <title role="desc.title">Description</title>
@@ -217,7 +222,7 @@ ${extralinks}${long_desc}
 <title role="details.title">Functions</title>
 ${functions_details}
 </refsect1>
-${other_desc}${args_desc}${signals_desc}${see_also}
+${other_desc}${args_desc}${signals_desc}${actions_desc}${see_also}
 </refentry>
 ''')
 
@@ -285,6 +290,7 @@ def Run(options):
     ReadKnownSymbols(os.path.join(ROOT_DIR, MODULE + "-sections.txt"))
     ReadSignalsFile(os.path.join(ROOT_DIR, MODULE + ".signals"))
     ReadArgsFile(os.path.join(ROOT_DIR, MODULE + ".args"))
+    ReadActionsFile(os.path.join(ROOT_DIR, MODULE + ".actions"))
     obj_tree = ReadObjectHierarchy(os.path.join(ROOT_DIR, MODULE + ".hierarchy"))
     ReadInterfaces(os.path.join(ROOT_DIR, MODULE + ".interfaces"))
     ReadPrerequisites(os.path.join(ROOT_DIR, MODULE + ".prerequisites"))
@@ -513,6 +519,8 @@ def OutputDB(file, options):
     args_desc = ''
     child_args_desc = ''
     style_args_desc = ''
+    actions_synop = ''
+    actions_desc = ''
     hierarchy_str = ''
     hierarchy = []
     interfaces = ''
@@ -627,6 +635,30 @@ def OutputDB(file, options):
                     args_desc += make_refsect1_desc(style_args_desc, 'Style Property Details',
                                                     section_id, 'style-property-details')
 
+                actions_synop = re.sub(r'^\n*', '', actions_synop)
+                actions_synop = re.sub(r'\n+$', '\n', actions_synop)
+                if actions_synop != '':
+                    actions_synop = '''<refsect1 id="%s.actions" role="actions">
+<title role="actions.title">Actions</title>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="actions_none" colwidth="150px"/>
+<colspec colname="actions_name" colwidth="300px"/>
+<colspec colname="actions_param" colwidth="200px"/>
+<tbody>
+%s
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+''' % (section_id, actions_synop)
+                    actions_desc = trim_leading_and_trailing_nl(actions_desc)
+                    actions_desc = '''<refsect1 id="%s.action-details" role="action_details">
+<title role="action_details.title">Action Details</title>
+%s
+</refsect1>
+''' % (section_id, actions_desc)
+
                 hierarchy_str = AddTreeLineArt(hierarchy)
                 if hierarchy_str != '':
                     hierarchy_str = make_refsect1_desc('<screen>' + hierarchy_str + '\n</screen>',
@@ -657,6 +689,7 @@ def OutputDB(file, options):
                                             functions_details, other_desc,
                                             signals_synop, signals_desc,
                                             args_synop, args_desc,
+                                            actions_synop, actions_desc,
                                             hierarchy_str, interfaces,
                                             implementations,
                                             prerequisites, derived,
@@ -683,6 +716,8 @@ def OutputDB(file, options):
             args_desc = ''
             child_args_desc = ''
             style_args_desc = ''
+            actions_synop = ''
+            actions_desc = ''
             hierarchy_str = ''
             hierarchy = []
             interfaces = ''
@@ -721,6 +756,7 @@ def OutputDB(file, options):
                     sig_synop, sig_desc = GetSignals(symbol)
                     arg_synop, child_arg_synop, style_arg_synop, arg_desc, child_arg_desc, style_arg_desc = GetArgs(
                         symbol)
+                    action_synop, action_desc = GetActions(symbol)
                     ifaces = GetInterfaces(symbol)
                     impls = GetImplementations(symbol)
                     prereqs = GetPrerequisites(symbol)
@@ -735,6 +771,8 @@ def OutputDB(file, options):
                     args_desc += arg_desc
                     child_args_desc += child_arg_desc
                     style_args_desc += style_arg_desc
+                    actions_synop += action_synop
+                    actions_desc += action_desc
                     interfaces += ifaces
                     implementations += impls
                     prerequisites += prereqs
@@ -905,6 +943,7 @@ def OutputIndex(basename, apiindex):
             logging.info("trying symbol %s", symbol)
             m1 = re.search(r'(.*)::(.*)', symbol)
             m2 = re.search(r'(.*):(.*)', symbol)
+            m3 = re.search(r'(.*)\|(.*)', symbol)
             if m1:
                 oname = m1.group(1)
                 osym = m1.group(2)
@@ -925,6 +964,18 @@ def OutputIndex(basename, apiindex):
                     logging.info("    " + name)
                     if name == osym:
                         symbol_type = "object property"
+                        if oname in SymbolSection:
+                            symbol_section = SymbolSection[oname]
+                            symbol_section_id = SymbolSectionId[oname]
+                        break
+            elif m3:
+                oname = m3.group(1)
+                osym = m3.group(2)
+                logging.info("  trying action %s|%s in %d actions", oname, osym, len(ActionNames))
+                for name in ActionNames:
+                    logging.info("    " + name)
+                    if name == osym:
+                        symbol_type = "action"
                         if oname in SymbolSection:
                             symbol_section = SymbolSection[oname]
                             symbol_section_id = SymbolSectionId[oname]
@@ -1123,6 +1174,7 @@ def OutputDeclaration(symbol, declaration):
     """
 
     dtype = DeclarationTypes[symbol]
+    logging.info('Output  Symbol: "%s" "%s"', symbol, dtype)
     if dtype == 'MACRO':
         return OutputMacro(symbol, declaration)
     elif dtype == 'TYPEDEF':
@@ -2051,7 +2103,7 @@ def ParseStabilityLevel(stability, file, line, message):
     return str(stability)
 
 
-def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop, functions_details, other_desc, signals_synop, signals_desc, args_synop, args_desc, hierarchy, interfaces, implementations, prerequisites, derived, file_objects, default_stability):
+def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop, functions_details, other_desc, signals_synop, signals_desc, args_synop, args_desc, actions_synop, actions_desc, hierarchy, interfaces, implementations, prerequisites, derived, file_objects, default_stability):
     """Outputs the final DocBook file for one section.
 
     Args:
@@ -2068,6 +2120,8 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
         signal_desc (str): the DocBook for the Signal Description part
         args_synop (str): the DocBook for the Arg Synopsis part
         args_desc (str): the DocBook for the Arg Description part
+        actions_synop (str): the DocBook for the Action Synopsis part
+        actions_desc (str): the DocBook for the Action Description part
         hierarchy (str): the DocBook for the Object Hierarchy part
         interfaces (str): the DocBook for the Interfaces part
         implementations (str): the DocBook for the Known Implementations part
@@ -2187,6 +2241,8 @@ def OutputDBFile(file, title, section_id, includes, functions_synop, other_synop
     # "<refentry id="$section_id" revision="$mday $month $year">"
 
     OUTPUT.write(DB_REFENTRY.substitute({
+        'actions_desc': actions_desc,
+        'actions_synop': actions_synop,
         'args_desc': args_desc,
         'args_synop': args_synop,
         'derived': derived,
@@ -3601,6 +3657,72 @@ def GetArgs(gobject):
     return (synop, child_synop, style_synop, desc, child_desc, style_desc)
 
 
+def GetActions(gobject):
+    """Generate action docs.
+
+    Returns the synopsis and detailed description DocBook output
+    for the actions of a given GtkWidget subclass.
+
+    Args:
+        object (str): the GObject subclass, e.g. 'GtkButton'.
+
+    Returns:
+        str: action docs
+    """
+    synop = ''
+    desc = ''
+
+    for i in range(len(ActionObjects)):
+        if ActionObjects[i] == gobject:
+            logging.info("Found action: %s", ActionNames[i])
+            name = ActionNames[i]
+            params = ActionParams[i]
+            prop = ActionProperties[i]
+
+            # Remember: pipe, so we don't clash with signals.
+            symbol = '%s|%s' % (gobject, name)
+            sid = common.CreateValidSGMLID(symbol)
+
+            AllSymbols[symbol] = 1
+            blurb = ''
+            if symbol in SymbolDocs and not IsEmptyDoc(SymbolDocs[symbol]):
+                blurb = ConvertMarkDown(symbol, SymbolDocs[symbol])
+                logging.info(".. [%s][%s]", SymbolDocs[symbol], blurb)
+                AllDocumentedSymbols[symbol] = 1
+
+            else:
+                # FIXME: print a warning?
+                logging.info(".. no description")
+
+            pad1 = ''
+            if len(name) < 24:
+                pad1 = " " * (24 - len(name))
+
+            action_synop = "<row><entry></entry><entry role=\"action_name\"><link linkend=\"%s\">%s</link></entry><entry role=\"parameter_type\">%s</entry></row>\n" % (
+                sid, name, params)
+            action_desc = u"<refsect2 id=\"%s\" role=\"action\"><title>The <literal>“%s”</literal> action</title>\n" % (
+                sid, name)
+            action_desc += MakeIndexterms(symbol, sid)
+            action_desc += "\n"
+            action_desc += OutputSymbolExtraLinks(symbol)
+            if blurb != '':
+                action_desc += blurb
+            elif prop != '':
+                action_desc += "<para>The %s action sets the %s property.</para>\n" % (name, MakeHashXRef (gobject + ':' + prop, "type"))
+            action_desc += MakeDeprecationNote(symbol)
+
+            if params != '':
+                action_desc += "<para>Parameter type: %s</para>\n" % params
+
+            action_desc += OutputParamDescriptions("ACTION", symbol, None)
+            action_desc += OutputSymbolTraits(symbol)
+            action_desc += "</refsect2>\n"
+
+            synop += action_synop
+            desc += action_desc
+
+    return (synop, desc)
+
 def IgnorePath(path, source_dirs, ignore_files):
     for sdir in source_dirs:
         # Cut off base directory
@@ -3763,9 +3885,18 @@ def SegmentCommentBlock(lines, line_number=0, ifile=''):
         logging.info("scanning[%s] :%s", in_part, line.strip())
 
         # If we haven't found the symbol name yet, look for it.
+        # We need to allow for the following cases:
+        # function:
+        # Class::signal:
+        # Class:property:
+        # Class|action:
+        # Signal and property names can contain dashes, action names
+        # can contain period.
+        # In all cases, there might be annotations in parentheses
+        # following the symbol name.
         if not symbol:
             m1 = re.search(r'^\s*((SECTION|PROGRAM):\s*\S+)', line)
-            m2 = re.search(r'^\s*([\w:-]*\w)\s*:?\s*(\(.+?\)\s*)*$', line)
+            m2 = re.search(r'^\s*([\w:.|-]*\w)\s*:?\s*(\(.+?\)\s*)*$', line)
             if m1:
                 symbol = m1.group(1)
                 logging.info("docs found in source for : '%s'", symbol)
@@ -4661,6 +4792,70 @@ def ReadArgsFile(ifile):
                 ArgBlurbs.append(arg_blurb)
                 ArgDefaults.append(arg_default)
                 in_arg = False
+
+    INPUT.close()
+
+def ReadActionsFile(ifile):
+    """Reads information about object actions
+
+    It creates the arrays ActionObjects, ActionNames, ActionParams
+    and ActionProperties containing info on the actions.
+
+    Args:
+        ifile (str): the input filename.
+    """
+    in_action = False
+    action_object = None
+    action_name = None
+    action_param = None
+    action_prop = None
+
+    # Reset the args info.
+    ActionObjects[:] = []
+    ActionNames[:] = []
+    ActionParams[:] = []
+    ActionProperties[:] = []
+
+    if not os.path.isfile(ifile):
+        return
+
+    INPUT = open(ifile, 'r', encoding='utf-8')
+    line_number = 0
+    for line in INPUT:
+        line_number += 1
+        if not in_action:
+            if line.startswith('<ACTION>'):
+                in_action = True
+                action_object = ''
+                action_name = ''
+                action_param = ''
+                action_prop = ''
+
+        else:
+            m1 = re.search(r'^<NAME>(.*)</NAME>', line)
+            m2 = re.search(r'^<PARAMETER>(.*)</PARAMETER>', line)
+            m3 = re.search(r'^<PROPERTY>(.*)</PROPERTY>', line)
+            if m1:
+                action_name = m1.group(1)
+                m1_1 = re.search(r'^(.*):::(.*)$', action_name)
+                if m1_1:
+                    action_object = m1_1.group(1)
+                    action_name = m1_1.group(2).replace('_', '-')
+                    logging.info("Found action: %s", action_name)
+                else:
+                    common.LogWarning(ifile, line_number, "Invalid action name: " + action_name)
+
+            elif m2:
+                action_param = m2.group(1)
+            elif m3:
+                action_prop = m3.group(1)
+            elif re.search(r'^</ACTION>', line):
+                logging.info("Found end of action: %s::%s", action_object, action_name)
+                ActionObjects.append(action_object)
+                ActionNames.append(action_name)
+                ActionParams.append(action_param)
+                ActionProperties.append(action_prop)
+                in_action = False
 
     INPUT.close()
 

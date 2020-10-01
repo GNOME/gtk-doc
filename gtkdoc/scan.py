@@ -111,8 +111,8 @@ CLINE_MATCHER = [
         \s*\=""" % VAR_TYPE_MODIFIER, re.VERBOSE),
     # 17: G_DECLARE_*
     re.compile(
-        r""".*G_DECLARE_
-        (FINAL_TYPE|DERIVABLE_TYPE|INTERFACE) # 1: variant
+        r""".*(G_DECLARE_|GDK_DECLARE_)
+        (FINAL_TYPE|DERIVABLE_TYPE|INTERNAL_TYPE|INTERFACE) # 1: variant
         \s*\(""", re.VERBOSE),
     # 18-21: FUNCTIONS
     None,  # in InitScanner()
@@ -733,7 +733,7 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
 
             elif cm[17]:
                 in_declaration = 'g-declare'
-                symbol = 'G_DECLARE_' + cm[17].group(1)
+                symbol = cm[17].group(1) + cm[17].group(2)
                 decl = line[cm[17].end():]
 
             # FUNCTIONS

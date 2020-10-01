@@ -41,6 +41,7 @@
   <xsl:param name="html.ext" select="'.html'"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
+  <xsl:param name="abstract.notitle.enabled" select="1"/>
   <!-- don't generate all those link tags (very slow and hardly used)
        it does not show much effect as we have a user.head.content template
   <xsl:param name="html.extra.head.links" select="0" />
@@ -399,6 +400,7 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
     <xsl:variable name="sect_derived_interfaces" select="./refsect1[@role='derived_interfaces']"/>
     <xsl:variable name="sect_implementations" select="./refsect1[@role='implementations']"/>
     <xsl:variable name="sect_properties" select="./refsect1[@role='properties']"/>
+    <xsl:variable name="sect_actions" select="./refsect1[@role='actions']"/>
     <xsl:variable name="sect_child_properties" select="./refsect1[@role='child_properties']"/>
     <xsl:variable name="sect_style_properties" select="./refsect1[@role='style_properties']"/>
     <xsl:variable name="sect_signal_proto" select="./refsect1[@role='signal_proto']"/>
@@ -479,6 +481,12 @@ Get a newer version at http://docbook.sourceforge.net/projects/xsl/
                   <span id="nav_signals">&#160;&#160;<span class="dim">|</span>&#160;
                   <a href="#{$section_id}.signals" class="shortcut">
                     <xsl:value-of select="./refsect1[@role='signal_proto']/title"/>
+                  </a></span>
+                </xsl:if>
+                <xsl:if test="count($sect_actions) > 0">
+                  <span id="nav_properties">&#160;&#160;<span class="dim">|</span>&#160;
+                  <a href="#{$section_id}.actions" class="shortcut">
+                    <xsl:value-of select="./refsect1[@role='actions']/title"/>
                   </a></span>
                 </xsl:if>
               </xsl:when>
