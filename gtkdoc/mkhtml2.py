@@ -1862,7 +1862,7 @@ def run(options):
     module = options.args[0]
     document = options.args[1]
 
-    output_dir = options.output_dir or os.getcmd()
+    output_dir = options.output_dir or os.getcwd()
     if options.output_dir and not os.path.isdir(output_dir):
         os.mkdir(output_dir)
 
