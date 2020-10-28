@@ -22,7 +22,7 @@ bindir = join_paths(prefix, get_option('bindir'))
 libdir = join_paths(prefix, get_option('libdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 
-cmakedatadir = join_paths(datadir, 'cmake')
+cmakedatadir = join_paths(libdir, 'cmake')
 
 autoconfdatadir = join_paths(datadir, 'aclocal')
 pkgdir = join_paths(datadir, package_name)
