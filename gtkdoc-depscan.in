@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import gzip, os.path, re
 
+from functools import reduce
 from os import environ, popen, walk
 from optparse import OptionParser
 from sys import stderr
