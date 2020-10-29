@@ -40,6 +40,12 @@ COMMON_INCLUDES = """
 #include <stdio.h>
 #include <errno.h>
 #include <glib-object.h>
+
+#ifndef G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+# define G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+# define G_GNUC_END_IGNORE_DEPRECATIONS
+#endif
+
 """
 
 QUERY_CHILD_PROPS_PROTOTYPE = "extern GParamSpec** %s (gpointer class, guint *n_properties);"
@@ -67,6 +73,8 @@ get_object_types (void)
   gpointer g_object_class;
   gint i = 0;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 ${get_types}
   object_types[i] = G_TYPE_INVALID;
 
@@ -85,6 +93,8 @@ ${get_types}
   }
 
   g_type_class_unref (g_object_class);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return object_types;
 }
