@@ -215,9 +215,9 @@ class Symbol(object):
         if since: since = Symbol.VersionInfo(since)
 
         if name.count(' '):
-            print >>stderr, (
+            print(
                 'WARNING: Malformed symbol name: "%s" (type=%s) in %s.' % (
-                name, type, book.name))
+                name, type, book.name), file=stderr)
 
         return Symbol(book, name, type, link, deprecated, since)
 
@@ -323,7 +323,7 @@ if '__main__' == __name__:
             return name, Book(name, options.dirs, version)
 
         except IOError as e:
-            print >>stderr, 'WARNING: %s.' % e
+            print('WARNING: %s.' % e, file=stderr)
 
     def scan_source_file(name):
         contents = None
@@ -332,7 +332,7 @@ if '__main__' == __name__:
             contents = __comment_regex.sub('', file(name).read())
 
         except IOError as e:
-            print >>stderr, e
+            print(e, file=stderr)
 
         if contents:
             trace('scanning: %s', name)
