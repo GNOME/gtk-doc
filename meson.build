@@ -1,5 +1,5 @@
 project('gtk-doc', 'c',
-  version: '1.33.1',
+  version: '1.33.2',
   license: 'GPL2+',
   meson_version: '>= 0.50.0', # needed for https://mesonbuild.com/Python-module.html#path
 )
