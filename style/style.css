@@ -455,3 +455,23 @@ acronym,abbr
   }
 }
 
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #aaa;
+    }
+    body,
+    #top,
+    hr,
+    .synopsis {
+        background: #000 !important;
+    }
+    #top {
+        border-bottom-color: #333 !important;
+    }
+    img {
+        filter: invert(.8);
+    }
+    .synopsis {
+        border-color: #555;
+    }
+}
