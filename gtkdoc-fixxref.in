@@ -41,14 +41,14 @@ if __name__ == '__main__':
     parser.add_argument('--module-dir', default='',
                         help='The directory which contains the generated HTML.')
     parser.add_argument('--html-dir', default='',
-                        help='The directory where gtk-doc generated documentation is'
+                        help='The directory where gtk-doc generated documentation is '
                        'installed.')
     parser.add_argument('--extra-dir', default=[], action='append',
-                        help='Directories to recursively scan for indices (*.devhelp2)'
+                        help='Directories to recursively scan for indices (*.devhelp2) '
                         'in addition to HTML_DIR')
     parser.add_argument('--src-lang', default='c',
-                        help='Programing language used for syntax highlighting. The'
-                        'available languages depend on the source'
+                        help='Programing language used for syntax highlighting. '
+                        'The available languages depend on the source '
                         'highlighter you use.')
 
     options = parser.parse_args()
