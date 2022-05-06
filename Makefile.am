@@ -54,7 +54,6 @@ pkgconfigdir = $(datadir)/pkgconfig
 pkgconfig_DATA = gtk-doc.pc
 
 EXTRA_DIST = \
-	MAINTAINERS     \
 	$(gtkdocdata_DATA) \
 	$(pylibdata_DATA) \
 	autogen.sh \
