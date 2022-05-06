@@ -48,8 +48,6 @@ git push origin GTK_DOC_${NEW_VER_TAG}
 
 # release
 scp gtk-doc-${NEW_VER}.tar.xz ${GNOME_USER}@master.gnome.org:
-scp NEWS ${GNOME_USER}@master.gnome.org:gtk-doc-${NEW_VER}.news
-scp ChangeLog-${NEW_VER} ${GNOME_USER}@master.gnome.org:gtk-doc-${NEW_VER}.changes
 ssh ${GNOME_USER}@master.gnome.org "ftpadmin install gtk-doc-${NEW_VER}.tar.xz"
 ```
 
