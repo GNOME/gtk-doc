@@ -1,26 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
          xmlns:foaf="http://xmlns.com/foaf/0.1/"
          xmlns:gnome="http://api.gnome.org/doap-extensions#"
          xmlns="http://usefulinc.com/ns/doap#">
-
   <name xml:lang="en">gtk-doc</name>
+  <shortdesc xml:lang="en">Documentation generator for C code</shortdesc>
+  <description xml:lang="en">
+GTK-Doc is used to document C code. It is typically used to document the public
+API of libraries, such as GLib-based libraries, but it can also be used to
+document application code.
+  </description>
 
-  <shortdesc xml:lang="en">Documentation generator for C code.</shortdesc>
-  <description>GTK-Doc is used to document C code.
-It is typically used to document the public
-API of libraries, such as the GTK+ and GNOME libraries, but it can also be
-used to document application code.
-</description>
-
-  <homepage rdf:resource="http://www.gtk.org/gtk-doc/" />
-  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-doc-devel-list" />
-  <download-page rdf:resource="http://download.gnome.org/sources/gtk-doc/" />
-  <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gtk-doc/issues/" />
-
+  <homepage rdf:resource="https://gitlab.gnome.org/GNOME/gtk-doc" />
+  <download-page rdf:resource="https://download.gnome.org/sources/gtk-doc/" />
+  <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gtk-doc/-/issues" />
   <category rdf:resource="http://api.gnome.org/doap-extensions#core" />
-  <programming-language>C</programming-language>
-  <programming-language>Shell</programming-language>
+
+  <programming-language>Python</programming-language>
 
   <maintainer>
     <foaf:Person>
