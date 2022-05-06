@@ -32,10 +32,6 @@ export GNOME_USER=...
   configure.ac meson.build
 
 - update NEWS
-  # ./bugzilla.py general ${NEW_VER} gtk-doc >RELNOTES.txt
-  git log --summary --format=short GTK_DOC_${OLD_VER_TAG}.. >ChangeLog-${NEW_VER}
-  grep "Author:" ChangeLog-${NEW_VER} | sed 's/Author:\(.*\)\ <.*>/\1/' | sort | uniq >RELNOTES.txt
-  and then copy to NEWS
 
 ```shell
 # commit
