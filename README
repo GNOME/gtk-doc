@@ -1,27 +1,25 @@
-
-GTK+ DocBook Documentation Generator
-====================================
+GTK-Doc - Documentation generator for C code
+============================================
 
 GTK-Doc is used to document C code. It is typically used to document the public
-API of libraries, such as the GTK+ and GNOME libraries, but it can also be
-used to document application code.
+API of libraries, such as GLib-based libraries, but it can also be used to
+document application code.
 
 Note that GTK-Doc wasn't originally intended to be a general-purpose
 documentation tool, so it can be a bit awkward to setup and use.
-For a more polished general-purpose documentation tool you may want to look
-at Doxygen (http://www.doxygen.org/). However GTK-Doc has some special code
-to document the signals and properties of GTK+ widgets and GObject classes
-which other tools may not have.
+For a more general-purpose documentation tool you may want to look at
+Doxygen (http://www.doxygen.org/). However GTK-Doc has some special code to
+document the signals and properties of GTK widgets and GObject classes which
+other tools may not have.
 
-From your source code comments GTK-Doc generates a Docbook XML document, which
+From your source code comments GTK-Doc generates a DocBook XML document, which
 is then transformed into HTML and/or PDF.
 The generated HTML documentation can be browsed in an ordinary web browser or
 by using the special Devhelp API browser
 (see https://wiki.gnome.org/Apps/Devhelp).
 
-
 Requirements
-============
+------------
 
 Python 3.x
     http:///www.python.org
@@ -50,20 +48,17 @@ the dblatex tool.
 Most distributions now have packages for all of these, so I would strongly
 advise that you grab those.
 
-See the documentation in the help/manual directory for more information. You can
-read it e.g. with yelp file://$PWD/help/manual/C/gtk-doc-manual.xml
-
+See the documentation in the help/manual/ directory for more information. You
+can read it for example with yelp: `yelp help/manual/C/index.docbook`.
 
 Building
-========
+--------
 
 We are supporting two build systems to build gtk-doc for some transitions time.
 
+### Build using the Autotools
 
-Build using auto*
------------------
-
-In order to build with a the classic auto* system use these commands:
+In order to build with the classic Autotools system use these commands:
 
 Build from git:
 ./autogen.sh; make
@@ -86,11 +81,9 @@ make distcheck
 or
 make dist
 
+### Build using Meson
 
-Build using meson
------------------
-
-Support for meson is new and still experimental.
+Support for Meson is new.
 
 Build it from git:
 meson build .
