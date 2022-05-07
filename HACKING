@@ -1,3 +1,14 @@
+Old website
+===========
+
+See: https://gitlab.gnome.org/Infrastructure/gtk-web (in the git history)
+
+The `gtk-doc/` directory has been removed after a big update to
+[gtk.org](https://gtk.org/)
+
+But it can contain useful information nevertheless, or a different wording at
+presenting GTK-Doc.
+
 Testing
 =======
 
@@ -16,62 +27,21 @@ fail and show the delta.
 Releasing
 =========
 
-http://live.gnome.org/MaintainersCorner/Releasing
+General: https://wiki.gnome.org/MaintainersCorner/Releasing
 
-'''shell
-export OLD_VER=1.31
-export NEW_VER=1.32
-export OLD_VER_TAG=$(echo ${OLD_VER} | tr '.' '_')
-export NEW_VER_TAG=$(echo ${NEW_VER} | tr '.' '_')
-export GNOME_USER=...
+Specific to GTK-Doc
+-------------------
+
+- Version numbers and release dates are also present in:
+  `help/manual/C/index.docbook`
+
+Some commands:
 ```
-
-- bump release date in:
-  help/manual/C/index.docbook
-- bump version in (x.y.1 -> x.y+1)
-  configure.ac meson.build
-
-- update NEWS
-
-```shell
-# commit
-git add configure.ac meson.build NEWS help/manual/C/index.docbook
-git commit -m"release: update news and date in manual"
-git push
-
-# dist
 TAR_OPTIONS="--owner=root --group=root" make distcheck
-
-# tag
-git tag -a GTK_DOC_${NEW_VER_TAG} -m"release: ${NEW_VER}"
-git push origin GTK_DOC_${NEW_VER_TAG}
-
-# release
-scp gtk-doc-${NEW_VER}.tar.xz ${GNOME_USER}@master.gnome.org:
-ssh ${GNOME_USER}@master.gnome.org "ftpadmin install gtk-doc-${NEW_VER}.tar.xz"
 ```
 
-- bump versions in:
-  configure.ac meson.build help/manual/C/index.docbook NEWS
-
-``'shell
-# commit
-git add configure.ac meson.build NEWS help/manual/C/index.docbook
-git commit -m"release: bump versions and back to development"
-git push
-```
-
-- update web-pages (gtk-web/gtk-doc)
-  git add gtk-doc/news.php
-  git commit -m"gtk-doc: new release (${NEW_VER})"
-  git push
-
-- if we want a icon on the newsfeed, we should copy a icon like on
-  http://ftp.acc.umu.se/pub/GNOME/sources/rhythmbox/rhythmbox.png
-  e.g. /usr/share/icons/hicolor/48x48/apps/devhelp.png
-
-Optimizing & Meassuring
-=======================
+Optimizing & Measuring
+======================
 
 cd tests/gobject/docs/html
 time xsltproc --nonet --xinclude --stringparam gtkdoc.bookname "tester" --stringparam gtkdoc.version "1.12" ../../../../gtk-doc.xsl ../tester-docs.xml
