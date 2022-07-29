@@ -41,7 +41,7 @@ python3_required_modules = ['pygments']
 foreach p : python3_required_modules
   # Source: https://docs.python.org/3/library/importlib.html#checking-if-a-module-can-be-imported
   script = 'import importlib.util; import sys; exit(1) if importlib.util.find_spec(\''+ p +'\') is None else exit(0)'
-  if run_command(python3, '-c', script).returncode() != 0
+  if run_command(python3, '-c', script, check: false).returncode() != 0
     error('Required Python3 module \'' + p + '\' not found')
   endif
 endforeach
