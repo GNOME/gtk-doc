@@ -43,9 +43,9 @@ RevMap = {}
 Mapped = {}
 
 
-def log(options, *msg):
+def log(options, message):
     if options.verbose:
-        print(*msg)
+        print(message)
 
 
 def run(options):
@@ -57,12 +57,12 @@ def run(options):
         for dir in os.environ["GNOME2_PATH"].split(':'):
             dir = os.path.join(dir, "share/gtk-doc/html")
             if os.path.isdir(dir):
-                log(options, "Prepending GNOME2_PATH directory:", dir)
+                log(options, "Prepending GNOME2_PATH directory: {}".format(dir))
                 other_dirs = [dir] + other_dirs
 
     glib_dir = common.GetModuleDocDir('glib-2.0')
     if glib_dir:
-        log(options, "Prepending GLib directory", glib_dir)
+        log(options, "Prepending GLib directory {}".format(glib_dir))
         other_dirs = [glib_dir] + other_dirs
 
     # Check all other dirs, but skip already scanned dirs ord subdirs of those
@@ -78,14 +78,14 @@ def run(options):
 
 
 def ScanDirectory(scan_dir, options):
-    log(options, "Scanning documentation directory %s", scan_dir)
+    log(options, "Scanning documentation directory {}".format(scan_dir))
 
     if scan_dir == options.html_dir:
         log(options, "Excluding self")
         return
 
     if not os.path.isdir(scan_dir):
-        logging.info('Cannot open dir "%s"', scan_dir)
+        logging.info('Cannot open dir "{}}"'.format(scan_dir))
         return
 
     subdirs = []
@@ -165,13 +165,13 @@ def AddMap(dir, onlinedir, options):
         dir = dir[len(options.dest_dir) - 1:]
 
     if onlinedir:
-        log(options, "On-line location of %s." % onlinedir)
+        log(options, "On-line location of {}.".format(onlinedir))
         OnlineMap[package] = onlinedir
         RevMap[onlinedir] = package
     else:
-        log(options, "No On-line location for %s found" % package)
+        log(options, "No On-line location for {} found".format(package))
 
-    log(options, "Local location of $package: " + dir)
+    log(options, "Local location of {}: {}".format(package, dir))
     LocalMap[package] = dir
     RevMap[dir] = package
 
@@ -186,7 +186,7 @@ def RelativizeLocalMap(dirname, options):
         if dir.startswith(prefix):
             dir = os.path.join("..", dir[len(prefix):])
             LocalMap[package] = dir
-            log(options, "Relativizing local location of $package to " + dir)
+            log(options, "Relativizing local location of {} to {}".format(package, dir))
 
 
 def RebaseReferences(dirname, options):
@@ -196,7 +196,7 @@ def RebaseReferences(dirname, options):
 
 
 def RebaseFile(filename, options):
-    log(options, "Fixing file: " + filename)
+    log(options, "Fixing file: {}".format(filename))
     regex = re.compile(r'''(<a(?:\s+\w+=(?:"[^"]*"|'[^']*'))*\s+href=")([^"]*)(")''',
                        flags=re.MULTILINE)
 
@@ -237,7 +237,7 @@ def RebaseLink(href, options):
                 dir = LocalMap[package]
             href = os.path.join(dir, file)
         else:
-            log(options, "Can't determine package for '%s'" % href)
+            log(options, "Can't determine package for '{}'".format(href))
 
         if dir != origdir:
             if origdir in Mapped:
