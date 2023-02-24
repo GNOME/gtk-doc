@@ -96,6 +96,21 @@ annotation_elementtype (const GList *list)
 }
 
 /**
+ * annotation_complex_elementtype:
+ * @table: (element-type utf8 GHashTable<utf8,utf8>): table that matches strings
+ *  to a #GHashTable of key and value strings.
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */
+gboolean
+annotation_complex_elementtype (const GHashTable *table)
+{
+  return TRUE;
+}
+
+/**
  * annotation_elementtype_transfer:
  * @list: (element-type utf8) (transfer full): list of #GObject instances to search
  *
