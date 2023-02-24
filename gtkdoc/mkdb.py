@@ -2672,7 +2672,7 @@ def ExpandAnnotation(symbol, param_desc):
         param_desc (str): the text to expand.
 
     Returns:
-        str: the remaining param_desc
+        str: the remaining param_desc with XML characters converted
         str: the formatted annotations
     """
     param_annotations = ''
@@ -2686,6 +2686,8 @@ def ExpandAnnotation(symbol, param_desc):
         annotations = re.split(r'\)\s*\(', m.group(1))
         logging.info("annotations for %s: '%s'\n", symbol, m.group(1))
         for annotation in annotations:
+            # The element-type annotation for instance allows to use GHashTable<utf8,utf8> as annotation
+            annotation = CreateValidSGML(annotation)
             # need to search for the longest key-match in %AnnotationDefinition
             match_length = 0
             match_annotation = ''
@@ -2716,7 +2718,7 @@ def ExpandAnnotation(symbol, param_desc):
     if param_annotations != '':
         param_annotations = "<emphasis role=\"annotation\">%s</emphasis>" % param_annotations
 
-    return (param_desc, param_annotations)
+    return (ConvertXMLChars(symbol, param_desc), param_annotations)
 
 
 def ExpandAbbreviations(symbol, text):
@@ -4018,8 +4020,6 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
 
     # Convert special characters
     segments["body"] = ConvertXMLChars(symbol, segments["body"])
-    for (param_name, param_desc) in params.items():
-        params[param_name] = ConvertXMLChars(symbol, param_desc)
 
     # Handle Section docs
     m = re.search(r'SECTION:\s*(.*)', symbol)
@@ -4029,6 +4029,7 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
 
         logging.info("SECTION DOCS found in source for : '%s'", real_symbol)
         for param_name, param_desc in params.items():
+            param_desc = ConvertXMLChars(symbol, param_desc)
             logging.info("   '" + param_name + "'")
             param_name = param_name.lower()
             if param_name in ['image', 'include', 'section_id', 'see_also', 'short_description', 'stability', 'title']:
@@ -4048,6 +4049,7 @@ def ParseCommentBlockSegments(symbol, segments, params, line_number=0, ifile='')
 
         logging.info("PROGRAM DOCS found in source for '%s'", real_symbol)
         for param_name, param_desc in params.items():
+            param_desc = ConvertXMLChars(symbol, param_desc)
             logging.info("PROGRAM key %s: '%s'", real_symbol, param_name)
             param_name = param_name.lower()
             if param_name in ['returns', 'section_id', 'see_also', 'short_description', 'synopsis']:
