@@ -2686,6 +2686,9 @@ def ExpandAnnotation(symbol, param_desc):
         annotations = re.split(r'\)\s*\(', m.group(1))
         logging.info("annotations for %s: '%s'\n", symbol, m.group(1))
         for annotation in annotations:
+            # The element-type annotation for instance allows to use GHashTable<utf8,utf8> as annotation
+            annotation = re.sub(r'<', r'&lt;', annotation)
+            annotation = re.sub(r'>', r'&gt;', annotation)
             # need to search for the longest key-match in %AnnotationDefinition
             match_length = 0
             match_annotation = ''

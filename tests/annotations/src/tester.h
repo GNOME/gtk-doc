@@ -21,6 +21,7 @@ gchar * annotation_nullable (const gchar *uri, const gchar *label);
 gchar * annotation_not_nullable (const gchar *uri, const gchar *label);
 
 gboolean annotation_elementtype (const GList *list);
+gboolean annotation_complex_elementtype (const GHashTable *table);
 gboolean annotation_elementtype_transfer (const GList *list);
 GList *annotation_elementtype_returns (void);
 
