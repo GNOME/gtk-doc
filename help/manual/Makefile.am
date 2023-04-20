@@ -8,7 +8,7 @@ HELP_FILES = \
     index.docbook \
     fdl-appendix.xml
 
-HELP_LINGUAS = bn_IN cs de el en_GB es fr gl gu pt_BR sl sv ta te zh_CN
+HELP_LINGUAS = bn_IN cs de el en_GB es eu fr gl gu hu pt_BR sl sv ta te zh_CN
 
 CLEANFILES = $(_HELP_LC_FILES) $(_HELP_LC_STAMPS) $(_HELP_MOFILES)
 
