@@ -196,7 +196,7 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	if test "x$(HTML_IMAGES)" != "x"; then \
 	  for img in $(HTML_IMAGES); do \
 	    part=`dirname $$img`; \
-	    echo $$mkpdf_options | grep >/dev/null "\-\-imgdir=$$part "; \
+	    echo $$mkpdf_options | grep >/dev/null "\--imgdir=$$part "; \
 	    if test $$? != 0; then \
 	      mkpdf_options="$$mkpdf_options --imgdir=$$part"; \
 	    fi; \
@@ -213,7 +213,7 @@ pdf-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 clean-local:
 	@rm -f *~ *.bak ts gtkdoc-*.log
 	@rm -rf .libs
-	@if echo $(SCAN_OPTIONS) | grep -q "\-\-rebuild-types" ; then \
+	@if echo $(SCAN_OPTIONS) | grep -q "\--rebuild-types" ; then \
 	  rm -f $(DOC_MODULE).types; \
 	fi
 	$(MAKE) distclean-local
