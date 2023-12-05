@@ -23,21 +23,12 @@ document application code.
   <maintainer>
     <foaf:Person>
       <foaf:name>Sébastien Wilmet</foaf:name>
-      <foaf:mbox rdf:resource="mailto:swilmet@gnome.org" />
+      <foaf:mbox rdf:resource="mailto:swilmet@mailfence.com" />
       <gnome:userid>swilmet</gnome:userid>
     </foaf:Person>
   </maintainer>
 
-  <!-- Person who knows the best the gtk-doc internals. -->
-  <maintainer>
-    <foaf:Person>
-      <foaf:name>Stefan Sauer</foaf:name>
-      <foaf:mbox rdf:resource="mailto:ensonic@users.sf.net" />
-      <gnome:userid>stefkost</gnome:userid>
-    </foaf:Person>
-  </maintainer>
-
-  <!-- Unlikely to continue contributing to gtk-doc. -->
+  <!-- Former maintainers: -->
   <maintainer>
     <foaf:Person>
       <foaf:name>Matthias Clasen</foaf:name>
@@ -45,4 +36,15 @@ document application code.
       <gnome:userid>matthiasc</gnome:userid>
     </foaf:Person>
   </maintainer>
+
+  <!-- Former maintainers with no longer valid gnome:userid  -->
+  <!--
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Stefan Sauer</foaf:name>
+      <foaf:mbox rdf:resource="mailto:ensonic@users.sf.net" />
+      <gnome:userid>stefkost</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+  -->
 </Project>
