@@ -39,7 +39,7 @@ set - $args
 
 # assume working directory if srcdir is not set
 test "$srcdir" || srcdir=.
-test "$docdir" || docdir="$srcdir"
+docdir="$srcdir"
 
 # detect configure script
 no_configure_found=0
