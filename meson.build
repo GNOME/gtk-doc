@@ -25,7 +25,6 @@ autoconfdatadir = join_paths(datadir, 'aclocal')
 pkgdir = join_paths(datadir, meson.project_name())
 pkgdatadir = join_paths(pkgdir, 'data')
 pkgpythondir = join_paths(pkgdir, 'python')
-pkgconfigdir = join_paths(datadir, 'pkgconfig')
 
 # Dependencies
 glib_req = '>= 2.38.0'
@@ -160,7 +159,7 @@ configure_file(
   output: 'gtk-doc.pc',
   configuration: gtkdoc_pc,
   install: true,
-  install_dir: pkgconfigdir,
+  install_dir: get_option('datadir') / 'pkgconfig',
 )
 
 subdir('help')
