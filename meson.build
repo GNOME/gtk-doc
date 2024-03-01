@@ -17,10 +17,9 @@ prefix = get_option('prefix')
 
 bindir = join_paths(prefix, get_option('bindir'))
 libdir = join_paths(prefix, get_option('libdir'))
-datadir = join_paths(prefix, get_option('datadir'))
 
-pkgdatadir = datadir / meson.project_name() / 'data'
-pkgpythondir = datadir / meson.project_name() / 'python'
+pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name() / 'data'
+pkgpythondir = get_option('prefix') / get_option('datadir') / meson.project_name() / 'python'
 
 # Dependencies
 glib_req = '>= 2.38.0'
@@ -176,7 +175,7 @@ summary = [
   '             prefix: @0@'.format(prefix),
   '             bindir: @0@'.format(bindir),
   '             libdir: @0@'.format(libdir),
-  '            datadir: @0@'.format(datadir),
+  '            datadir: @0@'.format(get_option('prefix') / get_option('datadir')),
   '',
   'Configuration:',
   '  Autotools support: @0@'.format(get_option('autotools_support')),
