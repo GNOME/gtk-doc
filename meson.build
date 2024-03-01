@@ -19,9 +19,8 @@ bindir = join_paths(prefix, get_option('bindir'))
 libdir = join_paths(prefix, get_option('libdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 
-pkgdir = join_paths(datadir, meson.project_name())
-pkgdatadir = join_paths(pkgdir, 'data')
-pkgpythondir = join_paths(pkgdir, 'python')
+pkgdatadir = datadir / meson.project_name() / 'data'
+pkgpythondir = datadir / meson.project_name() / 'python'
 
 # Dependencies
 glib_req = '>= 2.38.0'
