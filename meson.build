@@ -13,10 +13,8 @@ python3 = python.find_installation('python3')
 srcdir = meson.current_source_dir()
 builddir = meson.current_build_dir()
 
-prefix = get_option('prefix')
-
-bindir = join_paths(prefix, get_option('bindir'))
-libdir = join_paths(prefix, get_option('libdir'))
+bindir = get_option('prefix') / get_option('bindir')
+libdir = get_option('prefix') / get_option('libdir')
 
 pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name() / 'data'
 pkgpythondir = get_option('prefix') / get_option('datadir') / meson.project_name() / 'python'
@@ -142,7 +140,7 @@ if get_option('cmake_support') == true
 endif
 
 gtkdoc_pc = configuration_data()
-gtkdoc_pc.set('prefix', prefix)
+gtkdoc_pc.set('prefix', get_option('prefix'))
 gtkdoc_pc.set('exec_prefix', '${prefix}')
 gtkdoc_pc.set('datadir', join_paths('${prefix}', get_option('datadir')))
 
@@ -172,7 +170,7 @@ summary = [
   'gtk-doc @0@'.format(meson.project_version()),
   '',
   'Directories:',
-  '             prefix: @0@'.format(prefix),
+  '             prefix: @0@'.format(get_option('prefix')),
   '             bindir: @0@'.format(bindir),
   '             libdir: @0@'.format(libdir),
   '            datadir: @0@'.format(get_option('prefix') / get_option('datadir')),
