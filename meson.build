@@ -13,8 +13,6 @@ python3 = python.find_installation('python3')
 srcdir = meson.current_source_dir()
 builddir = meson.current_build_dir()
 
-libdir = get_option('prefix') / get_option('libdir')
-
 pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name() / 'data'
 pkgpythondir = get_option('prefix') / get_option('datadir') / meson.project_name() / 'python'
 
@@ -171,7 +169,7 @@ summary = [
   'Directories:',
   '             prefix: @0@'.format(get_option('prefix')),
   '             bindir: @0@'.format(get_option('prefix') / get_option('bindir')),
-  '             libdir: @0@'.format(libdir),
+  '             libdir: @0@'.format(get_option('prefix') / get_option('libdir')),
   '            datadir: @0@'.format(get_option('prefix') / get_option('datadir')),
   '',
   'Configuration:',
