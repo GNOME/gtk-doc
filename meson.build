@@ -9,8 +9,6 @@ python = import('python') # Meson new Python module https://mesonbuild.com/Pytho
 
 python3 = python.find_installation('python3')
 
-package_name = meson.project_name()
-
 # Paths
 srcdir = meson.current_source_dir()
 builddir = meson.current_build_dir()
@@ -24,7 +22,7 @@ datadir = join_paths(prefix, get_option('datadir'))
 cmakedatadir = join_paths(libdir, 'cmake')
 
 autoconfdatadir = join_paths(datadir, 'aclocal')
-pkgdir = join_paths(datadir, package_name)
+pkgdir = join_paths(datadir, meson.project_name())
 pkgdatadir = join_paths(pkgdir, 'data')
 pkgpythondir = join_paths(pkgdir, 'python')
 pkgconfigdir = join_paths(datadir, 'pkgconfig')
@@ -97,11 +95,11 @@ binary_in.set('prefix', get_option('prefix'))
 binary_in.set('datarootdir', join_paths('${prefix}', get_option('datadir')))
 binary_in.set('datadir', '${datarootdir}')
 
-binary_in.set('PACKAGE', package_name)
+binary_in.set('PACKAGE', meson.project_name())
 binary_in.set('PACKAGE_BUGREPORT', 'https://gitlab.gnome.org/GNOME/gtk-doc/issues')
-binary_in.set('PACKAGE_NAME', package_name)
-binary_in.set('PACKAGE_STRING', package_name)
-binary_in.set('PACKAGE_TARNAME', package_name)
+binary_in.set('PACKAGE_NAME', meson.project_name())
+binary_in.set('PACKAGE_STRING', meson.project_name())
+binary_in.set('PACKAGE_TARNAME', meson.project_name())
 binary_in.set('PACKAGE_URL', 'https://gitlab.gnome.org/GNOME/gtk-doc')
 binary_in.set('PACKAGE_VERSION', meson.project_version())
 binary_in.set('VERSION', meson.project_version())
@@ -154,7 +152,7 @@ gtkdoc_pc.set('prefix', prefix)
 gtkdoc_pc.set('exec_prefix', '${prefix}')
 gtkdoc_pc.set('datadir', join_paths('${prefix}', get_option('datadir')))
 
-gtkdoc_pc.set('PACKAGE', package_name)
+gtkdoc_pc.set('PACKAGE', meson.project_name())
 gtkdoc_pc.set('VERSION', meson.project_version())
 
 configure_file(

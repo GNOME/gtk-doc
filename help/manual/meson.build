@@ -4,6 +4,6 @@ gtkdoc_help_sources = [
 ]
 
 gnome.yelp(
-  package_name + '-manual',
+  meson.project_name() + '-manual',
   sources: gtkdoc_help_sources,
 )
