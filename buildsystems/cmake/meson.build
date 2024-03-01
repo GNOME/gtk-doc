@@ -6,10 +6,7 @@ configure_file(
   output: 'GtkDocConfigVersion.cmake',
   configuration: cmake_in,
   install: true,
-  install_dir: join_paths(
-    cmakedatadir,
-    'GtkDoc',
-  )
+  install_dir: get_option('libdir') / 'cmake' / 'GtkDoc',
 )
 
 gtkdoc_cmake_data = [
@@ -19,8 +16,5 @@ gtkdoc_cmake_data = [
 
 install_data(
   gtkdoc_cmake_data,
-  install_dir: join_paths(
-    cmakedatadir,
-    'GtkDoc',
-  )
+  install_dir: get_option('libdir') / 'cmake' / 'GtkDoc',
 )
