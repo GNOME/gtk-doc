@@ -13,7 +13,6 @@ python3 = python.find_installation('python3')
 srcdir = meson.current_source_dir()
 builddir = meson.current_build_dir()
 
-bindir = get_option('prefix') / get_option('bindir')
 libdir = get_option('prefix') / get_option('libdir')
 
 pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name() / 'data'
@@ -102,7 +101,7 @@ foreach binary: gtkdoc_binaires
     output: binary,
     configuration: binary_in,
     install: true,
-    install_dir: bindir,
+    install_dir: get_option('bindir'),
   )
   meson.override_find_program(binary, prog)
 endforeach
@@ -171,7 +170,7 @@ summary = [
   '',
   'Directories:',
   '             prefix: @0@'.format(get_option('prefix')),
-  '             bindir: @0@'.format(bindir),
+  '             bindir: @0@'.format(get_option('prefix') / get_option('bindir')),
   '             libdir: @0@'.format(libdir),
   '            datadir: @0@'.format(get_option('prefix') / get_option('datadir')),
   '',

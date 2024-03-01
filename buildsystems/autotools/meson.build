@@ -3,7 +3,7 @@ configure_file(
   output: 'gtkdocize',
   configuration: binary_in,
   install: true,
-  install_dir: bindir,
+  install_dir: get_option('bindir'),
 )
 
 foreach mode : ['', 'no-xslt']
