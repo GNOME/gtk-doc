@@ -9,7 +9,6 @@ python = import('python') # Meson new Python module https://mesonbuild.com/Pytho
 
 python3 = python.find_installation('python3')
 
-version = meson.project_version()
 package_name = meson.project_name()
 
 # Paths
@@ -104,8 +103,8 @@ binary_in.set('PACKAGE_NAME', package_name)
 binary_in.set('PACKAGE_STRING', package_name)
 binary_in.set('PACKAGE_TARNAME', package_name)
 binary_in.set('PACKAGE_URL', 'https://gitlab.gnome.org/GNOME/gtk-doc')
-binary_in.set('PACKAGE_VERSION', version)
-binary_in.set('VERSION', version)
+binary_in.set('PACKAGE_VERSION', meson.project_version())
+binary_in.set('VERSION', meson.project_version())
 
 foreach binary: gtkdoc_binaires
   prog = configure_file(
@@ -156,7 +155,7 @@ gtkdoc_pc.set('exec_prefix', '${prefix}')
 gtkdoc_pc.set('datadir', join_paths('${prefix}', get_option('datadir')))
 
 gtkdoc_pc.set('PACKAGE', package_name)
-gtkdoc_pc.set('VERSION', version)
+gtkdoc_pc.set('VERSION', meson.project_version())
 
 configure_file(
   input: 'gtk-doc.pc.in',
@@ -178,7 +177,7 @@ dummy_dep = declare_dependency()
 summary = [
   '',
   '------',
-  'gtk-doc @0@'.format(version),
+  'gtk-doc @0@'.format(meson.project_version()),
   '',
   'Directories:',
   '             prefix: @0@'.format(prefix),

@@ -8,7 +8,7 @@ config_py.set('FOP', fop_prg_path)
 config_py.set('PKG_CONFIG', pkgconfig_prg_path)
 config_py.set('XSLTPROC', xsltproc_prg_path)
 
-config_py.set('VERSION', version)
+config_py.set('VERSION', meson.project_version())
 config_py.set('EXEEXT', '')
 
 configure_file(

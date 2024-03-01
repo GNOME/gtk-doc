@@ -1,5 +1,5 @@
 cmake_in = configuration_data()
-cmake_in.set('PACKAGE_VERSION', version)
+cmake_in.set('PACKAGE_VERSION', meson.project_version())
 
 configure_file(
   input: 'GtkDocConfigVersion.cmake.in',
