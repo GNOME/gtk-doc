@@ -41,7 +41,7 @@ custom_target(
   input: 'gtk-doc.m4',
   output: 'gtk-doc.m4',
   install: true,
-  install_dir: autoconfdatadir,
+  install_dir: get_option('datadir') / 'aclocal',
   command: [
     'cp',
     '-f',

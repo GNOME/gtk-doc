@@ -21,7 +21,6 @@ datadir = join_paths(prefix, get_option('datadir'))
 
 cmakedatadir = join_paths(libdir, 'cmake')
 
-autoconfdatadir = join_paths(datadir, 'aclocal')
 pkgdir = join_paths(datadir, meson.project_name())
 pkgdatadir = join_paths(pkgdir, 'data')
 pkgpythondir = join_paths(pkgdir, 'python')
