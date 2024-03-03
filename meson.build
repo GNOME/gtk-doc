@@ -40,10 +40,7 @@ if fop_prg.found()
 endif
 
 # Options
-generate_pdf_output = true
-if not dblatex_prg.found() and not fop_prg.found()
-  generate_pdf_output = false
-endif
+generate_pdf_output = dblatex_prg.found() or fop_prg.found()
 
 # Code
 subdir('gtkdoc')
