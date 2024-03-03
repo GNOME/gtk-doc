@@ -16,10 +16,7 @@ configure_file(
   output: 'config_data.py',
   configuration: config_py,
   install: true,
-  install_dir: join_paths(
-    pkgpythondir,
-    'gtkdoc',
-  ),
+  install_dir: pkgpythondir / 'gtkdoc',
 )
 
 gtkdoc_sources = [
@@ -41,5 +38,5 @@ gtkdoc_sources = [
 ]
 
 install_data(gtkdoc_sources,
-  install_dir: join_paths(pkgpythondir, 'gtkdoc')
+  install_dir: pkgpythondir / 'gtkdoc',
 )
