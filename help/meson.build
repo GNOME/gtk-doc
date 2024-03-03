@@ -1,3 +1,3 @@
-if get_option('yelp_manual') == true
+if get_option('yelp_manual')
   subdir('manual')
 endif
