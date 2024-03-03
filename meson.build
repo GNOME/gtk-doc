@@ -1,7 +1,7 @@
 project('gtk-doc', 'c',
   version: '1.33.2',
   license: 'GPL2+',
-  meson_version: '>= 0.53',
+  meson_version: '>= 0.55',
 )
 
 gnome = import('gnome')
@@ -25,18 +25,18 @@ xsltproc_prg = find_program('xsltproc', required: true)
 dblatex_prg = find_program('dblatex', required: false)
 fop_prg = find_program('fop', required: false)
 
-python_prg_path = join_paths(python_prg.path())
-pkgconfig_prg_path = join_paths(pkgconfig_prg.path())
-xsltproc_prg_path = join_paths(xsltproc_prg.path())
+python_prg_path = python_prg.full_path()
+pkgconfig_prg_path = pkgconfig_prg.full_path()
+xsltproc_prg_path = xsltproc_prg.full_path()
 
 dblatex_prg_path = ''
 if dblatex_prg.found()
-  dblatex_prg_path = join_paths(dblatex_prg.path())
+  dblatex_prg_path = dblatex_prg.full_path()
 endif
 
 fop_prg_path = ''
 if fop_prg.found()
-  fop_prg_path = join_paths(fop_prg.path())
+  fop_prg_path = fop_prg.full_path()
 endif
 
 # Options
