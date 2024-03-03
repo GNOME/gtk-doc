@@ -116,11 +116,11 @@ install_data(
 
 subdir('style')
 
-if get_option('autotools_support') == true
+if get_option('autotools_support')
   subdir('buildsystems/autotools')
 endif
 
-if get_option('cmake_support') == true
+if get_option('cmake_support')
   subdir('buildsystems/cmake')
 endif
 
