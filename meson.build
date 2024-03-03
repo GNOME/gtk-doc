@@ -1,7 +1,7 @@
 project('gtk-doc', 'c',
   version: '1.33.2',
   license: 'GPL2+',
-  meson_version: '>= 0.51',
+  meson_version: '>= 0.53',
 )
 
 gnome = import('gnome')
@@ -149,24 +149,13 @@ endif
 # To be used as: dependency('gtk-doc', fallback : ['gtk-doc', 'dummy_dep'])
 dummy_dep = declare_dependency()
 
-summary = [
-  '',
-  '------',
-  'gtk-doc @0@'.format(meson.project_version()),
-  '',
-  'Directories:',
-  '             prefix: @0@'.format(get_option('prefix')),
-  '             bindir: @0@'.format(get_option('prefix') / get_option('bindir')),
-  '             libdir: @0@'.format(get_option('prefix') / get_option('libdir')),
-  '            datadir: @0@'.format(get_option('prefix') / get_option('datadir')),
-  '',
-  'Configuration:',
-  '  Autotools support: @0@'.format(get_option('autotools_support')),
-  '      CMake support: @0@'.format(get_option('cmake_support')),
-  '         PDF output: @0@'.format(generate_pdf_output),
-  '        User manual: @0@'.format(get_option('yelp_manual')),
-  '         Test suite: @0@'.format(get_option('tests')),
-  '------',
-]
+summary('prefix', get_option('prefix'), section: 'Directories')
+summary('bindir', get_option('prefix') / get_option('bindir'), section: 'Directories')
+summary('libdir', get_option('prefix') / get_option('libdir'), section: 'Directories')
+summary('datadir', get_option('prefix') / get_option('datadir'), section: 'Directories')
 
-message('\n'.join(summary))
+summary('Autotools support', get_option('autotools_support'), section: 'Configuration')
+summary('CMake support', get_option('cmake_support'), section: 'Configuration')
+summary('PDF output', generate_pdf_output, section: 'Configuration')
+summary('User manual', get_option('yelp_manual'), section: 'Configuration')
+summary('Test suite', get_option('tests'), section: 'Configuration')
