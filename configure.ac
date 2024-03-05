@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.63])
 
-m4_define(gtk_doc_version, 1.34.0)
+m4_define(gtk_doc_version, 1.34.1)
 
 AC_INIT([gtk-doc],[gtk_doc_version],[https://gitlab.gnome.org/GNOME/gtk-doc/issues],[gtk-doc])
 
