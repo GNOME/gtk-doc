@@ -123,7 +123,7 @@ AnnotationsUsed = {}
 # the regexp that parses the annotation is in ScanSourceFile()
 AnnotationDefinition = {
     # the GObjectIntrospection annotations are defined at:
-    # https://live.gnome.org/GObjectIntrospection/Annotations
+    # https://gi.readthedocs.io/en/latest/annotations/giannotations.html
     'allow-none': "NULL is OK, both for passing and for returning.",
     'nullable': "NULL may be passed as the value in, out, in-out; or as a return value.",
     'not nullable': "NULL must not be passed as the value in, out, in-out; or as a return value.",
