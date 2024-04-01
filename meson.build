@@ -17,7 +17,7 @@ pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
 pkgpythondir = get_option('prefix') / get_option('datadir') / meson.project_name() / 'python'
 
 # Dependencies
-glib_req = '>= 2.38'
+glib_req = '>= 2.68'
 
 python_prg = python3
 pkgconfig_prg = find_program('pkg-config', required: true)
