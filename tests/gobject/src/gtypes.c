@@ -59,7 +59,7 @@ GType gtkdoc_boxed_get_type (void) {
 /* boxed plain old data: class internals */
 
 static gpointer gtkdoc_boxed_plain_old_data_copy (gpointer boxed) {
-  return g_memdup(boxed, sizeof(GtkdocBoxedPlainOldData));
+  return g_memdup2(boxed, sizeof(GtkdocBoxedPlainOldData));
 }
 
 static void gtkdoc_boxed_plain_old_data_free (gpointer boxed) {
