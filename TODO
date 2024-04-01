@@ -1,0 +1,483 @@
+The TODO list for the gtk-doc project is at Bugzilla,
+the bugtracking system of the GNOME project.
+
+Visit
+ http://bugzilla.gnome.org/buglist.cgi?product=gtk-doc&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
+to see what is already requested, or where you can help. :-)
+
+To put an other request on the TODO list, visit
+ http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-doc
+
+Also have a look at
+ http://live.gnome.org/DocumentationProject/GtkDocFuture
+and join discussion about future features.
+
+
+Developers can also add items here :)
+
+= Less files to manually edit =
+The goal is that we configure gtk-doc in configure.ac and Makefile.am and
+document the code in the sources. Right no we also have to edit a bunch of extra
+files:
+ * $(DOC_MODULE).types
+ * $(DOC_MODULE)-docs.xml
+ * $(DOC_MODULE)-sections.txt
+
+== .types ==
+
+* using SCAN_OPTION="--rebuild-types" can be used to avoid maintaining the types
+  file
+* we need to check if this works well for all kind of _types (e.g. boxed)
+  https://bugzilla.gnome.org/show_bug.cgi?id=605025
+
+== -section.txt ==
+https://bugzilla.gnome.org/show_bug.cgi?id=646094
+
+* using SCAN_OPTION="--rebuild-sections" can be used to use the audogenerated
+  sections file
+* when scanning a header file, everything of the header and the respective .c
+  file will be put to one section
+* symbols can be hidden using __GTK_DOC_IGNORE__
+
+* we need comment markup to override the section
+  e.g.: " * InSection: xxxx"
+  this needs gtkdoc-mkdb::ScanSourceFile to understand a new tag, which
+  otherwise would appear as verbatim in the sources
+* if one has "@InSection: xxxx" in a section comment we could patch the
+  main.xml file and insert then xi:include line (would possibly rely on a
+  special comment-pair there, we might also need to rewrite these
+  auto-generated xi:includes every time as the placements could have been
+  changed, or we have a xi:include for each chapter, that we regenerate).
+* we need a way to specify subsections (Standard, Private)
+  this could be done in the SECTION comment
+  e.g.: "@HideSymbols: <list-of-symbols-to-hide>
+  * we could allow to have a SUBSECTION:xxx comment block too
+    but then we list all the symbols here to override the auto-section placement
+* if we want to avoid the "InSection in symbol docs we could also have
+  e.g.: "@ExtraSymbols: <list-of-symbols-to-include>
+* documented symbols that are in a file without section comment and do not
+  appear in "@ExtraSymbols", "@HideSymbols" would go to unused.txt
+  * shall we deprecated the unused sub-sections?
+* can we have both at the same time (for migration)
+  * yes, read section-file first and add/override from inline comments
+
+
+= More abbreviations =
+* expand urls (needds more work, see gtkdoc-mkdb : ExpandAbbreviations)
+
+
+= Running =
+gtk-doc is using a makefile with several targets to get from sources to docs. It
+uses makefile variables for configuration.
+It might be easier to have a gtkdoc tool that can run the other gtkdoc tools
+in the right order (ev. by importing them as modules). This could handle a few
+things nicer that the makefiles don't do well. This would also make it easy to
+run it manually or integrate into other build systems.
+
+
+= Intermediate files =
+Can we change the intermediate files into e.g. json or yaml so that we can just
+load it from python?
+
+Can we drop the decl-list.txt file (or rename to make sure this is what a
+generated section.txt would look like)
+
+
+= Issues =
+* gtkdoc-fixxref makefile targets use $HTML_DIR
+  * HTML_DIR: The directory where gtk-doc generated documentation is installed
+    it comes from gtk-doc.m4 (--with-html-dir) but has no default
+  * automake exports $htmldir which is by default:
+    ${prefix}/share/doc/${PACKAGE_TARNAME}
+  * the Makefile uses $(DESTDIR)$(TARGET_DIR)
+    where TARGET_DIR = $(HTML_DIR)/$(DOC_MODULE)
+    http://www.gnu.org/software/libtool/manual/automake/DESTDIR.html
+* gtkdoc does not know about module versions
+  * this is causing troubles when multiple library versions are installed
+    (gtk+-{2,3}, gstreamer-{0.8,0.10,1.0}
+  * right now gtk-doc is xreffing against any <module>/*.devhelp2 found
+  * just using the one with a higher number won't work
+
+
+= Extensibility =
+We'd like to extend gtk-doc to understand conventions/features of gobject libs.
+Ideally libs register their extension hooks, so that other libs that use these
+libs can benefit from the extensions too.
+
+== custom get_types collector ==
+- the default method takes the types from a type file
+- gstreamer plugin docs take a list of types from the gst plugin registry
+
+== custom properties ==
+- gtk has style and child properties
+
+== extra gobject property flags ==
+- gstreamer has 'controllable' properties
+
+= Output =
+* http://sagehill.net/docbookxsl/index.html
+* multipage-html
+  * would be good to be able to have page titles as a concatenation of document
+    name and page name (gtk+:GtkWIdget)
+* formats
+  http://bugzilla.gnome.org/show_bug.cgi?id=466535 : pdf
+  http://bugzilla.gnome.org/show_bug.cgi?id=467488 : man
+  we need more configure options in gtk-doc.m4:
+  --(enable|disable)-gtk-doc-(html|pdf|man)
+  - html : enabled by default
+* validation
+    xmllint --noout --xinclude --postvalid tester-docs.xml
+    xmllint --noout --postvalid tester-docs.fo --dtdvalid file://$HOME/download/fo.dtd
+    - fo.dtd : http://www.renderx.com/Tests/validator/fo.zip
+
+= Warnings =
+Bugzilla has some requests for extra warnings. We should support a common
+commandline option(s) in all tools to enable/disable the warnings. The makefiles
+should pass the flags from an env-var (GTKDOC_OPTIONS). The env-var should be
+used after the regular flags, so that the env-var can override hardcoded
+settings (in Makefile.am).
+
+Lets take this warning for the example:
+  "Symbol name not found at the start of the comment block."
+
+Version 1: (template "warn-xxx!, warn-yyy!")
+--warn-missing-symbol-at-comment-start
+--no-warn-missing-symbol-at-comment-start
+
+Version 2: (template "warn:s@")
+-Wmissing-symbol-at-comment-start
+-Wno-missing-symbol-at-comment-start
+-warn missing-symbol-at-comment-start
+-warn no-missing-symbol-at-comment-start
+
+more warnings:
+  - 'deprecated' deprecating 'features'
+  - 'dummy-docs' check if symbol docs are very short and repeat mainly words
+    from the symbol.
+  - possible xrefs (e.g. adding a # or () would make it a successful xref)
+
+
+= GIR =
+== scanning ==
+* ideas
+  * use gir files
+    1) replace gtkdoc-scan/gtkdoc-scangobject by gtkdoc-gir and output the classical files or
+       patch gtkdoc-scan/gtkdoc-scangobject to output gir files
+    2) patch gtkdoc-mkdb to read stuff from gir instead of classical files
+  * if gir-files would have the comments too (they are getting this now):
+    * we could even drop scanning the sources
+    * IDEs could use the gir-files to show doc-tooltips for symbols
+  * we might need yet another makefile flavour to use gir files
+* perl and xml
+  * http://www.xml.com/pub/a/2001/04/18/perlxmlqstart1.html
+
+== binding docs ==
+* simmillar workflow to gettext
+* add gtkdoc-mk??? to generate binding doc templates
+  * have c-comments there as comments
+  * when updating templates, mark sections that have changed as fuzzy
+* add options to gtkdoc-mkdb to build docbook from those templates
+* questions
+  * could we use the tmpl file mechanism?
+  * directory structure?
+    * we need to list the languages like ALL_LINGUAS for translations
+    * we need to create subdirs for binding docs, ideally we use one for 'C' as well
+* devhelp
+  * devhelp files need a language attribute in the book-tag
+    language={C,C++,JavaScript,Perl,Python,...}
+  * devhelp could show a selector for the language
+  * need to get existing python/~mm docs to use it, gtk-doc could output
+    language=C for own docs
+
+=== installation ===
+* need to install each book with a prefix
+* would be good to have a language attribute in book tag to allow filter by language
+* look at /usr/share/gtk-doc/html/pygobject/index.html
+
+
+= external processors =
+We need parametric, user definable macros.
+|[ ... ]| - programlistings
+|macro(arg1,arg2,...)[ ... ]| - call macro
+  - pass args as parameters (on the commandline)
+  - pass some gtk-doc vars in environment
+    (gtk-doc version, module, srcdir, buildir)
+  - content of [] on stdin or as a file
+  - get output on stdout or file
+  - and replace the macro with it
+The changes could be made in gtkdoc-mkdb::ExpandAbbreviations()
+== example macros ==
+|highlight(c)[...]| - highlight source code for a specific language (c)
+  - what will this output? preformatted html to be xincluded?
+  - we could have macros for each format, the docbook xml macro would leave
+    enough traces in the html so that a html macro can continue
+|dot(svg)[...]| - format dot graph and include result as mediaobject (in svg format)
+|ditta(svg)[...]| - parse ascii art and include result as mediaobject (in svg format)
+  - we need to generate a filename for the image or use anoter parameter
+
+== where to define macros ==
+* system wide and with the package, <prefix>/share/gtk-doc/macros, $(srcdir)
+* prefix for custom macros?
+* we could require stdin for input and stdout for output, the wrapper for the
+  actual tool can ensure the convention
+
+
+= styling =
+=== process html ===
+if we highlight to html we get colors, we need to check what tags we should process though:
+<pre class="programlisting"> is used for all code boxes.
+<div class="informalexample"><pre class="programlisting"> is used for examples.
+problems:
+* in html we don't know the language anymore
+  * add another div
+* with source-highlight, constants and types are not markedup.
+  for types we might need to build an own lang file dynamically and include
+  /usr/share/source-highlight/c.lang
+=== |[ ... ]| does not allow setting the language ===
+* check for vi/emacs/jedit modelines
+  jedit: http://www.jedit.org/users-guide/buffer-local.html
+  vim: http://vim.wikia.com/wiki/Modeline_magic
+  emacs: http://www.delorie.com/gnu/docs/emacs/emacs_486.html
+* allow <!-- language="C" --> comments after |[
+* we need to catch those when processing the docbook and expanding the |[
+* require new macro syntax
+
+== show inherited api ==
+could we write small html files for each object for methods, signals and properties and then use iframes to combine those at runtime like in javadoc?
+could we do that using javascript and some other magic?
+
+
+= Markup =
+== tags ==
+* to document the api-life cycle we have: since, deprecated and stability:
+* other things we might want to specify:
+  * multi-threading safety: mt-safe, use-with-lock <lock>
+
+== protected scope ==
+* we can have /* < protected > */ in classes
+* we can have <SUBSECTION Protected> in -section.txt
+* ideally we have Scope: {Public, Protected, Private} supported in doc comments
+* there is a bug for gir, https://bugzilla.gnome.org/show_bug.cgi?id=594125
+
+== wildcards in symbol names ==
+Sometimes one defines a set of function and macros with very similar purpose, e.g.
+READ_INT8, READ_INT16, READ_INT32. It would be great to allow documenting a symbol
+READ_INT* instead of 3 docs which are copy'n'pasted anyway. In the output we will have
+all matching declarations in one source listing. Multiple wildcards are okay.
+
+
+= documentation best practises #518427 =
+* we'd like offer a more complete skelleton
+  * structure
+  * docbook markup (part/chapter structure)
+* structure
+  Suggested structure for api-docs.
+  Idea is to have more content that api reference. It would be good to have a
+  gnome-platform document in devhelp, so that we could xref that instead of
+  explaining 100 times how to use pkg-config.
+
+  * examples
+    * gobject in devhelp
+      * concepts / api / tools / tutorial / related tools
+    * gtk in devhelp
+      * overview / api / migation / tools
+    * qt reference docs in qt assistant
+      * classes / overview / tutorial&examples
+  * recommendation
+    * front-page
+      * table with details (http://www.docbook.org/tdg/en/html/bookinfo.html)
+        (problem: what enclosing tag)
+        Logo, Module Version
+        Copyright and Legalnotice
+        Links
+        * homepage, mailing lists, irc channel
+        * repository, source releases, bugtracker
+      * TOC
+    * introduction - what is is about
+    * concepts - explain basic ideas and terminology
+    * development - how to build and run, env-vars, different platforms
+    * api - classic api docs
+    * tutorial & examples - integrated to keep it up-to-date and cross referenced
+    * migration - how to for api changes, deprecations
+    * (related) tools - tools part of the package or recommended for development
+    * indexes - api-index, depretations, new api since xxx
+
+proposed structure in docbook xml:
+<book>
+  <bookinfo>
+  </bookinfo>
+  <preface><title>Introduction</title>
+    ...
+  </preface>
+  <part label="I"><title>xxx Overview</title>
+    <xi:include href="building.xml" />
+    ...
+  </part>
+  <reference label="II"><title>xxx Core Reference</title>
+    <xi:include href="xml/gtkmain.xml" />
+    ...
+  </part>
+  <reference label="III"><title>xxx Object Reference</title>
+    <chapter><title>Object Hierarchy</title>
+      <xi:include href="xml/tree_index.sgml" />
+    </chapter>
+    <chapter>...
+  </part>
+  <index>...</index>
+</book>
+
+some things to check:
+* gtk,glib: can we make a <part> for the glosary and index's (according to docbook, yes)
+  should we use <appendix>? its like a chapter.
+* gobject: uses a <preface> for introductions
+* gobject: uses <reference> as a parent for the xi:includeed <refentry> docs
+
+
+= extra link for symbols =
+need options for configure:
+--enable-gtk-doc-codesearch-links
+--enable-gtk-doc-liveedit-links
+== viewvc,cgit,... ==
+- link to some online service for the code
+- problem: most don't have local anchors for the symbols
+- where to set the uri (in the document, like for online url)?
+- what about a template URL containing a %s for the "path/file" or a special macro
+  http://svn.gnome.org/viewvc/gtk-doc/trunk/tests/gobject/src/gobject.c?view=markup
+  http://buzztard.svn.sourceforge.net/viewvc/buzztard/trunk/buzztard/src/lib/core/core.c?view=markup
+  - unfortunately we can't link to symbols (only lines)
+  - linking to files is difficult as in gtkdoc we have modules
+
+== codesearch ==
+- google (code) link : http://www.google.com/codesearch?q=g_object_unref
+== live editing ==
+The idea is to have an 'edit' link in an online version of the docs (build from
+head development version) per doc-entry (symbols and section).
+The link goes to a cgi and that gets following parameters: docmodule,symbol.
+E.g. http://library.gnome.org/devel/references/edit?docmodule=glib&symbol=g_new
+The cgi would need a hashmap to get from docmodule to the way to check it out
+(ideally it has a recent checkout and only updates it).
+problems:
+- signal that this has been edited already?
+- support for xi:included examples
+- updating the checkout could be slow
+
+
+= fix missing since docs =
+cd gstreamer/gstreamer/docs/gst
+gtkdoc-mkdb --module=gstreamer --source-dir=../../gst --outputsymbolswithoutsince
+cd gstreamer/gstreamer/src
+git bisect start
+git bisect good
+git bisect bad RELEASE-0_10_0
+git bisect run script.sh
+
+script:
+#!/bin/sh
+make ctags
+grep "gst_caps_is_always_compatible" tags
+
+
+= performance =
+- timestamp each step
+  make check >make.log
+- try CFLAGS=-O0 for compiling the scanner, no need to optimize it
+  CFLAGS="-O0" make check >make.log
+  safes max 0.5 sec.
+- xslt
+  http://docbook2x.sourceforge.net/latest/doc/performance.html
+  - play with xsltproc --profile --verbose --timing
+    cd tests/gobject/docs/html
+    time /usr/bin/xsltproc 2>xslt.log --profile --verbose --timing --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --xinclude --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ../tester-docs.xml
+    - l10n.language is slow
+      bug: https://sourceforge.net/tracker/index.php?func=detail&aid=2918673&group_id=21935&atid=373750
+      see: http://www.mail-archive.com/docbook-apps@lists.oasis-open.org/msg05412.html
+      - override l10n.language
+        glib/gobject
+        real        user        sys
+        2m15.221s   1m58.740s   0m1.456s
+        >
+        1m55.480s   1m44.296s   0m2.125s
+      - override many template related to gentext
+        real        user        sys
+        0m43.327s   0m38.594s	0m4.724s
+        >
+        real        user        sys
+        0m33.282s   0m29.266s	0m4.012s
+      - removing the gentext calls for nav-bar alt tags does not help
+
+  - we could do the xinlcude processing once and use it for both html and pdf
+    time /usr/bin/xsltproc 2>../xslt4.log --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --xinclude --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ../tester-docs.xml
+    real        user       sys
+    0m4.846s    0m4.434s   0m0.147s
+    0m4.842s    0m4.386s   0m0.145s
+
+
+    time xmllint --nonet --xinclude ../tester-docs.xml >./tester-docs-all.xml
+    real        user       sys
+    0m0.596s    0m0.546s   0m0.023s
+
+    time /usr/bin/xsltproc 2>../xslt5.log --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ./tester-docs-all.xml
+    real        user       sys
+    0m4.167s    0m3.834s   0m0.106s
+    0m4.248s    0m3.851s   0m0.114s
+
+
+    time xmllint --nonet --c14n --xinclude ../tester-docs.xml >./tester-docs-all2.xml
+
+    real        user       sys
+    0m0.700s    0m0.636s   0m0.034s
+
+    time /usr/bin/xsltproc 2>../xslt6.log --path /home/ensonic/projects/gnome/gtk-doc/gtk-doc/tests/gobject/docs --nonet --stringparam gtkdoc.bookname tester --stringparam gtkdoc.version 1.14 /home/ensonic/projects/gnome/gtk-doc/gtk-doc/gtk-doc.xsl ./tester-docs-all2.xml
+
+    real        user       sys
+    0m3.344s    0m3.026s   0m0.109s
+    0m3.372s    0m3.037s   0m0.115s
+
+
+    l ../tester-docs.xml ./tester-docs-all*.xml
+
+  - we could also try to compact the installed xslt
+    xmllint --nonet --c14n --xinclude gtk-doc.xsl | sed -ne '/<!--/ { :c; /-->/! { N; b c; }; /-->/s/<!--.*-->//g }; /^  *$/!p;' | sed '/^$/d' >gtk-doc.pre.xsl
+    - unfortunately there is no way to ask xsltproc to pre-transform an xslt, that could
+      - strip comments
+      - process xsl:import and xsl:include
+  - extra xsltproc options:
+    --novalid: saves ~ 0.12 sec
+    
+  - strip DOCTYPES on xincludes
+    - there is a performance bottleneck in libxml, where it parses DTD for each fragment
+    - we're using the dtd to
+      - validate fragments
+      - inject package name/version etc.
+    - 1) we could provide a flags to gtkdoc-mkdb to not put any doctype on 
+         generated file and manually result entities in generated files (and
+         expand_content_files)
+      - to get a list of entities:
+        - we could parse entities from the main doc-file header
+          - tricky as with xml/gtkdocentities.ent, they are in a extra file
+        - we could pass entities as args for gtkdoc-mkdb
+        - if the flag is used, we should warn if entities are in the header
+    - 2) if the doctype on the main doc, does not cotnain entities, skip adding
+         the doctype to generated output
+    - 3) if the doctype on the main doc contains entities, only add the doctype
+         if the generated content contains entities ([&%][_a-zA-Z]*;)
+    - a quick check on the gnome modules showed:
+      - quite a few don't use entities
+      - those that use version.xml
+        - seem to mostly use it in the main doc
+        - but a few use it for man pages
+          find . -name "*.xml" -exec grep -Hn "&version;" {} \; | grep -v "\-docs.xml"
+
+find . -name "*.xml" -exec egrep --color -Hn '&[_a-zA-Z]*;' {} \; | egrep -v '&(amp|lt|gt|quot|apos|nbsp);' | egrep --color '&[_a-zA-Z]*;'
+find . -name "*.xml" -exec egrep -o '&[_a-zA-Z]*;' {} \; | sort | uniq -c | sort -n
+
+= python =
+- consider swithcing to this markdown parser
+  https://pythonhosted.org/Markdown/index.html
+- switch intermediate files to json/yaml
+  - we need to pick something, that we can easily output from plain c (produced by gtkdoc-scangobj)
+  - decl-list.txt and .types would need to stay
+  - maybe maintain one file per sourcefile (in a subdir) to eventually be able to
+    do incremental builds
+- refactor Read{Args,Declarations,Signals}File to output into a single dictionary each:
+  Signal{Names,Objects,Returns,...}[key] -> Signals[key].{names,objects,returns,...}
