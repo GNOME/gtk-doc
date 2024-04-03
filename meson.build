@@ -1,9 +1,10 @@
 project('gtk-doc', 'c',
   version: '1.34.1',
   license: 'GPL2+',
-  meson_version: '>= 0.55',
+  meson_version: '>= 0.64',
 )
 
+fs = import('fs')
 gnome = import('gnome')
 python = import('python')
 
