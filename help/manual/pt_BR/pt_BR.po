@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: gtk-doc help\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk-"
 "doc&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2020-10-01 20:17+0000\n"
-"PO-Revision-Date: 2021-02-07 08:57-0300\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2024-04-01 18:02+0000\n"
+"PO-Revision-Date: 2024-05-18 14:25-0300\n"
+"Last-Translator: Leônidas Araújo <leorusvellt@hotmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.38.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Project-Style: gnome\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
@@ -26,7 +26,8 @@ msgctxt "_"
 msgid "translator-credits"
 msgstr ""
 "Marcelo Rodrigues <marcelopires@mmsantos.com.br>, 2010\n"
-"Rafael Fontenelle <rafaelff@gnome.org>, 2013-2021"
+"Rafael Fontenelle <rafaelff@gnome.org>, 2013-2021\n"
+"Leônidas Araújo <leorusvellt@hotmail.com>, 2022-2023"
 
 #. (itstool) path: bookinfo/title
 #: C/index.docbook:12
@@ -126,9 +127,6 @@ msgstr ""
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:83
-#| msgid ""
-#| "<revnumber>1.32.1</revnumber> <date>15 Aug 2019</date> "
-#| "<authorinitials>ss</authorinitials> <revremark>dev version</revremark>"
 msgid ""
 "<revnumber>1.33.0</revnumber> <date>1 Oct 2020</date> <authorinitials>mc</"
 "authorinitials> <revremark>gtk4 version</revremark>"
@@ -526,8 +524,8 @@ msgstr ""
 #. (itstool) path: listitem/para
 #: C/index.docbook:327
 msgid ""
-"Files in <filename class=\"directory\">xml/</filename> and <filename class="
-"\"directory\">html/</filename> directories are always overwritten. One "
+"Files in <filename class=\"directory\">xml/</filename> and <filename "
+"class=\"directory\">html/</filename> directories are always overwritten. One "
 "should never edit them directly."
 msgstr ""
 "Arquivos nos diretórios <filename class=\"directory\">xml/</filename> e "
@@ -577,22 +575,22 @@ msgstr ""
 #. (itstool) path: sect2/para
 #: C/index.docbook:360
 msgid ""
-"<guilabel>xsltproc</guilabel> - the xslt processor from libxslt <ulink url="
-"\"http://xmlsoft.org/XSLT/\" type=\"http\">xmlsoft.org/XSLT/</ulink>"
+"<guilabel>xsltproc</guilabel> - the xslt processor from libxslt <ulink "
+"url=\"http://xmlsoft.org/XSLT/\" type=\"http\">xmlsoft.org/XSLT/</ulink>"
 msgstr ""
-"<guilabel>xsltproc</guilabel> – o processador de xslt do libxslt <ulink url="
-"\"http://xmlsoft.org/XSLT/\" type=\"http\">xmlsoft.org/XSLT/</ulink>"
+"<guilabel>xsltproc</guilabel> – o processador de xslt do libxslt <ulink "
+"url=\"http://xmlsoft.org/XSLT/\" type=\"http\">xmlsoft.org/XSLT/</ulink>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:364
 msgid ""
-"<guilabel>docbook-xsl</guilabel> - the docbook xsl stylesheets <ulink url="
-"\"http://sourceforge.net/projects/docbook/files/docbook-xsl/\" type=\"http"
-"\">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>"
+"<guilabel>docbook-xsl</guilabel> - the docbook xsl stylesheets <ulink "
+"url=\"http://sourceforge.net/projects/docbook/files/docbook-xsl/\" "
+"type=\"http\">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>"
 msgstr ""
 "<guilabel>docbook-xsl</guilabel> – as folhas de estilo xsl de docbook <ulink "
-"url=\"http://sourceforge.net/projects/docbook/files/docbook-xsl/\" type="
-"\"http\">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>"
+"url=\"http://sourceforge.net/projects/docbook/files/docbook-xsl/\" "
+"type=\"http\">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:368
@@ -671,12 +669,13 @@ msgstr ""
 #: C/index.docbook:425
 msgid ""
 "Preparation of the directory structure and creating required configuration "
-"files for your GTK-Doc documentation (see <link linkend=\"settingup_docfiles"
-"\"> Setting up a skeleton documentation</link>)."
+"files for your GTK-Doc documentation (see <link "
+"linkend=\"settingup_docfiles\"> Setting up a skeleton documentation</link>)."
 msgstr ""
 "Preparação da estrutura de diretórios e criação dos arquivos de configuração "
-"necessários para sua documentação do GTK-Doc (consulte <link linkend="
-"\"settingup_docfiles\">Preparando o esqueleto de uma documentação</link>)."
+"necessários para sua documentação do GTK-Doc (consulte <link "
+"linkend=\"settingup_docfiles\">Preparando o esqueleto de uma documentação</"
+"link>)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:433
@@ -684,15 +683,15 @@ msgid ""
 "Adjusting the build system to build your documentation using the GTK-Doc "
 "tools. Multiple build systems are supported, in this manual we describe how "
 "to integrate GTK-Doc with <link linkend=\"settingup_autotools\">Autotools</"
-"link>, <link linkend=\"settingup_cmake\">CMake</link>, and <link linkend="
-"\"settingup_plain_makefiles\">plain Makefiles</link>."
+"link>, <link linkend=\"settingup_cmake\">CMake</link>, and <link "
+"linkend=\"settingup_plain_makefiles\">plain Makefiles</link>."
 msgstr ""
 "Ajuste do sistema de compilação para compilar sua documentação usando as "
 "ferramentas do GTK-Doc. Há suporte a vários sistemas de compilação, neste "
-"manual descrevemos como integrar o GTK-Doc com <link linkend="
-"\"settingup_autotools\">Autotools</link>, <link linkend=\"settingup_cmake"
-"\">CMake</link> e <link linkend=\"settingup_plain_makefiles\">Makefiles "
-"simples</link>."
+"manual descrevemos como integrar o GTK-Doc com <link "
+"linkend=\"settingup_autotools\">Autotools</link>, <link "
+"linkend=\"settingup_cmake\">CMake</link> e <link "
+"linkend=\"settingup_plain_makefiles\">Makefiles simples</link>."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:443
@@ -896,14 +895,14 @@ msgstr "Integração com automake"
 #. (itstool) path: sect2/para
 #: C/index.docbook:569
 msgid ""
-"First copy the <filename>Makefile.am</filename> from the <filename class="
-"\"directory\">examples</filename> sub-directory of the <ulink url=\"https://"
-"gitlab.gnome.org/GNOME/gtk-doc/raw/master/examples/Makefile.am\"> gtkdoc-"
-"sources</ulink> to your project's reference documentation directory (e.g. "
-"<filename class=\"directory\">docs/reference/&lt;package&gt;</filename>). A "
-"local copy should be available under e.g. <filename>/usr/share/doc/gtk-doc-"
-"tools/examples/Makefile.am</filename>. If you have multiple packages repeat "
-"this for each one."
+"First copy the <filename>Makefile.am</filename> from the <filename "
+"class=\"directory\">examples</filename> sub-directory of the <ulink "
+"url=\"https://gitlab.gnome.org/GNOME/gtk-doc/raw/master/examples/Makefile."
+"am\"> gtkdoc-sources</ulink> to your project's reference documentation "
+"directory (e.g. <filename class=\"directory\">docs/reference/&lt;package&gt;"
+"</filename>). A local copy should be available under e.g. <filename>/usr/"
+"share/doc/gtk-doc-tools/examples/Makefile.am</filename>. If you have "
+"multiple packages repeat this for each one."
 msgstr ""
 "Primeiro copie o <filename>Makefile.am</filename> do subdiretório do "
 "<filename class=\"directory\">exemplo</filename> do <ulink url=\"https://"
@@ -1017,14 +1016,14 @@ msgstr ""
 #: C/index.docbook:657
 msgid ""
 "<option>HFILE_GLOB</option> and <option>CFILE_GLOB</option> are used for "
-"dependencies. Each option take a file-glob (e.g. <code>HFILE_GLOB="
-"$(top_srcdir)/src/*.c</code>). The documentation will be rebuilt if any of "
-"the matched files change."
+"dependencies. Each option take a file-glob (e.g. "
+"<code>HFILE_GLOB=$(top_srcdir)/src/*.c</code>). The documentation will be "
+"rebuilt if any of the matched files change."
 msgstr ""
 "<option>HFILE_GLOB</option> e <option>CFILE_GLOB</option> são usados para "
-"dependências. Cada opção pega um arquivo glob (por exemplo, <code>HFILE_GLOB="
-"$(top_srcdir)/src/*.c</code>). A documentação será recompilada se qualquer "
-"um dos arquivos correspondentes for alterado."
+"dependências. Cada opção pega um arquivo glob (por exemplo, "
+"<code>HFILE_GLOB=$(top_srcdir)/src/*.c</code>). A documentação será "
+"recompilada se qualquer um dos arquivos correspondentes for alterado."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:669
@@ -1036,8 +1035,8 @@ msgid ""
 msgstr ""
 "<option>EXTRA_HFILES</option> permite especificar arquivos de cabeçalho "
 "extras para incluir ao verificar a documentação da API, que não são "
-"encontrados em <code>DOC_SOURCE_DIR</code> (por exemplo, <code>EXTRA_HFILES="
-"$(top_srcdir}/contrib/extra.h</code>)."
+"encontrados em <code>DOC_SOURCE_DIR</code> (por exemplo, "
+"<code>EXTRA_HFILES=$(top_srcdir}/contrib/extra.h</code>)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:679
@@ -1257,10 +1256,11 @@ msgid ""
 "Otherwise pregenerated documentation is installed (which makes sense for "
 "users but not for developers)."
 msgstr ""
-"GTK-Doc está desabilitado por padrão! Lembre-se de passar a opção <option>"
-"\"--enable-gtk-doc\"</option> à próxima execução do <filename>configure</"
-"filename>. Do contrário, uma documentação gerada previamente é instalada (o "
-"que faz sentido para usuários, mas não para desenvolvedores)."
+"GTK-Doc está desabilitado por padrão! Lembre-se de passar a opção "
+"<option>\"--enable-gtk-doc\"</option> à próxima execução do "
+"<filename>configure</filename>. Do contrário, uma documentação gerada "
+"previamente é instalada (o que faz sentido para usuários, mas não para "
+"desenvolvedores)."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:816
@@ -1442,10 +1442,10 @@ msgstr ""
 "pacote&gt;/index.html </filename>. Com esta configuração inicial, você verá "
 "apenas um documento muito simples. O próximo capítulo ensinará como "
 "adicionar documentação da API ao seu código por meio de blocos de "
-"comentários especiais. O capítulo seguinte depois introduz <link linkend="
-"\"metafiles\">arquivos adicionais</link> e mostra como editar o <link "
-"linkend=\"metafiles_master\">modelo mestre</link> para adicionar capítulos e "
-"seções adicionais aos seus arquivos de documentação."
+"comentários especiais. O capítulo seguinte depois introduz <link "
+"linkend=\"metafiles\">arquivos adicionais</link> e mostra como editar o "
+"<link linkend=\"metafiles_master\">modelo mestre</link> para adicionar "
+"capítulos e seções adicionais aos seus arquivos de documentação."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:927
@@ -1953,10 +1953,6 @@ msgstr ""
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1224
-#| msgid ""
-#| "More examples of what markdown tags are supported can be found in the "
-#| "<ulink url=\"https://wiki.gnome.org/Projects/GTK%2B/DocumentationSyntax/"
-#| "Markdown\">GTK+ Documentation Markdown Syntax Reference</ulink>."
 msgid ""
 "More examples of what markdown tags are supported can be found in the <ulink "
 "url=\"https://wiki.gnome.org/Projects/GTK/DocumentationSyntax/Markdown\">GTK "
@@ -2192,9 +2188,9 @@ msgstr "@include"
 #: C/index.docbook:1376
 msgid ""
 "The <literal>#include</literal> files to show in the section synopsis (a "
-"comma separated list), overriding the global value from the <link linkend="
-"\"metafiles_sections\">section file</link> or command line. This item is "
-"optional."
+"comma separated list), overriding the global value from the <link "
+"linkend=\"metafiles_sections\">section file</link> or command line. This "
+"item is optional."
 msgstr ""
 "Os arquivos <literal>#include</literal> a ser mostrado na sinopse da seção "
 "(uma lista separada por vírgulas), sobrescrevendo o valor global do <link "
@@ -2411,16 +2407,18 @@ msgstr "Anotações"
 msgid ""
 "Documentation blocks can contain annotation-tags. These tags will be "
 "rendered with tooltips describing their meaning. The tags are used by "
-"gobject-introspection to generate language bindings. A detailed list of the "
-"supported tags can be found on <ulink url=\"http://live.gnome.org/"
-"GObjectIntrospection/Annotations\" type=\"http\">the wiki</ulink>."
+"GObject Introspection to generate language bindings. A detailed list of the "
+"supported tags can be found in the <ulink url=\"https://gi.readthedocs.io/en/"
+"latest/annotations/giannotations.html\" type=\"http\">GObject Introspection "
+"documentation</ulink>."
 msgstr ""
-"Blocos de documentação podem conter tags de anotação. Essas tags serão "
-"renderizadas com dicas de ferramentas descrevendo seu significados. As tags "
-"são usadas pelo gobject-introspection para garantir associações (bindings) "
-"de linguagens. Uma lista detalhada tags aceitas podem ser encontrada <ulink "
-"url=\"http://live.gnome.org/GObjectIntrospection/Annotations\" type=\"http"
-"\">no wiki</ulink>."
+"Os blocos de documentação podem conter etiquetas de anotação. Essas "
+"etiquetas serão renderizadas com dicas descrevendo seu significado. As "
+"etiquetas são usadas pelo GObject Introspection para gerar ligações de "
+"linguagem. Uma lista detalhada das etiquetas suportadas pode ser encontrada "
+"na <ulink url=\"https://gi.readthedocs.io/en/latest/annotations/"
+"giannotations.html\" type=\"http\">documentação do GObject Introspection</"
+"ulink> ."
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1515
@@ -3771,12 +3769,12 @@ msgstr ""
 #: C/index.docbook:2315
 msgid ""
 "Version 1.8 already introduced the syntax for documenting sections in the "
-"sources instead of the separate files under <filename class=\"directory"
-"\">tmpl</filename>. This version adds options to switch the whole doc module "
-"to not use the extra tmpl build step at all, by using <option>--flavour no-"
-"tmpl</option> in <filename>configure.ac</filename>. If you don't have a "
-"<filename class=\"directory\">tmpl</filename> checked into your source "
-"control system and haven't yet switched, just add the flag to "
+"sources instead of the separate files under <filename "
+"class=\"directory\">tmpl</filename>. This version adds options to switch the "
+"whole doc module to not use the extra tmpl build step at all, by using "
+"<option>--flavour no-tmpl</option> in <filename>configure.ac</filename>. If "
+"you don't have a <filename class=\"directory\">tmpl</filename> checked into "
+"your source control system and haven't yet switched, just add the flag to "
 "<filename>configure.ac</filename> and you are done."
 msgstr ""
 "A versão 1.8 já introduziu a sintaxe para documentação seções nos fontes em "
@@ -3984,14 +3982,14 @@ msgstr "Documentar a ferramenta"
 #. (itstool) path: sect2/para
 #: C/index.docbook:2429
 msgid ""
-"Create one refentry file per tool. Following <link linkend="
-"\"settingup_docfiles\">our example</link> we would call it <filename>meep/"
-"docs/reference/meeper/meep.xml</filename>. For the xml tags that should be "
-"used and can look at generated file in the xml subdirectory as well as "
-"examples e.g. in glib."
+"Create one refentry file per tool. Following <link "
+"linkend=\"settingup_docfiles\">our example</link> we would call it "
+"<filename>meep/docs/reference/meeper/meep.xml</filename>. For the xml tags "
+"that should be used and can look at generated file in the xml subdirectory "
+"as well as examples e.g. in glib."
 msgstr ""
-"Crie um arquivo refentry por ferramenta. Segundo <link linkend="
-"\"settingup_docfiles\">nosso exemplo</link> nós chamaríamos ele de "
+"Crie um arquivo refentry por ferramenta. Segundo <link "
+"linkend=\"settingup_docfiles\">nosso exemplo</link> nós chamaríamos ele de "
 "<filename>meep/docs/reference/meeper/meep.xml</filename>. Para as tags xml "
 "que devem ser usadas e podem parecer no arquivo gerado no subdiretório xml "
 "assim como exemplos, por exemplo, em glib."
@@ -4142,7 +4140,7 @@ msgid ""
 msgstr ""
 "Por acaso o nome do objeto (nome da struct da instância, ex. "
 "<type>GtkWidget</type>) faz parte da seção normal (não coloque isso em "
-"subseções Standard ou Private)?"
+"subseções Standard ou Private)."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2523
@@ -4184,7 +4182,7 @@ msgid ""
 "filename>."
 msgstr ""
 "A nova página foi “xi:incluída” do <filename>&lt;pacote&gt;-docs.{xml,sgml}</"
-"filename>?"
+"filename>."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2544
@@ -4302,1046 +4300,9 @@ msgstr ""
 "usadas, a partir de suas tags, para determinar a versão mínima necessária."
 
 #. (itstool) path: appendixinfo/releaseinfo
-#: C/index.docbook:12 C/fdl-appendix.xml:12
+#: C/fdl-appendix.xml:12
 msgid "Version 1.1, March 2000"
 msgstr "Versão 1.1, Março de 2000"
-
-#. (itstool) path: appendixinfo/copyright
-#: C/index.docbook:15
-msgid "<year>2000</year><holder>Free Software Foundation, Inc.</holder>"
-msgstr "<year>2000</year><holder>Free Software Foundation, Inc.</holder>"
-
-#. (itstool) path: para/address
-#: C/index.docbook:20
-#, no-wrap
-msgid ""
-"Free Software Foundation, Inc. <street>51 Franklin Street, \n"
-"        Suite 330</street>, <city>Boston</city>, <state>MA</state>  \n"
-"        <postcode>02110-1301</postcode>  <country>USA</country>"
-msgstr ""
-"Free Software Foundation, Inc. <street>51 Franklin Street, \n"
-"        Suite 330</street>, <city>Boston</city>, <state>MA</state>  \n"
-"        <postcode>02110-1301</postcode>  <country>USA</country>"
-
-#. (itstool) path: legalnotice/para
-#: C/index.docbook:19 C/fdl-appendix.xml:19
-msgid ""
-"<_:address-1/> Everyone is permitted to copy and distribute verbatim copies "
-"of this license document, but changing it is not allowed."
-msgstr ""
-"<_:address-1/> É permitido a qualquer um copiar e distribuir cópias exatas "
-"deste documento de licença, embora não seja permitido alterá-lo."
-
-#. (itstool) path: appendix/title
-#. (itstool) path: para/quote
-#: C/index.docbook:28 C/fdl-appendix.xml:28 C/fdl-appendix.xml:642
-msgid "GNU Free Documentation License"
-msgstr "Licença de Documentação Livre GNU"
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:31 C/fdl-appendix.xml:31
-msgid "0. PREAMBLE"
-msgstr "0. PREÂMBULO"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:32
-msgid ""
-"The purpose of this License is to make a manual, textbook, or other written "
-"document <quote>free</quote> in the sense of freedom: to assure everyone the "
-"effective freedom to copy and redistribute it, with or without modifying it, "
-"either commercially or noncommercially. Secondarily, this License preserves "
-"for the author and publisher a way to get credit for their work, while not "
-"being considered responsible for modifications made by others."
-msgstr ""
-"O objetivo desta Licença é tornar um manual, livro didático ou outro "
-"documento funcional e útil “livre” no sentido de liberdade: assegurar a "
-"todos a liberdade efetiva de copiá-lo e redistribuí-lo, com ou sem "
-"modificação do mesmo, comercialmente ou não. Em segundo lugar, esta Licença "
-"preserva para o autor e o editor uma maneira de obter crédito por seu "
-"trabalho, sem ser considerado responsável por modificações feitas por outros."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:43
-msgid ""
-"This License is a kind of <quote>copyleft</quote>, which means that "
-"derivative works of the document must themselves be free in the same sense. "
-"It complements the GNU General Public License, which is a copyleft license "
-"designed for free software."
-msgstr ""
-"Esta licença é um tipo de “copyleft”, o que significa que trabalhos "
-"derivados do documento devem ser livres no mesmo sentido. Ela complementa a "
-"Licença Pública Geral GNU (GNU General Public License), que é uma licença "
-"com copyleft projetada para software livre."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:50 C/fdl-appendix.xml:50
-msgid ""
-"We have designed this License in order to use it for manuals for free "
-"software, because free software needs free documentation: a free program "
-"should come with manuals providing the same freedoms that the software does. "
-"But this License is not limited to software manuals; it can be used for any "
-"textual work, regardless of subject matter or whether it is published as a "
-"printed book. We recommend this License principally for works whose purpose "
-"is instruction or reference."
-msgstr ""
-"Criamos esta Licença para usá-la para manuais para software livre, porque "
-"software livre precisa de documentação livre: um programa livre deve ser "
-"fornecido com manuais que proporcionam as mesmas liberdades que o software. "
-"Mas esta Licença não está limitada aos manuais de software; pode ser usada "
-"para qualquer trabalho textual, independentemente do assunto ou dele ser "
-"publicado como um livro impresso. Recomendamos esta Licença principalmente "
-"para trabalhos cujo propósito seja instrução ou referência."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:62 C/fdl-appendix.xml:62
-msgid "1. APPLICABILITY AND DEFINITIONS"
-msgstr "1. APLICABILIDADE E DEFINIÇÕES"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:63
-msgid ""
-"This License applies to any manual or other work that contains a notice "
-"placed by the copyright holder saying it can be distributed under the terms "
-"of this License. The <quote>Document</quote>, below, refers to any such "
-"manual or work. Any member of the public is a licensee, and is addressed as "
-"<quote>you</quote>."
-msgstr ""
-"Esta Licença aplica-se a qualquer manual ou outro trabalho, em qualquer "
-"meio, que contenha um aviso colocado pelo detentor dos direitos autorais "
-"dizendo que pode ser distribuído nos termos desta Licença. Tal aviso concede "
-"uma licença mundial, sem royalties, de duração ilimitada, para usar esse "
-"trabalho nas condições aqui estabelecidas. O “Documento”, a seguir, refere-"
-"se a qualquer manual ou trabalho. Qualquer membro do público é um licenciado "
-"e é referido como “você”. Você aceita a licença se você copiar, modificar ou "
-"distribuir o trabalho de forma a exigir permissão de acordo com a lei de "
-"direitos autorais."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:72
-msgid ""
-"A <quote>Modified Version</quote> of the Document means any work containing "
-"the Document or a portion of it, either copied verbatim, or with "
-"modifications and/or translated into another language."
-msgstr ""
-"Uma “Versão Modificada” do Documento significa qualquer trabalho contendo o "
-"Documento ou uma porção deste, seja uma cópia literal ou com modificações e/"
-"ou traduzido em outro idioma."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:79
-msgid ""
-"A <quote>Secondary Section</quote> is a named appendix or a front-matter "
-"section of the <link linkend=\"fdl-document\">Document</link> that deals "
-"exclusively with the relationship of the publishers or authors of the "
-"Document to the Document's overall subject (or to related matters) and "
-"contains nothing that could fall directly within that overall subject. (For "
-"example, if the Document is in part a textbook of mathematics, a Secondary "
-"Section may not explain any mathematics.) The relationship could be a matter "
-"of historical connection with the subject or with related matters, or of "
-"legal, commercial, philosophical, ethical or political position regarding "
-"them."
-msgstr ""
-"A “Seção Secundária” é um apêndice nomeado ou uma seção anterior do "
-"Documento que trata exclusivamente do relacionamento dos editores ou autores "
-"do <link linkend=\"fdl-document\">Documento</link> com o assunto geral do "
-"documento (ou assuntos relacionados) e não contém nada que possa estar "
-"diretamente dentro desse assunto geral. (Assim, se o Documento for, em "
-"parte, um livro de texto de matemática, uma Seção Secundária pode não "
-"explicar qualquer matemática.) O relacionamento poderia ser uma questão de "
-"conexão histórica com o assunto ou com assuntos relacionados, ou de posição "
-"legal, comercial, filosófica, ética ou política em relação a eles."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:94
-msgid ""
-"The <quote>Invariant Sections</quote> are certain <link linkend=\"fdl-"
-"secondary\"> Secondary Sections</link> whose titles are designated, as being "
-"those of Invariant Sections, in the notice that says that the <link linkend="
-"\"fdl-document\">Document</link> is released under this License."
-msgstr ""
-"As “Seções Invariantes” são certas <link linkend=\"fdl-secondary\">Seções "
-"Secundárias</link> cujos títulos são designados, como sendo daquelas de "
-"Seções Invariantes, no aviso que diz que o <link linkend=\"fdl-document"
-"\">Documento</link> é liberado sob esta Licença."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:103
-msgid ""
-"The <quote>Cover Texts</quote> are certain short passages of text that are "
-"listed, as Front-Cover Texts or Back-Cover Texts, in the notice that says "
-"that the <link linkend=\"fdl-document\">Document</link> is released under "
-"this License."
-msgstr ""
-"Os “Textos de Capa” são certas passagens de texto que são listadas como "
-"Textos de Capa Frontal ou Textos de Contracapa, no aviso que afirma que o "
-"<link linkend=\"fdl-document\">Documento</link> foi publicado sob esta "
-"Licença."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:111
-msgid ""
-"A <quote>Transparent</quote> copy of the <link linkend=\"fdl-document\"> "
-"Document</link> means a machine-readable copy, represented in a format whose "
-"specification is available to the general public, whose contents can be "
-"viewed and edited directly and straightforwardly with generic text editors "
-"or (for images composed of pixels) generic paint programs or (for drawings) "
-"some widely available drawing editor, and that is suitable for input to text "
-"formatters or for automatic translation to a variety of formats suitable for "
-"input to text formatters. A copy made in an otherwise Transparent file "
-"format whose markup has been designed to thwart or discourage subsequent "
-"modification by readers is not Transparent. A copy that is not "
-"<quote>Transparent</quote> is called <quote>Opaque</quote>."
-msgstr ""
-"Uma cópia “Transparente” do <link linkend=\"fdl-document\"> Documento</link> "
-"significa uma cópia legível por máquina, representada em um formato cuja "
-"especificação está disponível para o público em geral, cujo conteúdo possa "
-"ser visto e editado diretamente com editores de texto genéricos ou (para "
-"imagens compostas de pixels) programas gráficos genéricos ou (para desenhos) "
-"algum editor de desenho amplamente disponível, e isso seja adequado para "
-"entrada para formatadores de texto ou para tradução automática para uma "
-"variedade de formatos adequados para entrada de formatadores de texto. Uma "
-"cópia feita em um formato de arquivo Transparente cuja marcação tenha sido "
-"projetada para frustrar ou desencorajar a modificação subsequente pelos "
-"leitores não é Transparente. Uma cópia que não é “Transparente” é chamada de "
-"“Opaca”."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:128 C/fdl-appendix.xml:128
-msgid ""
-"Examples of suitable formats for Transparent copies include plain ASCII "
-"without markup, Texinfo input format, LaTeX input format, SGML or XML using "
-"a publicly available DTD, and standard-conforming simple HTML designed for "
-"human modification. Opaque formats include PostScript, PDF, proprietary "
-"formats that can be read and edited only by proprietary word processors, "
-"SGML or XML for which the DTD and/or processing tools are not generally "
-"available, and the machine-generated HTML produced by some word processors "
-"for output purposes only."
-msgstr ""
-"Exemplos de formatos adequados para cópias Transparentes incluem ASCII "
-"simples sem marcação, formato de entrada Texinfo, formato de entrada LaTeX, "
-"SGML ou XML usando DTD publicamente disponível e HTML simples, conforme "
-"padrão, projetados para modificação humana. Os formatos Opacos incluem "
-"PostScript, PDF, formatos proprietários que podem ser lidos e editados "
-"apenas por processadores de texto proprietários, SGML ou XML para os quais o "
-"DTD e/ou ferramentas de processamento não estão geralmente disponíveis e o "
-"HTML gerado por máquina produzido por alguns processadores de texto para "
-"apenas para fins de saída."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:141
-msgid ""
-"The <quote>Title Page</quote> means, for a printed book, the title page "
-"itself, plus such following pages as are needed to hold, legibly, the "
-"material this License requires to appear in the title page. For works in "
-"formats which do not have any title page as such, <quote>Title Page</quote> "
-"means the text near the most prominent appearance of the work's title, "
-"preceding the beginning of the body of the text."
-msgstr ""
-"A “Página de Título” significa, para um livro impresso, a própria página do "
-"título, além das páginas subsequentes necessárias para conter, de forma "
-"legível, o material que esta Licença requer que apareça na página do título. "
-"Para trabalhos em formatos que não possuem qualquer página de título "
-"semelhante, “Página de Título” significa o texto próximo à ocorrência mais "
-"proeminente do título do trabalho, precedendo o início do corpo do texto."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:153 C/fdl-appendix.xml:153
-msgid "2. VERBATIM COPYING"
-msgstr "2. CÓPIA LITERAL"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:154
-msgid ""
-"You may copy and distribute the <link linkend=\"fdl-document\">Document</"
-"link> in any medium, either commercially or noncommercially, provided that "
-"this License, the copyright notices, and the license notice saying this "
-"License applies to the Document are reproduced in all copies, and that you "
-"add no other conditions whatsoever to those of this License. You may not use "
-"technical measures to obstruct or control the reading or further copying of "
-"the copies you make or distribute. However, you may accept compensation in "
-"exchange for copies. If you distribute a large enough number of copies you "
-"must also follow the conditions in <link linkend=\"fdl-section3\">section 3</"
-"link>."
-msgstr ""
-"Você pode copiar e distribuir o <link linkend=\"fdl-document\">Documento</"
-"link> em qualquer meio, seja este de forma comercial ou não, desde que esta "
-"Licença, os avisos de direitos autorais e o aviso de licença afirmando que "
-"esta Licença se aplica ao Documento sejam reproduzidos em todas as cópias, e "
-"que você adicione nenhuma outra condição, qualquer que seja, às condições "
-"desta Licença. Você não pode usar de medidas técnicas para obstruir ou "
-"controlar a leitura ou cópia futura das cópias que você fizer ou distribuir. "
-"Contudo, você pode aceitar compensação em troca das cópias. Se você "
-"distribuir um número suficientemente grande de cópias, você deve também "
-"respeitar as condições descritas na <link linkend=\"fdl-section3\">seção 3</"
-"link>."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:169 C/fdl-appendix.xml:169
-msgid ""
-"You may also lend copies, under the same conditions stated above, and you "
-"may publicly display copies."
-msgstr ""
-"Você também pode emprestar cópias, nas mesmas condições acima mencionadas, e "
-"você pode publicar cópias."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:176 C/fdl-appendix.xml:176
-msgid "3. COPYING IN QUANTITY"
-msgstr "3. COPIANDO EM QUANTIDADE"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:177
-msgid ""
-"If you publish printed copies of the <link linkend=\"fdl-document"
-"\">Document</link> numbering more than 100, and the Document's license "
-"notice requires <link linkend=\"fdl-cover-texts\">Cover Texts</link>, you "
-"must enclose the copies in covers that carry, clearly and legibly, all these "
-"Cover Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on "
-"the back cover. Both covers must also clearly and legibly identify you as "
-"the publisher of these copies. The front cover must present the full title "
-"with all words of the title equally prominent and visible. You may add other "
-"material on the covers in addition. Copying with changes limited to the "
-"covers, as long as they preserve the title of the <link linkend=\"fdl-"
-"document\">Document</link> and satisfy these conditions, can be treated as "
-"verbatim copying in other respects."
-msgstr ""
-"Se você publicar cópias impressas do <link linkend=\"fdl-document"
-"\">Documento</link> em número maior que 100, e o aviso de licença do "
-"Documento exigir os <link linkend=\"fdl-cover-texts\">Textos de Capa</link>, "
-"você deve incluir as cópias nas capas que carregam, de forma clara e "
-"legível, todas essas Textos de Capa: Textos de Capa Frontal na capa frontal "
-"e Textos de Contracapa na contracapa. Ambas as capas também devem identificá-"
-"lo claramente e legivelmente como o editor dessas cópias. A capa frontal "
-"deve apresentar o título completo com todas as palavras do título igualmente "
-"proeminentes e visíveis. Você também pode adicionar outros materiais nas "
-"capas. Copiar com as alterações limitadas às capas, desde que preservem o "
-"título do <link linkend=\"fdl-document\">Documento</link> e satisfaçam estas "
-"condições, podem ser tratadas como cópias literais em outros aspectos."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:195 C/fdl-appendix.xml:195
-msgid ""
-"If the required texts for either cover are too voluminous to fit legibly, "
-"you should put the first ones listed (as many as fit reasonably) on the "
-"actual cover, and continue the rest onto adjacent pages."
-msgstr ""
-"Se os textos necessários para qualquer uma das coberturas forem demasiado "
-"volumosos para se ajustar de forma legível, você deve colocar os primeiros "
-"listados (tanto quanto encaixar razoavelmente) na capa real e continuar o "
-"resto em páginas adjacentes."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:202
-msgid ""
-"If you publish or distribute <link linkend=\"fdl-transparent\">Opaque</link> "
-"copies of the <link linkend=\"fdl-document\">Document</link> numbering more "
-"than 100, you must either include a machine-readable <link linkend=\"fdl-"
-"transparent\">Transparent</link> copy along with each Opaque copy, or state "
-"in or with each Opaque copy a publicly-accessible computer-network location "
-"containing a complete Transparent copy of the Document, free of added "
-"material, which the general network-using public has access to download "
-"anonymously at no charge using public-standard network protocols. If you use "
-"the latter option, you must take reasonably prudent steps, when you begin "
-"distribution of Opaque copies in quantity, to ensure that this Transparent "
-"copy will remain thus accessible at the stated location until at least one "
-"year after the last time you distribute an Opaque copy (directly or through "
-"your agents or retailers) of that edition to the public."
-msgstr ""
-"Se você publicar ou distribuir cópias <link linkend=\"fdl-transparent"
-"\">Opacas</link> do <link linkend=\"fdl-document\">Documento</link> em "
-"número superior a 100, você deve incluir uma cópia <link linkend=\"fdl-"
-"transparent\">Transparente</link> legível por máquina junto com cada cópia "
-"Opaca ou estabelecer em ou com cada cópia Opaca uma localização de rede de "
-"computador publicamente acessível contendo uma cópia transparente completa "
-"do documento, sem material adicional, a partir da qual o público geral "
-"usuário de rede tem acesso para baixar anonimamente sem custo, usando "
-"protocolos de rede padrão público. Se você usar a última opção, você deve "
-"tomar medidas razoavelmente prudentes, quando você começar a distribuir "
-"cópias Opacas em quantidade, para garantir que esta cópia Transparente "
-"permanecerá acessível no local indicado até pelo menos um ano após a última "
-"vez que você distribuir uma cópia Opaca (diretamente ou através de seus "
-"agentes ou varejistas) dessa edição para o público."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:222
-msgid ""
-"It is requested, but not required, that you contact the authors of the <link "
-"linkend=\"fdl-document\">Document</link> well before redistributing any "
-"large number of copies, to give them a chance to provide you with an updated "
-"version of the Document."
-msgstr ""
-"É solicitado, mas não é necessário, que você contate os autores do <link "
-"linkend=\"fdl-document\">Documento</link> muito antes de redistribuir "
-"qualquer grande número de cópias, para dar a eles uma chance de lhe fornecer "
-"uma versão atualizada do Documento."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:231 C/fdl-appendix.xml:231
-msgid "4. MODIFICATIONS"
-msgstr "4. MODIFICAÇÕES"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:232
-msgid ""
-"You may copy and distribute a <link linkend=\"fdl-modified\">Modified "
-"Version</link> of the <link linkend=\"fdl-document\">Document</link> under "
-"the conditions of sections <link linkend=\"fdl-section2\">2</link> and <link "
-"linkend=\"fdl-section3\">3</link> above, provided that you release the "
-"Modified Version under precisely this License, with the Modified Version "
-"filling the role of the Document, thus licensing distribution and "
-"modification of the Modified Version to whoever possesses a copy of it. In "
-"addition, you must do these things in the Modified Version:"
-msgstr ""
-"Você pode copiar e distribuir uma <link linkend=\"fdl-modified\">Versão "
-"Modificada</link> do <link linkend=\"fdl-document\">Documento</link> sob as "
-"condições das seções <link linkend=\"fdl-section2\">2</link> e <link linkend="
-"\"fdl-section3\">3</link> acima, desde que você forneça a Versão Modificada "
-"estritamente sob esta Licença, com a Versão Modificada preenchendo a função "
-"de Documento, permitindo assim a distribuição e modificação da Versão "
-"Modificada a quem quer que possua uma cópia desta. Além disso, você deve "
-"executar os seguintes procedimentos na Versão Modificada:"
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:248 C/fdl-appendix.xml:248
-msgid "A"
-msgstr "A"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:249
-msgid ""
-"Use in the <link linkend=\"fdl-title-page\">Title Page</link> (and on the "
-"covers, if any) a title distinct from that of the <link linkend=\"fdl-"
-"document\">Document</link>, and from those of previous versions (which "
-"should, if there were any, be listed in the History section of the "
-"Document). You may use the same title as a previous version if the original "
-"publisher of that version gives permission."
-msgstr ""
-"Usar na <link linkend=\"fdl-title-page\">Página de Título</link> (e nas "
-"capas, se existirem) um título distinto em relação ao do <link linkend=\"fdl-"
-"document\">Documento</link>, e daqueles de versões anteriores (os quais "
-"devem, havendo algum, ser listados na seção “Histórico” do Documento). Você "
-"pode usar o mesmo título de uma versão anterior se o editor original daquela "
-"versão lhe conceder permissão."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:264 C/fdl-appendix.xml:264
-msgid "B"
-msgstr "B"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:265
-msgid ""
-"List on the <link linkend=\"fdl-title-page\">Title Page</link>, as authors, "
-"one or more persons or entities responsible for authorship of the "
-"modifications in the <link linkend=\"fdl-modified\">Modified Version</link>, "
-"together with at least five of the principal authors of the <link linkend="
-"\"fdl-document\">Document</link> (all of its principal authors, if it has "
-"less than five)."
-msgstr ""
-"Listar na <link linkend=\"fdl-title-page\">Página de Título</link>, como "
-"autores, uma ou mais pessoas ou entidades responsáveis pela autoria das "
-"modificações na <link linkend=\"fdl-modified\">Versão Modificada</link>, "
-"juntamente com pelo menos cinco dos autores principais do <link linkend="
-"\"fdl-document\">Documento</link> (todos os seus principais autores, se "
-"tiverem menos de cinco)."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:279 C/fdl-appendix.xml:279
-msgid "C"
-msgstr "C"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:280
-msgid ""
-"State on the <link linkend=\"fdl-title-page\">Title Page</link> the name of "
-"the publisher of the <link linkend=\"fdl-modified\">Modified Version</link>, "
-"as the publisher."
-msgstr ""
-"Indicar na  <link linkend=\"fdl-title-page\">Página de Título</link> o nome "
-"do editor da <link linkend=\"fdl-modified\">Versão Modificada</link>, como "
-"editor."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:291 C/fdl-appendix.xml:291
-msgid "D"
-msgstr "D"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:292
-msgid ""
-"Preserve all the copyright notices of the <link linkend=\"fdl-document"
-"\">Document</link>."
-msgstr ""
-"Preservar todas as avisos de direitos autorais do <link linkend=\"fdl-"
-"document\">Documento</link>."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:301 C/fdl-appendix.xml:301
-msgid "E"
-msgstr "E"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:302 C/fdl-appendix.xml:302
-msgid ""
-"Add an appropriate copyright notice for your modifications adjacent to the "
-"other copyright notices."
-msgstr ""
-"Adicionar um aviso de direitos autorais apropriado para suas modificações "
-"adjacentes aos outros avisos de direitos autorais."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:311 C/fdl-appendix.xml:311
-msgid "F"
-msgstr "F"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:312
-msgid ""
-"Include, immediately after the copyright notices, a license notice giving "
-"the public permission to use the <link linkend=\"fdl-modified\">Modified "
-"Version</link> under the terms of this License, in the form shown in the "
-"Addendum below."
-msgstr ""
-"Incluir, imediatamente após os avisos de direitos autorais, um aviso de "
-"licença que dê permissão ao público para usar a <link linkend=\"fdl-modified"
-"\">Versão Modificada</link> sob os termos desta Licença, na forma mostrada "
-"no Adendo abaixo."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:324 C/fdl-appendix.xml:324
-msgid "G"
-msgstr "G"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:325
-msgid ""
-"Preserve in that license notice the full lists of <link linkend=\"fdl-"
-"invariant\"> Invariant Sections</link> and required <link linkend=\"fdl-"
-"cover-texts\">Cover Texts</link> given in the <link linkend=\"fdl-document"
-"\">Document's</link> license notice."
-msgstr ""
-"Preservar nesse aviso de licença as listas completas de <link linkend=\"fdl-"
-"invariant\">Seções Invariantes</link> e os <link linkend=\"fdl-cover-texts"
-"\">Textos de Capa</link> necessários fornecidos no aviso de licença do <link "
-"linkend=\"fdl-document\">Documento</link>."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:337 C/fdl-appendix.xml:337
-msgid "H"
-msgstr "H"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:338 C/fdl-appendix.xml:338
-msgid "Include an unaltered copy of this License."
-msgstr "Incluir uma cópia inalterada desta Licença."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:346 C/fdl-appendix.xml:346
-msgid "I"
-msgstr "I"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:347
-msgid ""
-"Preserve the section entitled <quote>History</quote>, and its title, and add "
-"to it an item stating at least the title, year, new authors, and publisher "
-"of the <link linkend=\"fdl-modified\">Modified Version</link> as given on "
-"the <link linkend=\"fdl-title-page\">Title Page</link>. If there is no "
-"section entitled <quote>History</quote> in the <link linkend=\"fdl-document"
-"\">Document</link>, create one stating the title, year, authors, and "
-"publisher of the Document as given on its Title Page, then add an item "
-"describing the Modified Version as stated in the previous sentence."
-msgstr ""
-"Preservar a seção intitulada “Histórico”, e seu título, e adicionar a ele um "
-"item que indique pelo menos o título, o ano, os novos autores e o editor da "
-"<link linkend=\"fdl-modified\">Versão Modificada</link> conforme indicado na "
-"<link linkend=\"fdl-title-page\">Página de Título</link>. Se não houver uma "
-"seção intitulada “Histórico” no <link linkend=\"fdl-document\">Documento</"
-"link>, crie um que declare o título, o ano, os autores e o editor do "
-"Documento conforme indicado em sua Página de Título e, em seguida, adicione "
-"um item descrevendo a Versão Modificada, como indicado na frase anterior."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:365 C/fdl-appendix.xml:365
-msgid "J"
-msgstr "J"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:366
-msgid ""
-"Preserve the network location, if any, given in the <link linkend=\"fdl-"
-"document\">Document</link> for public access to a <link linkend=\"fdl-"
-"transparent\">Transparent</link> copy of the Document, and likewise the "
-"network locations given in the Document for previous versions it was based "
-"on. These may be placed in the <quote>History</quote> section. You may omit "
-"a network location for a work that was published at least four years before "
-"the Document itself, or if the original publisher of the version it refers "
-"to gives permission."
-msgstr ""
-"Preservar a localização de rede, se for o caso, fornecida no <link linkend="
-"\"fdl-document\">Documento</link> para acesso público a uma cópia <link "
-"linkend=\"fdl-transparent\">Transparente</link> do Documento, e também as "
-"localizações de rede fornecidas no Documento para versões anteriores nas "
-"quais ele foi baseado. Estas podem ser colocadas na seção “Histórico”. Você "
-"pode omitir uma localização de rede para um trabalho que foi publicado pelo "
-"menos quatro anos antes do Documento em si, ou se o editor original da "
-"versão a que se refere der permissão."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:383 C/fdl-appendix.xml:383
-msgid "K"
-msgstr "K"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:384
-msgid ""
-"In any section entitled <quote>Acknowledgements</quote> or "
-"<quote>Dedications</quote>, preserve the section's title, and preserve in "
-"the section all the substance and tone of each of the contributor "
-"acknowledgements and/or dedications given therein."
-msgstr ""
-"Em qualquer seção intitulada “Agradecimentos” ou “Dedicatórias”, preservar o "
-"título da seção, e preservar na seção toda a substância e tom de cada um dos "
-"agradecimentos e/ou das dedicatórias dados nela."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:396 C/fdl-appendix.xml:396
-msgid "L"
-msgstr "L"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:397
-msgid ""
-"Preserve all the <link linkend=\"fdl-invariant\">Invariant Sections</link> "
-"of the <link linkend=\"fdl-document\">Document</link>, unaltered in their "
-"text and in their titles. Section numbers or the equivalent are not "
-"considered part of the section titles."
-msgstr ""
-"Preservar todas as <link linkend=\"fdl-invariant\">Seções Invariantes</link> "
-"do <link linkend=\"fdl-document\">Documento</link>, inalteradas em seus "
-"textos e em seus títulos. Os números de seção ou o equivalente não são "
-"considerados parte dos títulos das seções."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:409 C/fdl-appendix.xml:409
-msgid "M"
-msgstr "M"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:410
-msgid ""
-"Delete any section entitled <quote>Endorsements</quote>. Such a section may "
-"not be included in the <link linkend=\"fdl-modified\">Modified Version</"
-"link>."
-msgstr ""
-"Excluir qualquer seção intitulada “Endossos”. Essa seção pode não estar "
-"incluída na <link linkend=\"fdl-modified\">Versão Modificada</link>."
-
-#. (itstool) path: formalpara/title
-#: C/index.docbook:421 C/fdl-appendix.xml:421
-msgid "N"
-msgstr "N"
-
-#. (itstool) path: formalpara/para
-#: C/index.docbook:422
-msgid ""
-"Do not retitle any existing section as <quote>Endorsements</quote> or to "
-"conflict in title with any <link linkend=\"fdl-invariant\">Invariant "
-"Section</link>."
-msgstr ""
-"Não mudar o título de qualquer seção existente para “Endossos” ou para "
-"conflitar em título com qualquer <link linkend=\"fdl-invariant\">Seção "
-"Invariante</link>."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:432
-msgid ""
-"If the <link linkend=\"fdl-modified\">Modified Version</link> includes new "
-"front-matter sections or appendices that qualify as <link linkend=\"fdl-"
-"secondary\">Secondary Sections</link> and contain no material copied from "
-"the Document, you may at your option designate some or all of these sections "
-"as invariant. To do this, add their titles to the list of <link linkend="
-"\"fdl-invariant\">Invariant Sections</link> in the Modified Version's "
-"license notice. These titles must be distinct from any other section titles."
-msgstr ""
-"Se a <link linkend=\"fdl-modified\">Versão Modificada</link> incluir novas "
-"seções ou apêndices de primeira linha que se qualifiquem como <link linkend="
-"\"fdl-secondary\">Seções Secundárias</link> e não contenham material copiado "
-"do Documento, você pode, a sua escolha, designar algumas ou todas essas "
-"seções como invariantes. Para fazer isso, adicione seus títulos à lista de "
-"<link linkend=\"fdl-invariant\">Seções Invariantes</link> no aviso de "
-"licença da Versão Modificada. Esses títulos devem ser distintos de qualquer "
-"outro título de seção."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:444
-msgid ""
-"You may add a section entitled <quote>Endorsements</quote>, provided it "
-"contains nothing but endorsements of your <link linkend=\"fdl-modified"
-"\">Modified Version</link> by various parties--for example, statements of "
-"peer review or that the text has been approved by an organization as the "
-"authoritative definition of a standard."
-msgstr ""
-"Você pode incluir uma seção intitulada “Endossos”, desde que contenha nada "
-"além do endosso da sua <link linkend=\"fdl-modified\">Versão Modificada</"
-"link> por várias terceiros – por exemplo, declarações de revisão por pares "
-"ou de que o texto foi aprovado por uma organização como a definição oficial "
-"de um padrão."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:453
-msgid ""
-"You may add a passage of up to five words as a <link linkend=\"fdl-cover-"
-"texts\">Front-Cover Text</link>, and a passage of up to 25 words as a <link "
-"linkend=\"fdl-cover-texts\">Back-Cover Text</link>, to the end of the list "
-"of <link linkend=\"fdl-cover-texts\">Cover Texts</link> in the <link linkend="
-"\"fdl-modified\">Modified Version</link>. Only one passage of Front-Cover "
-"Text and one of Back-Cover Text may be added by (or through arrangements "
-"made by) any one entity. If the <link linkend=\"fdl-document\">Document</"
-"link> already includes a cover text for the same cover, previously added by "
-"you or by arrangement made by the same entity you are acting on behalf of, "
-"you may not add another; but you may replace the old one, on explicit "
-"permission from the previous publisher that added the old one."
-msgstr ""
-"Você pode adicionar uma passagem de até cinco palavras como um <link linkend="
-"\"fdl-cover-texts\">Texto de Capa Frontal</link> e uma passagem de até 25 "
-"palavras como um <link linkend=\"fdl-cover-texts\">Texto de Contracapa</"
-"link>, até o final da lista de <link linkend=\"fdl-cover-texts\">Textos de "
-"Capa</link> na <link linkend=\"fdl-modified\">Versão Modificada</link>. "
-"Apenas uma passagem de Texto de Capa Frontal e um de Texto de Contracapa "
-"pode ser adicionada por (ou por meio de acordos feitos por) qualquer "
-"entidade. Se o <link linkend=\"fdl-document\">Documento</link> já incluir um "
-"texto de capa para a mesma capa, previamente adicionado por você ou por "
-"acordo feito pela mesma entidade em que você está agindo em nome de, você "
-"não pode adicionar outro; mas você pode substituir o antigo, mediante "
-"permissão explícita do editor anterior que adicionou o antigo."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:470
-msgid ""
-"The author(s) and publisher(s) of the <link linkend=\"fdl-document"
-"\">Document</link> do not by this License give permission to use their names "
-"for publicity for or to assert or imply endorsement of any <link linkend="
-"\"fdl-modified\">Modified Version </link>."
-msgstr ""
-"O(s) autor(es) e editor(es) do <link linkend=\"fdl-document\">Documento</"
-"link> não concedem por esta Licença permissão para usar seus nomes para "
-"publicidade ou afirmar ou implicar o endosso de qualquer <link linkend=\"fdl-"
-"modified\">Versão Modificada</link>."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:480 C/fdl-appendix.xml:480
-msgid "5. COMBINING DOCUMENTS"
-msgstr "5. COMBINANDO DOCUMENTOS"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:481
-msgid ""
-"You may combine the <link linkend=\"fdl-document\">Document</link> with "
-"other documents released under this License, under the terms defined in "
-"<link linkend=\"fdl-section4\">section 4</link> above for modified versions, "
-"provided that you include in the combination all of the <link linkend=\"fdl-"
-"invariant\">Invariant Sections</link> of all of the original documents, "
-"unmodified, and list them all as Invariant Sections of your combined work in "
-"its license notice."
-msgstr ""
-"Você pode combinar o <link linkend=\"fdl-document\">Documento</link> com "
-"outros documentos publicados sob esta Licença, nos termos definidos na <link "
-"linkend=\"fdl-section4\">seção 4</link> acima para versões modificadas, "
-"desde que você inclua na combinação de todas as <link linkend=\"fdl-invariant"
-"\">Seções Invariantes</link> de todos os documentos originais, não "
-"modificados, e liste todos eles como Seções Invariantes do seu trabalho "
-"combinado em seu aviso de licença."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:492
-msgid ""
-"The combined work need only contain one copy of this License, and multiple "
-"identical <link linkend=\"fdl-invariant\">Invariant Sections</link> may be "
-"replaced with a single copy. If there are multiple Invariant Sections with "
-"the same name but different contents, make the title of each such section "
-"unique by adding at the end of it, in parentheses, the name of the original "
-"author or publisher of that section if known, or else a unique number. Make "
-"the same adjustment to the section titles in the list of Invariant Sections "
-"in the license notice of the combined work."
-msgstr ""
-"O trabalho combinado precisa conter somente uma cópia desta Licença, e "
-"várias <link linkend=\"fdl-invariant\">Seções Invariantes</link> idênticas "
-"podem ser substituídas por uma única cópia. Se existirem várias Seções "
-"Invariantes de mesmo nome, porém com conteúdos diferentes, você deve tornar "
-"o título de cada uma destas seções único, adicionando ao fim deste, entre "
-"parênteses, o nome do autor ou, se conhecido, o editor original desta seção, "
-"ou ainda um número único. Faça o mesmo ajuste nos títulos de seção na lista "
-"de Seções Invariantes no aviso de licença do trabalho combinado."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:505
-msgid ""
-"In the combination, you must combine any sections entitled <quote>History</"
-"quote> in the various original documents, forming one section entitled "
-"<quote>History</quote>; likewise combine any sections entitled "
-"<quote>Acknowledgements</quote>, and any sections entitled "
-"<quote>Dedications</quote>. You must delete all sections entitled "
-"<quote>Endorsements.</quote>"
-msgstr ""
-"Na combinação, você deve combinar todas as seções intituladas “Histórico” "
-"nos vários documentos originais, formando uma seção intitulada “Histórico”; "
-"da mesma forma, combinar todas as seções intituladas “Agradecimentos” e "
-"quaisquer seções intituladas “Dedicatórias”. Você deve excluir todas as "
-"seções intituladas “Endossos”."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:516 C/fdl-appendix.xml:516
-msgid "6. COLLECTIONS OF DOCUMENTS"
-msgstr "6. COLEÇÕES DE DOCUMENTOS"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:517
-msgid ""
-"You may make a collection consisting of the <link linkend=\"fdl-document"
-"\">Document</link> and other documents released under this License, and "
-"replace the individual copies of this License in the various documents with "
-"a single copy that is included in the collection, provided that you follow "
-"the rules of this License for verbatim copying of each of the documents in "
-"all other respects."
-msgstr ""
-"Você pode fazer uma coleção que consiste do <link linkend=\"fdl-document"
-"\">Documento</link> e outros documentos publicados sob esta Licença, e "
-"substituir as cópias individuais desta Licença, nos vários documentos, por "
-"uma única cópia a ser incluída na coleção, desde que você siga as regras "
-"desta Licença para cópias literais de cada documento em todos os outros "
-"aspectos."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:527 C/fdl-appendix.xml:527
-msgid ""
-"You may extract a single document from such a collection, and distribute it "
-"individually under this License, provided you insert a copy of this License "
-"into the extracted document, and follow this License in all other respects "
-"regarding verbatim copying of that document."
-msgstr ""
-"Você pode extrair um único documento de tal coleção e distribuí-lo "
-"individualmente sob esta Licença, desde que você insira uma cópia desta "
-"Licença no documento extraído e siga esta Licença em todos os outros "
-"aspectos referentes à cópia literal desse documento."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:537 C/fdl-appendix.xml:537
-msgid "7. AGGREGATION WITH INDEPENDENT WORKS"
-msgstr "7. AGREGAÇÃO COM TRABALHOS INDEPENDENTES"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:538
-msgid ""
-"A compilation of the <link linkend=\"fdl-document\">Document</link> or its "
-"derivatives with other separate and independent documents or works, in or on "
-"a volume of a storage or distribution medium, does not as a whole count as a "
-"<link linkend=\"fdl-modified\">Modified Version</link> of the Document, "
-"provided no compilation copyright is claimed for the compilation. Such a "
-"compilation is called an <quote>aggregate</quote>, and this License does not "
-"apply to the other self-contained works thus compiled with the Document , on "
-"account of their being thus compiled, if they are not themselves derivative "
-"works of the Document. If the <link linkend=\"fdl-cover-texts\">Cover Text</"
-"link> requirement of <link linkend=\"fdl-section3\">section 3</link> is "
-"applicable to these copies of the Document, then if the Document is less "
-"than one quarter of the entire aggregate, the Document's Cover Texts may be "
-"placed on covers that surround only the Document within the aggregate. "
-"Otherwise they must appear on covers around the whole aggregate."
-msgstr ""
-"Uma compilação do <link linkend=\"fdl-document\">Documento</link> ou seus "
-"derivados com outros documentos ou trabalhos separados e independentes, em "
-"ou sobre um volume de um meio de armazenamento ou distribuição, não como um "
-"todo conta como uma <link linkend=\"fdl-modified\">Versão Modificada</link> "
-"do Documento, desde que nenhuma compilação de direitos autorais seja "
-"reivindicada para a compilação. Tal compilação é chamada de "
-"“agregado” (aggregate), e esta Licença não se aplica aos outros trabalhos "
-"autônomos assim compilados com o Documento, por conta de serem assim "
-"compilados, se eles não forem eles próprios trabalhos derivados do "
-"Documento. Se o requisito do <link linkend=\"fdl-cover-texts\">Texto da "
-"Capa</link> da <link linkend=\"fdl-section3\">seção 3</link> for aplicável a "
-"essas cópias do Documento, então, se o Documento for inferior a um quarto do "
-"agregado inteiro, os Textos de Capa do Documento poderão ser colocados em "
-"capas que envolvam apenas o Documento no agregado. Caso contrário, eles "
-"devem aparecer nas capas envolvem todo o agregado."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:561 C/fdl-appendix.xml:561
-msgid "8. TRANSLATION"
-msgstr "8. TRADUÇÃO"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:562
-msgid ""
-"Translation is considered a kind of modification, so you may distribute "
-"translations of the <link linkend=\"fdl-document\">Document</link> under the "
-"terms of <link linkend=\"fdl-section4\">section 4</link>. Replacing <link "
-"linkend=\"fdl-invariant\"> Invariant Sections</link> with translations "
-"requires special permission from their copyright holders, but you may "
-"include translations of some or all Invariant Sections in addition to the "
-"original versions of these Invariant Sections. You may include a translation "
-"of this License provided that you also include the original English version "
-"of this License. In case of a disagreement between the translation and the "
-"original English version of this License, the original English version will "
-"prevail."
-msgstr ""
-"A tradução é considerada um tipo de modificação, então você pode distribuir "
-"as traduções do <link linkend=\"fdl-document\">Documento</link> nos termos "
-"da <link linkend=\"fdl-section4\">seção 4</link>. A substituição das <link "
-"linkend=\"fdl-invariant\">Seções Invariantes</link> com traduções requer "
-"permissão especial de seus detentores de direitos autorais, mas você pode "
-"incluir traduções de algumas ou todas as Seções Invariantes além das versões "
-"originais destas Seções Invariantes. Você pode incluir uma tradução desta "
-"Licença, desde que você também inclua a versão original em inglês desta "
-"Licença. Em caso de desacordo entre a tradução e a versão original desta "
-"Licença, a versão original prevalecerá."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:580 C/fdl-appendix.xml:580
-msgid "9. TERMINATION"
-msgstr "9. TERMINAÇÃO"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:581
-msgid ""
-"You may not copy, modify, sublicense, or distribute the <link linkend=\"fdl-"
-"document\">Document</link> except as expressly provided for under this "
-"License. Any other attempt to copy, modify, sublicense or distribute the "
-"Document is void, and will automatically terminate your rights under this "
-"License. However, parties who have received copies, or rights, from you "
-"under this License will not have their licenses terminated so long as such "
-"parties remain in full compliance."
-msgstr ""
-"Você não pode copiar, modificar, sublicenciar ou distribuir o <link linkend="
-"\"fdl-document\">Documento</link>, exceto conforme expressamente previsto "
-"nesta Licença. Qualquer tentativa de copiar, modificar, sublicenciar ou "
-"distribuir o Documento é anulada e terminará automaticamente seus direitos "
-"sob esta Licença. No entanto, as partes que receberam cópias ou direitos de "
-"você sob esta Licença não terão suas licenças terminadas, desde que tais "
-"partes permaneçam em plena conformidade."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:594 C/fdl-appendix.xml:594
-msgid "10. FUTURE REVISIONS OF THIS LICENSE"
-msgstr "10. FUTURAS REVISÕES DESTA LICENÇA"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:595
-msgid ""
-"The <ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf.html\">Free "
-"Software Foundation</ulink> may publish new, revised versions of the GNU "
-"Free Documentation License from time to time. Such new versions will be "
-"similar in spirit to the present version, but may differ in detail to "
-"address new problems or concerns. See <ulink type=\"http\" url=\"http://www."
-"gnu.org/copyleft\">http://www.gnu.org/copyleft/</ulink>."
-msgstr ""
-"A <ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf.html\">Free Software "
-"Foundation</ulink> pode publicar novas e revisadas versões da Licença de "
-"Documentação Livre GNU de vez em quando. Essas novas versões serão "
-"semelhantes em espírito à versão atual, mas podem diferir em detalhes para "
-"resolver novos problemas ou preocupações. Veja <ulink type=\"http\" url="
-"\"http://www.gnu.org/copyleft\">http://www.gnu.org/copyleft/</ulink>.A "
-"<ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf.html\">Free Software "
-"Foundation</ulink> pode publicar novas versões, revisadas, da Licença de "
-"Documentação Livre GNU de tempos em tempos. Tais versões posteriores terão "
-"ideologia similar à presente versão, embora possam diferir em detalhes a fim "
-"de abordar novos problemas ou preocupações. Consulte: <ulink type=\"http\" "
-"url=\"http://www.gnu.org/copyleft\">http://www.gnu.org/copyleft/</ulink>."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:606
-msgid ""
-"Each version of the License is given a distinguishing version number. If the "
-"<link linkend=\"fdl-document\">Document</link> specifies that a particular "
-"numbered version of this License <quote>or any later version</quote> applies "
-"to it, you have the option of following the terms and conditions either of "
-"that specified version or of any later version that has been published (not "
-"as a draft) by the Free Software Foundation. If the Document does not "
-"specify a version number of this License, you may choose any version ever "
-"published (not as a draft) by the Free Software Foundation."
-msgstr ""
-"Cada versão da Licença recebe um número de versão distinto. Se o <link "
-"linkend=\"fdl-document\">Documento</link> especifica que uma versão numerada "
-"específica desta Licença “ou qualquer versão posterior” aplica-se a ele, "
-"você tem a opção de seguir os termos e condições daquela versão especificada "
-"ou de qualquer versão posterior que tenha sido publicada (não como um "
-"rascunho) pela Free Software Foundation. Se o Documento não especificar um "
-"número de versão desta Licença, você pode escolher qualquer versão publicada "
-"(não como um rascunho) pela Free Software Foundation."
-
-#. (itstool) path: sect1/title
-#: C/index.docbook:621 C/fdl-appendix.xml:621
-msgid "Addendum"
-msgstr "Adendo"
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:622 C/fdl-appendix.xml:622
-msgid ""
-"To use this License in a document you have written, include a copy of the "
-"License in the document and put the following copyright and license notices "
-"just after the title page:"
-msgstr ""
-"Para usar esta Licença em um documento que você escreveu, inclua uma cópia "
-"da Licença no documento e coloque os seguintes avisos de direitos autorais e "
-"de licenças logo após a página de título:"
-
-#. (itstool) path: blockquote/para
-#: C/index.docbook:629 C/fdl-appendix.xml:629
-msgid "Copyright YEAR YOUR NAME."
-msgstr "Copyright ANO SEU NOME."
-
-#. (itstool) path: blockquote/para
-#: C/index.docbook:632
-msgid ""
-"Permission is granted to copy, distribute and/or modify this document under "
-"the terms of the GNU Free Documentation License, Version 1.1 or any later "
-"version published by the Free Software Foundation; with the <link linkend="
-"\"fdl-invariant\">Invariant Sections</link> being LIST THEIR TITLES, with "
-"the <link linkend=\"fdl-cover-texts\">Front-Cover Texts</link> being LIST, "
-"and with the <link linkend=\"fdl-cover-texts\">Back-Cover Texts</link> being "
-"LIST. A copy of the license is included in the section entitled <quote>GNU "
-"Free Documentation License</quote>."
-msgstr ""
-"Permissão concedida para copiar, distribuir e/ou modificar este documento "
-"sob os termos da Licença de Documentação Livre GNU, Versão 1.1 ou qualquer "
-"versão mais recente publicada pela Free Software Foundation; com as <link "
-"linkend=\"fdl-invariant\">Seções Invariantes</link> sendo LISTE SEUS "
-"TÍTULOS, com os <link linkend=\"fdl-cover-texts\">Textos de Capa Frontal</"
-"link> sendo LISTA e os <link linkend=\"fdl-cover-texts\">Textos de "
-"Contracapa</link> sendo LISTA. Uma cópia da licença está incluída na seção "
-"intitulada \"Licença de Documentação Livre GNU\" (GNU Free Documentation "
-"License)."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:647
-msgid ""
-"If you have no <link linkend=\"fdl-invariant\">Invariant Sections</link>, "
-"write <quote>with no Invariant Sections</quote> instead of saying which ones "
-"are invariant. If you have no <link linkend=\"fdl-cover-texts\">Front-Cover "
-"Texts</link>, write <quote>no Front-Cover Texts</quote> instead of "
-"<quote>Front-Cover Texts being LIST</quote>; likewise for <link linkend="
-"\"fdl-cover-texts\">Back-Cover Texts</link>."
-msgstr ""
-"Se você não tiver <link linkend=\"fdl-invariant\">Seção Invariante</link>, "
-"escreva “sem Seções Invariantes” em vez de dizer quais são invariantes. Se "
-"você não tiver <link linkend=\"fdl-cover-texts\">Textos de Capa Frontal</"
-"link>, escreva “sem Textos da Capa Frontal” em vez de “Textos de Capa "
-"Frontal sendo LIST”; Da mesma forma para <link linkend=\"fdl-cover-texts"
-"\">Textos de Contracapa</link>."
-
-#. (itstool) path: sect1/para
-#: C/index.docbook:657
-msgid ""
-"If your document contains nontrivial examples of program code, we recommend "
-"releasing these examples in parallel under your choice of free software "
-"license, such as the <ulink type=\"http\" url=\"http://www.gnu.org/copyleft/"
-"gpl.html\"> GNU General Public License</ulink>, to permit their use in free "
-"software."
-msgstr ""
-"Se o seu documento contiver exemplos não triviais do código do programa, "
-"recomendamos que apresente esses exemplos em paralelo, sob sua escolha de "
-"licença de software livre, como a <ulink type=\"http\" url=\"http://www.gnu."
-"org/copyleft/gpl.html\">Licença Pública Geral GNU</ulink> (GNU General "
-"Public License), para permitir sua utilização em software livre."
 
 #. (itstool) path: copyright/year
 #: C/fdl-appendix.xml:16
@@ -5387,6 +4348,26 @@ msgstr ""
 "Free Software Foundation, Inc. <_:street-1/>, <_:city-2/>, <_:state-3/> <_:"
 "postcode-4/> <_:country-5/>"
 
+#. (itstool) path: legalnotice/para
+#: C/fdl-appendix.xml:19
+msgid ""
+"<_:address-1/> Everyone is permitted to copy and distribute verbatim copies "
+"of this license document, but changing it is not allowed."
+msgstr ""
+"<_:address-1/> É permitido a qualquer um copiar e distribuir cópias exatas "
+"deste documento de licença, embora não seja permitido alterá-lo."
+
+#. (itstool) path: appendix/title
+#. (itstool) path: para/quote
+#: C/fdl-appendix.xml:28 C/fdl-appendix.xml:642
+msgid "GNU Free Documentation License"
+msgstr "Licença de Documentação Livre GNU"
+
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:31
+msgid "0. PREAMBLE"
+msgstr "0. PREÂMBULO"
+
 #. (itstool) path: para/quote
 #: C/fdl-appendix.xml:34
 msgid "free"
@@ -5426,6 +4407,30 @@ msgstr ""
 "derivados do documento precisam ser, por sua vez, livres no mesmo sentido. "
 "Ela complementa a Licença Pública Geral GNU (GNU General Public License), "
 "que é uma licença copyleft projetada para softwares livres."
+
+#. (itstool) path: sect1/para
+#: C/fdl-appendix.xml:50
+msgid ""
+"We have designed this License in order to use it for manuals for free "
+"software, because free software needs free documentation: a free program "
+"should come with manuals providing the same freedoms that the software does. "
+"But this License is not limited to software manuals; it can be used for any "
+"textual work, regardless of subject matter or whether it is published as a "
+"printed book. We recommend this License principally for works whose purpose "
+"is instruction or reference."
+msgstr ""
+"Criamos esta Licença para usá-la para manuais para software livre, porque "
+"software livre precisa de documentação livre: um programa livre deve ser "
+"fornecido com manuais que proporcionam as mesmas liberdades que o software. "
+"Mas esta Licença não está limitada aos manuais de software; pode ser usada "
+"para qualquer trabalho textual, independentemente do assunto ou dele ser "
+"publicado como um livro impresso. Recomendamos esta Licença principalmente "
+"para trabalhos cujo propósito seja instrução ou referência."
+
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:62
+msgid "1. APPLICABILITY AND DEFINITIONS"
+msgstr "1. APLICABILIDADE E DEFINIÇÕES"
 
 #. (itstool) path: para/quote
 #. (itstool) path: para/link
@@ -5589,6 +4594,28 @@ msgstr ""
 "modificação subsequente pelos leitores não é Transparente. Uma cópia que não "
 "é <_:quote-3/> é chamada <_:quote-4/>."
 
+#. (itstool) path: sect1/para
+#: C/fdl-appendix.xml:128
+msgid ""
+"Examples of suitable formats for Transparent copies include plain ASCII "
+"without markup, Texinfo input format, LaTeX input format, SGML or XML using "
+"a publicly available DTD, and standard-conforming simple HTML designed for "
+"human modification. Opaque formats include PostScript, PDF, proprietary "
+"formats that can be read and edited only by proprietary word processors, "
+"SGML or XML for which the DTD and/or processing tools are not generally "
+"available, and the machine-generated HTML produced by some word processors "
+"for output purposes only."
+msgstr ""
+"Exemplos de formatos adequados para cópias Transparentes incluem ASCII "
+"simples sem marcação, formato de entrada Texinfo, formato de entrada LaTeX, "
+"SGML ou XML usando DTD publicamente disponível e HTML simples, conforme "
+"padrão, projetados para modificação humana. Os formatos Opacos incluem "
+"PostScript, PDF, formatos proprietários que podem ser lidos e editados "
+"apenas por processadores de texto proprietários, SGML ou XML para os quais o "
+"DTD e/ou ferramentas de processamento não estão geralmente disponíveis e o "
+"HTML gerado por máquina produzido por alguns processadores de texto para "
+"apenas para fins de saída."
+
 #. (itstool) path: para/quote
 #. (itstool) path: para/link
 #: C/fdl-appendix.xml:142 C/fdl-appendix.xml:146 C/fdl-appendix.xml:250
@@ -5612,6 +4639,11 @@ msgstr ""
 "Para trabalhos em formatos que não possuem qualquer página de título "
 "semelhante, <_:quote-2/> significa o texto próximo à ocorrência mais "
 "proeminente do título do trabalho, precedendo o início do corpo do texto."
+
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:153
+msgid "2. VERBATIM COPYING"
+msgstr "2. CÓPIA LITERAL"
 
 #. (itstool) path: para/link
 #: C/fdl-appendix.xml:166 C/fdl-appendix.xml:551
@@ -5643,6 +4675,20 @@ msgstr ""
 "descritas na <_:link-2/>."
 
 #. (itstool) path: sect1/para
+#: C/fdl-appendix.xml:169
+msgid ""
+"You may also lend copies, under the same conditions stated above, and you "
+"may publicly display copies."
+msgstr ""
+"Você também pode emprestar cópias, nas mesmas condições acima mencionadas, e "
+"você pode publicar cópias."
+
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:176
+msgid "3. COPYING IN QUANTITY"
+msgstr "3. COPIANDO EM QUANTIDADE"
+
+#. (itstool) path: sect1/para
 #: C/fdl-appendix.xml:177
 msgid ""
 "If you publish printed copies of the <_:link-1/> numbering more than 100, "
@@ -5667,6 +4713,18 @@ msgstr ""
 "cópias com mudanças limitadas às capas, desde que preservem o título do <_:"
 "link-3/> e satisfaçam estas condições podem ser tratadas como cópias "
 "literais em outros aspectos."
+
+#. (itstool) path: sect1/para
+#: C/fdl-appendix.xml:195
+msgid ""
+"If the required texts for either cover are too voluminous to fit legibly, "
+"you should put the first ones listed (as many as fit reasonably) on the "
+"actual cover, and continue the rest onto adjacent pages."
+msgstr ""
+"Se os textos necessários para qualquer uma das coberturas forem demasiado "
+"volumosos para se ajustar de forma legível, você deve colocar os primeiros "
+"listados (tanto quanto encaixar razoavelmente) na capa real e continuar o "
+"resto em páginas adjacentes."
 
 #. (itstool) path: sect1/para
 #: C/fdl-appendix.xml:202
@@ -5708,6 +4766,11 @@ msgstr ""
 "muito antes de redistribuir qualquer grande número de cópias, para dar a "
 "eles uma chance de lhe fornecer uma versão atualizada do Documento."
 
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:231
+msgid "4. MODIFICATIONS"
+msgstr "4. MODIFICAÇÕES"
+
 #. (itstool) path: para/link
 #: C/fdl-appendix.xml:236
 msgid "2"
@@ -5736,6 +4799,11 @@ msgstr ""
 "Além disso, você deve executar os seguintes procedimentos na Versão "
 "Modificada:"
 
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:248
+msgid "A"
+msgstr "A"
+
 #. (itstool) path: formalpara/para
 #: C/fdl-appendix.xml:249
 msgid ""
@@ -5751,6 +4819,11 @@ msgstr ""
 "Você pode usar o mesmo título de uma versão anterior se o editor original "
 "daquela versão conceder-lhe permissão."
 
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:264
+msgid "B"
+msgstr "B"
+
 #. (itstool) path: formalpara/para
 #: C/fdl-appendix.xml:265
 msgid ""
@@ -5764,6 +4837,11 @@ msgstr ""
 "pelo menos cinco autores principais do <_:link-3/> (todos seus autores "
 "principais, se houver menos que cinco)."
 
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:279
+msgid "C"
+msgstr "C"
+
 #. (itstool) path: formalpara/para
 #: C/fdl-appendix.xml:280
 msgid ""
@@ -5772,11 +4850,35 @@ msgid ""
 msgstr ""
 "Declarar na <_:link-1/> o nome do editor da <_:link-2/>, como seu editor."
 
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:291
+msgid "D"
+msgstr "D"
+
 #. (itstool) path: formalpara/para
 #: C/fdl-appendix.xml:292
 msgid "Preserve all the copyright notices of the <_:link-1/>."
 msgstr ""
 "Preservar todas as notas de direitos autorais (copyright) do <_:link-1/>."
+
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:301
+msgid "E"
+msgstr "E"
+
+#. (itstool) path: formalpara/para
+#: C/fdl-appendix.xml:302
+msgid ""
+"Add an appropriate copyright notice for your modifications adjacent to the "
+"other copyright notices."
+msgstr ""
+"Adicionar um aviso de direitos autorais apropriado para suas modificações "
+"adjacentes aos outros avisos de direitos autorais."
+
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:311
+msgid "F"
+msgstr "F"
 
 #. (itstool) path: formalpara/para
 #: C/fdl-appendix.xml:312
@@ -5789,10 +4891,15 @@ msgstr ""
 "licença concedendo permissão pública para o uso da <_:link-1/> sob os termos "
 "desta Licença, na forma mostrada no Adendo abaixo."
 
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:324
+msgid "G"
+msgstr "G"
+
 #. (itstool) path: para/link
 #: C/fdl-appendix.xml:330
 msgid "Document's"
-msgstr "do Documento"
+msgstr "Do documento"
 
 #. (itstool) path: formalpara/para
 #: C/fdl-appendix.xml:325
@@ -5802,6 +4909,21 @@ msgid ""
 msgstr ""
 "Preservar na referida nota de licença a lista completa de <_:link-1/> e <_:"
 "link-2/> obrigatórios, dados na nota de licença do <_:link-3/>."
+
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:337
+msgid "H"
+msgstr "H"
+
+#. (itstool) path: formalpara/para
+#: C/fdl-appendix.xml:338
+msgid "Include an unaltered copy of this License."
+msgstr "Incluir uma cópia inalterada desta Licença."
+
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:346
+msgid "I"
+msgstr "I"
 
 #. (itstool) path: para/quote
 #: C/fdl-appendix.xml:348 C/fdl-appendix.xml:353 C/fdl-appendix.xml:372
@@ -5827,6 +4949,11 @@ msgstr ""
 "Página de Título, em seguida adicione um item descrevendo a Versão "
 "Modificada como mencionado na sentença anterior."
 
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:365
+msgid "J"
+msgstr "J"
+
 #. (itstool) path: formalpara/para
 #: C/fdl-appendix.xml:366
 msgid ""
@@ -5845,6 +4972,11 @@ msgstr ""
 "um endereço de rede para um trabalho que foi publicado pelo menos quatro "
 "anos antes do Documento em si, ou se o editor original da versão à qual o "
 "endereço se refere der permissão."
+
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:383
+msgid "K"
+msgstr "K"
 
 #. (itstool) path: para/quote
 #: C/fdl-appendix.xml:385 C/fdl-appendix.xml:509
@@ -5867,6 +4999,11 @@ msgstr ""
 "<_:quote-2/> e preservar dentro da seção toda a substância e tom de cada um "
 "dos agradecimentos e/ou dedicatórias lá mencionados."
 
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:396
+msgid "L"
+msgstr "L"
+
 #. (itstool) path: formalpara/para
 #: C/fdl-appendix.xml:397
 msgid ""
@@ -5877,6 +5014,11 @@ msgstr ""
 "Preservar todas as <_:link-1/> do <_:link-2/>, sem alterações em seus textos "
 "e títulos. Números de seção ou o equivalente não são considerados parte dos "
 "títulos das seções."
+
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:409
+msgid "M"
+msgstr "M"
 
 #. (itstool) path: para/quote
 #: C/fdl-appendix.xml:412 C/fdl-appendix.xml:424 C/fdl-appendix.xml:445
@@ -5891,6 +5033,11 @@ msgid ""
 msgstr ""
 "Apagar qualquer seção intitulada <_:quote-1/>. Tal seção não deve ser "
 "incluída na <_:link-2/>."
+
+#. (itstool) path: formalpara/title
+#: C/fdl-appendix.xml:421
+msgid "N"
+msgstr "N"
 
 #. (itstool) path: para/link
 #: C/fdl-appendix.xml:425
@@ -5979,6 +5126,11 @@ msgstr ""
 "permissão para que seus nomes sejam usados a fins de publicidade, para "
 "defesa ou para apoio implícito de qualquer <_:link-2/>."
 
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:480
+msgid "5. COMBINING DOCUMENTS"
+msgstr "5. COMBINANDO DOCUMENTOS"
+
 #. (itstool) path: para/link
 #: C/fdl-appendix.xml:484 C/fdl-appendix.xml:566
 msgid "section 4"
@@ -6039,6 +5191,11 @@ msgstr ""
 "quaisquer seções intituladas <_:quote-4/>. Você deve apagar todas as seções "
 "intituladas <_:quote-5/>."
 
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:516
+msgid "6. COLLECTIONS OF DOCUMENTS"
+msgstr "6. COLEÇÕES DE DOCUMENTOS"
+
 #. (itstool) path: sect1/para
 #: C/fdl-appendix.xml:517
 msgid ""
@@ -6053,6 +5210,24 @@ msgstr ""
 "Licença, nos vários documentos, por uma única cópia a ser incluída na "
 "coleção, desde que você siga as regras desta Licença para cópias literais de "
 "cada documento em todos os outros aspectos."
+
+#. (itstool) path: sect1/para
+#: C/fdl-appendix.xml:527
+msgid ""
+"You may extract a single document from such a collection, and distribute it "
+"individually under this License, provided you insert a copy of this License "
+"into the extracted document, and follow this License in all other respects "
+"regarding verbatim copying of that document."
+msgstr ""
+"Você pode extrair um único documento de tal coleção e distribuí-lo "
+"individualmente sob esta Licença, desde que você insira uma cópia desta "
+"Licença no documento extraído e siga esta Licença em todos os outros "
+"aspectos referentes à cópia literal desse documento."
+
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:537
+msgid "7. AGGREGATION WITH INDEPENDENT WORKS"
+msgstr "7. AGREGAÇÃO COM TRABALHOS INDEPENDENTES"
 
 #. (itstool) path: para/quote
 #: C/fdl-appendix.xml:546
@@ -6093,6 +5268,11 @@ msgstr ""
 "inseridos nas capas que envolvem somente o Documento no agregado. Caso "
 "contrário, eles devem aparecer em capas em volta do agregado como um todo."
 
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:561
+msgid "8. TRANSLATION"
+msgstr "8. TRADUÇÃO"
+
 #. (itstool) path: sect1/para
 #: C/fdl-appendix.xml:562
 msgid ""
@@ -6116,6 +5296,11 @@ msgstr ""
 "entre a tradução e a versão original desta Licença ou nota de licença, a "
 "versão original em inglês prevalecerá."
 
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:580
+msgid "9. TERMINATION"
+msgstr "9. TERMINAÇÃO"
+
 #. (itstool) path: sect1/para
 #: C/fdl-appendix.xml:581
 msgid ""
@@ -6133,6 +5318,11 @@ msgstr ""
 "esta Licença. Contudo, as partes que receberam as cópias, ou direitos, de "
 "você sob esta Licença não terão suas licenças rescindidas enquanto tais "
 "partes permanecerem em total acordo com a Licença."
+
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:594
+msgid "10. FUTURE REVISIONS OF THIS LICENSE"
+msgstr "10. FUTURAS REVISÕES DESTA LICENÇA"
 
 #. (itstool) path: para/ulink
 #: C/fdl-appendix.xml:597
@@ -6181,6 +5371,27 @@ msgstr ""
 "documento não especificar um número de versão desta Licença, você pode "
 "escolher qualquer versão já publicada (não como rascunho) pela Free Software "
 "Foundation."
+
+#. (itstool) path: sect1/title
+#: C/fdl-appendix.xml:621
+msgid "Addendum"
+msgstr "Adendo"
+
+#. (itstool) path: sect1/para
+#: C/fdl-appendix.xml:622
+msgid ""
+"To use this License in a document you have written, include a copy of the "
+"License in the document and put the following copyright and license notices "
+"just after the title page:"
+msgstr ""
+"Para usar esta Licença em um documento que você escreveu, inclua uma cópia "
+"da Licença no documento e coloque os seguintes avisos de direitos autorais e "
+"de licenças logo após a página de título:"
+
+#. (itstool) path: blockquote/para
+#: C/fdl-appendix.xml:629
+msgid "Copyright YEAR YOUR NAME."
+msgstr "Copyright ANO SEU NOME."
 
 #. (itstool) path: para/link
 #: C/fdl-appendix.xml:639 C/fdl-appendix.xml:651
@@ -6251,6 +5462,726 @@ msgstr ""
 "recomendamos publicar estes exemplos paralelamente, sob a licença de "
 "software livre que você escolher, como, por exemplo, a <_:ulink-1/>, para "
 "permitir seu uso em software livre."
+
+#~ msgid "<year>2000</year><holder>Free Software Foundation, Inc.</holder>"
+#~ msgstr "<year>2000</year><holder>Free Software Foundation, Inc.</holder>"
+
+#, no-wrap
+#~ msgid ""
+#~ "Free Software Foundation, Inc. <street>51 Franklin Street, \n"
+#~ "        Suite 330</street>, <city>Boston</city>, <state>MA</state>  \n"
+#~ "        <postcode>02110-1301</postcode>  <country>USA</country>"
+#~ msgstr ""
+#~ "Free Software Foundation, Inc. <street>51 Franklin Street, \n"
+#~ "        Suite 330</street>, <city>Boston</city>, <state>MA</state>  \n"
+#~ "        <postcode>02110-1301</postcode>  <country>USA</country>"
+
+#~ msgid ""
+#~ "The purpose of this License is to make a manual, textbook, or other "
+#~ "written document <quote>free</quote> in the sense of freedom: to assure "
+#~ "everyone the effective freedom to copy and redistribute it, with or "
+#~ "without modifying it, either commercially or noncommercially. "
+#~ "Secondarily, this License preserves for the author and publisher a way to "
+#~ "get credit for their work, while not being considered responsible for "
+#~ "modifications made by others."
+#~ msgstr ""
+#~ "O objetivo desta Licença é tornar um manual, livro didático ou outro "
+#~ "documento funcional e útil “livre” no sentido de liberdade: assegurar a "
+#~ "todos a liberdade efetiva de copiá-lo e redistribuí-lo, com ou sem "
+#~ "modificação do mesmo, comercialmente ou não. Em segundo lugar, esta "
+#~ "Licença preserva para o autor e o editor uma maneira de obter crédito por "
+#~ "seu trabalho, sem ser considerado responsável por modificações feitas por "
+#~ "outros."
+
+#~ msgid ""
+#~ "This License is a kind of <quote>copyleft</quote>, which means that "
+#~ "derivative works of the document must themselves be free in the same "
+#~ "sense. It complements the GNU General Public License, which is a copyleft "
+#~ "license designed for free software."
+#~ msgstr ""
+#~ "Esta licença é um tipo de “copyleft”, o que significa que trabalhos "
+#~ "derivados do documento devem ser livres no mesmo sentido. Ela complementa "
+#~ "a Licença Pública Geral GNU (GNU General Public License), que é uma "
+#~ "licença com copyleft projetada para software livre."
+
+#~ msgid ""
+#~ "This License applies to any manual or other work that contains a notice "
+#~ "placed by the copyright holder saying it can be distributed under the "
+#~ "terms of this License. The <quote>Document</quote>, below, refers to any "
+#~ "such manual or work. Any member of the public is a licensee, and is "
+#~ "addressed as <quote>you</quote>."
+#~ msgstr ""
+#~ "Esta Licença aplica-se a qualquer manual ou outro trabalho, em qualquer "
+#~ "meio, que contenha um aviso colocado pelo detentor dos direitos autorais "
+#~ "dizendo que pode ser distribuído nos termos desta Licença. Tal aviso "
+#~ "concede uma licença mundial, sem royalties, de duração ilimitada, para "
+#~ "usar esse trabalho nas condições aqui estabelecidas. O “Documento”, a "
+#~ "seguir, refere-se a qualquer manual ou trabalho. Qualquer membro do "
+#~ "público é um licenciado e é referido como “você”. Você aceita a licença "
+#~ "se você copiar, modificar ou distribuir o trabalho de forma a exigir "
+#~ "permissão de acordo com a lei de direitos autorais."
+
+#~ msgid ""
+#~ "A <quote>Modified Version</quote> of the Document means any work "
+#~ "containing the Document or a portion of it, either copied verbatim, or "
+#~ "with modifications and/or translated into another language."
+#~ msgstr ""
+#~ "Uma “Versão Modificada” do Documento significa qualquer trabalho contendo "
+#~ "o Documento ou uma porção deste, seja uma cópia literal ou com "
+#~ "modificações e/ou traduzido em outro idioma."
+
+#~ msgid ""
+#~ "A <quote>Secondary Section</quote> is a named appendix or a front-matter "
+#~ "section of the <link linkend=\"fdl-document\">Document</link> that deals "
+#~ "exclusively with the relationship of the publishers or authors of the "
+#~ "Document to the Document's overall subject (or to related matters) and "
+#~ "contains nothing that could fall directly within that overall subject. "
+#~ "(For example, if the Document is in part a textbook of mathematics, a "
+#~ "Secondary Section may not explain any mathematics.) The relationship "
+#~ "could be a matter of historical connection with the subject or with "
+#~ "related matters, or of legal, commercial, philosophical, ethical or "
+#~ "political position regarding them."
+#~ msgstr ""
+#~ "A “Seção Secundária” é um apêndice nomeado ou uma seção anterior do "
+#~ "Documento que trata exclusivamente do relacionamento dos editores ou "
+#~ "autores do <link linkend=\"fdl-document\">Documento</link> com o assunto "
+#~ "geral do documento (ou assuntos relacionados) e não contém nada que possa "
+#~ "estar diretamente dentro desse assunto geral. (Assim, se o Documento for, "
+#~ "em parte, um livro de texto de matemática, uma Seção Secundária pode não "
+#~ "explicar qualquer matemática.) O relacionamento poderia ser uma questão "
+#~ "de conexão histórica com o assunto ou com assuntos relacionados, ou de "
+#~ "posição legal, comercial, filosófica, ética ou política em relação a eles."
+
+#~ msgid ""
+#~ "The <quote>Invariant Sections</quote> are certain <link linkend=\"fdl-"
+#~ "secondary\"> Secondary Sections</link> whose titles are designated, as "
+#~ "being those of Invariant Sections, in the notice that says that the <link "
+#~ "linkend=\"fdl-document\">Document</link> is released under this License."
+#~ msgstr ""
+#~ "As “Seções Invariantes” são certas <link linkend=\"fdl-secondary\">Seções "
+#~ "Secundárias</link> cujos títulos são designados, como sendo daquelas de "
+#~ "Seções Invariantes, no aviso que diz que o <link linkend=\"fdl-"
+#~ "document\">Documento</link> é liberado sob esta Licença."
+
+#~ msgid ""
+#~ "The <quote>Cover Texts</quote> are certain short passages of text that "
+#~ "are listed, as Front-Cover Texts or Back-Cover Texts, in the notice that "
+#~ "says that the <link linkend=\"fdl-document\">Document</link> is released "
+#~ "under this License."
+#~ msgstr ""
+#~ "Os “Textos de Capa” são certas passagens de texto que são listadas como "
+#~ "Textos de Capa Frontal ou Textos de Contracapa, no aviso que afirma que o "
+#~ "<link linkend=\"fdl-document\">Documento</link> foi publicado sob esta "
+#~ "Licença."
+
+#~ msgid ""
+#~ "A <quote>Transparent</quote> copy of the <link linkend=\"fdl-document\"> "
+#~ "Document</link> means a machine-readable copy, represented in a format "
+#~ "whose specification is available to the general public, whose contents "
+#~ "can be viewed and edited directly and straightforwardly with generic text "
+#~ "editors or (for images composed of pixels) generic paint programs or (for "
+#~ "drawings) some widely available drawing editor, and that is suitable for "
+#~ "input to text formatters or for automatic translation to a variety of "
+#~ "formats suitable for input to text formatters. A copy made in an "
+#~ "otherwise Transparent file format whose markup has been designed to "
+#~ "thwart or discourage subsequent modification by readers is not "
+#~ "Transparent. A copy that is not <quote>Transparent</quote> is called "
+#~ "<quote>Opaque</quote>."
+#~ msgstr ""
+#~ "Uma cópia “Transparente” do <link linkend=\"fdl-document\"> Documento</"
+#~ "link> significa uma cópia legível por máquina, representada em um formato "
+#~ "cuja especificação está disponível para o público em geral, cujo conteúdo "
+#~ "possa ser visto e editado diretamente com editores de texto genéricos ou "
+#~ "(para imagens compostas de pixels) programas gráficos genéricos ou (para "
+#~ "desenhos) algum editor de desenho amplamente disponível, e isso seja "
+#~ "adequado para entrada para formatadores de texto ou para tradução "
+#~ "automática para uma variedade de formatos adequados para entrada de "
+#~ "formatadores de texto. Uma cópia feita em um formato de arquivo "
+#~ "Transparente cuja marcação tenha sido projetada para frustrar ou "
+#~ "desencorajar a modificação subsequente pelos leitores não é Transparente. "
+#~ "Uma cópia que não é “Transparente” é chamada de “Opaca”."
+
+#~ msgid ""
+#~ "The <quote>Title Page</quote> means, for a printed book, the title page "
+#~ "itself, plus such following pages as are needed to hold, legibly, the "
+#~ "material this License requires to appear in the title page. For works in "
+#~ "formats which do not have any title page as such, <quote>Title Page</"
+#~ "quote> means the text near the most prominent appearance of the work's "
+#~ "title, preceding the beginning of the body of the text."
+#~ msgstr ""
+#~ "A “Página de Título” significa, para um livro impresso, a própria página "
+#~ "do título, além das páginas subsequentes necessárias para conter, de "
+#~ "forma legível, o material que esta Licença requer que apareça na página "
+#~ "do título. Para trabalhos em formatos que não possuem qualquer página de "
+#~ "título semelhante, “Página de Título” significa o texto próximo à "
+#~ "ocorrência mais proeminente do título do trabalho, precedendo o início do "
+#~ "corpo do texto."
+
+#~ msgid ""
+#~ "You may copy and distribute the <link linkend=\"fdl-document\">Document</"
+#~ "link> in any medium, either commercially or noncommercially, provided "
+#~ "that this License, the copyright notices, and the license notice saying "
+#~ "this License applies to the Document are reproduced in all copies, and "
+#~ "that you add no other conditions whatsoever to those of this License. You "
+#~ "may not use technical measures to obstruct or control the reading or "
+#~ "further copying of the copies you make or distribute. However, you may "
+#~ "accept compensation in exchange for copies. If you distribute a large "
+#~ "enough number of copies you must also follow the conditions in <link "
+#~ "linkend=\"fdl-section3\">section 3</link>."
+#~ msgstr ""
+#~ "Você pode copiar e distribuir o <link linkend=\"fdl-document\">Documento</"
+#~ "link> em qualquer meio, seja este de forma comercial ou não, desde que "
+#~ "esta Licença, os avisos de direitos autorais e o aviso de licença "
+#~ "afirmando que esta Licença se aplica ao Documento sejam reproduzidos em "
+#~ "todas as cópias, e que você adicione nenhuma outra condição, qualquer que "
+#~ "seja, às condições desta Licença. Você não pode usar de medidas técnicas "
+#~ "para obstruir ou controlar a leitura ou cópia futura das cópias que você "
+#~ "fizer ou distribuir. Contudo, você pode aceitar compensação em troca das "
+#~ "cópias. Se você distribuir um número suficientemente grande de cópias, "
+#~ "você deve também respeitar as condições descritas na <link linkend=\"fdl-"
+#~ "section3\">seção 3</link>."
+
+#~ msgid ""
+#~ "If you publish printed copies of the <link linkend=\"fdl-"
+#~ "document\">Document</link> numbering more than 100, and the Document's "
+#~ "license notice requires <link linkend=\"fdl-cover-texts\">Cover Texts</"
+#~ "link>, you must enclose the copies in covers that carry, clearly and "
+#~ "legibly, all these Cover Texts: Front-Cover Texts on the front cover, and "
+#~ "Back-Cover Texts on the back cover. Both covers must also clearly and "
+#~ "legibly identify you as the publisher of these copies. The front cover "
+#~ "must present the full title with all words of the title equally prominent "
+#~ "and visible. You may add other material on the covers in addition. "
+#~ "Copying with changes limited to the covers, as long as they preserve the "
+#~ "title of the <link linkend=\"fdl-document\">Document</link> and satisfy "
+#~ "these conditions, can be treated as verbatim copying in other respects."
+#~ msgstr ""
+#~ "Se você publicar cópias impressas do <link linkend=\"fdl-"
+#~ "document\">Documento</link> em número maior que 100, e o aviso de licença "
+#~ "do Documento exigir os <link linkend=\"fdl-cover-texts\">Textos de Capa</"
+#~ "link>, você deve incluir as cópias nas capas que carregam, de forma clara "
+#~ "e legível, todas essas Textos de Capa: Textos de Capa Frontal na capa "
+#~ "frontal e Textos de Contracapa na contracapa. Ambas as capas também devem "
+#~ "identificá-lo claramente e legivelmente como o editor dessas cópias. A "
+#~ "capa frontal deve apresentar o título completo com todas as palavras do "
+#~ "título igualmente proeminentes e visíveis. Você também pode adicionar "
+#~ "outros materiais nas capas. Copiar com as alterações limitadas às capas, "
+#~ "desde que preservem o título do <link linkend=\"fdl-document\">Documento</"
+#~ "link> e satisfaçam estas condições, podem ser tratadas como cópias "
+#~ "literais em outros aspectos."
+
+#~ msgid ""
+#~ "If you publish or distribute <link linkend=\"fdl-transparent\">Opaque</"
+#~ "link> copies of the <link linkend=\"fdl-document\">Document</link> "
+#~ "numbering more than 100, you must either include a machine-readable <link "
+#~ "linkend=\"fdl-transparent\">Transparent</link> copy along with each "
+#~ "Opaque copy, or state in or with each Opaque copy a publicly-accessible "
+#~ "computer-network location containing a complete Transparent copy of the "
+#~ "Document, free of added material, which the general network-using public "
+#~ "has access to download anonymously at no charge using public-standard "
+#~ "network protocols. If you use the latter option, you must take reasonably "
+#~ "prudent steps, when you begin distribution of Opaque copies in quantity, "
+#~ "to ensure that this Transparent copy will remain thus accessible at the "
+#~ "stated location until at least one year after the last time you "
+#~ "distribute an Opaque copy (directly or through your agents or retailers) "
+#~ "of that edition to the public."
+#~ msgstr ""
+#~ "Se você publicar ou distribuir cópias <link linkend=\"fdl-"
+#~ "transparent\">Opacas</link> do <link linkend=\"fdl-document\">Documento</"
+#~ "link> em número superior a 100, você deve incluir uma cópia <link "
+#~ "linkend=\"fdl-transparent\">Transparente</link> legível por máquina junto "
+#~ "com cada cópia Opaca ou estabelecer em ou com cada cópia Opaca uma "
+#~ "localização de rede de computador publicamente acessível contendo uma "
+#~ "cópia transparente completa do documento, sem material adicional, a "
+#~ "partir da qual o público geral usuário de rede tem acesso para baixar "
+#~ "anonimamente sem custo, usando protocolos de rede padrão público. Se você "
+#~ "usar a última opção, você deve tomar medidas razoavelmente prudentes, "
+#~ "quando você começar a distribuir cópias Opacas em quantidade, para "
+#~ "garantir que esta cópia Transparente permanecerá acessível no local "
+#~ "indicado até pelo menos um ano após a última vez que você distribuir uma "
+#~ "cópia Opaca (diretamente ou através de seus agentes ou varejistas) dessa "
+#~ "edição para o público."
+
+#~ msgid ""
+#~ "It is requested, but not required, that you contact the authors of the "
+#~ "<link linkend=\"fdl-document\">Document</link> well before redistributing "
+#~ "any large number of copies, to give them a chance to provide you with an "
+#~ "updated version of the Document."
+#~ msgstr ""
+#~ "É solicitado, mas não é necessário, que você contate os autores do <link "
+#~ "linkend=\"fdl-document\">Documento</link> muito antes de redistribuir "
+#~ "qualquer grande número de cópias, para dar a eles uma chance de lhe "
+#~ "fornecer uma versão atualizada do Documento."
+
+#~ msgid ""
+#~ "You may copy and distribute a <link linkend=\"fdl-modified\">Modified "
+#~ "Version</link> of the <link linkend=\"fdl-document\">Document</link> "
+#~ "under the conditions of sections <link linkend=\"fdl-section2\">2</link> "
+#~ "and <link linkend=\"fdl-section3\">3</link> above, provided that you "
+#~ "release the Modified Version under precisely this License, with the "
+#~ "Modified Version filling the role of the Document, thus licensing "
+#~ "distribution and modification of the Modified Version to whoever "
+#~ "possesses a copy of it. In addition, you must do these things in the "
+#~ "Modified Version:"
+#~ msgstr ""
+#~ "Você pode copiar e distribuir uma <link linkend=\"fdl-modified\">Versão "
+#~ "Modificada</link> do <link linkend=\"fdl-document\">Documento</link> sob "
+#~ "as condições das seções <link linkend=\"fdl-section2\">2</link> e <link "
+#~ "linkend=\"fdl-section3\">3</link> acima, desde que você forneça a Versão "
+#~ "Modificada estritamente sob esta Licença, com a Versão Modificada "
+#~ "preenchendo a função de Documento, permitindo assim a distribuição e "
+#~ "modificação da Versão Modificada a quem quer que possua uma cópia desta. "
+#~ "Além disso, você deve executar os seguintes procedimentos na Versão "
+#~ "Modificada:"
+
+#~ msgid ""
+#~ "Use in the <link linkend=\"fdl-title-page\">Title Page</link> (and on the "
+#~ "covers, if any) a title distinct from that of the <link linkend=\"fdl-"
+#~ "document\">Document</link>, and from those of previous versions (which "
+#~ "should, if there were any, be listed in the History section of the "
+#~ "Document). You may use the same title as a previous version if the "
+#~ "original publisher of that version gives permission."
+#~ msgstr ""
+#~ "Usar na <link linkend=\"fdl-title-page\">Página de Título</link> (e nas "
+#~ "capas, se existirem) um título distinto em relação ao do <link "
+#~ "linkend=\"fdl-document\">Documento</link>, e daqueles de versões "
+#~ "anteriores (os quais devem, havendo algum, ser listados na seção "
+#~ "“Histórico” do Documento). Você pode usar o mesmo título de uma versão "
+#~ "anterior se o editor original daquela versão lhe conceder permissão."
+
+#~ msgid ""
+#~ "List on the <link linkend=\"fdl-title-page\">Title Page</link>, as "
+#~ "authors, one or more persons or entities responsible for authorship of "
+#~ "the modifications in the <link linkend=\"fdl-modified\">Modified Version</"
+#~ "link>, together with at least five of the principal authors of the <link "
+#~ "linkend=\"fdl-document\">Document</link> (all of its principal authors, "
+#~ "if it has less than five)."
+#~ msgstr ""
+#~ "Listar na <link linkend=\"fdl-title-page\">Página de Título</link>, como "
+#~ "autores, uma ou mais pessoas ou entidades responsáveis pela autoria das "
+#~ "modificações na <link linkend=\"fdl-modified\">Versão Modificada</link>, "
+#~ "juntamente com pelo menos cinco dos autores principais do <link "
+#~ "linkend=\"fdl-document\">Documento</link> (todos os seus principais "
+#~ "autores, se tiverem menos de cinco)."
+
+#~ msgid ""
+#~ "State on the <link linkend=\"fdl-title-page\">Title Page</link> the name "
+#~ "of the publisher of the <link linkend=\"fdl-modified\">Modified Version</"
+#~ "link>, as the publisher."
+#~ msgstr ""
+#~ "Indicar na  <link linkend=\"fdl-title-page\">Página de Título</link> o "
+#~ "nome do editor da <link linkend=\"fdl-modified\">Versão Modificada</"
+#~ "link>, como editor."
+
+#~ msgid ""
+#~ "Preserve all the copyright notices of the <link linkend=\"fdl-"
+#~ "document\">Document</link>."
+#~ msgstr ""
+#~ "Preservar todas as avisos de direitos autorais do <link linkend=\"fdl-"
+#~ "document\">Documento</link>."
+
+#~ msgid ""
+#~ "Include, immediately after the copyright notices, a license notice giving "
+#~ "the public permission to use the <link linkend=\"fdl-modified\">Modified "
+#~ "Version</link> under the terms of this License, in the form shown in the "
+#~ "Addendum below."
+#~ msgstr ""
+#~ "Incluir, imediatamente após os avisos de direitos autorais, um aviso de "
+#~ "licença que dê permissão ao público para usar a <link linkend=\"fdl-"
+#~ "modified\">Versão Modificada</link> sob os termos desta Licença, na forma "
+#~ "mostrada no Adendo abaixo."
+
+#~ msgid ""
+#~ "Preserve in that license notice the full lists of <link linkend=\"fdl-"
+#~ "invariant\"> Invariant Sections</link> and required <link linkend=\"fdl-"
+#~ "cover-texts\">Cover Texts</link> given in the <link linkend=\"fdl-"
+#~ "document\">Document's</link> license notice."
+#~ msgstr ""
+#~ "Preservar nesse aviso de licença as listas completas de <link "
+#~ "linkend=\"fdl-invariant\">Seções Invariantes</link> e os <link "
+#~ "linkend=\"fdl-cover-texts\">Textos de Capa</link> necessários fornecidos "
+#~ "no aviso de licença do <link linkend=\"fdl-document\">Documento</link>."
+
+#~ msgid ""
+#~ "Preserve the section entitled <quote>History</quote>, and its title, and "
+#~ "add to it an item stating at least the title, year, new authors, and "
+#~ "publisher of the <link linkend=\"fdl-modified\">Modified Version</link> "
+#~ "as given on the <link linkend=\"fdl-title-page\">Title Page</link>. If "
+#~ "there is no section entitled <quote>History</quote> in the <link "
+#~ "linkend=\"fdl-document\">Document</link>, create one stating the title, "
+#~ "year, authors, and publisher of the Document as given on its Title Page, "
+#~ "then add an item describing the Modified Version as stated in the "
+#~ "previous sentence."
+#~ msgstr ""
+#~ "Preservar a seção intitulada “Histórico”, e seu título, e adicionar a ele "
+#~ "um item que indique pelo menos o título, o ano, os novos autores e o "
+#~ "editor da <link linkend=\"fdl-modified\">Versão Modificada</link> "
+#~ "conforme indicado na <link linkend=\"fdl-title-page\">Página de Título</"
+#~ "link>. Se não houver uma seção intitulada “Histórico” no <link "
+#~ "linkend=\"fdl-document\">Documento</link>, crie um que declare o título, "
+#~ "o ano, os autores e o editor do Documento conforme indicado em sua Página "
+#~ "de Título e, em seguida, adicione um item descrevendo a Versão "
+#~ "Modificada, como indicado na frase anterior."
+
+#~ msgid ""
+#~ "Preserve the network location, if any, given in the <link linkend=\"fdl-"
+#~ "document\">Document</link> for public access to a <link linkend=\"fdl-"
+#~ "transparent\">Transparent</link> copy of the Document, and likewise the "
+#~ "network locations given in the Document for previous versions it was "
+#~ "based on. These may be placed in the <quote>History</quote> section. You "
+#~ "may omit a network location for a work that was published at least four "
+#~ "years before the Document itself, or if the original publisher of the "
+#~ "version it refers to gives permission."
+#~ msgstr ""
+#~ "Preservar a localização de rede, se for o caso, fornecida no <link "
+#~ "linkend=\"fdl-document\">Documento</link> para acesso público a uma cópia "
+#~ "<link linkend=\"fdl-transparent\">Transparente</link> do Documento, e "
+#~ "também as localizações de rede fornecidas no Documento para versões "
+#~ "anteriores nas quais ele foi baseado. Estas podem ser colocadas na seção "
+#~ "“Histórico”. Você pode omitir uma localização de rede para um trabalho "
+#~ "que foi publicado pelo menos quatro anos antes do Documento em si, ou se "
+#~ "o editor original da versão a que se refere der permissão."
+
+#~ msgid ""
+#~ "In any section entitled <quote>Acknowledgements</quote> or "
+#~ "<quote>Dedications</quote>, preserve the section's title, and preserve in "
+#~ "the section all the substance and tone of each of the contributor "
+#~ "acknowledgements and/or dedications given therein."
+#~ msgstr ""
+#~ "Em qualquer seção intitulada “Agradecimentos” ou “Dedicatórias”, "
+#~ "preservar o título da seção, e preservar na seção toda a substância e tom "
+#~ "de cada um dos agradecimentos e/ou das dedicatórias dados nela."
+
+#~ msgid ""
+#~ "Preserve all the <link linkend=\"fdl-invariant\">Invariant Sections</"
+#~ "link> of the <link linkend=\"fdl-document\">Document</link>, unaltered in "
+#~ "their text and in their titles. Section numbers or the equivalent are not "
+#~ "considered part of the section titles."
+#~ msgstr ""
+#~ "Preservar todas as <link linkend=\"fdl-invariant\">Seções Invariantes</"
+#~ "link> do <link linkend=\"fdl-document\">Documento</link>, inalteradas em "
+#~ "seus textos e em seus títulos. Os números de seção ou o equivalente não "
+#~ "são considerados parte dos títulos das seções."
+
+#~ msgid ""
+#~ "Delete any section entitled <quote>Endorsements</quote>. Such a section "
+#~ "may not be included in the <link linkend=\"fdl-modified\">Modified "
+#~ "Version</link>."
+#~ msgstr ""
+#~ "Excluir qualquer seção intitulada “Endossos”. Essa seção pode não estar "
+#~ "incluída na <link linkend=\"fdl-modified\">Versão Modificada</link>."
+
+#~ msgid ""
+#~ "Do not retitle any existing section as <quote>Endorsements</quote> or to "
+#~ "conflict in title with any <link linkend=\"fdl-invariant\">Invariant "
+#~ "Section</link>."
+#~ msgstr ""
+#~ "Não mudar o título de qualquer seção existente para “Endossos” ou para "
+#~ "conflitar em título com qualquer <link linkend=\"fdl-invariant\">Seção "
+#~ "Invariante</link>."
+
+#~ msgid ""
+#~ "If the <link linkend=\"fdl-modified\">Modified Version</link> includes "
+#~ "new front-matter sections or appendices that qualify as <link "
+#~ "linkend=\"fdl-secondary\">Secondary Sections</link> and contain no "
+#~ "material copied from the Document, you may at your option designate some "
+#~ "or all of these sections as invariant. To do this, add their titles to "
+#~ "the list of <link linkend=\"fdl-invariant\">Invariant Sections</link> in "
+#~ "the Modified Version's license notice. These titles must be distinct from "
+#~ "any other section titles."
+#~ msgstr ""
+#~ "Se a <link linkend=\"fdl-modified\">Versão Modificada</link> incluir "
+#~ "novas seções ou apêndices de primeira linha que se qualifiquem como <link "
+#~ "linkend=\"fdl-secondary\">Seções Secundárias</link> e não contenham "
+#~ "material copiado do Documento, você pode, a sua escolha, designar algumas "
+#~ "ou todas essas seções como invariantes. Para fazer isso, adicione seus "
+#~ "títulos à lista de <link linkend=\"fdl-invariant\">Seções Invariantes</"
+#~ "link> no aviso de licença da Versão Modificada. Esses títulos devem ser "
+#~ "distintos de qualquer outro título de seção."
+
+#~ msgid ""
+#~ "You may add a section entitled <quote>Endorsements</quote>, provided it "
+#~ "contains nothing but endorsements of your <link linkend=\"fdl-"
+#~ "modified\">Modified Version</link> by various parties--for example, "
+#~ "statements of peer review or that the text has been approved by an "
+#~ "organization as the authoritative definition of a standard."
+#~ msgstr ""
+#~ "Você pode incluir uma seção intitulada “Endossos”, desde que contenha "
+#~ "nada além do endosso da sua <link linkend=\"fdl-modified\">Versão "
+#~ "Modificada</link> por várias terceiros – por exemplo, declarações de "
+#~ "revisão por pares ou de que o texto foi aprovado por uma organização como "
+#~ "a definição oficial de um padrão."
+
+#~ msgid ""
+#~ "You may add a passage of up to five words as a <link linkend=\"fdl-cover-"
+#~ "texts\">Front-Cover Text</link>, and a passage of up to 25 words as a "
+#~ "<link linkend=\"fdl-cover-texts\">Back-Cover Text</link>, to the end of "
+#~ "the list of <link linkend=\"fdl-cover-texts\">Cover Texts</link> in the "
+#~ "<link linkend=\"fdl-modified\">Modified Version</link>. Only one passage "
+#~ "of Front-Cover Text and one of Back-Cover Text may be added by (or "
+#~ "through arrangements made by) any one entity. If the <link linkend=\"fdl-"
+#~ "document\">Document</link> already includes a cover text for the same "
+#~ "cover, previously added by you or by arrangement made by the same entity "
+#~ "you are acting on behalf of, you may not add another; but you may replace "
+#~ "the old one, on explicit permission from the previous publisher that "
+#~ "added the old one."
+#~ msgstr ""
+#~ "Você pode adicionar uma passagem de até cinco palavras como um <link "
+#~ "linkend=\"fdl-cover-texts\">Texto de Capa Frontal</link> e uma passagem "
+#~ "de até 25 palavras como um <link linkend=\"fdl-cover-texts\">Texto de "
+#~ "Contracapa</link>, até o final da lista de <link linkend=\"fdl-cover-"
+#~ "texts\">Textos de Capa</link> na <link linkend=\"fdl-modified\">Versão "
+#~ "Modificada</link>. Apenas uma passagem de Texto de Capa Frontal e um de "
+#~ "Texto de Contracapa pode ser adicionada por (ou por meio de acordos "
+#~ "feitos por) qualquer entidade. Se o <link linkend=\"fdl-"
+#~ "document\">Documento</link> já incluir um texto de capa para a mesma "
+#~ "capa, previamente adicionado por você ou por acordo feito pela mesma "
+#~ "entidade em que você está agindo em nome de, você não pode adicionar "
+#~ "outro; mas você pode substituir o antigo, mediante permissão explícita do "
+#~ "editor anterior que adicionou o antigo."
+
+#~ msgid ""
+#~ "The author(s) and publisher(s) of the <link linkend=\"fdl-"
+#~ "document\">Document</link> do not by this License give permission to use "
+#~ "their names for publicity for or to assert or imply endorsement of any "
+#~ "<link linkend=\"fdl-modified\">Modified Version </link>."
+#~ msgstr ""
+#~ "O(s) autor(es) e editor(es) do <link linkend=\"fdl-document\">Documento</"
+#~ "link> não concedem por esta Licença permissão para usar seus nomes para "
+#~ "publicidade ou afirmar ou implicar o endosso de qualquer <link "
+#~ "linkend=\"fdl-modified\">Versão Modificada</link>."
+
+#~ msgid ""
+#~ "You may combine the <link linkend=\"fdl-document\">Document</link> with "
+#~ "other documents released under this License, under the terms defined in "
+#~ "<link linkend=\"fdl-section4\">section 4</link> above for modified "
+#~ "versions, provided that you include in the combination all of the <link "
+#~ "linkend=\"fdl-invariant\">Invariant Sections</link> of all of the "
+#~ "original documents, unmodified, and list them all as Invariant Sections "
+#~ "of your combined work in its license notice."
+#~ msgstr ""
+#~ "Você pode combinar o <link linkend=\"fdl-document\">Documento</link> com "
+#~ "outros documentos publicados sob esta Licença, nos termos definidos na "
+#~ "<link linkend=\"fdl-section4\">seção 4</link> acima para versões "
+#~ "modificadas, desde que você inclua na combinação de todas as <link "
+#~ "linkend=\"fdl-invariant\">Seções Invariantes</link> de todos os "
+#~ "documentos originais, não modificados, e liste todos eles como Seções "
+#~ "Invariantes do seu trabalho combinado em seu aviso de licença."
+
+#~ msgid ""
+#~ "The combined work need only contain one copy of this License, and "
+#~ "multiple identical <link linkend=\"fdl-invariant\">Invariant Sections</"
+#~ "link> may be replaced with a single copy. If there are multiple Invariant "
+#~ "Sections with the same name but different contents, make the title of "
+#~ "each such section unique by adding at the end of it, in parentheses, the "
+#~ "name of the original author or publisher of that section if known, or "
+#~ "else a unique number. Make the same adjustment to the section titles in "
+#~ "the list of Invariant Sections in the license notice of the combined work."
+#~ msgstr ""
+#~ "O trabalho combinado precisa conter somente uma cópia desta Licença, e "
+#~ "várias <link linkend=\"fdl-invariant\">Seções Invariantes</link> "
+#~ "idênticas podem ser substituídas por uma única cópia. Se existirem várias "
+#~ "Seções Invariantes de mesmo nome, porém com conteúdos diferentes, você "
+#~ "deve tornar o título de cada uma destas seções único, adicionando ao fim "
+#~ "deste, entre parênteses, o nome do autor ou, se conhecido, o editor "
+#~ "original desta seção, ou ainda um número único. Faça o mesmo ajuste nos "
+#~ "títulos de seção na lista de Seções Invariantes no aviso de licença do "
+#~ "trabalho combinado."
+
+#~ msgid ""
+#~ "In the combination, you must combine any sections entitled "
+#~ "<quote>History</quote> in the various original documents, forming one "
+#~ "section entitled <quote>History</quote>; likewise combine any sections "
+#~ "entitled <quote>Acknowledgements</quote>, and any sections entitled "
+#~ "<quote>Dedications</quote>. You must delete all sections entitled "
+#~ "<quote>Endorsements.</quote>"
+#~ msgstr ""
+#~ "Na combinação, você deve combinar todas as seções intituladas “Histórico” "
+#~ "nos vários documentos originais, formando uma seção intitulada "
+#~ "“Histórico”; da mesma forma, combinar todas as seções intituladas "
+#~ "“Agradecimentos” e quaisquer seções intituladas “Dedicatórias”. Você deve "
+#~ "excluir todas as seções intituladas “Endossos”."
+
+#~ msgid ""
+#~ "You may make a collection consisting of the <link linkend=\"fdl-"
+#~ "document\">Document</link> and other documents released under this "
+#~ "License, and replace the individual copies of this License in the various "
+#~ "documents with a single copy that is included in the collection, provided "
+#~ "that you follow the rules of this License for verbatim copying of each of "
+#~ "the documents in all other respects."
+#~ msgstr ""
+#~ "Você pode fazer uma coleção que consiste do <link linkend=\"fdl-"
+#~ "document\">Documento</link> e outros documentos publicados sob esta "
+#~ "Licença, e substituir as cópias individuais desta Licença, nos vários "
+#~ "documentos, por uma única cópia a ser incluída na coleção, desde que você "
+#~ "siga as regras desta Licença para cópias literais de cada documento em "
+#~ "todos os outros aspectos."
+
+#~ msgid ""
+#~ "A compilation of the <link linkend=\"fdl-document\">Document</link> or "
+#~ "its derivatives with other separate and independent documents or works, "
+#~ "in or on a volume of a storage or distribution medium, does not as a "
+#~ "whole count as a <link linkend=\"fdl-modified\">Modified Version</link> "
+#~ "of the Document, provided no compilation copyright is claimed for the "
+#~ "compilation. Such a compilation is called an <quote>aggregate</quote>, "
+#~ "and this License does not apply to the other self-contained works thus "
+#~ "compiled with the Document , on account of their being thus compiled, if "
+#~ "they are not themselves derivative works of the Document. If the <link "
+#~ "linkend=\"fdl-cover-texts\">Cover Text</link> requirement of <link "
+#~ "linkend=\"fdl-section3\">section 3</link> is applicable to these copies "
+#~ "of the Document, then if the Document is less than one quarter of the "
+#~ "entire aggregate, the Document's Cover Texts may be placed on covers that "
+#~ "surround only the Document within the aggregate. Otherwise they must "
+#~ "appear on covers around the whole aggregate."
+#~ msgstr ""
+#~ "Uma compilação do <link linkend=\"fdl-document\">Documento</link> ou seus "
+#~ "derivados com outros documentos ou trabalhos separados e independentes, "
+#~ "em ou sobre um volume de um meio de armazenamento ou distribuição, não "
+#~ "como um todo conta como uma <link linkend=\"fdl-modified\">Versão "
+#~ "Modificada</link> do Documento, desde que nenhuma compilação de direitos "
+#~ "autorais seja reivindicada para a compilação. Tal compilação é chamada de "
+#~ "“agregado” (aggregate), e esta Licença não se aplica aos outros trabalhos "
+#~ "autônomos assim compilados com o Documento, por conta de serem assim "
+#~ "compilados, se eles não forem eles próprios trabalhos derivados do "
+#~ "Documento. Se o requisito do <link linkend=\"fdl-cover-texts\">Texto da "
+#~ "Capa</link> da <link linkend=\"fdl-section3\">seção 3</link> for "
+#~ "aplicável a essas cópias do Documento, então, se o Documento for inferior "
+#~ "a um quarto do agregado inteiro, os Textos de Capa do Documento poderão "
+#~ "ser colocados em capas que envolvam apenas o Documento no agregado. Caso "
+#~ "contrário, eles devem aparecer nas capas envolvem todo o agregado."
+
+#~ msgid ""
+#~ "Translation is considered a kind of modification, so you may distribute "
+#~ "translations of the <link linkend=\"fdl-document\">Document</link> under "
+#~ "the terms of <link linkend=\"fdl-section4\">section 4</link>. Replacing "
+#~ "<link linkend=\"fdl-invariant\"> Invariant Sections</link> with "
+#~ "translations requires special permission from their copyright holders, "
+#~ "but you may include translations of some or all Invariant Sections in "
+#~ "addition to the original versions of these Invariant Sections. You may "
+#~ "include a translation of this License provided that you also include the "
+#~ "original English version of this License. In case of a disagreement "
+#~ "between the translation and the original English version of this License, "
+#~ "the original English version will prevail."
+#~ msgstr ""
+#~ "A tradução é considerada um tipo de modificação, então você pode "
+#~ "distribuir as traduções do <link linkend=\"fdl-document\">Documento</"
+#~ "link> nos termos da <link linkend=\"fdl-section4\">seção 4</link>. A "
+#~ "substituição das <link linkend=\"fdl-invariant\">Seções Invariantes</"
+#~ "link> com traduções requer permissão especial de seus detentores de "
+#~ "direitos autorais, mas você pode incluir traduções de algumas ou todas as "
+#~ "Seções Invariantes além das versões originais destas Seções Invariantes. "
+#~ "Você pode incluir uma tradução desta Licença, desde que você também "
+#~ "inclua a versão original em inglês desta Licença. Em caso de desacordo "
+#~ "entre a tradução e a versão original desta Licença, a versão original "
+#~ "prevalecerá."
+
+#~ msgid ""
+#~ "You may not copy, modify, sublicense, or distribute the <link "
+#~ "linkend=\"fdl-document\">Document</link> except as expressly provided for "
+#~ "under this License. Any other attempt to copy, modify, sublicense or "
+#~ "distribute the Document is void, and will automatically terminate your "
+#~ "rights under this License. However, parties who have received copies, or "
+#~ "rights, from you under this License will not have their licenses "
+#~ "terminated so long as such parties remain in full compliance."
+#~ msgstr ""
+#~ "Você não pode copiar, modificar, sublicenciar ou distribuir o <link "
+#~ "linkend=\"fdl-document\">Documento</link>, exceto conforme expressamente "
+#~ "previsto nesta Licença. Qualquer tentativa de copiar, modificar, "
+#~ "sublicenciar ou distribuir o Documento é anulada e terminará "
+#~ "automaticamente seus direitos sob esta Licença. No entanto, as partes que "
+#~ "receberam cópias ou direitos de você sob esta Licença não terão suas "
+#~ "licenças terminadas, desde que tais partes permaneçam em plena "
+#~ "conformidade."
+
+#~ msgid ""
+#~ "The <ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf.html\">Free "
+#~ "Software Foundation</ulink> may publish new, revised versions of the GNU "
+#~ "Free Documentation License from time to time. Such new versions will be "
+#~ "similar in spirit to the present version, but may differ in detail to "
+#~ "address new problems or concerns. See <ulink type=\"http\" url=\"http://"
+#~ "www.gnu.org/copyleft\">http://www.gnu.org/copyleft/</ulink>."
+#~ msgstr ""
+#~ "A <ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf.html\">Free "
+#~ "Software Foundation</ulink> pode publicar novas e revisadas versões da "
+#~ "Licença de Documentação Livre GNU de vez em quando. Essas novas versões "
+#~ "serão semelhantes em espírito à versão atual, mas podem diferir em "
+#~ "detalhes para resolver novos problemas ou preocupações. Veja <ulink "
+#~ "type=\"http\" url=\"http://www.gnu.org/copyleft\">http://www.gnu.org/"
+#~ "copyleft/</ulink>.A <ulink type=\"http\" url=\"http://www.gnu.org/fsf/fsf."
+#~ "html\">Free Software Foundation</ulink> pode publicar novas versões, "
+#~ "revisadas, da Licença de Documentação Livre GNU de tempos em tempos. Tais "
+#~ "versões posteriores terão ideologia similar à presente versão, embora "
+#~ "possam diferir em detalhes a fim de abordar novos problemas ou "
+#~ "preocupações. Consulte: <ulink type=\"http\" url=\"http://www.gnu.org/"
+#~ "copyleft\">http://www.gnu.org/copyleft/</ulink>."
+
+#~ msgid ""
+#~ "Each version of the License is given a distinguishing version number. If "
+#~ "the <link linkend=\"fdl-document\">Document</link> specifies that a "
+#~ "particular numbered version of this License <quote>or any later version</"
+#~ "quote> applies to it, you have the option of following the terms and "
+#~ "conditions either of that specified version or of any later version that "
+#~ "has been published (not as a draft) by the Free Software Foundation. If "
+#~ "the Document does not specify a version number of this License, you may "
+#~ "choose any version ever published (not as a draft) by the Free Software "
+#~ "Foundation."
+#~ msgstr ""
+#~ "Cada versão da Licença recebe um número de versão distinto. Se o <link "
+#~ "linkend=\"fdl-document\">Documento</link> especifica que uma versão "
+#~ "numerada específica desta Licença “ou qualquer versão posterior” aplica-"
+#~ "se a ele, você tem a opção de seguir os termos e condições daquela versão "
+#~ "especificada ou de qualquer versão posterior que tenha sido publicada "
+#~ "(não como um rascunho) pela Free Software Foundation. Se o Documento não "
+#~ "especificar um número de versão desta Licença, você pode escolher "
+#~ "qualquer versão publicada (não como um rascunho) pela Free Software "
+#~ "Foundation."
+
+#~ msgid ""
+#~ "Permission is granted to copy, distribute and/or modify this document "
+#~ "under the terms of the GNU Free Documentation License, Version 1.1 or any "
+#~ "later version published by the Free Software Foundation; with the <link "
+#~ "linkend=\"fdl-invariant\">Invariant Sections</link> being LIST THEIR "
+#~ "TITLES, with the <link linkend=\"fdl-cover-texts\">Front-Cover Texts</"
+#~ "link> being LIST, and with the <link linkend=\"fdl-cover-texts\">Back-"
+#~ "Cover Texts</link> being LIST. A copy of the license is included in the "
+#~ "section entitled <quote>GNU Free Documentation License</quote>."
+#~ msgstr ""
+#~ "Permissão concedida para copiar, distribuir e/ou modificar este documento "
+#~ "sob os termos da Licença de Documentação Livre GNU, Versão 1.1 ou "
+#~ "qualquer versão mais recente publicada pela Free Software Foundation; com "
+#~ "as <link linkend=\"fdl-invariant\">Seções Invariantes</link> sendo LISTE "
+#~ "SEUS TÍTULOS, com os <link linkend=\"fdl-cover-texts\">Textos de Capa "
+#~ "Frontal</link> sendo LISTA e os <link linkend=\"fdl-cover-texts\">Textos "
+#~ "de Contracapa</link> sendo LISTA. Uma cópia da licença está incluída na "
+#~ "seção intitulada \"Licença de Documentação Livre GNU\" (GNU Free "
+#~ "Documentation License)."
+
+#~ msgid ""
+#~ "If you have no <link linkend=\"fdl-invariant\">Invariant Sections</link>, "
+#~ "write <quote>with no Invariant Sections</quote> instead of saying which "
+#~ "ones are invariant. If you have no <link linkend=\"fdl-cover-"
+#~ "texts\">Front-Cover Texts</link>, write <quote>no Front-Cover Texts</"
+#~ "quote> instead of <quote>Front-Cover Texts being LIST</quote>; likewise "
+#~ "for <link linkend=\"fdl-cover-texts\">Back-Cover Texts</link>."
+#~ msgstr ""
+#~ "Se você não tiver <link linkend=\"fdl-invariant\">Seção Invariante</"
+#~ "link>, escreva “sem Seções Invariantes” em vez de dizer quais são "
+#~ "invariantes. Se você não tiver <link linkend=\"fdl-cover-texts\">Textos "
+#~ "de Capa Frontal</link>, escreva “sem Textos da Capa Frontal” em vez de "
+#~ "“Textos de Capa Frontal sendo LIST”; Da mesma forma para <link "
+#~ "linkend=\"fdl-cover-texts\">Textos de Contracapa</link>."
+
+#~ msgid ""
+#~ "If your document contains nontrivial examples of program code, we "
+#~ "recommend releasing these examples in parallel under your choice of free "
+#~ "software license, such as the <ulink type=\"http\" url=\"http://www.gnu."
+#~ "org/copyleft/gpl.html\"> GNU General Public License</ulink>, to permit "
+#~ "their use in free software."
+#~ msgstr ""
+#~ "Se o seu documento contiver exemplos não triviais do código do programa, "
+#~ "recomendamos que apresente esses exemplos em paralelo, sob sua escolha de "
+#~ "licença de software livre, como a <ulink type=\"http\" url=\"http://www."
+#~ "gnu.org/copyleft/gpl.html\">Licença Pública Geral GNU</ulink> (GNU "
+#~ "General Public License), para permitir sua utilização em software livre."
 
 #~ msgid ""
 #~ "<revnumber>1.29</revnumber> <date>28 Aug 2018</date> <authorinitials>ss</"
@@ -6493,8 +6424,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "<guilabel>Jade v1.1</guilabel> - This is a DSSSL processor for converting "
-#~ "SGML to various formats. <ulink url=\"http://www.jclark.com/jade\" type="
-#~ "\"http\">http://www.jclark.com/jade</ulink>"
+#~ "SGML to various formats. <ulink url=\"http://www.jclark.com/jade\" "
+#~ "type=\"http\">http://www.jclark.com/jade</ulink>"
 #~ msgstr ""
 #~ "<guilabel>Jade v1.1</guilabel> - Este é um processador de DSSSL para "
 #~ "conversão de SGML para vários formatos. <ulink url=\"http://www.jclark."
@@ -6513,8 +6444,8 @@ msgstr ""
 #~ "É usado junto com jade. Eu personalizei um pouco o código DSSSL, em gtk-"
 #~ "doc.dsl, para colorir as listagens/declarações do código do programa e "
 #~ "para dar suporte a índices de referências cruzadas globais nos HTML "
-#~ "gerados. <ulink url=\"http://nwalsh.com/docbook/dsssl\" type=\"http"
-#~ "\">http://nwalsh.com/docbook/dsssl</ulink>"
+#~ "gerados. <ulink url=\"http://nwalsh.com/docbook/dsssl\" "
+#~ "type=\"http\">http://nwalsh.com/docbook/dsssl</ulink>"
 
 #~ msgid ""
 #~ "<guilabel>docbook-to-man</guilabel> - if you want to create man pages "
@@ -6525,12 +6456,12 @@ msgstr ""
 #~ "com/davenport</ulink> NOTE: This does not work yet."
 #~ msgstr ""
 #~ "<guilabel>docbook-to-man</guilabel> - se você deseja criar páginas man a "
-#~ "partir do DocBook. Eu personalizei um pouco a \"especificação de tradução"
-#~ "\", para deixar o título em caixa alta e adicionar o título \"GTK Library"
-#~ "\" no topo das páginas e a data de revisão no canto inferior. Há também "
-#~ "um link para isso em <ulink url=\"http://www.ora.com/davenport\" type="
-#~ "\"http\">http://www.ora.com/davenport</ulink>. NOTA: isso não funciona "
-#~ "ainda."
+#~ "partir do DocBook. Eu personalizei um pouco a \"especificação de "
+#~ "tradução\", para deixar o título em caixa alta e adicionar o título \"GTK "
+#~ "Library\" no topo das páginas e a data de revisão no canto inferior. Há "
+#~ "também um link para isso em <ulink url=\"http://www.ora.com/davenport\" "
+#~ "type=\"http\">http://www.ora.com/davenport</ulink>. NOTA: isso não "
+#~ "funciona ainda."
 
 #~ msgid ""
 #~ "There is no standard place where the DocBook Modular Stylesheets are "
