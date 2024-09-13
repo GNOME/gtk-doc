@@ -1,13 +1,13 @@
 # Hungarian translation for gtk-doc.
-# Copyright (C) 2023 Free Software Foundation, Inc.
+# Copyright (C) 2023, 2024 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk-doc package.
 #
-# Balázs Úr <ur.balazs at fsf dot hu>, 2023.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-doc master\n"
-"POT-Creation-Date: 2023-01-25 20:25+0000\n"
-"PO-Revision-Date: 2023-04-20 08:29+0200\n"
+"POT-Creation-Date: 2024-04-01 18:02+0000\n"
+"PO-Revision-Date: 2024-09-13 14:01+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -15,12 +15,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
 msgid "translator-credits"
-msgstr "Úr Balázs <ur dot balazs at fsf dot hu>, 2023."
+msgstr "Úr Balázs <ur dot balazs at fsf dot hu>, 2023, 2024."
 
 #. (itstool) path: bookinfo/title
 #: C/index.docbook:12
@@ -331,9 +331,8 @@ msgid ""
 "<authorinitials>sk</authorinitials> <revremark>broken tarball update</"
 "revremark>"
 msgstr ""
-"<revnumber>1.13</revnumber> <date>2009. december 18.</date> "
-"<authorinitials>sk</authorinitials> <revremark>törött kátránylabda-"
-"frissítés</revremark>"
+"<revnumber>1.13</revnumber> <date>2009. december 18.</date> <authorinitials"
+">sk</authorinitials> <revremark>törött forráscsomag-frissítés</revremark>"
 
 #. (itstool) path: revhistory/revision
 #: C/index.docbook:215
@@ -452,6 +451,22 @@ msgid ""
 "the ones in <filename>&lt;module&gt;-decl.txt</filename> into <filename>&lt;"
 "module&gt;-overrides.txt</filename>."
 msgstr ""
+"<guilabel>Információgyűjtés a kódról.</guilabel> A <application>gtkdoc-scan<"
+"/application> átvizsgálja a kód fejlécfájljait függvények, makrók,"
+" felsorolások, struktúrák és uniók deklarációit keresve. Létrehozza a"
+" deklarációk listáját tartalmazó <filename>&lt;modul&gt;-decl-list.txt<"
+"/filename> fájlt, és szakaszokba helyezi azokat aszerint, hogy melyik"
+" fejlécfájlban vannak. Az első futáskor ez a fájl a <filename"
+">&lt;modul&gt;-sections.txt</filename> fájlba lesz másolva. A szerző"
+" átrendezheti a szakaszokat és az azokon belüli deklarációk sorrendjét, hogy"
+" a kívánt végső sorrendet állítsa elő. A második fájl, amelyet előállít, a <"
+"filename>&lt;modul&gt;-decl.txt</filename>. Ez a fájl tartalmazza az"
+" átvilágító által talált összes deklarációt. Ha valamilyen oknál fogva valaki"
+" azt szeretné, hogy néhány szimbólum megjelenjen a dokumentációban, ahol a"
+" teljes deklarációt nem találja meg az átvizsgáló, vagy a deklarációnak"
+" másképp kellene megjelennie, akkor a <filename>&lt;modul&gt;-decl.txt<"
+"/filename> fájlban lévőhöz hasonló entitásokat helyezhet el a <filename"
+">&lt;modul&gt;-overrides.txt</filename> fájlba."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:299
@@ -461,6 +476,11 @@ msgid ""
 "information about each object's position in the class hierarchy and about "
 "any GObject properties and signals it provides."
 msgstr ""
+"A <application>gtkdoc-scangobj</application> arra is használható, hogy"
+" dinamikusan lekérdezzen egy programkönyvtárat az általa exportált GObject"
+" alosztályokról. Információt tárol az egyes objektumok osztályhierarchiában"
+" elfoglalt pozíciójáról, valamint az általa biztosított"
+" GObject-tulajdonságokról és szignálokról."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:305
@@ -468,6 +488,9 @@ msgid ""
 "<application>gtkdoc-scanobj</application> should not be used anymore. It was "
 "needed in the past when GObject was still GtkObject inside gtk+."
 msgstr ""
+"A <application>gtkdoc-scanobj</application> függvényt nem szabad többé"
+" használni. Régebben volt rá szükség, amikor a GObject még GtkObject volt a"
+" gtk+-on belül."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:312
@@ -479,6 +502,13 @@ msgid ""
 "gets merged in here. If there are no tmpl files used it only reads docs from "
 "sources and introspection data."
 msgstr ""
+"<guilabel>Az XML és a HTML/PDF előállítása.</guilabel> A <application"
+">gtkdoc-mkdb</application> átalakítja a sablonfájlokat XML-fájlokká az <"
+"filename class=\"directory\">xml/</filename> alkönyvtárban. Ha a forráskód"
+" tartalmaz dokumentációt a függvényekről a különleges megjegyzésblokkok"
+" használatával, akkor az beolvasztásra kerül ide. Ha nem használnak"
+" tmpl-fájlokat, akkor csak a forrásokból és a betekintési adatokból olvassa"
+" be a dokumentációt."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:321
@@ -488,6 +518,11 @@ msgid ""
 "<application>gtkdoc-mkpdf</application> turns the XML files into a PDF "
 "document called <filename>&lt;package&gt;.pdf</filename>."
 msgstr ""
+"A <application>gtkdoc-mkhtml</application> átalakítja az XML-fájlokat"
+" HTML-fájlokká a <filename class=\"directory\">html/</filename>"
+" alkönyvtárban. Hasonlóképpen a <application>gtkdoc-mkpdf</application>"
+" átalakítja az XML-fájlokat <filename>&lt;csomag&gt;.pdf</filename> nevű"
+" PDF-dokumentummá."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:327
@@ -496,6 +531,9 @@ msgid ""
 "class=\"directory\">html/</filename> directories are always overwritten. One "
 "should never edit them directly."
 msgstr ""
+"Az <filename class=\"directory\">xml/</filename> és a <filename"
+" class=\"directory\">html/</filename> könyvtárakban lévő fájlok mindig"
+" felülírásra kerülnek. Soha sem szabad közvetlenül szerkeszteni azokat."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:335
@@ -509,22 +547,34 @@ msgid ""
 "links. When installing distributed (pregenerated) docs the same application "
 "will try to turn links back to local links (where those docs are installed)."
 msgstr ""
+"<guilabel>A dokumentumok közötti kereszthivatkozások javítása.</guilabel> A"
+" HTML-fájlok telepítése után a <application>gtkdoc-fixxref</application>"
+" futtatható a különálló dokumentumok közötti kereszthivatkozások javításához."
+" Például a GTK+ dokumentáció számos kereszthivatkozást tartalmaz a GLib"
+" kézikönyvben dokumentált típusokra. A terjesztésre szánt forráscsomag"
+" létrehozásakor a <application>gtkdoc-rebase</application> az összes külső"
+" hivatkozást webes hivatkozásokká alakítja. A terjesztett (előre előállított)"
+" dokumentumok telepítésekor ugyanez az alkalmazás megpróbálja a"
+" hivatkozásokat visszaalakítani helyi hivatkozásokká (ahová az adott"
+" dokumentumok telepítve vannak)."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:353
 msgid "Getting GTK-Doc"
-msgstr ""
+msgstr "A GTK-Doc beszerzése"
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:356
 msgid "Requirements"
-msgstr ""
+msgstr "Követelmények"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:357
 msgid ""
 "<guilabel>python 2/3</guilabel> - the main scripts are written in python."
 msgstr ""
+"<guilabel>python 2/3</guilabel> – a fő parancsfájlok Python nyelven lettek"
+" írva."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:360
@@ -532,6 +582,8 @@ msgid ""
 "<guilabel>xsltproc</guilabel> - the xslt processor from libxslt <ulink "
 "url=\"http://xmlsoft.org/XSLT/\" type=\"http\">xmlsoft.org/XSLT/</ulink>"
 msgstr ""
+"<guilabel>xsltproc</guilabel> – az XSLT-feldolgozó a libxslt csomagból, <"
+"ulink url=\"http://xmlsoft.org/XSLT/\" type=\"http\">xmlsoft.org/XSLT/</ulink>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:364
@@ -540,6 +592,9 @@ msgid ""
 "url=\"http://sourceforge.net/projects/docbook/files/docbook-xsl/\" "
 "type=\"http\">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>"
 msgstr ""
+"<guilabel>docbook-xsl</guilabel> – a Docbook XSL-stíluslapjai, <ulink"
+" url=\"http://sourceforge.net/projects/docbook/files/docbook-xsl/\""
+" type=\"http\">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:368
@@ -548,11 +603,14 @@ msgid ""
 "or <guilabel>vim</guilabel> - optional - used for syntax highlighting of "
 "examples"
 msgstr ""
+"A <guilabel>source-highlight</guilabel>, <guilabel>highlight</guilabel> vagy"
+" <guilabel>vim</guilabel> egyike – nem kötelező – a példák"
+" szintaxis-kiemeléséhez van használva"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:376
 msgid "About GTK-Doc"
-msgstr ""
+msgstr "A GTK-Doc története"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:378
@@ -564,11 +622,18 @@ msgid ""
 "possible to place all API information into source comments, which made the "
 "template support obsolete. In version 1.26 template support has been removed."
 msgstr ""
+"Történetileg a GTK-Doc programot arra használták, hogy sablonfájlokat"
+" állítsanak elő a forráskódból. Ezeket a sablonfájlokat a fejlesztők"
+" használhatták az API-dokumentáció bevitelére. Ez a megközelítés meglehetősen"
+" kényelmetlen volt, mivel az előállított fájlokat verziókövetés alatt kellett"
+" tartani. A GTK-Doc 1.9 óta lehetővé vált, hogy az összes API-információ"
+" forrásmegjegyzésekbe kerüljön, ami elavulttá tette a sablontámogatást. Az"
+" 1.26-os verzióban a sablontámogatás eltávolításra került."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:388 C/index.docbook:402
 msgid "(FIXME)"
-msgstr ""
+msgstr "(JAVÍTS KI)"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:392
@@ -576,21 +641,23 @@ msgid ""
 "(authors, web pages, mailing list, license, future plans, comparison with "
 "other similar systems.)"
 msgstr ""
+"(szerzők, weboldalak, levelezőlista, licenc, jövőbeli tervek, összehasonlítás"
+" más, hasonló rendszerekkel)"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:400
 msgid "About this Manual"
-msgstr ""
+msgstr "Erről a kézikönyvről"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:406
 msgid "(who it is meant for, where you can get it, license)"
-msgstr ""
+msgstr "(kinek szánják, hol lehet hozzájutni, licenc)"
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:415
 msgid "Project Setup"
-msgstr ""
+msgstr "Projekt beállítása"
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:417
@@ -599,6 +666,9 @@ msgid ""
 "into your project. The integration of GTK-Doc into a project includes the "
 "following steps:"
 msgstr ""
+"Ez a fejezet azokat a lépéseket írja le, amelyek a GTK-Doc projektbe való"
+" integrálásához szükségesek. A GTK-Doc projektbe való integrálása a következő"
+" lépéseket tartalmazza:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:425
@@ -607,6 +677,10 @@ msgid ""
 "files for your GTK-Doc documentation (see <link "
 "linkend=\"settingup_docfiles\"> Setting up a skeleton documentation</link>)."
 msgstr ""
+"A könyvtárszerkezet előkészítése és a GTK-Doc dokumentációhoz szükséges"
+" beállítási fájlok létrehozása (nézze meg a <link"
+" linkend=\"settingup_docfiles\">Dokumentációvázlat beállítása</link>"
+" szakaszt)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:433
@@ -617,6 +691,12 @@ msgid ""
 "link>, <link linkend=\"settingup_cmake\">CMake</link>, and <link "
 "linkend=\"settingup_plain_makefiles\">plain Makefiles</link>."
 msgstr ""
+"Az összeállítási rendszer beállítása a dokumentáció összeállításához a"
+" GTK-Doc eszközök használatával. Több összeállítási rendszer is támogatott,"
+" ebben a kézikönyvben azt mutatjuk be, hogy hogyan integrálható a GTK-Doc az"
+" <link linkend=\"settingup_autotools\">Autotools</link>, a <link"
+" linkend=\"settingup_cmake\">CMake</link> és az <link"
+" linkend=\"settingup_plain_makefiles\">egyszerű Makefile</link> megoldásokkal."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:443
@@ -625,6 +705,10 @@ msgid ""
 "ignore (see <link linkend=\"settingup_vcs\"> Integration with version "
 "control systems</link>)."
 msgstr ""
+"GTK-Doc specifikus fájlok hozzáadása a verziókövetéshez és annak eldöntése,"
+" hogy mely fájlokat kell figyelmen kívül hagyni (nézze meg az <link"
+" linkend=\"settingup_vcs\">Integráció verziókövető rendszerekkel</link>"
+" szakaszt)."
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:451
@@ -633,11 +717,15 @@ msgid ""
 "This project contains two packages (or modules), a library called "
 "<code>libmeep</code> and an end-user app called <code>meeper</code>."
 msgstr ""
+"A következő szakaszok azt feltételezik, hogy egy <code>meep</code> nevű"
+" projekten dolgozunk. Ez a projekt két csomagot (vagy modult) tartalmaz, egy"
+" <code>libmeep</code> nevű programkönyvtárat és egy <code>meeper</code> nevű"
+" végfelhasználói alkalmazást."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:460
 msgid "Setting up a skeleton documentation"
-msgstr ""
+msgstr "Dokumentációvázlat beállítása"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:462
@@ -657,11 +745,25 @@ msgid ""
 "you must adjust your build system configuration to match your directory "
 "structure."
 msgstr ""
+"Általános gyakorlat, hogy a dokumentáció a <code>docs</code> nevű mappába"
+" kerül a legfelső szintű projektkönyvtáron belül. Általában különbséget"
+" teszünk a fejlesztőknek szánt <emphasis>hivatkozási dokumentáció</emphasis>"
+" és a végfelhasználóknak szánt <emphasis>felhasználói kézikönyv</emphasis>"
+" között. Megint csak az a gyakorlat, hogy mindkettőhöz külön mappák"
+" tartoznak. A hivatkozási dokumentációt általában a <code>reference</code>"
+" nevű mappába, a végfelhasználói kézikönyvet pedig a <code>help</code> nevű"
+" mappába tesszük. A fenti gyakorlat szerint a <code>libmeep</code> csomagunk"
+" dokumentációja a következő helyre kerülne: <code>docs/reference/libmeep<"
+"/code>. A csak egy programkönyvtárat vagy alkalmazást tartalmazó csomagok"
+" esetében a dokumentációt közvetlenül a <code>docs/reference</code> mappában"
+" is elhelyezhetjük. Nem kötelező a fenti gyakorlatot használni, de ha más"
+" könyvtárszerkezet használatát választja, akkor a könyvtárszerkezetnek"
+" megfelelően kell beállítania az összeállítási rendszer beállításait."
 
 #. (itstool) path: example/title
 #: C/index.docbook:493
 msgid "Example directory structure of <emphasis>meep</emphasis> project"
-msgstr ""
+msgstr "A <emphasis>meep</emphasis> projekt könyvtárszerkezeti példája"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:495
@@ -679,6 +781,17 @@ msgid ""
 "    libmeep/\n"
 "    meeper/\n"
 msgstr ""
+"\n"
+"meep/\n"
+"  docs/\n"
+"    reference/  # hivatkozási dokumentáció\n"
+"      libmeep/\n"
+"      meeper/\n"
+"    help/       # elhagyható: felhasználói kézikönyv\n"
+"      meeper/\n"
+"  src/\n"
+"    libmeep/\n"
+"    meeper/\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:487
@@ -687,11 +800,14 @@ msgid ""
 "<emphasis>meep</emphasis> project that uses the above conventions. <_:"
 "example-1/>"
 msgstr ""
+"A következő szakaszokban olyan könyvtárszerkezetet feltételezünk a <emphasis"
+">meep</emphasis> projektünkhöz, amely a fenti gyakorlatokat használja. <"
+"_:example-1/>"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:512
 msgid "Integration with Autotools"
-msgstr ""
+msgstr "Integráció az Autotools programmal"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:513
@@ -699,6 +815,8 @@ msgid ""
 "Integration of GTK-Doc into an autotools-based build system requires the "
 "following steps:"
 msgstr ""
+"A GTK-Doc integrálása egy autotools alapú összeállítási rendszerbe a"
+" következő lépéseket igényli:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:519
@@ -708,6 +826,11 @@ msgid ""
 "script is present, adjust it to check for GTK-Doc and add a call to "
 "<application>gtkdocize</application>."
 msgstr ""
+"Győződjön meg arról, hogy a <application>gtkdocize</application> egyszer"
+" lefusson a <filename>configure</filename> parancsfájl előtt. Ha egy <"
+"filename>autogen.sh</filename> parancsfájl is jelen van, akkor állítsa be"
+" úgy, hogy ellenőrizze a GTK-Doc eszközt, és adjon hozzá egy <application"
+">gtkdocize</application> hívást."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:527
@@ -717,6 +840,10 @@ msgid ""
 "filename> macro definition file available to the build system, either by "
 "copying or linking it into the project."
 msgstr ""
+"A <application>gtkdocize</application> fő célja, hogy elkészítse az"
+" összeállítási rendszerhez elérhető <filename>gtk-doc.make</filename>"
+" Makefile-t és <filename>gtk-doc.m4</filename> makródefiníciós fájlt a"
+" projektbe történő másolással vagy a projekthez történő kapcsolással."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:536
@@ -726,6 +853,10 @@ msgid ""
 "allow configuration of GTK-Doc via the generated <filename>configure</"
 "filename> script."
 msgstr ""
+"Adja hozzá a szükséges <application>autoconf</application> makrókat a <"
+"filename>configure.ac</filename> fájlhoz, hogy engedélyezze a GTK-Doc eszközt"
+" az összeállítási rendszerben a GTK-Doc beállításainak az előállított <"
+"filename>configure</filename> parancsfájl általi engedélyezéséhez."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:542
@@ -733,6 +864,8 @@ msgid ""
 "Among others with registers the <code>--enable-gtk-doc</code> option with "
 "the <filename>configure</filename> script."
 msgstr ""
+"Többek között a <code>--enable-gtk-doc</code> kapcsoló regisztrálásával a <"
+"filename>configure</filename> parancsfájlban."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:548
@@ -741,6 +874,10 @@ msgid ""
 "library in your project. In the example used in this documentation this step "
 "applies to both <code>meeper</code> and <code>libmeep</code>."
 msgstr ""
+"Hozzon létre egy <application>automake</application> parancsfájlt a projekt"
+" minden egyes alkalmazásához vagy programkönyvtárához. Az ebben a"
+" dokumentációban használt példában ez a lépés mind a <code>meeper</code>"
+" alkalmazásra, mind a <code>libmeep</code> programkönyvtárra vonatkozik."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:557
@@ -751,11 +888,17 @@ msgid ""
 "filename>. Then we show how enable Gtk-Doc in the build system and how to "
 "build the documentation."
 msgstr ""
+"A következő szakaszokban a fenti lépéseket fordított sorrendben hajtjuk"
+" végre. Az <application>automake</application> parancsfájlokkal kezdjük, és"
+" folytatjuk a munkát a <filename>configure.ac</filename> és <filename"
+">autogen.sh</filename> parancsfájlokig. Ezután megmutatjuk, hogyan"
+" engedélyezzük a GTK-Doc használatát az összeállítási rendszerben, és hogyan"
+" állítsuk össze a dokumentációt."
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:567
 msgid "Integration with automake"
-msgstr ""
+msgstr "Integráció az automake programmal"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:569
@@ -769,6 +912,14 @@ msgid ""
 "share/doc/gtk-doc-tools/examples/Makefile.am</filename>. If you have "
 "multiple packages repeat this for each one."
 msgstr ""
+"Először másolja át a <filename>Makefile.am</filename> fájlt a <ulink"
+" url=\"https://gitlab.gnome.org/GNOME/gtk-doc/raw/master/examples/Makefile.am"
+"\">gtkdoc-sources</ulink> <filename class=\"directory\">examples</filename>"
+" alkönyvtárából a projektje hivatkozási dokumentációs könyvtárába (például <"
+"filename class=\"directory\">docs/reference/&lt;csomag&gt;</filename>). Egy"
+" helyi másolatnak az <filename>/usr/share/doc/gtk-doc-tools/examples/Makefile."
+"am</filename> alatt kell elérhetőnek lennie. Ha több csomagja van, akkor ezt"
+" ismételje meg mindegyiknél."
 
 #. (itstool) path: note/simpara
 #: C/index.docbook:582
@@ -779,11 +930,16 @@ msgid ""
 "will need to add the entry <filename>docs/reference/libmeep/Makefile</"
 "filename> to <function>AC_CONFIG_FILES</function>."
 msgstr ""
+"Ne felejtsen el hozzáadni minden <filename>Makefile.am</filename> fájlt az <"
+"function>AC_CONFIG_FILES</function> makróhoz a <filename>configure.ac<"
+"/filename> fájlban. A <filename>docs/reference/libmeep/Makefile.am</filename>"
+" esetén a <filename>docs/reference/libmeep/Makefile</filename> bejegyzést"
+" kell hozzáadnia az <function>AC_CONFIG_FILES</function> makróhoz."
 
 #. (itstool) path: example/title
 #: C/index.docbook:594
 msgid "Example directory structure with <filename>Makefiles.am</filename>"
-msgstr ""
+msgstr "Könyvtárszerkezeti példa a <filename>Makefile.am</filename> fájlokkal"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:597
@@ -803,6 +959,19 @@ msgid ""
 "    libmeep/\n"
 "    meeper/\n"
 msgstr ""
+"\n"
+"meep/\n"
+"  docs/\n"
+"    reference/  # hivatkozási dokumentáció\n"
+"      libmeep/\n"
+"        Makefile.am\n"
+"      meeper/\n"
+"        Makefile.am\n"
+"    help/       # elhagyható: felhasználói kézikönyv\n"
+"      meeper/\n"
+"  src/\n"
+"    libmeep/\n"
+"    meeper/\n"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:613
@@ -816,6 +985,16 @@ msgid ""
 "application> has an option named <code>MKHTML_OPTIONS</code>). All the tools "
 "support <option>--help</option> to list the supported options."
 msgstr ""
+"Ezután személyre kell szabnia a lemásolt Makefile-okat, és meg kell adnia a"
+" különböző paraméterek értékeit az egyes <filename>Makefile.am</filename>"
+" fájlokban. Az összes beállítás fölött található egy megjegyzés, amely leírja"
+" a céljukat és a beállítás személyre szabását. A legtöbb beállítás arra"
+" szolgál, hogy további jelzőket adjon azokhoz az eszközökhöz, amelyekre"
+" vonatkozik. Minden eszköz rendelkezik egy <option>&lt;ESZKÖZNÉV&gt;_OPTIONS<"
+"/option> formájú változóval (például a <application>gtkdoc-mkhtml<"
+"/application> eszköznek van egy <code>MKHTML_OPTIONS</code> nevű kapcsolója)."
+" Az összes eszköz támogatja a <option>--help</option> kapcsolót a támogatott"
+" kapcsolók felsorolásához."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:637
@@ -823,6 +1002,8 @@ msgid ""
 "<option>DOC_MODULE</option> is used to provide the name of the package that "
 "is being documentated (e.g. <code>meeper</code>, or <code>libmeep</code>)."
 msgstr ""
+"A <option>DOC_MODULE</option> a dokumentálandó csomag nevének megadására"
+" szolgál (például <code>meeper</code> vagy <code>libmeep</code>)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:644
@@ -832,6 +1013,10 @@ msgid ""
 "usually be <code> DOC_SOURCE_DIR=$(top_srcdir)/src </code> or a sub-"
 "directory of that directory."
 msgstr ""
+"A <option>DOC_SOURCE_DIR</option> a forráskönyvtár helyének megadására"
+" szolgál, amelyben a GTK-Doc az API dokumentációját keresi. Ez általában a <"
+"code>DOC_SOURCE_DIR=$(top_srcdir)/src</code> vagy annak a könyvtárnak az"
+" alkönyvtára."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:657
@@ -841,6 +1026,10 @@ msgid ""
 "<code>HFILE_GLOB=$(top_srcdir)/src/*.c</code>). The documentation will be "
 "rebuilt if any of the matched files change."
 msgstr ""
+"A <option>HFILE_GLOB</option> és <option>CFILE_GLOB</option> a függőségekhez"
+" használatos. Mindkét kapcsoló egy fájl globot vár (például <code"
+">HFILE_GLOB=$(top_srcdir)/src/*.c</code>). A dokumentáció újra összeállításra"
+" kerül, ha bármelyik illeszkedő fájl megváltozik."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:669
@@ -850,6 +1039,10 @@ msgid ""
 "<code>DOC_SOURCE_DIR</code> (e.g. <code> EXTRA_HFILES=$(top_srcdir}/contrib/"
 "extra.h</code>)."
 msgstr ""
+"Az <option>EXTRA_HFILES</option> lehetővé teszi az API-dokumentáció"
+" keresésekor a további beágyazandó fejlécfájlok megadását, amelyek nem"
+" találhatók meg a <code>DOC_SOURCE_DIR</code> alatt (például <code>"
+" EXTRA_HFILES=$(top_srcdir}/contrib/extra.h</code>)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:679
@@ -859,6 +1052,10 @@ msgid ""
 "or directory (e.g. <code> IGNORE_HFILES=gtkdebug.h gtkintl.h "
 "private_code_folder</code>)."
 msgstr ""
+"Az <option>IGNORE_HFILES</option> lehetővé teszi a figyelmen kívül hagyandó"
+" fejlécfájlok vagy könyvtárak megadását az API-dokumentáció keresésekor."
+" Használja a fájl vagy könyvtár alapnevét (például <code"
+">IGNORE_HFILES=gtkdebug.h gtkintl.h személyes_kód_mappa</code>)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:689
@@ -869,6 +1066,11 @@ msgid ""
 "added to this option (e.g. <code> HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/"
 "stock_about_24.png</code>)."
 msgstr ""
+"A <option>HTML_IMAGES</option> lehetővé teszi az olyan képfájlok megadását,"
+" amelyek az előállított dokumentáció <filename>html/</filename> könyvtárába"
+" lesznek másolva. Ha az API-dokumentáció tartalmaz képeket, akkor azokat is"
+" hozzá kell adni ehhez a kapcsolóhoz (például <code"
+">HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/stock_about_24.png</code>)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:702
@@ -877,6 +1079,9 @@ msgid ""
 "included by <code>$(DOC_MAIN_SGML_FILE)</code> (e.g. <code> "
 "content_files=running.xml building.xml changes-2.0.xml</code>)."
 msgstr ""
+"A <option>content_files</option> lehetővé teszi a további fájlok megadását,"
+" amelyeket a <code>$(DOC_MAIN_SGML_FILE)</code> beágyaz (például <code"
+">content_files=running.xml building.xml changes-2.0.xml</code>)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:713
@@ -885,6 +1090,10 @@ msgid ""
 "<emphasis>gtk-doc abbreviations</emphasis> such as <code>#GtkWidget</code> "
 "are expanded (e.g. <code> expand_content_files=running.xml</code>)."
 msgstr ""
+"Az <option>expand_content_files</option> lehetővé teszi azoknak a fájloknak a"
+" megadását, ahol a <emphasis>gtk-doc rövidítések</emphasis> – mint például a"
+" <code>#GtkWidget</code> – ki vannak bővítve (például <code"
+">expand_content_files=running.xml</code>)."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:631
@@ -892,11 +1101,13 @@ msgid ""
 "The following list explains the most relevant options. Check the example "
 "<filename>Makefile.am</filename> for additional options. <_:itemizedlist-1/>"
 msgstr ""
+"A következő lista a legfontosabb kapcsolókat ismerteti. További kapcsolókért"
+" nézze meg a <filename>Makefile.am</filename> példát. <_:itemizedlist-1/>"
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:728
 msgid "Integration with autoconf"
-msgstr ""
+msgstr "Integráció az autoconf programmal"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:730
@@ -908,6 +1119,13 @@ msgid ""
 "configure options to enable GTK-Doc and allows you to set default arguments "
 "for <application>gtkdocize</application>."
 msgstr ""
+"Az <application>autoconf</application> programmal való integráció nagyon"
+" egyszerű, és egy kötelező, valamint egy további választható (de ajánlott)"
+" lépést tartalmaz. Az első lépés a <function>GTK_DOC_CHECK</function> makró"
+" hozzáadása a <filename>configure.ac</filename> parancsfájljához. Ez számos"
+" beállítási kapcsolót regisztrál a GTK-Doc engedélyezéséhez, és lehetővé"
+" teszi a <application>gtkdocize</application> alapértelmezett argumentumainak"
+" beállítását."
 
 #. (itstool) path: warning/simpara
 #: C/index.docbook:742
@@ -916,6 +1134,9 @@ msgid ""
 "macro must start at the beginning of the line and should not start with "
 "whitespace."
 msgstr ""
+"Győződjön meg arról, hogy a <code>GTK_DOC_CHECK</code> makró ne legyen"
+" behúzva. A makrónak a sor elején kell kezdődnie, és nem kezdődhet üres"
+" karakterekkel."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:749
@@ -929,11 +1150,19 @@ msgid ""
 "to explicitly tell the <application>aclocal</application> tool where to find "
 "the macro definition file."
 msgstr ""
+"A második lépés az <code>AC_CONFIG_MACRO_DIR(m4)</code> hozzáadása a <"
+"filename>configure.ac</filename> parancsfájljához. Ez nem kötelező, de segít"
+" a <application>gtkdocize</application> eszköznek abban, hogy azt a"
+" makródefiníciót (például <filename>gtk-doc.m4</filename>), amely a <function"
+">GTK_DOC_CHECK</function> makrót tartalmazza, automatikusan a projektje"
+" makrókönyvtárába másolja. Enélkül előfordulhat, hogy a GTK_DOC_CHECK makrót"
+" nem találja meg, és kifejezetten meg kell mondania az <application>aclocal<"
+"/application> eszköznek, hogy hol találja meg a makródefiníciós fájlt."
 
 #. (itstool) path: example/title
 #: C/index.docbook:762
 msgid "Minimal integration with autoconf"
-msgstr ""
+msgstr "Minimális integráció az autoconf programmal"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:763
@@ -945,11 +1174,16 @@ msgid ""
 "# optional: register gtk-doc in configure\n"
 "GTK_DOC_CHECK([1.28])\n"
 msgstr ""
+"\n"
+"# ajánlott: az m4 könyvtár beállítása\n"
+"AC_CONFIG_MACRO_DIR(m4)\n"
+"# elhagyható: a gtk-doc regisztrálása a configure fájlban\n"
+"GTK_DOC_CHECK([1.28])\n"
 
 #. (itstool) path: example/title
 #: C/index.docbook:778
 msgid "Integration with optional gtk-doc dependency"
-msgstr ""
+msgstr "Integráció a választható gtk-doc függőséggel"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:779
@@ -965,6 +1199,15 @@ msgid ""
 "AM_CONDITIONAL([ENABLE_GTK_DOC], false)\n"
 "])\n"
 msgstr ""
+"\n"
+"m4_ifdef([GTK_DOC_CHECK], [\n"
+"# ajánlott: az m4 könyvtár beállítása\n"
+"AC_CONFIG_MACRO_DIR(m4)\n"
+"# elhagyható: a gtk-doc regisztrálása a configure fájlban\n"
+"GTK_DOC_CHECK([1.28])\n"
+"],[\n"
+"AM_CONDITIONAL([ENABLE_GTK_DOC], false)\n"
+"])\n"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:772
@@ -973,6 +1216,9 @@ msgid ""
 "installed. A better way is to make building the documentation optional as "
 "shown in the next example: <_:example-1/>"
 msgstr ""
+"A fenti példa működik, de minden fejlesztőtől megköveteli a gtk-doc"
+" telepítését. Jobb megoldás, ha a dokumentáció összeállítását nem tesszük"
+" kötelezővé, ahogy a következő példában látható: <_:example-1/>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:792
@@ -982,27 +1228,37 @@ msgid ""
 "application>. The <symbol>GTK_DOC_CHECK</symbol> macro also adds several "
 "configure switches:"
 msgstr ""
+"Az első argumentum a GTK-Doc verziójának ellenőrzésére szolgál a"
+" beállításkor. A második, nem kötelező argumentumot a <application>gtkdocize<"
+"/application> használja. A <symbol>GTK_DOC_CHECK</symbol> makró számos"
+" beállítási kapcsolót is hozzáad:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:801
 msgid "--with-html-dir=PATH : path to installed docs"
-msgstr ""
+msgstr "--with-html-dir=PATH : útvonal a telepített dokumentációkhoz"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:802
 msgid "--enable-gtk-doc : use gtk-doc to build documentation [default=no]"
 msgstr ""
+"--enable-gtk-doc : a gtk-doc használata a dokumentáció összeállításához"
+" [alapértelmezett=nem]"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:803
 msgid ""
 "--enable-gtk-doc-html : build documentation in html format [default=yes]"
 msgstr ""
+"--enable-gtk-doc-html : dokumentáció összeállítása HTML formátumban"
+" [alapértelmezett=igen]"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:804
 msgid "--enable-gtk-doc-pdf : build documentation in pdf format [default=no]"
 msgstr ""
+"--enable-gtk-doc-pdf : dokumentáció összeállítása PDF formátumban"
+" [alapértelmezett=nem]"
 
 #. (itstool) path: important/para
 #: C/index.docbook:808
@@ -1012,6 +1268,11 @@ msgid ""
 "Otherwise pregenerated documentation is installed (which makes sense for "
 "users but not for developers)."
 msgstr ""
+"A GTK-Doc alapértelmezetten le van tiltva! Ne felejtse el átadni az <option"
+">--enable-gtk-doc</option> kapcsolót a következő <filename>configure<"
+"/filename> futtatásához. Egyébként előre előállított dokumentáció kerül"
+" telepítésre (aminek a felhasználók számára van értelme, de a fejlesztők"
+" számára nincs)."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:816
@@ -1020,11 +1281,14 @@ msgid ""
 "<filename>configure</filename> file. This can be done by re-running "
 "<code>autogen.sh</code>."
 msgstr ""
+"Miután a <filename>configure.ac</filename> fájl összes módosítása megtörtént,"
+" frissítse a <filename>configure</filename> fájlt. Ezt az <code>autogen.sh<"
+"/code> újbóli futtatásával lehet megtenni."
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:824
 msgid "Integration with autogen"
-msgstr ""
+msgstr "Integráció az autogen programmal"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:826
@@ -1035,16 +1299,23 @@ msgid ""
 "<application>gtkdocize</application> which can be used to copy the necessary "
 "files needed by Gtk-Doc to the source directory."
 msgstr ""
+"A legtöbb projekt rendelkezik <filename>autogen.sh</filename> parancsfájllal"
+" az összeállítási infrastruktúra beállításához, miután a projektet lekérték"
+" egy verziókövető rendszerből (például git vagy svn). A GTK-Doc egy <"
+"application>gtkdocize</application> nevű parancsfájllal érkezik, amely arra"
+" használható, hogy a GTK-Doc számára szükséges fájlokat a forráskönyvtárba"
+" másolja."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:834
 msgid "It should be run before autoreconf, autoheader, automake or autoconf."
 msgstr ""
+"Ezt az autoreconf, autoheader, automake vagy autoconf előtt kell futtatni."
 
 #. (itstool) path: example/title
 #: C/index.docbook:839
 msgid "Running gtkdocize from autogen.sh"
-msgstr ""
+msgstr "A gtkdocize futtatása az autogen.sh fájlból"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:840
@@ -1053,11 +1324,13 @@ msgid ""
 "\n"
 "gtkdocize || exit 1\n"
 msgstr ""
+"\n"
+"gtkdocize || exit 1\n"
 
 #. (itstool) path: example/title
 #: C/index.docbook:848
 msgid "Conditionally run gtkdocize from autogen.sh"
-msgstr ""
+msgstr "A gtkdocize feltételes futtatása az autogen.sh fájlból"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:849
@@ -1071,6 +1344,14 @@ msgid ""
 "  $GTKDOCIZE || exit 1\n"
 "fi\n"
 msgstr ""
+"\n"
+"GTKDOCIZE=$(which gtkdocize 2&gt;/dev/null)\n"
+"if test $? -ne 0; then\n"
+"  echo \"Nem található gtk-doc támogatás. Nem állítható össze a"
+" dokumentáció.\"\n"
+"else\n"
+"  $GTKDOCIZE || exit 1\n"
+"fi\n"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:860
@@ -1079,6 +1360,9 @@ msgid ""
 "doc.make</filename> to your project root (or any directory specified by the "
 "<option>--docdir</option> option)."
 msgstr ""
+"A <application>gtkdocize</application> futtatásakor átmásolja a <filename"
+">gtk-doc.make</filename> fájlt a projektje gyökerébe (vagy a <option"
+">--docdir</option> kapcsolóval megadott bármely könyvtárba)."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:866
@@ -1089,6 +1373,11 @@ msgid ""
 "to the <application>gtkdocize</application> script. the 2nd parameter in the "
 "<function>GTK_DOC_CHECK</function> macro."
 msgstr ""
+"A <application>gtkdocize</application> átnézi a <filename>configure.ac<"
+"/filename> parancsfájlt a <function>GTK_DOC_CHECK</function> makrót keresve."
+" A <function>GTK_DOC_CHECK</function> makró használható további argumentumok"
+" átadásához a <application>gtkdocize</application> parancsfájl számára. A"
+" második paraméter a <function>GTK_DOC_CHECK</function> makróban."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:875
@@ -1098,11 +1387,16 @@ msgid ""
 "function> environment variable, or by directly specifying them to "
 "<application>gtkdocize</application> in <filename>autogen.sh</filename>."
 msgstr ""
+"Másik lehetőségként további argumentumok is átadhatók a <application"
+">gtkdocize</application> makrónak a <function>GTKDOCIZE_FLAGS</function>"
+" környezeti változón keresztül, vagy közvetlenül megadva azokat a <"
+"application>gtkdocize</application> számára az <filename>autogen.sh</filename"
+"> fájlban."
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:886
 msgid "Executing GTK-Doc from the Build System"
-msgstr ""
+msgstr "A GTK-Doc végrehajtása az összeállítási rendszerből"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:888
@@ -1112,6 +1406,11 @@ msgid ""
 "give it the <option>--enable-gtk-doc</option> option. Otherwise manually run "
 "<filename>configure</filename> with this option afterwards."
 msgstr ""
+"Az előző lépések után itt az ideje az összeállítás futtatásának. Először az <"
+"filename>autogen.sh</filename> ismételt futtatása szükséges. Ha ez a"
+" parancsfájl futtatja a configure fájlt, akkor adja meg neki az <option"
+">--enable-gtk-doc</option> kapcsolót. Ellenkező esetben futtassa kézzel a <"
+"filename>configure</filename> fájlt utólag ezzel a kapcsolóval."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:895
@@ -1121,11 +1420,15 @@ msgid ""
 "filename>, <filename>&lt;package&gt;-docs.xml</filename> (in the past ."
 "sgml), <filename>&lt;package&gt;-sections.txt</filename>."
 msgstr ""
+"A make első futtatása számos további fájlt állít elő a dokumentációs"
+" könyvtárakban. A legfontosabbak a következők: <filename"
+">&lt;csomag&gt;.types</filename>, <filename>&lt;csomag&gt;-docs.xml</filename"
+"> (régebben .sgml), <filename>&lt;csomag&gt;-sections.txt</filename>."
 
 #. (itstool) path: example/title
 #: C/index.docbook:903
 msgid "Running the doc build"
-msgstr ""
+msgstr "A dokumentáció összeállításának futtatása"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:904
@@ -1135,6 +1438,9 @@ msgid ""
 "./autogen.sh --enable-gtk-doc\n"
 "make\n"
 msgstr ""
+"\n"
+"./autogen.sh --enable-gtk-doc\n"
+"make\n"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:911
@@ -1148,11 +1454,19 @@ msgid ""
 "template</link> to add additional chapters and sections to your "
 "documentation files."
 msgstr ""
+"Most nyissa meg a böngészőjével a <filename"
+">docs/reference/&lt;csomag&gt;/index.html</filename> fájlt. Ezzel a kezdeti"
+" beállítással csak egy nagyon egyszerű dokumentumot fog látni. A következő"
+" fejezetben megtanítjuk, hogyan adhat API-dokumentációt a kódjához a"
+" különleges megjegyzésblokkok segítségével. A fejezet ezt követően bemutatja"
+" a <link linkend=\"metafiles\">további fájlokat</link>, és megmutatja, hogyan"
+" szerkesztheti a <link linkend=\"metafiles_master\">mestersablont</link>,"
+" hogy további fejezeteket és szakaszokat adjon a dokumentációs fájljaihoz."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:927
 msgid "Integration with CMake build systems"
-msgstr ""
+msgstr "Integráció a CMake összeállítási rendszerekkel"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:929
@@ -1162,11 +1476,15 @@ msgid ""
 "This provides a <literal>gtk_doc_add_module</literal> command that you can "
 "set in your <filename>CMakeLists.txt</filename> file."
 msgstr ""
+"A GTK-Doc mostantól biztosít egy <filename>GtkDocConfig.cmake</filename>"
+" modult (és a megfelelő <filename>GtkDocConfigVersion.cmake</filename>"
+" modult). Ez biztosít egy <literal>gtk_doc_add_module</literal> parancsot,"
+" amelyet beállíthat a <filename>CMakeLists.txt</filename> fájlban."
 
 #. (itstool) path: example/title
 #: C/index.docbook:939
 msgid "Example of using GTK-Doc from CMake"
-msgstr ""
+msgstr "Példa a GTK-Doc CMake-ből való használatára"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:940
@@ -1183,24 +1501,48 @@ msgid ""
 ")\n"
 "\n"
 "# Build doc-libmeep as part of the default target. Without this, you would\n"
-"# have to explicitly run something like `make doc-libmeep` to build the docs.\n"
+"# have to explicitly run something like `make doc-libmeep` to build the"
+" docs.\n"
 "add_custom_target(documentation ALL DEPENDS doc-libmeep)\n"
 "\n"
-"# Install the docs. (This assumes you're using the GNUInstallDirs CMake module\n"
+"# Install the docs. (This assumes you're using the GNUInstallDirs CMake"
+" module\n"
 "# to set the CMAKE_INSTALL_DOCDIR variable correctly).\n"
 "install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html\n"
 "        DESTINATION ${CMAKE_INSTALL_DOCDIR})\n"
 msgstr ""
+"\n"
+"find_package(GtkDoc 1.25 REQUIRED)\n"
+"\n"
+"# A doc-libmeep cél létrehozása.\n"
+"gtk_doc_add_module(\n"
+"   libmeep ${CMAKE_SOURCE_DIR}/libmeep\n"
+"      XML meep-docs.xml\n"
+"      LIBRARIES libmeep\n"
+")\n"
+"\n"
+"# A doc-libmeep összeállítása az alapértelmezett cél részeként. Enélkül\n"
+"# kifejezetten futtatni kellene valami olyasmit, mint a „make doc-libmeep”\n"
+"# a dokumentáció összeállításához."
+"add_custom_target(documentation ALL DEPENDS doc-libmeep)\n"
+"\n"
+"# A dokumentáció telepítése (ez azt feltételezi, hogy a GNUInstallDirs CMake\n"
+"# modulját használja a CMAKE_INSTALL_DOCDIR változó helyes beállításához).\n"
+"install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/libmeep/html\n"
+"        DESTINATION ${CMAKE_INSTALL_DOCDIR})\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:937
 msgid "The following example shows how to use this command. <_:example-1/>"
 msgstr ""
+"A következő példa azt mutatja be, hogy hogyan kell használni ezt a parancsot."
+" <_:example-1/>"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:964
 msgid "Integration with plain makefiles or other build systems"
 msgstr ""
+"Integráció egyszerű makefile-okkal vagy egyéb összeállítási rendszerekkel"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:966
@@ -1209,11 +1551,15 @@ msgid ""
 "doc.mak</filename> one will need to call the gtkdoc tools in the right order "
 "in own makefiles (or other build tools)."
 msgstr ""
+"Abban az esetben, ha valaki nem szeretné az automake és ezáltal a <filename"
+">gtk-doc.mak</filename> használatát, akkor a gtkdoc eszközöket a megfelelő"
+" sorrendben kell meghívni a saját makefile-okban (vagy más összeállítási"
+" eszközökben)."
 
 #. (itstool) path: example/title
 #: C/index.docbook:973
 msgid "Documentation build steps"
-msgstr ""
+msgstr "Dokumentáció összeállítási lépései"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:974
@@ -1224,12 +1570,24 @@ msgid ""
 "// sources have changed\n"
 "gtkdoc-scan --module=$(DOC_MODULE) &lt;source-dir&gt;\n"
 "gtkdoc-scangobj --module=$(DOC_MODULE)\n"
-"gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml --source-dir=&lt;source-dir&gt;\n"
+"gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml"
+" --source-dir=&lt;source-dir&gt;\n"
 "// xml files have changed\n"
 "mkdir html\n"
 "cd html &amp;&amp; gtkdoc-mkhtml $(DOC_MODULE) ../meep-docs.xml\n"
 "gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html\n"
 msgstr ""
+"\n"
+"DOC_MODULE=meep\n"
+"// források megváltoztak\n"
+"gtkdoc-scan --module=$(DOC_MODULE) &lt;source-dir&gt;\n"
+"gtkdoc-scangobj --module=$(DOC_MODULE)\n"
+"gtkdoc-mkdb --module=$(DOC_MODULE) --output-format=xml"
+" --source-dir=&lt;source-dir&gt;\n"
+"// XML-fájlok megváltoztak\n"
+"mkdir html\n"
+"cd html &amp;&amp; gtkdoc-mkhtml $(DOC_MODULE) ../meep-docs.xml\n"
+"gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:988
@@ -1237,11 +1595,13 @@ msgid ""
 "One will need to look at the <filename>Makefile.am</filename> and "
 "<filename>gtk-doc.mak</filename> to pick the extra options needed."
 msgstr ""
+"Meg kell nézni a <filename>Makefile.am</filename> és a <filename>gtk-doc.mak<"
+"/filename> fájlokat a szükséges további kapcsolók kiválasztásához."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:995
 msgid "Integration with version control systems"
-msgstr ""
+msgstr "Integráció verziókövető rendszerekkel"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:997
@@ -1252,6 +1612,11 @@ msgid ""
 "past .sgml), <filename>&lt;package&gt;-sections.txt</filename>, "
 "<filename>Makefile.am</filename>."
 msgstr ""
+"Ökölszabályként a szerkesztett fájloknak kell verziókövetés alá kerülniük."
+" Tipikus projektek esetén ezek a következő fájlok: <filename"
+">&lt;csomag&gt;.types</filename>, <filename>&lt;csomag&gt;-docs.xml</filename"
+"> (régebben .sgml), <filename>&lt;csomag&gt;-sections.txt</filename>, <"
+"filename>Makefile.am</filename>."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1005
@@ -1260,11 +1625,14 @@ msgid ""
 "directories should not go under version control. Neither should any of the "
 "<filename>.stamp</filename> files."
 msgstr ""
+"Az <filename>xml/</filename> és a <filename>html/</filename> könyvtárakban"
+" lévő fájlok nem kerülhetnek verziókövetés alá. A <filename>.stamp</filename>"
+" fájlok egyikének sem kellene."
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:1015
 msgid "Documenting the code"
-msgstr ""
+msgstr "A kód dokumentálása"
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:1017
@@ -1274,11 +1642,15 @@ msgid ""
 "from other sources. During the next section you will find all information "
 "about the syntax of the comments."
 msgstr ""
+"A GTK-Doc a forráskód különleges szintaxisú megjegyzéseit használja a kód"
+" dokumentációjához. Továbbá információkat szerez a projekt szerkezetéről más"
+" forrásokból. A következő szakaszban minden információt megtalál a"
+" megjegyzések szintaxisáról."
 
 #. (itstool) path: example/title
 #: C/index.docbook:1028 C/index.docbook:1054
 msgid "GTK-Doc comment block"
-msgstr ""
+msgstr "GTK-Doc megjegyzésblokk"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1029
@@ -1289,6 +1661,10 @@ msgid ""
 "/* unparseable code here */\n"
 "#endif\n"
 msgstr ""
+"\n"
+"#ifndef __GTK_DOC_IGNORE__\n"
+"/* feldolgozhatatlan kód itt */\n"
+"#endif\n"
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:1024
@@ -1297,11 +1673,15 @@ msgid ""
 "of receiving warnings from the scanner that look like a special case, one "
 "can hint GTK-Doc to skip over them. <_:example-1/>"
 msgstr ""
+"A GTK-Doc átvizsgáló a C fejlécek többségét jól tudja kezelni. Abban az"
+" esetben, ha az átvizsgálótól olyan figyelmeztetések érkeznek, amelyek"
+" különleges esetnek tűnnek, a GTK-Doc eszköznek jelezni lehet, hogy hagyja ki"
+" azokat. <_:example-1/>"
 
 #. (itstool) path: note/title
 #: C/index.docbook:1038
 msgid "Limitations"
-msgstr ""
+msgstr "Korlátozások"
 
 #. (itstool) path: note/para
 #: C/index.docbook:1039
@@ -1309,11 +1689,14 @@ msgid ""
 "Note, that GTK-Doc's supports <code>#ifndef(__GTK_DOC_IGNORE__)</code> but "
 "not <code>#if !defined(__GTK_DOC_IGNORE__)</code> or other combinations."
 msgstr ""
+"Ne feledje, hogy a GTK-Doc az <code>#ifndef(__GTK_DOC_IGNORE__)</code>"
+" megadást támogatja, de az <code>#if !defined(__GTK_DOC_IGNORE__)</code> vagy"
+" egyéb kombinációkat nem."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1049
 msgid "Documentation comments"
-msgstr ""
+msgstr "Dokumentációs megjegyzések"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1055
@@ -1325,6 +1708,11 @@ msgid ""
 " * documentation ...\n"
 " */\n"
 msgstr ""
+"\n"
+"/**\n"
+" * azonosító:\n"
+" * dokumentáció ...\n"
+" */\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1051
@@ -1332,6 +1720,8 @@ msgid ""
 "A multiline comment that starts with an additional '*' marks a documentation "
 "block that will be processed by the GTK-Doc tools. <_:example-1/>"
 msgstr ""
+"Egy további „*” karakterrel kezdődő többsoros megjegyzés olyan dokumentációs"
+" blokkot jelöl, amelyet a GTK-Doc eszközök feldolgoznak. <_:example-1/>"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1064
@@ -1340,6 +1730,9 @@ msgid ""
 "related to. The syntax differs a little depending on the item. (TODO add "
 "table showing identifiers)"
 msgstr ""
+"Az „azonosító” egy sorban tartalmazza annak az elemnek a nevét, amelyhez a"
+" megjegyzés kapcsolódik. A szintaxis az elemtől függően némileg eltér."
+" (TEENDŐ: az azonosítókat megjelenítő táblázat hozzáadása)"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1070
@@ -1352,6 +1745,15 @@ msgid ""
 "breaks. If you don't want a paragraph break, change that into ' * ' (blank-"
 "asterisk-blank-blank). This is useful in preformatted text (code listings)."
 msgstr ""
+"A „dokumentáció” blokk szintén különbözik az egyes szimbólumtípusoknál. A"
+" paramétereket kapó szimbólumtípusoknál, mint például a függvények vagy"
+" makrók, a paraméter leírása az első, amit egy üres sor követ (csak egy „*”)."
+" Ezután következik a részletes leírás. Az összes olyan sor (a programlistákon"
+" és a CDATA szakaszokon kívül), amely csak „ *” karaktereket (üres helyet és"
+" csillagot) tartalmaz, bekezdéstörésekké lesznek átalakítva. Ha nem szeretne"
+" bekezdéstörést, akkor változtassa át „ * ” karaktersorozatra (üres hely,"
+" csillag, üres hely, üres hely). Ez hasznos az előformázott szövegnél"
+" (kódlistáknál)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1087
@@ -1359,22 +1761,28 @@ msgid ""
 "What it is: The name for a class or function can sometimes be misleading for "
 "people coming from a different background."
 msgstr ""
+"Mi ez: egy osztály vagy funkció neve néha félrevezető lehet a más háttérrel"
+" érkezők számára."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1093
 msgid ""
 "What it does: Tell about common uses. Put it in relation with the other API."
 msgstr ""
+"Mit csinál: mondja el a gyakori használatot, helyezze kapcsolatba a többi"
+" API-val."
 
 #. (itstool) path: tip/para
 #: C/index.docbook:1083
 msgid "When documenting code, describe two aspects: <_:itemizedlist-1/>"
-msgstr ""
+msgstr "A kód dokumentálásakor két szempontot kell leírni: <_:itemizedlist-1/>"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1108
 msgid "Use function() to refer to functions or macros which take arguments."
 msgstr ""
+"Használja a függvény() jelölést az olyan függvényekre vagy makrókra való"
+" hivatkozáshoz, amelyek argumentumokat fogadnak el."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1113
@@ -1382,11 +1790,16 @@ msgid ""
 "Use @param to refer to parameters. Also use this when referring to "
 "parameters of other functions, related to the one being described."
 msgstr ""
+"Használja a @paraméter jelölést a paraméterekre való hivatkozáshoz. Akkor is"
+" használja, ha más függvények paramétereire hivatkozik, amelyek a leírtakhoz"
+" kapcsolódnak."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1119
 msgid "Use %constant to refer to a constant, e.g. %G_TRAVERSE_LEAFS."
 msgstr ""
+"Használja a %konstans jelölést egy konstansra való hivatkozáshoz, például "
+"%G_TRAVERSE_LEAFS."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1124
@@ -1394,16 +1807,23 @@ msgid ""
 "Use #symbol to refer to other types of symbol, e.g. structs and enums and "
 "macros which don't take arguments."
 msgstr ""
+"Használja a #szimbólum jelölést más típusú szimbólumokra, például"
+" struktúrákra, felsorolásokra és olyan makrókra, amelyek nem fogadnak el"
+" argumentumokat."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1130
 msgid "Use #Object::signal to refer to a GObject signal."
 msgstr ""
+"Használja az #Objektum::szignál jelölést egy GObject szignálra való"
+" hivatkozáshoz."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1135
 msgid "Use #Object:property to refer to a GObject property."
 msgstr ""
+"Használja az #Objektum:tulajdonság jelölést egy GObject tulajdonságra való"
+" hivatkozáshoz."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1140
@@ -1411,6 +1831,9 @@ msgid ""
 "Use #Struct.field to refer to a field inside a structure and #GObjectClass."
 "foo_bar() to refer to a vmethod."
 msgstr ""
+"Használja a #Struktúra.mező jelölést egy struktúrán belüli mezőre való"
+" hivatkozáshoz, és a #GObjectClass.foo_bar() jelölést egy virtuális metódusra"
+" való hivatkozáshoz."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1102
@@ -1420,6 +1843,10 @@ msgid ""
 "GTK-Doc comes to help by providing several useful abbreviations. <_:"
 "itemizedlist-1/>"
 msgstr ""
+"A hiperszöveg egyik előnye az egyszerű szöveggel szemben az, hogy a"
+" dokumentumban hivatkozások is lehetnek. Egy hivatkozás megfelelő jelölésének"
+" megírása azonban fárasztó lehet. A GTK-Doc számos hasznos rövidítéssel segít"
+" ebben. <_:itemizedlist-1/>"
 
 #. (itstool) path: tip/para
 #: C/index.docbook:1149
@@ -1430,6 +1857,11 @@ msgid ""
 "commat;\", \"&amp;percnt;\" and \"&amp;num;\" respectively or escape them "
 "with a backslash '\\'."
 msgstr ""
+"Ha különleges karaktereket („&lt;”, „&gt;”, „(”, „)”, „@”, „%” vagy „#”) kell"
+" használnia a dokumentációban anélkül, hogy a GTK-Doc megváltoztatná azokat,"
+" használhatja az XML-entitásukat („&amp;lt;”, „&amp;gt;”, „&amp;lpar;”,"
+" „&amp;rpar;”, „&amp;commat;”, „&amp;percnt;” vagy „&amp;num;”) a fentieknek"
+" megfelelően vagy elfedheti azokat egy visszafelé mutató perjellel („\\”)."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1158
@@ -1441,6 +1873,13 @@ msgid ""
 "versions any documentation that includes Markdown will be rendered as is. "
 "For example, list items will appear as lines starting with a dash."
 msgstr ""
+"A DocBook többre is képes a hivatkozásoknál. Lehetnek benne listák, példák,"
+" címsorok és képek is. Az 1.20-as verziótól kezdve az előnyben részesített"
+" mód a <ulink url=\"http://daringfireball.net/projects/markdown/\">Markdown<"
+"/ulink> nevű alapvető szövegformázási szintaxis egy részhalmazának"
+" használata. A régebbi GTK-Doc verziókban minden olyan dokumentáció, amely"
+" Markdown formátumot tartalmaz, úgy lesz megjelenítve, ahogy van. Például a"
+" listaelemek kötőjellel kezdődő sorokként jelennek meg."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1169
@@ -1449,6 +1888,9 @@ msgid ""
 "that one can use docbook xml within markdown, but markdown within docbook "
 "xml is not supported."
 msgstr ""
+"Míg a Markdown most előnyben részesített, mindkettőt lehet vegyesen"
+" használni. Az egyik korlátozás az, hogy a DocBook XML használható a Markdown"
+" jelölésen belül, de a Markdown a DocBook XML-en belül nem támogatott."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1175
@@ -1459,11 +1901,16 @@ msgid ""
 "the variable <symbol>MKDB_OPTIONS</symbol> inside <filename>Makefile.am</"
 "filename>."
 msgstr ""
+"Ha a régebbi GTK-Doc kiadásokban további formázási támogatásra volt szüksége,"
+" akkor engedélyeznie kellett a DocBook XML címkék használatát a dokumentációs"
+" megjegyzéseken belül úgy, hogy <option>--xml-mode</option> (vagy <option"
+">--sgml-mode</option>) kapcsolókat tett az <symbol>MKDB_OPTIONS</symbol>"
+" változóba a <filename>Makefile.am</filename> fájlon belül."
 
 #. (itstool) path: example/title
 #: C/index.docbook:1184
 msgid "GTK-Doc comment block using Markdown"
-msgstr ""
+msgstr "GTK-Doc megjegyzésblokk Markdown használatával"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1185
@@ -1505,6 +1952,41 @@ msgid ""
 " * ]|\n"
 " */\n"
 msgstr ""
+"\n"
+"/**\n"
+" * azonosító:\n"
+" *\n"
+" * dokumentációs bekezdés ...\n"
+" *\n"
+" * # Alcímsor #\n"
+" *\n"
+" * ## Második alcímsor\n"
+" *\n"
+" * # Alcímsor hivatkozási horgonnyal # {#heading-two}\n"
+" *\n"
+" * további dokumentáció:\n"
+" *\n"
+" * - Első listaelem\n"
+" *\n"
+" *   Bekezdés a listaelemen belül.\n"
+" *\n"
+" * - Második listaelem\n"
+" *\n"
+" * 1. számozott listaelem\n"
+" *\n"
+" * 2. egy másik számozott listaelem\n"
+" *\n"
+" * Még egy bekezdés. [Hivatkozás a GNOME webhelyére](http://www.gnome.org/)\n"
+" *\n"
+" * ![egy beágyazott kép](plot-result.png)\n"
+" *\n"
+" * [Hivatkozás a fenti címsorhorgonyra][heading-two]\n"
+" *\n"
+" * Egy C nyelven írt példa:\n"
+" * |[&lt;!-- language=\"C\" --&gt;\n"
+" * GtkWidget *label = gtk_label_new (\"Gyönyörű!\");\n"
+" * ]|\n"
+" */\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1224
@@ -1513,6 +1995,9 @@ msgid ""
 "url=\"https://wiki.gnome.org/Projects/GTK/DocumentationSyntax/Markdown\">GTK "
 "Documentation Markdown Syntax Reference</ulink>."
 msgstr ""
+"További példák találhatók a támogatott Markdown-címkékre a <ulink"
+" url=\"https://wiki.gnome.org/Projects/GTK/DocumentationSyntax/Markdown\">GTK"
+" dokumentáció Markdown-szintaxis hivatkozásában</ulink>."
 
 #. (itstool) path: tip/para
 #: C/index.docbook:1230
@@ -1525,11 +2010,20 @@ msgid ""
 "public, all one needs to do is to add another '*' in the comment block and "
 "insert the symbol name at the right place inside the sections file."
 msgstr ""
+"Mint már korábban említettük, a GTK-Doc a nyilvános API dokumentálására"
+" szolgál. Így statikus szimbólumokhoz nem lehet dokumentációt írni."
+" Mindazonáltal jó, ha ezeket a szimbólumokat is ellátjuk megjegyzéssel. Ez"
+" segít más fejlesztőknek megérteni a kódot. Ezért azt javasoljuk, hogy ezeket"
+" normál megjegyzésekkel dokumentálja (a második „*” nélkül az első sorban)."
+" Ha később a függvényt nyilvánossá kell tenni, akkor csak annyit kell"
+" elvégezni, hogy a egy újabb „*” karaktert kell hozzáadni a"
+" megjegyzésblokkhoz, és a megfelelő helyre be kell illeszteni a szimbólum"
+" nevét a „sections” fájljában."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1245
 msgid "Documenting sections"
-msgstr ""
+msgstr "Szakaszok dokumentálása"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1247
@@ -1539,11 +2033,15 @@ msgid ""
 "description is also used inside the table of contents. All the @fields are "
 "optional."
 msgstr ""
+"A dokumentáció minden egyes szakasza egy-egy osztályról vagy modulról"
+" tartalmaz információt. Az összetevő bemutatásához írhatunk szakaszblokkot. A"
+" rövid leírást a tartalomjegyzéken belül is használják. Egyik @mező"
+" használata sem kötelező."
 
 #. (itstool) path: example/title
 #: C/index.docbook:1255
 msgid "Section comment block"
-msgstr ""
+msgstr "Szakasz megjegyzésblokkja"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1256
@@ -1563,11 +2061,24 @@ msgid ""
 " * The application class handles ...\n"
 " */\n"
 msgstr ""
+"\n"
+"/**\n"
+" * SECTION:meepapp\n"
+" * @short_description: az alkalmazás osztálya\n"
+" * @title: Meep alkalmazás\n"
+" * @section_id:\n"
+" * @see_also: #MeepSettings\n"
+" * @stability: Stable\n"
+" * @include: meep/app.h\n"
+" * @image: application.png\n"
+" *\n"
+" * Az alkalmazás osztálya kezeli a ...\n"
+" */\n"
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1275
 msgid "SECTION:&lt;name&gt;"
-msgstr ""
+msgstr "SECTION:&lt;név&gt;"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1277
@@ -1577,11 +2088,15 @@ msgid ""
 "should match the &lt;FILE&gt; tag in the <filename>&lt;package&gt;-sections."
 "txt</filename> file."
 msgstr ""
+"A név összekapcsolja a szakasz dokumentációját a <filename"
+">&lt;csomag&gt;-sections.txt</filename> fájl megfelelő részével. Az itt"
+" megadott névnek meg kell egyeznie a &lt;FILE&gt; címkével a <filename"
+">&lt;csomag&gt;-sections.txt</filename> fájlban."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1286
 msgid "@short_description"
-msgstr ""
+msgstr "@short_description"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1288
@@ -1589,11 +2104,13 @@ msgid ""
 "A one line description of the section, that later will appear after the "
 "links in the TOC and at the top of the section page."
 msgstr ""
+"A szakasz egysoros leírása, amely később a hivatkozás után jelenik meg a"
+" tartalomjegyzékben és a szakasz oldalának tetején."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1295
 msgid "@title"
-msgstr ""
+msgstr "@title"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1297
@@ -1601,11 +2118,13 @@ msgid ""
 "The section title defaults to &lt;name&gt; from the SECTION declaration. It "
 "can be overridden with the @title field."
 msgstr ""
+"A szakasz címe alapértelmezetten a SECTION deklarációból származó"
+" &lt;név&gt;. Ez felülírható a @title mezővel."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1304
 msgid "@section_id"
-msgstr ""
+msgstr "@section_id"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1306
@@ -1614,21 +2133,24 @@ msgid ""
 "title&gt; is used as a section_id and for other sections it is &lt;"
 "MODULE&gt;-&lt;title&gt;."
 msgstr ""
+"Felülírja a cím szakaszazonosítóként való használatát. A GObject"
+" objektumoknál a &lt;title&gt; lesz szakaszazonosítóként használva, más"
+" szakaszoknál pedig a &lt;MODUL&gt;-&lt;cím&gt;."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1314
 msgid "@see_also"
-msgstr ""
+msgstr "@see_also"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1316
 msgid "A list of symbols that are related to this section."
-msgstr ""
+msgstr "A szakaszhoz kapcsolódó szimbólumok listája."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1322
 msgid "@stability"
-msgstr ""
+msgstr "@stability"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1329
@@ -1640,6 +2162,12 @@ msgid ""
 "release). Even at a major release, incompatible changes are expected to be "
 "rare, and to have strong justifications."
 msgstr ""
+"Stable – A stabil interfész célja, hogy lehetővé tegye tetszőleges harmadik"
+" fél számára, hogy alkalmazásokat fejlesszen ezekre az interfészekre, kiadja"
+" azokat, és bízzon abban, hogy azok a termék minden kisebb kiadásán futni"
+" fognak (az interfész bevezetését követő, de ugyanazon fő kiadáson belül)."
+" Még egy fő kiadásnál is elvárható, hogy az inkompatibilis változtatások"
+" ritkák legyenek, és hogy erős indoklással rendelkezzenek."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1341
@@ -1650,6 +2178,12 @@ msgid ""
 "more general solution is anticipated. No claims are made about either source "
 "or binary compatibility from one minor release to the next."
 msgstr ""
+"Unstable – Az instabil interfészek kísérleti vagy átmeneti jellegűek."
+" Általában arra használják azokat, hogy külső fejlesztőknek korai hozzáférést"
+" biztosítsanak új vagy gyorsan változó technológiához, vagy hogy átmeneti"
+" megoldást nyújtsanak egy olyan problémára, amelyre általánosabb megoldást"
+" várnak. Sem a forrás-, sem a bináris kompatibilitás tekintetében nem"
+" állítanak semmit az egyik kisebb kiadásról a másikra."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1353
@@ -1658,6 +2192,9 @@ msgid ""
 "that is not documented for end-users. Such functions should only be used in "
 "specified and documented ways."
 msgstr ""
+"Private – Egy olyan interfész, amely a GNOME rendszerben használható, de"
+" nincs dokumentálva a végfelhasználók számára. Az ilyen függvényeket csak"
+" meghatározott és dokumentált módon szabad használni."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1362
@@ -1666,6 +2203,9 @@ msgid ""
 "end-user documentation. Functions that are undocumented are assumed to be "
 "Internal."
 msgstr ""
+"Internal – Egy olyan interfész, amely egy modul belső része, és nem igényel"
+" végfelhasználói dokumentációt. A dokumentálatlan függvények belsőnek"
+" tekintendők."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1324
@@ -1673,11 +2213,13 @@ msgid ""
 "An informal description of the stability level this API has. We recommend "
 "the use of one of these terms: <_:itemizedlist-1/>"
 msgstr ""
+"Az API stabilitási szintjének nem hivatalos leírása. Javasoljuk a következő"
+" kifejezések egyikének használatát: <_:itemizedlist-1/>"
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1374
 msgid "@include"
-msgstr ""
+msgstr "@include"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1376
@@ -1687,11 +2229,15 @@ msgid ""
 "linkend=\"metafiles_sections\">section file</link> or command line. This "
 "item is optional."
 msgstr ""
+"Az <literal>#include</literal> fájlok, amelyeket a szakasz összefoglalójában"
+" kell megjeleníteni (vesszővel elválasztott lista), felülírva a <link"
+" linkend=\"metafiles_sections\">szakaszfájlból</link> vagy a parancssorból"
+" származó globális értéket. Ez az elem nem kötelező."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1385
 msgid "@image"
-msgstr ""
+msgstr "@image"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1387
@@ -1701,6 +2247,10 @@ msgid ""
 "a class or a diagram of its relationship to other classes. This item is "
 "optional."
 msgstr ""
+"Az a kép, amelyet a hivatkozási oldal tetején kell megjeleníteni ebben a"
+" szakaszban. Ez gyakran valamilyen diagram lesz, amely az osztály vizuális"
+" megjelenését vagy más osztályokkal való kapcsolatát szemlélteti. Ez az elem"
+" nem kötelező."
 
 #. (itstool) path: tip/para
 #: C/index.docbook:1398
@@ -1708,11 +2258,13 @@ msgid ""
 "To avoid unnecessary recompilation after doc-changes put the section docs "
 "into the c-source where possible."
 msgstr ""
+"A felesleges újrafordítás elkerülése érdekében a dokumentáció változtatásai"
+" után tegye a szakasz dokumentációit a C-forrásba, ahol csak lehetséges."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1407
 msgid "Documenting symbols"
-msgstr ""
+msgstr "Szimbólumok dokumentálása"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1409
@@ -1723,12 +2275,17 @@ msgid ""
 "functions are usually documented in the c-source and macros, structs and "
 "enums in the header file."
 msgstr ""
+"Minden szimbólum (függvény, makró, struktúra, felsorolás, szignál és"
+" tulajdonság) külön blokkban van dokumentálva. A blokkot célszerű a"
+" szimbólumok definíciójához közel elhelyezni, hogy könnyen szinkronban"
+" lehessen tartani őket. Így a függvényeket általában a C-forrásban, a"
+" makrókat, struktúrákat és felsorolásokat pedig a fejlécfájlban dokumentálják."
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
 #: C/index.docbook:1417 C/index.docbook:1483
 msgid "General tags"
-msgstr ""
+msgstr "Általános címkék"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1419
@@ -1736,26 +2293,28 @@ msgid ""
 "You can add versioning information to all documentation elements to tell "
 "when an API was introduced, or when it was deprecated."
 msgstr ""
+"Verziózási információkat adhat az összes dokumentációs elemhez, hogy"
+" megmondja, mikor lett egy API bevezetve, vagy mikor vált elavulttá."
 
 #. (itstool) path: variablelist/title
 #: C/index.docbook:1424
 msgid "Versioning Tags"
-msgstr ""
+msgstr "Verziózási címkék"
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1425
 msgid "Since:"
-msgstr ""
+msgstr "Since:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1427
 msgid "Description since which version of the code the API is available."
-msgstr ""
+msgstr "Annak leírása, hogy a kód melyik verziója óta érhető el az API."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1432
 msgid "Deprecated:"
-msgstr ""
+msgstr "Deprecated:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1434
@@ -1763,6 +2322,8 @@ msgid ""
 "Paragraph denoting that this function should no be used anymore. The "
 "description should point the reader to the new API."
 msgstr ""
+"Olyan bekezdés, amely azt jelzi, hogy ezt a funkciót nem szabad tovább"
+" használni. A leírásnak az új API-ra kell irányítania az olvasót."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1442
@@ -1771,6 +2332,9 @@ msgid ""
 "indicate whether API stability is guaranteed for them for all future minor "
 "releases of the project."
 msgstr ""
+"Az összes dokumentációs elemhez stabilitási információt is adhat annak"
+" feltüntetéséhez, hogy az API stabilitása garantált-e hozzájuk a projekt"
+" összes jövőbeli kisebb kiadásában."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1448
@@ -1779,16 +2343,19 @@ msgid ""
 "passing the <option>--default-stability</option> argument to "
 "<application>gtkdoc-mkdb</application> with one of the values below."
 msgstr ""
+"Az összes dokumentációs elem alapértelmezett stabilitási szintje beállítható"
+" a <option>--default-stability</option> argumentum <application>gtkdoc-mkdb<"
+"/application> részére történő átadásával, az alábbi értékek egyikével."
 
 #. (itstool) path: variablelist/title
 #: C/index.docbook:1454
 msgid "Stability Tags"
-msgstr ""
+msgstr "Stabilitási címkék"
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1455
 msgid "Stability: Stable"
-msgstr ""
+msgstr "Stability: Stable"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1457
@@ -1796,11 +2363,14 @@ msgid ""
 "Mark the element as stable. This is for public APIs which are guaranteed to "
 "remain stable for all future minor releases of the project."
 msgstr ""
+"Az elem megjelölése stabilként. Ez olyan nyilvános API-kra vonatkozik,"
+" amelyek garantáltan stabilak maradnak a projekt összes jövőbeli kisebb"
+" kiadásában."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1464
 msgid "Stability: Unstable"
-msgstr ""
+msgstr "Stability: Unstable"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1466
@@ -1808,11 +2378,13 @@ msgid ""
 "Mark the element as unstable. This is for public APIs which are released as "
 "a preview before being stabilised."
 msgstr ""
+"Az elem megjelölése instabilként. Ez olyan nyilvános API-kra vonatkozik,"
+" amelyeket előzetesként adnak ki a stabilizálás előtt."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1472
 msgid "Stability: Private"
-msgstr ""
+msgstr "Stability: Private"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1474
@@ -1820,6 +2392,9 @@ msgid ""
 "Mark the element as private. This is for interfaces which can be used by "
 "tightly coupled modules, but not by arbitrary third parties."
 msgstr ""
+"Az elem megjelölése privátként. Ez olyan interfészekre vonatkozik, amelyeket"
+" szorosan összekapcsolt modulok használhatnak, de tetszőleges harmadik felek"
+" nem."
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1484
@@ -1842,22 +2417,45 @@ msgid ""
 "{\n"
 "...\n"
 msgstr ""
+"\n"
+"/**\n"
+" * foo_get_bar:\n"
+" * @foo: valamilyen izé\n"
+" *\n"
+" * Visszaadja a @foo bigyóját.\n"
+" *\n"
+" * Returns: @foo' bigyója\n"
+" *\n"
+" * Since: 2.6\n"
+" * Deprecated: 2.12: Használja a foo_baz_get_bar() függvényt helyette.\n"
+" */\n"
+"Bar *\n"
+"foo_get_bar(Foo *foo)\n"
+"{\n"
+"...\n"
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
 #: C/index.docbook:1504 C/index.docbook:1514
 msgid "Annotations"
-msgstr ""
+msgstr "Magyarázó jegyzetek"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1506
 msgid ""
 "Documentation blocks can contain annotation-tags. These tags will be "
 "rendered with tooltips describing their meaning. The tags are used by "
-"gobject-introspection to generate language bindings. A detailed list of the "
-"supported tags can be found on <ulink url=\"http://live.gnome.org/"
-"GObjectIntrospection/Annotations\" type=\"http\">the wiki</ulink>."
+"GObject Introspection to generate language bindings. A detailed list of the "
+"supported tags can be found in the <ulink url=\"https://gi.readthedocs.io/en/"
+"latest/annotations/giannotations.html\" type=\"http\">GObject Introspection "
+"documentation</ulink>."
 msgstr ""
+"A dokumentációs blokkok tartalmazhatnak magyarázó megjegyzés címkéket. Ezek a"
+" címkék a jelentésüket leíró buboréksúgókkal lesznek megjelenítve. A címkéket"
+" a GObject Introspection használja a nyelvi kötődések előállításához. A"
+" támogatott címkék részletes listája megtalálható a <ulink"
+" url=\"https://gi.readthedocs.io/en/latest/annotations/giannotations.html\""
+" type=\"http\">GObject Introspection dokumentációjában</ulink>."
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1515
@@ -1881,12 +2479,29 @@ msgid ""
 " * Sets bar on @foo.\n"
 " */\n"
 msgstr ""
+"\n"
+"/**\n"
+" * foo_get_bar: (megjegyzés)\n"
+" * @foo: (megjegyzés): valamilyen izé\n"
+" *\n"
+" * Visszaadja a @foo bigyóját.\n"
+" *\n"
+" * Returns: (megjegyzés): a @foo bigyója\n"
+" */\n"
+"...\n"
+"/**\n"
+" * foo_set_bar_using_the_frobnicator: (megjegyzés) (másik megjegyzés)\n"
+" *                                    (és még egy megjegyzés)\n"
+" * @foo: (megjegyzés) (másik megjegyzés): valamilyen izé\n"
+" *\n"
+" * Beállítja a bigyót a @foo izén.\n"
+" */\n"
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
 #: C/index.docbook:1536 C/index.docbook:1565
 msgid "Function comment block"
-msgstr ""
+msgstr "Függvény megjegyzésblokkja"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1542
@@ -1894,22 +2509,27 @@ msgid ""
 "Document whether returned objects, lists, strings, etc, should be freed/"
 "unrefed/released."
 msgstr ""
+"Dokumentálja, hogy a visszaadott objektumokat, listákat, karakterláncokat"
+" stb. fel kell-e szabadítani, meg kell-e szüntetni a hivatkozásukat, illetve"
+" ki kell-e adni."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1548
 msgid "Document whether parameters can be NULL, and what happens if they are."
 msgstr ""
+"Dokumentálja, hogy a paraméterek lehetnek-e NULL értékűek, és mi történjen,"
+" ha azok."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1553
 msgid ""
 "Mention interesting pre-conditions and post-conditions where appropriate."
-msgstr ""
+msgstr "Említse meg az érdekes elő- és utófeltételeket, ahol szükséges."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1538 C/index.docbook:1624
 msgid "Please remember to: <_:itemizedlist-1/>"
-msgstr ""
+msgstr "Ne felejtse el a következőket: <_:itemizedlist-1/>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1560
@@ -1917,6 +2537,8 @@ msgid ""
 "Gtk-doc assumes all symbols (macros, functions) starting with '_' are "
 "private. They are treated like static functions."
 msgstr ""
+"A GTK-Doc azt feltételezi, hogy az összes „_” karakterrel kezdődő szimbólum"
+" (makró, függvény) privát. Úgy kezeli őket, mint a statikus függvényeket."
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1566
@@ -1930,7 +2552,8 @@ msgid ""
 " * @par2:  description of parameter 2\n"
 " * @...: a %NULL-terminated list of bars\n"
 " *\n"
-" * The function description goes here. You can use @par1 to refer to parameters\n"
+" * The function description goes here. You can use @par1 to refer to"
+" parameters\n"
 " * so that they are highlighted in the output. You can also use %constant\n"
 " * for constants, function_name2() for functions and #GtkWidget for links to\n"
 " * other declarations (which may be documented elsewhere).\n"
@@ -1941,26 +2564,45 @@ msgid ""
 " * Deprecated: 2.18: Use other_function() instead.\n"
 " */\n"
 msgstr ""
+"\n"
+"/**\n"
+" * függvénynév:\n"
+" * @par1: az 1. paraméter leírása. Ez kiterjedhet több\n"
+" * sorra is.\n"
+" * @par2: a 2. paraméter leírása.\n"
+" * @...: %NULL-ra végződő bigyólisták.\n"
+" *\n"
+" * A függvény leírása kerül ide. A @par1 használatával hivatkozhat a\n"
+" * paraméterekre, így azok a kimeneten kiemelve jelennek meg. Használhatja\n"
+" * továbbá a %konstans jelzőt konstansok esetén, a függvény_neve2() jelzőt\n"
+" * függvények esetén és a #GtkWidget jelzőt más deklarációkra mutató\n"
+" * hivatkozások esetén (amelyek máshol lehetnek dokumentálva).\n"
+" *\n"
+" * Returns: egy egész szám.\n"
+" *\n"
+" * Since: 2.2\n"
+" * Deprecated: 2.18: Használja az egyéb_függvény() függvényt helyette.\n"
+" */\n"
 
 #. (itstool) path: variablelist/title
 #: C/index.docbook:1587
 msgid "Function tags"
-msgstr ""
+msgstr "A függvény címkéi"
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1588 C/index.docbook:1795
 msgid "Returns:"
-msgstr ""
+msgstr "Returns:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1590
 msgid "Paragraph describing the returned result."
-msgstr ""
+msgstr "A visszaadott eredményt leíró bekezdés."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1595
 msgid "@...:"
-msgstr ""
+msgstr "@...:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1597
@@ -1968,12 +2610,14 @@ msgid ""
 "In case the function has variadic arguments, you should use this tag "
 "(@Varargs: does also work for historic reasons)."
 msgstr ""
+"Abban az esetben, ha a függvénynek változó argumentumai vannak, akkor ezt a"
+" címkét kell használnia (a @Varargs: történelmi okokból szintén működik)."
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
 #: C/index.docbook:1607 C/index.docbook:1609
 msgid "Property comment block"
-msgstr ""
+msgstr "Tulajdonság megjegyzésblokkja"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1610
@@ -1987,12 +2631,19 @@ msgid ""
 " */\n"
 "g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);\n"
 msgstr ""
+"\n"
+"/**\n"
+" * ValamilyenElem:valamilyen-tulajdonság:\n"
+" *\n"
+" * Itt dokumentálhat egy tulajdonságot.\n"
+" */\n"
+"g_object_class_install_property (object_class, PROP_SOME_PROPERTY, ...);\n"
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
 #: C/index.docbook:1622 C/index.docbook:1641
 msgid "Signal comment block"
-msgstr ""
+msgstr "Szignál megjegyzésblokkja"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1628
@@ -2000,11 +2651,13 @@ msgid ""
 "Document when the signal is emitted and whether it is emitted before or "
 "after other signals."
 msgstr ""
+"Dokumentálja, hogy a szignál mikor kerül kibocsátásra, és hogy más szignálok"
+" előtt vagy után kerül-e kibocsátásra."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1634
 msgid "Document what an application might do in the signal handler."
-msgstr ""
+msgstr "Dokumentálja, hogy mit tehet egy alkalmazás a szignál kezelőjében."
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1642
@@ -2017,18 +2670,32 @@ msgid ""
 " * @foo: some foo\n"
 " * @bar: some bar\n"
 " *\n"
-" * The ::foobarized signal is emitted each time someone tries to foobarize @widget.\n"
+" * The ::foobarized signal is emitted each time someone tries to foobarize"
+" @widget.\n"
 " */\n"
 "foo_signals[FOOBARIZED] =\n"
 "  g_signal_new (\"foobarized\",\n"
 "                ...\n"
 msgstr ""
+"\n"
+"/**\n"
+" * FooWidget::foobarized:\n"
+" * @widget: a kütyü, amely fogadta a szignált\n"
+" * @foo: valamilyen izé\n"
+" * @bar: valamilyen bigyó\n"
+" *\n"
+" * A ::foobarized szignál minden alkalommal kibocsátásra kerül, ha valaki\n"
+" * megpróbálja megizélni a @widget kütyüt.\n"
+" */\n"
+"foo_signals[FOOBARIZED] =\n"
+"  g_signal_new (\"foobarized\",\n"
+"                ...\n"
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
 #: C/index.docbook:1659 C/index.docbook:1660
 msgid "Struct comment block"
-msgstr ""
+msgstr "Struktúra megjegyzésblokkja"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1661
@@ -2047,6 +2714,18 @@ msgid ""
 "  gboolean bar;\n"
 "} FooWidget;\n"
 msgstr ""
+"\n"
+"/**\n"
+" * FooWidget:\n"
+" * @bar: valamilyen #gboolean\n"
+" *\n"
+" * Ez a valaha volt legjobb kütyü.\n"
+" */\n"
+"typedef struct _FooWidget {\n"
+"  GtkWidget parent_instance;\n"
+"\n"
+"  gboolean bar;\n"
+"} FooWidget;\n"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1676
@@ -2055,6 +2734,9 @@ msgid ""
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
 "behaviour."
 msgstr ""
+"Használja a <code>/*&lt; private &gt;*/</code> jelölést azon privát"
+" struktúramezők előtt, amelyeket el szeretne rejteni. Használja a <code"
+">/*&lt; public &gt;*/</code> jelölést a fordított viselkedésért."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1682
@@ -2063,6 +2745,9 @@ msgid ""
 "it will be considered private automatically and doesn't need to be mentioned "
 "in the comment block."
 msgstr ""
+"Ha az első mező „g_iface”, „parent_instance” vagy „parent_class”, akkor az"
+" automatikusan privátnak minősül, és nem kell megemlíteni a"
+" megjegyzésblokkban."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1688
@@ -2075,12 +2760,19 @@ msgid ""
 "here is that this creates two index entries of the same name (the structure "
 "and the section)."
 msgstr ""
+"A struktúrák megjegyzésblokkjai GObjectek és GObjectClassok esetében is"
+" használhatók. Általában jó ötlet egy osztályhoz megjegyzésblokkot hozzáadni,"
+" ha van virtuális metódusa (mivel így lehet dokumentálni). Magához a"
+" GObjecthez használhatjuk a kapcsolódó szakaszok dokumentációit, a"
+" példánystruktúrához külön blokkot kell létrehozni, ami akkor hasznos, ha a"
+" példánynak nyilvános mezői vannak. Ennek egyik hátránya, hogy ez két azonos"
+" nevű indexbejegyzést hoz létre (a struktúra és a szakasz)."
 
 #. (itstool) path: sect2/title
 #. (itstool) path: example/title
 #: C/index.docbook:1700 C/index.docbook:1701
 msgid "Enum comment block"
-msgstr ""
+msgstr "Felsorolás megjegyzésblokkja"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1702
@@ -2101,6 +2793,20 @@ msgid ""
 "  SOMETHING_COUNT\n"
 "} Something;\n"
 msgstr ""
+"\n"
+"/**\n"
+" * Something:\n"
+" * @SOMETHING_FOO: valamilyen izé\n"
+" * @SOMETHING_BAR: valamilyen bigyó\n"
+" *\n"
+" * A dologhoz használt felsorolásértékek a dolog meghatározásához.\n"
+" */\n"
+"typedef enum {\n"
+"  SOMETHING_FOO,\n"
+"  SOMETHING_BAR,\n"
+"  /*&lt; private &gt;*/\n"
+"  SOMETHING_COUNT\n"
+"} Something;\n"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1719
@@ -2109,11 +2815,14 @@ msgid ""
 "want to hide. Use <code>/*&lt; public &gt;*/</code> for the reverse "
 "behaviour."
 msgstr ""
+"Használja a <code>/*&lt; private &gt;*/</code> jelölést azon privát"
+" felsorolásértékek előtt, amelyeket el szeretne rejteni. Használja a <code"
+">/*&lt; public &gt;*/</code> jelölést a fordított viselkedésért."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1730
 msgid "Inline program documentation"
-msgstr ""
+msgstr "Beágyazott program dokumentációja"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1731
@@ -2121,36 +2830,38 @@ msgid ""
 "You can document programs and their commandline interface using inline "
 "documentation."
 msgstr ""
+"Dokumentálhat programokat és a parancssori interfészüket beágyazott"
+" dokumentáció használatával."
 
 #. (itstool) path: variablelist/title
 #: C/index.docbook:1737
 msgid "Tags"
-msgstr ""
+msgstr "Címkék"
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1739
 msgid "PROGRAM"
-msgstr ""
+msgstr "PROGRAM"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1742
 msgid "Defines the start of a program documentation."
-msgstr ""
+msgstr "Meghatározza egy program dokumentációjának kezdetét."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1749
 msgid "@short_description:"
-msgstr ""
+msgstr "@short_description:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1751
 msgid "Defines a short description of the program. (Optional)"
-msgstr ""
+msgstr "Meghatározza a program rövid leírását (nem kötelező)."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1758
 msgid "@synopsis:"
-msgstr ""
+msgstr "@synopsis:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1760
@@ -2158,51 +2869,54 @@ msgid ""
 "Defines the arguments, or list of arguments that the program can take. "
 "(Optional)"
 msgstr ""
+"Meghatározza az argumentumokat vagy az argumentumok listáját, amelyeket a"
+" program elfogadhat (nem kötelező)."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1768
 msgid "@see_also:"
-msgstr ""
+msgstr "@see_also:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1770
 msgid "See Also manual page section. (Optional)"
-msgstr ""
+msgstr "Lásd még a kézikönyvoldal szakaszát (nem kötelező)."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1777
 msgid "@arg:"
-msgstr ""
+msgstr "@arg:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1779
 msgid "Argument(s) passed to the program and their description. (Optional)"
-msgstr ""
+msgstr "A programnak átadott argumentumok és leírásaik (nem kötelező)."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1786
 msgid "Description:"
-msgstr ""
+msgstr "Leírás:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1788
 msgid "A longer description of the program."
-msgstr ""
+msgstr "A program hosszabb leírása."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1797
 msgid "Specify what value(s) the program returns. (Optional)"
 msgstr ""
+"Annak megadása, hogy a program milyen értékeket ad vissza (nem kötelező)."
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:1806
 msgid "Example of program documentation."
-msgstr ""
+msgstr "Példa egy program dokumentációjára."
 
 #. (itstool) path: example/title
 #: C/index.docbook:1807
 msgid "Program documentation block"
-msgstr ""
+msgstr "Program dokumentációs blokkja"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1808
@@ -2228,17 +2942,37 @@ msgid ""
 "\treturn 0;\n"
 "}\n"
 msgstr ""
+"\n"
+"/**\n"
+" * PROGRAM:test-program\n"
+" * @short_description: Egy tesztprogram\n"
+" * @synopsis: test-program [*KAPCSOLÓK*...] --arg1 *arg* *FÁJL*\n"
+" * @see_also: test(1)\n"
+" * @--arg1 *arg*: az arg1 beállítása *arg* értékre\n"
+" * @--arg2 *arg*: az arg2 beállítása *arg* értékre\n"
+" * @-v, --version: A verziószám kiírása\n"
+" * @-h, --help: A súgóüzenet kiírása\n"
+" *\n"
+" * A program hosszú leírása.\n"
+" *\n"
+" * Returns: Siker esetén nulla, sikertelenség esetén nem nulla\n"
+" */\n"
+"int main(int argc, char *argv[])\n"
+"{\n"
+"\treturn 0;\n"
+"}\n"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:1834
 msgid "Useful DocBook tags"
-msgstr ""
+msgstr "Hasznos DocBook-címkék"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1836
 msgid ""
 "Here are some DocBook tags which are most useful when documenting the code."
 msgstr ""
+"Íme néhány DocBook-címke, amelyek a leghasznosabbak a kód dokumentálásakor."
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1845
@@ -2247,6 +2981,8 @@ msgid ""
 "\n"
 "&lt;link linkend=\"glib-Hash-Tables\"&gt;Hash Tables&lt;/link&gt;\n"
 msgstr ""
+"\n"
+"&lt;link linkend=\"glib-Hash-Tables\"&gt;Hasítótáblák&lt;/link&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1841
@@ -2257,6 +2993,13 @@ msgid ""
 "then the page title (\"Hash Tables\"). For widgets it is just the class "
 "name. Spaces and underscores are converted to '-' to conform to SGML/XML."
 msgstr ""
+"A GTK dokumentációjának egy másik szakaszára való hivatkozáshoz: <"
+"_:informalexample-1/> A hivatkozás vége az SGML/XML azonosítója annak az"
+" oldalnak a legfelső elemén, amelyre hivatkozni kíván. A legtöbb oldal"
+" esetében ez jelenleg a („gtk”, „gdk”, „glib”) rész, majd az oldal címe"
+" („Hasítótáblák”). A felületi elemek esetében ez csak az osztály neve. A"
+" szóközök és az aláhúzások az SGML/XML-nek való megfelelés érdekében „-”"
+" karakterre vannak átalakítva."
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1858
@@ -2265,6 +3008,8 @@ msgid ""
 "\n"
 "&lt;function&gt;...&lt;/function&gt;\n"
 msgstr ""
+"\n"
+"&lt;function&gt;...&lt;/function&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1855
@@ -2272,6 +3017,8 @@ msgid ""
 "To refer to an external function, e.g. a standard C function: <_:"
 "informalexample-1/>"
 msgstr ""
+"Egy külső függvényre, például egy szabványos C függvényre való hivatkozáshoz:"
+" <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1867
@@ -2285,6 +3032,13 @@ msgid ""
 "  &lt;/programlisting&gt;\n"
 "&lt;/example&gt;\n"
 msgstr ""
+"\n"
+"&lt;example&gt;\n"
+"  &lt;title&gt;Egy GHashTable használata.&lt;/title&gt;\n"
+"  &lt;programlisting language=\"C\"&gt;\n"
+"      ...\n"
+"  &lt;/programlisting&gt;\n"
+"&lt;/example&gt;\n"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1878
@@ -2297,6 +3051,12 @@ msgid ""
 "  &lt;/programlisting&gt;\n"
 "&lt;/informalexample&gt;\n"
 msgstr ""
+"\n"
+"&lt;informalexample&gt;\n"
+"  &lt;programlisting language=\"C\"&gt;\n"
+"  ...\n"
+"  &lt;/programlisting&gt;\n"
+"&lt;/informalexample&gt;\n"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1890
@@ -2307,6 +3067,10 @@ msgid ""
 "  ...\n"
 "]|\n"
 msgstr ""
+"\n"
+"|[&lt;!-- language=\"C\" --&gt;\n"
+"  ...\n"
+"]|\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1864
@@ -2317,6 +3081,11 @@ msgid ""
 "syntax highlighting engine (pygments for html output). For the latter GTK-"
 "Doc also supports an abbreviation: <_:informalexample-3/>"
 msgstr ""
+"Példakód beillesztéséhez: <_:informalexample-1/> vagy esetleg ez, a nagyon"
+" rövid kódrészletekhez, amelyeknek nincs szükségük címre: <"
+"_:informalexample-2/> Mindkét esetben a language attribútum elhagyható, és a"
+" szintaxiskiemelő motornak (pygments a HTML kimenethez) szolgál segítségül."
+" Ez utóbbihoz a GTK-Doc egy rövidítést is támogat: <_:informalexample-3/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1901
@@ -2336,11 +3105,24 @@ msgid ""
 "  &lt;/listitem&gt;\n"
 "&lt;/itemizedlist&gt;\n"
 msgstr ""
+"\n"
+"&lt;itemizedlist&gt;\n"
+"  &lt;listitem&gt;\n"
+"    &lt;para&gt;\n"
+"      ...\n"
+"    &lt;/para&gt;\n"
+"  &lt;/listitem&gt;\n"
+"  &lt;listitem&gt;\n"
+"    &lt;para&gt;\n"
+"      ...\n"
+"    &lt;/para&gt;\n"
+"  &lt;/listitem&gt;\n"
+"&lt;/itemizedlist&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1898
 msgid "To include bulleted lists: <_:informalexample-1/>"
-msgstr ""
+msgstr "Felsorolásos listák beillesztéséhez: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1921
@@ -2353,12 +3135,19 @@ msgid ""
 "  &lt;/para&gt;\n"
 "&lt;/note&gt;\n"
 msgstr ""
+"\n"
+"&lt;note&gt;\n"
+"  &lt;para&gt;\n"
+"    Győződjön meg arról, hogy használat után felszabadította-e az adatokat.\n"
+"  &lt;/para&gt;\n"
+"&lt;/note&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1918
 msgid ""
 "To include a note which stands out from the text: <_:informalexample-1/>"
 msgstr ""
+"A szövegből kiemelkedő megjegyzés beillesztéséhez: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1934
@@ -2367,11 +3156,13 @@ msgid ""
 "\n"
 "&lt;type&gt;unsigned char&lt;/type&gt;\n"
 msgstr ""
+"\n"
+"&lt;type&gt;unsigned char&lt;/type&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1931
 msgid "To refer to a type: <_:informalexample-1/>"
-msgstr ""
+msgstr "Egy típusra való hivatkozáshoz: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1943
@@ -2380,6 +3171,8 @@ msgid ""
 "\n"
 "&lt;structname&gt;XFontStruct&lt;/structname&gt;\n"
 msgstr ""
+"\n"
+"&lt;structname&gt;XFontStruct&lt;/structname&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1940
@@ -2387,6 +3180,8 @@ msgid ""
 "To refer to an external structure (not one described in the GTK docs): <_:"
 "informalexample-1/>"
 msgstr ""
+"Egy külső (nem a GTK dokumentációban ismertetett) struktúrára való"
+" hivatkozáshoz: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1952
@@ -2395,11 +3190,13 @@ msgid ""
 "\n"
 "&lt;structfield&gt;len&lt;/structfield&gt;\n"
 msgstr ""
+"\n"
+"&lt;structfield&gt;len&lt;/structfield&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1949
 msgid "To refer to a field of a structure: <_:informalexample-1/>"
-msgstr ""
+msgstr "Egy struktúra mezőjére való hivatkozáshoz: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1961
@@ -2408,6 +3205,8 @@ msgid ""
 "\n"
 "&lt;classname&gt;GtkWidget&lt;/classname&gt;\n"
 msgstr ""
+"\n"
+"&lt;classname&gt;GtkWidget&lt;/classname&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1958
@@ -2417,6 +3216,10 @@ msgid ""
 "to the GtkWidget page - see <link linkend=\"documenting_syntax\">the "
 "abbreviations</link>)."
 msgstr ""
+"Egy osztálynévre való hivatkozáshoz esetleg használhatjuk a következőt: <"
+"_:informalexample-1/> de valószínűleg a #GtkWidget lesz használva helyette"
+" (hogy automatikusan létrehozzon egy hivatkozást a GtkWidget oldalára – nézze"
+" meg a <link linkend=\"documenting_syntax\">rövidítéseket</link>)."
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1972
@@ -2425,11 +3228,13 @@ msgid ""
 "\n"
 "&lt;emphasis&gt;This is important&lt;/emphasis&gt;\n"
 msgstr ""
+"\n"
+"&lt;emphasis&gt;Ez fontos&lt;/emphasis&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1969
 msgid "To emphasize text: <_:informalexample-1/>"
-msgstr ""
+msgstr "A szöveg hangsúlyozásához: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1981
@@ -2438,29 +3243,35 @@ msgid ""
 "\n"
 "&lt;filename&gt;/home/user/documents&lt;/filename&gt;\n"
 msgstr ""
+"\n"
+"&lt;filename&gt;/home/user/documents&lt;/filename&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1978
 msgid "For filenames use: <_:informalexample-1/>"
-msgstr ""
+msgstr "Fájlnevekhez használja ezt: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1990
 #, no-wrap
 msgid ""
 "\n"
-"&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap&gt;&lt;/keycombo&gt;\n"
+"&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap"
+"&gt;&lt;/keycombo&gt;\n"
 msgstr ""
+"\n"
+"&lt;keycombo&gt;&lt;keycap&gt;Control&lt;/keycap&gt;&lt;keycap&gt;L&lt;/keycap"
+"&gt;&lt;/keycombo&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1987
 msgid "To refer to keys use: <_:informalexample-1/>"
-msgstr ""
+msgstr "Billentyűkre való hivatkozáshoz használja ezt: <_:informalexample-1/>"
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:2000
 msgid "Filling the extra files"
-msgstr ""
+msgstr "A további fájlok kitöltése"
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2002
@@ -2470,11 +3281,15 @@ msgid ""
 "<filename>&lt;package&gt;-docs.xml</filename> (in the past .sgml), "
 "<filename>&lt;package&gt;-sections.txt</filename>."
 msgstr ""
+"Van néhány további fájl, amelyeket a forráskód beágyazott megjegyzéseivel"
+" együtt kell karbantartani: <filename>&lt;csomag&gt;.types</filename>, <"
+"filename>&lt;csomag&gt;-docs.xml</filename> (régebben .sgml), <filename"
+">&lt;csomag&gt;-sections.txt</filename>."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2011
 msgid "Editing the types file"
-msgstr ""
+msgstr "A típusok fájl szerkesztése"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2013
@@ -2485,11 +3300,17 @@ msgid ""
 "function> functions together with their include inside the <filename>&lt;"
 "package&gt;.types</filename> file."
 msgstr ""
+"Ha a könyvtár vagy az alkalmazás GObjecteket tartalmaz, akkor a"
+" dokumentációban meg szeretné jeleníteni a szignálokat, argumentumokat,"
+" paramétereket és a hierarchiában elfoglalt helyüket. Mindössze annyit kell"
+" tennie, hogy felsorolja a <function>xxx_get_type</function> függvényeket az"
+" include-jaikkal együtt a <filename>&lt;csomag&gt;.types</filename> fájlon"
+" belül."
 
 #. (itstool) path: example/title
 #: C/index.docbook:2022
 msgid "Example &lt;package&gt;.types file"
-msgstr ""
+msgstr "Példa a &lt;csomag&gt;.types-fájlra"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2023
@@ -2503,6 +3324,13 @@ msgid ""
 "gtk_alignment_get_type\n"
 "gtk_arrow_get_type\n"
 msgstr ""
+"\n"
+"#include &lt;gtk/gtk.h&gt;\n"
+"\n"
+"gtk_accel_label_get_type\n"
+"gtk_adjustment_get_type\n"
+"gtk_alignment_get_type\n"
+"gtk_arrow_get_type\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2034
@@ -2512,11 +3340,16 @@ msgid ""
 "<filename>Makefile.am</filename>. If you use this approach you should not "
 "dist the types file nor have it under version control."
 msgstr ""
+"A GTK-Doc 1.8 óta az <application>gtkdoc-scan</application> képes előállítani"
+" ezt a listát Önnek. Csak adja hozzá a „--rebuild-types” kapcsolót a"
+" SCAN_OPTIONS értékeihez a <filename>Makefile.am</filename> fájlban. Ha ezt a"
+" megközelítést használja, akkor nem kell terjesztenie a típusok fájlt, és nem"
+" is kell verziókövetés alatt tartania."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2043
 msgid "Editing the master document"
-msgstr ""
+msgstr "A mesterdokumentum szerkesztése"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2045
@@ -2526,6 +3359,10 @@ msgid ""
 "per class or module as a separate file. The master document includes them "
 "and place them in an order."
 msgstr ""
+"A GTK-Doc DocBook SGML/XML formátumú dokumentációt készít. A beágyazott"
+" forrásmegjegyzések feldolgozásakor a GTK-Doc eszközei osztályonként vagy"
+" modulonként egy dokumentációs oldalt állítanak elő külön fájlként. A"
+" mesterdokumentum tartalmazza ezeket, és sorrendbe helyezi őket."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2052
@@ -2537,6 +3374,13 @@ msgid ""
 "scratch. Its a good idea to look at this from time to time to see if there "
 "are some new goodies introduced there."
 msgstr ""
+"Noha a GTK-Doc létrehoz egy sablon mesterdokumentumot Önnek, a későbbi"
+" futtatások nem nyúlnak hozzá újra. Ez azt jelenti, hogy szabadon"
+" szerkesztheti a dokumentációt. Ez magában foglalja az oldalak"
+" csoportosítását és a további oldalak hozzáadását. A GTK-Doc mostantól"
+" rendelkezik egy tesztcsomaggal, ahol a mesterdokumentum is újra létrejön a"
+" semmiből. Jó ötlet erre időről-időre ránézni és észrevenni, hogy vannak-e"
+" újdonságok, amik bevezetésre kerültek."
 
 #. (itstool) path: tip/para
 #: C/index.docbook:2062
@@ -2547,6 +3391,11 @@ msgid ""
 "documentation. Apart chances are higher that the tutorial gets updates along "
 "with the library."
 msgstr ""
+"Ne hozzon létre oktatóanyagokat külön dokumentumként. Csak írjon további"
+" fejezeteket. A programkönyvtára oktatóanyagának az API-dokumentációba való"
+" közvetlen beágyazásának az az előnye, hogy könnyen összekapcsolható az"
+" oktatóanyag a szimbólum dokumentációjával. Emellett nagyobb az esélye annak,"
+" hogy az oktatóanyag a programkönyvtárral együtt kap frissítéseket."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2071
@@ -2555,11 +3404,14 @@ msgid ""
 "only a little. There are some placeholders (text in square brackets) there "
 "which you should take care of."
 msgstr ""
+"Mik azok a dolgok, amelyeket a mesterdokumentumon belül meg kell változtatni?"
+" Kezdetnek csak egy keveset. Van ott néhány helykitöltő (szögletes zárójelben"
+" lévő szöveg), amelyekre vigyázni kell."
 
 #. (itstool) path: example/title
 #: C/index.docbook:2078
 msgid "Master document header"
-msgstr ""
+msgstr "Mesterdokumentum fejléce"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2079
@@ -2571,13 +3423,27 @@ msgid ""
 "  &lt;releaseinfo&gt;\n"
 "    for MODULENAME [VERSION]\n"
 "    The latest version of this documentation can be found on-line at\n"
-"    &lt;ulink role=\"online-location\" url=\"http://[SERVER]/MODULENAME/index.html\"&gt;http://[SERVER]/MODULENAME/&lt;/ulink&gt;.\n"
+"    &lt;ulink role=\"online-location\" url=\"http://[SERVER]/MODULENAME/index."
+"html\"&gt;http://[SERVER]/MODULENAME/&lt;/ulink&gt;.\n"
 "  &lt;/releaseinfo&gt;\n"
 "&lt;/bookinfo&gt;\n"
 "\n"
 "&lt;chapter&gt;\n"
 "  &lt;title&gt;[Insert title here]&lt;/title&gt;\n"
 msgstr ""
+"\n"
+"&lt;bookinfo&gt;\n"
+"  &lt;title&gt;MODULENAME hivatkozási kézikönyv&lt;/title&gt;\n"
+"  &lt;releaseinfo&gt;\n"
+"    MODULENAME [VERSION]\n"
+"    A dokumentáció legfrissebb változata megtalálható a\n"
+"    &lt;ulink role=\"online-location\" url=\"http://[SERVER]/MODULENAME/index."
+"html\"&gt;http://[SERVER]/MODULENAME/&lt;/ulink&gt; internetes oldalon.\n"
+"  &lt;/releaseinfo&gt;\n"
+"&lt;/bookinfo&gt;\n"
+"\n"
+"&lt;chapter&gt;\n"
+"  &lt;title&gt;[Cím beszúrása ide]&lt;/title&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2095
@@ -2585,11 +3451,13 @@ msgid ""
 "In addition a few option elements are created in commented form. You can "
 "review these and enable them as you like."
 msgstr ""
+"Ezenkívül néhány választható elem is létrehozásra kerül megjegyzésekkel"
+" ellátott formában. Ezeket áttekintheti, és tetszés szerint engedélyezheti."
 
 #. (itstool) path: example/title
 #: C/index.docbook:2101
 msgid "Optional part in the master document"
-msgstr ""
+msgstr "Választható rész a mesterdokumentumban"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2102
@@ -2597,9 +3465,15 @@ msgstr ""
 msgid ""
 "\n"
 "  &lt;!-- enable this when you use gobject introspection annotations\n"
-"  &lt;xi:include href=\"xml/annotation-glossary.xml\"&gt;&lt;xi:fallback /&gt;&lt;/xi:include&gt;\n"
+"  &lt;xi:include href=\"xml/annotation-glossary.xml\"&gt;&lt;xi:fallback"
+" /&gt;&lt;/xi:include&gt;\n"
 "  --&gt;\n"
 msgstr ""
+"\n"
+"  &lt;!-- engedélyezze ezt, ha GObject Introspection megjegyzéseket használ\n"
+"  &lt;xi:include href=\"xml/annotation-glossary.xml\"&gt;&lt;xi:fallback"
+" /&gt;&lt;/xi:include&gt;\n"
+"  --&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2110
@@ -2608,11 +3482,15 @@ msgid ""
 "linkend=\"modernizing-gtk-doc-1-16\">gtkdoc-check</link> tool will remind "
 "you of newly generated xml files that are not yet included into the doc."
 msgstr ""
+"Végül új szakaszt kell hozzáadni, amikor bevezet egyet. A <link"
+" linkend=\"modernizing-gtk-doc-1-16\">gtkdoc-check</link> eszköz emlékeztetni"
+" fogja az újonnan előállított XML-fájlokra, amelyek még nem szerepelnek a"
+" dokumentációban."
 
 #. (itstool) path: example/title
 #: C/index.docbook:2118 C/index.docbook:2153
 msgid "Including generated sections"
-msgstr ""
+msgstr "Előállított szakaszok beágyazása"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2119
@@ -2624,11 +3502,16 @@ msgid ""
 "      &lt;xi:include href=\"xml/object.xml\"/&gt;\n"
 "      ...\n"
 msgstr ""
+"\n"
+"  &lt;chapter&gt;\n"
+"    &lt;title&gt;Az én programkönyvtáram&lt;/title&gt;\n"
+"      &lt;xi:include href=\"xml/object.xml\"/&gt;\n"
+"      ...\n"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2131
 msgid "Editing the section file"
-msgstr ""
+msgstr "A szakaszfájl szerkesztése"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2133
@@ -2637,6 +3520,9 @@ msgid ""
 "Here one specifies which symbol belongs to which module or class and control "
 "the visibility (public or private)."
 msgstr ""
+"A szakaszfájl a GTK-Doc által kiírt dokumentáció rendszerezésére szolgál. Itt"
+" adhatjuk meg, hogy melyik szimbólum melyik modulhoz vagy osztályhoz"
+" tartozik, és szabályozhatjuk a láthatóságot (publikus vagy privát)."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2139
@@ -2644,6 +3530,9 @@ msgid ""
 "The section file is a plain text file with tags delimiting sections. Blank "
 "lines are ignored and lines starting with a '#' are treated as comment lines."
 msgstr ""
+"A szakaszfájl egy egyszerű szöveges fájl, címkékkel elválasztott"
+" szakaszokkal. Az üres sorok figyelmen kívül maradnak, és a „#” karakterrel"
+" kezdődő sorok megjegyzésként vannak kezelve."
 
 #. (itstool) path: note/para
 #: C/index.docbook:2146
@@ -2651,6 +3540,8 @@ msgid ""
 "While the tags make the file look like xml, it is not. Please do not close "
 "tags like &lt;SUBSECTION&gt;."
 msgstr ""
+"Noha a címkék miatt a fájl XML-nek tűnik, nem az. Ne zárja le a címkéket,"
+" mint például a &lt;SUBSECTION&gt; címkét."
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2154
@@ -2670,6 +3561,19 @@ msgid ""
 "meep_app_get_type\n"
 "&lt;/SECTION&gt;\n"
 msgstr ""
+"\n"
+"&lt;INCLUDE&gt;libmeep/meep.h&lt;/INCLUDE&gt;\n"
+"\n"
+"&lt;SECTION&gt;\n"
+"&lt;FILE&gt;meepapp&lt;/FILE&gt;\n"
+"&lt;TITLE&gt;MeepApp&lt;/TITLE&gt;\n"
+"MeepApp\n"
+"&lt;SUBSECTION Standard&gt;\n"
+"MEEP_APP\n"
+"...\n"
+"MeepAppClass\n"
+"meep_app_get_type\n"
+"&lt;/SECTION&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2171
@@ -2684,6 +3588,14 @@ msgid ""
 "title, or for GObjects it is based on the GObjects class name converted to "
 "lower case)."
 msgstr ""
+"A &lt;FILE&gt; ... &lt;/FILE&gt; címke a fájl nevének megadására szolgál,"
+" utótag nélkül. Például a „&lt;FILE&gt;gnome-config&lt;/FILE&gt;” használata"
+" azt eredményezi, hogy a szakaszdeklarációk kiírásra kerülnek a <filename"
+">tmpl/gnome-config.sgml</filename> sablonfájlban, amely az <filename"
+">xml/gnome-config.xml</filename> vagy az <filename>xml/gnome-config.sgml<"
+"/filename> DocBook XML-fájlra lesz átalakítva. (A HTML-fájl neve a modul"
+" nevén és a szakasz címén alapul, vagy GObjectek esetén a GObjectek"
+" osztálynevén alapul kisbetűssé alakítva)."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2183
@@ -2693,6 +3605,10 @@ msgid ""
 "created, since the title set in the template file overrides this. Also if "
 "one uses SECTION comment in the sources, this is obsolete."
 msgstr ""
+"A &lt;TITLE&gt; ... &lt;/TITLE&gt; címke a szakasz címének megadására"
+" szolgál. Ez csak a sablonok (ha használjuk) kezdeti létrehozása előtt"
+" hasznos, mivel a sablonfájlban beállított cím felülírja ezt. Ha valaki a"
+" forrásokban is használja a SECTION megjegyzést, akkor ez elavult."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2190
@@ -2710,6 +3626,21 @@ msgid ""
 "Whether you would place GObject and GObjectClass like structs in public or "
 "Standard section depends if they have public entries (variables, vmethods)."
 msgstr ""
+"Csoportosíthatja a szakaszban lévő elemeket a &lt;SUBSECTION&gt; címke"
+" használatával. Jelenleg üres sort ír ki az alfejezetek között az"
+" összefoglaló szakaszban. Használhatja a &lt;SUBSECTION Standard&gt; címkét"
+" is a szabványos GObject deklarációkhoz (például az olyan függvényekhez, mint"
+" a g_object_get_type és az olyan makrókhoz, mint a G_OBJECT(), G_IS_OBJECT()"
+" stb.). Jelenleg ezek kimaradnak a dokumentációból. Használhatja a"
+" &lt;SUBSECTION Private&gt; címkét is a privát deklarációkhoz, amelyek nem"
+" kerülnek kiírásra (ez egy praktikus módja annak, hogy elkerülje a nem"
+" használt deklarációkról szóló figyelmeztető üzeneteket). Ha a"
+" programkönyvtára olyan privát típusokat tartalmaz, amelyeket nem szeretne,"
+" hogy megjelenjenek az objektumhierarchiában és a megvalósított vagy"
+" szükséges interfészek listájában, adja őket egy Private alszakaszhoz. A"
+" GObject és GObjectClass típusú struktúrák publikus vagy a Standard szakaszba"
+" helyezése attól függ, hogy vannak-e publikus bejegyzéseik (változók,"
+" virtuális metódusok)."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2209
@@ -2720,11 +3651,17 @@ msgid ""
 "outside of any sections, it acts for all sections until the end of the file. "
 "If you set it within a section, it only applies to that section."
 msgstr ""
+"Használhatja az &lt;INCLUDE&gt; ... &lt;/INCLUDE&gt; jelölést is az #include"
+" fájlok megadásához, amelyek az összefoglaló szakaszokban jelennek meg. Az"
+" #include fájlok vesszővel elválasztott listáját tartalmazza, szögletes"
+" zárójelek nélkül. Ha bármelyik szakaszon kívül állítja be, akkor a fájl"
+" végéig az összes szakaszra vonatkozik. Ha egy szakaszon belül állítja be,"
+" akkor csak arra a szakaszra vonatkozik."
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:2223
 msgid "Controlling the result"
-msgstr ""
+msgstr "Az eredmény ellenőrzése"
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2225
@@ -2735,6 +3672,12 @@ msgid ""
 "<filename>&lt;package&gt;-unused.txt</filename>. All those are plain text "
 "files that can be viewed and postprocessed easily."
 msgstr ""
+"A GTK-Doc futtatása jelentésfájlokat állít elő a dokumentációs könyvtáron"
+" belül. Az előállított fájlok neve: <filename"
+">&lt;csomag&gt;-undocumented.txt</filename>, <filename"
+">&lt;csomag&gt;-undeclared.txt</filename> és <filename"
+">&lt;csomag&gt;-unused.txt</filename>. Ezek mind egyszerű szöveges fájlok,"
+" amelyek könnyen megtekinthetők és utólagosan feldolgozhatók."
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2234
@@ -2745,6 +3688,12 @@ msgid ""
 "second section does the same for section docs. Incomplete entries are those, "
 "which have documentation, but where e.g. a new parameter has been added."
 msgstr ""
+"A <filename>&lt;csomag&gt;-undocumented.txt</filename> fájl a dokumentáció"
+" lefedettségének összefoglalójával kezdődik. Alatta két, üres sorokkal"
+" elválasztott szakasz található. Az első szakasz a dokumentálatlan vagy"
+" hiányos szimbólumokat sorolja fel. A második szakasz ugyanezt teszi a"
+" szakaszok dokumentációira. A hiányos bejegyzések azok, amelyeknek van"
+" dokumentációja, de ahol például új paraméter került hozzáadásra."
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2243
@@ -2753,6 +3702,10 @@ msgid ""
 "given in the <filename>&lt;package&gt;-sections.txt</filename> but not found "
 "in the sources. Check if they have been removed or if they are misspelled."
 msgstr ""
+"A <filename>&lt;csomag&gt;-undeclared.txt</filename> fájl a <filename"
+">&lt;csomag&gt;-sections.txt</filename> fájlban megadott, de a forrásokban"
+" nem található szimbólumokat sorolja fel. Ellenőrizze, hogy nem kerültek-e"
+" eltávolításra, vagy nincsenek-e hibásan írva."
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2250
@@ -2762,6 +3715,11 @@ msgid ""
 "to put it. This means that the symbol has not yet been added to the "
 "<filename>&lt;package&gt;-sections.txt</filename> file."
 msgstr ""
+"A <filename>&lt;csomag&gt;-unused.txt</filename> fájl azokat a"
+" szimbólumneveket sorolja fel, ahol a GTK-Doc átvizsgáló talált"
+" dokumentációt, de nem tudja, hova tegye azt. Ez azt jelenti, hogy a"
+" szimbólum még nem lett hozzáadva a <filename>&lt;csomag&gt;-sections.txt<"
+"/filename> fájlhoz."
 
 #. (itstool) path: tip/para
 #: C/index.docbook:2258
@@ -2770,6 +3728,10 @@ msgid ""
 "am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during "
 "<command>make check</command> run."
 msgstr ""
+"Engedélyezze vagy adja hozzá a <option>TESTS=$(GTKDOC_CHECK)</option> sort a"
+" Makefile.am fájlhoz. Ha legalább GTK-Doc 1.9 van telepítve, akkor ez"
+" józansági ellenőrzéseket futtat a <command>make check</command> futtatása"
+" során."
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2265
@@ -2781,6 +3743,12 @@ msgid ""
 "declarations from the headers. If a symbol is missing one could check if "
 "this file contains it."
 msgstr ""
+"A forráskód-átvizsgáló által előállított fájlokat is megnézhetjük: <filename"
+">&lt;csomag&gt;-decl-list.txt</filename> és <filename"
+">&lt;csomag&gt;-decl.txt</filename>. Az elsőt össze lehet hasonlítani a"
+" szakaszfájllal, ha az kézzel van karbantartva. A második a fejlécekből"
+" származó összes deklarációt sorolja fel. Ha egy szimbólum hiányzik, akkor"
+" ellenőrizhetjük, hogy ez a fájl tartalmazza-e."
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2274
@@ -2794,11 +3762,20 @@ msgid ""
 "to keep the intermediate scanner file for further analysis, by running it as "
 "<command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 msgstr ""
+"Ha a projekt GObject-alapú, akkor az objektum-átvizsgáló által előállított"
+" fájlokat is megnézhetjük: <filename>&lt;csomag&gt;.args.txt</filename>, <"
+"filename>&lt;csomag&gt;.hierarchy.txt</filename>, <filename"
+">&lt;csomag&gt;.interfaces.txt</filename>, <filename"
+">&lt;csomag&gt;.prerequisites.txt</filename> és <filename"
+">&lt;csomag&gt;.signals.txt</filename>. Ha ezek bármelyikéből hiányoznak"
+" szimbólumok, akkor a <command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>"
+" futtatásával megkérhetjük a GTK-Doc eszközt arra, hogy tartsa meg a köztes"
+" átvizsgálási fájlt a további elemzéshez."
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:2289
 msgid "Modernizing the documentation"
-msgstr ""
+msgstr "A dokumentáció korszerűsítése"
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2291
@@ -2806,11 +3783,13 @@ msgid ""
 "GTK-Doc has been around for quite some time. In this section we list new "
 "features together with the version since when it is available."
 msgstr ""
+"A GTK-Doc már jó ideje létezik. Ebben a részben felsoroljuk az új funkciókat"
+" a verzióval együtt, amióta elérhetők."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2297
 msgid "GTK-Doc 1.9"
-msgstr ""
+msgstr "GTK-Doc 1.9"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2299
@@ -2818,6 +3797,8 @@ msgid ""
 "When using xml instead of sgml, one can actually name the master document "
 "<filename>&lt;package&gt;-docs.xml</filename>."
 msgstr ""
+"Ha SGML helyett XML-t használunk, a mesterdokumentumot <filename"
+">&lt;csomag&gt;-docs.xml</filename> néven is elnevezhetjük."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2304
@@ -2831,6 +3812,16 @@ msgid ""
 "simple as running <code>meld &lt;package&gt;-decl-list.txt &lt;package&gt;-"
 "sections.txt</code>."
 msgstr ""
+"Ez a verzió támogatja a <option>SCAN_OPTIONS=--rebuild-sections</option>"
+" kapcsolót a <filename>Makefile.am</filename> fájlban. Ha ez engedélyezve"
+" van, akkor a <filename>&lt;csomag&gt;-sections.txt</filename> fájl"
+" automatikusan előállításra kerül, és eltávolítható a verziókövető"
+" rendszerből. Ez csak olyan projekteknél működik jól, amelyek rendkívül"
+" szabályos szerkezettel rendelkeznek (például minden .{c,h} pár új szakaszt"
+" hoz létre). Ha valaki egy ehhez közeli projektet szervez, egy kézzel"
+" karbantartott szakaszfájl frissítése olyan egyszerű lehet, mint a <code>meld"
+" &lt;csomag&gt;-decl-list.txt &lt;csomag&gt;-sections.txt</code> kód"
+" futtatása."
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2315
@@ -2844,11 +3835,21 @@ msgid ""
 "your source control system and haven't yet switched, just add the flag to "
 "<filename>configure.ac</filename> and you are done."
 msgstr ""
+"Az 1.8-as verzió már bevezette a szintaxist a szakaszok forrásokban történő"
+" dokumentálásához a <filename class=\"directory\">tmpl</filename> alatti"
+" különálló fájlok helyett. Ez a verzió olyan kapcsolókat ad hozzá, amelyekkel"
+" az egész dokumentációs modult át lehet kapcsolni úgy, hogy egyáltalán ne"
+" használja a további sablon-összeállítási lépést. Ehhez a <option>--flavour"
+" no-tmpl</option> kapcsolót kell használni a <filename>configure.ac</filename"
+"> fájlban. Ha még nincs <filename class=\"directory\">tmpl</filename>"
+" könyvtár lekérve a forráskövető rendszerében, és még nem lett átváltva,"
+" akkor csak adja hozzá a jelzőt a <filename>configure.ac</filename> fájlhoz,"
+" és már kész is van."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2327
 msgid "GTK-Doc 1.10"
-msgstr ""
+msgstr "GTK-Doc 1.10"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2329
@@ -2860,16 +3861,23 @@ msgid ""
 "<varname>IGNORE_HFILES</varname> in <filename>Makefile.am</filename> for "
 "code that is build conditionally."
 msgstr ""
+"Ez a verzió támogatja a <option>SCAN_OPTIONS=--rebuild-types</option>"
+" kapcsolót a <filename>Makefile.am</filename> fájlban. Ha ez engedélyezve"
+" van, akkor a <filename>&lt;csomag&gt;.types</filename> fájl automatikusan"
+" előállításra kerül, és eltávolítható a verziókövető rendszerből. A funkció"
+" használatakor fontos, hogy az <varname>IGNORE_HFILES</varname> is be legyen"
+" állítva a <filename>Makefile.am</filename> fájlban a feltételesen"
+" összeállított kódhoz."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2340
 msgid "GTK-Doc 1.16"
-msgstr ""
+msgstr "GTK-Doc 1.16"
 
 #. (itstool) path: example/title
 #: C/index.docbook:2346
 msgid "Enable gtkdoc-check"
-msgstr ""
+msgstr "A gtkdoc-check engedélyezése"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2347
@@ -2883,6 +3891,13 @@ msgid ""
 "TESTS = $(GTKDOC_CHECK)\n"
 "endif\n"
 msgstr ""
+"\n"
+"if ENABLE_GTK_DOC\n"
+"TESTS_ENVIRONMENT = \\\n"
+"  DOC_MODULE=$(DOC_MODULE) DOC_MAIN_SGML_FILE=$(DOC_MAIN_SGML_FILE) \\\n"
+"  SRCDIR=$(abs_srcdir) BUILDDIR=$(abs_builddir)\n"
+"TESTS = $(GTKDOC_CHECK)\n"
+"endif\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2342
@@ -2891,11 +3906,15 @@ msgid ""
 "set of sanity checks on your documentation. It is enabled by adding these "
 "lines to the end of <filename>Makefile.am</filename>. <_:example-1/>"
 msgstr ""
+"Ez a verzió egy új, gtkdoc-check nevű eszközt tartalmaz. Ez az eszköz képes"
+" lefuttatni egy sor józansági ellenőrzést a dokumentáción. Az engedélyezéshez"
+" hozzá kell adni ezeket a sorokat a <filename>Makefile.am</filename> fájl"
+" végéhez. <_:example-1/>"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2360
 msgid "GTK-Doc 1.20"
-msgstr ""
+msgstr "GTK-Doc 1.20"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2362
@@ -2905,16 +3924,21 @@ msgid ""
 "lot on this and add a lot more styles. The section that explains the <link "
 "linkend=\"documenting_syntax\">comment syntax</link> has all the details."
 msgstr ""
+"Az 1.18-as verzió hozott némi kezdeti Markdown-támogatást. A Markdown"
+" használata a dokumentációs megjegyzésekben kevésbé tolakodó, mint a DocBook"
+" XML írása. Ez a verzió sokat javít ezen, és sokkal több stílust ad hozzá. A"
+" <link linkend=\"documenting_syntax\">megjegyzés szintaxisát</link> magyarázó"
+" szakasz minden részletet tartalmaz."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2372
 msgid "GTK-Doc 1.25"
-msgstr ""
+msgstr "GTK-Doc 1.25"
 
 #. (itstool) path: example/title
 #: C/index.docbook:2383
 msgid "Use pre-generated entities"
-msgstr ""
+msgstr "Előre előállított entitások használata"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2384
@@ -2925,7 +3949,8 @@ msgid ""
 "&lt;!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.3//EN\"\n"
 "               \"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd\"\n"
 "[\n"
-"  &lt;!ENTITY % local.common.attrib \"xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'\"&gt;\n"
+"  &lt;!ENTITY % local.common.attrib \"xmlns:xi  CDATA  #FIXED"
+" 'http://www.w3.org/2003/XInclude'\"&gt;\n"
 "  &lt;!ENTITY % gtkdocentities SYSTEM \"xml/gtkdocentities.ent\"&gt;\n"
 "  %gtkdocentities;\n"
 "]&gt;\n"
@@ -2935,10 +3960,33 @@ msgid ""
 "    &lt;releaseinfo&gt;\n"
 "      for &amp;package_string;.\n"
 "      The latest version of this documentation can be found on-line at\n"
-"      &lt;ulink role=\"online-location\" url=\"http://[SERVER]/&amp;package_name;/index.html\"&gt;http://[SERVER]/&amp;package_name;/&lt;/ulink&gt;.\n"
+"      &lt;ulink role=\"online-location\""
+" url=\"http://[SERVER]/&amp;package_name;/index.html\"&gt;http://[SERVER]/&amp"
+";package_name;/&lt;/ulink&gt;.\n"
 "    &lt;/releaseinfo&gt;\n"
 "  &lt;/bookinfo&gt;\n"
 msgstr ""
+"\n"
+"&lt;?xml version=\"1.0\"?&gt;\n"
+"&lt;!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.3//EN\"\n"
+"               \"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd\"\n"
+"[\n"
+"  &lt;!ENTITY % local.common.attrib \"xmlns:xi  CDATA  #FIXED"
+" 'http://www.w3.org/2003/XInclude'\"&gt;\n"
+"  &lt;!ENTITY % gtkdocentities SYSTEM \"xml/gtkdocentities.ent\"&gt;\n"
+"  %gtkdocentities;\n"
+"]&gt;\n"
+"&lt;book id=\"index\" xmlns:xi=\"http://www.w3.org/2003/XInclude\"&gt;\n"
+"  &lt;bookinfo&gt;\n"
+"    &lt;title&gt;&amp;package_name; hivatkozási kézikönyv&lt;/title&gt;\n"
+"    &lt;releaseinfo&gt;\n"
+"      for &amp;package_string;.\n"
+"      A dokumentáció legfrissebb változata megtalálható a\n"
+"    &lt;ulink role=\"online-location\" url=\"http://[SERVER]/&amp;package_name"
+";/index.html\"&gt;http://[SERVER]/&amp;package_name;/&lt;/ulink&gt;"
+" internetes oldalon.\n"
+"    &lt;/releaseinfo&gt;\n"
+"  &lt;/bookinfo&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2374
@@ -2951,11 +3999,19 @@ msgid ""
 "used. The entities can also be used in all generated files, GTK-Doc will use "
 "the same xml header in generated xml files. <_:example-1/>"
 msgstr ""
+"Az ezzel a verzióval szállított makefile-ok létrehoznak egy entitásfájlt az <"
+"filename>xml/gtkdocentities.ent</filename> fájlban, amely például a"
+" package_name és package_version entitásokat tartalmazza. Ezt használhatja"
+" például a fő XML-fájlban, hogy elkerülje a verziószám kézi megadását. Az"
+" alábbiakban egy példa azt mutatja be, hogy az entitásfájl hogyan kerül a"
+" mestersablonba, és hogyan kell használni az entitásokat. Az entitások az"
+" összes előállított fájlban is használhatók, a GTK-Doc ugyanazt az"
+" XML-fejlécet fogja használni az előállított XML-fájlokban. <_:example-1/>"
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:2409
 msgid "Documenting other interfaces"
-msgstr ""
+msgstr "Egyéb interfészek dokumentálása"
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2411
@@ -2964,11 +4020,14 @@ msgid ""
 "sections contain suggestions how the tools can be used to document other "
 "interfaces too."
 msgstr ""
+"Eddig a GTK-Doc eszközt használtuk a kód API-jának dokumentálásához. A"
+" következő szakaszok javaslatokat tartalmaznak arra vonatkozóan, hogy az"
+" eszközök hogyan használhatók egyéb interfészek dokumentálásához is."
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2418
 msgid "Command line options and man pages"
-msgstr ""
+msgstr "Parancssori kapcsolók és kézikönyvoldalak"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2420
@@ -2977,11 +4036,14 @@ msgid ""
 "a good idea to use it for that purpose. This way the interface is part of "
 "the reference and one gets the man-page for free."
 msgstr ""
+"Mivel kézikönyvoldalakat is elő lehet állítani egy DocBook-hivatkozási"
+" bejegyzéshez, jó ötletnek tűnik, hogy erre a célra használjuk. Így az"
+" interfész a hivatkozás része lesz, a kézikönyvoldalt pedig ingyen megkapjuk."
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:2427
 msgid "Document the tool"
-msgstr ""
+msgstr "Az eszköz dokumentálása"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:2429
@@ -2992,16 +4054,21 @@ msgid ""
 "that should be used and can look at generated file in the xml subdirectory "
 "as well as examples e.g. in glib."
 msgstr ""
+"Hozzon létre eszközönként egy hivatkozásibejegyzés-fájlt. A <link"
+" linkend=\"settingup_docfiles\">példánkat</link> követve elnevezhetjük <"
+"filename>meep/docs/reference/meeper/meep.xml</filename> néven. A használandó"
+" XML-címkék megtekinthetők az XML alkönyvtárban lévő előállított fájlban,"
+" valamint példák is találhatók például a glib csomagban."
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:2439
 msgid "Adding the extra configure check"
-msgstr ""
+msgstr "A további beállítás-ellenőrzés hozzáadása"
 
 #. (itstool) path: example/title
 #: C/index.docbook:2442 C/index.docbook:2460
 msgid "Extra configure checks"
-msgstr ""
+msgstr "További beállítás-ellenőrzések"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2443
@@ -3010,17 +4077,27 @@ msgid ""
 "\n"
 "AC_ARG_ENABLE(man,\n"
 "              [AC_HELP_STRING([--enable-man],\n"
-"                              [regenerate man pages from Docbook [default=no]])],enable_man=yes,\n"
+"                              [regenerate man pages from Docbook"
+" [default=no]])],enable_man=yes,\n"
 "              enable_man=no)\n"
 "\n"
 "AC_PATH_PROG([XSLTPROC], [xsltproc])\n"
 "AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)\n"
 msgstr ""
+"\n"
+"AC_ARG_ENABLE(man,\n"
+"              [AC_HELP_STRING([--enable-man],\n"
+"                              [regenerate man pages from Docbook"
+" [default=no]])],enable_man=yes,\n"
+"              enable_man=no)\n"
+"\n"
+"AC_PATH_PROG([XSLTPROC], [xsltproc])\n"
+"AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)\n"
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:2457
 msgid "Adding the extra makefile rules"
-msgstr ""
+msgstr "A további makefile-szabályok hozzáadása"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2461
@@ -3034,7 +4111,8 @@ msgid ""
 "if ENABLE_MAN\n"
 "\n"
 "%.1 : %.xml\n"
-"        @XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $&lt;\n"
+"        @XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/m"
+"anpages/docbook.xsl $&lt;\n"
 "\n"
 "endif\n"
 "endif\n"
@@ -3042,11 +4120,27 @@ msgid ""
 "BUILT_EXTRA_DIST = $(man_MANS)\n"
 "EXTRA_DIST += meep.xml\n"
 msgstr ""
+"\n"
+"man_MANS = \\\n"
+"       meeper.1\n"
+"\n"
+"if ENABLE_GTK_DOC\n"
+"if ENABLE_MAN\n"
+"\n"
+"%.1 : %.xml\n"
+"        @XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/m"
+"anpages/docbook.xsl $&lt;\n"
+"\n"
+"endif\n"
+"endif\n"
+"\n"
+"BUILT_EXTRA_DIST = $(man_MANS)\n"
+"EXTRA_DIST += meep.xml\n"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2483
 msgid "DBus interfaces"
-msgstr ""
+msgstr "DBus interfészek"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2485
@@ -3054,26 +4148,28 @@ msgid ""
 "(FIXME: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://"
 "cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
 msgstr ""
+"(JAVÍTS KI: http://hal.freedesktop.org/docs/DeviceKit/DeviceKit.html, http://"
+"cgit.freedesktop.org/DeviceKit/DeviceKit/tree/doc/dbus)"
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:2494
 msgid "Frequently asked questions"
-msgstr ""
+msgstr "Gyakran ismételt kérdések"
 
 #. (itstool) path: segmentedlist/segtitle
 #: C/index.docbook:2498
 msgid "Question"
-msgstr ""
+msgstr "Kérdés"
 
 #. (itstool) path: segmentedlist/segtitle
 #: C/index.docbook:2499
 msgid "Answer"
-msgstr ""
+msgstr "Válasz"
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2501
 msgid "No class hierarchy."
-msgstr ""
+msgstr "Nincs osztályhierarchia."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2502
@@ -3081,11 +4177,13 @@ msgid ""
 "The objects <function>xxx_get_type()</function> function has not been "
 "entered into the <filename>&lt;package&gt;.types</filename> file."
 msgstr ""
+"Az objektumok <function>xxx_get_type()</function> függvénye nem került be a <"
+"filename>&lt;csomag&gt;.types</filename> fájlba."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2508
 msgid "Still no class hierarchy."
-msgstr ""
+msgstr "Még mindig nincs osztályhierarchia."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2509
@@ -3094,11 +4192,14 @@ msgid ""
 "file (see <ulink url=\"http://mail.gnome.org/archives/gtk-doc-list/2003-"
 "October/msg00006.html\">explanation</ulink>)."
 msgstr ""
+"Hiányzó vagy hibás elnevezés a <filename>&lt;csomag&gt;-sections.txt<"
+"/filename> fájlban (nézze meg a <ulink url=\"http://mail.gnome.org/archives/gt"
+"k-doc-list/2003-October/msg00006.html\">magyarázatot</ulink>)."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2515
 msgid "Damn, I have still no class hierarchy."
-msgstr ""
+msgstr "A fenébe, még mindig nincs osztályhierarchiám."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2516
@@ -3107,11 +4208,13 @@ msgid ""
 "type>) part of the normal section (don't put this into Standard or Private "
 "subsections)."
 msgstr ""
+"Az objektum neve (a példánystruktúra neve, például <type>GtkWidget</type>) a"
+" normál szakasz része (ne tegye ezt a Standard vagy Private alszakaszokba)?"
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2523
 msgid "No symbol index."
-msgstr ""
+msgstr "Nincs szimbólumindex."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2524
@@ -3119,11 +4222,13 @@ msgid ""
 "Does the <filename>&lt;package&gt;-docs.{xml,sgml}</filename> contain a "
 "index that xi:includes the generated index?"
 msgstr ""
+"A <filename>&lt;csomag&gt;-docs.{xml,sgml}</filename> tartalmaz olyan"
+" indexet, amely xi:include-olja az előállított indexet?"
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2530
 msgid "Symbols are not linked to their doc-section."
-msgstr ""
+msgstr "A szimbólumok nem kapcsolódnak a dokumentumszakaszukhoz."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2531
@@ -3131,11 +4236,14 @@ msgid ""
 "Is the doc-comment using the correct markup (added #,% or ())? Check if the "
 "gtkdoc-fixxref warns about unresolvable xrefs."
 msgstr ""
+"A doc-comment a megfelelő jelölést használja (hozzáadott #, % vagy ()"
+" jelölőket)? Ellenőrizze, hogy a gtkdoc-fixxref figyelmeztet-e a nem"
+" feloldható xref-ekre."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2537
 msgid "A new class does not appear in the docs."
-msgstr ""
+msgstr "Egy új osztály nem jelenik meg a dokumentációban."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2538
@@ -3143,11 +4251,13 @@ msgid ""
 "Is the new page xi:included from <filename>&lt;package&gt;-docs.{xml,sgml}</"
 "filename>."
 msgstr ""
+"Az új oldal xi:include-olva van a <filename>&lt;csomag&gt;-docs.{xml,sgml}<"
+"/filename> fájlból?"
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2544
 msgid "A new symbol does not appear in the docs."
-msgstr ""
+msgstr "Egy új szimbólum nem jelenik meg a dokumentációban."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2545
@@ -3157,11 +4267,16 @@ msgid ""
 "xrefs. Check if the symbol is correctly listed in the <filename>&lt;"
 "package&gt;-sections.txt</filename> in a public subsection."
 msgstr ""
+"Megfelelően van formázva a doc-comment tulajdonság? Ellenőrizze, hogy"
+" nincsenek-e helyesírási hibák a megjegyzés elején. Ellenőrizze, hogy a"
+" gtkdoc-fixxref figyelmeztet-e a feloldhatatlan xref-ekre. Ellenőrizze, hogy"
+" a szimbólum helyesen van-e felsorolva a <filename"
+">&lt;csomag&gt;-sections.txt</filename> fájl egy nyilvános alszakaszában."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2553
 msgid "A type is missing from the class hierarchy."
-msgstr ""
+msgstr "Egy típus hiányzik az osztályhierarchiából."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2554
@@ -3172,11 +4287,17 @@ msgid ""
 "filename>. If the type instance (e.g. <type>GtkWidget</type>) is not listed "
 "or incidentally marked private it will not be shown."
 msgstr ""
+"Ha a típus fel van sorolva a <filename>&lt;csomag&gt;.hierarchy</filename>"
+" fájlban, de nincs az <filename>xml/tree_index.sgml</filename> fájlban, akkor"
+" ellenőrizze kétszer is, hogy a típus helyesen van-e elhelyezve a <filename"
+">&lt;csomag&gt;-sections.txt</filename> fájlban. Ha a típuspéldány (például <"
+"type>GtkWidget</type>) nincs felsorolva vagy véletlenül privátként van"
+" megjelölve, akkor nem fog megjelenni."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2563
 msgid "I get foldoc links for all gobject annotations."
-msgstr ""
+msgstr "Az összes gobject megjegyzéshez foldoc hivatkozásokat kapok."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2564
@@ -3184,11 +4305,15 @@ msgid ""
 "Check that <filename>xml/annotation-glossary.xml</filename> is xi:included "
 "from <filename>&lt;package&gt;-docs.{xml,sgml}</filename>."
 msgstr ""
+"Ellenőrizze, hogy az <filename>xml/annotation-glossary.xml</filename> fájl"
+" xi:include-olva van-e a <filename>&lt;csomag&gt;-docs.{xml,sgml}</filename>"
+" fájlból."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2572
 msgid "Parameter described in source code comment block but does not exist"
 msgstr ""
+"A paraméter le van írva a forráskód megjegyzésblokkjában, de nem létezik"
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2573
@@ -3196,11 +4321,13 @@ msgid ""
 "Check if the prototype in the header has different parameter names as in the "
 "source."
 msgstr ""
+"Ellenőrizze, hogy a fejlécben lévő prototípusnak más paraméternevei vannak-e,"
+" mint a forrásban."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2578
 msgid "multiple \"IDs\" for constraint linkend: XYZ"
-msgstr ""
+msgstr "Több „azonosító” a korlátozó hivatkozásvéghez: XYZ"
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2579
@@ -3208,6 +4335,8 @@ msgid ""
 "Symbol XYZ appears twice in <filename>&lt;package&gt;-sections.txt</"
 "filename> file."
 msgstr ""
+"Az XYZ szimbólum kétszer jelenik meg a <filename>&lt;csomag&gt;-sections.txt<"
+"/filename> fájlban."
 
 #. (itstool) path: seglistitem/seg
 #: C/index.docbook:2582
@@ -3215,11 +4344,13 @@ msgid ""
 "Element typename in namespace '' encountered in para, but no template "
 "matches."
 msgstr ""
+"A „” névtérben lévő típusnév elem megtalálható a bekezdésben, de nincs"
+" megfelelő sablon."
 
 #. (itstool) path: chapter/title
 #: C/index.docbook:2589
 msgid "Tools related to gtk-doc"
-msgstr ""
+msgstr "A GTK-Doc kapcsolódó eszközei"
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2591
@@ -3228,6 +4359,9 @@ msgid ""
 "GTK-Doc</ulink> integration plugin, that adds API docs to a trac site and "
 "integrates with the trac search."
 msgstr ""
+"GtkDocPlugin – egy <ulink url=\"http://trac-hacks.org/wiki/GtkDocPlugin\""
+">Trac GTK-Doc</ulink> integrációs bővítmény, amely API-dokumentációkat ad egy"
+" trac oldalhoz, és integrálódik a trac keresővel."
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2596
@@ -3235,6 +4369,9 @@ msgid ""
 "Gtkdoc-depscan - a tool (part of gtk-doc) to check used API against since "
 "tags in the API to determine the minimum required version."
 msgstr ""
+"Gtkdoc-depscan – egy eszköz (a GTK-Doc része), amely ellenőrzi a használt"
+" API-t, hogy mióta vannak a címkék az API-ban, hogy meghatározza a"
+" minimálisan szükséges verziót."
 
 #. (itstool) path: appendixinfo/releaseinfo
 #: C/fdl-appendix.xml:12
@@ -4420,3 +5557,4 @@ msgstr ""
 "azt javasoljuk, hogy e példákat egy választása szerinti szabad szoftver "
 "licenc alatt közölje – mint például a <_:ulink-1/> –, hogy lehetővé tegye a "
 "kódok szabad szoftverekben való alkalmazását."
+
