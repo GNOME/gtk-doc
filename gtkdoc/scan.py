@@ -41,8 +41,8 @@ import shutil
 from . import common
 
 TYPE_MODIFIERS = ['const', 'signed', 'unsigned', 'long', 'short', 'struct', 'union', 'enum']
-VAR_TYPE_MODIFIER = '(?:' + '|'.join([t + '\s+' for t in TYPE_MODIFIERS]) + ')*'
-RET_TYPE_MODIFIER = '(?:' + '|'.join([t + '\s+' for t in TYPE_MODIFIERS + ['G_CONST_RETURN']]) + ')*'
+VAR_TYPE_MODIFIER = '(?:' + '|'.join([t + r'\s+' for t in TYPE_MODIFIERS]) + ')*'
+RET_TYPE_MODIFIER = '(?:' + '|'.join([t + r'\s+' for t in TYPE_MODIFIERS + ['G_CONST_RETURN']]) + ')*'
 
 # Matchers for current line
 CLINE_MATCHER = [
@@ -235,8 +235,8 @@ def InitScanner(options):
     ignore_decorators = ''
     optional_decorators_regex = ''
     if options.ignore_decorators:
-        ignore_decorators = '|' + options.ignore_decorators.replace('()', '\(\w*\)')
-        optional_decorators_regex = '(?:\s+(?:%s))?' % ignore_decorators[1:]
+        ignore_decorators = '|' + options.ignore_decorators.replace('()', r'\(\w*\)')
+        optional_decorators_regex = r'(?:\s+(?:%s))?' % ignore_decorators[1:]
 
     # FUNCTION POINTER VARIABLES
     CLINE_MATCHER[4] = re.compile(
@@ -484,8 +484,8 @@ def ScanHeaderContent(input_lines, decl_list, get_types, options):
     ignore_decorators = ''          # 1 uses
     optional_decorators_regex = ''  # 4 uses
     if options.ignore_decorators:
-        ignore_decorators = '|' + options.ignore_decorators.replace('()', '\(\w*\)')
-        optional_decorators_regex = '(?:\s+(?:%s))?' % ignore_decorators[1:]
+        ignore_decorators = '|' + options.ignore_decorators.replace('()', r'\(\w*\)')
+        optional_decorators_regex = r'(?:\s+(?:%s))?' % ignore_decorators[1:]
 
     for line in input_lines:
         # If this is a private header, skip it.
