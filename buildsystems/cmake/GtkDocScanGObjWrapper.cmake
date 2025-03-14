@@ -20,7 +20,7 @@
 
 # This is needed for find_package(PkgConfig) to work correctly --
 # CMAKE_MINIMUM_REQUIRED_VERSION needs to be defined.
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.12)
 
 if(NOT APPLE)
     # We use pkg-config to find glib et al
