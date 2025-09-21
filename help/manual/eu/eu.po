@@ -1,13 +1,13 @@
 # Basque translation for gtk-doc.
 # Copyright (C) 2021 gtk-doc's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gtk-doc package.
-# Asier Sarasua Garmendia <asiersarasua@ni.eus>, 2021.
+# Asier Saratsua Garmendia <asiersarasua@ni.eus>, 2021, 2025.
 #
 msgid ""
 msgstr "Project-Id-Version: gtk-doc master\n"
-"POT-Creation-Date: 2022-05-06 19:31+0000\n"
-"PO-Revision-Date: 2022-07-03 11:35+0000\n"
-"Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
+"POT-Creation-Date: 2025-08-10 21:12+0000\n"
+"PO-Revision-Date: 2025-09-21 11:35+0000\n"
+"Last-Translator: Asier Saratsua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -329,7 +329,7 @@ msgid ""
 "<guilabel>Writing the documentation.</guilabel> The author fills in the "
 "source files with the documentation for each function, macro, structs or "
 "unions, etc."
-msgstr ""
+msgstr "<guilabel>Dokumentazioa idaztea.</guilabel> Egileak funtzio, makro, struct eta abarren dokumentazioarekin betetzen ditu iturburu-fitxategiak."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:282
@@ -342,13 +342,13 @@ msgid ""
 "to which header file they are in. On the first run this file is copied to "
 "<filename>&lt;module&gt;-sections.txt</filename>. The author can rearrange "
 "the sections, and the order of the declarations within them, to produce the "
-"final desired order. The second file it generates is <filename>&lt;"
-"module&gt;-decl.txt</filename>. This file contains the full declarations "
-"found by the scanner. If for some reason one would like some symbols to show "
-"up in the docs, where the full declaration cannot be found by the scanner or "
-"the declaration should appear differently, one can place entities similar to "
-"the ones in <filename>&lt;module&gt;-decl.txt</filename> into <filename>&lt;"
-"module&gt;-overrides.txt</filename>."
+"final desired order. The second file it generates is "
+"<filename>&lt;module&gt;-decl.txt</filename>. This file contains the full "
+"declarations found by the scanner. If for some reason one would like some "
+"symbols to show up in the docs, where the full declaration cannot be found "
+"by the scanner or the declaration should appear differently, one can place "
+"entities similar to the ones in <filename>&lt;module&gt;-decl.txt</filename> "
+"into <filename>&lt;module&gt;-overrides.txt</filename>."
 msgstr ""
 
 #. (itstool) path: listitem/para
@@ -358,14 +358,14 @@ msgid ""
 "query a library about any GObject subclasses it exports. It saves "
 "information about each object's position in the class hierarchy and about "
 "any GObject properties and signals it provides."
-msgstr ""
+msgstr "<application>gtkdoc-scangobj</application> edozein GObject azpiklaseri buruzko kontsultak dinamikoki gauzatzeko ere erabili daiteke. Objektu bakoitzak klase-hierarkian duen kokalekuari eta eskaintzen duen edozein GObject propietate eta seinaleri buruzko informazioa gordetzen du."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:305
 msgid ""
 "<application>gtkdoc-scanobj</application> should not be used anymore. It was "
 "needed in the past when GObject was still GtkObject inside gtk+."
-msgstr ""
+msgstr "<application>gtkdoc-scanobj</application> ez da gehiago erabili behar. Iraganean zen beharrezkoa, GObject oraindik gtk+ barruko GtkObject zenean."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:312
@@ -385,15 +385,15 @@ msgid ""
 "in the <filename class=\"directory\">html/</filename> subdirectory. Likewise "
 "<application>gtkdoc-mkpdf</application> turns the XML files into a PDF "
 "document called <filename>&lt;package&gt;.pdf</filename>."
-msgstr ""
+msgstr "<application>gtkdoc-mkhtml</application> aplikazioak XML fitxategiak HTML fitxategi bihurtzen ditu <filename class=\"directory\">html/</filename> azpidirektorioan. Era berean, <application>gtkdoc-mkpdf</application> aplikazioak XML fitxategiak <filename>&lt;package&gt;.pdf</filename> deitutako PDF dokumentu bihurtzen ditu."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:327
 msgid ""
-"Files in <filename class=\"directory\">xml/</filename> and <filename class="
-"\"directory\">html/</filename> directories are always overwritten. One "
+"Files in <filename class=\"directory\">xml/</filename> and <filename "
+"class=\"directory\">html/</filename> directories are always overwritten. One "
 "should never edit them directly."
-msgstr ""
+msgstr "<filename class=\"directory\">xml/</filename> eta <filename class=\"directory\">html/</filename> direktorioetako fitxategiak gainidatzi egiten dira beti. Ez dira zuzenean editatu behar."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:335
@@ -427,17 +427,17 @@ msgstr "<guilabel>python 2/3</guilabel> - script nagusiak Python lengoaian daude
 #. (itstool) path: sect2/para
 #: C/index.docbook:360
 msgid ""
-"<guilabel>xsltproc</guilabel> - the xslt processor from libxslt <ulink url="
-"\"http://xmlsoft.org/XSLT/\" type=\"http\">xmlsoft.org/XSLT/</ulink>"
+"<guilabel>xsltproc</guilabel> - the xslt processor from libxslt <ulink "
+"url=\"http://xmlsoft.org/XSLT/\" type=\"http\">xmlsoft.org/XSLT/</ulink>"
 msgstr "<guilabel>xsltproc</guilabel> - libxslt liburutegiaren xslt prozesatzailea <ulink url=\"http://xmlsoft.org/XSLT/\" type=\"http\">xmlsoft.org/XSLT/</ulink>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:364
 msgid ""
-"<guilabel>docbook-xsl</guilabel> - the docbook xsl stylesheets <ulink url="
-"\"http://sourceforge.net/projects/docbook/files/docbook-xsl/\" type=\"http"
-"\">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>"
-msgstr ""
+"<guilabel>docbook-xsl</guilabel> - the docbook xsl stylesheets <ulink "
+"url=\"http://sourceforge.net/projects/docbook/files/docbook-xsl/\" "
+"type=\"http\">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>"
+msgstr "<guilabel>docbook-xsl</guilabel> - docbook xsl estilo-orriak <ulink url=\"http://sourceforge.net/projects/docbook/files/docbook-xsl/\" type=\"http\">sourceforge.net/projects/docbook/files/docbook-xsl</ulink>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:368
@@ -445,7 +445,7 @@ msgid ""
 "One of <guilabel>source-highlight</guilabel>, <guilabel>highlight</guilabel> "
 "or <guilabel>vim</guilabel> - optional - used for syntax highlighting of "
 "examples"
-msgstr ""
+msgstr "Hiru hauetako bat: <guilabel>source-highlight</guilabel>, <guilabel>highlight</guilabel> edo <guilabel>vim</guilabel> - aukerakoa - adibideen sintaxia nabarmentzeko erabiltzen da"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:376
@@ -502,8 +502,8 @@ msgstr "Kapitulu honetan, GTK-Doc zure proiektuan integratzeko eman behar diren 
 #: C/index.docbook:425
 msgid ""
 "Preparation of the directory structure and creating required configuration "
-"files for your GTK-Doc documentation (see <link linkend=\"settingup_docfiles"
-"\"> Setting up a skeleton documentation</link>)."
+"files for your GTK-Doc documentation (see <link "
+"linkend=\"settingup_docfiles\"> Setting up a skeleton documentation</link>)."
 msgstr ""
 
 #. (itstool) path: listitem/para
@@ -512,8 +512,8 @@ msgid ""
 "Adjusting the build system to build your documentation using the GTK-Doc "
 "tools. Multiple build systems are supported, in this manual we describe how "
 "to integrate GTK-Doc with <link linkend=\"settingup_autotools\">Autotools</"
-"link>, <link linkend=\"settingup_cmake\">CMake</link>, and <link linkend="
-"\"settingup_plain_makefiles\">plain Makefiles</link>."
+"link>, <link linkend=\"settingup_cmake\">CMake</link>, and <link "
+"linkend=\"settingup_plain_makefiles\">plain Makefiles</link>."
 msgstr ""
 
 #. (itstool) path: listitem/para
@@ -522,7 +522,7 @@ msgid ""
 "Adding GTK-Doc specific files to version control and deciding which files to "
 "ignore (see <link linkend=\"settingup_vcs\"> Integration with version "
 "control systems</link>)."
-msgstr ""
+msgstr "GTK-Doc fitxategi espezifikoak bertsio-kontrolari gehitu eta zein fitxategiri ez ikusiarena egingo zaien erabaki  (ikus <link linkend=\"settingup_vcs\">Integrazioa bertsio-kontrolerako sistemekin</link>)."
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:451
@@ -593,9 +593,9 @@ msgstr ""
 #: C/index.docbook:487
 msgid ""
 "In the following sections we will assume a directory structure for our "
-"<emphasis>meep</emphasis> project that uses the above conventions. <_:"
-"example-1/>"
-msgstr ""
+"<emphasis>meep</emphasis> project that uses the above conventions. "
+"<_:example-1/>"
+msgstr "Hurrengo atalerako, gure <emphasis>meep</emphasis> proiektuaren direktorio-egiturak goiko konbentzioak darabiltzala onartuko dugu. <_:example-1/>"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:512
@@ -607,7 +607,7 @@ msgstr "Integrazioa Autotools tresnarekin"
 msgid ""
 "Integration of GTK-Doc into an autotools-based build system requires the "
 "following steps:"
-msgstr ""
+msgstr "GTK-Doc autotools tresnetan oinarritutako eraikuntza-sistema batean integratzeko honako urratsak eman behar dira:"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:519
@@ -616,7 +616,7 @@ msgid ""
 "<filename>configure</filename> script. If an <filename>autogen.sh</filename> "
 "script is present, adjust it to check for GTK-Doc and add a call to "
 "<application>gtkdocize</application>."
-msgstr ""
+msgstr "Ziurtatu <application>gtkdocize</application> aplikazioa behin exekutatzen dela <filename>configure</filename> script-aren aurretik. <filename>autogen.sh</filename> script bat badago, doitu hura GTK-Doc bilatu dezan eta gehitu <application>gtkdocize</application> aplikazioaren dei bat."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:527
@@ -669,14 +669,14 @@ msgstr "Integrazioa automake tresnarekin"
 #. (itstool) path: sect2/para
 #: C/index.docbook:569
 msgid ""
-"First copy the <filename>Makefile.am</filename> from the <filename class="
-"\"directory\">examples</filename> sub-directory of the <ulink url=\"https://"
-"gitlab.gnome.org/GNOME/gtk-doc/raw/master/examples/Makefile.am\"> gtkdoc-"
-"sources</ulink> to your project's reference documentation directory (e.g. "
-"<filename class=\"directory\">docs/reference/&lt;package&gt;</filename>). A "
-"local copy should be available under e.g. <filename>/usr/share/doc/gtk-doc-"
-"tools/examples/Makefile.am</filename>. If you have multiple packages repeat "
-"this for each one."
+"First copy the <filename>Makefile.am</filename> from the <filename "
+"class=\"directory\">examples</filename> sub-directory of the <ulink "
+"url=\"https://gitlab.gnome.org/GNOME/gtk-doc/raw/master/examples/"
+"Makefile.am\"> gtkdoc-sources</ulink> to your project's reference "
+"documentation directory (e.g. <filename class=\"directory\">docs/reference/"
+"&lt;package&gt;</filename>). A local copy should be available under e.g. "
+"<filename>/usr/share/doc/gtk-doc-tools/examples/Makefile.am</filename>. If "
+"you have multiple packages repeat this for each one."
 msgstr ""
 
 #. (itstool) path: note/simpara
@@ -712,6 +712,19 @@ msgid ""
 "    libmeep/\n"
 "    meeper/\n"
 msgstr ""
+"\n"
+"meep/\n"
+"  docs/\n"
+"    reference/  # erreferentziako dokumentazioa\n"
+"      libmeep/\n"
+"        Makefile.am\n"
+"      meeper/\n"
+"        Makefile.am\n"
+"    help/       # aukerakoa: erabiltzaile-eskuliburua\n"
+"      meeper/\n"
+"  src/\n"
+"    libmeep/\n"
+"    meeper/\n"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:613
@@ -720,10 +733,10 @@ msgid ""
 "various parameters in each <filename>Makefile.am</filename>. All settings "
 "have a comment above them that describes their purpose and how to customize "
 "the setting. Most settings are used to supply extra flags to the respective "
-"tools to which they apply. Every tool has a variable of the form <option>&lt;"
-"TOOLNAME&gt;_OPTIONS</option> (e.g. the tool <application>gtkdoc-mkhtml</"
-"application> has an option named <code>MKHTML_OPTIONS</code>). All the tools "
-"support <option>--help</option> to list the supported options."
+"tools to which they apply. Every tool has a variable of the form "
+"<option>&lt;TOOLNAME&gt;_OPTIONS</option> (e.g. the tool <application>gtkdoc-"
+"mkhtml</application> has an option named <code>MKHTML_OPTIONS</code>). All "
+"the tools support <option>--help</option> to list the supported options."
 msgstr ""
 
 #. (itstool) path: listitem/para
@@ -731,7 +744,7 @@ msgstr ""
 msgid ""
 "<option>DOC_MODULE</option> is used to provide the name of the package that "
 "is being documentated (e.g. <code>meeper</code>, or <code>libmeep</code>)."
-msgstr ""
+msgstr "<option>DOC_MODULE</option> aukera erabiltzen da dokumentatzen ari den paketearen izena emateko (adibidez <code>meeper</code> edo <code>libmeep</code>)."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:644
@@ -746,8 +759,8 @@ msgstr ""
 #: C/index.docbook:657
 msgid ""
 "<option>HFILE_GLOB</option> and <option>CFILE_GLOB</option> are used for "
-"dependencies. Each option take a file-glob (e.g. <code>HFILE_GLOB="
-"$(top_srcdir)/src/*.c</code>). The documentation will be rebuilt if any of "
+"dependencies. Each option take a file-glob (e.g. <code>HFILE_GLOB=$"
+"(top_srcdir)/src/*.c</code>). The documentation will be rebuilt if any of "
 "the matched files change."
 msgstr ""
 
@@ -800,7 +813,7 @@ msgstr ""
 msgid ""
 "The following list explains the most relevant options. Check the example "
 "<filename>Makefile.am</filename> for additional options. <_:itemizedlist-1/>"
-msgstr ""
+msgstr "Hurrengo zerrendak aukerarik nabarmenenak azaltzen ditu. Begiratu <filename>Makefile.am</filename> adibidea aukera gehiago ezagutzeko. <_:itemizedlist-1/>"
 
 #. (itstool) path: sect2/title
 #: C/index.docbook:728
@@ -858,7 +871,7 @@ msgstr ""
 #. (itstool) path: example/title
 #: C/index.docbook:778
 msgid "Integration with optional gtk-doc dependency"
-msgstr ""
+msgstr "Integrazioa aukerako gtk-doc mendekotasunarekin"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:779
@@ -881,7 +894,7 @@ msgid ""
 "The above example works, but will require all developers to have gtk-doc "
 "installed. A better way is to make building the documentation optional as "
 "shown in the next example: <_:example-1/>"
-msgstr ""
+msgstr "Goiko adibideak funtzionatzen du, baina horretarako garatzaile guztiek gtk-doc instalatuta eduki behar dute. Hobe da dokumentazioaren eraikuntza aukerakoa izan dadin, hurrengo adibidean erakusten den bezala: <_:example-1/>"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:792
@@ -982,6 +995,13 @@ msgid ""
 "  $GTKDOCIZE || exit 1\n"
 "fi\n"
 msgstr ""
+"\n"
+"GTKDOCIZE=$(which gtkdocize 2&gt;/dev/null)\n"
+"if test $? -ne 0; then\n"
+"  echo \"Ez da gtk-doc euskarririk aurkitu. Ezin dituzu dokumentuak eraiki.\"\n"
+"else\n"
+"  $GTKDOCIZE || exit 1\n"
+"fi\n"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:860
@@ -989,7 +1009,7 @@ msgid ""
 "When running <application>gtkdocize</application> it copies <filename>gtk-"
 "doc.make</filename> to your project root (or any directory specified by the "
 "<option>--docdir</option> option)."
-msgstr ""
+msgstr "<application>gtkdocize</application> exekutatzean, <filename>gtk-doc.make</filename> zure proiektuaren errora (edo <option>--docdir</option> aukerarekin zehaztutako edozein direktoriora) kopiatzen du."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:866
@@ -1013,7 +1033,7 @@ msgstr ""
 #. (itstool) path: sect2/title
 #: C/index.docbook:886
 msgid "Executing GTK-Doc from the Build System"
-msgstr ""
+msgstr "GTK-Doc eraikitze-sistematik exekutatzea"
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:888
@@ -1029,14 +1049,14 @@ msgstr ""
 msgid ""
 "The first make run generates several additional files in the doc-"
 "directories. The important ones are: <filename>&lt;package&gt;.types</"
-"filename>, <filename>&lt;package&gt;-docs.xml</filename> (in the past ."
-"sgml), <filename>&lt;package&gt;-sections.txt</filename>."
+"filename>, <filename>&lt;package&gt;-docs.xml</filename> (in the "
+"past .sgml), <filename>&lt;package&gt;-sections.txt</filename>."
 msgstr ""
 
 #. (itstool) path: example/title
 #: C/index.docbook:903
 msgid "Running the doc build"
-msgstr "doc eraikuntza exekutatzea"
+msgstr "Dokumentazioaren eraikitzea exekutatzea"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:904
@@ -1066,7 +1086,7 @@ msgstr ""
 #. (itstool) path: sect1/title
 #: C/index.docbook:927
 msgid "Integration with CMake build systems"
-msgstr "Integrazioa CMake eraikuntza-sisemarekin"
+msgstr "Integrazioa CMake eraikitze-sisemarekin"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:929
@@ -1114,7 +1134,7 @@ msgstr "Hurrengo adibideak komando hau nola erabili erakusten du. <_:example-1/>
 #. (itstool) path: sect1/title
 #: C/index.docbook:964
 msgid "Integration with plain makefiles or other build systems"
-msgstr ""
+msgstr "Integrazioa makefile soilekin edo beste eraikitze-sistema batzuekin"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:966
@@ -1171,10 +1191,10 @@ msgstr "Integrazioa bertsioen kontroleko sistemekin"
 #: C/index.docbook:997
 msgid ""
 "As a rule of thumb, it's the files you edit which should go under version "
-"control. For typical projects it's these files: <filename>&lt;package&gt;."
-"types</filename>, <filename>&lt;package&gt;-docs.xml</filename> (in the "
-"past .sgml), <filename>&lt;package&gt;-sections.txt</filename>, "
-"<filename>Makefile.am</filename>."
+"control. For typical projects it's these files: "
+"<filename>&lt;package&gt;.types</filename>, <filename>&lt;package&gt;-"
+"docs.xml</filename> (in the past .sgml), <filename>&lt;package&gt;-"
+"sections.txt</filename>, <filename>Makefile.am</filename>."
 msgstr ""
 
 #. (itstool) path: sect1/para
@@ -1264,7 +1284,7 @@ msgstr ""
 msgid ""
 "A multiline comment that starts with an additional '*' marks a documentation "
 "block that will be processed by the GTK-Doc tools. <_:example-1/>"
-msgstr ""
+msgstr "'*' ikur batekin hasten den lerro anitzeko iruzkin batek GTK-Doc tresnek prozesatu behar duten dokumentazio-bloke bat markatzen du. <_:example-1/>"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:1064
@@ -1314,7 +1334,7 @@ msgstr "Erabili function() argumentuak hartzen dituzten funtzioei edo makroei er
 msgid ""
 "Use @param to refer to parameters. Also use this when referring to "
 "parameters of other functions, related to the one being described."
-msgstr ""
+msgstr "Erabili @param parametroei erreferentzia egiteko. Erabili, baita ere, deskribatzen ari den funtzioari lotutako beste funtzio batzuen parametroei erreferentzia egitean."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1119
@@ -1341,8 +1361,8 @@ msgstr "GObject propietate bati erreferentzia egiteko, erabili #Object:property.
 #. (itstool) path: listitem/para
 #: C/index.docbook:1140
 msgid ""
-"Use #Struct.field to refer to a field inside a structure and #GObjectClass."
-"foo_bar() to refer to a vmethod."
+"Use #Struct.field to refer to a field inside a structure and "
+"#GObjectClass.foo_bar() to refer to a vmethod."
 msgstr ""
 
 #. (itstool) path: sect1/para
@@ -1350,8 +1370,8 @@ msgstr ""
 msgid ""
 "One advantage of hyper-text over plain-text is the ability to have links in "
 "the document. Writing the correct markup for a link can be tedious though. "
-"GTK-Doc comes to help by providing several useful abbreviations. <_:"
-"itemizedlist-1/>"
+"GTK-Doc comes to help by providing several useful abbreviations. "
+"<_:itemizedlist-1/>"
 msgstr ""
 
 #. (itstool) path: tip/para
@@ -1359,9 +1379,9 @@ msgstr ""
 msgid ""
 "If you need to use the special characters '&lt;', '&gt;', '()', '@', '%', or "
 "'#' in your documentation without GTK-Doc changing them you can use the XML "
-"entities \"&amp;lt;\", \"&amp;gt;\", \"&amp;lpar;\", \"&amp;rpar;\", \"&amp;"
-"commat;\", \"&amp;percnt;\" and \"&amp;num;\" respectively or escape them "
-"with a backslash '\\'."
+"entities \"&amp;lt;\", \"&amp;gt;\", \"&amp;lpar;\", \"&amp;rpar;\", "
+"\"&amp;commat;\", \"&amp;percnt;\" and \"&amp;num;\" respectively or escape "
+"them with a backslash '\\'."
 msgstr ""
 
 #. (itstool) path: sect1/para
@@ -1396,7 +1416,7 @@ msgstr ""
 #. (itstool) path: example/title
 #: C/index.docbook:1184
 msgid "GTK-Doc comment block using Markdown"
-msgstr ""
+msgstr "GTK-Doc iruzkin-blokea Markdown erabiliz"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1185
@@ -1500,15 +1520,15 @@ msgstr ""
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1275
 msgid "SECTION:&lt;name&gt;"
-msgstr ""
+msgstr "SECTION:&lt;name&gt;"
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1277
 msgid ""
 "The name links the section documentation to the respective part in the "
 "<filename>&lt;package&gt;-sections.txt</filename> file. The name given here "
-"should match the &lt;FILE&gt; tag in the <filename>&lt;package&gt;-sections."
-"txt</filename> file."
+"should match the &lt;FILE&gt; tag in the <filename>&lt;package&gt;-"
+"sections.txt</filename> file."
 msgstr ""
 
 #. (itstool) path: varlistentry/term
@@ -1521,7 +1541,7 @@ msgstr "@short_description"
 msgid ""
 "A one line description of the section, that later will appear after the "
 "links in the TOC and at the top of the section page."
-msgstr ""
+msgstr "Atala deskribatzen duen lerro bakarreko testua, geroago aurkibidean esteken ondoren eta atal-orriaren goiko aldean agertuko dena."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1295
@@ -1543,9 +1563,9 @@ msgstr "@section_id"
 #. (itstool) path: listitem/para
 #: C/index.docbook:1306
 msgid ""
-"Overrides the use of title as a section identifier. For GObjects the &lt;"
-"title&gt; is used as a section_id and for other sections it is &lt;"
-"MODULE&gt;-&lt;title&gt;."
+"Overrides the use of title as a section identifier. For GObjects the "
+"&lt;title&gt; is used as a section_id and for other sections it is "
+"&lt;MODULE&gt;-&lt;title&gt;."
 msgstr ""
 
 #. (itstool) path: varlistentry/term
@@ -1590,7 +1610,7 @@ msgid ""
 "Private - An interface that can be used within the GNOME stack itself, but "
 "that is not documented for end-users. Such functions should only be used in "
 "specified and documented ways."
-msgstr ""
+msgstr "Pribatua - GNOMEren pilan bertan erabili daitekeen interfaze bat, amaierako erabiltzaileentzat dokumentatuta ez dagoena. Funtzio horiek modu zehatz eta dokumentatuetan soilik erabili behar dira."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1362
@@ -1598,14 +1618,14 @@ msgid ""
 "Internal - An interface that is internal to a module and does not require "
 "end-user documentation. Functions that are undocumented are assumed to be "
 "Internal."
-msgstr ""
+msgstr "Barnekoa - Modulu baten barnekoa den interfaze bat, amaierako erabiltzaileentzako dokumentaziorik behar ez duena. Dokumentatu gabe dauden funtzioak barne-erabilerarako direla onartzen da."
 
 #. (itstool) path: listitem/para
 #: C/index.docbook:1324
 msgid ""
 "An informal description of the stability level this API has. We recommend "
 "the use of one of these terms: <_:itemizedlist-1/>"
-msgstr ""
+msgstr "API honek duen egonkortasun-mailaren deskribapen ez formala. Honako terminoetako bat erabiltzea gomendatzen dugu: <_:itemizedlist-1/>"
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1374
@@ -1616,9 +1636,9 @@ msgstr "@include"
 #: C/index.docbook:1376
 msgid ""
 "The <literal>#include</literal> files to show in the section synopsis (a "
-"comma separated list), overriding the global value from the <link linkend="
-"\"metafiles_sections\">section file</link> or command line. This item is "
-"optional."
+"comma separated list), overriding the global value from the <link "
+"linkend=\"metafiles_sections\">section file</link> or command line. This "
+"item is optional."
 msgstr ""
 
 #. (itstool) path: varlistentry/term
@@ -1633,7 +1653,7 @@ msgid ""
 "will often be some sort of a diagram to illustrate the visual appearance of "
 "a class or a diagram of its relationship to other classes. This item is "
 "optional."
-msgstr ""
+msgstr "Atal honen erreferentzia-orriaren goiko aldean bistaratuko den irudia. Sarritan, klase baten itxura irudikatzen duen diagrama bat edo beste klase batzuekin duen erlazioen diagrama bat izaten da. Elementu hau aukerakoa da."
 
 #. (itstool) path: tip/para
 #: C/index.docbook:1398
@@ -1668,7 +1688,7 @@ msgstr "Etiketa orokorrak"
 msgid ""
 "You can add versioning information to all documentation elements to tell "
 "when an API was introduced, or when it was deprecated."
-msgstr ""
+msgstr "Bertsio-informazioa gehitu diezaiekezu dokumentazio-elementu guztiei API bat noiz sortu zen adierazteko, edo zaharkitutzat noiz markatu zen adierazteko."
 
 #. (itstool) path: variablelist/title
 #: C/index.docbook:1424
@@ -1695,7 +1715,7 @@ msgstr "Zaharkitua:"
 msgid ""
 "Paragraph denoting that this function should no be used anymore. The "
 "description should point the reader to the new API."
-msgstr ""
+msgstr "Funtzioa ez dela gehiagotan erabili behar adierazten duen paragrafoa. Deskribapenak irakurlea API berrira bideratu beharko luke."
 
 #. (itstool) path: sect2/para
 #: C/index.docbook:1442
@@ -1740,7 +1760,7 @@ msgstr "Egonkortasuna: Desegonkorra"
 msgid ""
 "Mark the element as unstable. This is for public APIs which are released as "
 "a preview before being stabilised."
-msgstr ""
+msgstr "Markatu elementua desegonkor gisa. Egonkortu baino lehen aurrebista gisa argitaratzen diren API publikoetarako da."
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1472
@@ -1752,7 +1772,7 @@ msgstr "Egonkortasuna: Pribatua"
 msgid ""
 "Mark the element as private. This is for interfaces which can be used by "
 "tightly coupled modules, but not by arbitrary third parties."
-msgstr ""
+msgstr "Markatu elementua pribatu gisa. Estu lotutako moduluekin erabili daitezkeen interfazeetarako da, ez dituztenak hirugarrenek erabili behar."
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1484
@@ -1787,9 +1807,10 @@ msgstr "Oharpenak"
 msgid ""
 "Documentation blocks can contain annotation-tags. These tags will be "
 "rendered with tooltips describing their meaning. The tags are used by "
-"gobject-introspection to generate language bindings. A detailed list of the "
-"supported tags can be found on <ulink url=\"http://live.gnome.org/"
-"GObjectIntrospection/Annotations\" type=\"http\">the wiki</ulink>."
+"GObject Introspection to generate language bindings. A detailed list of the "
+"supported tags can be found in the <ulink url=\"https://gi.readthedocs.io/en/"
+"latest/annotations/giannotations.html\" type=\"http\">GObject Introspection "
+"documentation</ulink>."
 msgstr ""
 
 #. (itstool) path: example/programlisting
@@ -1849,7 +1870,7 @@ msgstr "Gogoratu honakoa: <_:itemizedlist-1/>"
 msgid ""
 "Gtk-doc assumes all symbols (macros, functions) starting with '_' are "
 "private. They are treated like static functions."
-msgstr ""
+msgstr "Gtk-doc sistemak ulertzen du '_' ikurrarekin hasten diren ikur guztiak (makroak, funtzioak) pribatuak direla. Funtzio estatikotzat hartzen dira. "
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1566
@@ -2020,7 +2041,7 @@ msgstr ""
 #. (itstool) path: example/title
 #: C/index.docbook:1700 C/index.docbook:1701
 msgid "Enum comment block"
-msgstr ""
+msgstr "Enumerazioen iruzkin-blokea"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:1702
@@ -2060,7 +2081,7 @@ msgstr "Programa-dokumentazio integratua"
 msgid ""
 "You can document programs and their commandline interface using inline "
 "documentation."
-msgstr ""
+msgstr "Programak eta haien komando-lerroko interfazeak dokumentazio integratuaren bidez dokumentatu daitezke."
 
 #. (itstool) path: variablelist/title
 #: C/index.docbook:1737
@@ -2107,7 +2128,7 @@ msgstr "@see_also:"
 #. (itstool) path: listitem/para
 #: C/index.docbook:1770
 msgid "See Also manual page section. (Optional)"
-msgstr "Eskuliburuaren 'Ikus halaber' orri-sekzioa. (Aukerakoa)"
+msgstr "Eskuliburuaren 'Ikus halaber' orri-atala. (Aukerakoa)"
 
 #. (itstool) path: varlistentry/term
 #: C/index.docbook:1777
@@ -2211,8 +2232,8 @@ msgstr ""
 #. (itstool) path: sect1/para
 #: C/index.docbook:1855
 msgid ""
-"To refer to an external function, e.g. a standard C function: <_:"
-"informalexample-1/>"
+"To refer to an external function, e.g. a standard C function: "
+"<_:informalexample-1/>"
 msgstr "Kanpoko funtzio bati, adibidez C funtzio estandar bati, erreferentzia egiteko: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
@@ -2366,9 +2387,9 @@ msgstr ""
 #. (itstool) path: sect1/para
 #: C/index.docbook:1940
 msgid ""
-"To refer to an external structure (not one described in the GTK docs): <_:"
-"informalexample-1/>"
-msgstr ""
+"To refer to an external structure (not one described in the GTK docs): "
+"<_:informalexample-1/>"
+msgstr "Kanpoko egitura bati (ez GTK dokumentuetan deskribatutako bati) erreferentzia egiteko: <_:informalexample-1/>"
 
 #. (itstool) path: informalexample/programlisting
 #: C/index.docbook:1952
@@ -2474,8 +2495,8 @@ msgid ""
 "If your library or application includes GObjects, you want their signals, "
 "arguments/parameters and position in the hierarchy to be shown in the "
 "documentation. All you need to do, is to list the <function>xxx_get_type</"
-"function> functions together with their include inside the <filename>&lt;"
-"package&gt;.types</filename> file."
+"function> functions together with their include inside the "
+"<filename>&lt;package&gt;.types</filename> file."
 msgstr ""
 
 #. (itstool) path: example/title
@@ -2553,7 +2574,7 @@ msgid ""
 "So what are the things to change inside the master document? For a start is "
 "only a little. There are some placeholders (text in square brackets) there "
 "which you should take care of."
-msgstr ""
+msgstr "Beraz, zein dira dokumentu maisuaren barruan aldatu behar diren gauzak? Hasteko, ezer gutxi. Badaude zenbait leku-marka (kortxete barruan dauden testuak), horiek zaindu behar dituzu."
 
 #. (itstool) path: example/title
 #: C/index.docbook:2078
@@ -2583,7 +2604,7 @@ msgstr ""
 msgid ""
 "In addition a few option elements are created in commented form. You can "
 "review these and enable them as you like."
-msgstr ""
+msgstr "Horrez gain, iruzkin modura sortzen diren aukerako elementu gutxi batzuk daude. Errepasatu horiek eta gaitu nahieran."
 
 #. (itstool) path: example/title
 #: C/index.docbook:2101
@@ -2599,6 +2620,10 @@ msgid ""
 "  &lt;xi:include href=\"xml/annotation-glossary.xml\"&gt;&lt;xi:fallback /&gt;&lt;/xi:include&gt;\n"
 "  --&gt;\n"
 msgstr ""
+"\n"
+"  &lt;!-- gaitu hau gobject introskpekzio-oharrak erabiltzen dituzunean\n"
+"  &lt;xi:include href=\"xml/annotation-glossary.xml\"&gt;&lt;xi:fallback /&gt;&lt;/xi:include&gt;\n"
+"  --&gt;\n"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2110
@@ -2611,7 +2636,7 @@ msgstr ""
 #. (itstool) path: example/title
 #: C/index.docbook:2118 C/index.docbook:2153
 msgid "Including generated sections"
-msgstr "Sortutako sekzioak sartzea"
+msgstr "Sortutako atalak sartzea"
 
 #. (itstool) path: example/programlisting
 #: C/index.docbook:2119
@@ -2623,11 +2648,16 @@ msgid ""
 "      &lt;xi:include href=\"xml/object.xml\"/&gt;\n"
 "      ...\n"
 msgstr ""
+"\n"
+"  &lt;kapitulua&gt;\n"
+"    &lt;izenburua&gt;nire liburutegia&lt;/title&gt;\n"
+"      &lt;xi:include href=\"xml/object.xml\"/&gt;\n"
+"      ...\n"
 
 #. (itstool) path: sect1/title
 #: C/index.docbook:2131
 msgid "Editing the section file"
-msgstr "Sekzioen fitxategia editatzea"
+msgstr "Atalen fitxategia editatzea"
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2133
@@ -2765,18 +2795,18 @@ msgstr ""
 #. (itstool) path: tip/para
 #: C/index.docbook:2258
 msgid ""
-"Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in Makefile."
-"am. If at least GTK-Doc 1.9 is installed, this will run sanity checks during "
-"<command>make check</command> run."
+"Enable or add the <option>TESTS=$(GTKDOC_CHECK)</option> line in "
+"Makefile.am. If at least GTK-Doc 1.9 is installed, this will run sanity "
+"checks during <command>make check</command> run."
 msgstr ""
 
 #. (itstool) path: chapter/para
 #: C/index.docbook:2265
 msgid ""
 "One can also look at the files produced by the source code scanner: "
-"<filename>&lt;package&gt;-decl-list.txt</filename> and <filename>&lt;"
-"package&gt;-decl.txt</filename>. The first one can be compared with the "
-"section file if that is manually maintained. The second lists all "
+"<filename>&lt;package&gt;-decl-list.txt</filename> and "
+"<filename>&lt;package&gt;-decl.txt</filename>. The first one can be compared "
+"with the section file if that is manually maintained. The second lists all "
 "declarations from the headers. If a symbol is missing one could check if "
 "this file contains it."
 msgstr ""
@@ -2786,11 +2816,12 @@ msgstr ""
 msgid ""
 "If the project is GObject based, one can also look into the files produced "
 "by the object scanner: <filename>&lt;package&gt;.args.txt</filename>, "
-"<filename>&lt;package&gt;.hierarchy.txt</filename>, <filename>&lt;"
-"package&gt;.interfaces.txt</filename>, <filename>&lt;package&gt;."
-"prerequisites.txt</filename> and <filename>&lt;package&gt;.signals.txt</"
-"filename>. If there are missing symbols in any of those, one can ask GTK-Doc "
-"to keep the intermediate scanner file for further analysis, by running it as "
+"<filename>&lt;package&gt;.hierarchy.txt</filename>, "
+"<filename>&lt;package&gt;.interfaces.txt</filename>, "
+"<filename>&lt;package&gt;.prerequisites.txt</filename> and "
+"<filename>&lt;package&gt;.signals.txt</filename>. If there are missing "
+"symbols in any of those, one can ask GTK-Doc to keep the intermediate "
+"scanner file for further analysis, by running it as "
 "<command>GTK_DOC_KEEP_INTERMEDIATE=1 make</command>."
 msgstr ""
 
@@ -2822,25 +2853,25 @@ msgstr ""
 #: C/index.docbook:2304
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-sections</option> in "
-"<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
-"package&gt;-sections.txt</filename> is autogenerated and can be removed from "
-"the vcs. This only works nicely for projects that have a very regular "
-"structure (e.g. each .{c,h} pair will create new section). If one organize a "
-"project close to that updating a manually maintained section file can be as "
-"simple as running <code>meld &lt;package&gt;-decl-list.txt &lt;package&gt;-"
-"sections.txt</code>."
+"<filename>Makefile.am</filename>. When this is enabled, the "
+"<filename>&lt;package&gt;-sections.txt</filename> is autogenerated and can "
+"be removed from the vcs. This only works nicely for projects that have a "
+"very regular structure (e.g. each .{c,h} pair will create new section). If "
+"one organize a project close to that updating a manually maintained section "
+"file can be as simple as running <code>meld &lt;package&gt;-decl-list.txt "
+"&lt;package&gt;-sections.txt</code>."
 msgstr ""
 
 #. (itstool) path: sect1/para
 #: C/index.docbook:2315
 msgid ""
 "Version 1.8 already introduced the syntax for documenting sections in the "
-"sources instead of the separate files under <filename class=\"directory"
-"\">tmpl</filename>. This version adds options to switch the whole doc module "
-"to not use the extra tmpl build step at all, by using <option>--flavour no-"
-"tmpl</option> in <filename>configure.ac</filename>. If you don't have a "
-"<filename class=\"directory\">tmpl</filename> checked into your source "
-"control system and haven't yet switched, just add the flag to "
+"sources instead of the separate files under <filename "
+"class=\"directory\">tmpl</filename>. This version adds options to switch the "
+"whole doc module to not use the extra tmpl build step at all, by using "
+"<option>--flavour no-tmpl</option> in <filename>configure.ac</filename>. If "
+"you don't have a <filename class=\"directory\">tmpl</filename> checked into "
+"your source control system and haven't yet switched, just add the flag to "
 "<filename>configure.ac</filename> and you are done."
 msgstr ""
 
@@ -2853,10 +2884,10 @@ msgstr "GTK-Doc 1.10"
 #: C/index.docbook:2329
 msgid ""
 "This version supports <option>SCAN_OPTIONS=--rebuild-types</option> in "
-"<filename>Makefile.am</filename>. When this is enabled, the <filename>&lt;"
-"package&gt;.types</filename> is autogenerated and can be removed from the "
-"vcs. When using this feature it is important to also setup the "
-"<varname>IGNORE_HFILES</varname> in <filename>Makefile.am</filename> for "
+"<filename>Makefile.am</filename>. When this is enabled, the "
+"<filename>&lt;package&gt;.types</filename> is autogenerated and can be "
+"removed from the vcs. When using this feature it is important to also setup "
+"the <varname>IGNORE_HFILES</varname> in <filename>Makefile.am</filename> for "
 "code that is build conditionally."
 msgstr ""
 
@@ -2985,11 +3016,11 @@ msgstr "Dokumentatu tresna"
 #. (itstool) path: sect2/para
 #: C/index.docbook:2429
 msgid ""
-"Create one refentry file per tool. Following <link linkend="
-"\"settingup_docfiles\">our example</link> we would call it <filename>meep/"
-"docs/reference/meeper/meep.xml</filename>. For the xml tags that should be "
-"used and can look at generated file in the xml subdirectory as well as "
-"examples e.g. in glib."
+"Create one refentry file per tool. Following <link "
+"linkend=\"settingup_docfiles\">our example</link> we would call it "
+"<filename>meep/docs/reference/meeper/meep.xml</filename>. For the xml tags "
+"that should be used and can look at generated file in the xml subdirectory "
+"as well as examples e.g. in glib."
 msgstr ""
 
 #. (itstool) path: sect2/title
@@ -3153,8 +3184,8 @@ msgstr "Ikur berri bat ez da agertzen dokumentuetan."
 msgid ""
 "Is the doc-comment properly formatted. Check for spelling mistakes in the "
 "begin of the comment. Check if the gtkdoc-fixxref warns about unresolvable "
-"xrefs. Check if the symbol is correctly listed in the <filename>&lt;"
-"package&gt;-sections.txt</filename> in a public subsection."
+"xrefs. Check if the symbol is correctly listed in the "
+"<filename>&lt;package&gt;-sections.txt</filename> in a public subsection."
 msgstr ""
 
 #. (itstool) path: seglistitem/seg
@@ -3278,8 +3309,8 @@ msgstr "USA"
 #. (itstool) path: para/address
 #: C/fdl-appendix.xml:20
 msgid ""
-"Free Software Foundation, Inc. <_:street-1/>, <_:city-2/>, <_:state-3/> <_:"
-"postcode-4/> <_:country-5/>"
+"Free Software Foundation, Inc. <_:street-1/>, <_:city-2/>, <_:state-3/> "
+"<_:postcode-4/> <_:country-5/>"
 msgstr "Free Software Foundation, Inc. <_:street-1/>, <_:city-2/>, <_:state-3/> <_:postcode-4/> <_:country-5/>"
 
 #. (itstool) path: legalnotice/para
@@ -3400,9 +3431,9 @@ msgstr "Bigarren mailako atala"
 #. (itstool) path: sect1/para
 #: C/fdl-appendix.xml:79
 msgid ""
-"A <_:quote-1/> is a named appendix or a front-matter section of the <_:"
-"link-2/> that deals exclusively with the relationship of the publishers or "
-"authors of the Document to the Document's overall subject (or to related "
+"A <_:quote-1/> is a named appendix or a front-matter section of the "
+"<_:link-2/> that deals exclusively with the relationship of the publishers "
+"or authors of the Document to the Document's overall subject (or to related "
 "matters) and contains nothing that could fall directly within that overall "
 "subject. (For example, if the Document is in part a textbook of mathematics, "
 "a Secondary Section may not explain any mathematics.) The relationship could "
@@ -3428,8 +3459,8 @@ msgstr "Bigarren mailako atalak"
 #: C/fdl-appendix.xml:94
 msgid ""
 "The <_:quote-1/> are certain <_:link-2/> whose titles are designated, as "
-"being those of Invariant Sections, in the notice that says that the <_:"
-"link-3/> is released under this License."
+"being those of Invariant Sections, in the notice that says that the "
+"<_:link-3/> is released under this License."
 msgstr ""
 
 #. (itstool) path: para/quote
@@ -3443,8 +3474,8 @@ msgstr "Azaleko testuak"
 #: C/fdl-appendix.xml:103
 msgid ""
 "The <_:quote-1/> are certain short passages of text that are listed, as "
-"Front-Cover Texts or Back-Cover Texts, in the notice that says that the <_:"
-"link-2/> is released under this License."
+"Front-Cover Texts or Back-Cover Texts, in the notice that says that the "
+"<_:link-2/> is released under this License."
 msgstr ""
 
 #. (itstool) path: para/quote
@@ -3514,7 +3545,7 @@ msgstr "2. KOPIA LITERALAK"
 #. (itstool) path: para/link
 #: C/fdl-appendix.xml:166 C/fdl-appendix.xml:551
 msgid "section 3"
-msgstr "3. sekzioa"
+msgstr "3. atala"
 
 #. (itstool) path: sect1/para
 #: C/fdl-appendix.xml:154
@@ -3585,9 +3616,9 @@ msgstr "<_:link-2/> dokumentuaren 100 kopia <_:link-1/> argitaratzen edo banatze
 #. (itstool) path: sect1/para
 #: C/fdl-appendix.xml:222
 msgid ""
-"It is requested, but not required, that you contact the authors of the <_:"
-"link-1/> well before redistributing any large number of copies, to give them "
-"a chance to provide you with an updated version of the Document."
+"It is requested, but not required, that you contact the authors of the "
+"<_:link-1/> well before redistributing any large number of copies, to give "
+"them a chance to provide you with an updated version of the Document."
 msgstr "Bestalde, <_:link-1/> dokumentuaren kopiak kantitate handian birbanatzen hasi aurretik, autoreekin harremanetan jar zaitezen eskatzen zaizu, behartu gabe, Dokumentuaren bertsio eguneratua eman ahal izan diezazuten."
 
 #. (itstool) path: sect1/title
@@ -3614,7 +3645,7 @@ msgid ""
 "Version filling the role of the Document, thus licensing distribution and "
 "modification of the Modified Version to whoever possesses a copy of it. In "
 "addition, you must do these things in the Modified Version:"
-msgstr ""
+msgstr "<_:link-2/> dokumentuaren <_:link-1/> kopiatu eta banatu dezakezu baldin eta hemen goiko <_:link-3/> eta <_:link-4/> ataletako baldintzak betetzen badituzu, kontuan izanik betiere Bertsio aldatua Lizentzia honen pean banatu behar duzula, Bertsio aldatua izanik Dokumentuaren funtzioa beteko duena, eta, beraz, Bertsio aldatua banatzeko edo aldatzeko baimena eman behar diozula kopia bat duen edonori. Horrez gainera, honako hauek egin behar dituzu Bertsio Aldatuan:"
 
 #. (itstool) path: formalpara/title
 #: C/fdl-appendix.xml:248
@@ -3629,7 +3660,7 @@ msgid ""
 "if there were any, be listed in the History section of the Document). You "
 "may use the same title as a previous version if the original publisher of "
 "that version gives permission."
-msgstr ""
+msgstr "<_:link-1/> izenburuan (eta azaletan, azalik badu) <_:link-2/> eta aurreko bertsioena ez den beste edozein titulu bat erabili behar duzu (aurreko bertsiorik badago, Dokumentuaren Historiaren atalean zerrendatuta egongo da). Aurreko bertsio horietako baten titulu bera erabil dezakezu, baldin eta jatorrizko argitaratzaileak horretarako baimena ematen badu."
 
 #. (itstool) path: formalpara/title
 #: C/fdl-appendix.xml:264
@@ -3707,7 +3738,7 @@ msgstr "Dokumentuaren"
 msgid ""
 "Preserve in that license notice the full lists of <_:link-1/> and required "
 "<_:link-2/> given in the <_:link-3/> license notice."
-msgstr ""
+msgstr "Lizentzia-ohar horretan <_:link-3/> lizentzia-oharrean adierazitako <_:link-1/> eta jarri beharreko <_:link-2/> guztien zerrenda gorde behar duzu."
 
 #. (itstool) path: formalpara/title
 #: C/fdl-appendix.xml:337
@@ -3734,11 +3765,11 @@ msgstr "Historia"
 #: C/fdl-appendix.xml:347
 msgid ""
 "Preserve the section entitled <_:quote-1/>, and its title, and add to it an "
-"item stating at least the title, year, new authors, and publisher of the <_:"
-"link-2/> as given on the <_:link-3/>. If there is no section entitled <_:"
-"quote-4/> in the <_:link-5/>, create one stating the title, year, authors, "
-"and publisher of the Document as given on its Title Page, then add an item "
-"describing the Modified Version as stated in the previous sentence."
+"item stating at least the title, year, new authors, and publisher of the "
+"<_:link-2/> as given on the <_:link-3/>. If there is no section entitled "
+"<_:quote-4/> in the <_:link-5/>, create one stating the title, year, "
+"authors, and publisher of the Document as given on its Title Page, then add "
+"an item describing the Modified Version as stated in the previous sentence."
 msgstr ""
 
 #. (itstool) path: formalpara/title
@@ -3779,7 +3810,7 @@ msgid ""
 "In any section entitled <_:quote-1/> or <_:quote-2/>, preserve the section's "
 "title, and preserve in the section all the substance and tone of each of the "
 "contributor acknowledgements and/or dedications given therein."
-msgstr ""
+msgstr "<_:quote-1/> edo <_:quote-2/> izeneko edozein ataletan, atalaren titulua gorde behar da, eta ataleko eskertza edota eskaintza bakoitzean egileak darabilen gai eta tonua errespetatu behar dira."
 
 #. (itstool) path: formalpara/title
 #: C/fdl-appendix.xml:396
@@ -3991,14 +4022,14 @@ msgstr "8. ITZULPENA"
 #: C/fdl-appendix.xml:562
 msgid ""
 "Translation is considered a kind of modification, so you may distribute "
-"translations of the <_:link-1/> under the terms of <_:link-2/>. Replacing <_:"
-"link-3/> with translations requires special permission from their copyright "
-"holders, but you may include translations of some or all Invariant Sections "
-"in addition to the original versions of these Invariant Sections. You may "
-"include a translation of this License provided that you also include the "
-"original English version of this License. In case of a disagreement between "
-"the translation and the original English version of this License, the "
-"original English version will prevail."
+"translations of the <_:link-1/> under the terms of <_:link-2/>. Replacing "
+"<_:link-3/> with translations requires special permission from their "
+"copyright holders, but you may include translations of some or all Invariant "
+"Sections in addition to the original versions of these Invariant Sections. "
+"You may include a translation of this License provided that you also include "
+"the original English version of this License. In case of a disagreement "
+"between the translation and the original English version of this License, "
+"the original English version will prevail."
 msgstr ""
 
 #. (itstool) path: sect1/title
@@ -4050,8 +4081,8 @@ msgstr "edo bertsio berriagoak"
 #: C/fdl-appendix.xml:606
 msgid ""
 "Each version of the License is given a distinguishing version number. If the "
-"<_:link-1/> specifies that a particular numbered version of this License <_:"
-"quote-2/> applies to it, you have the option of following the terms and "
+"<_:link-1/> specifies that a particular numbered version of this License "
+"<_:quote-2/> applies to it, you have the option of following the terms and "
 "conditions either of that specified version or of any later version that has "
 "been published (not as a draft) by the Free Software Foundation. If the "
 "Document does not specify a version number of this License, you may choose "
@@ -4092,8 +4123,8 @@ msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the GNU Free Documentation License, Version 1.1 or any later "
 "version published by the Free Software Foundation; with the <_:link-1/> "
-"being LIST THEIR TITLES, with the <_:link-2/> being LIST, and with the <_:"
-"link-3/> being LIST. A copy of the license is included in the section "
+"being LIST THEIR TITLES, with the <_:link-2/> being LIST, and with the "
+"<_:link-3/> being LIST. A copy of the license is included in the section "
 "entitled <_:quote-4/>."
 msgstr ""
 
@@ -4116,8 +4147,8 @@ msgstr ""
 #: C/fdl-appendix.xml:647
 msgid ""
 "If you have no <_:link-1/>, write <_:quote-2/> instead of saying which ones "
-"are invariant. If you have no <_:link-3/>, write <_:quote-4/> instead of <_:"
-"quote-5/>; likewise for <_:link-6/>."
+"are invariant. If you have no <_:link-3/>, write <_:quote-4/> instead of "
+"<_:quote-5/>; likewise for <_:link-6/>."
 msgstr ""
 
 #. (itstool) path: para/ulink
@@ -4227,9 +4258,9 @@ msgstr ""
 #~ "linkend=\"fdl-document\">Document</link> is released under this License."
 #~ msgstr ""
 #~ "<quote>Atal aldaezinak</quote> <link  linkend=\"fdl-secondary\">Atal "
-#~ "sekundario</link> jakin batzuk dira; <link linkend=\"fdl-document"
-#~ "\">Dokumentua</link> Lizentzia honen baldintzen pean argitaratzen dela "
-#~ "esaten duen oharrean zehazten dira Atal aldaezinen izenburuak."
+#~ "sekundario</link> jakin batzuk dira; <link linkend=\"fdl-"
+#~ "document\">Dokumentua</link> Lizentzia honen baldintzen pean argitaratzen "
+#~ "dela esaten duen oharrean zehazten dira Atal aldaezinen izenburuak."
 
 #~ msgid ""
 #~ "The <quote>Cover Texts</quote> are certain short passages of text that "
@@ -4238,9 +4269,9 @@ msgstr ""
 #~ "under this License."
 #~ msgstr ""
 #~ "<quote>Azaleko testuak</quote> testu zati laburrak dira eta Aurreko "
-#~ "azaleko testu edo Atzeko azaleko testu gisa aipatzen dira <link linkend="
-#~ "\"fdl-document\">Dokumentua</link> Lizentzia honen pean argitaratzen dela "
-#~ "dioen oharrean."
+#~ "azaleko testu edo Atzeko azaleko testu gisa aipatzen dira <link "
+#~ "linkend=\"fdl-document\">Dokumentua</link> Lizentzia honen pean "
+#~ "argitaratzen dela dioen oharrean."
 
 #~ msgid ""
 #~ "A <quote>Transparent</quote> copy of the <link linkend=\"fdl-document\"> "
@@ -4310,18 +4341,18 @@ msgstr ""
 #~ "bete behar dituzu."
 
 #~ msgid ""
-#~ "If you publish printed copies of the <link linkend=\"fdl-document"
-#~ "\">Document</link> numbering more than 100, and the Document's license "
-#~ "notice requires <link linkend=\"fdl-cover-texts\">Cover Texts</link>, you "
-#~ "must enclose the copies in covers that carry, clearly and legibly, all "
-#~ "these Cover Texts: Front-Cover Texts on the front cover, and Back-Cover "
-#~ "Texts on the back cover. Both covers must also clearly and legibly "
-#~ "identify you as the publisher of these copies. The front cover must "
-#~ "present the full title with all words of the title equally prominent and "
-#~ "visible. You may add other material on the covers in addition. Copying "
-#~ "with changes limited to the covers, as long as they preserve the title of "
-#~ "the <link linkend=\"fdl-document\">Document</link> and satisfy these "
-#~ "conditions, can be treated as verbatim copying in other respects."
+#~ "If you publish printed copies of the <link linkend=\"fdl-"
+#~ "document\">Document</link> numbering more than 100, and the Document's "
+#~ "license notice requires <link linkend=\"fdl-cover-texts\">Cover Texts</"
+#~ "link>, you must enclose the copies in covers that carry, clearly and "
+#~ "legibly, all these Cover Texts: Front-Cover Texts on the front cover, and "
+#~ "Back-Cover Texts on the back cover. Both covers must also clearly and "
+#~ "legibly identify you as the publisher of these copies. The front cover "
+#~ "must present the full title with all words of the title equally prominent "
+#~ "and visible. You may add other material on the covers in addition. "
+#~ "Copying with changes limited to the covers, as long as they preserve the "
+#~ "title of the <link linkend=\"fdl-document\">Document</link> and satisfy "
+#~ "these conditions, can be treated as verbatim copying in other respects."
 #~ msgstr ""
 #~ "<link linkend=\"fdl-document\">Dokumentu</link>aren 100 kopia baino "
 #~ "gehiago argitaratzen badituzu, eta Dokumentuaren lizentzia-oharrak <link "
@@ -4333,10 +4364,10 @@ msgstr ""
 #~ "azalak titulu osoa izan behar du, eta tituluaren hitz guztiak maila "
 #~ "berdinean izan behar dute nabarmenak eta ikusteko modukoak. Horrez "
 #~ "gainera, beste material batzuk ere gehi ditzakezu azaletan. Azaletara "
-#~ "mugatutako aldaketekin egindako kopiak, <link linkend=\"fdl-document"
-#~ "\">Dokumentu</link>aren titulua mantentzen bada eta baldintza horiek "
-#~ "betez egiten badira, kopia literaltzat jo daiteke beste alderdi batzuei "
-#~ "dagokienez."
+#~ "mugatutako aldaketekin egindako kopiak, <link linkend=\"fdl-"
+#~ "document\">Dokumentu</link>aren titulua mantentzen bada eta baldintza "
+#~ "horiek betez egiten badira, kopia literaltzat jo daiteke beste alderdi "
+#~ "batzuei dagokienez."
 
 #~ msgid ""
 #~ "If you publish or distribute <link linkend=\"fdl-transparent\">Opaque</"
@@ -4394,13 +4425,13 @@ msgstr ""
 #~ msgstr ""
 #~ "<link linkend=\"fdl-document\">Dokumentu</link>aren <link linkend=\"fdl-"
 #~ "modified\">Bertsio aldatua</link> kopiatu eta banatu dezakezu baldin eta "
-#~ "hemen goiko <link linkend=\"fdl-section2\">2</link> eta <link linkend="
-#~ "\"fdl-section3\">3</link> ataletako baldintzak betetzen badituzu, kontuan "
-#~ "izanik betiere Bertsio aldatua Lizentzia honen pean banatu behar duzula, "
-#~ "Bertsio aldatua izanik Dokumentuaren funtzioa beteko duena, eta, beraz, "
-#~ "Bertsio aldatua banatzeko edo aldatzeko baimena eman behar diozula kopia "
-#~ "bat duen edonori. Horrez gainera, honako hauek egin behar dituzu Bertsio "
-#~ "Aldatuan:"
+#~ "hemen goiko <link linkend=\"fdl-section2\">2</link> eta <link "
+#~ "linkend=\"fdl-section3\">3</link> ataletako baldintzak betetzen badituzu, "
+#~ "kontuan izanik betiere Bertsio aldatua Lizentzia honen pean banatu behar "
+#~ "duzula, Bertsio aldatua izanik Dokumentuaren funtzioa beteko duena, eta, "
+#~ "beraz, Bertsio aldatua banatzeko edo aldatzeko baimena eman behar diozula "
+#~ "kopia bat duen edonori. Horrez gainera, honako hauek egin behar dituzu "
+#~ "Bertsio Aldatuan:"
 
 #~ msgid ""
 #~ "Use in the <link linkend=\"fdl-title-page\">Title Page</link> (and on the "
@@ -4437,13 +4468,13 @@ msgstr ""
 #~ "of the publisher of the <link linkend=\"fdl-modified\">Modified Version</"
 #~ "link>, as the publisher."
 #~ msgstr ""
-#~ "<link linkend=\"fdl-title-page\">Titulu-orri</link>an <link  linkend="
-#~ "\"fdl-modified\">Bertsio aldatu</link>aren argitaratzailearen izena jarri "
-#~ "behar duzu, argitaratzaile gisa."
+#~ "<link linkend=\"fdl-title-page\">Titulu-orri</link>an <link  "
+#~ "linkend=\"fdl-modified\">Bertsio aldatu</link>aren argitaratzailearen "
+#~ "izena jarri behar duzu, argitaratzaile gisa."
 
 #~ msgid ""
-#~ "Preserve all the copyright notices of the <link linkend=\"fdl-document"
-#~ "\">Document</link>."
+#~ "Preserve all the copyright notices of the <link linkend=\"fdl-"
+#~ "document\">Document</link>."
 #~ msgstr ""
 #~ "<link  linkend=\"fdl-document\">Dokumentu</link>aren copyright-ohar "
 #~ "guztiak gorde behar dituzu."
@@ -4462,24 +4493,24 @@ msgstr ""
 #~ msgid ""
 #~ "Preserve in that license notice the full lists of <link linkend=\"fdl-"
 #~ "invariant\"> Invariant Sections</link> and required <link linkend=\"fdl-"
-#~ "cover-texts\">Cover Texts</link> given in the <link linkend=\"fdl-document"
-#~ "\">Document's</link> license notice."
+#~ "cover-texts\">Cover Texts</link> given in the <link linkend=\"fdl-"
+#~ "document\">Document's</link> license notice."
 #~ msgstr ""
 #~ "Lizentzia-ohar horretan <link  linkend=\"fdl-document\">Dokumentu</"
-#~ "link>aren lizentzia-oharrean adierazitako <link  linkend=\"fdl-invariant"
-#~ "\">Atal aldaezin</link> eta jarri beharreko <link linkend=\"fdl-cover-"
-#~ "texts\">Azaleko testu</link> guztien zerrenda gorde behar duzu."
+#~ "link>aren lizentzia-oharrean adierazitako <link  linkend=\"fdl-"
+#~ "invariant\">Atal aldaezin</link> eta jarri beharreko <link linkend=\"fdl-"
+#~ "cover-texts\">Azaleko testu</link> guztien zerrenda gorde behar duzu."
 
 #~ msgid ""
 #~ "Preserve the section entitled <quote>History</quote>, and its title, and "
 #~ "add to it an item stating at least the title, year, new authors, and "
 #~ "publisher of the <link linkend=\"fdl-modified\">Modified Version</link> "
 #~ "as given on the <link linkend=\"fdl-title-page\">Title Page</link>. If "
-#~ "there is no section entitled <quote>History</quote> in the <link linkend="
-#~ "\"fdl-document\">Document</link>, create one stating the title, year, "
-#~ "authors, and publisher of the Document as given on its Title Page, then "
-#~ "add an item describing the Modified Version as stated in the previous "
-#~ "sentence."
+#~ "there is no section entitled <quote>History</quote> in the <link "
+#~ "linkend=\"fdl-document\">Document</link>, create one stating the title, "
+#~ "year, authors, and publisher of the Document as given on its Title Page, "
+#~ "then add an item describing the Modified Version as stated in the "
+#~ "previous sentence."
 #~ msgstr ""
 #~ "<quote>Historia</quote> izeneko atala gorde behar duzu, baita bere "
 #~ "titulua ere, eta gutxienez <link linkend=\"fdl-modified\">Bertsio "
@@ -4554,29 +4585,30 @@ msgstr ""
 
 #~ msgid ""
 #~ "If the <link linkend=\"fdl-modified\">Modified Version</link> includes "
-#~ "new front-matter sections or appendices that qualify as <link linkend="
-#~ "\"fdl-secondary\">Secondary Sections</link> and contain no material "
-#~ "copied from the Document, you may at your option designate some or all of "
-#~ "these sections as invariant. To do this, add their titles to the list of "
-#~ "<link linkend=\"fdl-invariant\">Invariant Sections</link> in the Modified "
-#~ "Version's license notice. These titles must be distinct from any other "
-#~ "section titles."
+#~ "new front-matter sections or appendices that qualify as <link "
+#~ "linkend=\"fdl-secondary\">Secondary Sections</link> and contain no "
+#~ "material copied from the Document, you may at your option designate some "
+#~ "or all of these sections as invariant. To do this, add their titles to "
+#~ "the list of <link linkend=\"fdl-invariant\">Invariant Sections</link> in "
+#~ "the Modified Version's license notice. These titles must be distinct from "
+#~ "any other section titles."
 #~ msgstr ""
 #~ "<link linkend=\"fdl-modified\">Bertsio aldatuak</link> gai nagusiari "
-#~ "buruzko atal berriak edo eranskinak baditu, <link linkend=\"fdl-secondary"
-#~ "\">Atal Sekundario</link> gisa agertzen direnak, eta elementu horiek "
-#~ "Dokumentutik kopiatutako materialik ez badute, atal horietako batzuk edo "
-#~ "denak aldaezin izenda ditzakezu zuk hala nahi izanez gero. Horretarako, "
-#~ "gehitu atal horien tituluak <link linkend=\"fdl-invariant\">Atal "
-#~ "aldaezin</link>en zerrendan, Bertsio aldatuaren lizentzia-oharrean. "
-#~ "Titulu horiek gainerako atalen tituluen ezberdinak izan behar dute."
+#~ "buruzko atal berriak edo eranskinak baditu, <link linkend=\"fdl-"
+#~ "secondary\">Atal Sekundario</link> gisa agertzen direnak, eta elementu "
+#~ "horiek Dokumentutik kopiatutako materialik ez badute, atal horietako "
+#~ "batzuk edo denak aldaezin izenda ditzakezu zuk hala nahi izanez gero. "
+#~ "Horretarako, gehitu atal horien tituluak <link linkend=\"fdl-"
+#~ "invariant\">Atal aldaezin</link>en zerrendan, Bertsio aldatuaren "
+#~ "lizentzia-oharrean. Titulu horiek gainerako atalen tituluen ezberdinak "
+#~ "izan behar dute."
 
 #~ msgid ""
 #~ "You may add a section entitled <quote>Endorsements</quote>, provided it "
-#~ "contains nothing but endorsements of your <link linkend=\"fdl-modified"
-#~ "\">Modified Version</link> by various parties--for example, statements of "
-#~ "peer review or that the text has been approved by an organization as the "
-#~ "authoritative definition of a standard."
+#~ "contains nothing but endorsements of your <link linkend=\"fdl-"
+#~ "modified\">Modified Version</link> by various parties--for example, "
+#~ "statements of peer review or that the text has been approved by an "
+#~ "organization as the authoritative definition of a standard."
 #~ msgstr ""
 #~ "<quote>Oniritziak</quote> titulua duen atala gehi dezakezu, baldin eta "
 #~ "zure <link linkend=\"fdl-modified\">Bertsio aldatu</link>ari buruz "
@@ -4612,10 +4644,10 @@ msgstr ""
 #~ "zuen argitaratzailearen baimen esplizitua baldin baduzu."
 
 #~ msgid ""
-#~ "The author(s) and publisher(s) of the <link linkend=\"fdl-document"
-#~ "\">Document</link> do not by this License give permission to use their "
-#~ "names for publicity for or to assert or imply endorsement of any <link "
-#~ "linkend=\"fdl-modified\">Modified Version </link>."
+#~ "The author(s) and publisher(s) of the <link linkend=\"fdl-"
+#~ "document\">Document</link> do not by this License give permission to use "
+#~ "their names for publicity for or to assert or imply endorsement of any "
+#~ "<link linkend=\"fdl-modified\">Modified Version </link>."
 #~ msgstr ""
 #~ "Lizentzia honen bidez <link linkend=\"fdl-document\">Dokumentu</link>aren "
 #~ "autoreak (edo autoreek) eta argitaratzaileak (edo argitaratzaileek) ez "
@@ -4635,10 +4667,10 @@ msgstr ""
 #~ "Lizentzia honen pean argitaratutako beste dokumentu batzuekin konbina "
 #~ "dezakezu <link linkend=\"fdl-document\">Dokumentua</link>, goian <link "
 #~ "linkend=\"fdl-section4\">4. atalean</link> biltzen diren baldintzak "
-#~ "betetzen badituzu eta bateratzean jatorrizko dokumentuen <link linkend="
-#~ "\"fdl-invariant\">Atal aldaezin</link> guztiak sartzen badituzu aldatu "
-#~ "gabe eta guztiak Atal aldaezin gisa zerrendatuta zure lan konbinatuaren "
-#~ "lizentzia-oharrean."
+#~ "betetzen badituzu eta bateratzean jatorrizko dokumentuen <link "
+#~ "linkend=\"fdl-invariant\">Atal aldaezin</link> guztiak sartzen badituzu "
+#~ "aldatu gabe eta guztiak Atal aldaezin gisa zerrendatuta zure lan "
+#~ "konbinatuaren lizentzia-oharrean."
 
 #~ msgid ""
 #~ "The combined work need only contain one copy of this License, and "
@@ -4675,12 +4707,12 @@ msgstr ""
 #~ "egin behar dituzu."
 
 #~ msgid ""
-#~ "You may make a collection consisting of the <link linkend=\"fdl-document"
-#~ "\">Document</link> and other documents released under this License, and "
-#~ "replace the individual copies of this License in the various documents "
-#~ "with a single copy that is included in the collection, provided that you "
-#~ "follow the rules of this License for verbatim copying of each of the "
-#~ "documents in all other respects."
+#~ "You may make a collection consisting of the <link linkend=\"fdl-"
+#~ "document\">Document</link> and other documents released under this "
+#~ "License, and replace the individual copies of this License in the various "
+#~ "documents with a single copy that is included in the collection, provided "
+#~ "that you follow the rules of this License for verbatim copying of each of "
+#~ "the documents in all other respects."
 #~ msgstr ""
 #~ "<link  linkend=\"fdl-document\">Dokumentu</link> honekin eta lizentzia "
 #~ "honekin argitaratutako beste dokumentu batzuekin bilduma bat osa "
@@ -4736,25 +4768,25 @@ msgstr ""
 #~ "between the translation and the original English version of this License, "
 #~ "the original English version will prevail."
 #~ msgstr ""
-#~ "Itzulpena aldaketatzat jotzen da, eta, beraz, <link linkend=\"fdl-document"
-#~ "\">Dokumentu</link>aren itzulpenak <link linkend=\"fdl-section4\">4. "
-#~ "ataleko</link> baldintzen pean banatu ditzakezu. <link linkend=\"fdl-"
-#~ "invariant\"> Atal aldaezin</link>en ordez itzulpena bakarrik jartzeko, "
-#~ "copyright-jabeen baimena behar da, baina Atal aldaezin batzuen edo "
-#~ "guztien itzulpenak jar ditzakezu Atal aldaezin horien jatorrizko "
-#~ "bertsioekin batera. Lizentzia honen itzulpena ere jar dezakezu, baldin "
-#~ "eta ingelesezko jatorrizko bertsioa ere jartzen baduzu. Lizentzia honen "
-#~ "itzulpena eta jatorrizko ingelesezko bertsioa bat ez badatoz, jatorrizko "
-#~ "bertsioak balioko du."
+#~ "Itzulpena aldaketatzat jotzen da, eta, beraz, <link linkend=\"fdl-"
+#~ "document\">Dokumentu</link>aren itzulpenak <link linkend=\"fdl-"
+#~ "section4\">4. ataleko</link> baldintzen pean banatu ditzakezu. <link "
+#~ "linkend=\"fdl-invariant\"> Atal aldaezin</link>en ordez itzulpena "
+#~ "bakarrik jartzeko, copyright-jabeen baimena behar da, baina Atal aldaezin "
+#~ "batzuen edo guztien itzulpenak jar ditzakezu Atal aldaezin horien "
+#~ "jatorrizko bertsioekin batera. Lizentzia honen itzulpena ere jar "
+#~ "dezakezu, baldin eta ingelesezko jatorrizko bertsioa ere jartzen baduzu. "
+#~ "Lizentzia honen itzulpena eta jatorrizko ingelesezko bertsioa bat ez "
+#~ "badatoz, jatorrizko bertsioak balioko du."
 
 #~ msgid ""
-#~ "You may not copy, modify, sublicense, or distribute the <link linkend="
-#~ "\"fdl-document\">Document</link> except as expressly provided for under "
-#~ "this License. Any other attempt to copy, modify, sublicense or distribute "
-#~ "the Document is void, and will automatically terminate your rights under "
-#~ "this License. However, parties who have received copies, or rights, from "
-#~ "you under this License will not have their licenses terminated so long as "
-#~ "such parties remain in full compliance."
+#~ "You may not copy, modify, sublicense, or distribute the <link "
+#~ "linkend=\"fdl-document\">Document</link> except as expressly provided for "
+#~ "under this License. Any other attempt to copy, modify, sublicense or "
+#~ "distribute the Document is void, and will automatically terminate your "
+#~ "rights under this License. However, parties who have received copies, or "
+#~ "rights, from you under this License will not have their licenses "
+#~ "terminated so long as such parties remain in full compliance."
 #~ msgstr ""
 #~ "Lizentzia honen baitan espresuki adierazitakoa betetzen ez bada, "
 #~ "debekatuta dago <link linkend=\"fdl-document\">Dokumentua</link> "
@@ -4778,8 +4810,8 @@ msgstr ""
 #~ "Lizentziaren bertsio berrituak eta birmoldatuak argitaratuko ditu. "
 #~ "Bertsio berri horiek egungoaren antzekoak izango dira espirituz, baina, "
 #~ "arazo edo kezka berriei aurre egin beharko dietenez, litekeena da zehatz-"
-#~ "mehatz bat ez etortzea. Ikus <ulink type=\"http\" url=\"http://www.gnu."
-#~ "org/copyleft\">http://www.gnu.org/copyleft/</ulink>."
+#~ "mehatz bat ez etortzea. Ikus <ulink type=\"http\" url=\"http://"
+#~ "www.gnu.org/copyleft\">http://www.gnu.org/copyleft/</ulink>."
 
 #~ msgid ""
 #~ "Each version of the License is given a distinguishing version number. If "
@@ -4825,10 +4857,10 @@ msgstr ""
 #~ msgid ""
 #~ "If you have no <link linkend=\"fdl-invariant\">Invariant Sections</link>, "
 #~ "write <quote>with no Invariant Sections</quote> instead of saying which "
-#~ "ones are invariant. If you have no <link linkend=\"fdl-cover-texts"
-#~ "\">Front-Cover Texts</link>, write <quote>no Front-Cover Texts</quote> "
-#~ "instead of <quote>Front-Cover Texts being LIST</quote>; likewise for "
-#~ "<link linkend=\"fdl-cover-texts\">Back-Cover Texts</link>."
+#~ "ones are invariant. If you have no <link linkend=\"fdl-cover-"
+#~ "texts\">Front-Cover Texts</link>, write <quote>no Front-Cover Texts</"
+#~ "quote> instead of <quote>Front-Cover Texts being LIST</quote>; likewise "
+#~ "for <link linkend=\"fdl-cover-texts\">Back-Cover Texts</link>."
 #~ msgstr ""
 #~ "<link linkend=\"fdl-invariant\">Atal aldaezin</link>ik ez baduzu, idatzi "
 #~ "<quote>Atal aldaezinik gabe</quote> aldaezinak zein diren adierazi "
@@ -4841,13 +4873,13 @@ msgstr ""
 #~ msgid ""
 #~ "If your document contains nontrivial examples of program code, we "
 #~ "recommend releasing these examples in parallel under your choice of free "
-#~ "software license, such as the <ulink type=\"http\" url=\"http://www.gnu."
-#~ "org/copyleft/gpl.html\"> GNU General Public License</ulink>, to permit "
-#~ "their use in free software."
+#~ "software license, such as the <ulink type=\"http\" url=\"http://"
+#~ "www.gnu.org/copyleft/gpl.html\"> GNU General Public License</ulink>, to "
+#~ "permit their use in free software."
 #~ msgstr ""
 #~ "Zure dokumentuan programa-kodearen adibide ez-tribialik baldin badago, "
 #~ "adibide horiek paraleloan argitaratzea gomendatzen dizugu eta zeuk "
-#~ "aukeratu software librearen lizentzia eman nahi diezun, <ulink type=\"http"
-#~ "\"  url=\"http://www.gnu.org/copyleft/gpl.html\">GNU Lizentzia Publiko "
-#~ "Orokorra</ulink> lizentzian esaterako, software libre gisa erabil ahal "
-#~ "izan daitezen."
+#~ "aukeratu software librearen lizentzia eman nahi diezun, <ulink "
+#~ "type=\"http\"  url=\"http://www.gnu.org/copyleft/gpl.html\">GNU Lizentzia "
+#~ "Publiko Orokorra</ulink> lizentzian esaterako, software libre gisa erabil "
+#~ "ahal izan daitezen."
