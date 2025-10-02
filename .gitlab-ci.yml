@@ -1,0 +1,17 @@
+include:
+  - project: "GNOME/citemplates"
+    file: "templates/default-rules.yml"
+  - component: "gitlab.gnome.org/GNOME/citemplates/gnomeos-basic-ci@master"
+    inputs:
+      before-script: >-
+        pip install --user parameterized
+      meson-test-options: >-
+        # Meson can not exclude individual tests, only test-suites
+        # https://github.com/mesonbuild/meson/issues/6999
+        "--exclude "test-gobject-mkhtml"
+      scan-build: "disabled"
+      run-tests: "no"
+  - component: "gitlab.gnome.org/GNOME/citemplates/release-service@master"
+    inputs:
+      dist-job-name: "build-gnomeos"
+
