@@ -112,12 +112,7 @@ test(
     'tester',
     join_paths('..', 'tester-docs.xml'),
     '--uninstalled',
-    '--path=@0@'.format(':'.join([
-      gobject_test_docs_dir,
-      srcdir,
-      join_paths(srcdir, 'tests', 'gobject', 'examples'),
-      ])
-    ),
+    '--path=@0@'.format(join_paths(srcdir, 'tests', 'gobject', 'examples')),
   ],
 )
 
