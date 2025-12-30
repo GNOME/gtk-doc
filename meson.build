@@ -8,7 +8,12 @@ fs = import('fs')
 gnome = import('gnome')
 python = import('python')
 
-python3 = python.find_installation('python3', modules: ['pygments'])
+required_python_modules = ['pygments']
+if get_option('tests')
+  required_python_modules += ['parameterized']
+endif
+
+python3 = python.find_installation('python3', modules: required_python_modules)
 
 # Paths
 srcdir = meson.current_source_dir()
