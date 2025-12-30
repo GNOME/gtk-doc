@@ -115,6 +115,7 @@ test(
     '--path=@0@'.format(':'.join([
       gobject_test_docs_dir,
       srcdir,
+      join_paths(srcdir, 'tests', 'gobject', 'examples'),
       ])
     ),
   ],
