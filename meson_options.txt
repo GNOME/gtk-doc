@@ -19,5 +19,5 @@ option(
 option(
   'tests',
   type: 'boolean', value: true,
-  description: 'Build the test suite (requires glib)'
+  description: 'Build the test suite (requires glib and the parameterized python module)'
 )
