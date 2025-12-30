@@ -109,8 +109,8 @@ test(
     '--binary-dir=@0@'.format(builddir),
     '--change-dir=@0@'.format(join_paths(gobject_test_output_dir, 'html')),
     '--html-assets=@0@'.format('@@'.join(gobject_test_html_data)),
-    '@0@'.format('tester'),
-    '@0@'.format(join_paths('..', 'tester-docs.xml')),
+    'tester',
+    join_paths('..', 'tester-docs.xml'),
     '--uninstalled',
     '--path=@0@'.format(':'.join([
       gobject_test_docs_dir,
