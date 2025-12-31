@@ -1,16 +1,6 @@
 GTK-Doc - Documentation generator for C code
 ============================================
 
-Important message
------------------
-
-To generate the `api-index-*.html` files, you need to use docbook-style-xsl
-version 1.79.1, not the latest version.
-
-See:
-- https://sourceforge.net/p/docbook/bugs/1401/
-- https://gitlab.gnome.org/GNOME/gtk-doc/-/issues/36
-
 Introduction
 ------------
 
@@ -19,17 +9,28 @@ API of libraries, such as GLib-based libraries, but it can also be used to
 document application code.
 
 Note that GTK-Doc wasn't originally intended to be a general-purpose
-documentation tool, so it can be a bit awkward to setup and use.
-For a more general-purpose documentation tool you may want to look at
-Doxygen (http://www.doxygen.org/). However GTK-Doc has some special code to
+documentation tool, so it can be a bit awkward to setup and use. For a more
+general-purpose documentation tool you may want to look at
+[Doxygen](https://www.doxygen.nl/). However GTK-Doc has some special code to
 document the signals and properties of GTK widgets and GObject classes which
 other tools may not have.
 
 From your source code comments GTK-Doc generates a DocBook XML document, which
 is then transformed into HTML and/or PDF.
+
 The generated HTML documentation can be browsed in an ordinary web browser or
-by using the special Devhelp API browser
-(see https://wiki.gnome.org/Apps/Devhelp).
+by using the special
+[Devhelp API browser](https://github.com/gdev-technology/devhelp).
+
+Important message about the docbook-style-xsl dependency
+--------------------------------------------------------
+
+To generate the `api-index-*.html` files, you need to use docbook-style-xsl
+version 1.79.1, not the latest version.
+
+See:
+- https://sourceforge.net/p/docbook/bugs/1401/
+- https://gitlab.gnome.org/GNOME/gtk-doc/-/issues/36
 
 Requirements
 ------------
@@ -67,52 +68,4 @@ can read it for example with yelp: `yelp help/manual/C/index.docbook`.
 Building
 --------
 
-We are supporting two build systems to build gtk-doc for some transitions time.
-
-### Build using the Autotools
-
-In order to build with the classic Autotools system use these commands:
-
-Build from git:
-./autogen.sh; make
-
-Build from dist tarball:
-./configure; make
-
-There are a few parameters one can pass to ./configure, run ./configure --help
-to see them. Also ./autogen.sh can take those settings (and will hand them
-through to ./configure).
-
-To run the tests:
-make check
-
-To install:
-make install
-
-To make a release:
-make distcheck
-or
-make dist
-
-### Build using Meson
-
-Support for Meson is new.
-
-Build it from git:
-meson build .
-ninja -C build
-
-There are some options one can specify too:
-meson build . --prefix=
-meson build . -Dautotools_support=false
-meson build . -Dcmake_support=false
-meson build . -Dyelp_manual=false
-
-To run tests:
-ninja -C build test
-
-To install:
-ninja -C build install
-
-To make a release:
-ninja -C build dist
+The [Meson](https://mesonbuild.com/) build system is used.
