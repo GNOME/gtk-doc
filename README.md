@@ -32,38 +32,31 @@ See:
 - https://sourceforge.net/p/docbook/bugs/1401/
 - https://gitlab.gnome.org/GNOME/gtk-doc/-/issues/36
 
+Documentation
+-------------
+
+See the `help/manual/` directory. You can read the manual with
+[Yelp](https://apps.gnome.org/Yelp/):
+
+```
+$ yelp help/manual/C/index.docbook
+```
+
 Requirements
 ------------
 
-Python 3.x
-    http:///www.python.org
-
-Additional python modules:
-    For the tests: unittest, parameterized
-    For mkhtml2 (experimental): anytree, lxml and pygments
-    For fixxref: pygments
+[Python 3](https://www.python.org/) with these additional modules:
+- For the tests: unittest, parameterized
+- For mkhtml2 (experimental): anytree, lxml and pygments
+- For fixxref: pygments
 
 For XML output (recommended):
-
-The DocBook XML DTD.
-    http://www.oasis-open.org/docbook/
-
-The DocBook XSL Stylesheets.
-    http://docbook.sourceforge.net/projects/xsl/
-
-libxslt & libxml2 >= 2.3.6.
-    http://xmlsoft.org/
+- The [DocBook](https://www.oasis-open.org/docbook/) XML DTD.
+- The [DocBook XSL Stylesheets](http://docbook.sourceforge.net/projects/xsl/).
+- [libxml2 and libxslt](https://gitlab.gnome.org/GNOME/libxml2).
 
 For PDF output:
-
-the dblatex tool.
-    http://dblatex.sourceforge.net/
-
-Most distributions now have packages for all of these, so I would strongly
-advise that you grab those.
-
-See the documentation in the help/manual/ directory for more information. You
-can read it for example with yelp: `yelp help/manual/C/index.docbook`.
+- The [dblatex](https://dblatex.sourceforge.net/) tool.
 
 Building
 --------
