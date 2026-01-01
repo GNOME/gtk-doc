@@ -27,18 +27,8 @@ fail and show the delta.
 Releasing
 =========
 
-General: https://wiki.gnome.org/MaintainersCorner/Releasing
-
-Specific to GTK-Doc
--------------------
-
-- Version numbers and release dates are also present in:
-  `help/manual/C/index.docbook`
-
-Some commands:
-```
-TAR_OPTIONS="--owner=root --group=root" make distcheck
-```
+Version numbers and release dates are also present in:
+`help/manual/C/index.docbook`
 
 Optimizing & Measuring
 ======================
