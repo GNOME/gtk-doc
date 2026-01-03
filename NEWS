@@ -1,3 +1,19 @@
+GTK-Doc x.y.z (not yet released)
+=============
+
+GTK-Doc can no longer be built with the Autotools:
+  - You need to use Meson in order to build GTK-Doc.
+  - Note that buildsystems/autotools/ is still there for GTK-Doc integration in
+    projects using the Autotools.
+
+Meson:
+  - Fix test-gobject-mkhtml unit test.
+  - A few improvements.
+
+GTK-Doc integration in projects using CMake: support CMake 4.0.
+
+Some documentation updates.
+
 GTK-Doc 1.35.1 (Oct 3 2025)
 ==============
 
