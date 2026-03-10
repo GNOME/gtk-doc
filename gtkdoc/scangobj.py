@@ -939,8 +939,8 @@ describe_type (GParamSpec *spec)
   else if (G_IS_PARAM_SPEC_FLOAT (spec)) {
     GParamSpecFloat *pspec = G_PARAM_SPEC_FLOAT (spec);
 
-    lower = describe_double_constant (pspec->minimum);
-    upper = describe_double_constant (pspec->maximum);
+    lower = describe_double_constant ((gdouble) pspec->minimum);
+    upper = describe_double_constant ((gdouble) pspec->maximum);
     if (GTKDOC_COMPARE_FLOAT (pspec->minimum, -G_MAXFLOAT)) {
       if (GTKDOC_COMPARE_FLOAT (pspec->maximum, G_MAXFLOAT))
         desc = g_strdup ("");
@@ -1101,7 +1101,7 @@ describe_default (GParamSpec *spec)
      * and do not need the exact same bit representation when deserialising */
     desc = g_malloc0 (G_ASCII_DTOSTR_BUF_SIZE);
     g_ascii_formatd (desc, G_ASCII_DTOSTR_BUF_SIZE, "%g",
-        pspec->default_value);
+        (gdouble) pspec->default_value);
   }
   else if (G_IS_PARAM_SPEC_DOUBLE (spec)) {
     GParamSpecDouble *pspec = G_PARAM_SPEC_DOUBLE (spec);
