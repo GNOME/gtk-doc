@@ -289,28 +289,32 @@
             <guilabel>Gathering information about the code.</guilabel>
 
             <application>gtkdoc-scan</application> scans the header files of the
-            code looking for declarations of functions, macros, enums, structs, and unions.
-            It creates the file <filename>&lt;module&gt;-decl-list.txt</filename> containing a list of the
-            declarations, placing them into sections according to which header file they
-            are in. On the first run this file is copied to <filename>&lt;module&gt;-sections.txt</filename>.
-            The author can rearrange the sections, and the order of the
-            declarations within them, to produce the final desired order.
-            The second file it generates is <filename>&lt;module&gt;-decl.txt</filename>.
-            This file contains the full declarations found by the scanner. If for
-            some reason one would like some symbols to show up in the docs, where
-            the full declaration cannot be found by the scanner or the declaration
-            should appear differently, one can place entities similar to the ones in
-            <filename>&lt;module&gt;-decl.txt</filename> into <filename>&lt;module&gt;-overrides.txt</filename>.
+            code looking for declarations of functions, macros, enums, structs,
+            and unions. It creates the file
+            <filename>&lt;module&gt;-decl-list.txt</filename> containing a list
+            of the declarations, placing them into sections according to which
+            header file they are in. On the first run this file is copied to
+            <filename>&lt;module&gt;-sections.txt</filename>. The author can
+            rearrange the sections, and the order of the declarations within
+            them, to produce the final desired order. The second file it
+            generates is <filename>&lt;module&gt;-decl.txt</filename>. This file
+            contains the full declarations found by the scanner. If for some
+            reason one would like some symbols to show up in the docs, where the
+            full declaration cannot be found by the scanner or the declaration
+            should appear differently, one can place entities similar to the
+            ones in <filename>&lt;module&gt;-decl.txt</filename> into
+            <filename>&lt;module&gt;-overrides.txt</filename>.
          </para>
          <para>
-            <application>gtkdoc-scangobj</application> can also be used to dynamically query a library about
-            any GObject subclasses it exports. It saves information about each
-            object's position in the class hierarchy and about any GObject properties
-            and signals it provides.
+            <application>gtkdoc-scangobj</application> can also be used to
+            dynamically query a library about any GObject subclasses it exports.
+            It saves information about each object's position in the class
+            hierarchy and about any GObject properties and signals it provides.
           </para>
          <para>
-            <application>gtkdoc-scanobj</application> should not be used anymore.
-            It was needed in the past when GObject was still GtkObject inside gtk+.
+            <application>gtkdoc-scanobj</application> should not be used
+            anymore. It was needed in the past when GObject was still GtkObject
+            inside GTK.
          </para>
         </listitem>
 
@@ -319,16 +323,18 @@
             <guilabel>Generating the XML and HTML/PDF.</guilabel>
 
             <application>gtkdoc-mkdb</application> turns the template files into
-            XML files in the <filename class='directory'>xml/</filename> subdirectory.
-            If the source code contains documentation on functions, using the
-            special comment blocks, it gets merged in here. If there are no tmpl files used
-            it only reads docs from sources and introspection data.
+            XML files in the <filename class='directory'>xml/</filename>
+            subdirectory. If the source code contains documentation for symbols,
+            using the special comment blocks, it gets merged in here. If there
+            are no tmpl files used it only reads docs from sources and
+            introspection data.
           </para>
           <para>
-            <application>gtkdoc-mkhtml</application> turns the XML files into HTML
-            files in the <filename class='directory'>html/</filename> subdirectory.
-            Likewise <application>gtkdoc-mkpdf</application> turns the XML files into a PDF
-            document called <filename>&lt;package&gt;.pdf</filename>.
+            <application>gtkdoc-mkhtml</application> turns the XML files into
+            HTML files in the <filename class='directory'>html/</filename>
+            subdirectory. Likewise <application>gtkdoc-mkpdf</application> turns
+            the XML files into a PDF document called
+            <filename>&lt;package&gt;.pdf</filename>.
           </para>
           <para>
             Files in <filename class='directory'>xml/</filename> and
@@ -341,14 +347,18 @@
           <para>
             <guilabel>Fixing up cross-references between documents.</guilabel>
 
-            After installing the HTML files, <application>gtkdoc-fixxref</application> can be run to fix up any
-            cross-references between separate documents. For example, the GTK+
-            documentation contains many cross-references to types documented in the GLib manual.
-
-            When creating the source tarball for distribution, <application>gtkdoc-rebase</application>
-            turns all external links into web-links. When installing distributed (pregenerated) docs
-            the same application will try to turn links back to local links
-            (where those docs are installed).
+            After installing the HTML files,
+            <application>gtkdoc-fixxref</application> can be run to fix up any
+            cross-references between separate documents. For example, the GTK
+            documentation contains many cross-references to types documented in
+            the GLib manual.
+          </para>
+          <para>
+            When creating the source tarball for distribution,
+            <application>gtkdoc-rebase</application> turns all external links
+            into web-links. When installing distributed (pregenerated) docs the
+            same application will try to turn links back to local links (where
+            those docs are installed).
           </para>
         </listitem>
       </orderedlist>
