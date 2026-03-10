@@ -252,19 +252,25 @@
       <title>How Does GTK-Doc Work?</title>
 
       <para>
-        GTK-Doc works by using documentation of functions placed inside the source files in
-        specially-formatted comment blocks, or documentation added to the template files
-        which GTK-Doc uses (though note that GTK-Doc will only document functions that
-        are declared in header files; it won't produce output for static functions).
+        GTK-Doc works by reading specially-formatted comment blocks placed
+        inside the source files to document symbols such as functions, macros,
+        structs, enums, etc. (though note that for most kind of symbols GTK-Doc
+        will only document the symbols that are declared in header files; for
+        example it won't produce output for static functions).
       </para>
 
       <para>
-        GTK-Doc consists of a number of python scripts, each performing a different step
-        in the process.
+        GTK-Doc also reads template files where documentation can be added there
+        as well.
       </para>
 
       <para>
-        There are 5 main steps in the process:
+        GTK-Doc consists of a number of programs, each performing a different
+        step in the process.
+      </para>
+
+      <para>
+        The main steps are:
       </para>
 
       <orderedlist>
