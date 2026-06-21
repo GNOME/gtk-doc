@@ -8,9 +8,12 @@ fs = import('fs')
 gnome = import('gnome')
 python = import('python')
 
-required_python_modules = ['pygments']
-if get_option('tests')
-  required_python_modules += ['parameterized']
+required_python_modules = []
+if get_option('check_runtime_deps')
+  required_python_modules = ['pygments']
+  if get_option('tests')
+    required_python_modules += ['parameterized']
+  endif
 endif
 
 python3 = python.find_installation('python3', modules: required_python_modules)
