@@ -37,9 +37,9 @@ typedef enum {
   GTKDOC_ENUM2_V2,
 } GtkdocEnum2;
 
-GType  gtkdoc_enum_get_type(void) G_GNUC_CONST;
-GType  gtkdoc_enum2_get_type(void) G_GNUC_CONST;
-GType  gtkdoc_boxed_get_type(void) G_GNUC_CONST;
+GType  gtkdoc_enum_get_type(void);
+GType  gtkdoc_enum2_get_type(void);
+GType  gtkdoc_boxed_get_type(void);
 
 
 /**
@@ -72,7 +72,7 @@ typedef struct {
     gpointer priv;
 } GtkdocBoxedPlainOldData;
 
-GType  gtkdoc_boxed_plain_old_data_get_type(void) G_GNUC_CONST;
+GType  gtkdoc_boxed_plain_old_data_get_type(void);
 
 #endif // GTKDOC_TYPES_H
 

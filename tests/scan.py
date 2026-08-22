@@ -790,7 +790,7 @@ class SeparateSubSections(ScanHeaderContentTestCase):
 
     def test_CreatesStandardSectionFromGetTypeFunction(self):
         header = textwrap.dedent("""\
-            GType gtkdoc_object_get_type(void) G_GNUC_CONST;
+            GType gtkdoc_object_get_type(void);
             void gtkdoc_object_function(void);
             """)
         slist, doc_comments = self.scanHeaderContent(
@@ -823,7 +823,7 @@ class SeparateSubSections(ScanHeaderContentTestCase):
             struct _GtkdocObject {
               GObject parent;
             };
-            GType gtkdoc_object_get_type(void) G_GNUC_CONST;
+            GType gtkdoc_object_get_type(void);
             void gtkdoc_object_function(void);
             """)
         slist, doc_comments = self.scanHeaderContent(
@@ -843,7 +843,7 @@ class SeparateSubSections(ScanHeaderContentTestCase):
             struct _GtkdocObject {
               GObject parent;
             };
-            GType gtkdoc_object_get_type(void) G_GNUC_CONST;
+            GType gtkdoc_object_get_type(void);
             void gtkdoc_object_function(void);
             """)
         slist, doc_comments = self.scanHeaderContent(

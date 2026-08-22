@@ -44,8 +44,8 @@ struct _GtkdocIfaceInterface {
   void (*test)(const GtkdocIface * const self, gconstpointer const user_data);
 };
 
-GType  gtkdoc_iface_get_type(void) G_GNUC_CONST;
-GType  gtkdoc_iface2_get_type(void) G_GNUC_CONST;
+GType  gtkdoc_iface_get_type(void);
+GType  gtkdoc_iface2_get_type(void);
 
 gboolean gtkdoc_iface_configure (gchar *config);
 

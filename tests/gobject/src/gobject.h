@@ -117,9 +117,9 @@ enum GtkdocHelperEnum {
   GTKDOC_HELPER_ENUM_B
 };
 
-GType  gtkdoc_object_get_type(void) G_GNUC_CONST;
-GType  gtkdoc_object2_get_type(void) G_GNUC_CONST;
-GType  gtkdoc_object3_get_type(void) G_GNUC_CONST;
+GType  gtkdoc_object_get_type(void);
+GType  gtkdoc_object2_get_type(void);
+GType  gtkdoc_object3_get_type(void);
 
 GtkdocObject *gtkdoc_object_new(void);
 #ifndef GTKDOC_TESTER_DISABLE_DEPRECATED
