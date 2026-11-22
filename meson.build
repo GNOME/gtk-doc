@@ -1,5 +1,5 @@
 project('gtk-doc', 'c',
-  version: '1.37.0',
+  version: '1.37.1',
   license: 'GPL2+',
   meson_version: '>= 0.64',
 )
